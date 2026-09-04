@@ -75,10 +75,20 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
     return route.fulfill({ json: envelope(rule()) });
   });
   await page.goto("/sourcing/cost-rules");
-  await expect(page.getByRole("heading", { name: "费用与利润规则", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "成本质量门", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "成本规则准备度" })).toBeVisible();
+  await expect(page.getByText("成本质量门未就绪", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "美国站标准费用", level: 3 })).toBeVisible();
-  await expect(page.getByText("平台费", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".cost-rule-detail").getByText("平台费", { exact: true }),
+  ).toBeVisible();
   await expect(page.getByText("按售价百分比", { exact: true }).first()).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+  await expect(page).toHaveScreenshot("m04-04-cost-rules.png", { fullPage: true });
   await page.getByRole("button", { name: "提交审批" }).click();
   await expect(page.getByRole("dialog", { name: "提交费用规则审批" })).toBeVisible();
   await page.getByLabel("操作原因（至少 2 个字）").fill("提交美国站费用规则审批");
@@ -108,6 +118,7 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
     { action: "publish", reason: "双审批完成后发布" },
   ]);
   await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("生效中");
+  await expect(page.getByText("成本规则已生效", { exact: true })).toBeVisible();
 });
 
 test("M04-04 cost rule console uses capabilities, explicit entry and keyboard-safe dialogs", async ({

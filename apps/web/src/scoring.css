@@ -12,22 +12,15 @@
   font: inherit;
 }
 .score-rules-hero {
-  min-height: 150px;
-  padding: 28px 30px;
+  min-height: 0;
+  padding: 20px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   border: 1px solid var(--so-border);
-  border-radius: 22px;
-  background:
-    radial-gradient(
-      circle at 80% 20%,
-      color-mix(in srgb, var(--so-chart-4) 20%, transparent),
-      transparent 32%
-    ),
-    linear-gradient(135deg, var(--so-panel), var(--so-bg-elevated));
-  box-shadow: var(--so-shadow);
+  border-radius: 14px;
+  background: var(--so-panel);
 }
 .score-rules-hero p {
   margin: 0 0 8px;
@@ -37,7 +30,7 @@
   letter-spacing: 0.16em;
 }
 .score-rules-hero h2 {
-  font-size: 34px;
+  font-size: 26px;
 }
 .score-rules-hero span {
   display: block;

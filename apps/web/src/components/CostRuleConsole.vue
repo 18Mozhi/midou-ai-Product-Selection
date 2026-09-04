@@ -3,6 +3,7 @@ import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import QualityGateSetupSummary from "./shared/QualityGateSetupSummary.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../profit.css";
 
@@ -79,6 +80,40 @@ const form = reactive(initialForm());
 const canManage = computed(() => props.capabilities.includes("opportunity:approve")),
   canSelection = computed(() => canManage.value && props.roles.includes("selection_manager")),
   canAdmin = computed(() => canManage.value && props.roles.includes("organization_admin")),
+  activeCostRule = computed(() => rules.value.find((item) => item.status === "active") ?? null),
+  nextCostRule = computed(
+    () =>
+      rules.value.find((item) => item.status === "approved") ??
+      rules.value.find((item) => item.status === "pending_approval") ??
+      rules.value.find((item) => item.status === "draft") ??
+      null,
+  ),
+  costSetupDescription = computed(() => {
+    if (activeCostRule.value)
+      return `当前启用 ${activeCostRule.value.version_code}；实际商品仍需具备已复核成本输入。`;
+    if (nextCostRule.value?.status === "approved")
+      return "已有规则通过双角色审批，发布后成本质量门才会启用。";
+    if (nextCostRule.value?.status === "pending_approval")
+      return "规则正在等待选品经理和组织管理员完成双角色审批。";
+    if (nextCostRule.value?.status === "draft") return "已有草稿，提交并完成双角色审批后才能发布。";
+    return "尚无费用规则；创建规则并完成双角色审批后才能计算利润。";
+  }),
+  costSetupItems = computed(() => {
+    const rule = activeCostRule.value,
+      byType = new Map((rule?.fee_lines ?? []).map((item) => [item.type, item]));
+    return [
+      {
+        label: "生效规则",
+        detail: rule?.version_code ?? "尚无已发布版本",
+        ready: Boolean(rule),
+      },
+      ...(["platform_fee", "payment_fee", "tax", "fulfillment"] as FeeType[]).map((type) => ({
+        label: feeLabels[type],
+        detail: byType.has(type) ? "已显式配置" : "尚未生效",
+        ready: byType.has(type),
+      })),
+    ];
+  }),
   returnPath = computed(() => {
     const value = typeof route.query.from === "string" ? route.query.from : "/sourcing";
     return /^\/sourcing(?:[/?#]|$)/.test(value) && !value.startsWith("//") ? value : "/sourcing";
@@ -399,13 +434,15 @@ onMounted(load);
   <section class="cost-console" aria-labelledby="cost-rule-title">
     <header>
       <div>
-        <p>费用治理</p>
-        <h2 id="cost-rule-title">费用与利润规则</h2>
-        <span>所有费率必须显式填写；规则经选品经理与组织管理员双审批后才可发布。</span>
+        <p>自动推荐 · 成本与利润</p>
+        <h2 id="cost-rule-title">成本质量门</h2>
+        <span>费用规则生效且商品成本完成复核后，系统才计算利润并判断成本质量门。</span>
       </div>
       <div class="cost-head-actions">
         <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
-        <button v-if="canManage" type="button" @click="openCreate">新建规则</button>
+        <button v-if="canManage && state !== 'ready'" type="button" @click="openCreate">
+          新建规则版本
+        </button>
       </div>
     </header>
     <p v-if="notice" class="cost-notice" role="status">
@@ -430,7 +467,25 @@ onMounted(load);
       @primary="handleStatePrimary"
       @secondary="router.push(returnPath)"
     />
-    <div v-else class="cost-layout">
+    <QualityGateSetupSummary
+      v-if="state === 'ready'"
+      title="成本规则准备度"
+      :description="costSetupDescription"
+      :status="activeCostRule ? '成本规则已生效' : '成本质量门未就绪'"
+      :ready="Boolean(activeCostRule)"
+      :items="costSetupItems"
+    >
+      <button
+        v-if="canManage && !activeCostRule"
+        class="quality-gate-next"
+        type="button"
+        @click="openCreate"
+      >
+        {{ nextCostRule ? "创建后续版本" : "创建首个规则" }}
+      </button>
+      <RouterLink :to="returnPath">返回供应商与成本补全</RouterLink>
+    </QualityGateSetupSummary>
+    <div v-if="state === 'ready'" class="cost-layout">
       <section class="cost-rule-browser" aria-label="费用规则浏览器">
         <form class="cost-rule-filters" role="search" @submit.prevent>
           <label

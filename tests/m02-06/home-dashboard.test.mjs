@@ -328,6 +328,8 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   ])
     assert.match(overview, new RegExp(`to="${destination}"`));
   assert.match(home, /查看候选进度[\s\S]*查看采集进度/);
+  assert.match(home, /达到来源门槛先进入候选[\s\S]*五项质量门全部通过后才推荐/);
+  assert.doesNotMatch(home, /按真实来源门槛推荐/);
   assert.match(overview, /home-runtime-details[\s\S]*监控平台[\s\S]*质量门校验/);
   assert.match(overview, /人工采纳[\s\S]*人工已采纳/);
   assert.match(home, /<details class="home-truth">[\s\S]*自动推荐不等于自动采纳/);

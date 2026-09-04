@@ -211,6 +211,10 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/web/src/components/OpportunityDetailInsights.vue",
     "utf8",
   )}`;
+  const qualityGateSetupUi = await readFile(
+    "apps/web/src/components/shared/QualityGateSetupSummary.vue",
+    "utf8",
+  );
   assert.match(
     up,
     /score_rules[\s\S]*opportunity_score_inputs[\s\S]*opportunity_score_jobs[\s\S]*opportunity_score_runs[\s\S]*opportunity_score_components/,
@@ -238,6 +242,10 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(openapi, /opportunity-score-rules[\s\S]*scoreRuleId.*preview/);
   assert.match(repository, /page_summary:[\s\S]*read_only:\s*true/);
   assert.match(consoleUi, /预览影响[\s\S]*发布影响预览/);
+  assert.match(consoleUi, /评分与质量门/);
+  assert.match(consoleUi, /scoringSetupItems/);
+  assert.match(consoleUi, /评分配置未就绪/);
+  assert.match(qualityGateSetupUi, /自动推荐配置[\s\S]*已满足[\s\S]*待完成/);
   assert.match(feature, /scoringEngine/);
   assert.match(architecture, /50%[\s\S]*80%/);
   assert.match(runbook, /宝塔[\s\S]*回滚/);

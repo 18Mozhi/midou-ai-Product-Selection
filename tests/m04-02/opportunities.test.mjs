@@ -276,6 +276,10 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       live,
       blueprint,
     ] = values;
+  const detailInsightsWeb = await readFile(
+    "apps/web/src/components/OpportunityDetailInsights.vue",
+    "utf8",
+  );
   assert.match(
     up,
     /opportunities[\s\S]*opportunity_decisions[\s\S]*opportunity_refresh_jobs[\s\S]*opportunity_events[\s\S]*opportunity_outbox/,
@@ -302,6 +306,13 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
   assert.match(readinessWeb, /下一步：[\s\S]*查看五项配置状态/);
   assert.match(decisionWeb, /采纳建议[\s\S]*当前无需你处理[\s\S]*提前人工处理/);
+  assert.match(decisionWeb, /补证阻断项/);
+  assert.doesNotMatch(decisionWeb, /采纳前还缺/);
+  assert.match(
+    detailInsightsWeb,
+    /达到来源门槛只进入规则命中候选[\s\S]*五项质量门全部通过后[\s\S]*建议采纳/,
+  );
+  assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
   assert.match(evidenceWeb, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
   assert.match(webContract, /创建补采任务/);

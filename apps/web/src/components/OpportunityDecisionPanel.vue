@@ -134,7 +134,7 @@ const recommendationCopy = computed(() =>
     </p>
     <section v-if="unresolvedBlockers.length" class="opportunity-decision-gap">
       <div>
-        <strong>采纳前还缺 {{ unresolvedBlockers.length }} 项</strong>
+        <strong>仍有 {{ unresolvedBlockers.length }} 个补证阻断项</strong>
         <span>{{ unresolvedBlockers[0]?.next_action }}</span>
       </div>
       <RouterLink

@@ -133,7 +133,7 @@ defineEmits<{
       <span
         >覆盖状态：{{
           opportunityStatusLabel(detail.coverage_status)
-        }}。达到来源门槛即可进入推荐；市场、竞争、成本未齐全时会继续补证，并明确显示缺失项。</span
+        }}。达到来源门槛只进入规则命中候选；评分、市场、竞争、成本和风险五项质量门全部通过后，才显示“建议采纳”。</span
       >
     </article>
     <article>

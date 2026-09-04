@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import QualityGateSetupSummary from "./shared/QualityGateSetupSummary.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../opportunities.css";
 import "../scoring.css";
@@ -108,6 +109,47 @@ const form = reactive({
 const capabilities = computed(() => new Set(props.capabilities)),
   canDecide = computed(() => capabilities.value.has("opportunity:decide")),
   canApprove = computed(() => capabilities.value.has("opportunity:approve")),
+  activeRule = computed(() => rules.value.find((rule) => rule.status === "active") ?? null),
+  activeEvidenceGroups = computed(
+    () =>
+      new Set(
+        (activeRule.value?.dimensions ?? [])
+          .filter((item) => item.weight > 0)
+          .map((item) => item.evidence_group),
+      ),
+  ),
+  scoringSetupItems = computed(() => [
+    {
+      label: "评分规则",
+      detail: activeRule.value ? activeRule.value.version_code : "尚无已启用版本",
+      ready: Boolean(activeRule.value),
+    },
+    {
+      label: "市场证据",
+      detail: activeEvidenceGroups.value.has("market") ? "已纳入评分" : "未设置市场证据组",
+      ready: activeEvidenceGroups.value.has("market"),
+    },
+    {
+      label: "竞争证据",
+      detail: activeEvidenceGroups.value.has("competition") ? "已纳入评分" : "未设置竞争证据组",
+      ready: activeEvidenceGroups.value.has("competition"),
+    },
+    {
+      label: "成本证据",
+      detail: activeEvidenceGroups.value.has("cost") ? "已纳入评分" : "未设置成本证据组",
+      ready: activeEvidenceGroups.value.has("cost"),
+    },
+    {
+      label: "风险维度",
+      detail: activeRule.value?.dimensions.some((item) => item.code === "risk" && item.weight > 0)
+        ? "已启用风险权重"
+        : "未启用风险权重",
+      ready: Boolean(
+        activeRule.value?.dimensions.some((item) => item.code === "risk" && item.weight > 0),
+      ),
+    },
+  ]),
+  scoringSetupReady = computed(() => scoringSetupItems.value.every((item) => item.ready)),
   activeDimensions = computed(() => form.dimensions.filter((item) => item.weight > 0)),
   weightTotal = computed(
     () =>
@@ -347,12 +389,14 @@ onMounted(() => void load());
   <section class="score-rules">
     <header class="score-rules-hero">
       <div>
-        <p>版本化评分</p>
-        <h2>评分规则引擎</h2>
-        <span>权重、阈值、证据覆盖与计算结果均版本化；历史结果不会被新规则或回滚改写。</span>
+        <p>自动推荐 · 评分与证据</p>
+        <h2>评分与质量门</h2>
+        <span>只有已启用规则要求真实市场、竞争、成本和风险证据时，候选才可能进入“建议采纳”。</span>
       </div>
-      <button v-if="canDecide" type="button" @click="openCreate">＋ 新建规则草稿</button>
-      <span v-else class="score-rule-readonly-note">当前身份仅可查看规则。</span>
+      <button v-if="canDecide && state !== 'ready'" type="button" @click="openCreate">
+        新建规则版本
+      </button>
+      <span v-else-if="!canDecide" class="score-rule-readonly-note">当前身份仅可查看规则。</span>
     </header>
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
@@ -371,7 +415,23 @@ onMounted(() => void load());
         >请联系具备规则提交权限的成员创建首个草稿。</span
       >
     </section>
-    <section v-else class="score-rule-list">
+    <QualityGateSetupSummary
+      v-else
+      title="评分规则覆盖"
+      :description="
+        activeRule
+          ? `当前启用 ${activeRule.version_code}；完整自动推荐还需要竞品监控和费用规则同时生效。`
+          : '当前没有已启用评分规则，所有规则命中商品只能停留在候选队列。'
+      "
+      :status="scoringSetupReady ? '评分配置已覆盖' : '评分配置未就绪'"
+      :ready="scoringSetupReady"
+      :items="scoringSetupItems"
+    >
+      <button v-if="canDecide" class="quality-gate-next" type="button" @click="openCreate">
+        创建新版本补齐配置
+      </button>
+    </QualityGateSetupSummary>
+    <section v-if="state === 'ready'" class="score-rule-list">
       <header>
         <span>版本</span><span>阈值</span><span>维度与权重</span><span>状态</span><span>操作</span>
       </header>

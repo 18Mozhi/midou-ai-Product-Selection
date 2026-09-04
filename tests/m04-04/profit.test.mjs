@@ -182,6 +182,10 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     live,
     blueprint,
   ] = values;
+  const qualityGateSetupUi = await readFile(
+    "apps/web/src/components/shared/QualityGateSetupSummary.vue",
+    "utf8",
+  );
   assert.match(
     up,
     /cost_rules[\s\S]*exchange_rate_quotes[\s\S]*opportunity_profit_runs[\s\S]*opportunity_profit_components/,
@@ -208,6 +212,8 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   assert.match(opportunityShell, /profit-analysis[\s\S]*OpportunityProfitPanel/);
   assert.match(profitPanel, /提交成本复核[\s\S]*重新计算/);
   assert.match(`${profitPanel}\n${costReviewQueue}`, /成本复核队列[\s\S]*指定复核人/);
+  assert.match(consoleUi, /成本质量门[\s\S]*costSetupItems[\s\S]*成本规则已生效/);
+  assert.match(qualityGateSetupUi, /自动推荐配置[\s\S]*已满足[\s\S]*待完成/);
   assert.ok(opportunityShell.split(/\r?\n/).length < 1000);
   assert.ok(profitPanel.split(/\r?\n/).length < 200);
   assert.ok(costReviewQueue.split(/\r?\n/).length < 160);

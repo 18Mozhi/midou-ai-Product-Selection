@@ -132,8 +132,18 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
     }),
   );
   await page.goto("/opportunities/scoring-rules");
-  await expect(page.getByRole("heading", { name: "评分规则引擎" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "评分与质量门" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "评分规则覆盖" })).toBeVisible();
+  await expect(page.getByText("评分配置未就绪", { exact: true })).toBeVisible();
+  await expect(page.getByText("风险维度", { exact: true })).toBeVisible();
+  await expect(page.getByText("当前身份仅可查看规则。", { exact: true })).toBeHidden();
   await expect(page.getByText("当前生产评分规则")).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+  await expect(page).toHaveScreenshot("m04-03-score-rules.png", { fullPage: true });
   await page.getByRole("button", { name: "预览影响" }).click();
   const previewDialog = page.getByRole("dialog", { name: /发布影响预览/ });
   await expect(previewDialog).toBeVisible();
