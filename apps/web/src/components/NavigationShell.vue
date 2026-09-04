@@ -42,6 +42,7 @@ const componentModules = import.meta.glob<{ default: object }>([
   "!./OnboardingGuide.vue",
   "!./TenancyChooser.vue",
   "!./ThemeStudio.vue",
+  "!./AutomaticSelectionReadinessPanel.vue",
   "!./UiStatePanel.vue",
   "!./UiStateShowcase.vue",
   "!./VerificationFramework.vue",

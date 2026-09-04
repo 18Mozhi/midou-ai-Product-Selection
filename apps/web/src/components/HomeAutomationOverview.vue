@@ -19,22 +19,22 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
 <template>
   <section class="home-automation-overview" aria-label="自动选品状态">
     <div class="home-status-facts">
-      <div data-tone="positive">
+      <RouterLink to="/opportunities?view=recommended" data-tone="positive">
         <strong>{{ selection.recommended_count }}</strong>
         <span>待你采纳</span>
-      </div>
-      <div>
+      </RouterLink>
+      <RouterLink to="/opportunities?view=rule_candidates">
         <strong>{{ selection.rule_candidate_count ?? 0 }}</strong>
         <span>规则命中候选</span>
-      </div>
-      <div>
+      </RouterLink>
+      <RouterLink to="/opportunities?view=evidence_pending">
         <strong>{{ selection.awaiting_evidence_count }}</strong>
         <span>采集中</span>
-      </div>
-      <div>
+      </RouterLink>
+      <RouterLink to="/trends?section=rules">
         <strong>{{ selection.enabled_rule_count }}</strong>
         <span>运行规则</span>
-      </div>
+      </RouterLink>
     </div>
 
     <details class="home-runtime-details">

@@ -172,6 +172,22 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.locator(".home-status-facts")).toContainText("5规则命中候选");
   await expect(page.locator(".home-status-facts")).toContainText("8采集中");
   await expect(page.locator(".home-status-facts")).toContainText("3运行规则");
+  await expect(page.getByRole("link", { name: "4 待你采纳" })).toHaveAttribute(
+    "href",
+    "/opportunities?view=recommended",
+  );
+  await expect(page.getByRole("link", { name: "5 规则命中候选" })).toHaveAttribute(
+    "href",
+    "/opportunities?view=rule_candidates",
+  );
+  await expect(page.getByRole("link", { name: "8 采集中" })).toHaveAttribute(
+    "href",
+    "/opportunities?view=evidence_pending",
+  );
+  await expect(page.getByRole("link", { name: "3 运行规则" })).toHaveAttribute(
+    "href",
+    "/trends?section=rules",
+  );
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeHidden();
   await page.getByText("运行详情", { exact: true }).click();
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeVisible();
@@ -181,6 +197,9 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.getByText("自动推荐不等于自动采纳")).toBeHidden();
   await page.getByText("数据说明", { exact: true }).click();
   await expect(page.getByText("自动推荐不等于自动采纳")).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
   if (testInfo.project.name === "mobile-390") {
     const firstRecommendation = page.getByRole("link", { name: /便携咖啡机候选/ });
     await markOcclusionProbe(firstRecommendation);

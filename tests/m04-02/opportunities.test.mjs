@@ -237,6 +237,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/OpportunityListPanel.vue",
     "apps/web/src/components/OpportunityDecisionPanel.vue",
+    "apps/web/src/components/AutomaticSelectionReadinessPanel.vue",
+    "apps/web/src/components/OpportunityEvidencePanel.vue",
     "apps/web/src/opportunities.css",
     "apps/web/src/automatic-selection.css",
     "config/schema.json",
@@ -260,6 +262,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       web,
       listWeb,
       decisionWeb,
+      readinessWeb,
+      evidenceWeb,
       css,
       selectionCss,
       schema,
@@ -280,7 +284,10 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(worker, /succeeded_empty[\s\S]*failed_terminal[\s\S]*dead_letter/);
   assert.match(service, /coverageStatus[\s\S]*blockingReason/);
   assert.match(service, /OpportunitySelectionView[\s\S]*evidence_pending/);
-  assert.match(repository, /coverage_status=\?[\s\S]*recommendation_status='insufficient_data'/);
+  assert.match(
+    repository,
+    /selectionView === "recommended"[\s\S]*opportunityRecommendedSql[\s\S]*selectionView === "rule_candidates"[\s\S]*opportunityRuleCandidateSql/,
+  );
   assert.match(routes, /coverage_status[\s\S]*blocking_reason/);
   assert.match(routes, /selection_view/);
   assert.match(routes, /lifecycle_status[\s\S]*owner_id/);
@@ -290,10 +297,12 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
-  assert.match(webContract, /待我采纳[\s\S]*自动补证中[\s\S]*全部机会/);
-  assert.match(listWeb, /命中规则并通过证据门槛，只等你作最终决定/);
+  assert.match(webContract, /待我采纳[\s\S]*规则命中候选[\s\S]*采集中[\s\S]*全部机会/);
+  assert.match(listWeb, /已达到规则来源门槛，系统继续完成五项质量门校验/);
   assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
-  assert.match(webContract, /证据新鲜度：观测于/);
+  assert.match(readinessWeb, /下一步：[\s\S]*查看五项配置状态/);
+  assert.match(decisionWeb, /采纳建议[\s\S]*当前无需你处理[\s\S]*提前人工处理/);
+  assert.match(evidenceWeb, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
   assert.match(webContract, /创建补采任务/);
   assert.match(web, /evidence-completion-tasks/);

@@ -3,29 +3,23 @@ import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import { statusLabel } from "../ui/status-labels";
 import type { OpportunityDetail } from "./opportunity-workspace-types";
+import {
+  countPassedOpportunityQualityGates,
+  nextOpportunityQualityGateLabel,
+  opportunityBlockerStatusLabel,
+  opportunityDecisionCopy,
+  opportunityQualityGateLabels,
+} from "./opportunity-decision-presentation";
 import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
-
 const props = defineProps<{
   detail: OpportunityDetail;
   busy: boolean;
   canDecide: boolean;
 }>();
-
 const emit = defineEmits<{
   decide: [action: "adopt" | "observe" | "reject"];
   createEvidenceTask: [];
 }>();
-
-const opportunityStatus = (value: string) =>
-  (
-    ({
-      evidence_insufficient: "缺少可采纳证据",
-      recommendation_insufficient: "尚无可靠推荐结论",
-    }) as Record<string, string>
-  )[value] ?? value;
-const blockerStatus = (value: "blocked" | "in_progress" | "cleared") =>
-  ({ blocked: "仍在阻断", in_progress: "解除中", cleared: "已解除" })[value];
-
 const unresolvedBlockers = computed(() =>
   (props.detail.adoption_blockers ?? []).filter((item) => item.status !== "cleared"),
 );
@@ -53,22 +47,12 @@ const recommendationTitle = computed(() =>
     ? opportunityStatusLabel(props.detail.decision_status)
     : opportunityStatusLabel(selectionStage.value),
 );
-const qualityGateLabels = {
-  score: "评分",
-  market: "市场",
-  competition: "竞争",
-  cost: "成本",
-  risk: "风险",
-} as const;
+const passedGateCount = computed(() => countPassedOpportunityQualityGates(qualityGates.value));
+const nextMissingGate = computed(() => nextOpportunityQualityGateLabel(qualityGates.value));
 const recommendationCopy = computed(() =>
-  canAdopt.value
-    ? "五项质量门全部通过，最终采纳仍由你决定。"
-    : selectionStage.value === "rule_candidate"
-      ? "已进入规则命中候选，系统会继续补齐未通过的质量门。"
-      : "尚未达到规则来源门槛，或当前机会不属于自动选品规则，暂不能采纳。",
+  opportunityDecisionCopy(canAdopt.value, selectionStage.value),
 );
 </script>
-
 <template>
   <section v-if="detail.redecision_ready" class="opportunity-redecision-ready" role="status">
     <div>
@@ -81,9 +65,7 @@ const recommendationCopy = computed(() =>
     <header class="opportunity-decision-summary__lead">
       <div>
         <p>系统建议</p>
-        <h3 id="opportunity-decision-title">
-          {{ recommendationTitle }}
-        </h3>
+        <h3 id="opportunity-decision-title">{{ recommendationTitle }}</h3>
         <span>{{ recommendationCopy }}</span>
       </div>
       <dl aria-label="推荐判断摘要">
@@ -100,29 +82,53 @@ const recommendationCopy = computed(() =>
           <dd>{{ opportunityStatusLabel(detail.risk_level) }}</dd>
         </div>
       </dl>
-      <ul class="opportunity-quality-gates" aria-label="五项质量门">
-        <li v-for="(label, key) in qualityGateLabels" :key="key" :data-passed="qualityGates[key]">
-          <span>{{ label }}</span
-          ><b>{{ qualityGates[key] ? "通过" : "待完成" }}</b>
-        </li>
-      </ul>
+      <div class="opportunity-gate-progress" :data-ready="qualityGates.all_passed">
+        <span>
+          <b>五项质量门</b>
+          <small>{{ passedGateCount }}/5 已通过</small>
+        </span>
+        <i aria-hidden="true">
+          <b :style="{ width: `${passedGateCount * 20}%` }"></b>
+        </i>
+        <strong>{{ qualityGates.all_passed ? "全部通过" : `下一项：${nextMissingGate}` }}</strong>
+      </div>
+      <details class="opportunity-quality-gate-details">
+        <summary>查看每项判断</summary>
+        <ul class="opportunity-quality-gates" aria-label="五项质量门">
+          <li
+            v-for="(label, key) in opportunityQualityGateLabels"
+            :key="key"
+            :data-passed="qualityGates[key]"
+          >
+            <span>{{ label }}</span
+            ><b>{{ qualityGates[key] ? "通过" : "待完成" }}</b>
+          </li>
+        </ul>
+      </details>
     </header>
     <nav
-      v-if="canDecide"
+      v-if="canDecide && canAdopt"
       id="opportunity-decision-actions"
       class="opportunity-decision-actions"
       aria-label="机会决策操作"
     >
-      <button
-        class="primary"
-        :disabled="!canAdopt"
-        :title="canAdopt ? '采纳当前推荐' : '五项质量门尚未全部通过'"
-        @click="emit('decide', 'adopt')"
-      >
-        采纳推荐</button
+      <button class="primary" :disabled="busy" @click="emit('decide', 'adopt')">采纳建议</button
       ><button @click="emit('decide', 'observe')">继续观察</button
       ><button class="reject" @click="emit('decide', 'reject')">驳回</button>
     </nav>
+    <div v-else-if="canDecide" class="opportunity-decision-waiting" role="status">
+      <span>
+        <b>当前无需你处理</b>
+        <small>系统会继续采集和计算；只有显示“建议采纳”后才进入你的最终采纳队列。</small>
+      </span>
+      <details>
+        <summary>提前人工处理</summary>
+        <nav aria-label="候选提前人工处理">
+          <button type="button" @click="emit('decide', 'observe')">继续观察</button>
+          <button type="button" class="reject" @click="emit('decide', 'reject')">驳回</button>
+        </nav>
+      </details>
+    </div>
     <p v-else class="opportunity-decision-readonly" role="status">
       当前角色可查看判断依据；最终决定需要“机会决策”权限。
     </p>
@@ -152,8 +158,10 @@ const recommendationCopy = computed(() =>
         :data-status="blocker.status"
       >
         <div>
-          <strong>{{ opportunityStatus(blocker.code) }}</strong>
-          <span>{{ blockerStatus(blocker.status) }} · {{ blocker.next_action }}</span>
+          <strong>{{ opportunityStatusLabel(blocker.code) }}</strong>
+          <span
+            >{{ opportunityBlockerStatusLabel(blocker.status) }} · {{ blocker.next_action }}</span
+          >
           <small v-if="blocker.progress_percent != null"
             >补采任务进度 {{ blocker.progress_percent }}%</small
           ><small v-if="blocker.score_job_status"

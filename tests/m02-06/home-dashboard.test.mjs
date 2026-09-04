@@ -320,6 +320,14 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     overview,
     /home-status-facts[\s\S]*待你采纳[\s\S]*规则命中候选[\s\S]*采集中[\s\S]*运行规则/,
   );
+  for (const destination of [
+    "/opportunities\\?view=recommended",
+    "/opportunities\\?view=rule_candidates",
+    "/opportunities\\?view=evidence_pending",
+    "/trends\\?section=rules",
+  ])
+    assert.match(overview, new RegExp(`to="${destination}"`));
+  assert.match(home, /查看候选进度[\s\S]*查看采集进度/);
   assert.match(overview, /home-runtime-details[\s\S]*监控平台[\s\S]*质量门校验/);
   assert.match(overview, /人工采纳[\s\S]*人工已采纳/);
   assert.match(home, /<details class="home-truth">[\s\S]*自动推荐不等于自动采纳/);

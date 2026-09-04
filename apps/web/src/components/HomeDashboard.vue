@@ -411,6 +411,16 @@ onMounted(load);
                   ? `${selection.awaiting_evidence_count} 条商品仍在采集。`
                   : "系统会在五项质量门全部通过后自动加入这里。"
             }}</span>
+            <RouterLink
+              v-if="selection.rule_candidate_count"
+              to="/opportunities?view=rule_candidates"
+              >查看候选进度</RouterLink
+            >
+            <RouterLink
+              v-else-if="selection.awaiting_evidence_count"
+              to="/opportunities?view=evidence_pending"
+              >查看采集进度</RouterLink
+            >
           </div>
         </section>
       </section>

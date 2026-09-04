@@ -2,8 +2,10 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
+import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import type { OpportunitySummary } from "./opportunity-workspace-types";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type SelectionView = "recommended" | "rule_candidates" | "evidence_pending" | "all";
@@ -16,32 +18,7 @@ interface OpportunityFilters {
   lifecycle_status: string;
   owner_id: string;
 }
-interface Opportunity {
-  id: string;
-  name: string;
-  image_url: string | null;
-  market: string;
-  category: string | null;
-  source_type: "manual" | "trend_topic";
-  decision_status: string;
-  recommendation_status: string;
-  overall_score: number | null;
-  profit_status: string;
-  risk_level: string;
-  evidence_count: number;
-  source_count: number;
-  competitor_count: number;
-  supplier_candidate_count: number;
-  matched_rule_count: number;
-  selection_stage: "rule_candidate" | "recommended" | "not_eligible";
-  blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
-  owner_id: string | null;
-  lifecycle_status: string;
-  lifecycle_entered_at: string;
-  lifecycle_dwell_seconds: number;
-  version: number;
-  updated_at: string;
-}
+type Opportunity = OpportunitySummary;
 const viewOptions: Array<{ value: SelectionView; label: string }> = [
   { value: "recommended", label: "待我采纳" },
   { value: "rule_candidates", label: "规则命中候选" },
@@ -150,6 +127,42 @@ const opportunityStatus = (value: string) =>
       : selectionStage(item) === "rule_candidate"
         ? "规则命中候选"
         : opportunityStatus(item.decision_status),
+  qualityGateKeys = ["score", "market", "competition", "cost", "risk"] as const,
+  qualityGateLabels = {
+    score: "评分",
+    market: "市场",
+    competition: "竞争",
+    cost: "成本",
+    risk: "风险",
+  } as const,
+  passedGateCount = (item: Opportunity) =>
+    qualityGateKeys.filter((key) => Boolean(item.quality_gates?.[key])).length,
+  nextMissingGate = (item: Opportunity) => {
+    const key = qualityGateKeys.find((candidate) => !item.quality_gates?.[candidate]);
+    return key ? qualityGateLabels[key] : "全部通过";
+  },
+  rowFacts = (item: Opportunity) => {
+    if (props.selectionView === "rule_candidates")
+      return [
+        { label: "质量门", value: `${passedGateCount(item)}/5` },
+        { label: "证据", value: `${item.evidence_count} 条 · ${item.source_count} 源` },
+        { label: "下一项", value: nextMissingGate(item) },
+      ];
+    if (props.selectionView === "evidence_pending")
+      return [
+        { label: "独立来源", value: `${item.source_count} 个` },
+        { label: "证据", value: `${item.evidence_count} 条` },
+        { label: "命中规则", value: `${item.matched_rule_count} 条` },
+      ];
+    return [
+      ...(props.selectionView === "all"
+        ? [{ label: "当前结论", value: recommendationLabel(item) }]
+        : []),
+      { label: "综合评分", value: scoreLabel(item.overall_score) },
+      { label: "证据", value: `${item.evidence_count} 条 · ${item.source_count} 源` },
+      { label: "风险", value: opportunityStatus(item.risk_level) },
+    ];
+  },
   clearOrShowAll = () => {
     if (activeFilterCount.value) emit("reset");
     else if (props.selectionView === "all") emit("apply");
@@ -222,50 +235,10 @@ const opportunityStatus = (value: string) =>
       </form>
     </ResponsiveFilterDrawer>
   </section>
-  <section
+  <AutomaticSelectionReadinessPanel
     v-if="showAutomationReadiness && automationReadiness"
-    class="automatic-selection-readiness"
-    :data-ready="automationReadiness.allReady"
-    aria-labelledby="automatic-selection-readiness-title"
-  >
-    <header>
-      <div>
-        <p>自动推荐准备度</p>
-        <h3 id="automatic-selection-readiness-title">
-          {{
-            !automationReadiness.available
-              ? "暂时无法读取规则状态"
-              : automationReadiness.allReady
-                ? "五项规则配置已齐"
-                : "初始规则还未配齐"
-          }}
-        </h3>
-      </div>
-      <strong v-if="automationReadiness.available">{{ automationReadiness.readyCount }} / 5</strong>
-    </header>
-    <p v-if="!automationReadiness.available">
-      候选列表不受影响。刷新后仍无法读取时，请先检查评分规则页面。
-    </p>
-    <p v-else-if="automationReadiness.allReady">
-      系统会按真实证据逐项计算；只有单个商品的评分、市场、竞争、成本和风险全部通过，才会进入“待我采纳”。
-    </p>
-    <p v-else>
-      采集已能产出规则命中候选；完成下面的显式配置后，系统才能继续计算五项质量门。系统不会代填权重、阈值或费率。
-    </p>
-    <ol v-if="automationReadiness.available">
-      <li v-for="step in automationReadiness.steps" :key="step.code" :data-ready="step.ready">
-        <span
-          ><b>{{ step.label }}</b
-          ><small>{{ step.description }}</small></span
-        >
-        <em v-if="step.ready">已配置</em>
-        <RouterLink v-else :to="step.route">去设置</RouterLink>
-      </li>
-    </ol>
-    <RouterLink v-else class="automatic-selection-readiness__fallback" :to="nextSetupPath"
-      >检查评分规则</RouterLink
-    >
-  </section>
+    :readiness="automationReadiness"
+  />
   <UiStatePanel
     v-if="state !== 'ready'"
     :kind="state"
@@ -359,22 +332,10 @@ const opportunityStatus = (value: string) =>
             ></em
           ></span
         >
-        <dl>
-          <div v-if="selectionView === 'all'">
-            <dt>当前结论</dt>
-            <dd>{{ recommendationLabel(item) }}</dd>
-          </div>
-          <div>
-            <dt>综合评分</dt>
-            <dd>{{ scoreLabel(item.overall_score) }}</dd>
-          </div>
-          <div>
-            <dt>证据</dt>
-            <dd>{{ item.evidence_count }} 条 · {{ item.source_count }} 源</dd>
-          </div>
-          <div>
-            <dt>风险</dt>
-            <dd>{{ opportunityStatus(item.risk_level) }}</dd>
+        <dl :aria-label="`${item.name} 决策摘要`">
+          <div v-for="fact in rowFacts(item)" :key="fact.label">
+            <dt>{{ fact.label }}</dt>
+            <dd>{{ fact.value }}</dd>
           </div>
         </dl>
         <b :data-status="item.decision_status"

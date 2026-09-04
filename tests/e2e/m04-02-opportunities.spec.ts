@@ -48,6 +48,7 @@ const recommendedBase = {
     competition: true,
     cost: true,
     risk: true,
+    all_passed: true,
   },
   coverage_status: "complete",
   blocking_reasons: [],
@@ -120,6 +121,28 @@ async function ready(page: Page, detailEvidence = evidence) {
       ),
     });
   });
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: "score-rule",
+          status: "active",
+          dimensions: [
+            { code: "market", weight: 25, evidence_group: "market" },
+            { code: "competition", weight: 25, evidence_group: "competition" },
+            { code: "cost", weight: 25, evidence_group: "cost" },
+            { code: "risk", weight: 25, evidence_group: "risk" },
+          ],
+        },
+      ]),
+    }),
+  );
+  await page.route("**/api/v1/cost-rules", (route) =>
+    route.fulfill({ json: envelope([{ id: "cost-rule", status: "active" }]) }),
+  );
+  await page.route("**/api/v1/competitor-monitor-rules", (route) =>
+    route.fulfill({ json: envelope([{ id: "competitor-rule", status: "enabled" }]) }),
+  );
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
     route.fulfill({
       status: 200,
@@ -134,6 +157,7 @@ async function ready(page: Page, detailEvidence = evidence) {
             competition: false,
             cost: false,
             risk: false,
+            all_passed: false,
           },
           decision_status: decided ? "observing" : "pending",
           lifecycle_status: decided ? "observing" : "ready",
@@ -241,6 +265,13 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await dialog.getByRole("button", { name: "关闭" }).click();
+  await expect(page.getByRole("heading", { name: "自动推荐配置已就绪" })).toBeVisible();
+  await expect(page.getByRole("progressbar", { name: "自动推荐规则配置进度" })).toHaveAttribute(
+    "aria-valuenow",
+    "5",
+  );
+  await page.getByText("查看五项配置状态", { exact: true }).click();
+  await expect(page.locator(".automatic-selection-readiness__details li")).toHaveCount(5);
   await page.getByRole("button", { name: "高级筛选" }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
   const filtered = page.waitForRequest(
@@ -250,6 +281,10 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   );
   await page.getByRole("button", { name: "筛选", exact: true }).click();
   await filtered;
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("m04-02-opportunity-list.png", { fullPage: true });
   await page.getByRole("button", { name: "全部机会" }).click();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(1);
@@ -285,10 +320,13 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   ]);
   await expect(page.locator(".opportunity-tabs details > summary")).toHaveText("更多分析");
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await expect(page.getByText("0/5 已通过", { exact: true })).toBeVisible();
+  await expect(page.getByText("当前无需你处理", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
+  await page.getByText("查看每项判断", { exact: true }).click();
   await expect(page.getByRole("list", { name: "五项质量门" })).toContainText(
     "评分待完成市场待完成竞争待完成成本待完成风险待完成",
   );
-  await expect(page.getByRole("button", { name: "采纳推荐" })).toBeDisabled();
   await expect(
     page.getByText(
       "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
@@ -306,6 +344,7 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
   await page.getByRole("button", { name: "证据", exact: true }).click();
   await expect(page.getByText("Example News")).toBeVisible();
+  await page.getByText("提前人工处理", { exact: true }).click();
   await page.getByRole("button", { name: "继续观察", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
@@ -321,10 +360,13 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.locator("body")).not.toContainText(
     /\bobserve\b|trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("m04-02-opportunity-detail.png", { fullPage: true });
   if ((page.viewportSize()?.width ?? 0) <= 640) {
-    await expect(page.locator(".opportunity-decision-actions")).toHaveCSS("position", "static");
+    await expect(page.locator(".opportunity-decision-waiting")).toHaveCSS("position", "static");
   }
 });
 
