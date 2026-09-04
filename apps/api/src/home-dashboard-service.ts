@@ -47,6 +47,7 @@ export class HomeDashboardService {
             state: "not_configured" as const,
             enabled_rule_count: 0,
             candidate_count: 0,
+            rule_candidate_count: 0,
             recommended_count: 0,
             awaiting_evidence_count: 0,
             adopted_count: 0,

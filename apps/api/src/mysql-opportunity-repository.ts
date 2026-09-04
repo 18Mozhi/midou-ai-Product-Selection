@@ -13,6 +13,13 @@ import {
   type OpportunityWriteContext,
 } from "./opportunity-service.js";
 import { recommendationGuidance } from "./opportunity-recommendation-guidance.js";
+import {
+  evaluateOpportunitySelection,
+  opportunityQualityGateSql,
+  opportunityRecommendedSql,
+  opportunityRuleCandidateSql,
+  opportunitySelectionProjectionSql,
+} from "./opportunity-selection-policy.js";
 
 const iso = (value: unknown) =>
   value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString();
@@ -79,12 +86,13 @@ const summary = (row: RowDataPacket): OpportunitySummary => ({
   competitor_count: Number(row.competitor_count ?? 0),
   supplier_candidate_count: Number(row.supplier_candidate_count ?? 0),
   matched_rule_count: Number(row.matched_rule_count ?? 0),
+  ...evaluateOpportunitySelection(row),
   coverage_status: row.coverage_status,
   blocking_reasons: [
     ...(Number(row.evidence_count) === 0 || row.coverage_status === "insufficient"
       ? ["evidence_insufficient" as const]
       : []),
-    ...(row.recommendation_status === "insufficient_data"
+    ...(!evaluateOpportunitySelection(row).quality_gates.all_passed
       ? ["recommendation_insufficient" as const]
       : []),
   ],
@@ -110,7 +118,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
     ownerId?: string;
     scope?: "product" | "all";
-    selectionView?: "recommended" | "evidence_pending" | "all";
+    selectionView?: "recommended" | "rule_candidates" | "evidence_pending" | "all";
   }) {
     const where = ["o.organization_id=?", "o.workspace_id=?"],
       values: unknown[] = [input.organizationId, input.workspaceId];
@@ -118,13 +126,19 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       where.push(
         "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_view WHERE orm_view.opportunity_id=o.id AND orm_view.organization_id=o.organization_id AND orm_view.workspace_id=o.workspace_id)",
         "o.decision_status='pending'",
-        "o.recommendation_status='recommend'",
+        opportunityRecommendedSql,
+      );
+    } else if (input.selectionView === "rule_candidates") {
+      where.push(
+        "o.decision_status='pending'",
+        opportunityRuleCandidateSql,
+        `NOT ${opportunityQualityGateSql}`,
       );
     } else if (input.selectionView === "evidence_pending") {
       where.push(
         "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_view WHERE orm_view.opportunity_id=o.id AND orm_view.organization_id=o.organization_id AND orm_view.workspace_id=o.workspace_id)",
         "o.decision_status='pending'",
-        "o.recommendation_status='insufficient_data'",
+        `NOT ${opportunityRuleCandidateSql}`,
       );
     } else if (input.selectionView !== "all" && input.scope !== "all")
       where.push(
@@ -155,7 +169,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     if (input.blockingReason === "evidence_insufficient")
       where.push("(o.evidence_count=0 OR o.coverage_status='insufficient')");
     if (input.blockingReason === "recommendation_insufficient")
-      where.push("o.recommendation_status='insufficient_data'");
+      where.push(`NOT ${opportunityQualityGateSql}`);
     if (input.lifecycleStatus) {
       where.push("o.lifecycle_status=?");
       values.push(input.lifecycleStatus);
@@ -171,7 +185,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [rows] = await this.pool.query<RowDataPacket[]>(
         sqlText(
-          `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql}`,
+          `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
           `FROM opportunities o WHERE ${sql}`,
           "ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?",
         ),
@@ -574,7 +588,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
   }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       sqlText(
-        `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql}`,
+        `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
         "FROM opportunities o",
         "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1",
       ),
@@ -652,14 +666,22 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     } catch (error) {
       if ((error as { code?: string }).code !== "ER_NO_SUCH_TABLE") throw error;
     }
-    const evidenceTask = evidenceTasks[0],
+    const selection = evaluateOpportunitySelection(row),
+      missingQualityGates = Object.entries(selection.quality_gates)
+        .filter(([key, passed]) => key !== "all_passed" && !passed)
+        .map(
+          ([key]) =>
+            ({ score: "评分", market: "市场", competition: "竞争", cost: "成本", risk: "风险" })[
+              key
+            ],
+        ),
+      evidenceTask = evidenceTasks[0],
       scoreJob = scoreJobs[0],
       recommendationRule = recommendationRuleRows[0],
       evidenceBlocked = Number(row.evidence_count) === 0 || row.coverage_status === "insufficient",
       qualityRegressionBlocked =
         String(scoreJob?.last_error_code ?? "") === "score_blocked_by_data_quality_regression",
-      recommendationBlocked =
-        row.recommendation_status === "insufficient_data" || qualityRegressionBlocked,
+      recommendationBlocked = !selection.quality_gates.all_passed || qualityRegressionBlocked,
       scoreInProgress =
         scoreJob && ["queued", "leased", "retry_scheduled"].includes(String(scoreJob.status)),
       evidenceInProgress =
@@ -696,22 +718,26 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           status: recommendationBlocked ? (scoreInProgress ? "in_progress" : "blocked") : "cleared",
           progress_percent: null,
           next_action: recommendationBlocked
-            ? recommendationGuidance({
-                qualityRegressionBlocked,
-                scoreInProgress: Boolean(scoreInProgress),
-                scoreRuleVersion:
-                  row.score_rule_version == null ? null : String(row.score_rule_version),
-                latestScoreStatus: scoreRun?.status == null ? null : String(scoreRun.status),
-                matchedRuleCount: Number(
-                  recommendationRule?.matched_rule_count ?? row.matched_rule_count ?? 0,
-                ),
-                enabledRuleCount: Number(recommendationRule?.enabled_rule_count ?? 0),
-                minimumSourceCount:
-                  recommendationRule?.minimum_source_count == null
-                    ? null
-                    : Number(recommendationRule.minimum_source_count),
-                sourceCount: Number(row.source_count ?? 0),
-              })
+            ? !qualityRegressionBlocked &&
+              !scoreInProgress &&
+              selection.selection_stage === "rule_candidate"
+              ? `已进入规则命中候选；${missingQualityGates.join("、")}质量门全部通过后才会显示“建议采纳”。`
+              : recommendationGuidance({
+                  qualityRegressionBlocked,
+                  scoreInProgress: Boolean(scoreInProgress),
+                  scoreRuleVersion:
+                    row.score_rule_version == null ? null : String(row.score_rule_version),
+                  latestScoreStatus: scoreRun?.status == null ? null : String(scoreRun.status),
+                  matchedRuleCount: Number(
+                    recommendationRule?.matched_rule_count ?? row.matched_rule_count ?? 0,
+                  ),
+                  enabledRuleCount: Number(recommendationRule?.enabled_rule_count ?? 0),
+                  minimumSourceCount:
+                    recommendationRule?.minimum_source_count == null
+                      ? null
+                      : Number(recommendationRule.minimum_source_count),
+                  sourceCount: Number(row.source_count ?? 0),
+                })
             : "推荐结论阻断已解除。",
           task_id: evidenceTask ? String(evidenceTask.id) : null,
           task_status: evidenceTask ? String(evidenceTask.status) : null,
@@ -761,9 +787,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         market: Number(row.evidence_count) > 0 ? "covered" : "insufficient_data",
         competition: row.competition_score == null ? "insufficient_data" : "covered",
         profit: row.profit_status,
-        risk: components.some((item) => item.dimension_code === "risk" && item.input_score != null)
-          ? "covered"
-          : "insufficient_data",
+        risk: selection.quality_gates.risk ? "covered" : "insufficient_data",
         execution: "not_available",
       },
     } as OpportunityDetail;
@@ -905,9 +929,11 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       await connection.beginTransaction();
       const [rows] = await connection.query<RowDataPacket[]>(
         sqlText(
-          "SELECT name,decision_status,version,recommendation_status,evidence_count,coverage_status",
-          "FROM opportunities",
-          "WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1 FOR UPDATE",
+          `SELECT o.name,o.decision_status,o.version,o.recommendation_status,o.evidence_count,` +
+            `o.coverage_status,o.overall_score,o.score_rule_version,o.trend_score,` +
+            `o.competition_score,o.profit_status,${opportunitySelectionProjectionSql}`,
+          "FROM opportunities o",
+          "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1 FOR UPDATE",
         ),
         [input.opportunityId, input.organizationId, input.workspaceId],
       );
@@ -926,14 +952,12 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         );
       if (
         input.action === "adopt" &&
-        (row.recommendation_status === "insufficient_data" ||
-          Number(row.evidence_count) === 0 ||
-          row.coverage_status === "insufficient")
+        evaluateOpportunitySelection(row).selection_stage !== "recommended"
       )
         throw new OpportunityServiceError(
           "opportunity_adopt_evidence_insufficient",
           409,
-          "证据不足时不能采纳；先分派缺失证据补齐任务。",
+          "仅可采纳已通过评分、市场、竞争、成本和风险五项质量门的“建议采纳”商品。",
         );
       const status: Exclude<OpportunityDecision, "pending"> =
           input.action === "adopt"

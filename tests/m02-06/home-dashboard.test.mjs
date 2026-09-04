@@ -55,6 +55,7 @@ test("M02-06.A01/A02/A04/A12 service groups and caps the truthful projection", a
     state: "not_configured",
     enabled_rule_count: 0,
     candidate_count: 0,
+    rule_candidate_count: 0,
     recommended_count: 0,
     awaiting_evidence_count: 0,
     adopted_count: 0,
@@ -75,6 +76,7 @@ test("M02-06 automatic selection summary preserves rule, recommendation and huma
     state: "running",
     enabled_rule_count: 3,
     candidate_count: 12,
+    rule_candidate_count: 5,
     recommended_count: 4,
     awaiting_evidence_count: 8,
     adopted_count: 2,
@@ -256,6 +258,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     up,
     down,
     repo,
+    selectionPolicy,
     home,
     overview,
     apiClient,
@@ -272,6 +275,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
       "database/migrations/0015b_home_dashboard_m02_06.up.sql",
       "database/migrations/0015b_home_dashboard_m02_06.down.sql",
       "apps/api/src/mysql-home-dashboard-repository.ts",
+      "apps/api/src/opportunity-selection-policy.ts",
       "apps/web/src/components/HomeDashboard.vue",
       "apps/web/src/components/HomeAutomationOverview.vue",
       "apps/web/src/api-client.ts",
@@ -300,8 +304,8 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     "UTC_TIMESTAMP\\(3\\)",
   ])
     assert.match(repo, new RegExp(rule));
-  assert.match(repo, /opportunity_rule_matches orm/);
-  assert.match(repo, /recommendation_status='recommend'/);
+  assert.match(selectionPolicy, /opportunity_rule_matches orm_gate/);
+  assert.match(selectionPolicy, /recommendation_status='recommend'/);
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
@@ -312,8 +316,11 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(home, /<HomeAutomationOverview :selection="selection"/);
   assert.match(home, /home-review-queue[\s\S]*推荐清单/);
   assert.match(home, /recommended_items[\s\S]*recommended_count/);
-  assert.match(overview, /home-status-facts[\s\S]*待你采纳[\s\S]*自动补证中[\s\S]*运行规则/);
-  assert.match(overview, /home-runtime-details[\s\S]*监控平台[\s\S]*补证与评分/);
+  assert.match(
+    overview,
+    /home-status-facts[\s\S]*待你采纳[\s\S]*规则命中候选[\s\S]*采集中[\s\S]*运行规则/,
+  );
+  assert.match(overview, /home-runtime-details[\s\S]*监控平台[\s\S]*质量门校验/);
   assert.match(overview, /人工采纳[\s\S]*人工已采纳/);
   assert.match(home, /<details class="home-truth">[\s\S]*自动推荐不等于自动采纳/);
   assert.doesNotMatch(home, /全链路教学/);

@@ -2,7 +2,7 @@
 
 ## 宝塔部署顺序
 
-1. 在宝塔受限发布任务备份 MySQL，按发布清单执行 `database/migrations/0017a_trends_m04_01.up.sql`、`0043_trend_rule_collection_schedule.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0068_automatic_selection_rule_matches.up.sql` 与 `0069_rule_based_recommendations.up.sql`；迁移兼容 MySQL 5.7、`utf8mb4`，不得使用 root 运行常驻服务。
+1. 在宝塔受限发布任务备份 MySQL，按发布清单执行 `database/migrations/0017a_trends_m04_01.up.sql`、`0043_trend_rule_collection_schedule.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0068_automatic_selection_rule_matches.up.sql`、`0069_rule_based_recommendations.up.sql` 与 `0070_rule_candidates_quality_gate.up.sql`；迁移兼容 MySQL 5.7、`utf8mb4`，不得使用 root 运行常驻服务。
 2. 在 Node Worker 项目环境设置 `TREND_PROJECTION_POLL_MS=2000`、`TREND_PROJECTION_LEASE_SECONDS=120`。这些不是秘密；真实数据库、Redis 和会话秘密仍只保存在宝塔受限环境。
 3. 由宝塔先重启 Node Worker，再重启 Node API。Web 静态产物随网站发布；不得创建 systemd、独立 PM2、宿主 crontab或面板外容器。
 4. 检查 Worker 日志中的 `queue=trend_projection`，再运行 `npm run verify:module -- M04-01`。
@@ -28,7 +28,7 @@
 - 商品型频道有热点但没有自动发现选品：先检查主题是否命中至少一条已启用规则，再检查同组织、工作区、趋势主题对应的 `opportunities`、`opportunity_rule_matches`、`opportunity_evidence_links` 和 `opportunity.candidate.discovered`。未命中规则不生成候选是正确状态；命中后应保存全部精确规则关联。
 - Amazon 规则没有创建公开页任务：检查 Provider 是否启用、平台条款审核是否有效、解析器是否为 `amazon-structured-product-v2`，并确认规则任务的 `collection_subqueries.target_json` 含 `projection_type=rule_product_discovery` 和规则关键词 `query`。这条链只读取 Amazon 公开 `/s` 和商品页，不使用商品 API。
 - 1688 规则没有创建登录浏览器任务：检查 Provider 是否已完成固定样本回放、第二人审批和负责人显式启用，平台条款审核是否有效、解析器是否为 `1688-browser-contract-v3`，并确认规则任务的 `collection_subqueries.target_json` 含 `projection_type=rule_product_discovery`、规则编号和关键词 `query`。规则结果只有规范 `https://detail.1688.com/offer/{offerId}.html` 商品证据进入选品机会，供应商名称映射为趋势信号发布方；Cookie、账号和授权材料不得写入任务目标或日志。
-- 自动候选没有推荐：没有评分规则结果时，检查命中规则的 `status`、`recommendation_min_source_count` 与机会 `source_count`；达到任一启用规则门槛应写入 `recommend`，否则 `insufficient_data` 是正确状态。存在已启用评分规则时再检查 `opportunity_score_jobs` 与真实评分输入，并以评分版本结论为准。无论来源门槛或评分结果得到 `recommend`，都只能进入人工“采纳/观察/驳回”决策，系统不得自动采纳。
+- 自动候选没有推荐：先检查命中规则的 `status`、`recommendation_min_source_count` 与机会 `source_count`；达到任一启用规则门槛只应显示“规则命中候选”，不得直接写入 `recommend`。随后检查 `opportunity_score_jobs`、真实评分输入、市场分、竞争分、利润成本计算和风险输入；五项质量门全部通过后才显示“建议采纳”，并且仍只能由人工执行最终采纳。
 - 1688 未运行：检查已认证浏览器档案、登录健康和双人样本批准。当前合同仅允许已认证浏览器爬虫，不接入 OneBound 或其他商品 API；未完成前必须保持“待配置”，不得伪装为实时运行。
 - 已有商品机会但图片、竞品快照或供应商仍为空：检查 `collection_subqueries.target_json` 中对应的 `competitor_snapshot` / `sourcing_search`，以及事件 `competitor.collection.auto_scheduled` / `sourcing.collection.auto_scheduled`。Amazon 详情目标必须包含 `page_url`；供应商目标必须包含 `query_contract=supplier-keywords-v2` 和 1–300 字符的 `query`，实际自动关键词不超过 120 字符。旧版字段错误、完整长标题查询或代理响应 URL 丢失会自动补建一次正确任务；Made-in-China 失败后仍应继续 EC21。其他已有失败或死信任务不会自动无限重放，应在采集控制台查看错误和证据后人工处理。
 
@@ -39,7 +39,7 @@
 1. 先由宝塔停止 Node Worker，避免继续创建投影。
 2. 回滚 Web、Node API 和 Node Worker 到上一版本。回滚后自动频道不再创建新候选，但已经生成的待评估选品、规则关联、趋势证据和审计必须保留，不得批量删除掩盖发布结果。
 3. 如必须回滚数据库，确认 M04-02 及下游尚未使用趋势表，导出并保留 `trend_events`、`trend_outbox` 和主题证据关联后，执行 `database/migrations/0017a_trends_m04_01.down.sql`。
-4. 只回滚规则推荐时，先恢复旧代码，再执行 `0069_rule_based_recommendations.down.sql`；它会把尚无评分版本的待决策规则候选恢复为 `insufficient_data` 并删除来源门槛字段。继续回滚规则关联时再执行 `0068_automatic_selection_rule_matches.down.sql`；它只删除规则关联表，不删除机会、证据或决策。完整 M04-01 下迁移会删除趋势投影与监控规则并撤销 `trend:manage`，但不会删除 P03 原始证据和规范化记录。完成后由宝塔重启旧版 Worker/API。
+4. 只回滚本次五项质量门读模型时，先恢复旧代码，再执行 `0070_rule_candidates_quality_gate.down.sql`；它会恢复旧版本仅凭来源门槛的推荐口径，因此只能与旧应用一起使用。继续回滚来源门槛时再执行 `0069_rule_based_recommendations.down.sql`，回滚规则关联时再执行 `0068_automatic_selection_rule_matches.down.sql`。所有回滚前先备份，机会、证据和人工决策不得删除。
 
 ## 故障演练
 

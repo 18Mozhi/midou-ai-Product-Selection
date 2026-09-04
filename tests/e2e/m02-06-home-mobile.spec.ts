@@ -119,6 +119,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
             state: "running",
             enabled_rule_count: 3,
             candidate_count: 12,
+            rule_candidate_count: 5,
             recommended_count: 4,
             awaiting_evidence_count: 8,
             adopted_count: 2,
@@ -168,7 +169,8 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
   await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");
-  await expect(page.locator(".home-status-facts")).toContainText("8自动补证中");
+  await expect(page.locator(".home-status-facts")).toContainText("5规则命中候选");
+  await expect(page.locator(".home-status-facts")).toContainText("8采集中");
   await expect(page.locator(".home-status-facts")).toContainText("3运行规则");
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeHidden();
   await page.getByText("运行详情", { exact: true }).click();
@@ -206,6 +208,14 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
           owner_id: null,
           lifecycle_status: "ready",
           recommendation_status: "insufficient_data",
+          selection_stage: "not_eligible",
+          quality_gates: {
+            score: false,
+            market: false,
+            competition: false,
+            cost: false,
+            risk: false,
+          },
           overall_score: null,
           trend_score: null,
           competition_score: null,
@@ -244,6 +254,10 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   );
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "移动端真实机会" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "待判断", level: 3 })).toBeVisible();
+  await expect(
+    page.getByText("尚未达到规则来源门槛，或当前机会不属于自动选品规则，暂不能采纳。"),
+  ).toBeVisible();
   await expect(page.getByRole("navigation", { name: "机会详情返回路径" })).toContainText(
     "机会详情",
   );
@@ -305,6 +319,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
                   state: "not_configured",
                   enabled_rule_count: 0,
                   candidate_count: 0,
+                  rule_candidate_count: 0,
                   recommended_count: 0,
                   awaiting_evidence_count: 0,
                   adopted_count: 0,
@@ -331,7 +346,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
     "data-done",
     "false",
   );
-  const emptyRecommendation = page.getByText("系统会在规则命中后自动加入这里。");
+  const emptyRecommendation = page.getByText("系统会在五项质量门全部通过后自动加入这里。");
   await expect(emptyRecommendation).toBeVisible();
   if (testInfo.project.name === "mobile-390") {
     await markOcclusionProbe(emptyRecommendation);

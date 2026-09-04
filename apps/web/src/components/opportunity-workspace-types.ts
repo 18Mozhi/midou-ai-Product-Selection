@@ -57,6 +57,15 @@ export interface OpportunitySummary {
   competitor_count: number;
   supplier_candidate_count: number;
   matched_rule_count: number;
+  selection_stage: "rule_candidate" | "recommended" | "not_eligible";
+  quality_gates: {
+    score: boolean;
+    market: boolean;
+    competition: boolean;
+    cost: boolean;
+    risk: boolean;
+    all_passed: boolean;
+  };
   coverage_status: string;
   blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
   decision_status: string;

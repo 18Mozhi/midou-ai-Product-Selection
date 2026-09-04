@@ -44,6 +44,7 @@ const allowed = new Set([
   "0067_usernames_login.up.sql",
   "0068_automatic_selection_rule_matches.up.sql",
   "0069_rule_based_recommendations.up.sql",
+  "0070_rule_candidates_quality_gate.up.sql",
 ]);
 export function splitSqlStatements(source) {
   const statements = [];

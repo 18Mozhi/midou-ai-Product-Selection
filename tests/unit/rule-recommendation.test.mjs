@@ -15,7 +15,7 @@ const input = {
   now: new Date("2026-09-03T00:00:00Z"),
 };
 
-test("rule recommendation promotes only a pending unscored opportunity that reaches an enabled rule threshold", async () => {
+test("rule threshold only marks candidacy and corrects a legacy unscored recommendation", async () => {
   const calls = [];
   const connection = {
     query: async (sql, params) => {
@@ -24,7 +24,7 @@ test("rule recommendation promotes only a pending unscored opportunity that reac
         return [
           [
             {
-              recommendation_status: "insufficient_data",
+              recommendation_status: "recommend",
               score_rule_version: null,
               decision_status: "pending",
               source_count: 2,
@@ -36,12 +36,12 @@ test("rule recommendation promotes only a pending unscored opportunity that reac
     },
   };
   const result = await refreshRuleRecommendation(connection, input);
-  assert.deepEqual(result, { changed: true, recommendationStatus: "recommend" });
+  assert.deepEqual(result, { changed: true, recommendationStatus: "insufficient_data" });
   assert.match(calls[1].sql, /UPDATE opportunities SET recommendation_status=/);
-  assert.equal(calls[1].params[0], "recommend");
+  assert.equal(calls[1].params[0], "insufficient_data");
   assert.match(calls[2].sql, /opportunity_events/);
   assert.match(calls[3].sql, /opportunity_outbox/);
-  assert.match(String(calls[2].params[10]), /monitoring_rule_source_threshold/);
+  assert.match(String(calls[2].params[10]), /monitoring_rule_candidate_threshold/);
 });
 
 test("rule recommendation never overrides a versioned scoring conclusion", async () => {
@@ -84,7 +84,7 @@ test("rule status changes recalculate matching recommendations with an auditable
           [
             {
               id: input.opportunityId,
-              recommendation_status: "insufficient_data",
+              recommendation_status: "recommend",
               source_count: 2,
               matched_threshold: 2,
             },
@@ -148,4 +148,16 @@ test("0069 migration adds a MySQL 5.7 compatible explicit source threshold and r
   assert.match(up, /r\.status='enabled'/);
   assert.doesNotMatch(up, /CHECK\s*\(|JSON_TABLE|WITH\s+RECURSIVE/i);
   assert.match(down, /DROP COLUMN `recommendation_min_source_count`/);
+});
+
+test("0070 migration restores legacy unscored recommendations to truthful rule candidates", async () => {
+  const [up, down] = await Promise.all([
+    readFile("database/migrations/0070_rule_candidates_quality_gate.up.sql", "utf8"),
+    readFile("database/migrations/0070_rule_candidates_quality_gate.down.sql", "utf8"),
+  ]);
+  assert.match(up, /recommendation_status`='insufficient_data'/);
+  assert.match(up, /score_rule_version` IS NULL/);
+  assert.match(down, /opportunity_rule_matches/);
+  assert.match(down, /recommendation_min_source_count/);
+  assert.doesNotMatch(`${up}\n${down}`, /CHECK\s*\(|JSON_TABLE|WITH\s+RECURSIVE/i);
 });

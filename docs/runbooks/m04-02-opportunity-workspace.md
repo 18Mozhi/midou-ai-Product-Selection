@@ -8,7 +8,7 @@
 
 - Node API 与 Node Worker 均继续由宝塔面板管理，不创建额外生产服务。
 - `OPPORTUNITY_REFRESH_POLL_MS` 与 `OPPORTUNITY_REFRESH_LEASE_SECONDS` 只放在宝塔受限环境；修改后在面板重启 Node Worker。
-- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql` 与 `0065_opportunity_operating_feedback.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。
+- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql`、`0065_opportunity_operating_feedback.up.sql` 与 `0070_rule_candidates_quality_gate.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。
 - 发布自动发现选品逻辑后，确认商品型 `gnews_*` 主题能建立 `trend_topic` 来源候选、关联至少一条真实证据并保持 `insufficient_data`；普通新闻与数据频道不得批量生成候选。
 
 ## 观测和处置
@@ -18,7 +18,7 @@
 - `retry_scheduled` 会按 1/5/15 分钟退避；`failed_terminal` 表示来源已失效等不可重试输入，`dead_letter` 表示依赖错误耗尽四次。
 - 页面显示 `insufficient_data` 或 `unknown` 是事实状态，不应通过手工 SQL 填入分数、ROI 或低风险。
 - 机会列表可按“不完整 / 部分完整 / 完整”筛选，也可按“缺少可采纳证据 / 尚无可靠推荐结论”筛选；后者只对应采纳接口已有的持久化阻断条件。两类筛选都无需配置或重启 Worker。应用发布后需由宝塔重启 Node API 并更新网站静态文件。
-- 发布后先打开默认“待我采纳”，确认每条记录都存在规则命中标记且服务端为 `decision_status=pending`、`recommendation_status=recommend`；切换“自动补证中”只应出现规则命中且 `recommendation_status=insufficient_data` 的候选；“全部机会”保留手工、ERP 导入和其他机会。该变更无数据库迁移、环境变量或 Worker 重启要求，但新增 API 查询参数需要宝塔重启 Node API，前端静态文件需要重新发布。
+- 发布后先打开默认“待我采纳”，确认每条记录均为 `selection_stage=recommended`、`quality_gates.all_passed=true` 且 `decision_status=pending`；采纳按钮只对这些记录启用。切换“规则命中候选”应只出现达到来源门槛但至少一项质量门未通过的记录；“采集中”只显示已匹配规则但尚未达到来源门槛的记录；“全部机会”保留手工、ERP 导入和其他机会。该变更需要应用 0070 数据修正、重启宝塔 Node API 与 Node Worker，并重新发布前端静态文件；没有新增环境变量。
 - 发布后在列表设置筛选并翻页，确认地址栏同步；从结果进入详情，再使用“返回来源列表”，应恢复完整筛选和页码。直接打开带 `tab=evidence` 的详情链接应定位证据分区。证据超过 20 条时初始 DOM 只能挂载最新 20 条，“继续显示”每次增加最多 20 条，“收起”恢复 20 条，页面总数仍必须等于 API 全量事实。首屏应只突出系统建议、评分、证据、风险和人工最终决定，完整阻断进度与手动补证工具按需展开；390px 下四个一级页签等宽显示，“更多分析”在文档流内展开，人工决策区不得覆盖正文或成员底部导航。
 - 核对列表的阶段停留时长不会因改负责人或普通刷新而重置；只有阶段实际变化时 `lifecycle_entered_at` 才更新。详情应同时展示两类采纳阻断、补采任务进度与评分 Job 状态。
 - 推荐结论仍阻断时，核对详情提示与真实状态一致：质量回归应先处理质量问题；评分 Job 排队或执行中应显示处理中；已有评分运行但结论不足应按评分缺失项补证；命中运行规则但独立来源不足应显示当前来源数和最低门槛；只命中暂停规则应提示恢复规则；完全未命中规则应引导到首页设置匹配关键词。不得把这些状态统一显示为“启用评分规则”。

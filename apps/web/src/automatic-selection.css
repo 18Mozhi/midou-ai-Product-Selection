@@ -323,6 +323,37 @@
   font-weight: 800;
 }
 
+.opportunity-workspace .opportunity-quality-gates {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 14px 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  border-top: 1px solid var(--selection-line);
+  list-style: none;
+}
+
+.opportunity-workspace .opportunity-quality-gates li {
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--so-text-muted) 7%, transparent);
+  font-size: 13px;
+}
+
+.opportunity-workspace .opportunity-quality-gates li[data-passed="true"] {
+  background: color-mix(in srgb, var(--selection-positive) 11%, transparent);
+  color: var(--selection-positive);
+}
+
+.opportunity-workspace .opportunity-quality-gates li b {
+  white-space: nowrap;
+}
+
 .opportunity-workspace .opportunity-decision-gap {
   margin: 0 22px;
   padding: 13px 0;
@@ -580,6 +611,9 @@
   .opportunity-workspace .opportunity-decision-summary__lead dl {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+  }
+  .opportunity-workspace .opportunity-quality-gates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .opportunity-workspace .opportunity-decision-gap {
     margin: 0 18px;

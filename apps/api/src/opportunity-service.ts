@@ -3,7 +3,9 @@ import { randomUUID } from "node:crypto";
 export type OpportunityDecision = "pending" | "adopted" | "observing" | "rejected";
 export type OpportunityCoverageStatus = "insufficient" | "partial" | "complete";
 export type OpportunityBlockingReason = "evidence_insufficient" | "recommendation_insufficient";
-export type OpportunitySelectionView = "recommended" | "evidence_pending" | "all";
+export type OpportunitySelectionView =
+  "recommended" | "rule_candidates" | "evidence_pending" | "all";
+export type OpportunitySelectionStage = "rule_candidate" | "recommended" | "not_eligible";
 export type OpportunityLifecycle =
   "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
 export type OpportunityBatchAction = "assign" | "archive" | "review";
@@ -48,6 +50,15 @@ export interface OpportunitySummary {
   competitor_count: number;
   supplier_candidate_count: number;
   matched_rule_count: number;
+  selection_stage: OpportunitySelectionStage;
+  quality_gates: {
+    score: boolean;
+    market: boolean;
+    competition: boolean;
+    cost: boolean;
+    risk: boolean;
+    all_passed: boolean;
+  };
   coverage_status: OpportunityCoverageStatus;
   blocking_reasons: OpportunityBlockingReason[];
   decision_status: OpportunityDecision;
@@ -473,7 +484,7 @@ export class OpportunityService {
       );
     if (
       input.selectionView &&
-      !["recommended", "evidence_pending", "all"].includes(input.selectionView)
+      !["recommended", "rule_candidates", "evidence_pending", "all"].includes(input.selectionView)
     )
       throw new OpportunityServiceError(
         "opportunity_filter_invalid",

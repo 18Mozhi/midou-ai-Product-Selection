@@ -5,7 +5,7 @@ import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type SelectionView = "recommended" | "evidence_pending" | "all";
+type SelectionView = "recommended" | "rule_candidates" | "evidence_pending" | "all";
 interface OpportunityFilters {
   q: string;
   market: string;
@@ -32,6 +32,7 @@ interface Opportunity {
   competitor_count: number;
   supplier_candidate_count: number;
   matched_rule_count: number;
+  selection_stage: "rule_candidate" | "recommended" | "not_eligible";
   blocking_reasons: Array<"evidence_insufficient" | "recommendation_insufficient">;
   owner_id: string | null;
   lifecycle_status: string;
@@ -42,7 +43,8 @@ interface Opportunity {
 }
 const viewOptions: Array<{ value: SelectionView; label: string }> = [
   { value: "recommended", label: "待我采纳" },
-  { value: "evidence_pending", label: "自动补证中" },
+  { value: "rule_candidates", label: "规则命中候选" },
+  { value: "evidence_pending", label: "采集中" },
   { value: "all", label: "全部机会" },
 ];
 
@@ -75,12 +77,16 @@ const props = defineProps<{
     () =>
       ({
         recommended: {
-          title: `系统推荐 ${props.total} 个商品`,
-          description: "均已命中规则并通过证据门槛，只等你作最终决定。",
+          title: `${props.total} 个商品建议采纳`,
+          description: "评分、市场、竞争、成本和风险五项质量门均已通过，只等你最终采纳。",
+        },
+        rule_candidates: {
+          title: `${props.total} 个规则命中候选`,
+          description: "已达到规则来源门槛，系统继续完成五项质量门校验。",
         },
         evidence_pending: {
-          title: `${props.total} 个商品正在自动补证`,
-          description: "系统正在补齐市场、竞争、成本与风险信息，无需人工盯守。",
+          title: `${props.total} 个商品仍在采集`,
+          description: "尚未达到规则来源门槛，系统会继续监控和采集。",
         },
         all: {
           title: `全部 ${props.total} 个机会`,
@@ -126,11 +132,13 @@ const opportunityStatus = (value: string) =>
         : "其他线索",
   scoreLabel = (value: number | null) =>
     value == null ? "—" : Number.isInteger(value) ? String(value) : value.toFixed(1),
+  selectionStage = (item: Opportunity) =>
+    item.selection_stage ?? (item.matched_rule_count > 0 ? "rule_candidate" : "not_eligible"),
   recommendationLabel = (item: Opportunity) =>
-    item.matched_rule_count > 0 && item.recommendation_status === "recommend"
-      ? "系统推荐"
-      : item.matched_rule_count > 0 && item.recommendation_status === "insufficient_data"
-        ? "自动补证中"
+    selectionStage(item) === "recommended"
+      ? "建议采纳"
+      : selectionStage(item) === "rule_candidate"
+        ? "规则命中候选"
         : opportunityStatus(item.decision_status),
   clearOrShowAll = () => {
     if (activeFilterCount.value) emit("reset");
@@ -316,7 +324,7 @@ const opportunityStatus = (value: string) =>
           </div>
         </dl>
         <b :data-status="item.decision_status"
-          >{{ item.recommendation_status === "recommend" ? "审阅并决定" : "查看详情" }} →</b
+          >{{ selectionStage(item) === "recommended" ? "审阅并采纳" : "查看进度" }} →</b
         ></RouterLink
       >
     </article>

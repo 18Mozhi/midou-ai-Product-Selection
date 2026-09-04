@@ -67,7 +67,12 @@ test("opportunity blocker filters reuse the persisted adoption guard facts", asy
   statements.length = 0;
   await repository.list({ ...scope, blockingReason: "recommendation_insufficient" });
   assert.ok(
-    statements.every(({ sql }) => sql.includes("o.recommendation_status='insufficient_data'")),
+    statements.every(
+      ({ sql }) =>
+        sql.includes("NOT (o.recommendation_status='recommend'") &&
+        sql.includes("o.profit_status='calculated'") &&
+        sql.includes("sc_gate.dimension_code='risk'"),
+    ),
   );
 });
 
@@ -135,6 +140,6 @@ test("opportunity detail explains the persisted rule source threshold", async ()
   });
   assert.equal(
     detail.adoption_blockers[1].next_action,
-    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入推荐。系统会继续自动补证。",
+    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入规则命中候选。系统会继续自动采集。",
   );
 });

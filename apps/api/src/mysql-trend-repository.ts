@@ -709,8 +709,7 @@ export class MySqlTrendRepository implements TrendRepository {
       );
       let recommendationUpdates = 0;
       for (const opportunity of affectedOpportunities) {
-        const recommendationStatus =
-          opportunity.matched_threshold == null ? "insufficient_data" : "recommend";
+        const recommendationStatus = "insufficient_data";
         if (String(opportunity.recommendation_status) === recommendationStatus) continue;
         const now = this.now();
         await c.query(
@@ -1074,7 +1073,7 @@ export class MySqlTrendRepository implements TrendRepository {
       traceId: string;
     },
     opportunity: RowDataPacket,
-    recommendationStatus: "recommend" | "insufficient_data",
+    recommendationStatus: "insufficient_data",
     now: Date,
   ) {
     const eventId = randomUUID();
@@ -1084,7 +1083,7 @@ export class MySqlTrendRepository implements TrendRepository {
       source_count: Number(opportunity.source_count),
       minimum_source_count:
         opportunity.matched_threshold == null ? null : Number(opportunity.matched_threshold),
-      basis: "monitoring_rule_source_threshold",
+      basis: "monitoring_rule_candidate_threshold",
     });
     await c.query(
       "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type," +

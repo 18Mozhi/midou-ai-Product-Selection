@@ -3,6 +3,7 @@ interface AutomaticSelectionSummary {
   state: "not_configured" | "running" | "attention";
   enabled_rule_count: number;
   candidate_count: number;
+  rule_candidate_count: number;
   recommended_count: number;
   awaiting_evidence_count: number;
   adopted_count: number;
@@ -23,8 +24,12 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
         <span>待你采纳</span>
       </div>
       <div>
+        <strong>{{ selection.rule_candidate_count ?? 0 }}</strong>
+        <span>规则命中候选</span>
+      </div>
+      <div>
         <strong>{{ selection.awaiting_evidence_count }}</strong>
-        <span>自动补证中</span>
+        <span>采集中</span>
       </div>
       <div>
         <strong>{{ selection.enabled_rule_count }}</strong>
@@ -57,7 +62,8 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
           <li :data-done="selection.recommended_count > 0">
             <i>3</i>
             <div>
-              <b>补证与评分</b><span>{{ selection.awaiting_evidence_count }} 条仍在补证</span>
+              <b>质量门校验</b
+              ><span>{{ selection.rule_candidate_count ?? 0 }} 条候选正在完成五项校验</span>
             </div>
           </li>
           <li :data-done="selection.adopted_count > 0">

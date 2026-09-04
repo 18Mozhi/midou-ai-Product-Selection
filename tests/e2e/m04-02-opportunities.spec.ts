@@ -32,11 +32,23 @@ const recommendedBase = {
   ...base,
   recommendation_status: "recommend",
   overall_score: 86,
+  trend_score: 88,
+  competition_score: 82,
+  profit_status: "calculated",
+  risk_level: "low",
   evidence_count: 8,
   source_count: 3,
   competitor_count: 5,
   supplier_candidate_count: 4,
   matched_rule_count: 1,
+  selection_stage: "recommended",
+  quality_gates: {
+    score: true,
+    market: true,
+    competition: true,
+    cost: true,
+    risk: true,
+  },
   coverage_status: "complete",
   blocking_reasons: [],
 };
@@ -115,6 +127,14 @@ async function ready(page: Page, detailEvidence = evidence) {
       body: JSON.stringify(
         envelope({
           ...base,
+          selection_stage: "rule_candidate",
+          quality_gates: {
+            score: false,
+            market: false,
+            competition: false,
+            cost: false,
+            risk: false,
+          },
           decision_status: decided ? "observing" : "pending",
           lifecycle_status: decided ? "observing" : "ready",
           version: decided ? 2 : 1,
@@ -160,7 +180,7 @@ async function ready(page: Page, detailEvidence = evidence) {
               status: "blocked",
               progress_percent: null,
               next_action:
-                "当前候选尚未命中运行中的自动选品规则；在首页设置匹配关键词后，系统会继续采集并重新判断。",
+                "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
               task_id: null,
               task_status: null,
               score_job_status: null,
@@ -216,7 +236,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await ready(page);
   await page.goto("/opportunities?create=1");
   await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "系统推荐 1 个商品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "1 个商品建议采纳" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
@@ -265,9 +285,13 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   ]);
   await expect(page.locator(".opportunity-tabs details > summary")).toHaveText("更多分析");
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await expect(page.getByRole("list", { name: "五项质量门" })).toContainText(
+    "评分待完成市场待完成竞争待完成成本待完成风险待完成",
+  );
+  await expect(page.getByRole("button", { name: "采纳推荐" })).toBeDisabled();
   await expect(
     page.getByText(
-      "当前候选尚未命中运行中的自动选品规则；在首页设置匹配关键词后，系统会继续采集并重新判断。",
+      "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
       { exact: true },
     ),
   ).toBeVisible();
@@ -337,13 +361,21 @@ test("selection views send explicit truthful recommendation filters", async ({ p
     "page",
   );
 
+  const ruleCandidates = page.waitForRequest((request) =>
+    request.url().includes("selection_view=rule_candidates"),
+  );
+  await page.getByRole("button", { name: "规则命中候选" }).click();
+  await ruleCandidates;
+  await expect(page).toHaveURL(/view=rule_candidates/);
+  await expect(page.getByRole("heading", { name: "规则命中候选", level: 2 })).toBeVisible();
+
   const evidencePending = page.waitForRequest((request) =>
     request.url().includes("selection_view=evidence_pending"),
   );
-  await page.getByRole("button", { name: "自动补证中" }).click();
+  await page.getByRole("button", { name: "采集中" }).click();
   await evidencePending;
   await expect(page).toHaveURL(/view=evidence_pending/);
-  await expect(page.getByRole("heading", { name: "自动补证中", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "采集中", level: 2 })).toBeVisible();
 
   const all = page.waitForRequest((request) => request.url().includes("selection_view=all"));
   await page.getByRole("button", { name: "全部机会" }).click();

@@ -34,7 +34,7 @@ export async function refreshRuleRecommendation(
     String(opportunity.decision_status) !== "pending"
   )
     return { changed: false } as const;
-  const next = opportunity.matched_threshold == null ? "insufficient_data" : "recommend";
+  const next = "insufficient_data";
   if (String(opportunity.recommendation_status) === next) return { changed: false } as const;
   await connection.query(
     "UPDATE opportunities SET recommendation_status=?,version=version+1,updated_at=? " +
@@ -48,7 +48,7 @@ export async function refreshRuleRecommendation(
     source_count: Number(opportunity.source_count),
     minimum_source_count:
       opportunity.matched_threshold == null ? null : Number(opportunity.matched_threshold),
-    basis: "monitoring_rule_source_threshold",
+    basis: "monitoring_rule_candidate_threshold",
   };
   await connection.query(
     "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type," +

@@ -42,7 +42,7 @@ test("recommendation guidance reports the exact automatic-rule source threshold"
       minimumSourceCount: 3,
       sourceCount: 1,
     }),
-    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入推荐。系统会继续自动补证。",
+    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入规则命中候选。系统会继续自动采集。",
   );
   assert.equal(
     recommendationGuidance({
@@ -52,7 +52,7 @@ test("recommendation guidance reports the exact automatic-rule source threshold"
       minimumSourceCount: 2,
       sourceCount: 2,
     }),
-    "运行规则的独立来源门槛已满足，系统正在刷新推荐结论。",
+    "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
   );
 });
 

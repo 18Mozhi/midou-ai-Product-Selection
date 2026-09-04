@@ -1,6 +1,11 @@
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { HomeDashboardItem } from "@scoutops/contracts";
 import type { HomeDashboardRepository } from "./home-dashboard-service.js";
+import {
+  opportunityQualityGateSql,
+  opportunityRecommendedSql,
+  opportunityRuleCandidateSql,
+} from "./opportunity-selection-policy.js";
 export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
   constructor(private readonly pool: Pool) {}
   async automaticSelection(input: { organizationId: string; workspaceId: string }) {
@@ -15,23 +20,29 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
           JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
             AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
-          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
+         WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
             AND o.lifecycle_status<>'archived') candidate_count,
+         (SELECT COUNT(*) FROM opportunities o
+          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
+            AND o.lifecycle_status<>'archived' AND ${opportunityRuleCandidateSql}
+            AND NOT ${opportunityQualityGateSql}) rule_candidate_count,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
           JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
             AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND o.recommendation_status='recommend' AND o.lifecycle_status<>'archived') recommended_count,
+            AND ${opportunityRecommendedSql} AND o.lifecycle_status<>'archived') recommended_count,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
           JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
             AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND o.recommendation_status='insufficient_data' AND o.lifecycle_status<>'archived') awaiting_evidence_count,
+            AND NOT ${opportunityRuleCandidateSql} AND o.lifecycle_status<>'archived') awaiting_evidence_count,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
           JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
             AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='adopted') adopted_count`,
       [
+        input.organizationId,
+        input.workspaceId,
         input.organizationId,
         input.workspaceId,
         input.organizationId,
@@ -61,6 +72,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
             : ("attention" as const),
       enabled_rule_count: enabled,
       candidate_count: Number(row.candidate_count ?? 0),
+      rule_candidate_count: Number(row.rule_candidate_count ?? 0),
       recommended_count: Number(row.recommended_count ?? 0),
       awaiting_evidence_count: Number(row.awaiting_evidence_count ?? 0),
       adopted_count: Number(row.adopted_count ?? 0),
@@ -230,10 +242,8 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
           "o.updated_at,o.version,COALESCE(NULLIF(p.display_name,''),u.email) owner_label FROM opportunities o " +
           "LEFT JOIN users u ON u.id=COALESCE(o.owner_id,o.created_by) LEFT JOIN user_profiles p ON " +
           "p.user_id=COALESCE(o.owner_id,o.created_by) WHERE o.organization_id=? AND o.workspace_id=? " +
-          "AND o.decision_status='pending' AND o.recommendation_status='recommend' " +
-          "AND o.lifecycle_status<>'archived' AND EXISTS (SELECT 1 FROM opportunity_rule_matches orm " +
-          "WHERE orm.opportunity_id=o.id AND orm.organization_id=o.organization_id " +
-          "AND orm.workspace_id=o.workspace_id) AND " +
+          `AND o.decision_status='pending' AND ${opportunityRecommendedSql} ` +
+          "AND o.lifecycle_status<>'archived' AND " +
           "(o.owner_id=? OR o.owner_id IS NULL) ORDER BY " +
           "FIELD(o.risk_level,'high','medium','low','unknown'),o.overall_score DESC,o.updated_at DESC LIMIT 40",
         [input.organizationId, input.workspaceId, input.actorId],
@@ -246,7 +256,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
           title: String(row.name),
           reason: highRisk
             ? "当前机会风险较高，等待你复核证据并作出决策。"
-            : "命中已启用选品规则且评分结论为推荐，等待你最终确认。",
+            : "评分、市场、竞争、成本和风险五项质量门均已通过，等待你最终确认。",
           route: `/opportunities/${row.id}`,
           source_module: "opportunity",
           source_label: "选品机会",

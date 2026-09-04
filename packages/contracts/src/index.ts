@@ -345,6 +345,7 @@ export interface HomeDashboardSummary {
     state: "not_configured" | "running" | "attention";
     enabled_rule_count: number;
     candidate_count: number;
+    rule_candidate_count: number;
     recommended_count: number;
     awaiting_evidence_count: number;
     adopted_count: number;

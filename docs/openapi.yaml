@@ -1855,7 +1855,7 @@ paths:
   /opportunities:
     get:
       summary: List workspace-scoped opportunities without fabricated scores
-      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 DHgate/Made-in-China/EC21 公开供应商搜索；Amazon 使用 page_url 商品页目标，供应商按 supplier-keywords-v2 从原商品标题提取通用品类关键词且最多 120 字符，并兼容宝塔受限代理返回空 Response.url，单一供应商来源失败不会阻断后续公开来源。selection_view=recommended 只返回命中规则、待人工决定且评分结论为推荐的机会；evidence_pending 只返回命中规则但仍待补证的候选；all 返回完整机会库。未传 selection_view 时保留既有 scope 行为。人工创建仍可用，自动候选不等于系统推荐或自动采纳。
+      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 DHgate/Made-in-China/EC21 公开供应商搜索；Amazon 使用 page_url 商品页目标，供应商按 supplier-keywords-v2 从原商品标题提取通用品类关键词且最多 120 字符，并兼容宝塔受限代理返回空 Response.url，单一供应商来源失败不会阻断后续公开来源。selection_view=recommended 只返回达到启用规则来源门槛且评分、市场、竞争、成本、风险五项质量门全部通过的待人工采纳商品；rule_candidates 返回达到规则来源门槛但质量门尚未全部通过的候选；evidence_pending 返回已精确命中规则但仍低于来源门槛的采集中商品；all 返回完整机会库。未传 selection_view 时保留既有 scope 行为。最终采纳始终由人工完成。
       security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: "#/components/parameters/Page"
@@ -1869,8 +1869,8 @@ paths:
         - {
             name: selection_view,
             in: query,
-            description: "Truthful automatic-selection view; recommendation and evidence-pending views require an exact opportunity_rule_matches link.",
-            schema: { type: string, enum: [recommended, evidence_pending, all] },
+            description: "Truthful automatic-selection view; recommendation, rule-candidate and evidence-pending views require an exact opportunity_rule_matches link.",
+            schema: { type: string, enum: [recommended, rule_candidates, evidence_pending, all] },
           }
         - {
             name: decision_status,
@@ -1886,7 +1886,7 @@ paths:
         - {
             name: blocking_reason,
             in: query,
-            description: "Filter by an adoption blocker derived only from persisted evidence coverage/count or recommendation status.",
+            description: "Filter by an adoption blocker derived only from persisted evidence coverage/count or the five persisted recommendation quality gates.",
             schema: { type: string, enum: [evidence_insufficient, recommendation_insufficient] },
           }
         - {
@@ -7918,6 +7918,7 @@ components:
               state,
               enabled_rule_count,
               candidate_count,
+              rule_candidate_count,
               recommended_count,
               awaiting_evidence_count,
               adopted_count,
@@ -7929,6 +7930,12 @@ components:
             state: { type: string, enum: [not_configured, running, attention] }
             enabled_rule_count: { type: integer, minimum: 0 }
             candidate_count: { type: integer, minimum: 0 }
+            rule_candidate_count:
+              {
+                type: integer,
+                minimum: 0,
+                description: Pending opportunities at the enabled rule source threshold but not yet through all five quality gates,
+              }
             recommended_count: { type: integer, minimum: 0 }
             awaiting_evidence_count: { type: integer, minimum: 0 }
             adopted_count: { type: integer, minimum: 0 }
@@ -10890,6 +10897,8 @@ components:
           competitor_count,
           supplier_candidate_count,
           matched_rule_count,
+          selection_stage,
+          quality_gates,
           coverage_status,
           blocking_reasons,
           decision_status,
@@ -10917,7 +10926,11 @@ components:
             description: Persisted current-stage age calculated by the server at read time,
           }
         recommendation_status:
-          { type: string, enum: [insufficient_data, recommend, observe, not_recommend] }
+          {
+            type: string,
+            enum: [insufficient_data, recommend, observe, not_recommend],
+            description: Persisted scoring conclusion; use selection_stage for the user-facing automatic-selection state.,
+          }
         overall_score: { type: number, minimum: 0, maximum: 100, nullable: true }
         trend_score: { type: number, minimum: 0, maximum: 100, nullable: true }
         competition_score: { type: number, minimum: 0, maximum: 100, nullable: true }
@@ -10941,6 +10954,23 @@ components:
             minimum: 0,
             description: Enabled or historical monitoring rules exactly linked to this automatic candidate,
           }
+        selection_stage:
+          {
+            type: string,
+            enum: [rule_candidate, recommended, not_eligible],
+            description: Rule threshold and five-gate user-facing selection stage; this never records a human adoption.,
+          }
+        quality_gates:
+          type: object
+          additionalProperties: false
+          required: [score, market, competition, cost, risk, all_passed]
+          properties:
+            score: { type: boolean }
+            market: { type: boolean }
+            competition: { type: boolean }
+            cost: { type: boolean }
+            risk: { type: boolean }
+            all_passed: { type: boolean }
         coverage_status: { type: string, enum: [insufficient, partial, complete] }
         blocking_reasons:
           type: array

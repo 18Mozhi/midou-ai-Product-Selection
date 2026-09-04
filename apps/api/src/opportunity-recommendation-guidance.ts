@@ -18,8 +18,8 @@ export function recommendationGuidance(input: RecommendationGuidanceInput) {
   if (input.enabledRuleCount > 0 && input.minimumSourceCount !== null) {
     const missing = Math.max(0, input.minimumSourceCount - input.sourceCount);
     if (missing > 0)
-      return `已命中 ${input.enabledRuleCount} 条运行规则；当前 ${input.sourceCount} 个独立来源，达到 ${input.minimumSourceCount} 个后进入推荐。系统会继续自动补证。`;
-    return "运行规则的独立来源门槛已满足，系统正在刷新推荐结论。";
+      return `已命中 ${input.enabledRuleCount} 条运行规则；当前 ${input.sourceCount} 个独立来源，达到 ${input.minimumSourceCount} 个后进入规则命中候选。系统会继续自动采集。`;
+    return "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。";
   }
   if (input.matchedRuleCount > 0) return "候选关联的自动选品规则已暂停；恢复规则后系统会重新评估。";
   return "当前候选尚未命中运行中的自动选品规则；在首页设置匹配关键词后，系统会继续采集并重新判断。";

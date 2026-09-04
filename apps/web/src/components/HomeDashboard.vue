@@ -34,6 +34,7 @@ interface Summary {
     state: "not_configured" | "running" | "attention";
     enabled_rule_count: number;
     candidate_count: number;
+    rule_candidate_count: number;
     recommended_count: number;
     awaiting_evidence_count: number;
     adopted_count: number;
@@ -93,6 +94,7 @@ const total = computed(() =>
         state: "not_configured" as const,
         enabled_rule_count: 0,
         candidate_count: 0,
+        rule_candidate_count: 0,
         recommended_count: 0,
         awaiting_evidence_count: 0,
         adopted_count: 0,
@@ -403,9 +405,11 @@ onMounted(load);
           <div v-if="!decisionActions.length" class="home-quiet-empty">
             <b>当前没有待人工采纳的推荐</b
             ><span>{{
-              selection.awaiting_evidence_count
-                ? `${selection.awaiting_evidence_count} 条候选正在自动补证。`
-                : "系统会在规则命中后自动加入这里。"
+              selection.rule_candidate_count
+                ? `${selection.rule_candidate_count} 条规则命中候选正在完成五项质量门校验。`
+                : selection.awaiting_evidence_count
+                  ? `${selection.awaiting_evidence_count} 条商品仍在采集。`
+                  : "系统会在五项质量门全部通过后自动加入这里。"
             }}</span>
           </div>
         </section>

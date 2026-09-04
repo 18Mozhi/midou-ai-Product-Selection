@@ -54,7 +54,9 @@ const props = defineProps<{
   requestId = ref(""),
   message = ref(""),
   busy = ref(false),
-  selectionView = ref<"recommended" | "evidence_pending" | "all">("recommended"),
+  selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "all">(
+    "recommended",
+  ),
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<OpportunityTypes.OpportunityTab>("overview"),
   showCreate = ref(false),
@@ -541,11 +543,13 @@ function syncListRoute() {
     typeof route.query.lifecycle_status === "string" ? route.query.lifecycle_status : "";
   filters.owner_id = typeof route.query.owner_id === "string" ? route.query.owner_id : "";
   selectionView.value =
-    route.query.view === "evidence_pending"
-      ? "evidence_pending"
-      : route.query.view === "all" || route.query.scope === "all"
-        ? "all"
-        : "recommended";
+    route.query.view === "rule_candidates"
+      ? "rule_candidates"
+      : route.query.view === "evidence_pending"
+        ? "evidence_pending"
+        : route.query.view === "all" || route.query.scope === "all"
+          ? "all"
+          : "recommended";
   const requestedPage = Number(route.query.page ?? 1);
   page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
 }
@@ -573,7 +577,9 @@ async function resetListFilters() {
   });
   if (route.fullPath === previousPath) await load();
 }
-async function setSelectionView(nextView: "recommended" | "evidence_pending" | "all") {
+async function setSelectionView(
+  nextView: "recommended" | "rule_candidates" | "evidence_pending" | "all",
+) {
   if (selectionView.value === nextView) return;
   selectedOpportunityIds.value = [];
   await router.push({
@@ -666,12 +672,14 @@ watch(
           {{
             selectionView === "recommended"
               ? "待我采纳"
-              : selectionView === "evidence_pending"
-                ? "自动补证中"
-                : "全部机会"
+              : selectionView === "rule_candidates"
+                ? "规则命中候选"
+                : selectionView === "evidence_pending"
+                  ? "采集中"
+                  : "全部机会"
           }}
         </h2>
-        <span>系统持续监控和补证；只有达到规则要求的商品才会进入人工采纳队列。</span>
+        <span>规则命中先进入候选；五项质量门全部通过后，才进入你的人工采纳清单。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
         <RouterLink to="/trends?section=rules">管理选品规则</RouterLink
@@ -759,7 +767,7 @@ watch(
           @create-evidence-task="createEvidenceTask"
         />
         <section
-          v-if="detail.recommendation_status === 'insufficient_data'"
+          v-if="detail.selection_stage !== 'recommended'"
           class="opportunity-next-steps opportunity-collection-tools"
         >
           <details>

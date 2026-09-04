@@ -23,21 +23,34 @@ async function statementsFor(selectionView) {
   return statements;
 }
 
-test("recommended view contains only rule-matched pending recommendations", async () => {
+test("recommended view requires the rule threshold and all five quality gates", async () => {
   const statements = await statementsFor("recommended");
   for (const { sql } of statements) {
-    assert.match(sql, /EXISTS \(SELECT 1 FROM opportunity_rule_matches orm_view/);
+    assert.match(sql, /opportunity_rule_matches orm_gate/);
     assert.match(sql, /o\.decision_status='pending'/);
     assert.match(sql, /o\.recommendation_status='recommend'/);
+    assert.match(sql, /o\.trend_score IS NOT NULL/);
+    assert.match(sql, /o\.competition_score IS NOT NULL/);
+    assert.match(sql, /o\.profit_status='calculated'/);
+    assert.match(sql, /sc_gate\.dimension_code='risk'/);
   }
 });
 
-test("evidence-pending view contains only rule-matched candidates still awaiting evidence", async () => {
+test("rule-candidate view contains threshold matches that have not passed every quality gate", async () => {
+  const statements = await statementsFor("rule_candidates");
+  for (const { sql } of statements) {
+    assert.match(sql, /opportunity_rule_matches orm_gate/);
+    assert.match(sql, /o\.decision_status='pending'/);
+    assert.match(sql, /NOT \(o\.recommendation_status='recommend'/);
+  }
+});
+
+test("evidence-pending view contains rule matches still below the source threshold", async () => {
   const statements = await statementsFor("evidence_pending");
   for (const { sql } of statements) {
     assert.match(sql, /EXISTS \(SELECT 1 FROM opportunity_rule_matches orm_view/);
     assert.match(sql, /o\.decision_status='pending'/);
-    assert.match(sql, /o\.recommendation_status='insufficient_data'/);
+    assert.match(sql, /NOT EXISTS \(SELECT 1 FROM opportunity_rule_matches orm_gate/);
   }
 });
 

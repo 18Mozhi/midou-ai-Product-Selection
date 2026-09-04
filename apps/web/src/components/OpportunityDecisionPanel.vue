@@ -29,16 +29,43 @@ const blockerStatus = (value: "blocked" | "in_progress" | "cleared") =>
 const unresolvedBlockers = computed(() =>
   (props.detail.adoption_blockers ?? []).filter((item) => item.status !== "cleared"),
 );
-const canAdopt = computed(
+const qualityGates = computed(
   () =>
-    props.detail.recommendation_status !== "insufficient_data" &&
-    props.detail.coverage_status !== "insufficient" &&
-    props.detail.evidence_count > 0,
+    props.detail.quality_gates ?? {
+      score: false,
+      market: false,
+      competition: false,
+      cost: false,
+      risk: false,
+      all_passed: false,
+    },
 );
+const selectionStage = computed(
+  () =>
+    props.detail.selection_stage ??
+    (props.detail.matched_rule_count > 0 ? "rule_candidate" : "not_eligible"),
+);
+const canAdopt = computed(
+  () => selectionStage.value === "recommended" && qualityGates.value.all_passed,
+);
+const recommendationTitle = computed(() =>
+  selectionStage.value === "not_eligible" && Number(props.detail.matched_rule_count ?? 0) === 0
+    ? opportunityStatusLabel(props.detail.decision_status)
+    : opportunityStatusLabel(selectionStage.value),
+);
+const qualityGateLabels = {
+  score: "评分",
+  market: "市场",
+  competition: "竞争",
+  cost: "成本",
+  risk: "风险",
+} as const;
 const recommendationCopy = computed(() =>
   canAdopt.value
-    ? "系统已完成规则判断和证据校验，最终是否采纳由你决定。"
-    : `系统还在补齐 ${unresolvedBlockers.value.length || 1} 项关键信息，暂不建议采纳。`,
+    ? "五项质量门全部通过，最终采纳仍由你决定。"
+    : selectionStage.value === "rule_candidate"
+      ? "已进入规则命中候选，系统会继续补齐未通过的质量门。"
+      : "尚未达到规则来源门槛，或当前机会不属于自动选品规则，暂不能采纳。",
 );
 </script>
 
@@ -55,7 +82,7 @@ const recommendationCopy = computed(() =>
       <div>
         <p>系统建议</p>
         <h3 id="opportunity-decision-title">
-          {{ opportunityStatusLabel(detail.recommendation_status) }}
+          {{ recommendationTitle }}
         </h3>
         <span>{{ recommendationCopy }}</span>
       </div>
@@ -73,6 +100,12 @@ const recommendationCopy = computed(() =>
           <dd>{{ opportunityStatusLabel(detail.risk_level) }}</dd>
         </div>
       </dl>
+      <ul class="opportunity-quality-gates" aria-label="五项质量门">
+        <li v-for="(label, key) in qualityGateLabels" :key="key" :data-passed="qualityGates[key]">
+          <span>{{ label }}</span
+          ><b>{{ qualityGates[key] ? "通过" : "待完成" }}</b>
+        </li>
+      </ul>
     </header>
     <nav
       v-if="canDecide"
@@ -83,7 +116,7 @@ const recommendationCopy = computed(() =>
       <button
         class="primary"
         :disabled="!canAdopt"
-        :title="canAdopt ? '采纳当前推荐' : '证据不足，先补齐缺失项'"
+        :title="canAdopt ? '采纳当前推荐' : '五项质量门尚未全部通过'"
         @click="emit('decide', 'adopt')"
       >
         采纳推荐</button
