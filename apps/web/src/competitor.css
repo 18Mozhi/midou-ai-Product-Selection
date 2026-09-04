@@ -162,6 +162,7 @@
 .competitor-list small {
   color: var(--so-text-muted);
 }
+.competitor-list b,
 .competitor-list strong {
   font-size: 14px;
   overflow-wrap: anywhere;

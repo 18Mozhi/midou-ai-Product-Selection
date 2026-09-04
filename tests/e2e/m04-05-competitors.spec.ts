@@ -148,6 +148,14 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
       ),
     )
     .toBe(true);
+  await expect
+    .poll(() =>
+      page
+        .locator(".competitor-list b")
+        .first()
+        .evaluate((element) => element.scrollWidth <= element.clientWidth),
+    )
+    .toBe(true);
   await expect(page.locator(".competitor-guide")).not.toHaveAttribute("open");
   await page.getByRole("button", { name: /Wallet Case for iPhone 16/ }).click();
   await expect(page).toHaveURL(new RegExp(`competitor=${id}`));
