@@ -81,7 +81,15 @@ const seededProfiles = [...roleProfiles, authorizationProbeProfile];
 const state = {
   organizationId: randomUUID(),
   workspaceId: randomUUID(),
+  monitoringRuleId: randomUUID(),
+  opportunityRuleMatchId: randomUUID(),
   opportunityId: randomUUID(),
+  scoreRuleId: randomUUID(),
+  scoreRunId: randomUUID(),
+  marketScoreComponentId: randomUUID(),
+  competitionScoreComponentId: randomUUID(),
+  profitScoreComponentId: randomUUID(),
+  riskScoreComponentId: randomUUID(),
   taskId: randomUUID(),
   approvalTemplateId: randomUUID(),
   approvalTemplateVersionId: randomUUID(),
@@ -229,18 +237,124 @@ async function seed() {
     ],
   );
   await pool.query(
-    "INSERT INTO opportunities(id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES(?,?,?,'生产验收机会','US','acceptance','trend_topic',?,?,'ready','observe',72,76,68,'calculated','low','measured',82,1,1,'partial',NULL,NULL,'pending',1,?,?,?)",
+    "INSERT INTO trend_monitoring_rules(id,organization_id,workspace_id,name,include_keywords_json,negative_keywords_json,market,language,category,notification_channel,collection_interval_minutes,recommendation_min_source_count,source_cursor,status,last_evaluated_at,last_collection_at,next_collection_at,last_collection_task_id,version,created_by,updated_by,created_at,updated_at) VALUES(?,?,?,'生产验收自动选品规则',?,'[]','US','zh-CN','acceptance','in_app',60,1,0,'enabled',?,NULL,?,NULL,1,?,?,?,?)",
     [
-      state.opportunityId,
+      state.monitoringRuleId,
       state.organizationId,
       state.workspaceId,
-      state.trendTopicId,
+      JSON.stringify(["production acceptance"]),
+      now,
+      new Date(now.getTime() + 60 * 60_000),
       state.users.selection_manager,
       state.users.selection_manager,
       now,
       now,
     ],
   );
+  const scoreRuleVersion = `acceptance-${runId.slice(0, 8)}`;
+  const scoreDimensions = [
+    {
+      code: "market_demand",
+      label: "市场需求",
+      weight: 30,
+      required: true,
+      evidence_group: "market",
+    },
+    {
+      code: "competition",
+      label: "竞争",
+      weight: 20,
+      required: true,
+      evidence_group: "competition",
+    },
+    { code: "profit", label: "利润", weight: 30, required: true, evidence_group: "cost" },
+    { code: "risk", label: "风险", weight: 20, required: true, evidence_group: "other" },
+  ];
+  const scoreThresholds = { recommend_min: 75, observe_min: 55 };
+  await pool.query(
+    "INSERT INTO score_rules(id,organization_id,workspace_id,version_code,name,status,dimensions_json,thresholds_json,revision,submitted_by,submitted_at,approved_by,approved_at,activated_at,rollback_target_id,rolled_back_at,created_by,created_at,updated_at) VALUES(?,?,?,?,'生产验收评分规则','active',?,?,1,?,?,?,?,?,NULL,NULL,?,?,?)",
+    [
+      state.scoreRuleId,
+      state.organizationId,
+      state.workspaceId,
+      scoreRuleVersion,
+      JSON.stringify(scoreDimensions),
+      JSON.stringify(scoreThresholds),
+      state.users.selection_manager,
+      now,
+      state.users.organization_admin,
+      now,
+      now,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunities(id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES(?,?,?,'生产验收机会','US','acceptance','trend_topic',?,?,'ready','recommend',83.2,82,80,'calculated','low','measured',100,1,1,'complete',?,?,'pending',1,?,?,?)",
+    [
+      state.opportunityId,
+      state.organizationId,
+      state.workspaceId,
+      state.trendTopicId,
+      state.users.selection_manager,
+      scoreRuleVersion,
+      now,
+      state.users.selection_manager,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunity_rule_matches(id,organization_id,workspace_id,opportunity_id,monitoring_rule_id,topic_id,matched_at) VALUES(?,?,?,?,?,?,?)",
+    [
+      state.opportunityRuleMatchId,
+      state.organizationId,
+      state.workspaceId,
+      state.opportunityId,
+      state.monitoringRuleId,
+      state.trendTopicId,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunity_score_runs(id,organization_id,workspace_id,opportunity_id,score_rule_id,rule_version_code,status,overall_score,coverage_percent,confidence_score,recommendation_status,missing_fields_json,input_snapshot_json,request_id,trace_id,scored_at) VALUES(?,?,?,?,?,?,'calculated',83.2,100,100,'recommend','[]',?, ?, ?, ?)",
+    [
+      state.scoreRunId,
+      state.organizationId,
+      state.workspaceId,
+      state.opportunityId,
+      state.scoreRuleId,
+      scoreRuleVersion,
+      JSON.stringify([
+        { dimension_code: "market_demand", source: "production_acceptance" },
+        { dimension_code: "competition", source: "production_acceptance" },
+        { dimension_code: "profit", source: "production_acceptance" },
+        { dimension_code: "risk", source: "production_acceptance" },
+      ]),
+      runId,
+      runId,
+      now,
+    ],
+  );
+  for (const [id, code, weight, inputScore, weightedScore] of [
+    [state.marketScoreComponentId, "market_demand", 30, 82, 24.6],
+    [state.competitionScoreComponentId, "competition", 20, 80, 16],
+    [state.profitScoreComponentId, "profit", 30, 84, 25.2],
+    [state.riskScoreComponentId, "risk", 20, 87, 17.4],
+  ])
+    await pool.query(
+      "INSERT INTO opportunity_score_components(id,score_run_id,dimension_code,weight_percent,input_score,weighted_score,evidence_ids_json,missing_fields_json) VALUES(?,?,?,?,?,?,?,'[]')",
+      [
+        id,
+        state.scoreRunId,
+        code,
+        weight,
+        inputScore,
+        weightedScore,
+        JSON.stringify([state.rawEvidenceId]),
+      ],
+    );
   await pool.query(
     "INSERT INTO tasks(id,organization_id,workspace_id,title,description,status,priority,assignee_id,source_type,source_ref_id,due_at,completed_at,created_by,version,created_at,updated_at) VALUES(?,?,?,'生产验收任务','用于解析真实任务详情路由。','todo','normal',?,'manual',NULL,NULL,NULL,?,1,?,?)",
     [
@@ -557,7 +671,17 @@ async function cleanup() {
       workspaces: [state.workspaceId],
       memberships: Object.values(state.memberships),
       trend_topics: [state.trendTopicId],
+      trend_monitoring_rules: [state.monitoringRuleId],
+      opportunity_rule_matches: [state.opportunityRuleMatchId],
       opportunities: [state.opportunityId],
+      score_rules: [state.scoreRuleId],
+      opportunity_score_runs: [state.scoreRunId],
+      opportunity_score_components: [
+        state.marketScoreComponentId,
+        state.competitionScoreComponentId,
+        state.profitScoreComponentId,
+        state.riskScoreComponentId,
+      ],
       tasks: [state.taskId],
       approval_templates: [state.approvalTemplateId],
       approval_template_versions: [state.approvalTemplateVersionId],
@@ -593,6 +717,9 @@ async function cleanup() {
       if (column === "file_asset_id") return [state.fileAssetId];
       if (column === "normalized_record_id") return [state.normalizedRecordId];
       if (column === "cost_rule_id") return [state.costRuleId];
+      if (column === "monitoring_rule_id") return [state.monitoringRuleId];
+      if (column === "score_rule_id") return [state.scoreRuleId];
+      if (column === "score_run_id") return [state.scoreRunId];
       if (column === "cost_input_id")
         return [state.saleCostInputId, state.purchaseCostInputId, state.logisticsCostInputId];
       if (column === "opportunity_id") return [state.opportunityId];
@@ -721,12 +848,18 @@ const report = {
     organizations: 1,
     workspaces: 1,
     trends: 1,
+    monitoring_rules: 1,
     opportunities: 1,
+    opportunity_rule_matches: 1,
+    score_rules: 1,
+    score_runs: 1,
+    score_components: 4,
     collection_evidence: 1,
     sourcing_candidates: 1,
     cost_inputs: 3,
     profit_runs: 1,
     tasks: 1,
+    approvals: 1,
   },
   api: apiReport
     ? {

@@ -92,6 +92,11 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(runner, /verify-production-core-e2e\.mjs/);
   for (const table of [
     "trend_topics",
+    "trend_monitoring_rules",
+    "opportunity_rule_matches",
+    "score_rules",
+    "opportunity_score_runs",
+    "opportunity_score_components",
     "collection_tasks",
     "raw_evidence",
     "sourcing_candidates",
@@ -115,6 +120,14 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.doesNotMatch(coreE2e, /SCOUTOPS_QA_SELECTION_MANAGER_(?:EMAIL|PASSWORD)/);
   assert.match(coreE2e, /task mobile secondary actions overflowed the viewport/);
   assert.match(coreE2e, /approval_decision_desk/);
+  assert.match(coreE2e, /getByRole\("heading", \{ name: "建议采纳", exact: true \}\)/);
+  assert.match(coreE2e, /getByText\("5\/5 已通过", \{ exact: true \}\)/);
+  assert.match(coreE2e, /getByRole\("button", \{ name: "采纳建议", exact: true \}\)/);
+  assert.doesNotMatch(coreE2e, /getByRole\("button", \{ name: "继续观察", exact: true \}\)/);
+  assert.match(runner, /recommendation_status[^\n]*'recommend'/);
+  assert.match(runner, /coverage_status[^\n]*'complete'/);
+  assert.match(runner, /recommendation_min_source_count/);
+  assert.match(runner, /dimension_code[^\n]*risk/);
   assert.match(runner, /INSERT INTO approval_templates/);
   assert.match(runner, /INSERT INTO approval_requests/);
   assert.match(routeCoverage, /SCOUTOPS_ACCEPTANCE_RESOURCE_IDS/);

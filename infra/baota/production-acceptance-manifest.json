@@ -29,7 +29,12 @@
     "singleRoleRequired": true,
     "minimumSeed": [
       "trend",
+      "monitoring_rule",
       "opportunity",
+      "opportunity_rule_match",
+      "score_rule",
+      "score_run",
+      "score_components",
       "collection_evidence",
       "sourcing_candidate",
       "cost_inputs",

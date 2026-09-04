@@ -12,7 +12,7 @@
 
 报告中的 `route_catalog_count` 必须与 `covered_route_templates` 数量一致，六个角色都必须有独立 `route_count`、`allow_count`、`deny_count` 和长度等于 `route_catalog_count` 的 `route_matrix`，且 `api_failures`、`console_errors` 为空。`must have exactly` 表示账号角色叠加；`contains a forbidden capability` 表示生产权限目录漂移；`has no persisted acceptance record` 表示补齐隔离验收数据后重跑；`authorized route catalog is not fully covered` 表示新增受保护路由没有任何验收角色可达。路由目录和验收变量都不是常驻运行配置，修改后不需要重启 API、Worker 或 Crawler；重新生成路由产物并运行有限验收即可。
 
-完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。任务会从同一一次性密码派生六个产品矩阵账号和一个隔离 `auditor` 负向鉴权账号，不需要另配账号变量。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 224/257/60/6 产品基线且不连接数据库、不创建账号。
+完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。任务会从同一一次性密码派生六个产品矩阵账号和一个隔离 `auditor` 负向鉴权账号，不需要另配账号变量；其来源决策任务链会创建一条达到显式来源门槛、精确命中启用监控规则且评分、市场、竞争、成本、风险五项质量门全部通过的隔离商品，页面必须显示“建议采纳”，再由浏览器填写原因并执行“采纳建议”。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 224/257/60/6 产品基线且不连接数据库、不创建账号。
 
 生产机无法使用 Playwright 自带浏览器包时，在同一宝塔有限任务的受限环境设置 `SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH`，值必须是当前主机上由 `www` 可执行的 Chromium/Chrome 绝对路径；当前 Debian 11 主机使用面板内已安装的 `/usr/bin/chromium`。验收脚本在启动浏览器前检查绝对路径和执行权限，不通过时失败关闭。该配置仅影响两段生产浏览器验收，不改变网站、Node API、Worker 或 Crawler；修改后直接重新手工执行有限任务，不需要重启常驻服务，也不得在服务器升级 npm 锁定依赖来绕过平台不兼容。
 

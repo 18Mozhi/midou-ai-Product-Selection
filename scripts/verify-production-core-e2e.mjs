@@ -114,9 +114,13 @@ try {
     waitUntil: "networkidle",
   });
   await page.getByRole("heading", { name: "生产验收机会" }).waitFor();
-  await page.getByRole("button", { name: "继续观察", exact: true }).click();
+  await page.getByRole("heading", { name: "建议采纳", exact: true }).waitFor();
+  await page.getByText("5/5 已通过", { exact: true }).waitFor();
+  await page.getByRole("button", { name: "采纳建议", exact: true }).click();
   const decisionDialog = page.getByRole("dialog");
-  await decisionDialog.getByLabel("原因（必填）").fill("生产真实栈验收：继续观察经营事实");
+  await decisionDialog
+    .getByLabel("原因（必填）")
+    .fill("生产真实栈验收：五项质量门全部通过后人工采纳建议");
   await decisionDialog.getByRole("button", { name: "确认记录" }).click();
   await page.getByText("决策已记录；原始评分与证据未被改写。").waitFor();
   await page.goto(`${baseUrl}/tasks/${resources.taskId}`, { waitUntil: "networkidle" });
@@ -138,6 +142,9 @@ try {
     trend_topic_id: resources.trendTopicId,
     opportunity_id: resources.opportunityId,
     task_id: resources.taskId,
+    selection_stage: "recommended",
+    quality_gates_passed: 5,
+    decision_action: "adopt",
   };
 
   await page.goto(`${baseUrl}/tasks/approvals?approval=${resources.approvalRequestId}`, {
