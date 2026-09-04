@@ -39,10 +39,12 @@ export class MySqlTrendProjectionWorker {
   }
 
   async processOnce(): Promise<TrendProjectionResult> {
-    await this.persistence.enqueueMissingAutomaticDownstream();
     await this.enqueueMissing();
     const job = await this.claim();
-    if (!job) return { status: "idle" };
+    if (!job) {
+      await this.persistence.enqueueMissingAutomaticDownstream();
+      return { status: "idle" };
+    }
     if (!projectedTrendProviderContext(job.providerCode).accepted) {
       await this.finish(job, "succeeded_empty", null);
       return { status: "succeeded_empty", job_id: job.id };
