@@ -12,7 +12,7 @@ const id = "00000000-0000-4000-8000-000000000505",
     external_id: "B0SCOUTOPS",
     product_url: "https://example.test/product",
     title:
-      "便携式净水杯竞品 Wallet Case for iPhone 16, RFID Blocking, Crossbody, Magnetic Kickstand Detachable Wallet",
+      "Wallet Case for iPhone 16,RFID Blocking,Crossbody,Purple | 8 Card Slots|Magnetic|Kickstand|Detachable Wallet",
     status: "active",
     revision: 2,
     snapshot_count: 2,
@@ -149,7 +149,7 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
     )
     .toBe(true);
   await expect(page.locator(".competitor-guide")).not.toHaveAttribute("open");
-  await page.getByRole("button", { name: /便携式净水杯竞品/ }).click();
+  await page.getByRole("button", { name: /Wallet Case for iPhone 16/ }).click();
   await expect(page).toHaveURL(new RegExp(`competitor=${id}`));
   await expect(page.getByLabel("基线、变动与阈值").getByText("USD 29.99")).toBeVisible();
   await expect(page.getByLabel("基线、变动与阈值").getByText("价格 · 减少 USD 2")).toBeVisible();
@@ -209,7 +209,7 @@ test("initial selection loads full snapshot history and empty search can be rese
   await page.getByLabel("搜索竞品").fill("不存在的 ASIN");
   await expect(page.getByRole("heading", { name: "没有匹配的竞品" })).toBeVisible();
   await page.getByRole("button", { name: "清空搜索" }).click();
-  await expect(page.getByRole("button", { name: /便携式净水杯竞品/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Wallet Case for iPhone 16/ })).toBeVisible();
 });
 
 test("auditor keeps full read detail but does not receive competitor write controls", async ({
