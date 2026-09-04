@@ -318,7 +318,7 @@ def panel_node_action_source(action: str) -> str:
         {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action},
         ensure_ascii=False,
     )
-    return f'''import json, sys
+    return f'''import json, sys, time
 from pathlib import Path
 sys.path.insert(0, "/www/server/panel")
 sys.path.insert(0, "/www/server/panel/class")
@@ -329,11 +329,35 @@ v=json.loads({values!r}); root=Path(v["root"])
 row=public.M("sites").where("name=?", (v["node_project"],)).find()
 if not row or row.get("project_type") != "Node" or row.get("path") != str(root / "backend"):
     raise RuntimeError("Node project identity or path mismatch")
+def project_processes():
+    root_bytes=str(root).encode("utf-8")
+    markers=(b"apps/backend/dist/server.js", b"apps/api/dist/server.js", b"apps/worker/dist/index.js")
+    found=[]
+    for entry in Path("/proc").iterdir():
+        if not entry.name.isdigit():
+            continue
+        try:
+            command=(entry / "cmdline").read_bytes()
+        except (FileNotFoundError, PermissionError, ProcessLookupError):
+            continue
+        if root_bytes in command and any(marker in command for marker in markers):
+            found.append(int(entry.name))
+    return found
+
 model=NodeModel(); request=public.dict_obj(); request.project_name=v["node_project"]
 response=model.stop_project(request) if v["action"] == "stop" else model.start_project(request)
 text=json.dumps(response, ensure_ascii=False)
 allowed=("项目未启动", "项目已启动", "already stopped", "already started")
 status=bool(isinstance(response, dict) and response.get("status")) or any(item in text for item in allowed)
+if status and v["action"] == "stop":
+    deadline=time.time() + 45
+    remaining=project_processes()
+    while remaining and time.time() < deadline:
+        time.sleep(1)
+        remaining=project_processes()
+    if remaining:
+        raise RuntimeError("Node project processes did not stop: " + ",".join(str(pid) for pid in remaining))
+    time.sleep(2)
 print("SCOUTOPS_RESULT=" + json.dumps({{"status": status, "message": v["action"] + " Node", "response": text[:300]}}, ensure_ascii=False))
 '''
 
@@ -879,7 +903,7 @@ def main() -> None:
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
                 "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql"
             )
-            remote_python(client, panel_node_action_source("stop"), timeout=60)
+            remote_python(client, panel_node_action_source("stop"), timeout=90)
             node_stopped_for_migration = True
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)

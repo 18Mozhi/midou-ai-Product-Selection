@@ -80,6 +80,11 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
       deploy.indexOf("ssh_exec(client, migrate"),
   );
   assert.match(deploy, /if node_stopped_for_migration:[\s\S]*panel_node_action_source\("start"\)/);
+  assert.match(deploy, /def project_processes\(\):/);
+  assert.match(deploy, /apps\/worker\/dist\/index\.js/);
+  assert.match(deploy, /deadline=time\.time\(\) \+ 45/);
+  assert.match(deploy, /if remaining:[\s\S]*Node project processes did not stop/);
+  assert.match(deploy, /time\.sleep\(2\)/);
   const orderedMigrations = [
     "0040_platform_messages.up.sql",
     "0041_member_workspace_tasks.up.sql",
