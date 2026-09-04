@@ -3,153 +3,30 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import ApprovalQueuePanel from "./ApprovalQueuePanel.vue";
+import type {
+  ApprovalItem,
+  ApprovalMemberOption,
+  ApprovalRequestForm,
+  ApprovalTemplate,
+  ApprovalTemplateForm,
+  ApprovalViewState,
+} from "./approval-workspace-types";
 import "../approval-workspace.css";
-type ViewState =
-  | "loading"
-  | "ready"
-  | "empty"
-  | "error"
-  | "forbidden"
-  | "expired"
-  | "rate_limited"
-  | "version_conflict";
-type Template = {
-  id: string;
-  name: string;
-  resource_type: string;
-  status: string;
-  current_version: number;
-  revision: number;
-  node_count: number;
-};
-type MemberOption = { id: string; label: string };
-type Approval = {
-  id: string;
-  title: string;
-  template_name: string;
-  resource_type: string;
-  resource_id: string;
-  status: string;
-  current_node_ordinal: number;
-  current_node_name: string | null;
-  can_decide: boolean;
-  due_at: string | null;
-  escalated_at: string | null;
-  version: number;
-  approval_template_version?: number;
-  nodes?: Array<{
-    id: string;
-    ordinal: number;
-    name: string;
-    status: string;
-    approver_name: string;
-    active_approver_id: string;
-    active_approver_name: string;
-    escalation_assignee_id: string;
-    escalation_assignee_name: string;
-    due_at: string | null;
-    escalated_at: string | null;
-    decision_reason: string | null;
-    decided_by_name: string | null;
-  }>;
-  actions?: Array<{
-    id: string;
-    action: string;
-    reason: string;
-    actor_name: string;
-    created_at: string;
-  }>;
-  requested_by?: string;
-  decision_context?: {
-    snapshot_status: "captured" | "live_fallback";
-    captured_at: string | null;
-    observed_at: string;
-    resource: {
-      type: "task" | "opportunity";
-      id: string;
-      label: string;
-      route: string;
-    };
-    evidence: {
-      applicable: boolean;
-      complete: number;
-      total: number;
-      percent: number | null;
-      is_complete: boolean | null;
-      missing_items: string[];
-      note: string | null;
-      requirements: Array<{
-        code: string;
-        label: string;
-        complete: boolean;
-        detail: string;
-        route: string;
-      }>;
-    };
-    rule_versions: {
-      approval_template: string;
-      scoring: string | null;
-      profit: string | null;
-    };
-    decision: {
-      action: string;
-      reason: string;
-      opportunity_version: number;
-      created_at: string;
-    } | null;
-    basis_items: Array<{ code: string; label: string; value: string | null }>;
-    evidence_complete: number;
-    evidence_total: number;
-    missing_items: string[];
-    rule_version: string;
-    basis: string[];
-  };
-  decision_context_diff?: {
-    available: boolean;
-    observed_at: string | null;
-    has_changes: boolean;
-    evidence_summary: {
-      before_complete: number;
-      before_total: number;
-      before_percent: number | null;
-      after_complete: number;
-      after_total: number;
-      after_percent: number | null;
-    } | null;
-    requirement_changes: Array<{
-      code: string;
-      label: string;
-      before_complete: boolean | null;
-      after_complete: boolean | null;
-      before_detail: string | null;
-      after_detail: string | null;
-    }>;
-    basis_changes: Array<{
-      code: string;
-      label: string;
-      before: string | null;
-      after: string | null;
-    }>;
-    rule_version_changes: Array<{
-      code: string;
-      label: string;
-      before: string | null;
-      after: string | null;
-    }>;
-  };
-};
 const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
-  state = ref<ViewState>("loading"),
-  approvals = ref<Approval[]>([]),
-  templates = ref<Template[]>([]),
-  memberOptions = ref<MemberOption[]>([]),
-  selected = ref<Approval | null>(null),
+  state = ref<ApprovalViewState>("loading"),
+  approvals = ref<ApprovalItem[]>([]),
+  templates = ref<ApprovalTemplate[]>([]),
+  memberOptions = ref<ApprovalMemberOption[]>([]),
+  selected = ref<ApprovalItem | null>(null),
   detailBusy = ref(false),
   detailNotice = ref(""),
-  queue = ref(route.query.view === "requested" ? "requested" : "decidable"),
+  queue = ref<"decidable" | "requested">(
+    route.query.view === "requested" ? "requested" : "decidable",
+  ),
   filter = ref(
     ["pending", "approved", "rejected", "cancelled", ""].includes(String(route.query.status ?? ""))
       ? String(route.query.status ?? "pending")
@@ -163,9 +40,9 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
   busy = ref(false),
   showTemplate = ref(false),
   showRequest = ref(false),
-  publishTarget = ref<Template | null>(null),
+  publishTarget = ref<ApprovalTemplate | null>(null),
   publishReason = ref(""),
-  templateForm = ref({
+  templateForm = ref<ApprovalTemplateForm>({
     name: "",
     resource_type: "task",
     node_name: "",
@@ -173,7 +50,7 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
     sla_minutes: 60,
     escalation_assignee_id: "",
   }),
-  requestForm = ref({
+  requestForm = ref<ApprovalRequestForm>({
     template_id: "",
     resource_type: "task",
     resource_id: "",
@@ -195,7 +72,6 @@ const { dialogElement: templateDialogElement, handleCancel: handleTemplateCancel
     },
   );
 const canManage = computed(() => props.capabilities?.includes("task:assign") ?? false),
-  pendingCount = computed(() => approvals.value.filter((x) => x.status === "pending").length),
   mineCount = computed(() => approvals.value.filter((x) => x.can_decide).length),
   overdueCount = computed(
     () =>
@@ -212,7 +88,29 @@ const canManage = computed(() => props.capabilities?.includes("task:assign") ?? 
   }),
   selectedTemplate = computed(() =>
     published.value.find((item) => item.id === requestForm.value.template_id),
-  );
+  ),
+  focusSummary = computed(() => {
+    if (overdueCount.value > 0)
+      return {
+        tone: "danger",
+        eyebrow: "立即处理",
+        title: `${overdueCount.value} 个审批节点已经超时`,
+        detail: "先核对升级后的当前审批人与证据变化，再记录批准或驳回原因。",
+      };
+    if (mineCount.value > 0)
+      return {
+        tone: "active",
+        eyebrow: "需要判断",
+        title: `${mineCount.value} 个审批正在等待你`,
+        detail: "打开首项，先看影响范围、当前节点和证据变化，再作决定。",
+      };
+    return {
+      tone: "quiet",
+      eyebrow: "当前清空",
+      title: queue.value === "requested" ? "没有进行中的发起记录" : "没有待你处理的审批",
+      detail: "新审批到达你的节点后会自动进入当前队列。",
+    };
+  });
 const statusText = (x: string) =>
     (
       ({
@@ -289,7 +187,7 @@ async function load() {
   state.value = "loading";
   try {
     const [list, tpl, members] = await Promise.all([
-      api<Approval[]>(
+      api<ApprovalItem[]>(
         `/tasks/approvals?page=${page.value}&page_size=${pageSize}&involvement=${queue.value}${filter.value ? `&status=${filter.value}` : ""}`,
         {},
         true,
@@ -297,8 +195,8 @@ async function load() {
           total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
         },
       ),
-      api<Template[]>("/tasks/approval-templates"),
-      canManage.value ? api<MemberOption[]>("/tasks/member-options") : Promise.resolve([]),
+      api<ApprovalTemplate[]>("/tasks/approval-templates"),
+      canManage.value ? api<ApprovalMemberOption[]>("/tasks/member-options") : Promise.resolve([]),
     ]);
     approvals.value = list;
     templates.value = tpl;
@@ -314,7 +212,7 @@ async function openById(id: string, syncUrl = true) {
   detailBusy.value = true;
   detailNotice.value = "";
   try {
-    selected.value = await api<Approval>(`/tasks/approvals/${id}`, {}, false);
+    selected.value = await api<ApprovalItem>(`/tasks/approvals/${id}`, {}, false);
     reason.value = "";
     if (syncUrl) await router.replace({ query: { ...route.query, approval: selected.value.id } });
   } catch (error) {
@@ -330,7 +228,7 @@ async function openById(id: string, syncUrl = true) {
     detailBusy.value = false;
   }
 }
-async function open(item: Approval) {
+async function open(item: ApprovalItem) {
   await openById(item.id);
 }
 async function closeDetail() {
@@ -424,7 +322,7 @@ async function createTemplate() {
     busy.value = false;
   }
 }
-function openPublish(t: Template) {
+function openPublish(t: ApprovalTemplate) {
   publishTarget.value = t;
   publishReason.value = "";
 }
@@ -493,15 +391,18 @@ watch(
 </script>
 <template>
   <section class="approval-workspace">
-    <header>
+    <header class="approval-header">
       <div>
-        <p>工作管理</p>
+        <p>人工决策</p>
         <h2>审批中心</h2>
-        <span>模板版本、节点时限、人工原因与升级记录均来自当前工作区后端。</span>
+        <span>先处理到达当前节点的事项；证据差异和历史记录按需展开。</span>
       </div>
-      <div v-if="canManage">
-        <button class="secondary" @click="showTemplate = true">配置模板</button
-        ><button @click="showRequest = true">＋ 发起审批</button>
+      <div v-if="canManage" class="approval-header-actions">
+        <button v-if="published.length" class="secondary" @click="showTemplate = true">
+          管理模板
+        </button>
+        <button v-if="published.length" @click="showRequest = true">＋ 发起审批</button>
+        <button v-else @click="showTemplate = true">配置第一个模板</button>
       </div>
       <p v-else class="approval-readonly-badge">只读权限</p>
     </header>
@@ -512,39 +413,28 @@ watch(
         <code>{{ requestId }}</code>
       </details>
     </div>
-    <section class="approval-metrics">
-      <article>
-        <span>当前页审批中</span><b>{{ pendingCount }}</b>
-      </article>
-      <article>
-        <span>当前页待我审批</span><b>{{ mineCount }}</b>
-      </article>
-      <article class="alert">
-        <span>当前页节点超时</span><b>{{ overdueCount }}</b>
-      </article>
-      <article>
-        <span>已发布模板</span><b>{{ published.length }}</b>
-      </article>
+    <section class="approval-focus-strip" :data-tone="focusSummary.tone" aria-label="当前审批重点">
+      <span class="approval-focus-signal" aria-hidden="true"></span>
+      <div>
+        <small>{{ focusSummary.eyebrow }}</small>
+        <strong>{{ focusSummary.title }}</strong>
+        <p>{{ focusSummary.detail }}</p>
+      </div>
+      <dl>
+        <div>
+          <dt>待我处理</dt>
+          <dd>{{ mineCount }}</dd>
+        </div>
+        <div>
+          <dt>已超时</dt>
+          <dd>{{ overdueCount }}</dd>
+        </div>
+        <div>
+          <dt>可用模板</dt>
+          <dd>{{ published.length }}</dd>
+        </div>
+      </dl>
     </section>
-    <nav class="approval-inbox-tabs" aria-label="审批范围">
-      <button :aria-pressed="queue === 'decidable'" @click="setQueue('decidable')">待我处理</button>
-      <button :aria-pressed="queue === 'requested'" @click="setQueue('requested')">我发起的</button>
-    </nav>
-    <nav aria-label="审批状态">
-      <button
-        v-for="x in [
-          { v: 'pending', t: '审批中' },
-          { v: 'approved', t: '已批准' },
-          { v: 'rejected', t: '已驳回' },
-          { v: '', t: '全部' },
-        ]"
-        :key="x.v"
-        :aria-pressed="filter === x.v"
-        @click="setFilter(x.v)"
-      >
-        {{ x.t }}
-      </button>
-    </nav>
     <section v-if="state === 'loading'" class="approval-state">正在读取审批事实…</section>
     <section
       v-else-if="
@@ -568,25 +458,22 @@ watch(
       <p>{{ notice }}</p>
       <button @click="load">刷新最新状态</button>
     </section>
-    <section v-else-if="!approvals.length" class="approval-state">
-      <h3>当前筛选条件下没有审批</h3>
-      <p>请使用已发布模板发起审批，提交后将显示在当前列表。</p>
-    </section>
-    <div v-else class="approval-list">
-      <button v-for="item in approvals" :key="item.id" @click="open(item)">
-        <span class="approval-mark">{{ item.current_node_ordinal }}</span
-        ><span
-          ><strong>{{ item.title }}</strong
-          ><small>{{ item.template_name }} · {{ resourceText(item.resource_type) }}</small></span
-        ><span
-          ><em :data-status="item.status">{{ statusText(item.status) }}</em
-          ><small>{{ item.current_node_name || "流程已结束" }}</small></span
-        ><span
-          ><strong>{{ item.escalated_at ? "已升级" : time(item.due_at) }}</strong
-          ><small>{{ item.can_decide ? "需要你处理" : "只读" }}</small></span
-        ><b>查看 →</b>
-      </button>
-    </div>
+    <ApprovalQueuePanel
+      v-else
+      :approvals="approvals"
+      :queue="queue"
+      :filter="filter"
+      :can-manage="canManage"
+      :published-count="published.length"
+      :status-text="statusText"
+      :resource-text="resourceText"
+      :time="time"
+      @queue="setQueue"
+      @filter="setFilter"
+      @open="open"
+      @create-request="showRequest = true"
+      @manage-templates="showTemplate = true"
+    />
     <section v-if="detailBusy" class="approval-detail-state" aria-live="polite">
       正在读取审批详情…
     </section>

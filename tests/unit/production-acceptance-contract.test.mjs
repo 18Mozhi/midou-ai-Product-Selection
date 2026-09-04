@@ -34,7 +34,7 @@ test("production acceptance locks the 224 path, 257 operation, 60 route and six 
       ?.productionResolver?.parentPath,
     "/opportunities?view=all",
   );
-  assert.equal(manifest.baseline.realCoreScreenshotCount, 2);
+  assert.equal(manifest.baseline.realCoreScreenshotCount, 4);
   assert.equal(manifest.baseline.apiReportSchemaVersion, 3);
   assert.equal(manifest.baseline.operationIdPolicy, "method_path_v1");
   assert.deepEqual(manifest.apiProbe.evidenceDimensions, [
@@ -113,6 +113,10 @@ test("production acceptance only probes writes through safe blocking and always 
   assert.match(coreE2e, /SCOUTOPS_QA_ORGANIZATION_ADMIN_EMAIL/);
   assert.match(coreE2e, /SCOUTOPS_QA_ORGANIZATION_ADMIN_PASSWORD/);
   assert.doesNotMatch(coreE2e, /SCOUTOPS_QA_SELECTION_MANAGER_(?:EMAIL|PASSWORD)/);
+  assert.match(coreE2e, /task mobile secondary actions overflowed the viewport/);
+  assert.match(coreE2e, /approval_decision_desk/);
+  assert.match(runner, /INSERT INTO approval_templates/);
+  assert.match(runner, /INSERT INTO approval_requests/);
   assert.match(routeCoverage, /SCOUTOPS_ACCEPTANCE_RESOURCE_IDS/);
   assert.match(routeCoverage, /resolver\.resourceIdKey/);
   assert.match(routeCoverage, /seeded acceptance resource id is invalid/);

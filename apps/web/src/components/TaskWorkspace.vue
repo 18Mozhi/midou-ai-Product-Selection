@@ -11,7 +11,13 @@ import { useModalDialog } from "../use-modal-dialog";
 import TaskBatchActions from "./TaskBatchActions.vue";
 import TaskDetailPanel from "./TaskDetailPanel.vue";
 import TaskListPanel from "./TaskListPanel.vue";
-import type { BatchTaskAction, MemberOption, Task, TaskActionEditor } from "./task-workspace-types";
+import type {
+  BatchTaskAction,
+  MemberOption,
+  Task,
+  TaskActionEditor,
+  TaskSummary,
+} from "./task-workspace-types";
 import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
 type State =
@@ -46,7 +52,7 @@ const props = defineProps<{
   activeView = ref<"business" | "exports">(
     props.mode === "all" && route.query.view === "exports" ? "exports" : "business",
   ),
-  summary = ref<any>({
+  summary = ref<TaskSummary>({
     todo: 0,
     in_progress: 0,
     paused: 0,
@@ -118,6 +124,35 @@ const pageSize = 10,
   canAssign = computed(() => props.capabilities?.includes("task:assign") ?? false),
   canReadExports = computed(() => props.capabilities?.includes("report:read") ?? false),
   visible = computed(() => tasks.value),
+  focusSummary = computed(() => {
+    if (summary.value.overdue > 0)
+      return {
+        tone: "danger",
+        eyebrow: "优先处理",
+        title: `${summary.value.overdue} 个任务已经逾期`,
+        detail: "队列已按优先级与期限排序，请先处理首项或调整期限。",
+      };
+    if (summary.value.in_progress > 0)
+      return {
+        tone: "active",
+        eyebrow: "继续推进",
+        title: `${summary.value.in_progress} 个任务正在进行`,
+        detail: "打开任务记录进度、阻塞原因和下一步，不需要重复创建。",
+      };
+    if (summary.value.todo > 0)
+      return {
+        tone: "ready",
+        eyebrow: "可以开始",
+        title: `${summary.value.todo} 个任务等待处理`,
+        detail: "从优先队列打开首项，开始后再持续记录进度。",
+      };
+    return {
+      tone: "quiet",
+      eyebrow: "当前清空",
+      title: "没有待处理任务",
+      detail: canCreate.value ? "需要人工跟进时再创建任务。" : "当前工作区没有分配给你的行动项。",
+    };
+  }),
   label = (v: string) =>
     (
       ({
@@ -139,6 +174,10 @@ const pageSize = 10,
         transfer: "转交任务",
         progress: "更新进度",
         updated: "编辑任务",
+        low: "低",
+        normal: "普通",
+        high: "高",
+        critical: "紧急",
       }) as any
     )[v] ?? v,
   batchTargets = computed(() => tasks.value.filter((task) => selectedIds.value.includes(task.id))),
@@ -678,16 +717,14 @@ watch(
 </script>
 <template>
   <section class="task-workspace" :class="{ 'task-detail-route': Boolean(taskId) }">
-    <div class="task-title">
+    <header class="task-title">
       <div>
-        <p>工作管理</p>
+        <p>{{ mode === "today" ? "今日行动" : "工作队列" }}</p>
         <h2>{{ mode === "today" ? "今日工作" : "任务中心" }}</h2>
-        <span
-          >把选品调查、竞品复核、找货和利润确认拆成可运行任务；开始后可更新进度、编辑、删除和查看全过程。</span
-        >
+        <span>查看负责人、期限和下一步；过程记录与审计按需展开。</span>
       </div>
       <button v-if="canCreate" @click="showCreate = true">＋ 新建任务</button>
-    </div>
+    </header>
     <div v-if="notice" class="task-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </div>
@@ -733,23 +770,28 @@ watch(
       <button @click="load">重新加载</button>
     </section>
     <template v-else-if="activeView === 'business'"
-      ><div class="task-metrics">
-        <article>
-          <span>我的待处理</span><b>{{ summary.todo }}</b>
-        </article>
-        <article>
-          <span>我的进行中</span><b>{{ summary.in_progress }}</b>
-        </article>
-        <article>
-          <span>我的已暂停</span><b>{{ summary.paused }}</b>
-        </article>
-        <article class="danger">
-          <span>我的已逾期</span><b>{{ summary.overdue }}</b>
-        </article>
-        <article>
-          <span>我的已完成</span><b>{{ summary.completed }}</b>
-        </article>
-      </div>
+      ><section class="task-focus-strip" :data-tone="focusSummary.tone" aria-label="当前任务重点">
+        <span class="task-focus-signal" aria-hidden="true"></span>
+        <div>
+          <small>{{ focusSummary.eyebrow }}</small>
+          <strong>{{ focusSummary.title }}</strong>
+          <p>{{ focusSummary.detail }}</p>
+        </div>
+        <dl>
+          <div>
+            <dt>待处理</dt>
+            <dd>{{ summary.todo }}</dd>
+          </div>
+          <div>
+            <dt>进行中</dt>
+            <dd>{{ summary.in_progress }}</dd>
+          </div>
+          <div>
+            <dt>已暂停</dt>
+            <dd>{{ summary.paused }}</dd>
+          </div>
+        </dl>
+      </section>
       <p v-if="!canUpdate" class="task-readonly-note">
         当前角色可查看工作区任务；新建、选择、批量操作和删除入口按权限隐藏。
       </p>
@@ -773,6 +815,7 @@ watch(
         @update:assignee-id="batchAssigneeId = $event" />
       <TaskListPanel
         :tasks="visible"
+        :summary="summary"
         :selected-ids="selectedIds"
         :status="status"
         :query="query"

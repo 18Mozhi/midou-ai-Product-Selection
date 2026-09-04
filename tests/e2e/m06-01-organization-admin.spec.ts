@@ -1223,7 +1223,7 @@ test("organization audit auditor can open only the read-only capability route", 
   });
 
   await page.goto("/org-admin/audit");
-  await expect(page.getByLabel("当前身份")).toContainText("审计员");
+  await expect(page.getByRole("region", { name: "上下文" })).toContainText("审计员");
   await expect(page.getByRole("heading", { name: "组织审计账本" })).toBeVisible();
   await expect(page.locator(".role-nav-groups a")).toHaveCount(1);
   await expect(page.getByRole("link", { name: "邀请成员" })).toHaveCount(0);

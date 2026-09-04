@@ -19,7 +19,7 @@
     "operationIdPolicy": "method_path_v1",
     "protectedRouteCount": 60,
     "roleCount": 6,
-    "realCoreScreenshotCount": 2
+    "realCoreScreenshotCount": 4
   },
   "tenant": {
     "organizationLabel": "AI选品功能验收组织",
@@ -34,7 +34,8 @@
       "sourcing_candidate",
       "cost_inputs",
       "profit_run",
-      "task"
+      "task",
+      "approval"
     ]
   },
   "apiProbe": {
@@ -56,8 +57,8 @@
     "realMySqlRequired": true,
     "realRedisRequired": true,
     "browserInterceptionAllowed": false,
-    "chains": ["source_decision_task", "sourcing_cost_profit"],
-    "screenshotCount": 2
+    "chains": ["source_decision_task", "approval_decision_desk", "sourcing_cost_profit"],
+    "screenshotCount": 4
   },
   "cleanup": {
     "required": true,

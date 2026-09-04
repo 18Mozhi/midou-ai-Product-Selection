@@ -122,20 +122,15 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
     <div v-if="canUpdate || canAssign" class="task-actions" aria-label="任务操作">
       <button
         v-if="canUpdate && task.status === 'todo'"
+        class="primary"
         :disabled="busy"
         @click="$emit('action', 'start')"
       >
         开始
       </button>
       <button
-        v-if="canUpdate && task.status === 'in_progress'"
-        :disabled="busy"
-        @click="$emit('action', 'pause')"
-      >
-        暂停
-      </button>
-      <button
         v-if="canUpdate && task.status === 'paused'"
+        class="primary"
         :disabled="busy"
         @click="$emit('action', 'resume')"
       >
@@ -151,28 +146,59 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
       <button
         v-if="canUpdate && !['completed', 'cancelled'].includes(task.status)"
         :disabled="busy"
-        @click="$emit('action', 'delay')"
+        @click="$emit('action', 'progress')"
       >
-        延期
-      </button>
-      <button
-        v-if="canUpdate && !['completed', 'cancelled'].includes(task.status)"
-        class="danger"
-        :disabled="busy"
-        @click="$emit('action', 'cancel')"
-      >
-        取消任务
-      </button>
-      <button v-if="canAssign" :disabled="busy" @click="$emit('action', 'transfer')">转交</button>
-      <button v-if="canUpdate" :disabled="busy" @click="$emit('action', 'progress')">
         更新进度
       </button>
-      <button v-if="canUpdate" :disabled="busy" @click="$emit('edit')">编辑</button>
-      <details v-if="canUpdate" class="task-detail-more">
+      <details v-if="canUpdate || canAssign" class="task-detail-more">
         <summary>更多任务操作</summary>
-        <button class="danger" type="button" :disabled="busy" @click="$emit('remove', task)">
-          删除任务
-        </button>
+        <div>
+          <button
+            v-if="canUpdate && task.status === 'in_progress'"
+            type="button"
+            :disabled="busy"
+            @click="$emit('action', 'pause')"
+          >
+            暂停
+          </button>
+          <button
+            v-if="canUpdate && !['completed', 'cancelled'].includes(task.status)"
+            type="button"
+            :disabled="busy"
+            @click="$emit('action', 'delay')"
+          >
+            调整期限
+          </button>
+          <button
+            v-if="canAssign"
+            type="button"
+            :disabled="busy"
+            @click="$emit('action', 'transfer')"
+          >
+            转交负责人
+          </button>
+          <button v-if="canUpdate" type="button" :disabled="busy" @click="$emit('edit')">
+            编辑任务
+          </button>
+          <button
+            v-if="canUpdate && !['completed', 'cancelled'].includes(task.status)"
+            class="danger"
+            type="button"
+            :disabled="busy"
+            @click="$emit('action', 'cancel')"
+          >
+            取消任务
+          </button>
+          <button
+            v-if="canUpdate"
+            class="danger"
+            type="button"
+            :disabled="busy"
+            @click="$emit('remove', task)"
+          >
+            删除任务
+          </button>
+        </div>
       </details>
     </div>
     <section class="task-activity">

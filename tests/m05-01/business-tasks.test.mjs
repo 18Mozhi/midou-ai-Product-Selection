@@ -150,7 +150,9 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     taskUi,
     /capabilities\?: string\[\][\s\S]*canCreate[\s\S]*canUpdate[\s\S]*canAssign/,
   );
-  assert.match(taskUi, /搜索标题或说明[\s\S]*最近更新[\s\S]*已取消/);
+  assert.match(taskUi, /搜索标题或说明/);
+  assert.match(taskUi, /最近更新/);
+  assert.match(taskUi, /已取消/);
   assert.doesNotMatch(taskUi, /window\.prompt/);
   assert.match(values[3], /\/api\/v1\/tasks\/member-options/);
   assert.match(values[2], /membership_data_scopes[\s\S]*scope_type='workspace'/);

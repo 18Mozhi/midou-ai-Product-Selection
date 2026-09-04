@@ -340,7 +340,7 @@ test("core list pages expose explicit detail and operational actions", async () 
         : readFile(`apps/web/src/components/${name}`, "utf8"),
     ),
   );
-  assert.match(tasks, /查看详情.*删除/s);
+  assert.match(tasks, /查看任务.*删除/s);
   assert.match(opportunities, /采集 Amazon 竞品.*采集公开供应商/s);
   assert.match(competitors, /立即采集.*采集快照.*删除竞品监控/s);
   assert.match(sourcing, /重新采集.*删除找货记录/s);

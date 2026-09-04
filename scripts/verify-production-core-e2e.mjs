@@ -122,10 +122,33 @@ try {
   await page.goto(`${baseUrl}/tasks/${resources.taskId}`, { waitUntil: "networkidle" });
   await page.getByText("生产验收任务", { exact: true }).first().waitFor();
   await screenshot("01-source-decision-task.png");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByText("更多任务操作", { exact: true }).click();
+  const secondaryActions = page.locator(".task-detail-more > div");
+  await secondaryActions.waitFor();
+  const secondaryBounds = await secondaryActions.boundingBox();
+  assert(
+    secondaryBounds && secondaryBounds.x >= 0 && secondaryBounds.x + secondaryBounds.width <= 390,
+    "task mobile secondary actions overflowed the viewport",
+  );
+  await screenshot("02-task-mobile-actions.png");
+  await page.setViewportSize({ width: 1440, height: 1000 });
   report.chains.source_decision_task = {
     status: "passed",
     trend_topic_id: resources.trendTopicId,
     opportunity_id: resources.opportunityId,
+    task_id: resources.taskId,
+  };
+
+  await page.goto(`${baseUrl}/tasks/approvals?approval=${resources.approvalRequestId}`, {
+    waitUntil: "networkidle",
+  });
+  await page.getByRole("heading", { name: "生产验收任务审批" }).waitFor();
+  await page.getByLabel("审批依据与影响范围").waitFor();
+  await screenshot("03-approval-decision-desk.png");
+  report.chains.approval_decision_desk = {
+    status: "passed",
+    approval_request_id: resources.approvalRequestId,
     task_id: resources.taskId,
   };
 
@@ -146,7 +169,7 @@ try {
   });
   await page.getByRole("button", { name: "利润与成本" }).click();
   await page.getByText(/69\.4/).first().waitFor();
-  await screenshot("02-sourcing-cost-profit.png");
+  await screenshot("04-sourcing-cost-profit.png");
   report.chains.sourcing_cost_profit = {
     status: "passed",
     sourcing_search_id: resources.sourcingSearchId,

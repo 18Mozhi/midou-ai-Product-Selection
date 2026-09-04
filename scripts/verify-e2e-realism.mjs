@@ -35,9 +35,10 @@ const productionRealStackScreenshots = Number(
   productionManifest.baseline?.realCoreScreenshotCount ?? 0,
 );
 if (
-  productionRealStackScreenshots !== 2 ||
+  productionRealStackScreenshots !== 4 ||
   /page\.route\s*\(/.test(productionCoreVerifier) ||
   !/source_decision_task/.test(productionCoreVerifier) ||
+  !/approval_decision_desk/.test(productionCoreVerifier) ||
   !/sourcing_cost_profit/.test(productionCoreVerifier) ||
   !/dependencies\?\.mysql === "available"/.test(productionCoreVerifier) ||
   !/dependencies\?\.redis === "available"/.test(productionCoreVerifier)

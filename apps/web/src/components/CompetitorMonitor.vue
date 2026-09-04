@@ -94,7 +94,7 @@ const props = withDefaults(
   showCreate = ref(false),
   createStep = ref(1),
   showRule = ref(false),
-  query = ref(""),
+  query = ref(typeof route.query.q === "string" ? route.query.q : ""),
   deleting = ref<Competitor | null>(null),
   deleteReason = ref(""),
   createDialog = ref<HTMLElement | null>(null),
@@ -149,11 +149,20 @@ const rulesPage = computed(() => props.mode === "rules"),
   ),
   filteredItems = computed(() => {
     const needle = query.value.trim().toLowerCase();
-    return needle
+    const matches = needle
       ? items.value.filter((item) =>
           `${item.title} ${item.external_id} ${item.source_site}`.toLowerCase().includes(needle),
         )
       : items.value;
+    const requestedCompetitor =
+      typeof route.query.competitor === "string" ? route.query.competitor : "";
+    if (
+      requestedCompetitor &&
+      selected.value?.id === requestedCompetitor &&
+      !matches.some((item) => item.id === requestedCompetitor)
+    )
+      return [selected.value];
+    return matches;
   }),
   summary = computed(() => ({
     total: items.value.length,
@@ -560,7 +569,6 @@ function handleEscape(event: KeyboardEvent) {
 }
 onMounted(() => {
   showCreate.value = route.query.create === "1" && canManage.value;
-  query.value = typeof route.query.q === "string" ? route.query.q : "";
   if (rulesPage.value && typeof route.query.competitor === "string") {
     rule.competitor_id = route.query.competitor;
     showRule.value = canManage.value;
@@ -573,7 +581,14 @@ onUnmounted(() => {
   window.removeEventListener("keydown", handleEscape);
 });
 watch(query, (value) => {
-  void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
+  void router.replace({
+    query: {
+      ...route.query,
+      q: value || undefined,
+      competitor: undefined,
+      create: undefined,
+    },
+  });
 });
 watch(canManage, (allowed) => {
   if (allowed) return;

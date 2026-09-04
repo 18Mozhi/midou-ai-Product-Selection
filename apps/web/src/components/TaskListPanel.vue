@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import type { Task } from "./task-workspace-types";
+import type { Task, TaskSummary } from "./task-workspace-types";
 
 const props = defineProps<{
   tasks: Task[];
+  summary: TaskSummary;
   selectedIds: string[];
   status: string;
   query: string;
@@ -29,7 +30,25 @@ const draftQuery = ref(props.query),
   allCurrentSelected = computed(
     () =>
       props.tasks.length > 0 && props.tasks.every((task) => props.selectedIds.includes(task.id)),
-  );
+  ),
+  statusOptions = computed(() => [
+    {
+      value: "",
+      label: "全部",
+      count:
+        props.summary.todo +
+        props.summary.in_progress +
+        props.summary.paused +
+        props.summary.completed +
+        props.summary.cancelled,
+    },
+    { value: "todo", label: "待处理", count: props.summary.todo },
+    { value: "in_progress", label: "进行中", count: props.summary.in_progress },
+    { value: "paused", label: "已暂停", count: props.summary.paused },
+    { value: "completed", label: "已完成", count: props.summary.completed },
+    { value: "cancelled", label: "已取消", count: props.summary.cancelled },
+  ]),
+  hasAdvancedFilter = computed(() => Boolean(props.query || props.sort !== "priority_due"));
 
 watch(
   () => props.query,
@@ -45,52 +64,57 @@ const toggle = (id: string, checked: boolean, selectedIds: string[]) =>
 
 <template>
   <div class="task-filter-panel">
-    <form
-      class="task-search"
-      role="search"
-      @submit.prevent="$emit('applyFilters', { query: draftQuery.trim(), sort })"
-    >
-      <label>
-        <span>搜索任务</span>
-        <input v-model="draftQuery" maxlength="200" placeholder="搜索标题或说明" />
-      </label>
-      <label>
-        <span>排序</span>
-        <select
-          :value="sort"
-          @change="
-            $emit('applyFilters', {
-              query: draftQuery.trim(),
-              sort: ($event.target as HTMLSelectElement).value,
-            })
-          "
-        >
-          <option value="priority_due">优先级与期限</option>
-          <option value="due_asc">截止时间最早</option>
-          <option value="updated_desc">最近更新</option>
-          <option value="created_desc">最近创建</option>
-        </select>
-      </label>
-      <button type="submit">查询</button>
-      <button type="button" @click="$emit('resetFilters')">重置</button>
-    </form>
-    <div class="task-filter" aria-label="任务状态筛选">
+    <div class="task-queue-heading">
+      <div><span>当前队列</span><strong>先处理逾期与高优先级任务</strong></div>
+      <small>状态数量来自当前工作区任务事实</small>
+    </div>
+    <nav class="task-filter" aria-label="任务状态筛选">
       <button
-        v-for="item in [
-          { value: '', label: '全部' },
-          { value: 'todo', label: '待处理' },
-          { value: 'in_progress', label: '进行中' },
-          { value: 'paused', label: '已暂停' },
-          { value: 'completed', label: '已完成' },
-          { value: 'cancelled', label: '已取消' },
-        ]"
+        v-for="item in statusOptions"
         :key="item.value"
         :aria-pressed="status === item.value"
         @click="$emit('status', item.value)"
       >
-        {{ item.label }}
+        <span>{{ item.label }}</span
+        ><b>{{ item.count }}</b>
       </button>
-    </div>
+    </nav>
+    <details class="task-filter-disclosure" :open="hasAdvancedFilter">
+      <summary>
+        <span>搜索与排序</span>
+        <small v-if="hasAdvancedFilter">已应用条件</small>
+        <small v-else>按需展开</small>
+      </summary>
+      <form
+        class="task-search"
+        role="search"
+        @submit.prevent="$emit('applyFilters', { query: draftQuery.trim(), sort })"
+      >
+        <label>
+          <span>搜索任务</span>
+          <input v-model="draftQuery" maxlength="200" placeholder="搜索标题或说明" />
+        </label>
+        <label>
+          <span>排序</span>
+          <select
+            :value="sort"
+            @change="
+              $emit('applyFilters', {
+                query: draftQuery.trim(),
+                sort: ($event.target as HTMLSelectElement).value,
+              })
+            "
+          >
+            <option value="priority_due">优先级与期限</option>
+            <option value="due_asc">截止时间最早</option>
+            <option value="updated_desc">最近更新</option>
+            <option value="created_desc">最近创建</option>
+          </select>
+        </label>
+        <button type="submit">应用</button>
+        <button type="button" @click="$emit('resetFilters')">重置</button>
+      </form>
+    </details>
     <div v-if="canUpdate && tasks.length" class="task-select-current">
       <label
         ><input
@@ -136,17 +160,21 @@ const toggle = (id: string, checked: boolean, selectedIds: string[]) =>
         :to="{ path: `/tasks/${task.id}`, query: { from: routeFullPath } }"
       >
         <i :data-priority="task.priority"></i
-        ><span
+        ><span class="task-row-copy"
+          ><span class="task-row-kicker"
+            ><em>{{ label(task.status) }}</em
+            ><small>{{ label(task.priority) }}优先级</small></span
           ><strong>{{ task.title }}</strong
           ><small>{{ task.description || "无补充说明" }}</small></span
-        ><em>{{ label(task.status) }}</em
-        ><span class="task-progress"
-          ><b>{{ phase(task) }}</b
+        ><span class="task-row-progress"
+          ><span
+            ><b>{{ phase(task) }}</b
+            ><small>{{ task.progress_percent || 0 }}%</small></span
           ><i><u :style="{ width: `${task.progress_percent || 0}%` }"></u></i></span
-        ><span
+        ><span class="task-row-deadline"
           ><strong>{{ label(task.sla_status) }}</strong
           ><small>{{ time(task.due_at) }}</small></span
-        ><b>查看详情 →</b>
+        ><b class="task-row-link">查看 →</b>
       </RouterLink>
       <details v-if="canUpdate" class="task-row-actions">
         <summary :aria-label="`任务操作：${task.title}`">•••</summary>

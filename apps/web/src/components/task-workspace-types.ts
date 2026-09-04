@@ -30,6 +30,15 @@ export type Task = {
 
 export type MemberOption = { id: string; label: string };
 
+export type TaskSummary = {
+  todo: number;
+  in_progress: number;
+  paused: number;
+  completed: number;
+  cancelled: number;
+  overdue: number;
+};
+
 export type TaskActionEditor = "pause" | "cancel" | "delay" | "transfer" | "progress";
 
 export type BatchTaskAction = "pause" | "resume" | "cancel" | "delay" | "transfer";

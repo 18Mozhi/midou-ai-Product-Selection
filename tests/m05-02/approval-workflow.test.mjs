@@ -227,25 +227,28 @@ test("M05-02 splits actionable and requested approvals before repository paginat
   assert.equal(calls[0].involvement, "decidable");
   assert.equal(calls[1].involvement, "requested");
   assert.equal(calls[2].involvement, null);
-  const [repository, routes, ui, openapi] = await Promise.all(
+  const [repository, routes, ui, queueUi, openapi] = await Promise.all(
     [
       "apps/api/src/mysql-approval-repository.ts",
       "apps/api/src/approval-routes.ts",
       "apps/web/src/components/ApprovalWorkspace.vue",
+      "apps/web/src/components/ApprovalQueuePanel.vue",
       "docs/openapi.yaml",
     ].map((path) => readFile(path, "utf8")),
   );
+  const approvalUi = `${ui}\n${queueUi}`;
   assert.match(repository, /involvement === "requested"[\s\S]*requested_by=\?/);
   assert.match(repository, /involvement === "decidable"[\s\S]*active_approver_id=\?/);
   assert.match(repository, /ORDER BY \(r\.status='pending'\)[\s\S]*n\.due_at[\s\S]*r\.id DESC/);
   assert.match(repository, /route: `\/tasks\/\$\{input\.resourceId\}`/);
   assert.match(repository, /normalizeApprovalResourceRoute/);
   assert.match(routes, /involvement: q\.involvement/);
-  assert.match(ui, /待我处理[\s\S]*我发起的[\s\S]*审批依据与影响范围/);
+  assert.match(queueUi, /待我处理[\s\S]*我发起的/);
+  assert.match(approvalUi, /审批依据与影响范围/);
   assert.match(ui, /canManage[\s\S]*task:assign/);
   assert.match(ui, /只读权限/);
   assert.match(ui, /审批操作记录[\s\S]*selected\.actions/);
-  assert.match(ui, /当前页审批中[\s\S]*当前页待我审批[\s\S]*当前页节点超时/);
+  assert.match(ui, /当前审批重点[\s\S]*待我处理[\s\S]*已超时[\s\S]*可用模板/);
   assert.match(ui, /资源类型由模板锁定/);
   assert.match(openapi, /name: involvement[\s\S]*decidable, requested/);
 });

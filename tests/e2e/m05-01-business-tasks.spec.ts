@@ -252,7 +252,24 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
     page.locator(".task-detail-facts").getByText("测试成员", { exact: true }),
   ).toBeVisible();
   await expect(page.getByText("暂停任务", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "转交" })).toBeVisible();
+  await page.getByText("更多任务操作", { exact: true }).click();
+  const secondaryActions = page.locator(".task-detail-more > div");
+  await expect(page.getByRole("button", { name: "转交负责人" })).toBeVisible();
+  await expect
+    .poll(() =>
+      secondaryActions.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return bounds.left >= 0 && bounds.right <= window.innerWidth;
+      }),
+    )
+    .toBe(true);
+  await page.getByText("更多任务操作", { exact: true }).click();
+  await expect(page.locator(".task-detail-more")).not.toHaveAttribute("open", "");
+  await expect(secondaryActions).toBeHidden();
+  await expect(page).toHaveScreenshot("m05-01-business-tasks.png", {
+    animations: "disabled",
+    fullPage: true,
+  });
 });
 
 test("task detail hides every write entry for read-only roles", async ({ page }) => {
@@ -271,11 +288,12 @@ test("task detail hides every write entry for read-only roles", async ({ page })
 test("task update role keeps detail editing but cannot transfer ownership", async ({ page }) => {
   await setup(page, false, ["task:read", "task:update"]);
   await page.goto(`/tasks/${taskId}`);
-  await expect(page.getByRole("button", { name: "暂停" })).toBeVisible();
   await expect(page.getByRole("button", { name: "更新进度" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "编辑" })).toBeVisible();
   await expect(page.getByPlaceholder("添加可审计评论")).toBeVisible();
-  await expect(page.getByRole("button", { name: "转交" })).toHaveCount(0);
+  await page.getByText("更多任务操作", { exact: true }).click();
+  await expect(page.getByRole("button", { name: "暂停" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "编辑任务" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "转交负责人" })).toHaveCount(0);
 });
 
 test("task detail blocks duplicate lifecycle and comment submissions", async ({ page }) => {
@@ -359,23 +377,25 @@ test("member workspace shows Chinese context theme switch and task progress with
   await expect(
     page.getByText(/navigation_member_allowed|权限由服务端裁决|前端菜单不是安全边界/),
   ).toHaveCount(0);
-  const beforeTheme = await page
-    .locator(".task-title")
-    .evaluate((element) => getComputedStyle(element).backgroundImage);
+  const beforeTheme = await page.locator(".task-focus-strip").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return `${style.backgroundColor}|${style.borderColor}`;
+  });
   await page.getByRole("button", { name: "切换界面主题" }).click();
   await page.getByRole("button", { name: /极光紫/ }).click();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("aurora-purple");
   await expect(page.getByText("主题已应用到全部模块。")).toBeVisible();
-  const afterTheme = await page
-    .locator(".task-title")
-    .evaluate((element) => getComputedStyle(element).backgroundImage);
+  const afterTheme = await page.locator(".task-focus-strip").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return `${style.backgroundColor}|${style.borderColor}`;
+  });
   expect(afterTheme).not.toBe(beforeTheme);
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
   await expect(page.getByText("执行中 · 35%", { exact: true })).toBeVisible();
   await expect(page.getByText("已完成亚马逊竞品初筛", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "更新进度" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "编辑" })).toBeVisible();
   await page.getByText("更多任务操作", { exact: true }).click();
+  await expect(page.getByRole("button", { name: "编辑任务" })).toBeVisible();
   await expect(
     page.locator(".task-detail").getByRole("button", { name: "删除任务" }),
   ).toBeVisible();
@@ -403,6 +423,7 @@ test("task list sends paused, search and sort to the API and reset clears URL st
   );
   await page.getByRole("button", { name: "已暂停" }).click();
   await pausedRequest;
+  await page.getByText("搜索与排序", { exact: true }).click();
   await page.getByPlaceholder("搜索标题或说明").fill("供应商报价");
   const searchRequest = page.waitForRequest((request) => {
     const url = new URL(request.url());
@@ -476,7 +497,7 @@ test("approval notification and real-selection surfaces follow every member them
   const cases = [
     {
       path: "/tasks/approvals",
-      selector: ".approval-state",
+      selector: ".approval-focus-strip",
       theme: "极光紫",
       expected: "aurora-purple",
     },
