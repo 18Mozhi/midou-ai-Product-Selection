@@ -412,7 +412,7 @@ test("a provider reaches its configured failure threshold and opens its runtime 
         },
         async () => {},
       ),
-    (error) => error?.code === "validation_failed",
+    (error) => error?.code === "network_error",
   );
   const opened = statements.find((item) =>
     item.sql.startsWith("INSERT INTO provider_runtime_circuits"),
@@ -421,5 +421,5 @@ test("a provider reaches its configured failure threshold and opens its runtime 
   assert.equal(opened.values[1], "open");
   assert.equal(opened.values[2], 3);
   assert.equal(opened.values[3], 3);
-  assert.equal(opened.values[4], "validation_failed");
+  assert.equal(opened.values[4], "network_error");
 });

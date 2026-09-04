@@ -450,6 +450,152 @@ test("adapter failures keep their source error across duplicated package instanc
   });
 });
 
+test("provider execution retries transient evidence failures without inventing missing fields", async () => {
+  const { ProviderSourceExecutor } =
+      await import("../../apps/worker/dist/provider-source-executor.js"),
+    provider = {
+      id: "55555555-5555-4555-8555-555555555570",
+      code: "evidence-retry-test",
+      access_mode: "public_page",
+      target_url: "https://example.test/products",
+      parser_version: "evidence-retry-v1",
+      timeout_ms: 20_000,
+      fields_json: ["title", "canonical_url"],
+      status: "enabled",
+      circuit_failure_threshold: 3,
+      terms_review_status: "approved",
+      terms_reference_url: "https://example.test/terms",
+      terms_version: "2026-09",
+      terms_expires_at: "2099-09-01T00:00:00.000Z",
+      created_by: "66666666-6666-4666-8666-666666666666",
+    },
+    pool = {
+      query: async (sql) => {
+        if (sql.includes("FROM providers p")) return [[provider]];
+        if (sql.startsWith("SELECT state,consecutive_failures")) return [[]];
+        return [{ affectedRows: 1 }];
+      },
+    },
+    record = {
+      externalId: "retry-item",
+      observedAt: "2026-09-04T17:00:00.000Z",
+      evidenceRef: "retry:item",
+      payload: {
+        raw_content: "<article>Retry item</article>",
+        content_type: "text/html",
+        canonical_url: "https://example.test/products/retry-item",
+        fields: { title: "Retry item" },
+        source_paths: { title: "article.title" },
+      },
+    },
+    registry = {
+      collect: async () => ({ records: [record], nextCursor: null }),
+      normalize: (_code, raw, context) => ({
+        external_id: raw.externalId,
+        observed_at: raw.observedAt,
+        canonical_url: raw.payload.canonical_url,
+        fields: raw.payload.fields,
+        evidence_ref: raw.evidenceRef,
+        provenance: {
+          provider_id: context.provider.id,
+          adapter_key: context.provider.code,
+          adapter_version: "evidence-retry-adapter-v1",
+          parser_version: context.provider.parserVersion,
+        },
+      }),
+    },
+    task = {
+      id: "33333333-3333-4333-8333-333333333370",
+      organizationId: "11111111-1111-4111-8111-111111111111",
+      workspaceId: "22222222-2222-4222-8222-222222222222",
+      attemptCount: 1,
+      requestId: "evidence-retry",
+      traceId: "evidence-retry",
+      leaseToken: "unused",
+      subqueries: [
+        {
+          id: "44444444-4444-4444-8444-444444444470",
+          providerId: provider.id,
+          ordinal: 0,
+          required: false,
+          target: {},
+        },
+      ],
+    };
+  let attempts = 0;
+  const evidence = {
+      persist: async () => {
+        attempts += 1;
+        if (attempts < 3)
+          throw Object.assign(new Error("private database detail"), {
+            code: "ER_LOCK_DEADLOCK",
+          });
+        return {
+          evidence_id: "retry-evidence",
+          normalized_record_id: "retry-record",
+          deduplicated: false,
+        };
+      },
+    },
+    executor = new ProviderSourceExecutor(
+      withTransactionConnection(pool),
+      registry,
+      evidence,
+      "evidence-retry-worker",
+    );
+
+  let [outcome] = await executor.execute(task, async () => {});
+  assert.equal(attempts, 3);
+  assert.deepEqual(
+    {
+      status: outcome.status,
+      errorCode: outcome.errorCode,
+      missingFields: outcome.missingFields,
+      availableResultCount: outcome.availableResultCount,
+    },
+    { status: "succeeded", errorCode: null, missingFields: [], availableResultCount: 1 },
+  );
+
+  attempts = 0;
+  evidence.persist = async () => {
+    attempts += 1;
+    throw Object.assign(new Error("private connection detail"), { code: "ECONNRESET" });
+  };
+  [outcome] = await executor.execute(task, async () => {});
+  assert.equal(attempts, 3);
+  assert.deepEqual(
+    {
+      status: outcome.status,
+      errorCode: outcome.errorCode,
+      missingFields: outcome.missingFields,
+    },
+    { status: "failed", errorCode: "network_error", missingFields: [] },
+  );
+
+  attempts = 0;
+  evidence.persist = async () => {
+    attempts += 1;
+    throw Object.assign(new Error("evidence_content_size_invalid"), {
+      name: "DataQualityError",
+      code: "evidence_content_size_invalid",
+    });
+  };
+  [outcome] = await executor.execute(task, async () => {});
+  assert.equal(attempts, 1);
+  assert.deepEqual(
+    {
+      status: outcome.status,
+      errorCode: outcome.errorCode,
+      missingFields: outcome.missingFields,
+    },
+    {
+      status: "failed",
+      errorCode: "validation_failed",
+      missingFields: provider.fields_json,
+    },
+  );
+});
+
 test("RSS execution distinguishes empty success, parse failure and no new content", async () => {
   const [{ ProviderSourceExecutor }, { ProviderAdapterFailure }] = await Promise.all([
       import("../../apps/worker/dist/provider-source-executor.js"),

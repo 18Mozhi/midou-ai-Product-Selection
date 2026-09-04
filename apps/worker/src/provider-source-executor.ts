@@ -48,12 +48,30 @@ const codes = new Set<CollectionErrorCode>([
   "permission_denied",
   "source_circuit_open",
 ]);
+const TRANSIENT_EVIDENCE_ERROR_CODES = new Set([
+  "ECONNREFUSED",
+  "ECONNRESET",
+  "ETIMEDOUT",
+  "PROTOCOL_CONNECTION_LOST",
+  "ER_LOCK_DEADLOCK",
+  "ER_LOCK_WAIT_TIMEOUT",
+  "ER_DUP_ENTRY",
+]);
+const rawErrorCode = (error: unknown) =>
+  typeof (error as { code?: unknown })?.code === "string"
+    ? String((error as { code: string }).code)
+    : "";
+const isEvidenceValidationError = (error: unknown) =>
+  error instanceof EvidencePersistenceError ||
+  (error instanceof Error && error.name === "DataQualityError");
 const code = (value: string): CollectionErrorCode =>
   codes.has(value as CollectionErrorCode)
     ? (value as CollectionErrorCode)
-    : value.includes("parse") || value.includes("payload")
-      ? "parse_failed"
-      : "validation_failed";
+    : value === "dependency_unavailable"
+      ? "network_error"
+      : value.includes("parse") || value.includes("payload")
+        ? "parse_failed"
+        : "validation_failed";
 type PersistedSubqueryOutcome = SubqueryOutcome & {
   id: string;
   resultKind?: CollectionResultKind;
@@ -342,36 +360,39 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             sourceValueHash: sha(source.fields[fieldPath] ?? null),
           }));
         try {
-          const persisted = await this.evidence.persist({
-            organizationId: task.organizationId,
-            workspaceId: task.workspaceId,
-            taskId: task.id,
-            subqueryId: query.id,
-            providerId: provider.id,
-            sourceUrl: source.canonical_url,
-            canonicalUrl: normalized.canonical_url ?? source.canonical_url,
-            dedupeKey: VERSIONED_PRODUCT_SOURCES.has(provider.code)
-              ? sha({ task_id: task.id, external_id: normalized.external_id })
-              : normalized.external_id,
-            contentType: source.content_type,
-            content: Buffer.from(source.raw_content),
-            capturedAt: new Date(normalized.observed_at),
-            parserVersion: provider.parserVersion,
-            adapterVersion: normalized.provenance.adapter_version,
-            recordKey: normalized.external_id,
-            recordSchemaVersion: "provider-source-v1",
-            normalizedPayload: {
-              ...normalized.fields,
-              canonical_url: normalized.canonical_url,
-              observed_at: normalized.observed_at,
-              evidence_ref: normalized.evidence_ref,
-              worker_id: this.workerId,
+          const persisted = await this.persistEvidenceWithRetry(
+            {
+              organizationId: task.organizationId,
+              workspaceId: task.workspaceId,
+              taskId: task.id,
+              subqueryId: query.id,
+              providerId: provider.id,
+              sourceUrl: source.canonical_url,
+              canonicalUrl: normalized.canonical_url ?? source.canonical_url,
+              dedupeKey: VERSIONED_PRODUCT_SOURCES.has(provider.code)
+                ? sha({ task_id: task.id, external_id: normalized.external_id })
+                : normalized.external_id,
+              contentType: source.content_type,
+              content: Buffer.from(source.raw_content),
+              capturedAt: new Date(normalized.observed_at),
+              parserVersion: provider.parserVersion,
+              adapterVersion: normalized.provenance.adapter_version,
+              recordKey: normalized.external_id,
+              recordSchemaVersion: "provider-source-v1",
+              normalizedPayload: {
+                ...normalized.fields,
+                canonical_url: normalized.canonical_url,
+                observed_at: normalized.observed_at,
+                evidence_ref: normalized.evidence_ref,
+                worker_id: this.workerId,
+              },
+              provenance,
+              requestId: task.requestId,
+              traceId: task.traceId,
+              actorId: String(row.created_by),
             },
-            provenance,
-            requestId: task.requestId,
-            traceId: task.traceId,
-            actorId: String(row.created_by),
-          });
+            signal,
+          );
           available += 1;
           if (persisted.deduplicated) deduplicated += 1;
           else fresh += 1;
@@ -428,7 +449,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       };
     } catch (error) {
       const failure = classifyProviderAdapterFailure(error),
-        mapped = code(failure.code),
+        mapped = isEvidenceValidationError(error) ? "validation_failed" : code(failure.code),
         policyDecision = robotsDecision ?? publicCollectionPolicyDecision(error) ?? undefined,
         blocked = [
           "login_required",
@@ -477,11 +498,26 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         required: query.required,
         status: blocked ? "blocked" : "failed",
         availableResultCount: 0,
-        missingFields: provider.fields,
+        missingFields: mapped === "validation_failed" ? provider.fields : [],
         errorCode: mapped,
         ...(mapped === "parse_failed" ? { resultKind: "parse_failed" as const } : {}),
         ...(policyDecision ? { robotsDecision: policyDecision } : {}),
       };
+    }
+  }
+
+  private async persistEvidenceWithRetry(
+    input: Parameters<MySqlEvidencePersistence["persist"]>[0],
+    signal?: AbortSignal,
+  ) {
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        return await this.evidence.persist(input);
+      } catch (error) {
+        if (!TRANSIENT_EVIDENCE_ERROR_CODES.has(rawErrorCode(error)) || attempt >= 3) throw error;
+        signal?.throwIfAborted();
+        await new Promise((resolve) => setTimeout(resolve, attempt * 25));
+      }
     }
   }
 

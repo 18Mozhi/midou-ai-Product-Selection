@@ -31,6 +31,7 @@
 - `rate_limited`：保留任务和证据，等待状态机退避；不要提高并发绕过限制。
 - `source_changed`：系统已事务化停用对应 Provider，并写 Provider 版本和 `provider.parser_drift.auto_paused` 平台审计；保留 trace_id，更新解析器和合同测试、完成固定样本差异回放后再由来源负责人显式恢复。
 - `parse_failed`：任务按失败分类处理但不会自动停源；先用 trace_id 判断是单条脏数据还是稳定页面合同漂移，只有确认合同漂移并发布新解析器后再调整来源状态。
+- `network_error` 且浏览器作业已成功：优先检查 MySQL 连接、死锁、锁等待或证据目录可用性。Worker 会对明确可重试的证据持久化异常执行最多三次短退避重试；耗尽后保留 `network_error`，不会再把依赖异常显示为“全部字段缺失”。
 - 1688 的 `source_changed`：对照失败快照的 `schema_version`、DOM 片段与 `source_paths`，更新受控浏览器提取器和固定样本回放；`source_paths` 可保存最多 200 个可打印 ASCII 字符的 CSS/属性/查询参数定位表达式，但不得包含换行、控制字符或非 ASCII；不得放宽到任意 1688 URL、吞掉缺失字段或用空记录冒充成功。
 - 1688 搜索返回空：先检查页面标题和关键词是否乱码；执行请求必须从固定搜索页填写 `#alisearch-input` 并点击 `.input-button`，不得恢复为 UTF-8 `keywords` 查询串。若证据 DOM 只有 `offer-skeleton-item`，核对滚动后的二次条目等待是否生效；Crawler 的 `succeeded_empty` 必须被 Worker 立即作为终态读取，不能继续轮询约 190 秒后误记为 `timeout`。再检查商品卡是否仍为带数字 `offerId` 且声明 `data-tracker="offer"` 的链接，以及标题、供应商和可见价格节点是否仍为当前 `v2` 合同选择器；结构变化按 `source_changed` 处理，不得扩大到旺旺、广告跳转或店铺链接。
 - 1688 的 `source_configuration_invalid`：检查是否为 HTTPS 1688 域名、搜索入口是否为 `s.1688.com`，以及详情 URL 中商品 ID 是否与记录一致。该错误不是登录续期信号，不能通过重放绕过。
