@@ -420,6 +420,8 @@ test("automatic downstream tasks use crawler contracts and recover malformed his
   ).join("\n");
   assert.match(worker, /page_url: String\(row\.product_url\)/);
   assert.match(worker, /page_url: canonicalUrl/);
+  assert.equal(worker.match(/q\.organization_id=o\.organization_id/g)?.length, 4);
+  assert.equal(worker.match(/q\.workspace_id=o\.workspace_id/g)?.length, 4);
   assert.match(worker, /JSON_EXTRACT\(q\.target_json,'\$\.page_url'\).*IS NOT NULL/s);
   assert.match(
     worker,

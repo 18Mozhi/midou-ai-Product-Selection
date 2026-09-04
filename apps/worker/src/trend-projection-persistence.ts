@@ -180,13 +180,17 @@ export class TrendProjectionPersistence {
                   se.resource_id search_id,
                   (c.latest_snapshot_id IS NULL AND NOT EXISTS (
                     SELECT 1 FROM collection_subqueries q
-                    WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
+                    WHERE q.organization_id=o.organization_id
+                      AND q.workspace_id=o.workspace_id
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.page_url')) IS NOT NULL
                   )) competitor_task_missing,
                   (se.resource_id IS NOT NULL AND NOT EXISTS (
                     SELECT 1 FROM collection_subqueries q
-                    WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
+                    WHERE q.organization_id=o.organization_id
+                      AND q.workspace_id=o.workspace_id
+                      AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
                       AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
                       AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v2'
@@ -207,14 +211,18 @@ export class TrendProjectionPersistence {
              AND (
                (c.latest_snapshot_id IS NULL AND NOT EXISTS (
                  SELECT 1 FROM collection_subqueries q
-                 WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
+                 WHERE q.organization_id=o.organization_id
+                   AND q.workspace_id=o.workspace_id
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.page_url')) IS NOT NULL
                ))
                OR
                (se.resource_id IS NOT NULL AND NOT EXISTS (
                  SELECT 1 FROM collection_subqueries q
-                 WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
+                 WHERE q.organization_id=o.organization_id
+                   AND q.workspace_id=o.workspace_id
+                   AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
                    AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
                    AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v2'
