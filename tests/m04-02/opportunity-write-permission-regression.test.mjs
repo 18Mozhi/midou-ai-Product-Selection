@@ -24,7 +24,11 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(list, /@click="emit\('reset'\)">重置/);
   assert.match(list, /selectionView === 'all'[\s\S]*canDecide[\s\S]*'手工添加机会'/);
   assert.match(list, /selectionView === 'all'[\s\S]*'刷新列表'[\s\S]*'查看全部机会'/);
-  assert.match(list, /state === 'empty' && selectionView !== 'all'[\s\S]*emit\('manageRules'\)/);
+  assert.match(
+    list,
+    /state === 'empty' && selectionView !== 'all'[\s\S]*emit\('manageSetup', nextSetupPath\)/,
+  );
+  assert.match(workspace, /@manage-setup="router\.push\(\$event\)"/);
   assert.match(workspace, /async function resetListFilters\(\)/);
   assert.match(workspace, /@reset="resetListFilters"/);
   assert.match(decision, /v-if="canDecide"[\s\S]*aria-label="机会决策操作"/);

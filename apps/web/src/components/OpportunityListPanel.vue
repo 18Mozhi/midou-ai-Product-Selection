@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 
@@ -59,6 +60,7 @@ const props = defineProps<{
     selectedIds: string[];
     page: number;
     canDecide: boolean;
+    automationReadiness: AutomaticSelectionReadiness | null;
   }>(),
   emit = defineEmits<{
     apply: [];
@@ -67,12 +69,20 @@ const props = defineProps<{
     "update:selectedIds": [value: string[]];
     batch: [value: "assign" | "archive" | "review"];
     create: [];
-    manageRules: [];
+    manageSetup: [path: string];
     reset: [];
   }>(),
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
   activeFilterCount = computed(() => Object.values(props.filters).filter(Boolean).length),
+  showAutomationReadiness = computed(() =>
+    ["recommended", "rule_candidates"].includes(props.selectionView),
+  ),
+  nextSetupPath = computed(
+    () =>
+      props.automationReadiness?.steps.find((step) => !step.ready)?.route ??
+      "/opportunities/scoring-rules",
+  ),
   viewCopy = computed(
     () =>
       ({
@@ -212,6 +222,50 @@ const opportunityStatus = (value: string) =>
       </form>
     </ResponsiveFilterDrawer>
   </section>
+  <section
+    v-if="showAutomationReadiness && automationReadiness"
+    class="automatic-selection-readiness"
+    :data-ready="automationReadiness.allReady"
+    aria-labelledby="automatic-selection-readiness-title"
+  >
+    <header>
+      <div>
+        <p>自动推荐准备度</p>
+        <h3 id="automatic-selection-readiness-title">
+          {{
+            !automationReadiness.available
+              ? "暂时无法读取规则状态"
+              : automationReadiness.allReady
+                ? "五项规则配置已齐"
+                : "初始规则还未配齐"
+          }}
+        </h3>
+      </div>
+      <strong v-if="automationReadiness.available">{{ automationReadiness.readyCount }} / 5</strong>
+    </header>
+    <p v-if="!automationReadiness.available">
+      候选列表不受影响。刷新后仍无法读取时，请先检查评分规则页面。
+    </p>
+    <p v-else-if="automationReadiness.allReady">
+      系统会按真实证据逐项计算；只有单个商品的评分、市场、竞争、成本和风险全部通过，才会进入“待我采纳”。
+    </p>
+    <p v-else>
+      采集已能产出规则命中候选；完成下面的显式配置后，系统才能继续计算五项质量门。系统不会代填权重、阈值或费率。
+    </p>
+    <ol v-if="automationReadiness.available">
+      <li v-for="step in automationReadiness.steps" :key="step.code" :data-ready="step.ready">
+        <span
+          ><b>{{ step.label }}</b
+          ><small>{{ step.description }}</small></span
+        >
+        <em v-if="step.ready">已配置</em>
+        <RouterLink v-else :to="step.route">去设置</RouterLink>
+      </li>
+    </ol>
+    <RouterLink v-else class="automatic-selection-readiness__fallback" :to="nextSetupPath"
+      >检查评分规则</RouterLink
+    >
+  </section>
   <UiStatePanel
     v-if="state !== 'ready'"
     :kind="state"
@@ -222,7 +276,7 @@ const opportunityStatus = (value: string) =>
           ? canDecide
             ? '手工添加机会'
             : '刷新列表'
-          : '管理选品规则'
+          : '完善自动推荐配置'
         : ''
     "
     :secondary-label="
@@ -236,7 +290,7 @@ const opportunityStatus = (value: string) =>
     "
     @primary="
       state === 'empty' && selectionView !== 'all'
-        ? emit('manageRules')
+        ? emit('manageSetup', nextSetupPath)
         : state === 'empty' && canDecide
           ? emit('create')
           : emit('apply')

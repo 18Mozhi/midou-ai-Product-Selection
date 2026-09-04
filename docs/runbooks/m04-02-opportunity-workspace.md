@@ -8,7 +8,7 @@
 
 - Node API 与 Node Worker 均继续由宝塔面板管理，不创建额外生产服务。
 - `OPPORTUNITY_REFRESH_POLL_MS` 与 `OPPORTUNITY_REFRESH_LEASE_SECONDS` 只放在宝塔受限环境；修改后在面板重启 Node Worker。
-- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql`、`0065_opportunity_operating_feedback.up.sql` 与 `0070_rule_candidates_quality_gate.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。
+- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql`、`0065_opportunity_operating_feedback.up.sql`、`0070_rule_candidates_quality_gate.up.sql` 与 `0071_opportunity_migration_timestamp_timezone.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。固定部署脚本会先通过宝塔停止统一 Node 项目，避免 Worker 与数据迁移争抢机会行；迁移或换包失败时会通过宝塔恢复原 Node 项目。0071 只校正由 0070 批量写入的 UTC 墙钟值，不修改其他历史机会时间。
 - 发布自动发现选品逻辑后，确认商品型 `gnews_*` 主题能建立 `trend_topic` 来源候选、关联至少一条真实证据并保持 `insufficient_data`；普通新闻与数据频道不得批量生成候选。
 
 ## 观测和处置
@@ -18,6 +18,7 @@
 - `retry_scheduled` 会按 1/5/15 分钟退避；`failed_terminal` 表示来源已失效等不可重试输入，`dead_letter` 表示依赖错误耗尽四次。
 - 页面显示 `insufficient_data` 或 `unknown` 是事实状态，不应通过手工 SQL 填入分数、ROI 或低风险。
 - 机会列表可按“不完整 / 部分完整 / 完整”筛选，也可按“缺少可采纳证据 / 尚无可靠推荐结论”筛选；后者只对应采纳接口已有的持久化阻断条件。两类筛选都无需配置或重启 Worker。应用发布后需由宝塔重启 Node API 并更新网站静态文件。
+- 默认“待我采纳”和“规则命中候选”页会读取现有评分、费用与竞品规则，显示评分、市场、竞争、成本、风险五项配置准备度。这里仅判断显式规则是否齐全，不代表某个商品已经通过质量门；缺少业务权重、阈值、费率或真实证据时不得显示为已配置或建议采纳。
 - 发布后先打开默认“待我采纳”，确认每条记录均为 `selection_stage=recommended`、`quality_gates.all_passed=true` 且 `decision_status=pending`；采纳按钮只对这些记录启用。切换“规则命中候选”应只出现达到来源门槛但至少一项质量门未通过的记录；“采集中”只显示已匹配规则但尚未达到来源门槛的记录；“全部机会”保留手工、ERP 导入和其他机会。该变更需要应用 0070 数据修正、重启宝塔 Node API 与 Node Worker，并重新发布前端静态文件；没有新增环境变量。
 - 发布后在列表设置筛选并翻页，确认地址栏同步；从结果进入详情，再使用“返回来源列表”，应恢复完整筛选和页码。直接打开带 `tab=evidence` 的详情链接应定位证据分区。证据超过 20 条时初始 DOM 只能挂载最新 20 条，“继续显示”每次增加最多 20 条，“收起”恢复 20 条，页面总数仍必须等于 API 全量事实。首屏应只突出系统建议、评分、证据、风险和人工最终决定，完整阻断进度与手动补证工具按需展开；390px 下四个一级页签等宽显示，“更多分析”在文档流内展开，人工决策区不得覆盖正文或成员底部导航。
 - 核对列表的阶段停留时长不会因改负责人或普通刷新而重置；只有阶段实际变化时 `lifecycle_entered_at` 才更新。详情应同时展示两类采纳阻断、补采任务进度与评分 Job 状态。
@@ -26,4 +27,4 @@
 
 ## 回滚
 
-先在宝塔关闭机会入口并停止 Node Worker，回滚应用版本。经营复盘表包含业务事实，只有完成受控归档并确认可删除后才能执行 `0065_opportunity_operating_feedback.down.sql`；随后按需执行 `0060_opportunity_workflow_visibility.down.sql`，完整移除机会域时再执行 `0017b_opportunities_m04_02.down.sql`。下迁移会移除阶段进入时间与评分 Job 的补采任务关联，已经投递的通知和审计事实保留。恢复时重新应用迁移、启动 API/Worker，并运行 `npm run verify:module -- M04-02`。
+先在宝塔关闭机会入口并停止 Node Worker，回滚应用版本。若需要撤销时间校正，先在相同服务器时区下执行 `0071_opportunity_migration_timestamp_timezone.down.sql`；它仍只匹配 0070 的批量时间戳。经营复盘表包含业务事实，只有完成受控归档并确认可删除后才能执行 `0065_opportunity_operating_feedback.down.sql`；随后按需执行 `0060_opportunity_workflow_visibility.down.sql`，完整移除机会域时再执行 `0017b_opportunities_m04_02.down.sql`。下迁移会移除阶段进入时间与评分 Job 的补采任务关联，已经投递的通知和审计事实保留。恢复时重新应用迁移、启动 API/Worker，并运行 `npm run verify:module -- M04-02`。

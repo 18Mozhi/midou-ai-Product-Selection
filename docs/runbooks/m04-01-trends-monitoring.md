@@ -2,7 +2,7 @@
 
 ## 宝塔部署顺序
 
-1. 在宝塔受限发布任务备份 MySQL，按发布清单执行 `database/migrations/0017a_trends_m04_01.up.sql`、`0043_trend_rule_collection_schedule.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0068_automatic_selection_rule_matches.up.sql`、`0069_rule_based_recommendations.up.sql` 与 `0070_rule_candidates_quality_gate.up.sql`；迁移兼容 MySQL 5.7、`utf8mb4`，不得使用 root 运行常驻服务。
+1. 在宝塔受限发布任务备份 MySQL，按发布清单执行 `database/migrations/0017a_trends_m04_01.up.sql`、`0043_trend_rule_collection_schedule.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0068_automatic_selection_rule_matches.up.sql`、`0069_rule_based_recommendations.up.sql`、`0070_rule_candidates_quality_gate.up.sql` 与 `0071_opportunity_migration_timestamp_timezone.up.sql`；迁移兼容 MySQL 5.7、`utf8mb4`，不得使用 root 运行常驻服务。
 2. 在 Node Worker 项目环境设置 `TREND_PROJECTION_POLL_MS=2000`、`TREND_PROJECTION_LEASE_SECONDS=120`。这些不是秘密；真实数据库、Redis 和会话秘密仍只保存在宝塔受限环境。
 3. 由宝塔先重启 Node Worker，再重启 Node API。Web 静态产物随网站发布；不得创建 systemd、独立 PM2、宿主 crontab或面板外容器。
 4. 检查 Worker 日志中的 `queue=trend_projection`，再运行 `npm run verify:module -- M04-01`。
@@ -39,7 +39,7 @@
 1. 先由宝塔停止 Node Worker，避免继续创建投影。
 2. 回滚 Web、Node API 和 Node Worker 到上一版本。回滚后自动频道不再创建新候选，但已经生成的待评估选品、规则关联、趋势证据和审计必须保留，不得批量删除掩盖发布结果。
 3. 如必须回滚数据库，确认 M04-02 及下游尚未使用趋势表，导出并保留 `trend_events`、`trend_outbox` 和主题证据关联后，执行 `database/migrations/0017a_trends_m04_01.down.sql`。
-4. 只回滚本次五项质量门读模型时，先恢复旧代码，再执行 `0070_rule_candidates_quality_gate.down.sql`；它会恢复旧版本仅凭来源门槛的推荐口径，因此只能与旧应用一起使用。继续回滚来源门槛时再执行 `0069_rule_based_recommendations.down.sql`，回滚规则关联时再执行 `0068_automatic_selection_rule_matches.down.sql`。所有回滚前先备份，机会、证据和人工决策不得删除。
+4. 只回滚本次五项质量门读模型时，先在相同服务器时区下执行 `0071_opportunity_migration_timestamp_timezone.down.sql`，再恢复旧代码并执行 `0070_rule_candidates_quality_gate.down.sql`；0070 会恢复旧版本仅凭来源门槛的推荐口径，因此只能与旧应用一起使用。继续回滚来源门槛时再执行 `0069_rule_based_recommendations.down.sql`，回滚规则关联时再执行 `0068_automatic_selection_rule_matches.down.sql`。所有回滚前先备份，机会、证据和人工决策不得删除。
 
 ## 故障演练
 

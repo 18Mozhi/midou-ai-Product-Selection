@@ -45,6 +45,7 @@ const allowed = new Set([
   "0068_automatic_selection_rule_matches.up.sql",
   "0069_rule_based_recommendations.up.sql",
   "0070_rule_candidates_quality_gate.up.sql",
+  "0071_opportunity_migration_timestamp_timezone.up.sql",
 ]);
 export function splitSqlStatements(source) {
   const statements = [];
@@ -121,6 +122,27 @@ export function splitSqlStatements(source) {
   return statements;
 }
 
+const migrationRetryDelaysMs = [100, 300, 750];
+
+export async function executeMigrationStatement(
+  execute,
+  statement,
+  {
+    retryDelaysMs = migrationRetryDelaysMs,
+    wait = (delay) => new Promise((done) => setTimeout(done, delay)),
+  } = {},
+) {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await execute(statement);
+    } catch (error) {
+      const retryable = ["ER_LOCK_DEADLOCK", "ER_LOCK_WAIT_TIMEOUT"].includes(error?.code);
+      if (!retryable || attempt >= retryDelaysMs.length) throw error;
+      await wait(retryDelaysMs[attempt]);
+    }
+  }
+}
+
 async function main() {
   const requested = process.argv.slice(2);
   if (!requested.length || requested.some((name) => !allowed.has(basename(name)))) {
@@ -164,7 +186,8 @@ async function main() {
         continue;
       }
       const statements = splitSqlStatements(sql);
-      for (const statement of statements) await pool.query(statement);
+      for (const statement of statements)
+        await executeMigrationStatement((value) => pool.query(value), statement);
       await pool.query(
         "INSERT INTO schema_migrations(name,checksum,applied_at) VALUES(?,?,UTC_TIMESTAMP(3))",
         [name, checksum],

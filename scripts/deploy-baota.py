@@ -43,7 +43,7 @@ PYTHON_BIN = "/www/server/pyporject_evn/versions/3.12.13/bin/python3.12"
 PANEL_PYTHON = "/www/server/panel/pyenv/bin/python"
 PUBLIC_BASE_URL = "https://midouai.medouai.com"
 EXPECTED_GITHUB_REPOSITORY = "18Mozhi/midou-ai-Product-Selection"
-DEPLOYMENT_MIGRATION_VERSION = "0070_rule_candidates_quality_gate.up.sql"
+DEPLOYMENT_MIGRATION_VERSION = "0071_opportunity_migration_timestamp_timezone.up.sql"
 NODE_START_COMMAND = (
     f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
     f"--env-file={PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
@@ -309,6 +309,33 @@ def remote_python(client: paramiko.SSHClient, source: str, timeout: int = 120) -
     if not result.get("status"):
         raise RuntimeError(f"BaoTa helper failed: {result.get('message', 'unknown error')}")
     return result
+
+
+def panel_node_action_source(action: str) -> str:
+    if action not in {"stop", "start"}:
+        raise ValueError("unsupported Node project action")
+    values = json.dumps(
+        {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action},
+        ensure_ascii=False,
+    )
+    return f'''import json, sys
+from pathlib import Path
+sys.path.insert(0, "/www/server/panel")
+sys.path.insert(0, "/www/server/panel/class")
+import public
+from projectModel.nodejsModel import main as NodeModel
+
+v=json.loads({values!r}); root=Path(v["root"])
+row=public.M("sites").where("name=?", (v["node_project"],)).find()
+if not row or row.get("project_type") != "Node" or row.get("path") != str(root / "backend"):
+    raise RuntimeError("Node project identity or path mismatch")
+model=NodeModel(); request=public.dict_obj(); request.project_name=v["node_project"]
+response=model.stop_project(request) if v["action"] == "stop" else model.start_project(request)
+text=json.dumps(response, ensure_ascii=False)
+allowed=("项目未启动", "项目已启动", "already stopped", "already started")
+status=bool(isinstance(response, dict) and response.get("status")) or any(item in text for item in allowed)
+print("SCOUTOPS_RESULT=" + json.dumps({{"status": status, "message": v["action"] + " Node", "response": text[:300]}}, ensure_ascii=False))
+'''
 
 
 def panel_deploy_source(build_sha: str, initialize_layout: bool) -> str:
@@ -828,6 +855,7 @@ def main() -> None:
         client.connect(HOST, username=SSH_USER, password=password, timeout=15)
         remote_archive = f"{PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
         remote_stage = f"{PROJECT_ROOT}/.deploy-stage-{build_sha}"
+        node_stopped_for_migration = False
         try:
             production_identity = remote_python(client, production_identity_source(), timeout=30)
             verify_production_sha_history(repo, production_identity.get("build_sha"), build_sha)
@@ -849,10 +877,13 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql"
             )
+            remote_python(client, panel_node_action_source("stop"), timeout=60)
+            node_stopped_for_migration = True
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)
+            node_stopped_for_migration = False
             client.close()
             verify_public(build_sha)
 
@@ -865,6 +896,9 @@ def main() -> None:
                 transport = client.get_transport()
                 if transport is None or not transport.is_active():
                     client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+                if node_stopped_for_migration:
+                    remote_python(client, panel_node_action_source("start"), timeout=60)
+                    node_stopped_for_migration = False
                 remote_python(client, transient_cleanup_source(build_sha), timeout=180)
             except Exception as error:
                 cleanup_error = error

@@ -2,7 +2,7 @@
 
 ## 发布
 
-1. 在宝塔 MySQL 5.7 使用 `product_scout` 业务账号执行 `0015b_home_dashboard_m02_06.up.sql`、`0068_automatic_selection_rule_matches.up.sql`、`0069_rule_based_recommendations.up.sql` 和 `0070_rule_candidates_quality_gate.up.sql`。0070 会把历史上仅凭来源门槛写成 `recommend` 且尚无评分版本的待决策记录恢复为 `insufficient_data`；不删除机会、证据或人工决策。
+1. 在宝塔 MySQL 5.7 使用 `product_scout` 业务账号执行 `0015b_home_dashboard_m02_06.up.sql`、`0068_automatic_selection_rule_matches.up.sql`、`0069_rule_based_recommendations.up.sql`、`0070_rule_candidates_quality_gate.up.sql` 和 `0071_opportunity_migration_timestamp_timezone.up.sql`。0070 会把历史上仅凭来源门槛写成 `recommend` 且尚无评分版本的待决策记录恢复为 `insufficient_data`；0071 只校正这批记录的迁移时间显示，不删除机会、证据或人工决策。
 2. 通过宝塔 Node 项目发布并重启 Node API 与 Node Worker，使 `/api/v1/me/home-dashboard` 和自动规则调度生效；通过宝塔网站发布 Vue Web 静态资源。Python Crawler 和 Redis 无变更，不重启，不创建面板外服务。
 3. 不新增环境变量。验证桌面与 390px `/home` 首屏可直接创建第一条规则或恢复暂停规则，并在第一视口显示“待你采纳 / 规则命中候选 / 采集中 / 运行规则”四项真实计数。推荐清单只能列出五项质量门全部通过的商品；规则候选只计数、不伪装成人工待办。点击“运行详情”后，必须准确显示候选、人工已采纳、采集步骤以及最近/下次采集时间；推荐入口必须进入真实机会列表，不能把推荐直接写成采纳。
 

@@ -17,6 +17,10 @@ import { durationLabel, statusLabel } from "../ui/status-labels";
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
 import {
+  loadAutomaticSelectionReadiness,
+  type AutomaticSelectionReadiness,
+} from "../automatic-selection-readiness";
+import {
   formatOpportunityTime as freshness,
   opportunityStatusLabel,
   opportunityPrimaryTabs as primaryTabs,
@@ -53,6 +57,7 @@ const props = defineProps<{
   page = ref(1),
   requestId = ref(""),
   message = ref(""),
+  automationReadiness = ref<AutomaticSelectionReadiness | null>(null),
   busy = ref(false),
   selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "all">(
     "recommended",
@@ -206,6 +211,10 @@ async function loadDownstream() {
     if (error instanceof ApiClientError) requestId.value = error.requestId;
   }
 }
+async function loadAutomationReadiness() {
+  automationReadiness.value = null;
+  automationReadiness.value = await loadAutomaticSelectionReadiness(request);
+}
 async function load() {
   state.value = "loading";
   message.value = "";
@@ -236,6 +245,7 @@ async function load() {
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
     const result = await read(`/opportunities?${params}`);
     items.value = result.data;
+    const readinessPromise = loadAutomationReadiness();
     try {
       memberOptions.value = (await request<any[]>("/opportunities/member-options")).data;
     } catch (error) {
@@ -244,6 +254,7 @@ async function load() {
       requestId.value = error.requestId;
       message.value = "机会已加载；组织成员选项暂不可用，批量指派需稍后重试。";
     }
+    await readinessPromise;
     total.value = (result.meta as { total: number }).total;
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
@@ -720,10 +731,11 @@ watch(
       :selected-ids="selectedOpportunityIds"
       :page="page"
       :can-decide="canDecide"
+      :automation-readiness="automationReadiness"
       @apply="applyListFilters"
       @batch="openBatch"
       @create="showCreate = true"
-      @manage-rules="router.push('/trends?section=rules')"
+      @manage-setup="router.push($event)"
       @page="goListPage"
       @reset="resetListFilters"
       @view="setSelectionView"

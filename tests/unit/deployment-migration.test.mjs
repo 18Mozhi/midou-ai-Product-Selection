@@ -28,6 +28,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0068_automatic_selection_rule_matches\.up\.sql/);
   assert.match(deploy, /0069_rule_based_recommendations\.up\.sql/);
   assert.match(deploy, /0070_rule_candidates_quality_gate\.up\.sql/);
+  assert.match(deploy, /0071_opportunity_migration_timestamp_timezone\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
@@ -74,6 +75,11 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     deploy.indexOf("ssh_exec(client, migrate") <
       deploy.indexOf("remote_python(client, panel_deploy_source"),
   );
+  assert.ok(
+    deploy.indexOf('remote_python(client, panel_node_action_source("stop")') <
+      deploy.indexOf("ssh_exec(client, migrate"),
+  );
+  assert.match(deploy, /if node_stopped_for_migration:[\s\S]*panel_node_action_source\("start"\)/);
   const orderedMigrations = [
     "0040_platform_messages.up.sql",
     "0041_member_workspace_tasks.up.sql",
@@ -110,6 +116,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0068_automatic_selection_rule_matches.up.sql",
     "0069_rule_based_recommendations.up.sql",
     "0070_rule_candidates_quality_gate.up.sql",
+    "0071_opportunity_migration_timestamp_timezone.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -163,6 +170,7 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     "0068_automatic_selection_rule_matches.up.sql",
     "0069_rule_based_recommendations.up.sql",
     "0070_rule_candidates_quality_gate.up.sql",
+    "0071_opportunity_migration_timestamp_timezone.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = splitSqlStatements(sql);
@@ -180,4 +188,49 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
       `${name} statement count changed unexpectedly`,
     );
   }
+});
+
+test("opportunity timestamp repair only adjusts rows stamped by migration 0070", async () => {
+  const sql = await readFile(
+    "database/migrations/0071_opportunity_migration_timestamp_timezone.up.sql",
+    "utf8",
+  );
+  assert.match(sql, /FROM `schema_migrations` m/);
+  assert.match(sql, /WHERE m\.`name`='0070_rule_candidates_quality_gate\.up\.sql'/);
+  assert.match(sql, /TIMESTAMPDIFF\(SECOND,UTC_TIMESTAMP\(3\),NOW\(3\)\)/);
+  assert.match(
+    sql,
+    /TIMESTAMPDIFF\(\s*MICROSECOND,\s*o\.`updated_at`,\s*\(\s*SELECT m\.`applied_at`/s,
+  );
+  assert.match(sql, /o\.`score_rule_version` IS NULL/);
+  assert.match(sql, /o\.`recommendation_status`='insufficient_data'/);
+});
+
+test("deployment migration statements retry only transient MySQL lock failures", async () => {
+  const { executeMigrationStatement } =
+    await import("../../scripts/apply-deployment-migrations.mjs");
+  const attempts = [];
+  const waits = [];
+  const result = await executeMigrationStatement(
+    async (statement) => {
+      attempts.push(statement);
+      if (attempts.length < 3) throw { code: "ER_LOCK_DEADLOCK" };
+      return "applied";
+    },
+    "UPDATE opportunities SET updated_at=updated_at",
+    { retryDelaysMs: [1, 2], wait: async (delay) => waits.push(delay) },
+  );
+  assert.equal(result, "applied");
+  assert.equal(attempts.length, 3);
+  assert.deepEqual(waits, [1, 2]);
+  await assert.rejects(
+    executeMigrationStatement(
+      async () => {
+        throw { code: "ER_PARSE_ERROR" };
+      },
+      "invalid",
+      { retryDelaysMs: [1], wait: async () => undefined },
+    ),
+    (error) => error.code === "ER_PARSE_ERROR",
+  );
 });
