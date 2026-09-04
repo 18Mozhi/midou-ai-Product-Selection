@@ -1,0 +1,1952 @@
+export const routes = [
+  {
+    "path": "/",
+    "name": "landing",
+    "title": "正在进入",
+    "breadcrumb": [],
+    "shell": null,
+    "view": "landing",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "landing",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/login",
+    "name": "login",
+    "title": "登录",
+    "breadcrumb": [
+      "登录"
+    ],
+    "shell": null,
+    "view": "local-identity",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "login",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/register",
+    "name": "register",
+    "title": "注册",
+    "breadcrumb": [
+      "注册"
+    ],
+    "shell": null,
+    "view": "local-identity",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "register",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/forgot-password",
+    "name": "forgot-password",
+    "title": "找回密码",
+    "breadcrumb": [
+      "找回密码"
+    ],
+    "shell": null,
+    "view": "local-identity",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "forgot-password",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/verify-email",
+    "name": "verify-email",
+    "title": "验证邮箱",
+    "breadcrumb": [
+      "验证邮箱"
+    ],
+    "shell": null,
+    "view": "local-identity",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "verify-email",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/reset-password",
+    "name": "reset-password",
+    "title": "重置密码",
+    "breadcrumb": [
+      "重置密码"
+    ],
+    "shell": null,
+    "view": "local-identity",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "reset-password",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/security/mfa",
+    "name": "security-mfa",
+    "title": "安全设置",
+    "breadcrumb": [
+      "账号",
+      "安全设置"
+    ],
+    "shell": null,
+    "view": "local-identity",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "security-mfa",
+    "cachePolicy": "none",
+    "acceptance": "public",
+    "sessionRequired": true
+  },
+  {
+    "path": "/select-context",
+    "name": "select-context",
+    "title": "选择组织与工作区",
+    "breadcrumb": [
+      "选择组织与工作区"
+    ],
+    "shell": null,
+    "view": "tenancy",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "select-context",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/onboarding",
+    "name": "onboarding",
+    "title": "快速引导",
+    "breadcrumb": [
+      "快速引导"
+    ],
+    "shell": null,
+    "view": "onboarding",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "onboarding",
+    "cachePolicy": "none",
+    "acceptance": "public"
+  },
+  {
+    "path": "/settings/theme",
+    "name": "theme-settings",
+    "title": "外观偏好",
+    "breadcrumb": [
+      "账号",
+      "外观偏好"
+    ],
+    "shell": null,
+    "view": "theme",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "theme-settings",
+    "cachePolicy": "none",
+    "acceptance": "public",
+    "featureMap": {
+      "path": "/settings/theme",
+      "view": "ThemeStudio",
+      "domain": "personal-preferences",
+      "status": "verified",
+      "statusDetail": "M02-01_module_verified"
+    }
+  },
+  {
+    "path": "/me",
+    "name": "personal-center",
+    "title": "个人中心",
+    "breadcrumb": [
+      "账号",
+      "个人中心"
+    ],
+    "shell": "account",
+    "view": "account",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "personal-center",
+    "cachePolicy": "none",
+    "acceptance": "public",
+    "sessionRequired": true,
+    "featureMap": {
+      "path": "/me",
+      "view": "PersonalCenter",
+      "domain": "personal-profile-permissions-security-notifications-assets",
+      "loading": "profile is loaded and rendered first from the valid account session even without organization context; authorization, sessions, notifications and assets settle independently in the background with explicit partial-failure feedback, and tenant-owned sections remain unavailable until a real organization and workspace are selected",
+      "status": "implemented"
+    }
+  },
+  {
+    "path": "/home",
+    "name": "home",
+    "title": "今日行动",
+    "breadcrumb": [
+      "工作台",
+      "今日行动"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "task:read"
+    ],
+    "notFound": false,
+    "surface": "home-dashboard",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/home",
+      "view": "HomeDashboard",
+      "domain": "work",
+      "status": "implemented"
+    },
+    "navigation": {
+      "label": "今日行动",
+      "icon": "home",
+      "group": "工作台"
+    }
+  },
+  {
+    "path": "/work",
+    "name": "today-work",
+    "title": "今日工作",
+    "breadcrumb": [
+      "工作台",
+      "今日工作"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "task:read"
+    ],
+    "notFound": false,
+    "surface": "task-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/work",
+      "view": "TaskWorkspace",
+      "domain": "tasks",
+      "status": "verified",
+      "statusDetail": "M05-01_module_verified"
+    },
+    "navigation": {
+      "label": "今日工作",
+      "icon": "check",
+      "group": "工作台"
+    }
+  },
+  {
+    "path": "/trends",
+    "name": "trends",
+    "title": "热点趋势",
+    "breadcrumb": [
+      "洞察与选品",
+      "热点趋势"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "trend:read"
+    ],
+    "notFound": false,
+    "surface": "trend-dashboard",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/trends",
+      "view": "TrendDashboard",
+      "domain": "trends",
+      "status": "verified",
+      "statusDetail": "M04-01_module_verified"
+    },
+    "navigation": {
+      "label": "热点趋势",
+      "icon": "trend",
+      "group": "洞察与选品"
+    }
+  },
+  {
+    "path": "/opportunities",
+    "name": "opportunities",
+    "title": "选品机会",
+    "breadcrumb": [
+      "洞察与选品",
+      "选品机会"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "opportunity:read"
+    ],
+    "notFound": false,
+    "surface": "opportunity-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/opportunities",
+      "view": "OpportunityWorkspace",
+      "domain": "opportunities",
+      "status": "verified",
+      "statusDetail": "M04-02_module_verified"
+    },
+    "navigation": {
+      "label": "选品机会",
+      "icon": "diamond",
+      "group": "洞察与选品"
+    }
+  },
+  {
+    "path": "/opportunities/start",
+    "name": "opportunity-start",
+    "title": "创建选品",
+    "breadcrumb": [
+      "洞察与选品",
+      "创建选品"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "opportunity:decide"
+    ],
+    "notFound": false,
+    "surface": "selection-journey",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/opportunities/start",
+      "view": "SelectionJourney",
+      "domain": "selection_acceptance",
+      "status": "verified",
+      "statusDetail": "M07-06_module_verified"
+    }
+  },
+  {
+    "path": "/opportunities/scoring-rules",
+    "name": "opportunity-scoring",
+    "title": "评分规则",
+    "breadcrumb": [
+      "洞察与选品",
+      "选品机会",
+      "评分规则"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "opportunity:read"
+    ],
+    "notFound": false,
+    "surface": "score-rule-console",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/opportunities/scoring-rules",
+      "view": "ScoreRuleConsole",
+      "domain": "opportunities",
+      "status": "verified",
+      "statusDetail": "M04-03_module_verified"
+    }
+  },
+  {
+    "path": "/opportunities/:opportunityId",
+    "name": "opportunity-detail",
+    "title": "机会详情",
+    "breadcrumb": [
+      "洞察与选品",
+      "选品机会",
+      "机会详情"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "opportunity:read"
+    ],
+    "notFound": false,
+    "surface": "opportunity-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "productionResolver": {
+      "parentPath": "/opportunities?view=all",
+      "pathPattern": "^/opportunities/[0-9a-f-]{36}$"
+    },
+    "featureMap": {
+      "path": "/opportunities/{opportunityId}",
+      "view": "OpportunityWorkspace",
+      "domain": "opportunities",
+      "status": "verified",
+      "statusDetail": "M04-04_profit_analysis_verified"
+    }
+  },
+  {
+    "path": "/competitors",
+    "name": "competitors",
+    "title": "竞品监控",
+    "breadcrumb": [
+      "洞察与选品",
+      "竞品监控"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "competitor:read"
+    ],
+    "notFound": false,
+    "surface": "competitor-monitor",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/competitors",
+      "view": "CompetitorMonitor",
+      "domain": "competitors",
+      "status": "verified",
+      "statusDetail": "M04-05_module_verified"
+    },
+    "navigation": {
+      "label": "竞品监控",
+      "icon": "target",
+      "group": "洞察与选品"
+    }
+  },
+  {
+    "path": "/competitors/monitoring-rules",
+    "name": "competitor-monitoring-rules",
+    "title": "竞品监控规则",
+    "breadcrumb": [
+      "洞察与选品",
+      "竞品监控",
+      "监控规则"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "competitor:read"
+    ],
+    "notFound": false,
+    "surface": "competitor-monitor",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/competitors/monitoring-rules",
+      "view": "CompetitorMonitor",
+      "domain": "competitor-monitoring-rules",
+      "status": "verified",
+      "statusDetail": "M04-05_module_verified"
+    }
+  },
+  {
+    "path": "/sourcing",
+    "name": "sourcing",
+    "title": "供应链与利润",
+    "breadcrumb": [
+      "洞察与选品",
+      "供应链与利润"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "sourcing:read"
+    ],
+    "notFound": false,
+    "surface": "sourcing-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/sourcing",
+      "view": "SourcingWorkspace",
+      "domain": "sourcing",
+      "status": "verified",
+      "statusDetail": "M04-06_module_verified"
+    },
+    "navigation": {
+      "label": "供应链与利润",
+      "icon": "box",
+      "group": "洞察与选品"
+    }
+  },
+  {
+    "path": "/sourcing/cost-rules",
+    "name": "sourcing-cost-rules",
+    "title": "费用与利润规则",
+    "breadcrumb": [
+      "洞察与选品",
+      "供应链与利润",
+      "费用规则"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "cost-rule-console",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/sourcing/cost-rules",
+      "view": "CostRuleConsole",
+      "domain": "sourcing",
+      "status": "verified",
+      "statusDetail": "M04-04_module_verified"
+    }
+  },
+  {
+    "path": "/tasks",
+    "name": "tasks",
+    "title": "全部任务",
+    "breadcrumb": [
+      "工作台",
+      "全部任务"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "task:read"
+    ],
+    "notFound": false,
+    "surface": "task-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/tasks",
+      "view": "TaskWorkspace",
+      "domain": "tasks",
+      "status": "verified",
+      "statusDetail": "M05-01_module_verified"
+    },
+    "navigation": {
+      "label": "任务中心",
+      "icon": "list",
+      "group": "工作台"
+    }
+  },
+  {
+    "path": "/tasks/:taskId",
+    "name": "task-detail",
+    "title": "任务详情",
+    "breadcrumb": [
+      "工作台",
+      "全部任务",
+      "任务详情"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "task:read"
+    ],
+    "notFound": false,
+    "surface": "task-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "productionResolver": {
+      "parentPath": "/tasks",
+      "pathPattern": "^/tasks/[0-9a-f-]{36}$"
+    },
+    "featureMap": {
+      "path": "/tasks/{taskId}",
+      "view": "TaskWorkspace",
+      "domain": "tasks",
+      "status": "implemented",
+      "statusDetail": "explicit_detail_route_implemented"
+    }
+  },
+  {
+    "path": "/tasks/approvals",
+    "name": "approvals",
+    "title": "审批中心",
+    "breadcrumb": [
+      "工作台",
+      "审批中心"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "task:read"
+    ],
+    "notFound": false,
+    "surface": "approval-workspace",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/tasks/approvals",
+      "view": "ApprovalWorkspace",
+      "domain": "approvals",
+      "status": "verified",
+      "statusDetail": "M05-02_module_verified"
+    },
+    "navigation": {
+      "label": "审批中心",
+      "icon": "check",
+      "group": "工作台"
+    }
+  },
+  {
+    "path": "/notifications",
+    "name": "notifications",
+    "title": "通知中心",
+    "breadcrumb": [
+      "工作台",
+      "通知中心"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "notification:read"
+    ],
+    "notFound": false,
+    "surface": "notification-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/notifications",
+      "view": "NotificationCenter",
+      "domain": "notifications",
+      "status": "verified",
+      "statusDetail": "M05-03_module_verified"
+    },
+    "navigation": {
+      "label": "通知中心",
+      "icon": "bell",
+      "group": "工作台"
+    }
+  },
+  {
+    "path": "/automations",
+    "name": "automations",
+    "title": "自动化规则",
+    "breadcrumb": [
+      "运营工具",
+      "自动化规则"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "team:manage"
+    ],
+    "notFound": false,
+    "surface": "automation-rule-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/automations",
+      "view": "AutomationRuleCenter",
+      "domain": "automation-rules",
+      "status": "verified",
+      "statusDetail": "M05-05_module_verified"
+    },
+    "navigation": {
+      "label": "自动化规则",
+      "icon": "automation",
+      "group": "运营工具"
+    }
+  },
+  {
+    "path": "/reports",
+    "name": "reports",
+    "title": "报表与导出",
+    "breadcrumb": [
+      "运营工具",
+      "报表与导出"
+    ],
+    "shell": "member",
+    "view": null,
+    "capabilities": [
+      "report:read"
+    ],
+    "notFound": false,
+    "surface": "report-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/reports",
+      "view": "ReportCenter",
+      "domain": "reports-exports",
+      "status": "verified",
+      "statusDetail": "M05-06_module_verified"
+    },
+    "navigation": {
+      "label": "报表与导出",
+      "icon": "chart",
+      "group": "运营工具"
+    }
+  },
+  {
+    "path": "/org-admin",
+    "name": "organization-overview",
+    "title": "治理概览",
+    "breadcrumb": [
+      "组织后台",
+      "治理概览"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization",
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
+    },
+    "navigation": {
+      "label": "治理概览",
+      "icon": "home",
+      "group": "概览"
+    }
+  },
+  {
+    "path": "/org-admin/members",
+    "name": "organization-members",
+    "title": "成员与邀请",
+    "breadcrumb": [
+      "组织后台",
+      "成员与邀请"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/members",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-members",
+      "status": "verified",
+      "statusDetail": "M06-01_module_verified"
+    },
+    "navigation": {
+      "label": "成员与邀请",
+      "icon": "users",
+      "group": "人员与权限"
+    }
+  },
+  {
+    "path": "/org-admin/roles",
+    "name": "organization-roles",
+    "title": "角色与权限",
+    "breadcrumb": [
+      "组织后台",
+      "角色与权限"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/roles",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-roles",
+      "status": "verified",
+      "statusDetail": "M06-01_role_governance_live_verified"
+    },
+    "navigation": {
+      "label": "角色与权限",
+      "icon": "shield",
+      "group": "人员与权限"
+    }
+  },
+  {
+    "path": "/org-admin/workspaces",
+    "name": "organization-workspaces",
+    "title": "工作区管理",
+    "breadcrumb": [
+      "组织后台",
+      "工作区管理"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/workspaces",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-workspaces",
+      "status": "verified",
+      "statusDetail": "M06-01_workspace_governance_live_verified"
+    },
+    "navigation": {
+      "label": "工作区管理",
+      "icon": "building",
+      "group": "组织结构"
+    }
+  },
+  {
+    "path": "/org-admin/teams",
+    "name": "organization-teams",
+    "title": "团队管理",
+    "breadcrumb": [
+      "组织后台",
+      "团队管理"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/teams",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-teams",
+      "status": "verified",
+      "statusDetail": "M06-01_team_governance_live_verified"
+    },
+    "navigation": {
+      "label": "团队管理",
+      "icon": "users",
+      "group": "组织结构"
+    }
+  },
+  {
+    "path": "/org-admin/approvals",
+    "name": "organization-approvals",
+    "title": "审批模板",
+    "breadcrumb": [
+      "组织后台",
+      "审批模板"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/approvals",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-approvals",
+      "status": "verified",
+      "statusDetail": "M06-01_approval_governance_live_verified"
+    },
+    "navigation": {
+      "label": "审批模板",
+      "icon": "check",
+      "group": "组织治理"
+    }
+  },
+  {
+    "path": "/org-admin/data",
+    "name": "organization-data",
+    "title": "组织数据",
+    "breadcrumb": [
+      "组织后台",
+      "组织数据"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [
+      "report:read"
+    ],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/data",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-data",
+      "status": "verified",
+      "statusDetail": "M06-01_organization_data_live_verified"
+    },
+    "navigation": {
+      "label": "组织数据",
+      "icon": "chart",
+      "group": "组织治理"
+    }
+  },
+  {
+    "path": "/org-admin/tokens",
+    "name": "organization-tokens",
+    "title": "组织令牌",
+    "breadcrumb": [
+      "组织后台",
+      "组织令牌"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/tokens",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-tokens",
+      "status": "verified",
+      "statusDetail": "M06-01_organization_token_governance_live_verified"
+    },
+    "navigation": {
+      "label": "组织令牌",
+      "icon": "key",
+      "group": "安全与审计"
+    }
+  },
+  {
+    "path": "/org-admin/audit",
+    "name": "organization-audit",
+    "title": "组织审计",
+    "breadcrumb": [
+      "组织后台",
+      "组织审计"
+    ],
+    "shell": "organization_admin",
+    "view": null,
+    "capabilities": [
+      "audit:read"
+    ],
+    "notFound": false,
+    "surface": "organization-admin-center",
+    "cachePolicy": "reset_on_scope",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/org-admin/audit",
+      "view": "OrganizationAdminCenter",
+      "domain": "organization-audit",
+      "status": "verified",
+      "statusDetail": "M06-01_organization_audit_live_verified"
+    },
+    "navigation": {
+      "label": "组织审计",
+      "icon": "shield",
+      "group": "安全与审计"
+    }
+  },
+  {
+    "path": "/platform-admin",
+    "name": "platform-overview",
+    "title": "平台概览",
+    "breadcrumb": [
+      "平台后台",
+      "平台概览"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-dashboard",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin",
+      "view": "PlatformDashboard",
+      "domain": "platform",
+      "status": "implemented",
+      "statusDetail": "platform_dashboard_live_mysql_api_permission_failure_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "平台概览",
+      "icon": "home",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/accounts",
+    "name": "platform-accounts",
+    "title": "账号与组织",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/accounts",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-accounts",
+      "status": "implemented",
+      "statusDetail": "account_overview_live_mysql_api_worker_crawler_permission_role_failure_refresh_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/organizations",
+    "name": "platform-organizations",
+    "title": "组织管理",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织",
+      "组织管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/organizations",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-organizations",
+      "status": "implemented",
+      "statusDetail": "organization_list_live_mysql_api_worker_crawler_permission_filter_empty_refresh_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "组织管理",
+      "icon": "building",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/organizations/new",
+    "name": "platform-organization-create",
+    "title": "创建组织",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织",
+      "组织管理",
+      "创建组织"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/organizations/new",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-organization-create",
+      "status": "implemented",
+      "statusDetail": "organization_create_live_mysql_atomic_scope_audit_validation_error_retry_permission_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/organizations/:organizationId",
+    "name": "platform-organization-detail",
+    "title": "组织详情",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织",
+      "组织管理",
+      "组织详情"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "productionResolver": {
+      "parentPath": "/platform-admin/organizations",
+      "pathPattern": "^/platform-admin/organizations/[0-9a-f-]{36}$",
+      "resourceIdKey": "organizationId"
+    },
+    "featureMap": {
+      "path": "/platform-admin/organizations/{organizationId}",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-organization-detail",
+      "status": "implemented",
+      "statusDetail": "organization_detail_live_mysql_update_status_audit_idempotency_missing_error_retry_permission_refresh_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/users",
+    "name": "platform-users",
+    "title": "用户管理",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织",
+      "用户管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/users",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-users",
+      "status": "implemented"
+    },
+    "navigation": {
+      "label": "用户管理",
+      "icon": "person",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/admins",
+    "name": "platform-admins",
+    "title": "管理员管理",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织",
+      "管理员管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/admins",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-administrators",
+      "status": "implemented",
+      "statusDetail": "administrator_management_live_mysql_api_worker_crawler_create_role_session_status_password_idempotency_permission_failure_refresh_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "管理员管理",
+      "icon": "shield",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/permissions",
+    "name": "platform-permissions",
+    "title": "角色权限",
+    "breadcrumb": [
+      "平台后台",
+      "账号与组织",
+      "角色权限"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-account-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/permissions",
+      "view": "PlatformAccountCenter",
+      "domain": "platform-accounts-permissions",
+      "status": "implemented",
+      "statusDetail": "permission_comparison_live_mysql_role_catalog_search_filter_refresh_persistence_empty_failure_timeout_permission_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "角色权限",
+      "icon": "key",
+      "group": "治理与安全"
+    }
+  },
+  {
+    "path": "/platform-admin/providers",
+    "name": "platform-providers",
+    "title": "来源设置",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "来源设置"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "provider-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/providers",
+      "view": "ProviderRegistry",
+      "domain": "platform",
+      "status": "implemented",
+      "statusDetail": "provider_registry_live_mysql_api_worker_crawler_truthful_admission_search_filter_sort_pagination_create_version_idempotency_concurrency_permission_offline_refresh_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "来源设置",
+      "icon": "settings",
+      "group": "采集与数据"
+    }
+  },
+  {
+    "path": "/platform-admin/providers/adapters",
+    "name": "platform-provider-adapters",
+    "title": "采集程序",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "采集程序"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "provider-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/providers/adapters",
+      "view": "ProviderAdapterCenter",
+      "domain": "provider-adapters",
+      "status": "verified",
+      "statusDetail": "provider_adapter_live_mysql_api_worker_crawler_registry_version_search_filter_sort_pagination_refresh_timeout_permission_idempotency_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/providers/sources",
+    "name": "platform-provider-sources",
+    "title": "热点来源",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "热点来源"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "provider-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/providers/sources",
+      "view": "ProviderSourceCenter",
+      "domain": "platform",
+      "status": "verified",
+      "statusDetail": "provider_sources_live_mysql_api_worker_crawler_catalog_search_filter_sort_pagination_url_state_refresh_timeout_configuration_smoke_version_rollback_compatibility_permission_idempotency_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "热点来源",
+      "icon": "trend",
+      "group": "采集与数据"
+    }
+  },
+  {
+    "path": "/platform-admin/providers/sources/1688-acceptance",
+    "name": "platform-provider-1688-acceptance",
+    "title": "1688 启用检查",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "1688 启用检查"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "provider-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/providers/sources/1688-acceptance",
+      "view": "Alibaba1688AcceptanceCenter",
+      "domain": "provider-sources-1688-acceptance",
+      "status": "verified",
+      "statusDetail": "provider_1688_acceptance_live_mysql_api_worker_crawler_gate_matrix_refresh_timeout_preserve_data_scoped_actions_permission_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/credentials",
+    "name": "platform-credentials",
+    "title": "凭证与档案",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "凭证与档案"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "provider-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/credentials",
+      "view": "CredentialAssetCenter",
+      "domain": "credential-assets",
+      "status": "verified",
+      "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/collection",
+    "name": "platform-collection-tasks",
+    "title": "采集任务",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "采集任务"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "collection-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/collection",
+      "view": "CollectionTaskCenter",
+      "domain": "collection-tasks",
+      "status": "verified",
+      "statusDetail": "collection_tasks_live_mysql_redis_api_worker_crawler_pagination_all_states_current_page_filter_refresh_offline_timeout_preserve_data_detail_url_accessibility_failure_isolation_manual_replay_concurrent_idempotency_permission_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/collection/overview",
+    "name": "platform-collection-overview",
+    "title": "采集总览",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "采集总览"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "collection-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/collection/overview",
+      "view": "CollectionOperationsConsole",
+      "domain": "collection-operations",
+      "status": "verified",
+      "statusDetail": "M06-03_module_verified"
+    },
+    "navigation": {
+      "label": "采集管理",
+      "icon": "automation",
+      "group": "采集与数据"
+    }
+  },
+  {
+    "path": "/platform-admin/collection/browser-runtime",
+    "name": "platform-browser-runtime",
+    "title": "网页登录采集",
+    "breadcrumb": [
+      "平台后台",
+      "热点与采集",
+      "网页登录采集"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "collection-runtime-surface",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/collection/browser-runtime",
+      "view": "CollectionRuntimeCenter",
+      "domain": "playwright-crawler-runtime",
+      "status": "verified",
+      "statusDetail": "M03-04_module_verified"
+    }
+  },
+  {
+    "path": "/platform-admin/data",
+    "name": "platform-data",
+    "title": "数据中心",
+    "breadcrumb": [
+      "平台后台",
+      "数据治理",
+      "数据中心"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-data-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/data",
+      "view": "PlatformDataCenter",
+      "domain": "platform-data",
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
+    },
+    "navigation": {
+      "label": "数据中心",
+      "icon": "database",
+      "group": "治理与安全"
+    }
+  },
+  {
+    "path": "/platform-admin/governance",
+    "name": "platform-governance",
+    "title": "质量与规则",
+    "breadcrumb": [
+      "平台后台",
+      "数据治理",
+      "质量与规则"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-governance-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/governance",
+      "view": "PlatformGovernanceCenter",
+      "domain": "platform-governance",
+      "status": "verified",
+      "statusDetail": "M06-02_platform_governance_factual_pagination_url_failure_preservation_verified"
+    },
+    "navigation": {
+      "label": "质量与规则",
+      "icon": "settings",
+      "group": "治理与安全"
+    }
+  },
+  {
+    "path": "/platform-admin/content",
+    "name": "platform-content",
+    "title": "内容管理",
+    "breadcrumb": [
+      "平台后台",
+      "运营中心",
+      "内容管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-management-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/content",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-content",
+      "status": "verified",
+      "statusDetail": "M06-02_content_factual_pagination_url_failure_permission_worker_projection_verified"
+    },
+    "navigation": {
+      "label": "内容运营",
+      "icon": "list",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/notifications",
+    "name": "platform-notifications",
+    "title": "通知管理",
+    "breadcrumb": [
+      "平台后台",
+      "运营中心",
+      "通知管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-management-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/notifications",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-notifications",
+      "status": "verified",
+      "statusDetail": "M06-02_module_verified"
+    },
+    "navigation": {
+      "label": "通知运营",
+      "icon": "bell",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/commercial",
+    "name": "platform-commercial",
+    "title": "配额管理",
+    "breadcrumb": [
+      "平台后台",
+      "运营中心",
+      "配额管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "commercial-operations-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/commercial",
+      "view": "CommercialOperationsCenter",
+      "domain": "commercial-operations",
+      "status": "verified",
+      "statusDetail": "M06-06_quota_pagination_effective_adjustment_and_url_state_verified"
+    },
+    "navigation": {
+      "label": "配额管理",
+      "icon": "chart",
+      "group": "业务运营"
+    }
+  },
+  {
+    "path": "/platform-admin/security",
+    "name": "platform-security",
+    "title": "安全中心",
+    "breadcrumb": [
+      "平台后台",
+      "安全中心"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:secure",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "security-operations-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/security",
+      "view": "SecurityOperationsCenter",
+      "domain": "security-operations",
+      "status": "verified",
+      "statusDetail": "M06-04_module_verified"
+    },
+    "navigation": {
+      "label": "安全与审计",
+      "icon": "shield",
+      "group": "治理与安全"
+    }
+  },
+  {
+    "path": "/platform-admin/open-platform",
+    "name": "platform-open",
+    "title": "开放平台",
+    "breadcrumb": [
+      "平台后台",
+      "安全中心",
+      "开放平台"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform_token:manage"
+    ],
+    "notFound": false,
+    "surface": "open-platform-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/open-platform",
+      "view": "OpenPlatformCenter",
+      "domain": "open-platform",
+      "status": "verified",
+      "statusDetail": "M06-05_permission_pagination_filter_sort_and_worker_feedback_verified"
+    },
+    "navigation": {
+      "label": "开放平台",
+      "icon": "key",
+      "group": "治理与安全"
+    }
+  },
+  {
+    "path": "/platform-admin/status",
+    "name": "platform-status",
+    "title": "系统状态",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "系统状态"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-management-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/status",
+      "view": "PlatformManagementCenter",
+      "domain": "platform-system-status",
+      "status": "verified",
+      "statusDetail": "M06-02_status_live_mysql_api_worker_crawler_permission_failure_timeout_empty_refresh_and_responsive_verification_completed"
+    },
+    "navigation": {
+      "label": "系统运维",
+      "icon": "target",
+      "group": "高级运维"
+    }
+  },
+  {
+    "path": "/platform-admin/logs",
+    "name": "platform-logs",
+    "title": "链路日志",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "链路日志"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-log-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/logs",
+      "view": "PlatformLogCenter",
+      "domain": "platform-operational-logs",
+      "status": "verified",
+      "statusDetail": "M06-02_logs_live_mysql_api_worker_crawler_permission_failure_timeout_url_filter_export_idempotency_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/api-coverage",
+    "name": "platform-api-coverage",
+    "title": "接口覆盖证据",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "接口覆盖证据"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "platform-management-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/api-coverage",
+      "view": "ApiCoverageDashboard",
+      "domain": "platform-api-coverage",
+      "status": "verified",
+      "statusDetail": "schema3_method_path_operation_evidence_manifest_and_live_report_join_verified"
+    }
+  },
+  {
+    "path": "/platform-admin/operations",
+    "name": "platform-operations",
+    "title": "备份与恢复",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "备份与恢复"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "backup-recovery-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/operations",
+      "view": "BackupRecoveryCenter",
+      "domain": "backup-recovery",
+      "status": "verified",
+      "statusDetail": "M07-04_module_verified"
+    }
+  },
+  {
+    "path": "/platform-admin/releases",
+    "name": "platform-releases",
+    "title": "发布管理",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "发布管理"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "release-rollout-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/releases",
+      "view": "ReleaseRolloutCenter",
+      "domain": "release-operations",
+      "status": "verified",
+      "statusDetail": "M07-05_module_verified_bounded_single_flight_refresh"
+    }
+  },
+  {
+    "path": "/platform-admin/topology",
+    "name": "platform-topology",
+    "title": "服务拓扑",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "服务拓扑"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "runtime-topology-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/topology",
+      "view": "RuntimeTopologyCenter",
+      "domain": "runtime-topology",
+      "status": "verified",
+      "statusDetail": "M08-01_topology_live_mysql_redis_api_worker_crawler_permission_refresh_timeout_failure_queue_truth_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/redis",
+    "name": "platform-redis",
+    "title": "Redis 运行",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "Redis 运行"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "redis-resilience-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/redis",
+      "view": "RedisResilienceCenter",
+      "domain": "redis-resilience",
+      "status": "verified",
+      "statusDetail": "M08-02_redis_live_mysql57_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_failure_and_responsive_verification_completed"
+    }
+  },
+  {
+    "path": "/platform-admin/mysql",
+    "name": "platform-mysql",
+    "title": "MySQL 运行",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "MySQL 运行"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "mysql-resilience-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/mysql",
+      "view": "MySqlResilienceCenter",
+      "domain": "mysql-resilience",
+      "status": "verified",
+      "statusDetail": "M08-03_module_verified"
+    }
+  },
+  {
+    "path": "/platform-admin/files",
+    "name": "platform-files",
+    "title": "文件存储",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "文件存储"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "file-resilience-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/files",
+      "view": "FileResilienceCenter",
+      "domain": "file-resilience",
+      "status": "verified",
+      "statusDetail": "M08-04_module_verified"
+    }
+  },
+  {
+    "path": "/platform-admin/crawler-scheduler",
+    "name": "platform-crawler-scheduler",
+    "title": "采集调度",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "采集调度"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "crawler-scheduler-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/crawler-scheduler",
+      "view": "CrawlerSchedulerCenter",
+      "title": "采集调度",
+      "domain": "crawler-single-host-scheduler",
+      "status": "verified",
+      "statusDetail": "M08-05_refresh_chain_verified"
+    }
+  },
+  {
+    "path": "/platform-admin/capacity",
+    "name": "platform-capacity",
+    "title": "容量边界",
+    "breadcrumb": [
+      "平台后台",
+      "系统运维",
+      "容量边界"
+    ],
+    "shell": "platform_admin",
+    "view": null,
+    "capabilities": [
+      "platform:operate",
+      "platform:superadmin"
+    ],
+    "notFound": false,
+    "surface": "capacity-boundary-center",
+    "cachePolicy": "preserve",
+    "acceptance": "protected",
+    "featureMap": {
+      "path": "/platform-admin/capacity",
+      "view": "CapacityBoundaryCenter",
+      "domain": "capacity-boundary",
+      "status": "verified",
+      "statusDetail": "M08-06_live_refresh_and_drill_chain_verified"
+    }
+  },
+  {
+    "path": "/ui-states",
+    "name": "ui-states",
+    "title": "界面状态",
+    "breadcrumb": [
+      "开发工具",
+      "界面状态"
+    ],
+    "shell": null,
+    "view": "ui-states",
+    "capabilities": [],
+    "notFound": false,
+    "surface": "ui-states",
+    "cachePolicy": "none",
+    "acceptance": "internal"
+  },
+  {
+    "path": "/:pathMatch(.*)*",
+    "name": "not-found",
+    "title": "页面不存在",
+    "breadcrumb": [
+      "页面不存在"
+    ],
+    "shell": null,
+    "view": "not-found",
+    "capabilities": [],
+    "notFound": true,
+    "surface": "not-found",
+    "cachePolicy": "none",
+    "acceptance": "fallback"
+  }
+];
