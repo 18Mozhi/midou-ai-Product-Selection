@@ -377,17 +377,7 @@ onUnmounted(() => {
       >
         <AppIcon name="menu" /> <span>菜单</span>
       </button>
-      <div class="role-context" v-if="state === 'ready'">
-        <span v-if="shell !== 'platform_admin'"
-          ><small>组织</small>{{ contextName(guard?.organization_name, "未命名组织") }}</span
-        ><span v-if="shell !== 'platform_admin'"
-          ><small>工作区</small>{{ contextName(guard?.workspace_name, "默认工作区") }}</span
-        ><span v-else><small>范围</small>平台全局</span>
-      </div>
       <div class="role-top-actions">
-        <div v-if="state === 'ready'" class="role-identity" aria-label="当前身份">
-          <small>当前身份</small><strong>{{ roleSummary }}</strong>
-        </div>
         <div class="role-theme-switcher">
           <button type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen">
             <AppIcon name="theme" /> <span>主题</span>
@@ -420,38 +410,6 @@ onUnmounted(() => {
         >
           <AppIcon name="plus" /> <span>创建选品</span>
         </button>
-        <RouterLink
-          v-if="shell === 'platform_admin'"
-          class="role-switch"
-          :to="contextSwitchTarget"
-          aria-label="选择组织与工作区后进入用户工作台"
-          ><AppIcon name="switch" /><span class="role-switch-desktop">选择范围并返回工作台</span
-          ><span class="role-switch-mobile">用户面板</span></RouterLink
-        >
-        <RouterLink
-          v-else-if="shell === 'organization_admin'"
-          class="role-switch"
-          :to="memberReturnPath()"
-          aria-label="返回成员工作台"
-          ><AppIcon name="switch" /><span class="role-switch-desktop">返回成员工作台</span
-          ><span class="role-switch-mobile">工作台</span></RouterLink
-        >
-        <RouterLink
-          v-else-if="guard?.roles?.includes('organization_admin')"
-          class="role-switch"
-          to="/org-admin"
-          aria-label="进入组织管理后台"
-          ><AppIcon name="switch" /><span class="role-switch-desktop">进入组织后台</span
-          ><span class="role-switch-mobile">组织后台</span></RouterLink
-        >
-        <RouterLink
-          v-if="shell === 'member' && guard?.platform_roles?.length"
-          class="role-switch"
-          to="/platform-admin"
-          aria-label="进入管理后台"
-          ><AppIcon name="switch" /><span class="role-switch-desktop">进入管理后台</span
-          ><span class="role-switch-mobile">管理后台</span></RouterLink
-        >
         <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
           ><AppIcon name="bell" /></RouterLink
         ><RouterLink to="/me" aria-label="个人中心"><AppIcon name="person" /></RouterLink>
@@ -566,7 +524,31 @@ onUnmounted(() => {
             ><b v-if="index < breadcrumbs.length - 1">/</b>
           </template>
         </nav>
-        <h1 v-if="!opportunityId" class="so-visually-hidden">{{ pageTitle }}</h1>
+        <header v-if="!opportunityId" class="role-page-title">
+          <div>
+            <p>{{ activeItem?.group || shellTitle }}</p>
+            <h1>{{ pageTitle }}</h1>
+            <span v-if="pageSummary">{{ pageSummary }}</span>
+          </div>
+        </header>
+        <section v-if="!opportunityId" class="role-context-rail" aria-label="上下文">
+          <div>
+            <small>当前范围</small>
+            <strong v-if="shell === 'platform_admin'">平台全局</strong>
+            <strong v-else
+              >{{ contextName(guard?.organization_name, "未命名组织") }} ·
+              {{ contextName(guard?.workspace_name, "默认工作区") }}</strong
+            >
+          </div>
+          <div>
+            <small>任务域</small>
+            <strong>{{ activeItem?.group || shellTitle }}</strong>
+          </div>
+          <div>
+            <small>当前角色</small>
+            <strong>{{ roleSummary }}</strong>
+          </div>
+        </section>
         <nav
           v-if="isPlatformOperationsRoute"
           class="platform-secondary-nav"

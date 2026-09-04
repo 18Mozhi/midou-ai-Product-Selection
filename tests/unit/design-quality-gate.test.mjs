@@ -34,6 +34,7 @@ test("design tokens keep one accent family and administrative shells disable dec
   ]);
   assert.match(tokens, /--so-font-ui:\s*"Microsoft YaHei UI"/);
   assert.match(tokens, /--so-font-meta:\s*0\.8125rem/);
+  assert.match(tokens, /--so-content-max:\s*1240px/);
   assert.match(tokens, /\[data-theme="cloud-white"\][\s\S]*--so-border:\s*rgba\([^)]*,\s*0\.26\)/);
   for (const administrativeShell of ["organization_admin", "platform_admin"])
     assert.match(
@@ -41,6 +42,8 @@ test("design tokens keep one accent family and administrative shells disable dec
       new RegExp(`data-shell="${administrativeShell}"[\\s\\S]*?--so-glow:\\s*transparent`),
     );
   assert.doesNotMatch(`${shell}\n${account}`, /applyTheme\("cloud-white"\)/);
+  assert.match(shellStyles, /role-page-title h1[\s\S]*clamp\(30px, 3vw, 38px\)/);
+  assert.doesNotMatch(shellStyles, /role-shell[\s\S]{0,260}radial-gradient/);
 });
 
 test("navigation recovery and responsive quality are contract tested beyond screenshots", async () => {

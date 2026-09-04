@@ -169,6 +169,8 @@ for (const item of [
     await page.goto(item.path);
     await expect(page.getByRole("heading", { name: item.heading, level: 2 })).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+    await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
+    await expect(page.locator(".role-context-rail")).toBeVisible();
     await expect(page.locator(".role-sidebar")).toHaveAttribute(
       "aria-label",
       new RegExp(
@@ -373,7 +375,7 @@ test("M02-03 member shell never exposes platform administration navigation", asy
   await expect(page.getByRole("link", { name: "组织与用户" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "热点来源" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "安全与审计" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: /智能选品 选品工作台/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /智能选品/ })).toBeVisible();
 });
 
 test("M02-03 explicit routes keep internal navigation reactive and unknown routes unselected", async ({

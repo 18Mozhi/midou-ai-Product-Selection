@@ -37,6 +37,68 @@
 }
 
 .role-sidebar-utility {
+  margin-top: auto;
+  padding-top: 12px;
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--so-border);
+}
+
+.role-sidebar-utility a {
+  min-height: var(--so-touch-target);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: var(--so-control-radius);
+  color: var(--so-text-muted);
+  text-decoration: none;
+}
+
+.role-sidebar-utility a:hover {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.role-context-rail {
+  margin: 18px 0 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(140px, 1fr) minmax(140px, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--so-border);
+  border-left: 3px solid var(--role-accent);
+  border-radius: var(--so-card-radius);
+  background: color-mix(in srgb, var(--so-panel) 78%, var(--so-bg));
+}
+
+.role-context-rail > div {
+  min-width: 0;
+  padding: 11px 14px;
+}
+
+.role-context-rail > div + div {
+  border-left: 1px solid var(--so-border);
+}
+
+.role-context-rail small,
+.role-context-rail strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-context-rail small {
+  color: var(--so-text-muted);
+}
+
+.role-context-rail strong {
+  margin-top: 3px;
+  color: var(--so-text);
+  font-size: 14px;
+}
+
+.role-theme-switcher span {
   display: none;
 }
 
@@ -50,31 +112,23 @@
     min-height: 44px;
   }
 
-  .role-sidebar-utility {
-    margin-top: auto;
-    padding-top: 12px;
-    display: grid;
-    gap: 8px;
-    border-top: 1px solid var(--so-border);
-  }
-
   .role-sidebar-utility a {
-    min-height: var(--so-touch-target);
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    border-radius: var(--so-control-radius);
     color: var(--so-text);
-    text-decoration: none;
     background: var(--so-panel-soft);
-  }
-
-  .role-theme-switcher span {
-    display: none;
   }
 
   .role-top-actions .role-switch {
     display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .role-context-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .role-context-rail > div + div {
+    border-top: 1px solid var(--so-border);
+    border-left: 0;
   }
 }

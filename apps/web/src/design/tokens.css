@@ -83,7 +83,7 @@
   --so-radius-md: var(--so-card-radius);
   --so-radius-lg: var(--so-dialog-radius);
   --so-control-height: 44px;
-  --so-content-max: 1440px;
+  --so-content-max: 1240px;
   --so-readable-max: 1120px;
   --so-density-gap: 16px;
   --so-density-padding: 20px;

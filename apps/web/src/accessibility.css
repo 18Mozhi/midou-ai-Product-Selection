@@ -37,6 +37,19 @@ textarea {
   opacity: var(--so-disabled-opacity);
 }
 
+#app :where(button, [role="button"]) {
+  transition:
+    transform var(--so-transition),
+    color var(--so-transition),
+    border-color var(--so-transition),
+    background-color var(--so-transition),
+    box-shadow var(--so-transition);
+}
+
+#app :where(button, [role="button"]):active:not(:disabled) {
+  transform: translateY(1px);
+}
+
 #app :where(table, [data-numeric], .metric-grid, .preview-metrics) {
   font-variant-numeric: tabular-nums;
 }

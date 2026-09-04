@@ -3,7 +3,7 @@ import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 test("UI governance keeps responsive, status, dialog and error boundaries shared", async () => {
-  const [main, responsive, accessibility, statusLabels, apiClient, routeCatalog, shell] =
+  const [main, responsive, accessibility, statusLabels, apiClient, routeCatalog, shell, tokens] =
     await Promise.all(
       [
         "apps/web/src/main.ts",
@@ -13,6 +13,7 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
         "apps/web/src/api-client.ts",
         "apps/web/src/route-catalog.ts",
         "apps/web/src/components/NavigationShell.vue",
+        "apps/web/src/design/tokens.css",
       ].map((path) => readFile(path, "utf8")),
     );
   assert.match(main, /responsive-baselines\.css/);
@@ -24,6 +25,11 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
   assert.match(apiClient, /rethrowUnexpectedError/);
   assert.match(routeCatalog, /surface[\s\S]*cachePolicy/);
   assert.match(shell, /selectedSurfaceComponent[\s\S]*surfaceCacheKey/);
+  assert.match(shell, /class="role-page-title"[\s\S]*pageTitle[\s\S]*pageSummary/);
+  assert.match(shell, /class="role-context-rail"[\s\S]*当前范围[\s\S]*任务域[\s\S]*当前角色/);
+  assert.doesNotMatch(shell, /class="role-identity"/);
+  assert.match(tokens, /--so-content-max:\s*1240px/);
+  assert.doesNotMatch(accessibility, /transition:\s*all/);
   for (const stylesheet of [
     "apps/web/src/styles.css",
     "apps/web/src/styles/access-governance.css",
