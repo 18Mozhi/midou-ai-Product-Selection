@@ -127,13 +127,27 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
 }) => {
   await setup(page);
   await page.goto("/competitors?create=1");
-  await expect(page.getByRole("heading", { name: "竞品监控", level: 2 })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "竞品变化正在持续进入竞争证据链", level: 2 }),
+  ).toBeVisible();
+  const readiness = page.getByLabel("竞争质量门 · 证据就绪");
+  await expect(readiness.getByText("1 / 1")).toBeVisible();
+  await expect(readiness.getByText("2 份")).toBeVisible();
+  await expect(readiness.getByText("1 条启用")).toBeVisible();
   await expect(page.getByRole("heading", { name: "添加竞品监控" })).toBeVisible();
   await expect(page.getByLabel("添加竞品步骤").getByText("1 商品链接")).toHaveAttribute(
     "aria-current",
     "step",
   );
   await page.getByRole("button", { name: "关闭新建竞品" }).click();
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    )
+    .toBe(true);
+  await expect(page.locator(".competitor-guide")).not.toHaveAttribute("open");
   await page.getByRole("button", { name: /便携式净水杯竞品/ }).click();
   await expect(page).toHaveURL(new RegExp(`competitor=${id}`));
   await expect(page.getByLabel("基线、变动与阈值").getByText("USD 29.99")).toBeVisible();
@@ -324,6 +338,13 @@ test("competitor monitoring rules use an independent route and retain the source
   await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveValue(id);
   await page.getByRole("button", { name: "关闭告警规则" }).click();
   await expect(page).toHaveURL("/competitors/monitoring-rules");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    )
+    .toBe(true);
   await expect(page.getByLabel("竞品监控规则列表").getByText("价格 · 减少 USD 2")).toBeVisible();
   await expect(page.getByLabel("竞品监控规则列表").getByText("已生效")).toBeVisible();
   await expect(page.getByText("更新于 2026/08/08 20:01 · 版本 1")).toBeVisible();

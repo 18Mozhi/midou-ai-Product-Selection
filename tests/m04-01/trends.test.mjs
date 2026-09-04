@@ -432,6 +432,9 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/api/src/mysql-trend-repository.ts",
     "apps/api/src/trend-routes.ts",
     "apps/web/src/components/TrendDashboard.vue",
+    "apps/web/src/components/TrendRuleDialog.vue",
+    "apps/web/src/components/shared/MonitoringReadinessStrip.vue",
+    "apps/web/src/components/shared/monitoring-readiness.ts",
     "apps/web/src/components/TrendFilterPanel.vue",
     "apps/web/src/components/TrendDetailPanel.vue",
     "apps/web/src/components/TrendEvidenceTimeline.vue",
@@ -460,6 +463,9 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       repository,
       routes,
       web,
+      ruleDialog,
+      readinessStrip,
+      readinessModel,
       filterPanel,
       detailPanel,
       evidenceTimeline,
@@ -491,7 +497,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     /trend_change_self_confirmation_forbidden[\s\S]*trend_change_opportunity_conflict/,
   );
   assert.match(routes, /trend:read[\s\S]*trend:manage/);
-  const webSurface = `${webTypes}\n${web}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}\n${changeQueue}`;
+  const webSurface = `${webTypes}\n${web}\n${ruleDialog}\n${readinessStrip}\n${readinessModel}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}\n${changeQueue}`;
   assert.match(
     webSurface,
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
@@ -502,6 +508,8 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(web, /变更原因/);
   assert.match(web, /下次采集[\s\S]*上次失败来源/);
   assert.match(webSurface, /个来源[\s\S]*新鲜度[\s\S]*可信度/);
+  assert.match(webSurface, /市场质量门[\s\S]*持续监控中/);
+  assert.match(webSurface, /候选不等于建议采纳[\s\S]*五项质量门/);
   assert.match(schema, /TREND_PROJECTION_POLL_MS/);
   assert.match(env, /TREND_PROJECTION_LEASE_SECONDS/);
   assert.match(openapi, /\/trends\/\{topicId\}\/follow:[\s\S]*timeline_sources/);

@@ -707,7 +707,7 @@ test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", as
     });
   });
   await page.goto("/trends");
-  await page.getByRole("button", { name: /立即获取热点/ }).click();
+  await page.getByRole("button", { name: /立即刷新来源/ }).click();
   await expect.poll(() => body).toEqual({ organization_id: org, workspace_id: ws });
   await expect(page.getByText(/已开始从 138 个实时频道获取热点/)).toBeVisible();
 });

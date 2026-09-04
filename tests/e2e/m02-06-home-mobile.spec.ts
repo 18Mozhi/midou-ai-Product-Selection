@@ -372,7 +372,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
     await expectAboveMobileNavigation(page, emptyRecommendation);
   }
   await page.getByLabel("想找的商品关键词").fill("egg washer, egg brush");
-  await page.getByLabel("进入推荐的门槛").selectOption("2");
+  await page.getByLabel("形成候选的来源门槛").selectOption("2");
   await page.getByRole("button", { name: "保存并开始自动选品" }).click();
   await expect.poll(() => createdRuleBody?.recommendation_min_source_count).toBe(2);
   await expect.poll(() => createdRuleBody?.include_keywords).toEqual(["egg washer", "egg brush"]);

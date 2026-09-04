@@ -3,6 +3,8 @@ import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
+import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
+import { buildTrendMonitoringReadiness } from "./shared/monitoring-readiness";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
 import TrendFilterPanel from "./TrendFilterPanel.vue";
 import TrendChangeQueue from "./TrendChangeQueue.vue";
@@ -70,6 +72,22 @@ const stateFrom = (kind: ApiFailureKind): State =>
         ? "blocked"
         : "error";
 const canManageTrends = computed(() => props.capabilities.includes("trend:manage")),
+  enabledRules = computed(() => rules.value.filter((item) => item.status === "enabled")),
+  evaluatedRuleCount = computed(
+    () => enabledRules.value.filter((item) => Boolean(item.last_evaluated_at)).length,
+  ),
+  failedRuleSources = computed(() => [
+    ...new Set(enabledRules.value.flatMap((item) => item.last_failed_sources)),
+  ]),
+  trendReadiness = computed(() =>
+    buildTrendMonitoringReadiness({
+      loading: state.value === "loading",
+      enabledRules: enabledRules.value.length,
+      evaluatedRules: evaluatedRuleCount.value,
+      totalTopics: total.value,
+      failedSources: failedRuleSources.value.length,
+    }),
+  ),
   activeFilterCount = computed(() => Object.values(filters).filter(Boolean).length),
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20))),
   sortedTopics = computed(() => {
@@ -327,7 +345,7 @@ async function createRule(form: TrendRuleDraft) {
   if (result) {
     showRule.value = false;
     await load();
-    message.value = "监控规则已启用；当前仅发送站内通知。";
+    message.value = "监控规则已启用；命中来源门槛只会形成规则命中候选。";
     await setTab("rules");
   }
 }
@@ -431,21 +449,33 @@ onMounted(() => {
 
 <template>
   <section class="trend-dashboard">
-    <header class="trend-hero">
-      <div>
-        <p>全网热点雷达</p>
-        <h2>系统自动找热点，你也可以马上刷新</h2>
-        <span>新闻、电商、数据与社区频道每 15 分钟自动采集；所有结论都能打开原文核对。</span>
-      </div>
-      <div>
-        <button type="button" :disabled="Boolean(busy)" @click="refreshHotspots">
-          {{
-            busy === "/provider-sources/refresh" ? "正在启动，预计 1–3 分钟" : "立即获取热点"
-          }}</button
-        ><button v-if="canManageTrends" type="button" @click="showRule = true">＋ 创建监控</button
-        ><button class="secondary" type="button" @click="setTab('rules')">订阅管理</button>
-      </div>
-    </header>
+    <MonitoringReadinessStrip
+      eyebrow="市场质量门 · 证据就绪"
+      :title="trendReadiness.summary.title"
+      description="这里确认市场证据是否持续产出；单个商品是否通过市场质量门，仍以机会详情中的真实评分输入为准。"
+      :status="trendReadiness.summary.status"
+      :tone="trendReadiness.summary.tone"
+      :facts="trendReadiness.facts"
+    >
+      <button
+        v-if="!enabledRules.length && canManageTrends"
+        class="primary"
+        type="button"
+        @click="showRule = true"
+      >
+        创建第一条监控规则
+      </button>
+      <button
+        v-else
+        class="primary"
+        type="button"
+        :disabled="Boolean(busy)"
+        @click="refreshHotspots"
+      >
+        {{ busy === "/provider-sources/refresh" ? "正在启动…" : "立即刷新来源" }}
+      </button>
+      <button type="button" @click="setTab('rules')">管理监控规则</button>
+    </MonitoringReadinessStrip>
     <nav class="trend-tabs" aria-label="热点趋势视图">
       <button :aria-current="tab === 'topics' ? 'page' : undefined" @click="setTab('topics')">
         趋势主题</button
@@ -560,11 +590,12 @@ onMounted(() => {
       </details>
     </template>
     <section v-else-if="tab === 'rules'" class="trend-rules">
-      <header>
+      <header class="trend-rule-heading">
         <div>
-          <p>订阅规则</p>
+          <p>规则列表</p>
           <h3>趋势监控规则</h3>
-          <span v-if="canManageTrends">当前仅提供站内通知；邮件服务未确认，不显示为已接通。</span
+          <span v-if="canManageTrends"
+            >来源门槛只生成规则命中候选；五项质量门全部通过后才显示建议采纳。通知仅支持站内；邮件服务未确认。</span
           ><span v-else>当前为只读权限；可查看规则与结果，不能创建、暂停或恢复规则。</span>
         </div>
         <button v-if="canManageTrends" type="button" @click="showRule = true">＋ 创建规则</button>
@@ -603,7 +634,7 @@ onMounted(() => {
             <dd>每 {{ item.collection_interval_minutes }} 分钟</dd>
           </div>
           <div>
-            <dt>进入推荐</dt>
+            <dt>候选来源门槛</dt>
             <dd>至少 {{ item.recommendation_min_source_count }} 个独立来源</dd>
           </div>
           <div>

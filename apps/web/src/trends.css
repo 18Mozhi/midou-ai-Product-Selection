@@ -1,5 +1,8 @@
 .trend-dashboard {
-  margin-top: 28px;
+  margin-top: 18px;
+  min-width: 0;
+  display: grid;
+  gap: 14px;
   color: var(--so-text);
 }
 .trend-dashboard * {
@@ -10,27 +13,14 @@
 .trend-dashboard select {
   font: inherit;
 }
-.trend-hero,
-.trend-rules > header {
-  min-height: 112px;
-  padding: 20px 24px;
+.trend-rule-heading {
+  padding: 4px 2px 12px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 24px;
-  border: 1px solid var(--so-border);
-  border-radius: 22px;
-  background:
-    radial-gradient(
-      circle at 78% 20%,
-      color-mix(in srgb, var(--so-primary) 20%, transparent),
-      transparent 30%
-    ),
-    linear-gradient(135deg, var(--so-panel), var(--so-bg-elevated));
-  box-shadow: var(--so-shadow);
+  gap: 20px;
 }
-.trend-hero p,
-.trend-rules > header p,
+.trend-rule-heading p,
 .trend-detail p,
 .trend-evidence p,
 .trend-lower header p,
@@ -41,37 +31,24 @@
   font-weight: 850;
   letter-spacing: 0.16em;
 }
-.trend-hero h2 {
-  font-size: clamp(24px, 3vw, 30px);
-}
-.trend-hero span,
-.trend-rules > header span {
+.trend-rule-heading span {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   color: var(--so-text-muted);
   line-height: 1.6;
 }
-.trend-hero > div:last-child {
-  display: flex;
-  gap: 9px;
-}
-.trend-hero button,
-.trend-rules > header button,
+.trend-rule-heading button,
 .trend-modal footer button:last-child {
-  padding: 11px 16px;
+  min-height: var(--so-touch-target);
+  padding: 9px 15px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--so-control-radius);
   color: var(--so-on-primary);
-  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
+  background: var(--so-primary);
   font-weight: 750;
 }
-.trend-hero button.secondary {
-  border: 1px solid var(--so-border);
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-}
 .trend-tabs {
-  margin: 14px 0;
+  margin: 0;
   padding: 5px;
   display: flex;
   gap: 4px;
@@ -80,7 +57,8 @@
   background: var(--so-panel);
 }
 .trend-tabs button {
-  padding: 10px 15px;
+  min-height: var(--so-touch-target);
+  padding: 9px 15px;
   border: 0;
   border-radius: 8px;
   color: var(--so-text-muted);
@@ -110,10 +88,10 @@
   color: var(--so-text-muted);
 }
 .trend-filters {
-  margin-bottom: 14px;
+  margin-bottom: 0;
   padding: 15px;
   display: grid;
-  grid-template-columns: 120px 150px 130px minmax(220px, 1fr) 150px auto;
+  grid-template-columns: 120px 150px 130px minmax(220px, 1fr) 150px repeat(3, auto);
   align-items: end;
   gap: 10px;
   border: 1px solid var(--so-border);
@@ -131,7 +109,7 @@
 .trend-filters select,
 .trend-modal input {
   width: 100%;
-  min-height: 40px;
+  min-height: var(--so-touch-target);
   padding: 9px 11px;
   border: 1px solid var(--so-border);
   border-radius: 9px;
@@ -139,7 +117,7 @@
   background: var(--so-bg);
 }
 .trend-filters button {
-  min-height: 40px;
+  min-height: var(--so-touch-target);
   padding: 0 15px;
   border: 0;
   border-radius: 9px;
@@ -163,7 +141,6 @@
   border: 1px solid var(--so-border);
   border-radius: 18px;
   background: var(--so-panel);
-  box-shadow: var(--so-shadow);
 }
 .trend-list {
   max-height: 1000px;
@@ -341,7 +318,7 @@
 .trend-actions button:first-child {
   border-color: transparent;
   color: var(--so-on-primary);
-  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
+  background: var(--so-primary);
 }
 .trend-actions button:disabled {
   opacity: 0.46;
@@ -357,11 +334,7 @@
   gap: 18px;
   border: 1px solid var(--so-border);
   border-radius: 14px;
-  background: linear-gradient(
-    120deg,
-    color-mix(in srgb, var(--so-primary) 8%, var(--so-panel-soft)),
-    var(--so-panel-soft)
-  );
+  background: var(--so-panel-soft);
 }
 .trend-conclusion strong,
 .trend-conclusion span {
@@ -491,8 +464,7 @@
   width: 16px;
   min-height: 12px;
   border-radius: 6px 6px 0 0;
-  background: linear-gradient(var(--so-chart-4), var(--so-primary));
-  box-shadow: 0 0 20px var(--so-glow);
+  background: var(--so-primary);
 }
 .timeline-bars b {
   position: absolute;
@@ -535,8 +507,8 @@
 .trend-rules > header {
   margin-bottom: 4px;
 }
-.trend-rules > header h3 {
-  font-size: 28px;
+.trend-rule-heading h3 {
+  font-size: 22px;
 }
 .trend-rules > article {
   padding: 16px;
@@ -692,33 +664,14 @@
   .trend-dashboard {
     margin-top: 18px;
   }
-  .trend-hero,
-  .trend-rules > header {
-    min-height: auto;
-    padding: 14px 16px;
+  .trend-rule-heading {
+    padding: 2px 0 10px;
     align-items: flex-start;
     flex-direction: column;
     gap: 12px;
-    border-radius: var(--so-card-radius);
   }
-  .trend-hero p,
-  .trend-hero > div:first-child > span {
-    display: none;
-  }
-  .trend-hero h2 {
-    font-size: 20px;
-  }
-  .trend-hero > div:last-child,
-  .trend-hero button,
-  .trend-rules > header button {
+  .trend-rule-heading button {
     width: 100%;
-  }
-  .trend-hero > div:last-child {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .trend-hero > div:last-child button:last-child {
-    grid-column: 1/-1;
   }
   .trend-filters {
     grid-template-columns: 1fr 1fr;

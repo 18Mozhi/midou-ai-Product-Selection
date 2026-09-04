@@ -212,8 +212,12 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await ready(page);
   await page.goto("/trends");
   await expect(
-    page.getByRole("heading", { name: "系统自动找热点，你也可以马上刷新", level: 2 }),
+    page.getByRole("heading", { name: "市场信号正在持续进入选品链", level: 2 }),
   ).toBeVisible();
+  const readiness = page.getByLabel("市场质量门 · 证据就绪");
+  await expect(readiness.getByText("1 条启用")).toBeVisible();
+  await expect(readiness.getByText("1 个")).toBeVisible();
+  await expect(readiness.getByText("持续监控中")).toBeVisible();
   const trendList = page.locator(".trend-list");
   await expect(trendList.getByText("2 个来源")).toBeVisible();
   await expect(trendList.getByText(/新鲜度/)).toBeVisible();
@@ -275,17 +279,17 @@ test("long trend timelines scroll inside the detail card without widening the pa
 test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", async ({ page }) => {
   await ready(page);
   await page.goto("/trends");
-  await page.getByRole("button", { name: /监控规则/ }).click();
+  await page.getByRole("button", { name: /^监控规则/ }).click();
   await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
   await expect(page.getByText(/邮件服务未确认/)).toBeVisible();
   await expect(page.getByText("至少 2 个独立来源")).toBeVisible();
   await page.getByRole("button", { name: "＋ 创建规则" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
-  await expect(page.getByText("推荐不等于采纳")).toBeVisible();
+  await expect(page.getByText("候选不等于建议采纳")).toBeVisible();
   await page.getByLabel("规则名称").fill("新的监控");
   await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
   await page.getByRole("button", { name: "创建并启用" }).click();
-  await expect(page.getByText("监控规则已启用；当前仅发送站内通知。")).toBeVisible();
+  await expect(page.getByText("监控规则已启用；命中来源门槛只会形成规则命中候选。")).toBeVisible();
 });
 
 test("monitoring-rule deep links open the rule view and keep the legacy alias working", async ({
@@ -316,14 +320,14 @@ test("trend:read-only loads topics and rules without requesting or exposing gove
   await page.goto("/trends?section=governance");
   await expect(page).not.toHaveURL(/section=governance/);
   await expect(page.getByRole("heading", { name: topic.title })).toBeVisible();
-  await expect(page.getByRole("button", { name: "立即获取热点" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "立即刷新来源" })).toBeVisible();
   await expect(page.getByRole("button", { name: /合并与拆分/ })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /创建监控/ })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "关注", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "标记无关" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "报告异常" })).toHaveCount(0);
 
-  await page.getByRole("button", { name: /监控规则/ }).click();
+  await page.getByRole("button", { name: /^监控规则/ }).click();
   await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
   await expect(page.getByText(/当前为只读权限/)).toBeVisible();
   await expect(page.getByText(rule.name)).toBeVisible();

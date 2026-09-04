@@ -61,6 +61,8 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     "apps/worker/src/business-task-projection-worker.ts",
     "apps/worker/src/notification-outbox-worker.ts",
     "apps/web/src/components/CompetitorMonitor.vue",
+    "apps/web/src/components/shared/MonitoringReadinessStrip.vue",
+    "apps/web/src/components/shared/monitoring-readiness.ts",
     "apps/web/src/competitor.css",
     "config/schema.json",
     "config/env.example",
@@ -83,6 +85,8 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       businessProjection,
       notificationWorker,
       ui,
+      readinessStrip,
+      readinessModel,
       css,
       schema,
       env,
@@ -112,8 +116,11 @@ test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     notificationWorker,
     /competitor\.threshold\.triggered[\s\S]*notification_status[\s\S]*delivered/,
   );
+  const uiSurface = `${ui}\n${readinessStrip}\n${readinessModel}`;
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
-    assert.match(ui, new RegExp(state));
+    assert.match(uiSurface, new RegExp(state));
+  assert.match(uiSurface, /竞争质量门[\s\S]*持续监控中/);
+  assert.match(uiSurface, /真实快照[\s\S]*变化阈值/);
   assert.match(ui, /基线快照[\s\S]*当前快照[\s\S]*生效阈值/);
   assert.match(ui, /changeCurrency[\s\S]*changed_at/);
   assert.match(ui, /添加竞品步骤[\s\S]*商品链接[\s\S]*市场信息[\s\S]*确认采集/);

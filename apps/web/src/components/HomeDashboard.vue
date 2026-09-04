@@ -343,7 +343,7 @@ onMounted(load);
             </select>
           </label>
           <label>
-            <span>进入推荐的门槛</span>
+            <span>形成候选的来源门槛</span>
             <select v-model.number="setupForm.recommendation_min_source_count">
               <option :value="1">命中 1 个真实来源</option>
               <option :value="2">至少 2 个独立来源</option>

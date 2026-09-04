@@ -3,6 +3,8 @@ import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
+import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
+import { buildCompetitionMonitoringReadiness } from "./shared/monitoring-readiness";
 import "../competitor.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Snapshot {
@@ -159,6 +161,23 @@ const rulesPage = computed(() => props.mode === "rules"),
     pending: items.value.filter((item) => !item.latest_snapshot).length,
     snapshots: items.value.reduce((sum, item) => sum + (item.snapshot_count ?? 0), 0),
   })),
+  unhealthySourceCount = computed(
+    () =>
+      items.value.filter(
+        (item) => item.latest_snapshot && item.latest_snapshot.source_status !== "healthy",
+      ).length,
+  ),
+  competitionReadiness = computed(() =>
+    buildCompetitionMonitoringReadiness({
+      loading: state.value === "loading",
+      total: summary.value.total,
+      active: summary.value.active,
+      pending: summary.value.pending,
+      snapshots: summary.value.snapshots,
+      enabledRules: enabledRules.value.length,
+      unhealthySources: unhealthySourceCount.value,
+    }),
+  ),
   stateFrom = (kind: ApiFailureKind): State =>
     kind === "expired" || kind === "forbidden"
       ? kind
@@ -572,21 +591,21 @@ watch(
 );
 </script>
 <template>
-  <section class="competitor-monitor" aria-labelledby="competitor-title">
+  <section class="competitor-monitor" aria-label="竞品监控工作区">
     <template v-if="rulesPage">
-      <header class="competitor-head competitor-rule-page-head">
-        <div>
-          <p>竞品监控 / 独立规则页</p>
-          <h2 id="competitor-title">监控规则</h2>
-          <span>规则与商品详情分离；每条规则同时显示作用对象、指标、阈值和当前状态。</span>
-        </div>
-        <div>
-          <RouterLink class="competitor-link-button ghost" to="/competitors"
-            >返回竞品列表</RouterLink
-          >
-          <button v-if="canManage" type="button" @click="openRule()">新建监控规则</button>
-        </div>
-      </header>
+      <MonitoringReadinessStrip
+        eyebrow="竞争质量门 · 规则就绪"
+        :title="competitionReadiness.summary.title"
+        description="这里确认竞品、真实快照和变化阈值是否就绪；单个商品是否通过竞争质量门，仍以机会详情中的真实竞争评分输入为准。"
+        :status="competitionReadiness.summary.status"
+        :tone="competitionReadiness.summary.tone"
+        :facts="competitionReadiness.facts"
+      >
+        <button v-if="canManage" class="primary" type="button" @click="openRule()">
+          {{ enabledRules.length ? "新建监控规则" : "配置第一条阈值" }}
+        </button>
+        <RouterLink class="competitor-link-button" to="/competitors">返回竞品列表</RouterLink>
+      </MonitoringReadinessStrip>
       <p v-if="notice" class="competitor-notice" role="status">{{ notice }}</p>
       <UiStatePanel
         v-if="state !== 'ready'"
@@ -598,6 +617,13 @@ watch(
         @secondary="handleStateSecondary"
       />
       <section v-else class="competitor-rule-page-list" aria-label="竞品监控规则列表">
+        <header class="competitor-section-heading">
+          <div>
+            <p>阈值规则</p>
+            <h2>监控规则</h2>
+          </div>
+          <span>{{ rules.length }} 条规则</span>
+        </header>
         <article v-for="item in rules" :key="item.id">
           <div>
             <small>{{ item.competitor_id ? "指定竞品" : "工作区全部竞品" }}</small>
@@ -617,32 +643,30 @@ watch(
       </section>
     </template>
     <template v-else>
-      <section class="member-module-guide">
-        <div>
-          <p>竞品监控怎么运行</p>
-          <h3>添加亚马逊等平台商品后，持续记录价格、评分和页面变化</h3>
-          <span
-            >每次快照都保留来源网址和采集时间。点击“查看详情”可追溯历史变化；没有真实快照时不会显示虚构曲线。</span
-          >
-        </div>
-        <ol>
-          <li>添加商品链接或商品编号</li>
-          <li>定时采集公开商品页</li>
-          <li>对比新旧快照</li>
-          <li>变化超过阈值时提醒</li>
-        </ol>
-      </section>
-      <header class="competitor-head">
-        <div>
-          <p>竞品情报</p>
-          <h2 id="competitor-title">竞品监控</h2>
-          <span>每个数字都来自可追溯快照；变化与阈值告警不会覆盖历史。</span>
-        </div>
-        <div>
-          <button type="button" class="ghost" @click="openRule()">监控规则</button
-          ><button v-if="canManage" type="button" @click="openCreate">添加竞品监控</button>
-        </div>
-      </header>
+      <MonitoringReadinessStrip
+        eyebrow="竞争质量门 · 证据就绪"
+        :title="competitionReadiness.summary.title"
+        description="系统持续保留竞品快照、变化与阈值告警；这里只展示真实采集事实，不用缺失字段补造竞争结论。"
+        :status="competitionReadiness.summary.status"
+        :tone="competitionReadiness.summary.tone"
+        :facts="competitionReadiness.facts"
+      >
+        <button
+          v-if="!enabledRules.length && canManage"
+          class="primary"
+          type="button"
+          @click="openRule()"
+        >
+          配置监控阈值
+        </button>
+        <button v-else-if="canManage" class="primary" type="button" @click="openCreate">
+          添加竞品监控
+        </button>
+        <button v-if="canManage && !enabledRules.length" type="button" @click="openCreate">
+          添加竞品
+        </button>
+        <button type="button" @click="openRule()">查看监控规则</button>
+      </MonitoringReadinessStrip>
       <p
         v-if="notice && !showCreate && !showRule && !deleting"
         class="competitor-notice"
@@ -650,20 +674,6 @@ watch(
       >
         {{ notice }} <code v-if="requestId">{{ requestId }}</code>
       </p>
-      <section class="competitor-summary" aria-label="竞品监控数据总览">
-        <article>
-          <span>竞品总数</span><b>{{ summary.total }}</b>
-        </article>
-        <article>
-          <span>监控中</span><b>{{ summary.active }}</b>
-        </article>
-        <article>
-          <span>待首次采集</span><b>{{ summary.pending }}</b>
-        </article>
-        <article>
-          <span>历史快照</span><b>{{ summary.snapshots }}</b>
-        </article>
-      </section>
       <div class="competitor-toolbar">
         <label
           >搜索竞品<input
@@ -891,6 +901,15 @@ watch(
           </section>
         </article>
       </div>
+      <details class="competitor-guide">
+        <summary>帮助：竞品监控如何工作</summary>
+        <ol>
+          <li><b>添加竞品</b><span>保存公开商品链接和目标市场</span></li>
+          <li><b>建立基线</b><span>首次真实快照只作为比较起点</span></li>
+          <li><b>持续比较</b><span>后续快照记录价格、排名、评论和库存变化</span></li>
+          <li><b>阈值提醒</b><span>只有达到显式规则时才生成告警与任务</span></li>
+        </ol>
+      </details>
     </template>
     <div
       v-if="showCreate && canManage"
