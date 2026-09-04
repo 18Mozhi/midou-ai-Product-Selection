@@ -134,8 +134,10 @@
   gap: 8px;
 }
 .competitor-list button {
+  width: 100%;
+  min-width: 0;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   text-align: left;
   background: var(--so-panel);
   color: var(--ink);
@@ -147,6 +149,7 @@
   box-shadow: inset 3px 0 var(--so-primary);
 }
 .competitor-list span {
+  min-width: 0;
   display: grid;
   gap: 5px;
 }
@@ -155,6 +158,7 @@
 }
 .competitor-list strong {
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 .competitor-list .competitor-pending {
   color: var(--so-warning);
