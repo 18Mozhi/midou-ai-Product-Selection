@@ -73,6 +73,11 @@ const form = reactive({
   status: "enabled",
   reason: "调整来源采集配置",
 });
+const automaticProductSourceCodes = new Set(["amazon_product", "1688_search"]);
+const effectiveAvailability = (item: SourceItem): SourceItem["availability"] => {
+  if (!automaticProductSourceCodes.has(item.code)) return item.availability;
+  return item.provisioned?.status === "enabled" ? "automatic" : "setup_required";
+};
 
 const linkedProviderId = computed(() =>
   typeof route.query.provider_id === "string" ? route.query.provider_id : "",
@@ -87,7 +92,7 @@ const filtered = computed(() =>
           .toLowerCase()
           .includes(term)) &&
       (!category.value || item.category === category.value) &&
-      (!availability.value || item.availability === availability.value) &&
+      (!availability.value || effectiveAvailability(item) === availability.value) &&
       (!market.value || item.markets.includes(market.value)) &&
       (!language.value || item.languages.includes(language.value)) &&
       (!accessMode.value || item.access_mode === accessMode.value)
@@ -119,11 +124,11 @@ const sourcePurpose = (item: SourceItem): SourcePurpose =>
       ? "product_competition"
       : "market_signals";
 const availabilityPriority = (item: SourceItem) =>
-  item.availability === "setup_required"
+  effectiveAvailability(item) === "setup_required"
     ? 0
-    : item.availability === "automatic" && item.provisioned?.status !== "enabled"
+    : effectiveAvailability(item) === "automatic" && item.provisioned?.status !== "enabled"
       ? 1
-      : item.availability === "automatic"
+      : effectiveAvailability(item) === "automatic"
         ? 2
         : 3;
 const sorted = computed(() =>
@@ -162,9 +167,10 @@ const resultRange = computed(() => ({
 }));
 const counts = computed(() => ({
   all: items.value.length,
-  automatic: items.value.filter((item) => item.availability === "automatic").length,
+  automatic: items.value.filter((item) => effectiveAvailability(item) === "automatic").length,
   nonGoogle: items.value.filter(
-    (item) => item.availability === "automatic" && !item.target_url.includes("news.google.com"),
+    (item) =>
+      effectiveAvailability(item) === "automatic" && !item.target_url.includes("news.google.com"),
   ).length,
   markets: new Set(items.value.flatMap((item) => item.markets)).size,
 }));
@@ -251,14 +257,29 @@ const categoryText = (value: SourceItem["category"]) =>
     product_supply: "商品供应链",
   })[value];
 const statusText = (item: SourceItem) => {
-  if (item.availability === "automatic")
+  const availability = effectiveAvailability(item);
+  if (availability === "automatic")
     return item.provisioned?.status === "enabled"
-      ? "生产可用"
+      ? automaticProductSourceCodes.has(item.code)
+        ? "自动采集"
+        : "生产可用"
       : item.provisioned
         ? "待配置"
         : "等待同步";
-  if (item.availability === "setup_required") return "待配置";
+  if (availability === "setup_required")
+    return item.code === "amazon_product" && item.provisioned?.status === "disabled"
+      ? "已停用"
+      : "待配置";
   return "手工来源";
+};
+const policyText = (item: SourceItem) => {
+  if (effectiveAvailability(item) !== "automatic") return item.policy_note;
+  const interval = item.provisioned?.schedule_minutes ?? item.schedule_minutes;
+  if (item.code === "amazon_product")
+    return `系统按选品规则每 ${interval} 分钟抓取公开 Amazon 商品页；不使用官方 API，价格、评分和评论只保留页面真实披露值。`;
+  if (item.code === "1688_search")
+    return `已完成网页登录和来源验收；系统按选品规则每 ${interval} 分钟采集 1688 公开商品与供应商信息。`;
+  return item.policy_note;
 };
 const modeText = (value: string) =>
   (
@@ -705,7 +726,7 @@ onMounted(load);
           <article
             v-for="item in group.items"
             :key="item.code"
-            :data-availability="item.availability"
+            :data-availability="effectiveAvailability(item)"
           >
             <header>
               <div>
@@ -715,7 +736,7 @@ onMounted(load);
               <b>{{ statusText(item) }}</b>
             </header>
             <p>
-              {{ item.policy_note }}
+              {{ policyText(item) }}
               <a
                 v-if="item.target_url.startsWith('https://')"
                 class="source-target"

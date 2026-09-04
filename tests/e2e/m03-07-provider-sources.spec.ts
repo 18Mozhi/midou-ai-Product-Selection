@@ -156,6 +156,67 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
+test("enabled Amazon and 1688 sources are shown as automatic instead of stale catalog setup labels", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  const enabledProductSources = [
+    {
+      ...manual[0],
+      code: "amazon_product",
+      name: "Amazon 商品页面",
+      access_mode: "public_page",
+      category: "ecommerce",
+      schedule_minutes: 30,
+      provisioned: {
+        ...manual[0].provisioned,
+        id: "30000000-0000-4000-8000-000000000001",
+        code: "amazon_product",
+        schedule_minutes: 30,
+        timeout_ms: 20000,
+        retry_limit: 2,
+        updated_at: "2026-09-04T06:05:08.000Z",
+        last_success: {
+          task_id: "30000000-0000-4000-8000-000000000011",
+          status: "succeeded",
+          available_result_count: 1,
+          finished_at: "2026-09-04T06:05:08.000Z",
+        },
+      },
+    },
+    {
+      ...setup[2],
+      code: "1688_search",
+      name: "1688 搜索",
+      category: "product_supply",
+      provisioned: {
+        ...setup[2].provisioned,
+        id: "30000000-0000-4000-8000-000000000002",
+        code: "1688_search",
+        status: "enabled",
+        last_success: {
+          task_id: "30000000-0000-4000-8000-000000000012",
+          status: "succeeded",
+          available_result_count: 10,
+          finished_at: "2026-09-04T06:16:00.000Z",
+        },
+      },
+    },
+  ];
+  await page.route("**/api/v1/platform/provider-sources", (route) =>
+    route.fulfill({ json: envelope(enabledProductSources) }),
+  );
+
+  await page.goto("/platform-admin/providers/sources?availability=automatic");
+  const automaticCards = page.locator('.source-list article[data-availability="automatic"]');
+  await expect(automaticCards).toHaveCount(2);
+  await expect(automaticCards.getByText("自动采集", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("手工来源", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("待配置", { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/系统按选品规则每 30 分钟抓取公开 Amazon 商品页/)).toBeVisible();
+  await expect(page.getByText(/系统按选品规则每 30 分钟采集 1688 公开商品/)).toBeVisible();
+});
+
 test("source catalog paginates the real-size directory and preserves filter state in the URL", async ({
   page,
 }) => {
