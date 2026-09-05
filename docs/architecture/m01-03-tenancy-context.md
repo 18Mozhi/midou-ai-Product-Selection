@@ -2,7 +2,7 @@
 
 ## 范围与图片依据
 
-本模块交付 organizations、workspaces、teams、memberships 和会话租户上下文。界面已读取 `images-html/README.txt`、`images-html/manifest.json`、`images-html/01_72_page_concepts/06_选择组织.jpg`、`07_选择工作区.jpg`、`58_工作区管理.jpg`、`59_团队管理.jpg` 以及 `images-html/02_high_resolution_core_pages/09_赛博风组织管理后台仪表盘.png`，采用深色后台层级、卡片式选择、清晰状态文案和桌面/390px 重排。图片只决定布局与视觉，不作为字段或权限事实。
+本模块交付 organizations、workspaces、teams、memberships 和会话租户上下文。当前界面依据 `design-plans/ui-redesign-2026-09-05/`，采用纸张层级、方形组织/工作区选择账页、清晰状态文案和桌面/390px 重排。设计图只决定布局与视觉，不作为字段或权限事实。
 
 组织创建由 `TenancyService.provisionOrganization` 作为内部事务能力提供。账号没有任何活动成员资格时，`POST /api/v1/me/personal-workspace` 只允许幂等创建固定名称的个人选品组织和默认工作区，同时写入创建者的组织管理员角色、组织数据范围与当前会话上下文；该入口不接受组织名称、成员或权限参数，不能用于创建任意组织或越权。团队在本模块仅为组织级实体和只读摘要，不猜测工作区归属或团队成员关系。
 

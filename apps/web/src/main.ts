@@ -8,9 +8,11 @@ import "./styles/platform-dashboard.css";
 import "./design/tokens.css";
 import "./accessibility.css";
 import "./responsive-baselines.css";
+import "./signal-ledger.css";
 import { applyCachedTheme, applyShellDensity } from "./design/theme";
 import { router } from "./router";
 
+document.documentElement.dataset.design = "signal-ledger";
 applyCachedTheme();
 applyShellDensity(false);
 createApp({ render: () => h(RouterView) })

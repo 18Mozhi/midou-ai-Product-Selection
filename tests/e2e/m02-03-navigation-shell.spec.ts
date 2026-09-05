@@ -169,6 +169,8 @@ for (const item of [
     await page.goto(item.path);
     await expect(page.getByRole("heading", { name: item.heading, level: 2 })).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+    await expect(page.locator(".role-nav-groups details[open]")).toHaveCount(0);
+    await expect(page.locator(".role-nav-menu").first()).toBeHidden();
     await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
     await expect(page.locator(".role-context-rail")).toBeVisible();
     await expect(page.locator(".role-sidebar")).toHaveAttribute(
@@ -347,6 +349,9 @@ test("M02-03 platform shell exposes management navigation without member-only sh
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
   const sidebar = page.locator(".role-sidebar");
+  if ((page.viewportSize()?.width ?? 1000) <= 840)
+    await page.getByRole("button", { name: "更多" }).click();
+  else await sidebar.getByText("业务运营", { exact: true }).click();
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
   await expect(sidebar.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
@@ -384,8 +389,10 @@ test("M02-03 explicit routes keep internal navigation reactive and unknown route
   await allow(page, "member");
   await page.goto("/home");
   await page.evaluate(() => ((window as any).__scoutopsRouteMarker = "kept"));
+  if ((page.viewportSize()?.width ?? 1000) > 840)
+    await page.locator(".role-sidebar").getByText("工作台", { exact: true }).click();
   const routeLink =
-    (page.viewportSize()?.width ?? 1000) <= 720
+    (page.viewportSize()?.width ?? 1000) <= 840
       ? page
           .getByRole("navigation", { name: "移动快捷导航" })
           .getByRole("link", { name: "今日工作" })
@@ -537,7 +544,7 @@ test("M02-03 personal center uses an account shell without the organization navi
   );
   await page.goto("/me");
   await expect(page.locator(".account-shell")).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toHaveCount(0);
-  await expect(page.getByRole("complementary", { name: "个人中心分区" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
 });

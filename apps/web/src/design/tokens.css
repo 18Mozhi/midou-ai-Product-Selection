@@ -1,73 +1,73 @@
 :root,
 [data-theme="deep-ocean"] {
-  --so-bg: #06101f;
-  --so-bg-elevated: #0a1930;
-  --so-panel: rgba(12, 29, 53, 0.92);
-  --so-panel-soft: rgba(18, 40, 69, 0.72);
-  --so-text: #eef5ff;
-  --so-text-muted: #a8b8cc;
-  --so-border: rgba(142, 170, 207, 0.26);
-  --so-primary: #6f9cff;
-  --so-primary-strong: #4776dd;
-  --so-on-primary: #06101f;
-  --so-focus: #a9c3ff;
-  --so-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-  --so-glow: transparent;
-  --so-chart-1: #54d5ff;
-  --so-chart-2: #8275ff;
-  --so-chart-3: #ffb759;
-  --so-chart-4: #ff7896;
-  --so-success: #4ee3aa;
-  --so-warning: #ffc45d;
-  --so-danger: #ff818c;
-  --so-info: #68b8ff;
+  --so-bg: #eeeadd;
+  --so-bg-elevated: #f8f5e9;
+  --so-panel: #fffdf5;
+  --so-panel-soft: #e5e0d2;
+  --so-text: #171813;
+  --so-text-muted: #68675e;
+  --so-border: #a7a294;
+  --so-primary: #e44c1b;
+  --so-primary-strong: #b93312;
+  --so-on-primary: #fffdf5;
+  --so-focus: #171813;
+  --so-chart-1: #e44c1b;
+  --so-chart-2: #b9d833;
+  --so-chart-3: #137759;
+  --so-chart-4: #605f58;
+  --so-success: #137759;
+  --so-warning: #9a5b00;
+  --so-danger: #b52b1c;
+  --so-info: #365a76;
+  --so-signal: #c7e642;
 }
+
 [data-theme="aurora-purple"] {
-  --so-bg: #150b27;
-  --so-bg-elevated: #25113e;
-  --so-panel: rgba(42, 20, 65, 0.93);
-  --so-panel-soft: rgba(63, 30, 90, 0.68);
-  --so-text: #fff4ff;
-  --so-text-muted: #c3a9d5;
-  --so-border: rgba(218, 151, 241, 0.23);
-  --so-primary: #cf83ee;
-  --so-primary-strong: #a45fc8;
-  --so-on-primary: #1b0828;
-  --so-focus: #ffc0ff;
-  --so-shadow: 0 26px 80px rgba(16, 3, 30, 0.46);
-  --so-glow: transparent;
-  --so-chart-1: #ef75ff;
-  --so-chart-2: #7e82ff;
-  --so-chart-3: #ffb654;
-  --so-chart-4: #ff85c9;
-  --so-success: #65e4b0;
-  --so-warning: #ffd06d;
-  --so-danger: #ff879d;
-  --so-info: #86b8ff;
+  --so-bg: #e8e0cf;
+  --so-bg-elevated: #f3ecdd;
+  --so-panel: #fbf4e5;
+  --so-panel-soft: #dcd1bd;
+  --so-text: #211c17;
+  --so-text-muted: #71685d;
+  --so-border: #a89b88;
+  --so-primary: #d8441b;
+  --so-primary-strong: #a92d10;
+  --so-on-primary: #fffaf0;
+  --so-focus: #211c17;
+  --so-chart-1: #d8441b;
+  --so-chart-2: #bfd838;
+  --so-chart-3: #1f7556;
+  --so-chart-4: #6f655a;
+  --so-success: #1f7556;
+  --so-warning: #925500;
+  --so-danger: #aa2a1c;
+  --so-info: #405c6d;
+  --so-signal: #c9e342;
 }
+
 [data-theme="cloud-white"] {
-  --so-bg: #f3f6fd;
-  --so-bg-elevated: #ffffff;
-  --so-panel: rgba(255, 255, 255, 0.94);
-  --so-panel-soft: #f6f8fe;
-  --so-text: #17233c;
-  --so-text-muted: #526078;
-  --so-border: rgba(48, 65, 101, 0.26);
-  --so-primary: #315df4;
-  --so-primary-strong: #2449c9;
+  --so-bg: #f1f0ea;
+  --so-bg-elevated: #faf9f4;
+  --so-panel: #ffffff;
+  --so-panel-soft: #e6e5df;
+  --so-text: #151613;
+  --so-text-muted: #62635e;
+  --so-border: #989b95;
+  --so-primary: #e54a19;
+  --so-primary-strong: #b63210;
   --so-on-primary: #ffffff;
-  --so-focus: #163fd1;
-  --so-shadow: 0 24px 70px rgba(38, 51, 89, 0.14);
-  --so-glow: transparent;
-  --so-chart-1: #2764ee;
-  --so-chart-2: #8758e9;
-  --so-chart-3: #c96e0c;
-  --so-chart-4: #c33162;
-  --so-success: #087d55;
-  --so-warning: #9b5900;
-  --so-danger: #c33145;
-  --so-info: #1766b5;
+  --so-focus: #151613;
+  --so-chart-1: #e54a19;
+  --so-chart-2: #b9d72f;
+  --so-chart-3: #117554;
+  --so-chart-4: #5c605c;
+  --so-success: #117554;
+  --so-warning: #8f5700;
+  --so-danger: #ad2b1c;
+  --so-info: #375e73;
+  --so-signal: #c6e23c;
 }
+
 :root {
   --so-space-1: 4px;
   --so-space-2: 8px;
@@ -76,40 +76,46 @@
   --so-space-5: 24px;
   --so-space-6: 32px;
   --so-space-7: 48px;
-  --so-control-radius: 8px;
-  --so-card-radius: 12px;
-  --so-dialog-radius: 18px;
-  --so-radius-sm: var(--so-control-radius);
-  --so-radius-md: var(--so-card-radius);
-  --so-radius-lg: var(--so-dialog-radius);
+  --so-control-radius: 0;
+  --so-card-radius: 0;
+  --so-dialog-radius: 0;
+  --so-radius-sm: 0;
+  --so-radius-md: 0;
+  --so-radius-lg: 0;
   --so-control-height: 44px;
-  --so-content-max: 1240px;
-  --so-readable-max: 1120px;
+  --so-touch-target: 44px;
+  --so-content-max: 1440px;
+  --so-readable-max: 1180px;
   --so-density-gap: 16px;
   --so-density-padding: 20px;
-  --so-disabled-opacity: 0.48;
+  --so-disabled-opacity: 0.46;
   --so-font-ui: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --so-font-display: "STSong", "SimSun", "Songti SC", serif;
+  --so-font-mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
   --so-font-meta: 0.8125rem;
-  --so-transition: 160ms ease;
+  --so-transition: 140ms ease-out;
   --so-bg-soft: color-mix(in srgb, var(--so-bg) 82%, var(--so-panel));
-  --so-panel-strong: color-mix(in srgb, var(--so-panel) 82%, var(--so-bg));
+  --so-panel-strong: color-mix(in srgb, var(--so-panel) 88%, var(--so-bg));
   --so-panel-muted: color-mix(in srgb, var(--so-panel-soft) 76%, var(--so-bg));
-  --so-border-strong: color-mix(in srgb, var(--so-border) 68%, var(--so-text-muted));
-  --so-primary-soft: color-mix(in srgb, var(--so-primary) 14%, var(--so-panel));
-  --so-primary-border: color-mix(in srgb, var(--so-primary) 42%, var(--so-border));
-  --so-success-soft: color-mix(in srgb, var(--so-success) 14%, var(--so-panel));
-  --so-success-border: color-mix(in srgb, var(--so-success) 42%, var(--so-border));
-  --so-warning-soft: color-mix(in srgb, var(--so-warning) 14%, var(--so-panel));
-  --so-warning-border: color-mix(in srgb, var(--so-warning) 42%, var(--so-border));
-  --so-danger-soft: color-mix(in srgb, var(--so-danger) 14%, var(--so-panel));
-  --so-danger-border: color-mix(in srgb, var(--so-danger) 42%, var(--so-border));
-  --so-info-soft: color-mix(in srgb, var(--so-info) 14%, var(--so-panel));
-  --so-info-border: color-mix(in srgb, var(--so-info) 42%, var(--so-border));
-  --so-scrim: color-mix(in srgb, var(--so-bg) 72%, transparent);
-  --so-overlay: color-mix(in srgb, var(--so-bg) 82%, transparent);
-  --so-shadow-color: color-mix(in srgb, var(--so-bg) 44%, transparent);
-  --so-shadow-card: 0 16px 44px color-mix(in srgb, var(--so-bg) 22%, transparent);
-  --so-shadow-dialog: 0 28px 90px color-mix(in srgb, var(--so-bg) 52%, transparent);
+  --so-border-strong: color-mix(in srgb, var(--so-border) 54%, var(--so-text));
+  --so-primary-soft: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel));
+  --so-primary-border: color-mix(in srgb, var(--so-primary) 52%, var(--so-border));
+  --so-success-soft: color-mix(in srgb, var(--so-success) 10%, var(--so-panel));
+  --so-success-border: color-mix(in srgb, var(--so-success) 48%, var(--so-border));
+  --so-warning-soft: color-mix(in srgb, var(--so-warning) 10%, var(--so-panel));
+  --so-warning-border: color-mix(in srgb, var(--so-warning) 48%, var(--so-border));
+  --so-danger-soft: color-mix(in srgb, var(--so-danger) 10%, var(--so-panel));
+  --so-danger-border: color-mix(in srgb, var(--so-danger) 48%, var(--so-border));
+  --so-info-soft: color-mix(in srgb, var(--so-info) 10%, var(--so-panel));
+  --so-info-border: color-mix(in srgb, var(--so-info) 48%, var(--so-border));
+  --so-signal-soft: color-mix(in srgb, var(--so-signal) 26%, var(--so-panel));
+  --so-scrim: color-mix(in srgb, var(--so-text) 68%, transparent);
+  --so-overlay: color-mix(in srgb, var(--so-text) 78%, transparent);
+  --so-shadow: none;
+  --so-glow: transparent;
+  --so-shadow-color: transparent;
+  --so-shadow-card: none;
+  --so-shadow-dialog: 10px 10px 0 color-mix(in srgb, var(--so-text) 18%, transparent);
   --bg: var(--so-bg);
   --surface: var(--so-panel);
   --surface-subtle: var(--so-panel-soft);
@@ -123,17 +129,20 @@
   --warning: var(--so-warning);
   --danger: var(--so-danger);
   --info: var(--so-info);
-  --shadow-sm: 0 12px 34px color-mix(in srgb, var(--so-bg) 28%, transparent);
+  --shadow-sm: none;
 }
+
 [data-density="compact"] {
   --so-control-height: 44px;
   --so-density-gap: 10px;
   --so-density-padding: 14px;
 }
+
 .theme-page *:focus-visible {
-  outline: 3px solid var(--so-focus);
+  outline: 2px solid var(--so-focus);
   outline-offset: 3px;
 }
+
 @media (prefers-reduced-motion: reduce) {
   .theme-page * {
     scroll-behavior: auto;

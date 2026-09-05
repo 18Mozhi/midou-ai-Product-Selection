@@ -283,12 +283,12 @@ onMounted(() => {
 <template>
   <main class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
-      <RouterLink class="identity-brand" to="/"><span>选</span>智能选品</RouterLink>
-      <p>账号登录</p>
+      <RouterLink class="identity-brand" to="/"><span>S</span>SCOUTOPS / 智能选品</RouterLink>
+      <p>IDENTITY DESK / 账号登录</p>
     </header>
     <section class="identity-shell">
       <aside class="identity-story" aria-label="智能选品产品说明">
-        <p class="identity-kicker">从信号到行动</p>
+        <p class="identity-kicker">SIGNAL TO DECISION / 从信号到行动</p>
         <h1><span>让增长，</span><em>更有确定性</em></h1>
         <p>登录后，从真实趋势、机会和供应链证据开始今天的选品工作。</p>
         <div class="identity-orbit" aria-hidden="true"><span>S</span><i></i><i></i><i></i></div>

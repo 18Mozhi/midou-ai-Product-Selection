@@ -1,9 +1,9 @@
 export const themeIds = ["deep-ocean", "aurora-purple", "cloud-white"] as const;
 export type ThemeId = (typeof themeIds)[number];
 export const themes: ReadonlyArray<{ id: ThemeId; name: string; caption: string; mode: string }> = [
-  { id: "deep-ocean", name: "深海蓝", caption: "专注、克制，适合长时间决策工作", mode: "深色" },
-  { id: "aurora-purple", name: "极光紫", caption: "增强探索感，保持同一业务语义", mode: "深色" },
-  { id: "cloud-white", name: "云雾白", caption: "明亮、清晰，适合高照度环境", mode: "浅色" },
+  { id: "deep-ocean", name: "信号纸", caption: "暖白纸张与朱砂信号，适合持续决策", mode: "纸张" },
+  { id: "aurora-purple", name: "档案纸", caption: "偏暖档案底色，适合高密度复核", mode: "纸张" },
+  { id: "cloud-white", name: "净页白", caption: "清晰白底，适合高照度环境", mode: "纸张" },
 ];
 
 export const densityIds = ["standard", "compact"] as const;
@@ -30,7 +30,7 @@ let preferredDensity: DensityId = "standard";
 
 export function applyTheme(theme: ThemeId, cache = true) {
   document.documentElement.dataset.theme = theme;
-  document.documentElement.style.colorScheme = theme === "cloud-white" ? "light" : "dark";
+  document.documentElement.style.colorScheme = "light";
   if (cache)
     try {
       window.localStorage.setItem(themeStorageKey, theme);

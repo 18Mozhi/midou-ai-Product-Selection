@@ -1,0 +1,701 @@
+/* Signal Ledger — the production-wide visual contract. Business semantics stay in components. */
+html[data-design="signal-ledger"] {
+  color: var(--so-text);
+  background: var(--so-bg);
+  font-family: var(--so-font-ui);
+}
+
+html[data-design="signal-ledger"] body {
+  color: var(--so-text);
+  background-color: var(--so-bg);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--so-border) 17%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--so-border) 12%, transparent) 1px,
+      transparent 1px
+    );
+  background-size:
+    100% 28px,
+    28px 100%;
+}
+
+html[data-design="signal-ledger"] body * {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html[data-design="signal-ledger"] body :where(button, input, select, textarea) {
+  font: inherit;
+}
+
+html[data-design="signal-ledger"] body :where(button, [role="button"]) {
+  min-height: var(--so-touch-target);
+  cursor: pointer;
+  transition:
+    color var(--so-transition),
+    border-color var(--so-transition),
+    background-color var(--so-transition),
+    transform var(--so-transition);
+}
+
+html[data-design="signal-ledger"] body :where(button, [role="button"]):active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+html[data-design="signal-ledger"] body :where(button, input, select, textarea):focus-visible,
+html[data-design="signal-ledger"] body a:focus-visible {
+  outline: 2px solid var(--so-focus);
+  outline-offset: 3px;
+}
+
+html[data-design="signal-ledger"] body :where(input, select, textarea) {
+  min-height: var(--so-control-height);
+  border: 1px solid var(--so-border);
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] body textarea {
+  min-height: 104px;
+}
+
+html[data-design="signal-ledger"] body :where(button, input, select, textarea):disabled {
+  cursor: not-allowed;
+  opacity: var(--so-disabled-opacity);
+}
+
+html[data-design="signal-ledger"] body :where(h1, h2, h3) {
+  color: var(--so-text);
+  font-family: var(--so-font-display);
+  text-wrap: balance;
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where(code, kbd, time, [class*="-meta"], [class*="-kicker"]) {
+  font-family: var(--so-font-mono);
+}
+
+html[data-design="signal-ledger"] body :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  border-block: 2px solid var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] body :where(th) {
+  padding: 9px 12px;
+  border: 1px solid var(--so-border);
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+  font: 700 13px var(--so-font-mono);
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+html[data-design="signal-ledger"] body :where(td) {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  color: var(--so-text);
+  vertical-align: top;
+}
+
+html[data-design="signal-ledger"] body tbody tr:hover {
+  background: var(--so-signal-soft);
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where(.primary, [class*="primary"], [class*="-submit"], [class*="-create"]) {
+  border-color: var(--so-primary);
+  color: var(--so-on-primary);
+  background-color: var(--so-primary);
+  background-image: none;
+  font-weight: 800;
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where(.primary, [class*="primary"], [class*="-submit"], [class*="-create"]):hover:not(
+    :disabled
+  ) {
+  border-color: var(--so-primary-strong);
+  background-color: var(--so-primary-strong);
+}
+
+html[data-design="signal-ledger"] body :where(.secondary, [class*="secondary"], .text-button) {
+  border: 1px solid var(--so-border);
+  color: var(--so-text);
+  background: transparent;
+}
+
+/* Ledger surfaces replace rounded dashboard cards across all feature families. */
+html[data-design="signal-ledger"]
+  body
+  :where(
+    [class$="-card"],
+    [class*="-card "],
+    [class$="-panel"],
+    [class*="-panel "],
+    [class$="-metric"],
+    [class*="-metric "],
+    [class$="-tile"],
+    [class*="-tile "],
+    [class$="-summary"],
+    [class*="-summary "],
+    [class$="-overview"],
+    [class*="-overview "],
+    [class$="-section"],
+    [class*="-section "],
+    [class$="-strip"],
+    [class*="-strip "]
+  ) {
+  background-image: none;
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where(
+    [class$="-card"],
+    [class*="-card "],
+    [class$="-panel"],
+    [class*="-panel "],
+    [class$="-metric"],
+    [class*="-metric "],
+    [class$="-tile"],
+    [class*="-tile "]
+  ) {
+  border-color: var(--so-border);
+  background-color: var(--so-panel);
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where([class*="badge"], [class*="status"], [class*="chip"], [class*="tag"], [class*="pill"]) {
+  border-radius: 0;
+  box-shadow: inset 3px 0 currentColor;
+}
+
+/* Member decision ledger */
+html[data-design="signal-ledger"] .home-dashboard {
+  display: grid;
+  gap: 0;
+}
+
+html[data-design="signal-ledger"] .home-command-bar {
+  min-height: 82px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  border-block: 2px solid var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .home-command-bar > :first-child {
+  padding: 16px 18px;
+}
+
+html[data-design="signal-ledger"] .home-command-bar :where(button, a) {
+  align-self: stretch;
+  min-height: 100%;
+  padding-inline: 18px;
+  border: 0;
+  border-left: 1px solid var(--so-border);
+}
+
+html[data-design="signal-ledger"] .home-system-state,
+html[data-design="signal-ledger"] .home-setup-callout,
+html[data-design="signal-ledger"] .home-rule-setup,
+html[data-design="signal-ledger"] .home-truth {
+  margin: 0;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--so-border);
+  border-left: 6px solid var(--so-signal);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .home-main-grid {
+  margin-top: 24px;
+  gap: 0;
+  border: 1px solid var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .home-main-grid > * + * {
+  border-left: 1px solid var(--so-text);
+}
+
+html[data-design="signal-ledger"] .home-review-queue {
+  border: 0;
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .home-review-row {
+  margin: 0;
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid var(--so-border);
+  background: transparent;
+}
+
+html[data-design="signal-ledger"] .home-review-row:hover {
+  background: var(--so-signal-soft);
+}
+
+html[data-design="signal-ledger"] .home-operations-strip {
+  margin-top: 24px;
+  display: grid;
+  gap: 0;
+  border-block: 2px solid var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .home-operations-strip > * {
+  border-right: 1px solid var(--so-border);
+}
+
+/* Recurrent feature page structures */
+html[data-design="signal-ledger"]
+  body
+  :where(
+    [class*="page-head"],
+    [class*="workspace-head"],
+    [class*="center-head"],
+    [class*="dashboard-head"],
+    [class*="hero"]
+  ) {
+  background-image: none;
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where([class*="toolbar"], [class*="filter"], [class*="action-bar"], [class*="command"]) {
+  background-image: none;
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where(
+    [class*="metric-grid"],
+    [class*="summary-grid"],
+    [class*="stat-grid"],
+    [class*="kpi-grid"]
+  ) {
+  gap: 0;
+  border-block: 2px solid var(--so-text);
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where([class*="metric-grid"], [class*="summary-grid"], [class*="stat-grid"], [class*="kpi-grid"])
+  > * {
+  border: 0;
+  border-right: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where([class*="metric"], [class*="summary"], [class*="stat"], [class*="kpi"])
+  > strong {
+  font-family: var(--so-font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-design="signal-ledger"]
+  body
+  :where([class*="empty"], [class*="loading"], [class*="error"], [class*="blocked"]) {
+  background-image: none;
+}
+
+/* Identity, context selection and appearance are editorial entry sheets. */
+html[data-design="signal-ledger"] :where(.identity-page, .tenancy-page, .theme-page) {
+  min-height: 100vh;
+  color: var(--so-text);
+  background: var(--so-bg);
+}
+
+html[data-design="signal-ledger"] :where(.identity-header, .tenancy-header) {
+  min-height: 58px;
+  border-bottom: 2px solid var(--so-text);
+  background: var(--so-bg-elevated);
+}
+
+html[data-design="signal-ledger"] :where(.identity-brand, .theme-brand) {
+  color: var(--so-text);
+  font-family: var(--so-font-mono);
+  letter-spacing: 0.1em;
+}
+
+html[data-design="signal-ledger"] :where(.identity-brand, .theme-brand) > :first-child {
+  border: 1px solid var(--so-text);
+  color: var(--so-primary);
+  background: transparent;
+}
+
+html[data-design="signal-ledger"] .identity-shell {
+  width: min(1320px, 100%);
+  margin-inline: auto;
+  padding: clamp(22px, 5vw, 72px);
+  gap: 0;
+}
+
+html[data-design="signal-ledger"] .identity-story {
+  padding: clamp(24px, 4vw, 56px);
+  border: 2px solid var(--so-text);
+  border-right: 0;
+  background: var(--so-signal-soft);
+}
+
+html[data-design="signal-ledger"] .identity-story h1,
+html[data-design="signal-ledger"] .tenancy-intro h1,
+html[data-design="signal-ledger"] .theme-header h1 {
+  font: 800 clamp(46px, 7vw, 90px)/0.96 var(--so-font-display);
+  letter-spacing: -0.07em;
+}
+
+html[data-design="signal-ledger"] .identity-orbit {
+  border: 1px solid var(--so-text);
+  background: transparent;
+}
+
+html[data-design="signal-ledger"] .identity-card {
+  padding: clamp(24px, 4vw, 48px);
+  border: 2px solid var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .identity-card__head > p,
+html[data-design="signal-ledger"] .tenancy-intro > p,
+html[data-design="signal-ledger"] .theme-header > div > p,
+html[data-design="signal-ledger"] .section-heading p {
+  color: var(--so-primary);
+  font: 700 13px var(--so-font-mono);
+  letter-spacing: 0.14em;
+}
+
+html[data-design="signal-ledger"] .identity-card form :where(input, textarea),
+html[data-design="signal-ledger"] .tenancy-page :where(input, select),
+html[data-design="signal-ledger"] .theme-page :where(input, select) {
+  border-color: var(--so-text);
+  background: var(--so-bg-elevated);
+}
+
+html[data-design="signal-ledger"] .tenancy-shell {
+  width: min(1240px, 100%);
+}
+
+html[data-design="signal-ledger"] :where(.tenancy-card, .workspace-card) {
+  border: 1px solid var(--so-text);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] :where(.tenancy-card, .workspace-card):hover:not(:disabled) {
+  border-color: var(--so-primary);
+  background: var(--so-signal-soft);
+  transform: translate(-2px, -2px);
+}
+
+html[data-design="signal-ledger"] .theme-page {
+  display: block;
+}
+
+html[data-design="signal-ledger"] .theme-nav {
+  position: static;
+  min-height: 58px;
+  padding: 0 clamp(16px, 2.4vw, 36px);
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 0;
+  border-bottom: 2px solid var(--so-text);
+  background: var(--so-bg-elevated);
+}
+
+html[data-design="signal-ledger"] .theme-nav > p,
+html[data-design="signal-ledger"] .theme-nav > small {
+  display: none;
+}
+
+html[data-design="signal-ledger"] .theme-nav nav {
+  margin: 0 0 0 auto;
+  display: flex;
+  gap: 0;
+}
+
+html[data-design="signal-ledger"] .theme-nav nav a {
+  min-height: 58px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  border-left: 1px solid var(--so-border);
+}
+
+html[data-design="signal-ledger"] .theme-nav nav a.active {
+  color: var(--so-text);
+  background: var(--so-signal-soft);
+  box-shadow: inset 0 -4px var(--so-primary);
+}
+
+html[data-design="signal-ledger"] .theme-main {
+  width: min(1440px, 100%);
+  margin-inline: auto;
+  padding: clamp(24px, 4vw, 56px);
+}
+
+html[data-design="signal-ledger"] .theme-workbench {
+  gap: 0;
+  border: 2px solid var(--so-text);
+}
+
+html[data-design="signal-ledger"] :where(.theme-picker, .theme-preview) {
+  border: 0;
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .theme-preview {
+  border-left: 1px solid var(--so-text);
+}
+
+html[data-design="signal-ledger"] .theme-options,
+html[data-design="signal-ledger"] .preview-metrics,
+html[data-design="signal-ledger"] .theme-contract {
+  gap: 0;
+}
+
+html[data-design="signal-ledger"]
+  :where(.theme-option, .preview-metrics article, .theme-contract article) {
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] .theme-option.selected {
+  border-color: var(--so-text);
+  box-shadow: inset 0 -5px var(--so-primary);
+  background: var(--so-signal-soft);
+}
+
+/* Dialog = impact manifest + sign-off, never a floating rounded card. */
+html[data-design="signal-ledger"]
+  :where(.confirm-backdrop, [class*="modal-backdrop"], [class*="dialog-backdrop"]) {
+  background: var(--so-scrim);
+  backdrop-filter: none;
+}
+
+html[data-design="signal-ledger"]
+  :where(
+    .confirm-dialog,
+    .audited-reason-dialog,
+    .discovery-dialog,
+    dialog,
+    [role="dialog"],
+    [role="alertdialog"]
+  ) {
+  border: 2px solid var(--so-text);
+  border-top: 8px solid var(--so-primary);
+  color: var(--so-text);
+  background: var(--so-panel);
+  background-image: none;
+  box-shadow: var(--so-shadow-dialog);
+}
+
+html[data-design="signal-ledger"] .confirm-dialog {
+  width: min(620px, calc(100vw - 24px));
+  padding: clamp(22px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  column-gap: 20px;
+}
+
+html[data-design="signal-ledger"] .confirm-dialog > span {
+  grid-row: 1 / 4;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border: 2px solid currentColor;
+  color: var(--so-primary);
+  background: transparent;
+  font: 800 32px var(--so-font-display);
+}
+
+html[data-design="signal-ledger"] .confirm-dialog > p {
+  margin: 0;
+  color: var(--so-primary);
+  font: 700 13px var(--so-font-mono);
+  letter-spacing: 0.14em;
+}
+
+html[data-design="signal-ledger"] .confirm-dialog h2 {
+  margin: 6px 0;
+  font-size: clamp(30px, 5vw, 50px);
+}
+
+html[data-design="signal-ledger"] .confirm-dialog > div {
+  color: var(--so-text-muted);
+  line-height: 1.65;
+}
+
+html[data-design="signal-ledger"] .confirm-dialog > aside,
+html[data-design="signal-ledger"] .confirm-dialog > label,
+html[data-design="signal-ledger"] .confirm-dialog > footer {
+  grid-column: 1 / -1;
+}
+
+html[data-design="signal-ledger"] .confirm-dialog > aside {
+  margin-top: 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--so-text);
+  border-left: 8px solid var(--so-signal);
+  background: var(--so-bg-elevated);
+}
+
+html[data-design="signal-ledger"] .confirm-dialog footer,
+html[data-design="signal-ledger"] .audited-reason-dialog footer {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--so-border);
+}
+
+html[data-design="signal-ledger"] .confirm-dialog footer button,
+html[data-design="signal-ledger"] .audited-reason-dialog footer button {
+  min-width: 116px;
+  border: 1px solid var(--so-text);
+}
+
+html[data-design="signal-ledger"] .audited-reason-dialog form {
+  padding: clamp(22px, 4vw, 36px);
+}
+
+html[data-design="signal-ledger"] .audited-reason-dialog header p {
+  color: var(--so-primary);
+  font: 700 13px var(--so-font-mono);
+  letter-spacing: 0.14em;
+}
+
+html[data-design="signal-ledger"] .audited-reason-dialog header h3 {
+  font-size: clamp(28px, 4vw, 44px);
+}
+
+html[data-design="signal-ledger"] .discovery-dialog {
+  width: min(820px, calc(100vw - 24px));
+}
+
+/* Menus and popovers behave like clipped index sheets. */
+html[data-design="signal-ledger"]
+  :where(.role-theme-menu, [class*="popover"], [class*="dropdown"], [class*="context-menu"]) {
+  border: 1px solid var(--so-text);
+  background: var(--so-panel);
+  background-image: none;
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--so-text) 16%, transparent);
+}
+
+html[data-design="signal-ledger"] .role-theme-menu button[aria-pressed="true"] {
+  background: var(--so-signal-soft);
+  box-shadow: inset 5px 0 var(--so-primary);
+}
+
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"] body {
+    background-size:
+      100% 24px,
+      24px 100%;
+  }
+
+  html[data-design="signal-ledger"] .identity-shell {
+    padding: 14px;
+    display: block;
+  }
+
+  html[data-design="signal-ledger"] .identity-story {
+    border-right: 2px solid var(--so-text);
+    border-bottom: 0;
+  }
+
+  html[data-design="signal-ledger"] .identity-story h1,
+  html[data-design="signal-ledger"] .tenancy-intro h1,
+  html[data-design="signal-ledger"] .theme-header h1 {
+    font-size: clamp(42px, 14vw, 64px);
+  }
+
+  html[data-design="signal-ledger"] .theme-nav {
+    overflow-x: auto;
+  }
+
+  html[data-design="signal-ledger"] .theme-brand span,
+  html[data-design="signal-ledger"] .theme-nav nav a:not(.active) {
+    display: none;
+  }
+
+  html[data-design="signal-ledger"] .theme-main {
+    padding: 18px 14px 40px;
+  }
+
+  html[data-design="signal-ledger"] .theme-workbench {
+    display: block;
+  }
+
+  html[data-design="signal-ledger"] .theme-preview {
+    border-top: 1px solid var(--so-text);
+    border-left: 0;
+  }
+
+  html[data-design="signal-ledger"] .home-command-bar {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-design="signal-ledger"] .home-command-bar :where(button, a) {
+    min-height: 50px;
+    border-top: 1px solid var(--so-border);
+    border-left: 0;
+  }
+
+  html[data-design="signal-ledger"] .home-main-grid > * + * {
+    border-top: 1px solid var(--so-text);
+    border-left: 0;
+  }
+
+  html[data-design="signal-ledger"] .confirm-dialog {
+    padding: 20px 16px;
+    grid-template-columns: 52px minmax(0, 1fr);
+    column-gap: 12px;
+  }
+
+  html[data-design="signal-ledger"] .confirm-dialog > span {
+    width: 52px;
+    height: 52px;
+  }
+
+  html[data-design="signal-ledger"] .confirm-dialog footer {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  html[data-design="signal-ledger"] .confirm-dialog footer button {
+    width: 100%;
+  }
+
+  html[data-design="signal-ledger"] body :where(table) {
+    min-width: 680px;
+  }
+
+  html[data-design="signal-ledger"]
+    body
+    :where([class*="table-wrap"], [class*="table-shell"], [class*="data-table"]) {
+    overflow-x: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-design="signal-ledger"] body * {
+    scroll-behavior: auto;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+}

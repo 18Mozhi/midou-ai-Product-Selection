@@ -21,7 +21,6 @@ import {
 import {
   breadcrumbTrail,
   navigationParentPath as resolveNavigationParentPath,
-  pageSummary as resolvePageSummary,
   platformOperationsNavigation,
   routeEntityIds,
   surfaceProps,
@@ -234,7 +233,14 @@ const selectedSurfaceProps = computed<Record<string, unknown>>(() =>
     roles: guard.value?.roles ?? [],
   }),
 );
-const pageSummary = computed(() => resolvePageSummary(props.shell, routePath.value));
+const pageFolio = computed(() =>
+  String(
+    Math.max(
+      0,
+      items.value.findIndex((item) => item.path === activeItem.value?.path),
+    ) + 1,
+  ).padStart(2, "0"),
+);
 const contextName = (value: string | null | undefined, fallback: string) =>
   value?.trim() || fallback;
 const stateCopy = computed(
@@ -319,6 +325,7 @@ onUnmounted(() => {
     <header class="role-topbar">
       <RouterLink
         class="role-brand"
+        aria-label="SCOUTOPS 智能选品"
         :to="
           shell === 'member'
             ? '/home'
@@ -326,7 +333,7 @@ onUnmounted(() => {
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span>选</span><b>智能选品</b
+        ><span aria-hidden="true">S</span><b>SCOUTOPS</b
         ><em>{{
           shell === "platform_admin"
             ? "管理员"
@@ -383,7 +390,7 @@ onUnmounted(() => {
         ><RouterLink to="/me" aria-label="个人中心"><AppIcon name="person" /></RouterLink>
       </div>
     </header>
-    <aside
+    <nav
       id="role-navigation"
       class="role-sidebar"
       :class="{ 'is-open': menuOpen }"
@@ -412,29 +419,32 @@ onUnmounted(() => {
           aria-label="搜索导航菜单"
         />
       </label>
-      <nav v-if="state === 'ready'" class="role-nav-groups">
+      <div v-if="state === 'ready'" class="role-nav-groups">
         <details
           v-for="group in menuGroups"
           :key="group.label"
           :open="
-            Boolean(menuQuery.trim()) || group.items.some((item) => activeItem?.path === item.path)
+            Boolean(menuQuery.trim()) ||
+            (menuOpen && group.items.some((item) => activeItem?.path === item.path))
           "
         >
           <summary>
             <span>{{ group.label }}</span
             ><AppIcon name="chevron" :size="14" />
           </summary>
-          <RouterLink
-            v-for="item in group.items"
-            :key="item.path"
-            :to="item.path"
-            :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-            @click="((menuOpen = false), (menuQuery = ''))"
-            ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
-          >
+          <div class="role-nav-menu">
+            <RouterLink
+              v-for="item in group.items"
+              :key="item.path"
+              :to="item.path"
+              :aria-current="activeItem?.path === item.path ? 'page' : undefined"
+              @click="((menuOpen = false), (menuQuery = ''))"
+              ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
+            >
+          </div>
         </details>
         <p v-if="!menuGroups.length" class="role-menu-empty">没有匹配的菜单或分组。</p>
-      </nav>
+      </div>
       <div v-if="state === 'ready'" class="role-sidebar-utility">
         <RouterLink
           v-if="shell === 'platform_admin'"
@@ -461,7 +471,7 @@ onUnmounted(() => {
           ><AppIcon name="switch" />进入管理后台</RouterLink
         >
       </div>
-    </aside>
+    </nav>
     <section class="role-content">
       <section v-if="state !== 'ready'" class="role-gate-state" aria-live="polite">
         <span class="role-state-mark" aria-hidden="true">{{
@@ -493,10 +503,10 @@ onUnmounted(() => {
           </template>
         </nav>
         <header v-if="!opportunityId" class="role-page-title">
+          <b class="role-page-folio" aria-hidden="true">{{ pageFolio }}</b>
           <div>
-            <p>{{ activeItem?.group || shellTitle }}</p>
+            <p>{{ activeItem?.group || shellTitle }} / SIGNAL LEDGER</p>
             <h1>{{ pageTitle }}</h1>
-            <span v-if="pageSummary">{{ pageSummary }}</span>
           </div>
         </header>
         <section v-if="!opportunityId" class="role-context-rail" aria-label="上下文">
@@ -511,6 +521,10 @@ onUnmounted(() => {
           <div>
             <small>任务域</small>
             <strong>{{ activeItem?.group || shellTitle }}</strong>
+          </div>
+          <div>
+            <small>信号状态</small>
+            <strong class="role-signal-status">已连接 · 可复核</strong>
           </div>
           <div>
             <small>当前角色</small>
@@ -541,7 +555,7 @@ onUnmounted(() => {
             <span class="role-state-mark" aria-hidden="true">?</span>
             <p>页面不存在</p>
             <h2>页面不存在</h2>
-            <p>该地址没有可用功能，请从左侧真实功能菜单重新进入。</p>
+            <p>该地址没有可用功能，请从顶部模块索引重新进入。</p>
             <RouterLink :to="items[0]?.path || '/'">返回工作台</RouterLink>
           </section>
         </KeepAlive>

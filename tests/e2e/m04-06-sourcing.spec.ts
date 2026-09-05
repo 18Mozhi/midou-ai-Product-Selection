@@ -269,7 +269,7 @@ test("opportunity sourcing detail exposes designated dual-person cost review", a
   );
 });
 
-test("供应链详情完整跟随深色与浅色主题", async ({ page }) => {
+test("供应链详情完整跟随档案纸与净页白主题", async ({ page }) => {
   await setup(page);
   await page.goto("/sourcing");
   const surface = page.locator(".sourcing-detail");
@@ -279,7 +279,7 @@ test("供应链详情完整跟随深色与浅色主题", async ({ page }) => {
   );
   expect(deepBackground).not.toBe("rgb(255, 255, 255)");
   await page.getByRole("button", { name: "切换界面主题" }).click();
-  await page.getByRole("button", { name: /云雾白/ }).click();
+  await page.getByRole("button", { name: /净页白/ }).click();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("cloud-white");
   const lightBackground = await surface.evaluate(
     (element) => getComputedStyle(element).backgroundColor,

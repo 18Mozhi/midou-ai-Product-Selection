@@ -120,7 +120,7 @@ onMounted(load);
 <template>
   <main class="theme-page" data-testid="theme-studio">
     <aside class="theme-nav">
-      <RouterLink class="theme-brand" to="/"><b>选</b><span>智能选品</span></RouterLink>
+      <RouterLink class="theme-brand" to="/"><b>S</b><span>SCOUTOPS / 智能选品</span></RouterLink>
       <p>个人中心</p>
       <nav>
         <RouterLink to="/me">个人资料</RouterLink
@@ -132,8 +132,8 @@ onMounted(load);
     <section class="theme-main">
       <header class="theme-header">
         <div>
-          <p>个人外观</p>
-          <h1>主题与视觉语义</h1>
+          <p>VISUAL REGISTER / 个人外观</p>
+          <h1>账页与信号语义</h1>
           <span>选择适合工作环境的界面。所有状态同时保留图标、文字与数值。</span>
         </div>
         <div class="theme-context">
@@ -143,7 +143,7 @@ onMounted(load);
       </header>
       <section v-if="state === 'loading'" class="theme-state" aria-live="polite">
         <span class="theme-spinner"></span><strong>正在读取你的工作区偏好</strong>
-        <p>默认显示深海蓝；服务器确认前不会覆盖已保存选择。</p>
+        <p>默认显示信号纸；服务器确认前不会覆盖已保存选择。</p>
       </section>
       <section
         v-else-if="['error', 'forbidden', 'expired', 'blocked', 'conflict'].includes(state)"
@@ -190,7 +190,7 @@ onMounted(load);
             <div class="section-heading">
               <div>
                 <p>界面主题</p>
-                <h2>三种外观，同一套判断</h2>
+                <h2>三种纸张，同一套判断</h2>
               </div>
               <span>{{
                 state === "saved" ? "✓ 已保存" : dirty ? "● 有未保存更改" : "✓ 已同步"
@@ -242,14 +242,14 @@ onMounted(load);
           </div>
           <aside class="theme-preview" aria-label="主题实时预览">
             <div class="preview-top">
-              <span><b>选</b>决策概览</span><small>实时预览</small>
+              <span><b>S</b>决策账页</span><small>实时预览</small>
             </div>
             <div class="theme-shell-previews" aria-label="三套壳层同步预览">
               <article data-shell-preview="member">
                 <small>成员工作台</small><strong>今日行动</strong><span>业务操作与主题同步</span>
               </article>
               <article data-shell-preview="organization">
-                <small>组织管理后台</small><strong>治理概览</strong><span>不强制切换浅色</span>
+                <small>组织管理后台</small><strong>治理概览</strong><span>沿用同一账页语义</span>
               </article>
               <article data-shell-preview="platform">
                 <small>平台管理后台</small><strong>异常优先</strong><span>继承当前主题</span>

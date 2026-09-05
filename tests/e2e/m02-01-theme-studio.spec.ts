@@ -33,8 +33,8 @@ test("M02-01.A07/A08/A15 theme studio previews and saves by keyboard without cha
 }) => {
   await ready(page);
   await page.goto("/settings/theme");
-  await expect(page.getByRole("heading", { name: "主题与视觉语义" })).toBeVisible();
-  const aurora = page.getByRole("radio", { name: /极光紫/ });
+  await expect(page.getByRole("heading", { name: "账页与信号语义" })).toBeVisible();
+  const aurora = page.getByRole("radio", { name: /档案纸/ });
   await aurora.focus();
   await page.keyboard.press("Enter");
   await expect(aurora).toHaveAttribute("aria-checked", "true");

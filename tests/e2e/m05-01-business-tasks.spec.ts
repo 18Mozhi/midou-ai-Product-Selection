@@ -382,7 +382,7 @@ test("member workspace shows Chinese context theme switch and task progress with
     return `${style.backgroundColor}|${style.borderColor}`;
   });
   await page.getByRole("button", { name: "切换界面主题" }).click();
-  await page.getByRole("button", { name: /极光紫/ }).click();
+  await page.getByRole("button", { name: /档案纸/ }).click();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("aurora-purple");
   await expect(page.getByText("主题已应用到全部模块。")).toBeVisible();
   const afterTheme = await page.locator(".task-focus-strip").evaluate((element) => {
@@ -498,19 +498,19 @@ test("approval notification and real-selection surfaces follow every member them
     {
       path: "/tasks/approvals",
       selector: ".approval-focus-strip",
-      theme: "极光紫",
+      theme: "档案纸",
       expected: "aurora-purple",
     },
     {
       path: "/notifications",
       selector: ".notification-state",
-      theme: "云雾白",
+      theme: "净页白",
       expected: "cloud-white",
     },
     {
       path: "/opportunities/start",
       selector: ".selection-start",
-      theme: "深海蓝",
+      theme: "信号纸",
       expected: "deep-ocean",
     },
   ];

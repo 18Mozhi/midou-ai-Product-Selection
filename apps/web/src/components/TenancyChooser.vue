@@ -143,7 +143,9 @@ onMounted(() => {
 <template>
   <main class="tenancy-page" data-testid="tenancy">
     <header class="tenancy-header">
-      <RouterLink to="/" class="identity-brand"><span>选</span><span>智能选品</span></RouterLink>
+      <RouterLink to="/" class="identity-brand"
+        ><span>S</span><span>SCOUTOPS / 智能选品</span></RouterLink
+      >
       <div>
         <span class="tenancy-step">01</span><i></i
         ><span class="tenancy-step" :class="{ 'tenancy-step--active': selectedOrganization }"
@@ -154,7 +156,7 @@ onMounted(() => {
     </header>
     <section class="tenancy-shell">
       <div class="tenancy-intro">
-        <p>组织与工作区</p>
+        <p>CONTEXT REGISTER / 组织与工作区</p>
         <h1>{{ title }}</h1>
         <span>{{ copy }}</span>
       </div>
