@@ -2,7 +2,7 @@
 
 ## 宝塔部署
 
-1. 在维护窗口按发布清单执行 `0017d_profit_cost_m04_04.up.sql`、`0064_governed_workflow_confirmations.up.sql` 与 `0072_automatic_quality_evaluation.up.sql`，确认 MySQL 5.7、`product_scout` 业务账号和 `utf8mb4`。
+1. 在维护窗口按发布清单执行 `0017d_profit_cost_m04_04.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0072_automatic_quality_evaluation.up.sql` 与 `0073_automatic_selection_migration_timestamp_timezone.up.sql`，确认 MySQL 5.7、`product_scout` 业务账号和 `utf8mb4`。0073 只校正由 0072 同批创建、仍未领取且没有结果的自动评估任务时间，使其符合现有服务器本地 mysql2 DATETIME 读写约定；它不修改已经领取、重试、完成或人工产生的记录。
 2. 在宝塔 Node 项目中部署 API 和 Worker 构建；不得创建面板外 PM2、systemd、crontab 或 Docker 服务。
 3. 在宝塔 Worker 受限环境设置 `PROFIT_CALCULATION_POLL_MS` 与 `PROFIT_CALCULATION_LEASE_SECONDS`，然后重启宝塔 Node Worker。API 路由变更后同时重启宝塔 Node API。
 4. 访问 `/sourcing` 创建显式费用规则，完成选品经理与组织管理员双审批后发布；未审批规则不会参与计算。

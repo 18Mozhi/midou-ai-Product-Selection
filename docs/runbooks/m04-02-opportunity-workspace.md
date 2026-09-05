@@ -8,7 +8,7 @@
 
 - Node API 与 Node Worker 均继续由宝塔面板管理，不创建额外生产服务。
 - `OPPORTUNITY_REFRESH_POLL_MS` 与 `OPPORTUNITY_REFRESH_LEASE_SECONDS` 只放在宝塔受限环境；修改后在面板重启 Node Worker。
-- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql`、`0065_opportunity_operating_feedback.up.sql`、`0070_rule_candidates_quality_gate.up.sql` 与 `0071_opportunity_migration_timestamp_timezone.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。固定部署脚本会先通过宝塔停止统一 Node 项目，等待该项目的 Supervisor、API 与 Worker 进程全部退出并留出数据库连接回收时间，避免 Worker 的 `FOR UPDATE` 与数据迁移争抢机会行；迁移或换包失败时会通过宝塔恢复原 Node 项目。0071 只校正由 0070 批量写入的 UTC 墙钟值，不修改其他历史机会时间。
+- 上线先执行 MySQL 5.7 迁移 `0017b_opportunities_m04_02.up.sql`、`0060_opportunity_workflow_visibility.up.sql`、`0065_opportunity_operating_feedback.up.sql`、`0070_rule_candidates_quality_gate.up.sql`、`0071_opportunity_migration_timestamp_timezone.up.sql`、`0072_automatic_quality_evaluation.up.sql` 与 `0073_automatic_selection_migration_timestamp_timezone.up.sql`，再重启 Node API 和 Node Worker，最后检查 `/api/v1/health/ready`。固定部署脚本会先通过宝塔停止统一 Node 项目，等待该项目的 Supervisor、API 与 Worker 进程全部退出并留出数据库连接回收时间，避免 Worker 的 `FOR UPDATE` 与数据迁移争抢机会行；迁移或换包失败时会通过宝塔恢复原 Node 项目。0071 只校正由 0070 批量写入的 UTC 墙钟值；0073 只校正由 0072 同批创建且仍未领取的自动评估任务时间，不修改其他历史机会或已处理任务。
 - 发布自动发现选品逻辑后，确认商品型 `gnews_*` 主题能建立 `trend_topic` 来源候选、关联至少一条真实证据并保持 `insufficient_data`；普通新闻与数据频道不得批量生成候选。
 
 ## 观测和处置

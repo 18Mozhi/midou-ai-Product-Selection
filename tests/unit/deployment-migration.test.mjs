@@ -30,6 +30,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0070_rule_candidates_quality_gate\.up\.sql/);
   assert.match(deploy, /0071_opportunity_migration_timestamp_timezone\.up\.sql/);
   assert.match(deploy, /0072_automatic_quality_evaluation\.up\.sql/);
+  assert.match(deploy, /0073_automatic_selection_migration_timestamp_timezone\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
@@ -124,6 +125,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0070_rule_candidates_quality_gate.up.sql",
     "0071_opportunity_migration_timestamp_timezone.up.sql",
     "0072_automatic_quality_evaluation.up.sql",
+    "0073_automatic_selection_migration_timestamp_timezone.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -179,6 +181,7 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     "0070_rule_candidates_quality_gate.up.sql",
     "0071_opportunity_migration_timestamp_timezone.up.sql",
     "0072_automatic_quality_evaluation.up.sql",
+    "0073_automatic_selection_migration_timestamp_timezone.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = splitSqlStatements(sql);
@@ -213,6 +216,21 @@ test("opportunity timestamp repair only adjusts rows stamped by migration 0070",
   );
   assert.match(sql, /o\.`score_rule_version` IS NULL/);
   assert.match(sql, /o\.`recommendation_status`='insufficient_data'/);
+});
+
+test("automatic selection timestamp repair only adjusts untouched rows stamped by migration 0072", async () => {
+  const sql = await readFile(
+    "database/migrations/0073_automatic_selection_migration_timestamp_timezone.up.sql",
+    "utf8",
+  );
+  assert.match(sql, /JOIN `schema_migrations` m/);
+  assert.match(sql, /m\.`name`='0072_automatic_quality_evaluation\.up\.sql'/);
+  assert.match(sql, /TIMESTAMPDIFF\(SECOND,UTC_TIMESTAMP\(3\),NOW\(3\)\)/);
+  assert.match(sql, /e\.`status`='queued'/);
+  assert.match(sql, /e\.`attempt_count`=0/);
+  assert.match(sql, /e\.`lease_owner` IS NULL/);
+  assert.match(sql, /e\.`result_json` IS NULL/);
+  assert.match(sql, /TIMESTAMPDIFF\(MICROSECOND,e\.`created_at`,m\.`applied_at`\)/);
 });
 
 test("deployment migration statements retry only transient MySQL lock failures", async () => {
