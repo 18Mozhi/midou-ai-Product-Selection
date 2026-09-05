@@ -477,7 +477,14 @@ export class TrendProjectionPersistence {
         "UPDATE automatic_selection_evaluations SET status=IF(status='leased',status,'queued')," +
           "available_at=IF(status='leased',available_at,?),last_error_code=IF(status='leased',last_error_code,NULL)," +
           "updated_at=? WHERE organization_id=? AND workspace_id=? AND status IN " +
-          "('waiting_evidence','waiting_profit','succeeded','failed_terminal','dead_letter')",
+          "('waiting_evidence','waiting_profit','succeeded','failed_terminal','dead_letter') AND EXISTS " +
+          "(SELECT 1 FROM opportunities o JOIN opportunity_rule_matches m ON m.opportunity_id=o.id " +
+          "AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id JOIN " +
+          "trend_monitoring_rules r ON r.id=m.monitoring_rule_id AND r.organization_id=m.organization_id " +
+          "AND r.workspace_id=m.workspace_id WHERE o.id=automatic_selection_evaluations.opportunity_id " +
+          "AND o.organization_id=automatic_selection_evaluations.organization_id AND " +
+          "o.workspace_id=automatic_selection_evaluations.workspace_id AND o.decision_status='pending' " +
+          "AND r.status='enabled' AND o.source_count>=r.recommendation_min_source_count)",
         [now, now, job.organizationId, job.workspaceId],
       );
     if (insert.affectedRows) {

@@ -116,3 +116,19 @@ test("automatic worker preserves human costs and clears a stale recommendation o
   assert.match(source, /recommendation_status=IF\(\?,'insufficient_data',/);
   assert.match(source, /profit: currentCostEvidenceIds/);
 });
+
+test("bulk automatic reevaluation only queues enabled-rule candidates above their source threshold", async () => {
+  const paths = [
+      "apps/api/src/mysql-profit-repository.ts",
+      "apps/api/src/mysql-scoring-repository.ts",
+      "apps/worker/src/trend-projection-persistence.ts",
+    ],
+    sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
+  for (const source of sources) {
+    assert.match(source, /automatic_selection_evaluations/);
+    assert.match(source, /opportunity_rule_matches/);
+    assert.match(source, /trend_monitoring_rules/);
+    assert.match(source, /r\.status='enabled'/);
+    assert.match(source, /o\.source_count>=r\.recommendation_min_source_count/);
+  }
+});
