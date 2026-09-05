@@ -29,6 +29,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /0069_rule_based_recommendations\.up\.sql/);
   assert.match(deploy, /0070_rule_candidates_quality_gate\.up\.sql/);
   assert.match(deploy, /0071_opportunity_migration_timestamp_timezone\.up\.sql/);
+  assert.match(deploy, /0072_automatic_quality_evaluation\.up\.sql/);
   assert.match(deploy, /"npm\.cmd" if os\.name == "nt" else "npm"/);
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
@@ -122,6 +123,7 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     "0069_rule_based_recommendations.up.sql",
     "0070_rule_candidates_quality_gate.up.sql",
     "0071_opportunity_migration_timestamp_timezone.up.sql",
+    "0072_automatic_quality_evaluation.up.sql",
   ];
   let previousIndex = -1;
   for (const migration of orderedMigrations) {
@@ -176,6 +178,7 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
     "0069_rule_based_recommendations.up.sql",
     "0070_rule_candidates_quality_gate.up.sql",
     "0071_opportunity_migration_timestamp_timezone.up.sql",
+    "0072_automatic_quality_evaluation.up.sql",
   ]) {
     const sql = await readFile(`database/migrations/${name}`, "utf8");
     const statements = splitSqlStatements(sql);
@@ -186,6 +189,7 @@ test("allowlisted deployment migrations use the locked statement splitter", asyn
       "0060_opportunity_workflow_visibility.up.sql": 4,
       "0064_governed_workflow_confirmations.up.sql": 7,
       "0069_rule_based_recommendations.up.sql": 2,
+      "0072_automatic_quality_evaluation.up.sql": 4,
     };
     assert.equal(
       statements.length,

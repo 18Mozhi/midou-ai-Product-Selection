@@ -26,6 +26,10 @@ interface ScoreRuleLike {
 
 interface StatusRuleLike {
   status: string;
+  platform?: string;
+  fee_lines?: Array<{ type: string; currency?: string | null }>;
+  conversion_rates?: Array<{ base_currency: string; quote_currency: string }>;
+  automatic_scope?: { product_family?: string } | null;
 }
 
 const scoreRuleRoute = "/opportunities/scoring-rules";
@@ -71,7 +75,20 @@ export function resolveAutomaticSelectionReadiness(
     hasEvidenceGroup = (group: string) =>
       activeDimensions.some((dimension) => dimension.evidence_group === group),
     hasRiskDimension = activeDimensions.some((dimension) => dimension.code === "risk"),
-    hasActiveCostRule = costRules.some((rule) => rule.status === "active"),
+    activeCostRule = costRules.find(
+      (rule) =>
+        rule.status === "active" &&
+        rule.platform === "amazon" &&
+        rule.automatic_scope?.product_family === "phone_case",
+    ),
+    hasActiveCostRule = Boolean(activeCostRule),
+    logisticsLine = activeCostRule?.fee_lines?.find((item) => item.type === "logistics"),
+    hasAutomaticCostPolicy = Boolean(
+      logisticsLine &&
+      activeCostRule?.conversion_rates?.some(
+        (item) => item.base_currency === "CNY" && item.quote_currency === logisticsLine.currency,
+      ),
+    ),
     hasEnabledCompetitorRule = competitorRules.some((rule) => rule.status === "enabled"),
     steps: SelectionSetupStep[] = [
       {
@@ -107,10 +124,14 @@ export function resolveAutomaticSelectionReadiness(
         code: "cost",
         label: "成本质量门",
         description:
-          hasEvidenceGroup("cost") && hasActiveCostRule
-            ? "成本维度和费用规则均已生效。"
-            : "启用成本证据维度，并发布费用规则。",
-        ready: Boolean(activeScoreRule) && hasEvidenceGroup("cost") && hasActiveCostRule,
+          hasEvidenceGroup("cost") && hasActiveCostRule && hasAutomaticCostPolicy
+            ? "成本维度、费用、物流和换算依据均已生效。"
+            : "启用成本维度，并发布含物流与换算依据的费用规则。",
+        ready:
+          Boolean(activeScoreRule) &&
+          hasEvidenceGroup("cost") &&
+          hasActiveCostRule &&
+          hasAutomaticCostPolicy,
         route: "/sourcing/cost-rules",
       },
       {

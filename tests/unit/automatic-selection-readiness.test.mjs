@@ -22,6 +22,13 @@ const activeScoreRule = {
     { code: "risk", weight: 20, evidence_group: "other" },
   ],
 };
+const activeCostRule = {
+  status: "active",
+  platform: "amazon",
+  fee_lines: [{ type: "logistics", currency: "USD" }],
+  conversion_rates: [{ base_currency: "CNY", quote_currency: "USD" }],
+  automatic_scope: { product_family: "phone_case" },
+};
 
 test("automatic selection readiness exposes every missing initial rule without defaults", () => {
   const result = resolveAutomaticSelectionReadiness([], [], []);
@@ -54,7 +61,7 @@ test("automatic selection readiness requires active score cost and competitor ru
 
   const complete = resolveAutomaticSelectionReadiness(
     [activeScoreRule],
-    [{ status: "active" }],
+    [activeCostRule],
     [{ status: "enabled" }],
   );
   assert.equal(complete.readyCount, 5);
@@ -75,7 +82,7 @@ test("automatic selection readiness loads all three rule surfaces and fails clos
   const loaded = await loadAutomaticSelectionReadiness(async (path) => {
     paths.push(path);
     if (path === "/opportunity-score-rules") return { data: [activeScoreRule] };
-    if (path === "/cost-rules") return { data: [{ status: "active" }] };
+    if (path === "/cost-rules") return { data: [activeCostRule] };
     return { data: [{ status: "enabled" }] };
   });
   assert.deepEqual(paths.sort(), [

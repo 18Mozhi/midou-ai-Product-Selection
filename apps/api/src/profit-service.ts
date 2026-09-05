@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-export type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment";
+export type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment" | "logistics";
 export type FeeMode = "percentage_of_sale" | "fixed_amount";
 export type CostRuleStatus =
   "draft" | "pending_approval" | "approved" | "active" | "retired" | "rejected" | "rolled_back";
@@ -13,6 +13,16 @@ export interface FeeLine {
   value: number;
   currency: string | null;
 }
+export interface CostConversionRate {
+  base_currency: string;
+  quote_currency: string;
+  rate_value: number;
+  effective_on: string;
+  source_url: string;
+}
+export interface AutomaticCostScope {
+  product_family: "phone_case";
+}
 export interface CostRule {
   id: string;
   market: string;
@@ -21,6 +31,8 @@ export interface CostRule {
   name: string;
   status: CostRuleStatus;
   fee_lines: FeeLine[];
+  conversion_rates: CostConversionRate[];
+  automatic_scope: AutomaticCostScope | null;
   effective_from: string;
   revision: number;
   approvals: ApprovalRole[];
@@ -63,6 +75,7 @@ export interface ProfitAnalysis {
     observed_at: string;
     input_version: number;
     platform: string;
+    confirmation_mode: "human_review" | "automatic_evidence";
   }>;
   cost_input_reviews: Array<{
     id: string;
@@ -150,19 +163,27 @@ export function validateCostRule(value: {
   version_code: string;
   name: string;
   fee_lines: FeeLine[];
+  conversion_rates?: CostConversionRate[];
+  automatic_scope?: AutomaticCostScope | null;
   effective_from: string;
 }) {
-  if (!value || !Array.isArray(value.fee_lines) || value.fee_lines.length !== 4)
+  if (
+    !value ||
+    !Array.isArray(value.fee_lines) ||
+    value.fee_lines.length < 4 ||
+    value.fee_lines.length > 5
+  )
     throw new ProfitServiceError(
       "cost_rule_fee_lines_invalid",
       400,
       "必须明确提供平台费、支付手续费、税费和履约成本四项规则。",
     );
   const expected: FeeType[] = ["platform_fee", "payment_fee", "tax", "fulfillment"],
+    allowed: FeeType[] = [...expected, "logistics"],
     seen = new Set<string>(),
     fee_lines = value.fee_lines.map((line) => {
       if (
-        !expected.includes(line?.type) ||
+        !allowed.includes(line?.type) ||
         seen.has(line.type) ||
         !["percentage_of_sale", "fixed_amount"].includes(line.mode)
       )
@@ -188,12 +209,98 @@ export function validateCostRule(value: {
     });
   if (expected.some((type) => !seen.has(type)))
     throw new ProfitServiceError("cost_rule_fee_lines_invalid", 400, "费用类型不完整。");
+  const conversion_rates = (value.conversion_rates ?? []).map((item) => {
+    const base = currency(item.base_currency),
+      quote = currency(item.quote_currency),
+      effectiveOn = dateOnly(item.effective_on, "conversion_rate.effective_on");
+    if (base === quote)
+      throw new ProfitServiceError(
+        "cost_rule_conversion_pair_invalid",
+        400,
+        "费用规则汇率币种对必须不同。",
+      );
+    if (effectiveOn > new Date().toISOString().slice(0, 10))
+      throw new ProfitServiceError(
+        "cost_rule_conversion_future",
+        400,
+        "费用规则汇率不能使用未来日期。",
+      );
+    let sourceUrl: URL;
+    try {
+      sourceUrl = new URL(item.source_url);
+    } catch {
+      throw new ProfitServiceError(
+        "cost_rule_conversion_source_invalid",
+        400,
+        "费用规则汇率必须提供 HTTPS 来源页面。",
+      );
+    }
+    if (sourceUrl.protocol !== "https:" || sourceUrl.username || sourceUrl.password)
+      throw new ProfitServiceError(
+        "cost_rule_conversion_source_invalid",
+        400,
+        "费用规则汇率必须提供 HTTPS 来源页面。",
+      );
+    return {
+      base_currency: base,
+      quote_currency: quote,
+      rate_value: amount(item.rate_value, "conversion_rate.rate_value", false),
+      effective_on: effectiveOn,
+      source_url: sourceUrl.toString(),
+    };
+  });
+  if (conversion_rates.length > 10)
+    throw new ProfitServiceError(
+      "cost_rule_conversion_rates_invalid",
+      400,
+      "单个费用规则最多配置 10 组汇率。",
+    );
+  const pairs = new Set(
+    conversion_rates.map((item) => `${item.base_currency}/${item.quote_currency}`),
+  );
+  if (pairs.size !== conversion_rates.length)
+    throw new ProfitServiceError(
+      "cost_rule_conversion_rates_invalid",
+      400,
+      "同一费用规则中的汇率币种对不能重复。",
+    );
+  if (value.automatic_scope && value.automatic_scope.product_family !== "phone_case")
+    throw new ProfitServiceError(
+      "cost_rule_automatic_scope_invalid",
+      400,
+      "当前自动成本仅支持手机壳商品族；其他品类继续使用人工成本复核。",
+    );
+  const normalizedPlatform = bounded(
+      value.platform,
+      "platform",
+      80,
+      /^[A-Za-z0-9._-]+$/,
+    ).toLowerCase(),
+    logisticsLine = fee_lines.find((item) => item.type === "logistics");
+  if (
+    value.automatic_scope?.product_family === "phone_case" &&
+    (normalizedPlatform !== "amazon" ||
+      !seen.has("logistics") ||
+      !conversion_rates.some(
+        (item) => item.base_currency === "CNY" && item.quote_currency === logisticsLine?.currency,
+      ))
+  )
+    throw new ProfitServiceError(
+      "cost_rule_automatic_policy_incomplete",
+      400,
+      "手机壳自动成本规则必须使用 Amazon 平台，并显式提供入仓物流和 CNY 换算依据。",
+    );
   return {
     market: bounded(value.market, "market", 40, /^[A-Za-z0-9._-]+$/).toUpperCase(),
-    platform: bounded(value.platform, "platform", 80, /^[A-Za-z0-9._-]+$/).toLowerCase(),
+    platform: normalizedPlatform,
     version_code: bounded(value.version_code, "version_code", 64, /^[A-Za-z0-9._-]+$/),
     name: bounded(value.name, "name", 160),
     fee_lines,
+    conversion_rates,
+    automatic_scope:
+      value.automatic_scope?.product_family === "phone_case"
+        ? { product_family: "phone_case" as const }
+        : null,
     effective_from: dateOnly(value.effective_from, "effective_from"),
   };
 }

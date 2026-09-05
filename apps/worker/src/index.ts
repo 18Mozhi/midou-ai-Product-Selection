@@ -16,6 +16,7 @@ import {
 } from "./auth-delivery-worker.js";
 import { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 import { MySqlAutomaticSourceScheduler } from "./automatic-source-scheduler.js";
+import { MySqlAutomaticSelectionEvaluationWorker } from "./automatic-selection-evaluation-worker.js";
 import { AutomationWorker } from "./automation-worker.js";
 import { projectBusinessTaskOnce } from "./business-task-projection-worker.js";
 import {
@@ -169,6 +170,12 @@ const automaticSourceScheduler = new MySqlAutomaticSourceScheduler(
     queueBacklogLimit: config.automaticSources.queueBacklogLimit,
   },
 );
+const automaticSelectionEvaluation = new MySqlAutomaticSelectionEvaluationWorker(
+  pool,
+  config.identity.workerId,
+  config.automaticSources.systemActorId,
+  config.automaticSelection.leaseSeconds,
+);
 const coreCollectionProjection = new CoreCollectionProjectionWorker(pool, config.identity.workerId);
 const pollers = new WorkerPollers();
 const schedulerStateWriter = new WorkerSchedulerStateWriter(
@@ -263,6 +270,13 @@ const queues = [
       enabled: () => Boolean(config.security.credentialsMasterKey),
       logResult: false,
     }),
+  ),
+  workerQueue(
+    "automatic_selection_evaluation",
+    config.automaticSelection.pollMs,
+    pollers.create("automatic_selection_evaluation", () =>
+      automaticSelectionEvaluation.processOnce(),
+    ),
   ),
   workerQueue(
     "opportunity_refresh",

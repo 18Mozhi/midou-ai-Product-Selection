@@ -109,7 +109,13 @@ const inputLabel = (value: string) =>
       <article v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
         <strong>{{ inputLabel(item.input_type) }}</strong>
         <span>{{ item.amount_value }} {{ item.currency }} · {{ item.platform }}</span>
-        <small>v{{ item.input_version }} · {{ item.source_ref_id }}</small>
+        <small
+          >v{{ item.input_version }} ·
+          {{
+            item.confirmation_mode === "automatic_evidence" ? "爬虫证据自动确认" : "人工双人复核"
+          }}
+          · {{ item.source_ref_id }}</small
+        >
       </article>
     </section>
     <OpportunityCostReviewQueue

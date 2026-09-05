@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 type Job = {
   id: string;
   organizationId: string;
@@ -88,7 +89,7 @@ export class MySqlCompetitorMonitorWorker {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT c.latest_snapshot_id,s.* FROM competitors c JOIN competitor_snapshots s ON s.id=? AND s.competitor_id=c.id WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? FOR UPDATE",
+        "SELECT c.latest_snapshot_id,c.opportunity_id,s.* FROM competitors c JOIN competitor_snapshots s ON s.id=? AND s.competitor_id=c.id WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? FOR UPDATE",
         [job.snapshotId, job.competitorId, job.organizationId, job.workspaceId],
       );
       const current = rows[0];
@@ -187,6 +188,13 @@ export class MySqlCompetitorMonitorWorker {
         now,
         job.competitorId,
       ]);
+      if (current.opportunity_id)
+        await queueAutomaticSelectionEvaluation(c, {
+          organizationId: job.organizationId,
+          workspaceId: job.workspaceId,
+          opportunityId: String(current.opportunity_id),
+          now,
+        });
       await c.query(
         "UPDATE competitor_snapshot_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
         [now, job.id, this.workerId],

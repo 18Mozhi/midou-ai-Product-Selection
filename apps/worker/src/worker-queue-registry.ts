@@ -18,7 +18,8 @@ export type WorkerQueueName =
   | "automation_rules"
   | "core_collection_projection"
   | "automatic_rule_sources"
-  | "automatic_full_sources";
+  | "automatic_full_sources"
+  | "automatic_selection_evaluation";
 
 type QueuePolicy = Pick<
   QueueSchedulerJob,
@@ -76,6 +77,7 @@ export const WORKER_QUEUE_POLICIES: Readonly<Record<WorkerQueueName, QueuePolicy
   core_collection_projection: policy(35, 120_000, 1, 4),
   automatic_rule_sources: policy(32, 60_000, 1, 3),
   automatic_full_sources: policy(30, 60_000, 1, 3),
+  automatic_selection_evaluation: policy(68, 120_000, 0, 4),
 };
 
 export const workerQueue = (

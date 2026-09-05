@@ -34,6 +34,43 @@ test("M04-04.A01/A02/A04/A12 requires every explicit fee and provenance", () => 
     fee_lines: fees,
   });
   assert.equal(rule.fee_lines.length, 4);
+  assert.deepEqual(rule.conversion_rates, []);
+  const automaticRule = validateCostRule({
+    market: "US",
+    platform: "amazon",
+    version_code: "v2",
+    name: "自动证据规则",
+    effective_from: "2026-09-05",
+    fee_lines: [...fees, { type: "logistics", mode: "fixed_amount", value: 1, currency: "USD" }],
+    conversion_rates: [
+      {
+        base_currency: "CNY",
+        quote_currency: "USD",
+        rate_value: 0.149014,
+        effective_on: "2026-09-04",
+        source_url:
+          "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      },
+    ],
+    automatic_scope: { product_family: "phone_case" },
+  });
+  assert.equal(automaticRule.fee_lines.at(-1).type, "logistics");
+  assert.equal(automaticRule.conversion_rates[0].rate_value, 0.149014);
+  assert.equal(automaticRule.automatic_scope.product_family, "phone_case");
+  assert.throws(
+    () =>
+      validateCostRule({
+        market: "US",
+        platform: "amazon",
+        version_code: "bad-auto",
+        name: "缺少自动成本依据",
+        effective_from: "2026-09-05",
+        fee_lines: fees,
+        automatic_scope: { product_family: "phone_case" },
+      }),
+    (error) =>
+      error instanceof ProfitServiceError && error.code === "cost_rule_automatic_policy_incomplete",
+  );
   assert.throws(
     () =>
       validateCostRule({

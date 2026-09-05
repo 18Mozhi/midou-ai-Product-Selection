@@ -65,6 +65,14 @@ const associationRules: Readonly<Record<string, AssociationRule[]>> = {
       href: (id) => `/opportunities/${encodeURIComponent(id)}`,
     },
   ],
+  automatic_selection_evaluation: [
+    {
+      key: "opportunity_id",
+      type: "opportunity",
+      label: "自动质量评估",
+      href: (id) => `/opportunities/${encodeURIComponent(id)}`,
+    },
+  ],
   opportunity_scoring: [
     {
       key: "opportunity_id",

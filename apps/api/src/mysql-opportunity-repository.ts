@@ -619,30 +619,36 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
-    const [[evidenceTasks], [scoreJobs], [recommendationRuleRows]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
-          "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
-          "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
-          "ORDER BY created_at DESC,id DESC LIMIT 1",
-        [input.organizationId, input.workspaceId, input.opportunityId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
-          "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
-          "ORDER BY created_at DESC,id DESC LIMIT 1",
-        [input.organizationId, input.workspaceId, input.opportunityId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(DISTINCT m.monitoring_rule_id) matched_rule_count," +
-          "COUNT(DISTINCT CASE WHEN r.status='enabled' THEN m.monitoring_rule_id END) enabled_rule_count," +
-          "MIN(CASE WHEN r.status='enabled' THEN r.recommendation_min_source_count END) minimum_source_count " +
-          "FROM opportunity_rule_matches m JOIN trend_monitoring_rules r ON r.id=m.monitoring_rule_id " +
-          "AND r.organization_id=m.organization_id AND r.workspace_id=m.workspace_id WHERE " +
-          "m.opportunity_id=? AND m.organization_id=? AND m.workspace_id=?",
-        [input.opportunityId, input.organizationId, input.workspaceId],
-      ),
-    ]);
+    const [[evidenceTasks], [scoreJobs], [recommendationRuleRows], [automaticEvaluations]] =
+      await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
+            "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+            "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
+            "ORDER BY created_at DESC,id DESC LIMIT 1",
+          [input.organizationId, input.workspaceId, input.opportunityId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
+            "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
+            "ORDER BY created_at DESC,id DESC LIMIT 1",
+          [input.organizationId, input.workspaceId, input.opportunityId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT COUNT(DISTINCT m.monitoring_rule_id) matched_rule_count," +
+            "COUNT(DISTINCT CASE WHEN r.status='enabled' THEN m.monitoring_rule_id END) enabled_rule_count," +
+            "MIN(CASE WHEN r.status='enabled' THEN r.recommendation_min_source_count END) minimum_source_count " +
+            "FROM opportunity_rule_matches m JOIN trend_monitoring_rules r ON r.id=m.monitoring_rule_id " +
+            "AND r.organization_id=m.organization_id AND r.workspace_id=m.workspace_id WHERE " +
+            "m.opportunity_id=? AND m.organization_id=? AND m.workspace_id=?",
+          [input.opportunityId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT status,last_error_code,result_json,evaluated_at FROM automatic_selection_evaluations " +
+            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? LIMIT 1",
+          [input.opportunityId, input.organizationId, input.workspaceId],
+        ),
+      ]);
     let scoreRun: RowDataPacket | undefined,
       components: RowDataPacket[] = [];
     try {
@@ -678,12 +684,40 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       evidenceTask = evidenceTasks[0],
       scoreJob = scoreJobs[0],
       recommendationRule = recommendationRuleRows[0],
+      automaticEvaluation = automaticEvaluations[0],
+      automaticResult = automaticEvaluation
+        ? parse<Record<string, unknown>>(automaticEvaluation.result_json ?? "{}")
+        : {},
+      automaticErrorCode = String(
+        automaticEvaluation?.last_error_code ?? automaticResult.error_code ?? "",
+      ),
+      automaticGuidance =
+        (
+          {
+            automatic_rules_not_active: "先启用评分规则和 Amazon 费用规则。",
+            amazon_product_evidence_missing: "等待 Amazon 商品页证据。",
+            amazon_sale_facts_incomplete: "Amazon 商品页尚未取得有效标题、售价或币种。",
+            automatic_cost_scope_mismatch:
+              "当前费用规则未覆盖该商品族；系统不会套用其他品类的成本假设。",
+            amazon_competitor_snapshot_missing: "等待 Amazon 竞品快照。",
+            high_confidence_1688_match_missing:
+              "1688 同款高置信报价不足 3 条；系统会继续采集，不会用弱匹配强行估算。",
+            automatic_cost_policy_incomplete: "费用规则需补齐固定入仓物流和当前币种换算依据。",
+            automatic_cost_inputs_missing: "自动成本输入尚未写入完成；系统会继续重试。",
+            profit_calculation_incomplete: "利润计算仍缺少费用或换算依据。",
+          } as Record<string, string>
+        )[automaticErrorCode] ?? null,
       evidenceBlocked = Number(row.evidence_count) === 0 || row.coverage_status === "insufficient",
       qualityRegressionBlocked =
         String(scoreJob?.last_error_code ?? "") === "score_blocked_by_data_quality_regression",
       recommendationBlocked = !selection.quality_gates.all_passed || qualityRegressionBlocked,
       scoreInProgress =
         scoreJob && ["queued", "leased", "retry_scheduled"].includes(String(scoreJob.status)),
+      automaticInProgress =
+        automaticEvaluation &&
+        ["queued", "leased", "retry_scheduled", "waiting_profit"].includes(
+          String(automaticEvaluation.status),
+        ),
       evidenceInProgress =
         evidenceBlocked && evidenceTask && !["cancelled"].includes(String(evidenceTask.status)),
       redecisionReady = Boolean(
@@ -715,29 +749,34 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         },
         {
           code: "recommendation_insufficient",
-          status: recommendationBlocked ? (scoreInProgress ? "in_progress" : "blocked") : "cleared",
+          status: recommendationBlocked
+            ? scoreInProgress || automaticInProgress
+              ? "in_progress"
+              : "blocked"
+            : "cleared",
           progress_percent: null,
           next_action: recommendationBlocked
-            ? !qualityRegressionBlocked &&
+            ? (automaticGuidance ??
+              (!qualityRegressionBlocked &&
               !scoreInProgress &&
               selection.selection_stage === "rule_candidate"
-              ? `已进入规则命中候选；${missingQualityGates.join("、")}质量门全部通过后才会显示“建议采纳”。`
-              : recommendationGuidance({
-                  qualityRegressionBlocked,
-                  scoreInProgress: Boolean(scoreInProgress),
-                  scoreRuleVersion:
-                    row.score_rule_version == null ? null : String(row.score_rule_version),
-                  latestScoreStatus: scoreRun?.status == null ? null : String(scoreRun.status),
-                  matchedRuleCount: Number(
-                    recommendationRule?.matched_rule_count ?? row.matched_rule_count ?? 0,
-                  ),
-                  enabledRuleCount: Number(recommendationRule?.enabled_rule_count ?? 0),
-                  minimumSourceCount:
-                    recommendationRule?.minimum_source_count == null
-                      ? null
-                      : Number(recommendationRule.minimum_source_count),
-                  sourceCount: Number(row.source_count ?? 0),
-                })
+                ? `已进入规则命中候选；${missingQualityGates.join("、")}质量门全部通过后才会显示“建议采纳”。`
+                : recommendationGuidance({
+                    qualityRegressionBlocked,
+                    scoreInProgress: Boolean(scoreInProgress),
+                    scoreRuleVersion:
+                      row.score_rule_version == null ? null : String(row.score_rule_version),
+                    latestScoreStatus: scoreRun?.status == null ? null : String(scoreRun.status),
+                    matchedRuleCount: Number(
+                      recommendationRule?.matched_rule_count ?? row.matched_rule_count ?? 0,
+                    ),
+                    enabledRuleCount: Number(recommendationRule?.enabled_rule_count ?? 0),
+                    minimumSourceCount:
+                      recommendationRule?.minimum_source_count == null
+                        ? null
+                        : Number(recommendationRule.minimum_source_count),
+                    sourceCount: Number(row.source_count ?? 0),
+                  })))
             : "推荐结论阻断已解除。",
           task_id: evidenceTask ? String(evidenceTask.id) : null,
           task_status: evidenceTask ? String(evidenceTask.status) : null,

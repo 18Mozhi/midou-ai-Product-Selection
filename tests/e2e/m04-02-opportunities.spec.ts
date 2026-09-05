@@ -138,7 +138,18 @@ async function ready(page: Page, detailEvidence = evidence) {
     }),
   );
   await page.route("**/api/v1/cost-rules", (route) =>
-    route.fulfill({ json: envelope([{ id: "cost-rule", status: "active" }]) }),
+    route.fulfill({
+      json: envelope([
+        {
+          id: "cost-rule",
+          status: "active",
+          platform: "amazon",
+          fee_lines: [{ type: "logistics", currency: "USD" }],
+          conversion_rates: [{ base_currency: "CNY", quote_currency: "USD" }],
+          automatic_scope: { product_family: "phone_case" },
+        },
+      ]),
+    }),
   );
   await page.route("**/api/v1/competitor-monitor-rules", (route) =>
     route.fulfill({ json: envelope([{ id: "competitor-rule", status: "enabled" }]) }),

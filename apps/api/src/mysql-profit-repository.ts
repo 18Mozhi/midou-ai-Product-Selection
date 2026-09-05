@@ -45,7 +45,7 @@ export class MySqlProfitRepository implements ProfitRepository {
       throw new ProfitServiceError("opportunity_not_found", 404, "刷新机会列表。");
     const [inputs] = await this.pool.query<RowDataPacket[]>(
       "SELECT input_type,amount_value,currency,source_type,source_ref_id,evidence_id," +
-        "observed_at,input_version,platform FROM opportunity_cost_inputs WHERE opportunity_id=? " +
+        "observed_at,input_version,platform,confirmation_mode FROM opportunity_cost_inputs WHERE opportunity_id=? " +
         "AND organization_id=? AND workspace_id=? AND is_current=1 ORDER BY platform," +
         "input_type",
       [input.opportunityId, input.organizationId, input.workspaceId],
@@ -116,6 +116,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         observed_at: iso(item.observed_at)!,
         input_version: Number(item.input_version),
         platform: String(item.platform),
+        confirmation_mode: item.confirmation_mode,
       })),
       cost_input_reviews: reviews.map((item) => ({
         id: String(item.id),
@@ -165,8 +166,8 @@ export class MySqlProfitRepository implements ProfitRepository {
       await c.beginTransaction();
       await c.query(
         "INSERT INTO cost_rules (id,organization_id,workspace_id,market,platform," +
-          "version_code,name,status,fee_lines_json,effective_from,revision,created_by," +
-          "created_at,updated_at) VALUES (?,?,?,?,?,?,?,'draft',?,?,1,?,?,?)",
+          "version_code,name,status,fee_lines_json,conversion_rates_json,automatic_scope_json,effective_from,revision,created_by," +
+          "created_at,updated_at) VALUES (?,?,?,?,?,?,?,'draft',?,?,?,?,1,?,?,?)",
         [
           input.id,
           input.organizationId,
@@ -176,6 +177,8 @@ export class MySqlProfitRepository implements ProfitRepository {
           input.value.version_code,
           input.value.name,
           JSON.stringify(input.value.fee_lines),
+          JSON.stringify(input.value.conversion_rates),
+          input.value.automatic_scope ? JSON.stringify(input.value.automatic_scope) : null,
           input.value.effective_from,
           input.actorId,
           now,
@@ -782,6 +785,8 @@ export class MySqlProfitRepository implements ProfitRepository {
       name: String(row.name),
       status: row.status,
       fee_lines: parse(row.fee_lines_json),
+      conversion_rates: row.conversion_rates_json ? parse(row.conversion_rates_json) : [],
+      automatic_scope: row.automatic_scope_json ? parse(row.automatic_scope_json) : null,
       effective_from: databaseDay(row.effective_from),
       revision: Number(row.revision),
       approvals: row.approvals ? (String(row.approvals).split(",") as ApprovalRole[]) : [],
@@ -845,6 +850,16 @@ export class MySqlProfitRepository implements ProfitRepository {
       [platform, input.organizationId, input.workspaceId, market],
     );
     for (const row of rows) await this.queueOne(c, input, String(row.id), ruleId, now);
+    await c.query(
+      "INSERT INTO automatic_selection_evaluations " +
+        "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
+        "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o WHERE " +
+        "o.organization_id=? AND o.workspace_id=? AND o.market=? AND o.decision_status='pending' " +
+        "ON DUPLICATE KEY UPDATE status=IF(status='leased',status,'queued')," +
+        "available_at=IF(status='leased',available_at,VALUES(available_at))," +
+        "last_error_code=IF(status='leased',last_error_code,NULL),updated_at=VALUES(updated_at)",
+      [now, now, now, input.organizationId, input.workspaceId, market],
+    );
   }
   private async operation<T>(input: ProfitWriteContext & { route: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(

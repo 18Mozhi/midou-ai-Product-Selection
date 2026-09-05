@@ -550,6 +550,15 @@ export class MySqlScoringRepository implements ScoringRepository {
       [input.organizationId, input.workspaceId],
     );
     for (const item of items) await this.queueOne(c, input, String(item.id), ruleId, now);
+    await c.query(
+      "INSERT INTO automatic_selection_evaluations " +
+        "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
+        "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o WHERE " +
+        "o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' ON DUPLICATE KEY UPDATE " +
+        "status=IF(status='leased',status,'queued'),available_at=IF(status='leased',available_at,VALUES(available_at))," +
+        "last_error_code=IF(status='leased',last_error_code,NULL),updated_at=VALUES(updated_at)",
+      [now, now, now, input.organizationId, input.workspaceId],
+    );
   }
   private async operation<T>(input: ScoreWriteContext & { route: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(

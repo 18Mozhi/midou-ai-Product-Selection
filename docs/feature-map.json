@@ -1104,6 +1104,10 @@
         "../database/migrations/0069_rule_based_recommendations.up.sql",
         "../database/migrations/0070_rule_candidates_quality_gate.up.sql",
         "../database/migrations/0071_opportunity_migration_timestamp_timezone.up.sql",
+        "../database/migrations/0072_automatic_quality_evaluation.up.sql",
+        "../apps/worker/src/automatic-selection-evaluation.ts",
+        "../apps/worker/src/automatic-selection-evaluation-worker.ts",
+        "../tests/unit/automatic-selection-evaluation.test.mjs",
         "../tests/unit/automatic-selection-readiness.test.mjs",
         "../tests/unit/opportunity-selection-policy.test.mjs",
         "../tests/m04-02/operating-feedback.test.mjs"
@@ -1122,7 +1126,7 @@
         "/api/v1/imports/erp-products"
       ],
       "scope": "organization and workspace scoped manual, monitoring-rule-discovered and Midou ERP-imported opportunity candidates, exact automatic rule links, trend evidence links, human decisions and refresh jobs; selection_view exposes recommended, rule_candidates, evidence_pending and all as separate truthful queues, while advanced filters cover persisted evidence coverage with coverage_status, adoption blockers with blocking_reason, stage with lifecycle_status and eligible owner with owner_id; the list displays persisted lifecycle_entered_at plus server-calculated dwell time and supports atomic batch assignment archive and review-task creation; the opportunity lineage tab joins scoped persisted source health, collection task, attempt, raw evidence, quality issue, trend, opportunity, score, profit, business task and notification nodes with direct routes; the operating feedback tab appends actual sales revenue advertising returns purchase lead time and profit facts with decision score-rule profit-rule predicted-profit and quoted-lead-time snapshots",
-      "truthBoundary": "the user-facing default list is selection_view=recommended and contains only exact enabled-rule threshold matches that are pending and pass score market competition cost and risk quality gates; rule_candidates contains threshold matches with one or more incomplete gates, evidence_pending contains exact rule matches still below the source threshold, and all preserves access to manual ERP-imported and other opportunities, while requests without selection_view retain the legacy scope contract; selection_stage and quality_gates are read-model facts and never record adoption, while POST decisions accepts adopt only for selection_stage recommended and human reason remains required; blocking reasons and release progress derive only from persisted opportunity facts, evidence-completion tasks and score jobs; the list reads existing score cost and competitor-rule contracts to expose a five-step configuration readiness checklist and never treats missing business weights thresholds rates or evidence as ready; recommendation next-action guidance distinguishes persisted quality regression, score work in progress, an existing insufficient score, enabled matched-rule distinct-source progress, paused matched rules and no exact rule match; lineage exposes exact request_id trace_id, latest evidence observation age, factual failure codes and affected stages without inventing missing nodes or crossing organization and workspace scope; the automatic downstream repair aggregates existing competitor and sourcing projection targets once by organization and workspace before joining candidate rows, preventing repeated cross-tenant JSON scans from holding the repair transaction; operating calibration derives return rate advertising ratio same-currency profit variance and quote-to-actual lead-time variance only from immutable facts, requires human review, and never changes a rule score or decision automatically; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese; migration 0071 corrects only opportunity updated_at values stamped by migration 0070 from UTC wall time into the existing server-local mysql2 read contract so unrelated historical rows remain untouched",
+      "truthBoundary": "the user-facing default list is selection_view=recommended and contains only exact enabled-rule threshold matches that are pending and pass score market competition cost and risk quality gates; rule_candidates contains threshold matches with one or more incomplete gates, evidence_pending contains exact rule matches still below the source threshold, and all preserves access to manual ERP-imported and other opportunities, while requests without selection_view retain the legacy scope contract; selection_stage and quality_gates are read-model facts and never record adoption, while POST decisions accepts adopt only for selection_stage recommended and human reason remains required; the automatic evaluator accepts an Amazon sale fact only from the opportunity's raw crawler evidence, requires an active cost rule scoped with automatic_scope.product_family=phone_case, refuses non-phone-case titles, requires a current Amazon competitor snapshot, and requires at least three same-family same-model compatible-variant 1688 offers before selecting the conservative 75th-percentile purchase price; it never replaces a current human-reviewed cost input, uses the actual current cost evidence in scoring, waits for a profit run calculated after those current inputs, and immediately clears a stale recommend read-model status when current evidence has a blocking quality regression; missing identity, price, fees, approved conversion basis, freshness or source quality keeps the item as a rule candidate; blocking reasons and release progress derive only from persisted opportunity facts, evidence-completion tasks and score jobs; the list reads existing score cost and competitor-rule contracts to expose a five-step configuration readiness checklist and never treats missing business weights thresholds rates product scope or evidence as ready; recommendation next-action guidance distinguishes persisted quality regression, score work in progress, an existing insufficient score, enabled matched-rule distinct-source progress, paused matched rules and no exact rule match; lineage exposes exact request_id trace_id, latest evidence observation age, factual failure codes and affected stages without inventing missing nodes or crossing organization and workspace scope; the automatic downstream repair aggregates existing competitor and sourcing projection targets once by organization and workspace before joining candidate rows, preventing repeated cross-tenant JSON scans from holding the repair transaction; operating calibration derives return rate advertising ratio same-currency profit variance and quote-to-actual lead-time variance only from immutable facts, requires human review, and never changes a rule score or decision automatically; scores ROI and risk are never invented, missing downstream fields remain null unknown or insufficient_data in APIs, and user-facing opportunity details translate internal status codes into Chinese; migration 0071 corrects only opportunity updated_at values stamped by migration 0070 from UTC wall time into the existing server-local mysql2 read contract so unrelated historical rows remain untouched",
       "readinessPresentation": "the list defaults to one next missing configuration plus a zero-to-five progress fact and keeps the full five-step setup state behind explicit disclosure; rule-candidate rows show passed-gate count evidence and next missing gate, evidence-pending rows show exact source evidence and rule counts, and recommended rows retain score evidence and risk",
       "navigationState": "selection view, advanced filters and page are URL-backed; legacy scope=all opens the all view; detail tabs use the tab query and every list-to-detail link carries a validated same-origin from path so returning restores the source view",
       "decisionLayout": "detail removes the duplicate large page hero, combines recommendation score evidence risk and the human final decision in one first-screen summary, shows compact five-gate progress with per-gate facts behind disclosure, exposes adoption as the primary action only after all gates produce selection_stage recommended, keeps nonrecommended observe and reject actions behind an explicit early-human-processing disclosure, highlights only unresolved blockers while keeping full progress and manual recovery tools behind disclosure, shows a redecision-ready notice after replenishment scoring, and uses a non-overlay action area plus four primary tabs with secondary analysis under more analysis",
@@ -1135,7 +1139,12 @@
       "erpImport": "the restricted browser helper reads the existing ERP Authorization token only inside the logged-in ERP tab and imports immutable evidence, opportunities, actual ASIN competitors and evidence-linked ERP historical-cost supplier candidates; missing MOQ specification lead time and location stay explicit rather than being presented as confirmed quotes",
       "permission": "opportunity:read for scoped reads; existing opportunity:decide for candidate creation and required-reason decisions; same-origin Origin and Idempotency-Key required",
       "audit": "manual creation, automatic opportunity.candidate.discovered, evidence refresh, atomic batch actions, linked evidence-completion tasks and decision changes persist correlated opportunity_events and opportunity_outbox; completing a linked evidence task queues scoring only when an active rule exists and records trigger_task_id, completed scoring queues a scoped redecision-ready notification for the owner or task assignee, and decisions do not rewrite scores or evidence",
-      "configuration": ["OPPORTUNITY_REFRESH_POLL_MS", "OPPORTUNITY_REFRESH_LEASE_SECONDS"],
+      "configuration": [
+        "OPPORTUNITY_REFRESH_POLL_MS",
+        "OPPORTUNITY_REFRESH_LEASE_SECONDS",
+        "AUTOMATIC_SELECTION_EVALUATION_POLL_MS",
+        "AUTOMATIC_SELECTION_EVALUATION_LEASE_SECONDS"
+      ],
       "runtimeBoundary": "refresh runs inside the Baota-managed Node Worker; no panel-external production service",
       "imageEvidence": [
         "concept 33 opportunity list",
@@ -1161,6 +1170,8 @@
         "../apps/api/src/scoring-routes.ts",
         "../packages/contracts/src/index.ts",
         "../apps/worker/src/opportunity-scoring-worker.ts",
+        "../apps/worker/src/automatic-selection-evaluation.ts",
+        "../apps/worker/src/automatic-selection-evaluation-worker.ts",
         "../apps/web/src/components/ScoreRuleConsole.vue",
         "../apps/web/src/components/shared/QualityGateSetupSummary.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue"
@@ -1174,7 +1185,7 @@
         "/api/v1/opportunities/{opportunityId}/score-runs"
       ],
       "scope": "organization and workspace scoped versioned rules inputs jobs immutable runs components approvals rollback and read-only pre-publish opportunity impact preview",
-      "truthBoundary": "no default weights thresholds or missing scores; preview reuses current persisted inputs and the production calculator without creating runs or changing opportunities; a monitoring-rule-created candidate queues scoring only when an explicit active score rule exists, below 50 percent remains insufficient and recommendation requires at least 80 percent plus market competition and cost evidence; no score or recommendation constitutes adoption",
+      "truthBoundary": "no default weights thresholds or missing scores; preview reuses current persisted inputs and the production calculator without creating runs or changing opportunities; when an explicit active score rule exists the automatic evaluator can derive only supported dimensions from persisted Amazon 1688 competitor profit and quality evidence using formula version crawler-evidence-v1, while unsupported or missing dimensions remain explicit missing inputs; below 50 percent remains insufficient and recommendation requires at least 80 percent plus market competition and cost evidence; no score or recommendation constitutes adoption",
       "qualityGateBoundary": "before writing a score run the Worker resolves current input evidence IDs to raw evidence; a failed latest reconciliation for the same provider and parser, or an open critical issue on that evidence, fails the job terminally with score_blocked_by_data_quality_regression and preserves the previous score",
       "apiClientBoundary": "score-rule reads and lifecycle writes use the shared frontend API client without changing rule versions, evidence thresholds or approval transitions; native modal dialogs keep validation and request failures inside the active workflow and restore trigger focus after close",
       "setupPresentationBoundary": "the score-rule surface presents the active version plus market competition and cost evidence-group requirements and the risk dimension as a compact automatic-recommendation checklist; it never treats this rule-only checklist as proof that external competitor cost or per-opportunity quality gates passed",
@@ -1198,13 +1209,15 @@
         "../apps/api/src/mysql-profit-repository.ts",
         "../apps/api/src/profit-routes.ts",
         "../apps/worker/src/opportunity-profit-worker.ts",
+        "../apps/worker/src/automatic-selection-evaluation-worker.ts",
         "../apps/web/src/components/CostRuleConsole.vue",
         "../apps/web/src/components/shared/QualityGateSetupSummary.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue",
         "../apps/web/src/components/OpportunityProfitPanel.vue",
         "../apps/web/src/components/OpportunityCostReviewQueue.vue",
         "../apps/web/src/components/SourcingCostConfirmationPanel.vue",
-        "../database/migrations/0064_governed_workflow_confirmations.up.sql"
+        "../database/migrations/0064_governed_workflow_confirmations.up.sql",
+        "../database/migrations/0072_automatic_quality_evaluation.up.sql"
       ],
       "routes": [
         "/sourcing/cost-rules",
@@ -1217,10 +1230,10 @@
         "/api/v1/opportunities/{opportunityId}/profit-runs",
         "/api/v1/opportunities/{opportunityId}/profit-analysis"
       ],
-      "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes second-person-reviewed cost inputs jobs immutable profit runs components and rollback",
-      "truthBoundary": "all four fees are explicit; a submitted cost input remains inactive until its distinct assigned cost:confirm reviewer approves it; rejection or deadline never activates it; missing required inputs or an approved historical exchange rate stays insufficient_data and never emits numeric ROI",
+      "scope": "organization and workspace scoped versioned fee rules dual approvals exchange quotes second-person-reviewed manual cost inputs evidence-derived automatic cost inputs jobs immutable profit runs components and rollback",
+      "truthBoundary": "platform payment tax and fulfillment fees are explicit and optional fixed inbound logistics is explicit; a manually submitted cost input remains inactive until its distinct assigned cost:confirm reviewer approves it, while the automatic path only activates immutable Amazon sale and high-confidence multi-offer 1688 purchase facts and records confirmation_mode=automatic_evidence; cross-currency calculation requires either an approved exchange quote or a dated HTTPS conversion basis inside the dual-approved cost-rule version; missing required inputs or conversion basis stays insufficient_data and never emits numeric ROI",
       "costReviewBoundary": "submission creates a 24-hour pending review and schedules a reviewer reminder four hours before expiry plus an overdue escalation to the reviewer and organization administrators; scheduled delivery rechecks pending state and never auto-approves; approval atomically supersedes the prior current input and queues profit recalculation",
-      "setupPresentationBoundary": "the cost-rule surface presents the active version and all four explicit fee lines as a compact automatic-recommendation checklist while stating that each opportunity still requires a reviewed cost input before its cost gate can pass",
+      "setupPresentationBoundary": "the cost-rule surface presents the active version and explicit fee lines as a compact automatic-recommendation checklist, accepts an optional fixed inbound-logistics line and dated HTTPS conversion basis, and distinguishes manually reviewed from automatic crawler-evidence cost facts",
       "apiClientBoundary": "cost-rule reads and lifecycle writes use the shared frontend API client without browser-side ROI calculation or inferred fee values; OpportunityProfitPanel keeps calculation and input presentation while OpportunityCostReviewQueue owns only the pending review interaction and emits decisions to its parent",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",
       "audit": "rule transitions rates inputs and profit runs persist correlated opportunity_events and opportunity_outbox while historical inputs and runs remain immutable",
@@ -1242,6 +1255,7 @@
         "../apps/api/src/mysql-competitor-repository.ts",
         "../apps/api/src/competitor-routes.ts",
         "../apps/worker/src/competitor-monitor-worker.ts",
+        "../apps/worker/src/automatic-selection-evaluation-worker.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/worker/src/business-task-projection-worker.ts",
         "../apps/worker/src/notification-outbox-worker.ts",

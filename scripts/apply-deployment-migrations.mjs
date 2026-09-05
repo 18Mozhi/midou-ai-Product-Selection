@@ -46,6 +46,7 @@ const allowed = new Set([
   "0069_rule_based_recommendations.up.sql",
   "0070_rule_candidates_quality_gate.up.sql",
   "0071_opportunity_migration_timestamp_timezone.up.sql",
+  "0072_automatic_quality_evaluation.up.sql",
 ]);
 export function splitSqlStatements(source) {
   const statements = [];

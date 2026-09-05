@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import { refreshRuleRecommendation } from "./rule-recommendation.js";
 import { TrendProjectionAlerts } from "./trend-projection-alerts.js";
 import {
@@ -465,6 +466,20 @@ export class TrendProjectionPersistence {
       traceId: job.traceId,
       now,
     });
+    await queueAutomaticSelectionEvaluation(c, {
+      organizationId: job.organizationId,
+      workspaceId: job.workspaceId,
+      opportunityId: persistedOpportunityId,
+      now,
+    });
+    if (job.providerCode === "1688_search")
+      await c.query(
+        "UPDATE automatic_selection_evaluations SET status=IF(status='leased',status,'queued')," +
+          "available_at=IF(status='leased',available_at,?),last_error_code=IF(status='leased',last_error_code,NULL)," +
+          "updated_at=? WHERE organization_id=? AND workspace_id=? AND status IN " +
+          "('waiting_evidence','waiting_profit','succeeded','failed_terminal','dead_letter')",
+        [now, now, job.organizationId, job.workspaceId],
+      );
     if (insert.affectedRows) {
       await this.alerts.writeOpportunityDiscovery(
         c,

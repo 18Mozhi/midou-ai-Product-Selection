@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import { refreshRuleRecommendation } from "./rule-recommendation.js";
 
 export type OpportunityRefreshResult =
@@ -160,6 +161,12 @@ export class MySqlOpportunityRefreshWorker {
         actorId: this.workerId,
         requestId: job.requestId,
         traceId: job.traceId,
+        now,
+      });
+      await queueAutomaticSelectionEvaluation(connection, {
+        organizationId: job.organizationId,
+        workspaceId: job.workspaceId,
+        opportunityId: job.opportunityId,
         now,
       });
       const status = evidenceCount ? "succeeded" : "succeeded_empty";

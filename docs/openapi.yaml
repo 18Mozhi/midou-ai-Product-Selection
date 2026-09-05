@@ -10400,7 +10400,7 @@ components:
             type: integer,
             minimum: 1,
             maximum: 10,
-            description: Minimum distinct persisted evidence providers required before a rule-matched unscored opportunity becomes an automatic recommendation,
+            description: Minimum distinct persisted evidence providers required before a rule-matched opportunity becomes a rule candidate; all five quality gates are still required for recommendation,
           }
     TrendMonitoringRule:
       allOf:
@@ -10748,7 +10748,7 @@ components:
       type: object
       required: [type, mode, value, currency]
       properties:
-        type: { type: string, enum: [platform_fee, payment_fee, tax, fulfillment] }
+        type: { type: string, enum: [platform_fee, payment_fee, tax, fulfillment, logistics] }
         mode: { type: string, enum: [percentage_of_sale, fixed_amount] }
         value: { type: number, minimum: 0 }
         currency: { type: string, minLength: 3, maxLength: 3, nullable: true }
@@ -10762,7 +10762,33 @@ components:
         name: { type: string, minLength: 1, maxLength: 160 }
         effective_from: { type: string, format: date }
         fee_lines:
-          { type: array, minItems: 4, maxItems: 4, items: { $ref: "#/components/schemas/FeeLine" } }
+          { type: array, minItems: 4, maxItems: 5, items: { $ref: "#/components/schemas/FeeLine" } }
+        conversion_rates:
+          type: array
+          maxItems: 10
+          items:
+            $ref: "#/components/schemas/CostConversionRate"
+        automatic_scope:
+          allOf:
+            - $ref: "#/components/schemas/AutomaticCostScope"
+          nullable: true
+          description: 选择 phone_case 时平台必须为 amazon，且费用规则必须包含固定物流与 CNY 换算依据。
+    CostConversionRate:
+      type: object
+      additionalProperties: false
+      required: [base_currency, quote_currency, rate_value, effective_on, source_url]
+      properties:
+        base_currency: { type: string, minLength: 3, maxLength: 3 }
+        quote_currency: { type: string, minLength: 3, maxLength: 3 }
+        rate_value: { type: number, exclusiveMinimum: 0 }
+        effective_on: { type: string, format: date }
+        source_url: { type: string, format: uri, pattern: "^https://" }
+    AutomaticCostScope:
+      type: object
+      additionalProperties: false
+      required: [product_family]
+      properties:
+        product_family: { type: string, enum: [phone_case] }
     CostRuleActionInput:
       type: object
       required: [action, reason, expected_revision]

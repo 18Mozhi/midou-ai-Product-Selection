@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 
 type Job = {
   id: string;
@@ -12,10 +13,17 @@ type Job = {
   attemptCount: number;
 };
 type FeeLine = {
-  type: "platform_fee" | "payment_fee" | "tax" | "fulfillment";
+  type: "platform_fee" | "payment_fee" | "tax" | "fulfillment" | "logistics";
   mode: "percentage_of_sale" | "fixed_amount";
   value: number;
   currency: string | null;
+};
+type ConversionRate = {
+  base_currency: string;
+  quote_currency: string;
+  rate_value: number;
+  effective_on: string;
+  source_url: string;
 };
 type Component = {
   type: string;
@@ -27,6 +35,7 @@ type Component = {
   evidenceId: string | null;
   quoteId: string | null;
   missing: string | null;
+  conversionRef?: string | null;
 };
 export type ProfitWorkerResult =
   | { status: "idle" }
@@ -158,6 +167,7 @@ export class MySqlOpportunityProfitWorker {
       const byType = new Map(inputs.map((row) => [String(row.input_type), row]));
       const sale = byType.get("sale_price"),
         target = sale ? String(sale.currency) : null,
+        conversionRates = parse<ConversionRate[]>(rule.conversion_rates_json ?? "[]"),
         components: Component[] = [];
       const convert = async (type: string, row: RowDataPacket | undefined) => {
         if (!row || !target) {
@@ -195,7 +205,15 @@ export class MySqlOpportunityProfitWorker {
           [job.organizationId, job.workspaceId, source, target, today],
         );
         const quote = quotes[0];
-        if (!quote) {
+        const policyRate = conversionRates
+          .filter(
+            (item) =>
+              item.base_currency === source &&
+              item.quote_currency === target &&
+              item.effective_on <= today,
+          )
+          .sort((left, right) => right.effective_on.localeCompare(left.effective_on))[0];
+        if (!quote && !policyRate) {
           components.push({
             type,
             sourceAmount: value,
@@ -209,7 +227,10 @@ export class MySqlOpportunityProfitWorker {
           });
           return null;
         }
-        const converted = round(value * Number(quote.rate_value));
+        const converted = round(value * Number(quote?.rate_value ?? policyRate!.rate_value)),
+          conversionRef = quote
+            ? null
+            : `cost_rule:${String(rule.version_code)}:fx:${source}_${target}:${policyRate!.effective_on}`;
         components.push({
           type,
           sourceAmount: value,
@@ -218,17 +239,20 @@ export class MySqlOpportunityProfitWorker {
           targetCurrency: target,
           sourceRef: String(row.source_ref_id),
           evidenceId: nullableString(row.evidence_id),
-          quoteId: String(quote.id),
+          quoteId: quote ? String(quote.id) : null,
           missing: null,
+          conversionRef,
         });
         return converted;
       };
-      const saleValue = await convert("sale_price", sale),
+      const fees = parse<FeeLine[]>(rule.fee_lines_json),
+        saleValue = await convert("sale_price", sale),
         purchase = await convert("purchase_price", byType.get("purchase_price")),
-        logistics = await convert("logistics", byType.get("logistics"));
+        logistics = fees.some((fee) => fee.type === "logistics")
+          ? null
+          : await convert("logistics", byType.get("logistics"));
       void purchase;
       void logistics;
-      const fees = parse<FeeLine[]>(rule.fee_lines_json);
       for (const fee of fees) {
         if (fee.mode === "percentage_of_sale") {
           const value = saleValue == null ? null : round((saleValue * fee.value) / 100);
@@ -290,7 +314,11 @@ export class MySqlOpportunityProfitWorker {
               version: Number(row.input_version),
             })),
           ),
-          JSON.stringify(components.filter((item) => item.quoteId).map((item) => item.quoteId)),
+          JSON.stringify(
+            components
+              .flatMap((item) => [item.quoteId, item.conversionRef])
+              .filter((item): item is string => Boolean(item)),
+          ),
           job.requestId,
           job.traceId,
           now,
@@ -317,6 +345,12 @@ export class MySqlOpportunityProfitWorker {
         "UPDATE opportunities SET profit_status=?,version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
         [status, now, job.opportunityId, job.organizationId, job.workspaceId],
       );
+      await queueAutomaticSelectionEvaluation(connection, {
+        organizationId: job.organizationId,
+        workspaceId: job.workspaceId,
+        opportunityId: job.opportunityId,
+        now,
+      });
       await connection.query(
         "UPDATE opportunity_profit_jobs SET status=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
         [

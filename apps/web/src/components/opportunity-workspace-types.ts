@@ -223,6 +223,7 @@ export interface OpportunityProfitAnalysis {
     observed_at: string;
     input_version: number;
     platform: string;
+    confirmation_mode: "human_review" | "automatic_evidence";
   }>;
   cost_input_reviews: Array<{
     id: string;

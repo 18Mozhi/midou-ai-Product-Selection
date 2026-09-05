@@ -8,7 +8,7 @@ import UiStatePanel from "./UiStatePanel.vue";
 import "../profit.css";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment";
+type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment" | "logistics";
 type ApprovalRole = "selection_manager" | "organization_admin";
 type Action = "submit" | "approve" | "reject" | "publish" | "rollback";
 interface Rule {
@@ -24,6 +24,14 @@ interface Rule {
     value: number;
     currency: string | null;
   }>;
+  conversion_rates: Array<{
+    base_currency: string;
+    quote_currency: string;
+    rate_value: number;
+    effective_on: string;
+    source_url: string;
+  }>;
+  automatic_scope: { product_family: "phone_case" } | null;
   effective_from: string;
   revision: number;
   approvals: ApprovalRole[];
@@ -74,7 +82,12 @@ const initialForm = () => ({
   payment_fee: "",
   tax: "",
   fulfillment: "",
+  logistics: "",
   currency: "USD",
+  conversion_rate: "",
+  conversion_effective_on: localDay(),
+  conversion_source_url: "",
+  automatic_product_family: "",
 });
 const form = reactive(initialForm());
 const canManage = computed(() => props.capabilities.includes("opportunity:approve")),
@@ -90,7 +103,7 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
   ),
   costSetupDescription = computed(() => {
     if (activeCostRule.value)
-      return `当前启用 ${activeCostRule.value.version_code}；实际商品仍需具备已复核成本输入。`;
+      return `当前启用 ${activeCostRule.value.version_code}；商品成本可由双人复核或高置信爬虫证据形成。`;
     if (nextCostRule.value?.status === "approved")
       return "已有规则通过双角色审批，发布后成本质量门才会启用。";
     if (nextCostRule.value?.status === "pending_approval")
@@ -112,6 +125,16 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
         detail: byType.has(type) ? "已显式配置" : "尚未生效",
         ready: byType.has(type),
       })),
+      {
+        label: "入仓物流",
+        detail: byType.has("logistics") ? "已显式配置" : "自动成本尚缺固定物流依据",
+        ready: byType.has("logistics"),
+      },
+      {
+        label: "跨币种换算",
+        detail: rule?.conversion_rates.length ? "已保存日期与来源" : "自动成本尚缺汇率依据",
+        ready: Boolean(rule?.conversion_rates.length),
+      },
     ];
   }),
   returnPath = computed(() => {
@@ -168,7 +191,34 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
     )
       return "三项百分比费用必须在 0 到 100 之间。";
     if (!Number.isFinite(fulfillment) || fulfillment < 0) return "履约成本不能小于 0。";
+    if (
+      String(form.logistics).trim() &&
+      (!Number.isFinite(Number(form.logistics)) || Number(form.logistics) < 0)
+    )
+      return "入仓物流成本不能小于 0。";
     if (!/^[A-Za-z]{3}$/.test(form.currency.trim())) return "履约币种必须是 3 位字母代码。";
+    const conversionValues = [
+        String(form.conversion_rate).trim(),
+        form.conversion_effective_on,
+        form.conversion_source_url.trim(),
+      ],
+      hasConversion = Boolean(conversionValues[0] || conversionValues[2]);
+    if (hasConversion && conversionValues.some((value) => !value))
+      return "填写汇率时必须同时提供数值、生效日期和 HTTPS 来源页面。";
+    if (
+      String(form.conversion_rate).trim() &&
+      (!Number.isFinite(Number(form.conversion_rate)) || Number(form.conversion_rate) <= 0)
+    )
+      return "CNY/USD 汇率必须大于 0。";
+    if (form.conversion_source_url && !/^https:\/\//i.test(form.conversion_source_url))
+      return "汇率来源必须是 HTTPS 页面。";
+    if (
+      form.automatic_product_family === "phone_case" &&
+      (form.platform.trim().toLowerCase() !== "amazon" ||
+        !String(form.logistics).trim() ||
+        conversionValues.some((value) => !value))
+    )
+      return "手机壳自动成本必须使用 Amazon 平台，并填写入仓物流、汇率、日期和来源。";
     return "";
   }),
   actionTitle = computed(() => {
@@ -201,6 +251,7 @@ const statusLabels: Record<string, string> = {
     payment_fee: "支付手续费",
     tax: "税费",
     fulfillment: "履约成本",
+    logistics: "入仓物流",
   },
   modeLabels = {
     percentage_of_sale: "按售价百分比",
@@ -244,13 +295,20 @@ const stateFrom = (kind: ApiFailureKind): State =>
   apiErrorText = (error: ApiClientError) =>
     `${profitErrorLabels[error.code] ?? error.userMessage} ${error.actionHint}`.trim();
 
+const normalizeRule = (rule: Rule): Rule => ({
+  ...rule,
+  conversion_rates: Array.isArray(rule.conversion_rates) ? rule.conversion_rates : [],
+  automatic_scope:
+    rule.automatic_scope?.product_family === "phone_case" ? { product_family: "phone_case" } : null,
+});
+
 async function load() {
   state.value = "loading";
   notice.value = "";
   try {
     const response = await request<Rule[]>("/cost-rules");
     requestId.value = response.request_id;
-    rules.value = response.data;
+    rules.value = response.data.map(normalizeRule);
     const routeRuleId = typeof route.query.rule === "string" ? route.query.rule : "";
     selected.value =
       rules.value.find((item) => item.id === selected.value?.id) ??
@@ -278,7 +336,7 @@ async function post(path: string, body: unknown, setError: (value: string) => vo
   try {
     const response = await request<Rule>(path, { method: "POST", body });
     requestId.value = response.request_id;
-    return response.data;
+    return normalizeRule(response.data);
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -349,7 +407,30 @@ async function create() {
           value: Number(form.fulfillment),
           currency: form.currency.trim().toUpperCase(),
         },
+        ...(String(form.logistics).trim()
+          ? [
+              {
+                type: "logistics" as const,
+                mode: "fixed_amount" as const,
+                value: Number(form.logistics),
+                currency: form.currency.trim().toUpperCase(),
+              },
+            ]
+          : []),
       ],
+      conversion_rates: String(form.conversion_rate).trim()
+        ? [
+            {
+              base_currency: "CNY",
+              quote_currency: form.currency.trim().toUpperCase(),
+              rate_value: Number(form.conversion_rate),
+              effective_on: form.conversion_effective_on,
+              source_url: form.conversion_source_url.trim(),
+            },
+          ]
+        : [],
+      automatic_scope:
+        form.automatic_product_family === "phone_case" ? { product_family: "phone_case" } : null,
     },
     (value) => (createError.value = value),
   );
@@ -436,7 +517,7 @@ onMounted(load);
       <div>
         <p>自动推荐 · 成本与利润</p>
         <h2 id="cost-rule-title">成本质量门</h2>
-        <span>费用规则生效且商品成本完成复核后，系统才计算利润并判断成本质量门。</span>
+        <span>费用规则生效后，双人复核或高置信爬虫证据可触发利润计算与成本质量门。</span>
       </div>
       <div class="cost-head-actions">
         <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
@@ -552,6 +633,18 @@ onMounted(load);
             ><span>{{ modeLabels[fee.mode] }}</span>
           </article>
         </div>
+        <section v-if="selected.conversion_rates.length">
+          <h4>跨币种换算依据</h4>
+          <p
+            v-for="rate in selected.conversion_rates"
+            :key="`${rate.base_currency}-${rate.quote_currency}`"
+          >
+            <b>1 {{ rate.base_currency }} = {{ rate.rate_value }} {{ rate.quote_currency }}</b>
+            <a :href="rate.source_url" target="_blank" rel="noopener noreferrer"
+              >{{ rate.effective_on }} · 查看来源</a
+            >
+          </p>
+        </section>
         <section>
           <h4>审批链</h4>
           <p>
@@ -703,9 +796,50 @@ onMounted(load);
               pattern="[A-Za-z]{3}"
               autocomplete="off"
           /></label>
+          <label
+            >入仓物流（可选固定金额）<input
+              v-model="form.logistics"
+              :required="form.automatic_product_family === 'phone_case'"
+              type="number"
+              min="0"
+              step="0.000001"
+              placeholder="例如 1.00"
+          /></label>
+        </fieldset>
+        <fieldset>
+          <legend>1688 采购价换算（可选）</legend>
+          <label
+            >自动成本适用品类<select v-model="form.automatic_product_family">
+              <option value="">仅人工复核成本</option>
+              <option value="phone_case">手机壳（Amazon + 1688 高置信匹配）</option>
+            </select></label
+          >
+          <label
+            >1 CNY = 目标币种<input
+              v-model="form.conversion_rate"
+              :required="form.automatic_product_family === 'phone_case'"
+              type="number"
+              min="0.000001"
+              step="0.000001"
+              placeholder="例如 0.149014"
+          /></label>
+          <label
+            >汇率日期<input
+              v-model="form.conversion_effective_on"
+              :required="form.automatic_product_family === 'phone_case'"
+              type="date"
+          /></label>
+          <label
+            >官方来源页面<input
+              v-model="form.conversion_source_url"
+              :required="form.automatic_product_family === 'phone_case'"
+              type="url"
+              maxlength="2048"
+              placeholder="https://…"
+          /></label>
         </fieldset>
         <p class="cost-form-summary" :data-valid="!createValidation" role="status">
-          {{ createValidation || "四项费用已显式填写，可以保存草稿。" }}
+          {{ createValidation || "费用与可选换算依据已显式填写，可以保存草稿。" }}
         </p>
         <p v-if="createError" class="cost-dialog-error" role="alert">
           {{ createError }} <code v-if="requestId">{{ requestId }}</code>

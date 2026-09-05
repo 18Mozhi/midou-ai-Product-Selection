@@ -196,6 +196,7 @@ export interface RuntimeConfig {
     queueBacklogLimit: number;
     systemActorId: string;
   };
+  automaticSelection: { pollMs: number; leaseSeconds: number };
   trends: { projectionPollMs: number; projectionLeaseSeconds: number };
   opportunities: { refreshPollMs: number; refreshLeaseSeconds: number };
   scoring: { pollMs: number; leaseSeconds: number };
@@ -676,6 +677,10 @@ export function loadRuntimeConfig(
       tenantActiveTaskBudget: integer(env, "AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET", 2, 1, 100),
       queueBacklogLimit: integer(env, "AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT", 1000, 1, 100000),
       systemActorId: text(env, "AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID"),
+    },
+    automaticSelection: {
+      pollMs: integer(env, "AUTOMATIC_SELECTION_EVALUATION_POLL_MS", 2000, 250, 60000),
+      leaseSeconds: integer(env, "AUTOMATIC_SELECTION_EVALUATION_LEASE_SECONDS", 120, 30, 3600),
     },
     trends: {
       projectionPollMs: integer(env, "TREND_PROJECTION_POLL_MS", 2000, 250, 60000),
