@@ -25,10 +25,16 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
   assert.match(apiClient, /rethrowUnexpectedError/);
   assert.match(routeCatalog, /surface[\s\S]*cachePolicy/);
   assert.match(shell, /selectedSurfaceComponent[\s\S]*surfaceCacheKey/);
-  assert.match(shell, /class="role-page-title"[\s\S]*pageTitle[\s\S]*pageSummary/);
-  assert.match(shell, /class="role-context-rail"[\s\S]*当前范围[\s\S]*任务域[\s\S]*当前角色/);
+  assert.match(
+    shell,
+    /class="role-page-title"[\s\S]*role-page-folio[\s\S]*pageFolio[\s\S]*SIGNAL LEDGER[\s\S]*pageTitle/,
+  );
+  assert.match(
+    shell,
+    /class="role-context-rail"[\s\S]*当前范围[\s\S]*任务域[\s\S]*信号状态[\s\S]*当前角色/,
+  );
   assert.doesNotMatch(shell, /class="role-identity"/);
-  assert.match(tokens, /--so-content-max:\s*1240px/);
+  assert.match(tokens, /--so-content-max:\s*1440px/);
   assert.doesNotMatch(accessibility, /transition:\s*all/);
   for (const stylesheet of [
     "apps/web/src/styles.css",

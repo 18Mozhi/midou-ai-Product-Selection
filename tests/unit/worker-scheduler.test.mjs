@@ -282,6 +282,90 @@ test("业务可用性区分调度告警与过期心跳", async () => {
   assert.equal((await service.publicHealth()).state, "ready");
 });
 
+test("自动选品等待规则时不把后台业务可用性误报为降级", async () => {
+  const { RuntimeTopologyService } =
+    await import("../../apps/api/dist/runtime-topology-service.js");
+  const now = new Date("2026-09-06T10:00:00.000Z");
+  const schedulerSnapshot = {
+    status: "running",
+    max_concurrency: 4,
+    active_runs: 0,
+    due_queue_count: 0,
+    backpressure: false,
+    max_queue_delay_ms: 0,
+    suspected_stuck_runs: 0,
+    snapshot_publish_failed_total: 0,
+    last_snapshot_error: null,
+    completed_last_minute: 1,
+    failed_last_minute: 0,
+    failure_rate_percent: 0,
+    queues: [
+      {
+        name: "automatic_selection_evaluation",
+        priority: 68,
+        running: false,
+        queue_delay_ms: 0,
+        failed_total: 0,
+        deferred_total: 0,
+        last_result_at: now.toISOString(),
+        last_result_status: "waiting_evidence",
+        last_result_error_code: "automatic_rules_not_active",
+        last_business_objects: [
+          {
+            type: "opportunity",
+            id: "opportunity-waiting-for-rules",
+            label: "自动质量评估",
+            href: "/opportunities/opportunity-waiting-for-rules",
+          },
+        ],
+      },
+    ],
+    observed_at: now.toISOString(),
+  };
+  const service = new RuntimeTopologyService(
+    {
+      snapshot: async () => ({
+        nodes: [
+          {
+            nodeId: "api-primary",
+            hostId: "huizhou-single-host",
+            role: "api",
+            status: "ready",
+            lastHeartbeatAt: now,
+          },
+        ],
+      }),
+      recordView: async () => {},
+      heartbeat: async () => {},
+    },
+    {
+      expectedNodeId: "api-primary",
+      expectedHostId: "huizhou-single-host",
+      staleAfterMs: 90_000,
+      workerSchedulerStaleAfterMs: 90_000,
+      workerSchedulerSnapshot: async () => schedulerSnapshot,
+    },
+    () => now,
+  );
+
+  const waiting = await service.read({
+    actorId: "actor",
+    requestId: "request",
+    traceId: "trace",
+  });
+  assert.deepEqual(waiting.alerts, []);
+  assert.equal((await service.businessHealth()).status, "available");
+
+  schedulerSnapshot.queues[0].last_result_status = "failed_terminal";
+  const failed = await service.read({
+    actorId: "actor",
+    requestId: "request-2",
+    traceId: "trace-2",
+  });
+  assert.equal(failed.alerts.at(-1).code, "worker_business_result_failed");
+  assert.equal((await service.businessHealth()).status, "degraded");
+});
+
 test("运行拓扑统一收敛卡死、队列熔断与快照异常", async () => {
   const { RuntimeTopologyService } =
     await import("../../apps/api/dist/runtime-topology-service.js");

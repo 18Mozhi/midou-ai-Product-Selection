@@ -308,7 +308,7 @@ test("platform account overview query remains compatible with MySQL 5.7 aggregat
   assert.doesNotMatch(repository, /ORDER BY \(granted_at IS NULL\)/);
 });
 
-test("frontend primary headings and platform operations use Chinese labels", async () => {
+test("frontend primary headings use Chinese labels while Signal Ledger identity stays explicit", async () => {
   const files = [
     "NavigationShell.vue",
     "PlatformDashboard.vue",
@@ -327,6 +327,9 @@ test("frontend primary headings and platform operations use Chinese labels", asy
       readFile(new URL(`../../apps/web/src/components/${name}`, import.meta.url), "utf8"),
     ),
   );
-  for (const source of sources) assert.doesNotMatch(source, />[A-Z][A-Z0-9 &/+._·:-]{3,}</);
+  for (const source of sources)
+    assert.doesNotMatch(source, /<h[1-3][^>]*>\s*[A-Z][A-Z0-9 &/+._·:-]{3,}\s*<\/h[1-3]>/);
+  assert.match(sources[0], /<b>SCOUTOPS<\/b/);
+  assert.match(sources[0], /SIGNAL LEDGER/);
   assert.ok(sources.join("\n").includes("智能选品"));
 });

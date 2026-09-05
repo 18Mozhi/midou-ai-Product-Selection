@@ -66,6 +66,8 @@ const runtimeBusinessObjectTypes = new Set<RuntimeBusinessObjectAssociation["typ
   "automation_execution",
 ]);
 
+const expectedBusinessWaitingStatuses = new Set(["waiting_evidence", "waiting_profit"]);
+
 const boundedRuntimeText = (value: unknown, maximum: number) =>
   typeof value === "string" && value.trim().length > 0 && value.trim().length <= maximum
     ? value.trim()
@@ -307,7 +309,11 @@ export class RuntimeTopologyService {
         occurred_at: workerScheduler?.observed_at ?? null,
       });
     for (const queue of schedulerQueues)
-      if (queue.last_result_error_code && recent(queue.last_result_at))
+      if (
+        queue.last_result_error_code &&
+        recent(queue.last_result_at) &&
+        !expectedBusinessWaitingStatuses.has(queue.last_result_status ?? "")
+      )
         pushAlert({
           code: "worker_business_result_failed",
           severity: "warning",

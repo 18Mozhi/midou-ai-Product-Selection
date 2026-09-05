@@ -144,7 +144,7 @@ paths:
   /health/available:
     get:
       summary: Business processing availability
-      description: Separates process liveness and synchronous dependency readiness from the ability of the supervised Worker scheduler to accept and process background business tasks.
+      description: Separates process liveness and synchronous dependency readiness from the ability of the supervised Worker scheduler to accept and process background business tasks. Expected waiting states such as waiting_evidence and waiting_profit remain available; recent retry or terminal results carrying a stable error code degrade business availability.
       security: []
       responses:
         "200":
