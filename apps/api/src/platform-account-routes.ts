@@ -87,6 +87,14 @@ export function registerPlatformAccountRoutes(
     reply.header("cache-control", "private, no-store");
     return envelope(await o.service.userDetail((r.params as any).userId), r);
   });
+  app.post("/api/v1/platform/accounts/users/:userId/memberships", async (r, reply) => {
+    const actorId = await write(r);
+    reply.code(201);
+    return envelope(
+      await o.service.addUserMembership((r.params as any).userId, r.body, context(r, actorId)),
+      r,
+    );
+  });
   app.post("/api/v1/platform/accounts/users/:userId/status", async (r) => {
     const actorId = await write(r);
     return envelope(

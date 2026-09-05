@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
+import type { AccountData, AccountTab, MembershipInput } from "../platform-account-types";
 import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
 import PlatformAccountDialogs from "./PlatformAccountDialogs.vue";
@@ -13,23 +14,10 @@ import PlatformRoleComparison from "./PlatformRoleComparison.vue";
 import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
 import PlatformUserRecords from "./PlatformUserRecords.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
-type Tab = "organizations" | "users" | "admins";
-interface Data {
-  summary: {
-    organizations: number;
-    active_organizations: number;
-    users: number;
-    active_users: number;
-    platform_admins: number;
-  };
-  organizations: any[];
-  users: any[];
-  admins: any[];
-}
 const props = withDefaults(
     defineProps<{
       apiBaseUrl: string;
-      initialTab?: Tab;
+      initialTab?: AccountTab;
       routePath?: string;
       organizationId?: string;
     }>(),
@@ -43,8 +31,8 @@ const props = withDefaults(
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<"loading" | "ready" | "empty" | "error">("loading"),
-  tab = ref<Tab>(props.initialTab),
-  data = ref<Data | null>(null),
+  tab = ref<AccountTab>(props.initialTab),
+  data = ref<AccountData | null>(null),
   platformRoles = ref<RoleCapabilitySummary[]>([]),
   query = ref(typeof route.query.query === "string" ? route.query.query.slice(0, 120) : ""),
   status = ref(typeof route.query.status === "string" ? route.query.status.slice(0, 30) : ""),
@@ -236,7 +224,7 @@ async function load() {
     const p = new URLSearchParams();
     if (query.value.trim()) p.set("query", query.value.trim());
     if (status.value) p.set("status", status.value);
-    const accountResponse = await request<Data>(`/platform/accounts?${p}`, {
+    const accountResponse = await request<AccountData>(`/platform/accounts?${p}`, {
       signal: controller.signal,
     });
     data.value = accountResponse.data;
@@ -419,6 +407,14 @@ async function role(userId: string, roleCode: string, enabled: boolean) {
       if (updated && detailOpen.value) await openUserDetail(updated, true);
     }
   });
+}
+async function addMembership(userId: string, value: MembershipInput) {
+  clearDetailFeedback();
+  const path = `/platform/accounts/users/${userId}/memberships`;
+  const created = await write(path, value, "POST", (error) => (detailError.value = error));
+  if (!created) return;
+  detailSuccess.value = `${roleText(value.role_code)}组织关系已创建。`;
+  await openUserDetail(selected.value, true);
 }
 function showOrganization(item: any) {
   selected.value = item;
@@ -834,12 +830,14 @@ onMounted(load);
       :busy="Boolean(busy)"
       :error-message="detailError"
       :success-message="detailSuccess"
+      :organizations="data?.organizations || []"
       :status-text="statusText"
       :role-text="roleText"
       @close="closeUserDetail"
       @retry="selected && openUserDetail(selected)"
       @toggle-status="toggleUser"
       @role="role"
+      @add-membership="addMembership"
       @reset-password="openPassword"
       @revoke-sessions="revokeSessions"
     />

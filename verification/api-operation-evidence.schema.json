@@ -17,16 +17,16 @@
   "properties": {
     "schema_version": { "const": 3 },
     "status": { "const": "passed" },
-    "path_count": { "const": 224 },
-    "operation_count": { "const": 257 },
+    "path_count": { "const": 225 },
+    "operation_count": { "const": 258 },
     "operation_id_policy": { "const": "method_path_v1" },
     "catalog_fingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "captured_at": { "type": "string", "format": "date-time" },
     "trace_id": { "type": "string", "minLength": 1 },
     "operations": {
       "type": "array",
-      "minItems": 257,
-      "maxItems": 257,
+      "minItems": 258,
+      "maxItems": 258,
       "items": {
         "type": "object",
         "required": [

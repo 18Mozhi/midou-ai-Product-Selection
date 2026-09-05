@@ -5979,6 +5979,35 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /platform/accounts/users/{userId}/memberships:
+    post:
+      summary: Add an existing verified user to one active organization
+      description: Requires platform:superadmin. Creates one active membership, exactly one organization role and an organization-wide data scope atomically. A matching unexpired pending invitation is marked accepted. Existing platform roles are not changed.
+      security: [{ HttpOnlySession: [] }]
+      parameters:
+        - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { $ref: "#/components/parameters/IdempotencyKey" }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                { schema: { $ref: "#/components/schemas/PlatformUserMembershipCreateInput" } },
+            },
+        }
+      responses:
+        "201":
+          {
+            description: Organization membership, role and data scope created and audited,
+            content:
+              { application/json: { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } },
+          }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
   /platform/accounts/organizations/{organizationId}/status:
     post:
       summary: Stop or restore an organization
@@ -9810,6 +9839,18 @@ components:
           }
         organization_id: { type: string, nullable: true, format: uuid }
         organization_role_code: { type: string, enum: [member, organization_admin] }
+    PlatformUserMembershipCreateInput:
+      type: object
+      additionalProperties: false
+      required: [organization_id, role_code, reason]
+      properties:
+        organization_id: { type: string, format: uuid }
+        role_code:
+          {
+            type: string,
+            enum: [member, selection_manager, procurement_member, organization_admin, auditor],
+          }
+        reason: { type: string, minLength: 2, maxLength: 300 }
     PlatformPasswordResetInput:
       type: object
       additionalProperties: false

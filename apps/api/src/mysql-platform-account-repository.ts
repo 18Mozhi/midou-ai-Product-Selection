@@ -285,6 +285,81 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
       })),
     };
   }
+  async addUserMembership(input: Parameters<PlatformAccountRepository["addUserMembership"]>[0]) {
+    return this.write(input, async (c) => {
+      const [users] = await c.query<RowDataPacket[]>(
+        "SELECT id,email_normalized,status,email_verified_at FROM users WHERE id=? FOR UPDATE",
+        [input.userId],
+      );
+      if (!users[0] || users[0].status !== "active")
+        throw new PlatformAccountError("user_not_available", 409, "用户不存在或已停用。");
+      if (!users[0].email_verified_at)
+        throw new PlatformAccountError(
+          "user_email_not_verified",
+          409,
+          "请先完成邮箱验证，再加入组织。",
+        );
+      const [organizations] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM organizations WHERE id=? AND status='active' FOR UPDATE",
+        [input.organizationId],
+      );
+      if (!organizations[0])
+        throw new PlatformAccountError(
+          "organization_not_available",
+          409,
+          "选择仍在正常使用的组织。",
+        );
+      const [memberships] = await c.query<RowDataPacket[]>(
+        "SELECT id,status FROM memberships WHERE organization_id=? AND user_id=? FOR UPDATE",
+        [input.organizationId, input.userId],
+      );
+      if (memberships[0])
+        throw new PlatformAccountError(
+          "membership_exists",
+          409,
+          "该账号已经在所选组织中，请从组织后台维护其角色。",
+        );
+      const membershipId = randomUUID();
+      await c.query(
+        "INSERT INTO memberships (id,organization_id,user_id,status,joined_at,version," +
+          "created_at,updated_at) VALUES (?,?,?,'active',?,1,?,?)",
+        [membershipId, input.organizationId, input.userId, input.now, input.now, input.now],
+      );
+      await c.query(
+        "INSERT INTO membership_role_assignments (membership_id,role_code,created_by,created_at) " +
+          "VALUES (?,?,?,?)",
+        [membershipId, input.roleCode, input.actorId, input.now],
+      );
+      await c.query(
+        "INSERT INTO membership_data_scopes (id,membership_id,scope_type,scope_key," +
+          "workspace_id,team_id,created_by,version,created_at) VALUES (?,?,'organization'," +
+          "'organization',NULL,NULL,?,1,?)",
+        [randomUUID(), membershipId, input.actorId, input.now],
+      );
+      const [invitationUpdate]: any = await c.query(
+        "UPDATE organization_invitations SET status='accepted',accepted_membership_id=?," +
+          "version=version+1,updated_at=? WHERE organization_id=? AND email_normalized=? AND " +
+          "status IN ('pending_delivery','pending_acceptance') AND expires_at>?",
+        [membershipId, input.now, input.organizationId, users[0].email_normalized, input.now],
+      );
+      const result = {
+        id: membershipId,
+        user_id: input.userId,
+        organization_id: input.organizationId,
+        role_code: input.roleCode,
+        status: "active",
+        accepted_invitation_count: Number(invitationUpdate.affectedRows ?? 0),
+      };
+      await this.audit(c, input, "organization.membership.created", "membership", membershipId, {
+        organization_id: input.organizationId,
+        user_id: input.userId,
+        role_code: input.roleCode,
+        accepted_invitation_count: result.accepted_invitation_count,
+        reason: input.reason,
+      });
+      return result;
+    });
+  }
   async resetUserPassword(input: Parameters<PlatformAccountRepository["resetUserPassword"]>[0]) {
     return this.write(input, async (c) => {
       const [rows] = await c.query<RowDataPacket[]>(

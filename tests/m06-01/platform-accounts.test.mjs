@@ -20,6 +20,7 @@ test("M06-01 platform account service validates novice organization and account 
       updateOrganization: async (input) => (calls.push(input), input),
       createUser: async (input) => (calls.push(input), input),
       userDetail: async (input) => ({ input, sessions: [] }),
+      addUserMembership: async (input) => (calls.push(input), input),
       resetUserPassword: async (input) => (calls.push(input), input),
       revokeUserSessions: async (input) => (calls.push(input), input),
       setOrganizationStatus: async (input) => (calls.push(input), input),
@@ -70,6 +71,15 @@ test("M06-01 platform account service validates novice organization and account 
     },
     context,
   );
+  await service.addUserMembership(
+    other,
+    {
+      organization_id: "00000000-0000-4000-8000-000000000603",
+      role_code: "selection_manager",
+      reason: "负责选品规则审批",
+    },
+    context,
+  );
   await service.resetUserPassword(
     other,
     { temporary_password: "next-temporary-password", reason: "管理员强制改密" },
@@ -80,8 +90,9 @@ test("M06-01 platform account service validates novice organization and account 
     { session_id: null, reason: "撤销全部登录会话" },
     context,
   );
-  assert.equal(calls.length, 8);
+  assert.equal(calls.length, 9);
   assert.equal(calls[5].passwordHash, "argon2:temporary-password");
+  assert.equal(calls[6].roleCode, "selection_manager");
   assert.equal("temporary_password" in calls[5], false);
   for (const call of calls) {
     assert.match(call.requestHash, /^[a-f0-9]{64}$/);
@@ -103,6 +114,122 @@ test("M06-01 platform account service validates novice organization and account 
         context,
       ),
     (error) => error.code === "cannot_revoke_self_superadmin",
+  );
+  assert.throws(
+    () =>
+      service.addUserMembership(
+        other,
+        {
+          organization_id: "00000000-0000-4000-8000-000000000603",
+          role_code: "platform_operations_admin",
+          reason: "角色边界验证",
+        },
+        context,
+      ),
+    (error) => error.code === "organization_role_invalid",
+  );
+});
+test("M06-01 platform super administrator adds a verified existing user to one organization", async () => {
+  const statements = [];
+  const connection = {
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+      query: async (sql) => {
+        statements.push(sql);
+        if (sql.startsWith("SELECT result_json")) return [[], []];
+        if (sql.startsWith("SELECT id,email_normalized,status,email_verified_at"))
+          return [
+            [
+              {
+                id: other,
+                email_normalized: "verified@example.test",
+                status: "active",
+                email_verified_at: new Date("2026-09-01T00:00:00.000Z"),
+              },
+            ],
+            [],
+          ];
+        if (sql.startsWith("SELECT id FROM organizations")) return [[{ id: "org" }], []];
+        if (sql.startsWith("SELECT id,status FROM memberships")) return [[], []];
+        if (sql.startsWith("UPDATE organization_invitations")) return [{ affectedRows: 1 }, []];
+        return [[], []];
+      },
+    },
+    repository = new MySqlPlatformAccountRepository({
+      getConnection: async () => connection,
+    });
+  const result = await repository.addUserMembership({
+    ...context,
+    userId: other,
+    organizationId: "00000000-0000-4000-8000-000000000603",
+    roleCode: "selection_manager",
+    reason: "负责选品规则审批",
+    requestHash: "d".repeat(64),
+    route: "/platform/accounts/users/memberships",
+    now: new Date("2026-09-05T00:00:00.000Z"),
+  });
+  assert.equal(result.role_code, "selection_manager");
+  assert.equal(result.accepted_invitation_count, 1);
+  assert.ok(statements.some((sql) => sql.startsWith("INSERT INTO memberships")));
+  assert.ok(statements.some((sql) => sql.includes("INSERT INTO membership_role_assignments")));
+  assert.ok(statements.some((sql) => sql.includes("INSERT INTO membership_data_scopes")));
+  assert.ok(statements.some((sql) => sql.startsWith("UPDATE organization_invitations")));
+  assert.ok(statements.some((sql) => sql.includes("platform_audit_events")));
+  assert.equal(
+    statements.filter((sql) => sql.includes("INSERT INTO membership_role_assignments")).length,
+    1,
+  );
+  assert.equal(
+    statements.some((sql) => sql.includes("platform_role_assignments")),
+    false,
+  );
+});
+test("M06-01 refuses to add an unverified account to an organization", async () => {
+  const statements = [];
+  const connection = {
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+      query: async (sql) => {
+        statements.push(sql);
+        if (sql.startsWith("SELECT result_json")) return [[], []];
+        if (sql.startsWith("SELECT id,email_normalized,status,email_verified_at"))
+          return [
+            [
+              {
+                id: other,
+                email_normalized: "pending@example.test",
+                status: "active",
+                email_verified_at: null,
+              },
+            ],
+            [],
+          ];
+        return [[], []];
+      },
+    },
+    repository = new MySqlPlatformAccountRepository({
+      getConnection: async () => connection,
+    });
+  await assert.rejects(
+    repository.addUserMembership({
+      ...context,
+      userId: other,
+      organizationId: "00000000-0000-4000-8000-000000000603",
+      roleCode: "selection_manager",
+      reason: "邮箱验证门槛",
+      requestHash: "e".repeat(64),
+      route: "/platform/accounts/users/memberships",
+      now: new Date("2026-09-05T00:00:00.000Z"),
+    }),
+    (error) => error.code === "user_email_not_verified" && error.statusCode === 409,
+  );
+  assert.equal(
+    statements.some((sql) => sql.startsWith("INSERT INTO memberships")),
+    false,
   );
 });
 test("M06-01 concurrent idempotency collision replays the committed platform operation", async () => {
@@ -213,6 +340,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/web/src/components/PlatformAdminRecords.vue",
       "apps/web/src/components/PlatformRoleComparison.vue",
       "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "apps/web/src/components/PlatformUserMembershipForm.vue",
+      "apps/web/src/platform-account-types.ts",
       "apps/web/src/use-modal-dialog.ts",
       "apps/web/src/components/NavigationShell.vue",
       "config/route-catalog.json",
@@ -232,6 +361,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       adminRecords,
       comparison,
       detailDialog,
+      membershipForm,
+      accountTypes,
       modalDialog,
       navigation,
       routeCatalog,
@@ -246,6 +377,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       adminRecords,
       comparison,
       detailDialog,
+      membershipForm,
+      accountTypes,
     ].join("\n");
   assert.match(migration, /platform_account_operations/);
   assert.match(service, /cannot_disable_self/);
@@ -267,6 +400,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(routes, /platform:superadmin/);
   assert.match(routes, /users\/:userId\/password/);
   assert.match(routes, /users\/:userId\/sessions\/revoke/);
+  assert.match(routes, /users\/:userId\/memberships/);
   assert.match(web, /组织管理.*用户管理.*管理员管理/s);
   assert.match(web, /创建组织步骤/);
   assert.match(web, /下一步：选择管理员/);
@@ -317,6 +451,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(detailDialog, /successMessage/);
   assert.match(detailDialog, /\$emit\('retry'\)/);
   assert.match(detailDialog, /:disabled="busy"/);
+  assert.match(membershipForm, /加入其他组织/);
+  assert.match(membershipForm, /organizationRoleCodes/);
   assert.match(web, /不以页面按钮推测权限/);
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));

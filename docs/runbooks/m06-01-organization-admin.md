@@ -6,6 +6,7 @@
 2. 执行 `0019_organization_admin_m06_01.up.sql`，再发布 Web 与 Node API 构建。
 3. 在宝塔 Node API 受限环境配置 `ORG_INVITATION_TTL_HOURS=72`、`ORG_TOKEN_DEFAULT_TTL_DAYS=90`、`ORG_TOKEN_MAX_ACTIVE=20`，然后重启 Node API。真实密钥不写入仓库。
 4. 复核 `/api/v1/health/live`、`/api/v1/health/ready` 和 `/org-admin`。邀请 Outbox 只表示待投递；邮件 Provider 未确认时不得人工改成已发送。
+5. 已验证的现有账号需要立即加入组织时，由平台超级管理员在“用户管理 → 账号详情 → 加入其他组织”选择一个正常组织和一个组织角色并填写原因；该操作原子创建成员关系、单一角色和组织级数据范围，并把相同组织、邮箱且尚未过期的待处理邀请结转为已接受，不修改账号原有平台角色。
 
 ## 观测与故障处理
 

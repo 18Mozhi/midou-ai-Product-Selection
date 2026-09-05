@@ -8,6 +8,8 @@ export class PlatformAccountError extends ApiError {
     this.name = "PlatformAccountError";
   }
 }
+export type OrganizationRoleCode =
+  "member" | "selection_manager" | "procurement_member" | "organization_admin" | "auditor";
 export interface PlatformAccountRepository {
   overview(input: { query: string; status: string; limit: number }): Promise<unknown>;
   createOrganization(input: {
@@ -53,6 +55,19 @@ export interface PlatformAccountRepository {
     route: string;
   }): Promise<unknown>;
   userDetail(input: { userId: string }): Promise<unknown>;
+  addUserMembership(input: {
+    userId: string;
+    organizationId: string;
+    roleCode: OrganizationRoleCode;
+    reason: string;
+    actorId: string;
+    idempotencyKey: string;
+    requestHash: string;
+    requestId: string;
+    traceId: string;
+    now: Date;
+    route: string;
+  }): Promise<unknown>;
   resetUserPassword(input: {
     userId: string;
     passwordHash: string;
@@ -113,6 +128,13 @@ export interface PlatformAccountRepository {
   }): Promise<unknown>;
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const organizationRoles = new Set<OrganizationRoleCode>([
+  "member",
+  "selection_manager",
+  "procurement_member",
+  "organization_admin",
+  "auditor",
+]);
 const reason = (value: unknown) => {
   if (typeof value !== "string" || value.trim().length < 2 || value.trim().length > 300)
     throw new PlatformAccountError("reason_invalid", 400, "填写 2–300 字的操作原因。");
@@ -273,6 +295,39 @@ export class PlatformAccountService {
     if (!uuid.test(id))
       throw new PlatformAccountError("user_id_invalid", 400, "刷新用户列表后重试。");
     return this.repository.userDetail({ userId: id });
+  }
+  addUserMembership(
+    id: string,
+    value: any,
+    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
+  ) {
+    if (!uuid.test(id))
+      throw new PlatformAccountError("user_id_invalid", 400, "刷新用户列表后重试。");
+    const organizationId = String(value?.organization_id ?? ""),
+      roleCode = String(value?.role_code ?? "") as OrganizationRoleCode,
+      operationReason = reason(value?.reason);
+    if (!uuid.test(organizationId))
+      throw new PlatformAccountError("organization_id_invalid", 400, "选择有效组织。");
+    if (!organizationRoles.has(roleCode))
+      throw new PlatformAccountError("organization_role_invalid", 400, "选择有效的组织角色。");
+    return this.repository.addUserMembership({
+      userId: id,
+      organizationId,
+      roleCode,
+      reason: operationReason,
+      requestHash: requestHash(
+        {
+          user_id: id,
+          organization_id: organizationId,
+          role_code: roleCode,
+          reason: operationReason,
+        },
+        this.requestHashKey,
+      ),
+      ...context,
+      route: "/platform/accounts/users/memberships",
+      now: this.now(),
+    });
   }
   async resetUserPassword(
     id: string,

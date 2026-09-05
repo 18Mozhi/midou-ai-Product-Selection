@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useModalDialog } from "../use-modal-dialog";
+import PlatformUserMembershipForm from "./PlatformUserMembershipForm.vue";
 
 const props = defineProps<{
   open: boolean;
@@ -8,6 +9,7 @@ const props = defineProps<{
   busy: boolean;
   errorMessage: string;
   successMessage: string;
+  organizations: any[];
   statusText: (value: string) => string;
   roleText: (value: string) => string;
 }>();
@@ -17,6 +19,10 @@ const emit = defineEmits<{
   retry: [];
   toggleStatus: [user: any];
   role: [userId: string, roleCode: string, enabled: boolean];
+  addMembership: [
+    userId: string,
+    value: { organization_id: string; role_code: string; reason: string },
+  ];
   resetPassword: [user: any];
   revokeSessions: [user: any, sessionId: string | null];
 }>();
@@ -79,6 +85,16 @@ const currentRoles = () => props.selected?.roles ?? props.selected?.platform_rol
           ><small>{{ statusText(item.status) }}</small>
         </li>
       </ul>
+      <PlatformUserMembershipForm
+        :open="open"
+        :user-id="selected.id"
+        :user-status="selected.status"
+        :memberships="detail.memberships"
+        :organizations="organizations"
+        :busy="busy"
+        :role-text="roleText"
+        @submit="$emit('addMembership', selected.id, $event)"
+      />
       <h4>登录会话</h4>
       <p v-if="!detail.sessions.length">暂无会话。</p>
       <ul>
