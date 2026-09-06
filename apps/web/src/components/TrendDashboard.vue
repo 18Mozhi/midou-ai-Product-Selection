@@ -457,21 +457,10 @@ onMounted(() => {
       :tone="trendReadiness.summary.tone"
       :facts="trendReadiness.facts"
     >
-      <button
-        v-if="!enabledRules.length && canManageTrends"
-        class="primary"
-        type="button"
-        @click="showRule = true"
-      >
-        创建第一条监控规则
+      <button v-if="canManageTrends" class="primary" type="button" @click="showRule = true">
+        {{ enabledRules.length ? "创建趋势监控" : "创建第一条监控规则" }}
       </button>
-      <button
-        v-else
-        class="primary"
-        type="button"
-        :disabled="Boolean(busy)"
-        @click="refreshHotspots"
-      >
+      <button class="secondary" type="button" :disabled="Boolean(busy)" @click="refreshHotspots">
         {{ busy === "/provider-sources/refresh" ? "正在启动…" : "立即刷新来源" }}
       </button>
       <button type="button" @click="setTab('rules')">管理监控规则</button>

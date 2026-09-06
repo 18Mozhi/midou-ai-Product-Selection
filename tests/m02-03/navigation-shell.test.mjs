@@ -349,11 +349,11 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(feature, /navigationShells/);
 });
 
-test("M02-03 each role shell keeps its role-specific primary action in the top bar", async () => {
+test("M02-03 each role shell keeps a neutral quick action in the top bar", async () => {
   const component = await read("apps/web/src/components/NavigationShell.vue");
   const platformCreatePattern = [
     `v-if="shell === 'platform_admin' && allCapabilities\\.includes\\('platform:superadmin'\\)"`,
-    `\\s+class="role-create"\\s+to="/platform-admin/organizations/new"[\\s\\S]*?新建组织`,
+    `\\s+class="role-quick-action"\\s+to="/platform-admin/organizations/new"[\\s\\S]*?新建组织`,
   ].join("");
   assert.match(component, new RegExp(platformCreatePattern));
   assert.match(component, /v-else-if="shell === 'organization_admin'"/);
@@ -362,8 +362,9 @@ test("M02-03 each role shell keeps its role-specific primary action in the top b
   assert.match(component, /<span>邀请成员<\/span>/);
   assert.match(
     component,
-    /v-else-if="shell === 'member'"\s+type="button"\s+class="role-create"[\s\S]*?创建选品/,
+    /v-else-if="shell === 'member'"\s+type="button"\s+class="role-quick-action"[\s\S]*?创建选品/,
   );
+  assert.doesNotMatch(component, /class="role-create"/);
 });
 
 test("M02-03 context selection stays outside the cached shell boundary", async () => {

@@ -270,7 +270,8 @@ onMounted(load);
         </div>
         <nav>
           <RouterLink class="home-secondary-action" to="/trends?section=rules">管理规则</RouterLink>
-          <RouterLink class="home-primary-action" to="/opportunities">查看推荐清单</RouterLink>
+          <RouterLink class="home-secondary-action" to="/opportunities">查看推荐清单</RouterLink>
+          <RouterLink class="home-primary-action" to="/opportunities/start">创建选品 →</RouterLink>
         </nav>
       </header>
 

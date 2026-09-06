@@ -183,11 +183,7 @@ const opportunityStatus = (value: string) =>
         {{ option.label }}
       </button>
     </nav>
-    <ResponsiveFilterDrawer
-      label="高级筛选"
-      :active-count="activeFilterCount"
-      :always-drawer="true"
-    >
+    <ResponsiveFilterDrawer label="高级筛选" :active-count="activeFilterCount">
       <form class="opportunity-filters" @submit.prevent="emit('apply')">
         <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
         ><label v-if="selectionView === 'all'"
@@ -230,8 +226,8 @@ const opportunityStatus = (value: string) =>
             </option>
           </select></label
         ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
-        ><button type="submit">筛选</button
-        ><button type="button" @click="emit('reset')">重置</button>
+        ><button class="filter-apply-action secondary" type="submit">筛选</button
+        ><button class="secondary" type="button" @click="emit('reset')">重置</button>
       </form>
     </ResponsiveFilterDrawer>
   </section>
@@ -352,3 +348,20 @@ const opportunityStatus = (value: string) =>
     </footer>
   </section>
 </template>
+
+<style scoped>
+.filter-apply-action {
+  border-color: var(--so-border);
+  color: var(--so-text);
+  background-color: transparent;
+  background-image: none;
+}
+
+@media (max-width: 760px) {
+  .filter-apply-action {
+    border-color: var(--so-primary);
+    color: var(--so-on-primary);
+    background-color: var(--so-primary);
+  }
+}
+</style>

@@ -283,15 +283,30 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   );
   await page.getByText("查看五项配置状态", { exact: true }).click();
   await expect(page.locator(".automatic-selection-readiness__details li")).toHaveCount(5);
-  await page.getByRole("button", { name: "高级筛选" }).click();
+  const createSelection = page.getByRole("link", { name: "创建选品 →" });
+  const manageSelectionRules = page.getByRole("link", { name: "管理选品规则" });
+  await expect(createSelection).toHaveAttribute("href", "/opportunities/start");
+  const [primaryBackground, secondaryBackground] = await Promise.all([
+    createSelection.evaluate((element) => getComputedStyle(element).backgroundColor),
+    manageSelectionRules.evaluate((element) => getComputedStyle(element).backgroundColor),
+  ]);
+  expect(primaryBackground).not.toBe(secondaryBackground);
+  expect(secondaryBackground).toBe("rgba(0, 0, 0, 0)");
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: "高级筛选" }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
+  const filterButton = page.getByRole("button", { name: "筛选", exact: true });
+  if ((page.viewportSize()?.width ?? 0) > 760)
+    await expect(filterButton).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   const filtered = page.waitForRequest(
     (request) =>
       request.url().includes("/api/v1/opportunities?") &&
       request.url().includes("coverage_status=partial"),
   );
-  await page.getByRole("button", { name: "筛选", exact: true }).click();
+  await filterButton.click();
   await filtered;
+  await expect(manageSelectionRules).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(manageSelectionRules).toHaveCSS("background-image", "none");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -389,6 +404,10 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await page.goto("/opportunities");
   await page.getByRole("button", { name: /高级筛选/ }).click();
   const drawer = page.getByRole("dialog", { name: "高级筛选" });
+  await expect(drawer).toHaveCSS("width", "390px");
+  await expect(drawer).toHaveCSS("height", "844px");
+  await expect(drawer).toHaveCSS("border-radius", "0px");
+  await expect(drawer).toHaveCSS("box-shadow", "none");
   await drawer.getByLabel("阻断原因").selectOption("recommendation_insufficient");
   await drawer.getByRole("button", { name: "关闭筛选条件" }).click();
   await page.getByRole("button", { name: /高级筛选/ }).click();

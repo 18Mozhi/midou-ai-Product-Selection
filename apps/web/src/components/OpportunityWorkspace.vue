@@ -693,18 +693,19 @@ watch(
         <span>规则命中先进入候选；五项质量门全部通过后，才进入你的人工采纳清单。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
-        <RouterLink to="/trends?section=rules">管理选品规则</RouterLink
+        <RouterLink class="primary" to="/opportunities/start">创建选品 →</RouterLink
+        ><RouterLink class="secondary" to="/trends?section=rules">管理选品规则</RouterLink
         ><button
           v-if="selectionView === 'all'"
           type="button"
-          class="ghost"
+          class="ghost secondary"
           @click="showErpImport = true"
         >
           从 ERP 导入</button
         ><button
           v-if="selectionView === 'all'"
           type="button"
-          class="ghost"
+          class="ghost secondary"
           @click="showCreate = true"
         >
           手工添加
@@ -976,3 +977,57 @@ watch(
     />
   </section>
 </template>
+
+<style scoped>
+.opportunity-hero-actions {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.opportunity-hero-actions > :is(a, button) {
+  min-height: var(--so-touch-target);
+  padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--so-border);
+  color: var(--so-text);
+  background: transparent;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.opportunity-hero-actions > :is(a, button) + :is(a, button) {
+  border-left: 0;
+}
+
+.opportunity-hero-actions > .secondary {
+  border-color: var(--so-border);
+  color: var(--so-text);
+  background-color: transparent;
+  background-image: none;
+}
+
+.opportunity-hero-actions > .primary {
+  border-color: var(--so-primary);
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+}
+
+@media (max-width: 760px) {
+  .opportunity-hero-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .opportunity-hero-actions > :is(a, button) {
+    width: 100%;
+  }
+
+  .opportunity-hero-actions > :is(a, button) + :is(a, button) {
+    border-top: 0;
+    border-left: 1px solid var(--so-border);
+  }
+}
+</style>

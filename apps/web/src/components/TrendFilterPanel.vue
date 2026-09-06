@@ -54,9 +54,26 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
           <option value="momentum">增长速度</option>
           <option value="followed">我的关注优先</option>
         </select></label
-      ><button type="submit">筛选</button
+      ><button class="filter-apply-action secondary" type="submit">筛选</button
       ><button type="button" class="secondary" @click="emit('clear')">清除</button
       ><button type="button" class="secondary" @click="emit('saveView')">保存视图链接</button>
     </form>
   </ResponsiveFilterDrawer>
 </template>
+
+<style scoped>
+.filter-apply-action {
+  border-color: var(--so-border);
+  color: var(--so-text);
+  background-color: transparent;
+  background-image: none;
+}
+
+@media (max-width: 760px) {
+  .filter-apply-action {
+    border-color: var(--so-primary);
+    color: var(--so-on-primary);
+    background-color: var(--so-primary);
+  }
+}
+</style>

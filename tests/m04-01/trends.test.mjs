@@ -507,6 +507,8 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(webSurface, /合并主题[\s\S]*拆分主题[\s\S]*待确认/);
   assert.match(web, /变更原因/);
   assert.match(web, /下次采集[\s\S]*上次失败来源/);
+  assert.match(web, /class="primary"[\s\S]*创建趋势监控/);
+  assert.match(web, /class="secondary"[\s\S]*refreshHotspots/);
   assert.match(webSurface, /个来源[\s\S]*新鲜度[\s\S]*可信度/);
   assert.match(webSurface, /市场质量门[\s\S]*持续监控中/);
   assert.match(webSurface, /候选不等于建议采纳[\s\S]*五项质量门/);

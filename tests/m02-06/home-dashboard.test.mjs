@@ -311,8 +311,10 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   for (const fact of ["自动选品运行中", "选品控制台", "HomeAutomationOverview"])
     assert.match(home, new RegExp(fact));
-  for (const destination of ["/trends\\?section=rules", "/opportunities"])
+  for (const destination of ["/trends\\?section=rules", "/opportunities", "/opportunities/start"])
     assert.match(home, new RegExp(`to="${destination}"`));
+  assert.match(home, /home-primary-action[\s\S]*创建选品/);
+  assert.match(home, /home-secondary-action[\s\S]*查看推荐清单/);
   assert.match(home, /<HomeAutomationOverview :selection="selection"/);
   assert.match(home, /home-review-queue[\s\S]*推荐清单/);
   assert.match(home, /recommended_items[\s\S]*recommended_count/);

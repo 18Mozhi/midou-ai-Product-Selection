@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 
-const props = withDefaults(
-  defineProps<{ label?: string; activeCount?: number; alwaysDrawer?: boolean }>(),
-  {
-    label: "筛选条件",
-    activeCount: 0,
-    alwaysDrawer: false,
-  },
-);
+const props = withDefaults(defineProps<{ label?: string; activeCount?: number }>(), {
+  label: "筛选条件",
+  activeCount: 0,
+});
 
 const open = ref(false);
 const mobile = ref(false);
@@ -16,11 +12,11 @@ const triggerButton = ref<HTMLButtonElement | null>(null);
 const closeButton = ref<HTMLButtonElement | null>(null);
 const sheet = ref<HTMLElement | null>(null);
 let mediaQuery: MediaQueryList | null = null;
-const overlay = computed(() => props.alwaysDrawer || mobile.value);
+const overlay = computed(() => mobile.value);
 
 function syncViewport(event?: MediaQueryListEvent) {
   mobile.value = event?.matches ?? mediaQuery?.matches ?? false;
-  if (!mobile.value && !props.alwaysDrawer) open.value = false;
+  if (!mobile.value) open.value = false;
 }
 
 async function show() {
@@ -89,42 +85,54 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
       <b v-if="activeCount">{{ activeCount }} 项已选</b>
       <i aria-hidden="true">调</i>
     </button>
-    <div
-      class="responsive-filter-drawer__surface"
-      :class="{ 'is-open': open }"
-      :aria-hidden="overlay && !open"
-    >
-      <button
-        type="button"
-        class="responsive-filter-drawer__scrim"
-        aria-label="关闭筛选条件"
-        @click="close"
-      ></button>
-      <section
-        ref="sheet"
-        class="responsive-filter-drawer__sheet"
-        :role="overlay ? 'dialog' : 'group'"
-        :aria-modal="overlay && open ? 'true' : undefined"
-        :aria-label="label"
+    <Teleport to="body" :disabled="!overlay">
+      <div
+        class="responsive-filter-drawer__portal"
+        :class="{ 'responsive-filter-drawer--overlay': overlay }"
+        @keydown="handleKeydown"
       >
-        <header>
-          <div>
-            <small>当前列表</small>
-            <strong>{{ label }}</strong>
-          </div>
-          <button ref="closeButton" type="button" aria-label="关闭筛选条件" @click="close">
-            ×
-          </button>
-        </header>
-        <div class="responsive-filter-drawer__content" @submit.capture="close">
-          <slot />
+        <div
+          class="responsive-filter-drawer__surface"
+          :class="{ 'is-open': open }"
+          :aria-hidden="overlay && !open"
+        >
+          <button
+            type="button"
+            class="responsive-filter-drawer__scrim"
+            aria-label="关闭筛选条件"
+            @click="close"
+          ></button>
+          <section
+            ref="sheet"
+            class="responsive-filter-drawer__sheet"
+            :role="overlay ? 'dialog' : 'group'"
+            :aria-modal="overlay && open ? 'true' : undefined"
+            :aria-label="label"
+          >
+            <header>
+              <div>
+                <small>当前列表</small>
+                <strong>{{ label }}</strong>
+              </div>
+              <button ref="closeButton" type="button" aria-label="关闭筛选条件" @click="close">
+                ×
+              </button>
+            </header>
+            <div class="responsive-filter-drawer__content" @submit.capture="close">
+              <slot />
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <style scoped>
+.responsive-filter-drawer__portal {
+  display: contents;
+}
+
 .responsive-filter-drawer__trigger,
 .responsive-filter-drawer__sheet > header,
 .responsive-filter-drawer__scrim {
@@ -140,7 +148,6 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   align-items: center;
   gap: 10px;
   border: 1px solid var(--so-border);
-  border-radius: 12px;
   color: var(--so-text);
   background: var(--so-panel);
   text-align: left;
@@ -157,7 +164,6 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   height: 32px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
   color: var(--so-primary);
   background: color-mix(in srgb, var(--so-primary) 12%, transparent);
   font-style: normal;
@@ -185,7 +191,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   border: 0;
   background: color-mix(in srgb, var(--so-bg) 78%, transparent);
   opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity 220ms ease;
 }
 
 .responsive-filter-drawer--overlay
@@ -196,17 +202,16 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
 
 .responsive-filter-drawer--overlay .responsive-filter-drawer__sheet {
   position: absolute;
-  inset: 0 0 0 auto;
-  width: min(370px, calc(100% - 20px));
-  max-height: 100dvh;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
   padding: 18px;
   overflow-y: auto;
-  border-left: 1px solid var(--so-border);
+  border: 0;
   color: var(--so-text);
   background: var(--so-bg-elevated);
-  box-shadow: var(--so-shadow);
   transform: translateX(100%);
-  transition: transform 180ms ease;
+  transition: transform 220ms ease;
 }
 
 .responsive-filter-drawer--overlay
@@ -232,7 +237,6 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   min-width: var(--so-touch-target);
   min-height: var(--so-touch-target);
   border: 1px solid var(--so-border);
-  border-radius: 10px;
   color: var(--so-text);
   background: var(--so-panel-soft);
 }

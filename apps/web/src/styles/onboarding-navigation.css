@@ -383,10 +383,10 @@
   color: var(--so-text-muted);
   font-size: 13px;
 }
-.role-top-actions .role-create {
-  color: var(--so-on-primary);
-  border-color: transparent;
-  background: var(--role-accent);
+.role-top-actions .role-quick-action {
+  color: var(--so-text);
+  border-color: var(--so-border);
+  background: transparent;
 }
 .role-menu-toggle {
   display: none;
@@ -863,12 +863,12 @@
   .role-top-actions a:last-child {
     display: flex;
   }
-  .role-top-actions .role-create {
+  .role-top-actions .role-quick-action {
     min-width: var(--so-touch-target);
     padding-inline: 10px;
     display: flex;
   }
-  .role-top-actions .role-create span {
+  .role-top-actions .role-quick-action span {
     display: none;
   }
   .role-menu-toggle span {

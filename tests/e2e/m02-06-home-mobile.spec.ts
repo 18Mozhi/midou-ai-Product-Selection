@@ -166,6 +166,10 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     "href",
     "/opportunities",
   );
+  await expect(page.getByRole("link", { name: "创建选品 →" })).toHaveAttribute(
+    "href",
+    "/opportunities/start",
+  );
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
   await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");

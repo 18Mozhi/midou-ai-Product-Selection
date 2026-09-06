@@ -191,7 +191,7 @@ const moreActive = computed(
     routePath.value !== activeItem.value?.path ||
     !primaryItems.value.some((item) => item.path === activeItem.value?.path),
 );
-const primaryActionLabel = computed(() =>
+const quickActionLabel = computed(() =>
   props.shell === "member"
     ? "创建选品"
     : props.shell === "organization_admin"
@@ -363,24 +363,24 @@ onUnmounted(() => {
         </button>
         <RouterLink
           v-if="shell === 'platform_admin' && allCapabilities.includes('platform:superadmin')"
-          class="role-create"
+          class="role-quick-action"
           to="/platform-admin/organizations/new"
-          :aria-label="primaryActionLabel"
+          :aria-label="quickActionLabel"
           ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
         >
         <RouterLink
           v-else-if="shell === 'organization_admin'"
-          class="role-create"
+          class="role-quick-action"
           v-show="guard?.roles?.includes('organization_admin')"
           to="/org-admin/members"
-          :aria-label="primaryActionLabel"
+          :aria-label="quickActionLabel"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
         <button
           v-else-if="shell === 'member'"
           type="button"
-          class="role-create"
-          :aria-label="primaryActionLabel"
+          class="role-quick-action"
+          :aria-label="quickActionLabel"
           @click="openDiscovery('create')"
         >
           <AppIcon name="plus" /> <span>创建选品</span>

@@ -88,15 +88,16 @@
   background: var(--so-signal-soft);
 }
 
-.role-top-actions .role-create {
-  border-color: var(--so-primary);
-  color: var(--so-on-primary);
-  background: var(--so-primary);
+.role-top-actions .role-quick-action {
+  border-color: var(--so-border);
+  color: var(--so-text);
+  background: transparent;
   font-weight: 800;
 }
 
-.role-top-actions .role-create:hover {
-  background: var(--so-primary-strong);
+.role-top-actions .role-quick-action:hover {
+  border-color: var(--so-text);
+  background: var(--so-signal-soft);
 }
 
 .role-top-actions kbd {
@@ -586,11 +587,11 @@
   }
 
   .role-top-actions a:last-child,
-  .role-top-actions .role-create {
+  .role-top-actions .role-quick-action {
     display: inline-flex;
   }
 
-  .role-top-actions .role-create span {
+  .role-top-actions .role-quick-action span {
     display: none;
   }
 
