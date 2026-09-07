@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   ApiClientError,
@@ -93,6 +93,42 @@ const props = defineProps<{
   showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
   comment = ref("");
+type TaskRead = { key: string; controller: AbortController };
+class SupersededTaskRead extends Error {}
+const mounted = ref(false),
+  active = ref(true),
+  readKey = computed(() =>
+    JSON.stringify([
+      route.path,
+      props.mode,
+      props.taskId,
+      route.query.status,
+      route.query.page,
+      route.query.view,
+      route.query.query,
+      route.query.sort,
+    ]),
+  );
+let currentRead: TaskRead | null = null;
+function ownsTaskRoute() {
+  const path = route.path.replace(/\/$/, "");
+  return (
+    path === (props.taskId ? `/tasks/${props.taskId}` : props.mode === "today" ? "/work" : "/tasks")
+  );
+}
+function stopRead() {
+  currentRead?.controller.abort();
+  currentRead = null;
+}
+function beginRead(): TaskRead {
+  stopRead();
+  currentRead = { key: readKey.value, controller: new AbortController() };
+  return currentRead;
+}
+function assertCurrentRead(read: TaskRead) {
+  if (!active.value || !ownsTaskRoute() || currentRead !== read || read.key !== readKey.value)
+    throw new SupersededTaskRead();
+}
 const taskActionEditor = ref<TaskActionEditor | null>(null),
   taskActionForm = ref({
     reason: "",
@@ -294,13 +330,20 @@ async function api<T = any>(
   path: string,
   options?: ApiRequestOptions,
   captureMeta?: (meta: unknown) => void,
+  read?: TaskRead,
 ): Promise<T> {
   try {
-    const response = await request<T>(path, options);
+    if (read) assertCurrentRead(read);
+    const response = await request<T>(path, {
+      ...options,
+      ...(read ? { signal: read.controller.signal } : {}),
+    });
+    if (read) assertCurrentRead(read);
     requestId.value = response.request_id;
     captureMeta?.(response.meta);
     return response.data;
   } catch (error) {
+    if (read) assertCurrentRead(read);
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
@@ -322,7 +365,23 @@ async function api<T = any>(
     throw error;
   }
 }
+async function loadMembers(read: TaskRead, detail = false) {
+  try {
+    const members = await api<MemberOption[]>("/tasks/member-options", undefined, undefined, read);
+    assertCurrentRead(read);
+    memberOptions.value = members;
+  } catch (error) {
+    assertCurrentRead(read);
+    if (!(error instanceof ApiClientError)) throw error;
+    memberOptions.value = [];
+    notice.value = detail
+      ? "任务已加载；组织成员目录暂不可用，负责人显示与转交需稍后重试。"
+      : "任务已加载；组织成员选项暂不可用，转交与指派需稍后重试。";
+  }
+}
 async function load() {
+  if (!active.value || !ownsTaskRoute()) return;
+  const read = beginRead();
   state.value = "loading";
   try {
     if (activeView.value === "exports") {
@@ -331,20 +390,16 @@ async function load() {
         await setView("business");
         return;
       }
-      exportTasks.value = await api<ExportTask[]>("/report-exports");
+      const exports = await api<ExportTask[]>("/report-exports", undefined, undefined, read);
+      assertCurrentRead(read);
+      exportTasks.value = exports;
       state.value = exportTasks.value.length ? "ready" : "empty";
       return;
     }
     if (props.taskId) {
-      const loaded = await openById(props.taskId, true);
+      const loaded = await openById(props.taskId, true, read);
       if (!loaded) return;
-      try {
-        memberOptions.value = await api<MemberOption[]>("/tasks/member-options");
-      } catch (error) {
-        if (!(error instanceof ApiClientError)) throw error;
-        memberOptions.value = [];
-        notice.value = "任务已加载；组织成员目录暂不可用，负责人显示与转交需稍后重试。";
-      }
+      await loadMembers(read, true);
       return;
     }
     const params = new URLSearchParams({ page: String(page.value), page_size: String(pageSize) });
@@ -352,27 +407,30 @@ async function load() {
     if (status.value) params.set("status", status.value);
     if (query.value) params.set("query", query.value);
     if (sort.value !== "priority_due") params.set("sort", sort.value);
+    let listTotal = 0;
     const [list, sum] = await Promise.all([
-      api(`/tasks?${params.toString()}`, undefined, (meta) => {
-        total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
-      }),
-      api("/tasks/summary"),
+      api(
+        `/tasks?${params.toString()}`,
+        undefined,
+        (meta) => {
+          listTotal = Number((meta as { total?: number } | undefined)?.total ?? 0);
+        },
+        read,
+      ),
+      api("/tasks/summary", undefined, undefined, read),
     ]);
+    assertCurrentRead(read);
+    total.value = listTotal;
     tasks.value = list;
     summary.value = sum;
-    try {
-      memberOptions.value = await api<MemberOption[]>("/tasks/member-options");
-    } catch (error) {
-      if (!(error instanceof ApiClientError)) throw error;
-      memberOptions.value = [];
-      notice.value = "任务已加载；组织成员选项暂不可用，转交与指派需稍后重试。";
-    }
+    await loadMembers(read);
     state.value = list.length ? "ready" : "empty";
     if (page.value > pageCount.value) {
       await setPage(pageCount.value);
       return;
     }
   } catch (error) {
+    if (error instanceof SupersededTaskRead) return;
     rethrowUnexpectedError(error);
   }
 }
@@ -387,16 +445,22 @@ async function setView(value: "business" | "exports") {
     },
   });
 }
-async function openById(id: string, resetState = false) {
+async function openById(id: string, resetState = false, read?: TaskRead) {
+  if (!active.value || !ownsTaskRoute() || (props.taskId && props.taskId !== id)) return false;
+  const requestRead = read ?? beginRead();
   if (resetState) {
     state.value = "loading";
     selected.value = null;
   }
   try {
-    selected.value = await api(`/tasks/${id}`);
+    const task = await api<Task>(`/tasks/${id}`, undefined, undefined, requestRead);
+    assertCurrentRead(requestRead);
+    selected.value = task;
     state.value = "ready";
+    if (!read) await loadMembers(requestRead, true);
     return true;
   } catch (error) {
+    if (error instanceof SupersededTaskRead) return false;
     rethrowUnexpectedError(error);
     return false;
   }
@@ -673,28 +737,28 @@ onMounted(() => {
     form.value.title = query.get("title")?.slice(0, 200) ?? "";
     form.value.description = query.get("description")?.slice(0, 5000) ?? "";
   }
-  void load();
+  mounted.value = true;
 });
-
+onActivated(() => {
+  active.value = true;
+});
+onDeactivated(() => {
+  active.value = false;
+  stopRead();
+});
+onBeforeUnmount(stopRead);
 watch(
-  () => props.taskId,
-  (taskId) => {
-    if (taskId) {
-      void load();
-      return;
-    }
-    selected.value = null;
-  },
-);
-watch(
-  () => [
-    route.query.status,
-    route.query.page,
-    route.query.view,
-    route.query.query,
-    route.query.sort,
-  ],
-  ([nextStatus, nextPage, nextView, nextQuery, nextSort], previous) => {
+  () => [mounted.value && active.value && ownsTaskRoute(), readKey.value] as const,
+  ([enabled]) => {
+    stopRead();
+    if (!enabled) return;
+    const {
+      status: nextStatus,
+      page: nextPage,
+      view: nextView,
+      query: nextQuery,
+      sort: nextSort,
+    } = route.query;
     const parsedStatus = ["todo", "in_progress", "paused", "completed", "cancelled"].includes(
       String(nextStatus ?? ""),
     )
@@ -711,8 +775,10 @@ watch(
       : "priority_due";
     activeView.value = props.mode === "all" && nextView === "exports" ? "exports" : "business";
     selectedIds.value = [];
-    if (previous) void load();
+    if (!props.taskId) selected.value = null;
+    void load();
   },
+  { flush: "post" },
 );
 </script>
 <template>

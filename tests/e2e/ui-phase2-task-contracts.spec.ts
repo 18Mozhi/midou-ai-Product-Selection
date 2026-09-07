@@ -217,8 +217,7 @@ test("UI2-T05 work filters preserve mine and return restores the exact list URL"
     "aria-pressed",
     "true",
   );
-  // Inactive KeepAlive watchers also read during navigation; tracked in task-contract-review.md.
-  // This case proves scope and restored active filters, not absence of those extra reads.
+  // Exact inactive-cache request counts and response ownership have separate UI2-C01/C02 cases.
   for (const url of requests) {
     expect(url.searchParams.get("mine")).toBe("true");
   }
