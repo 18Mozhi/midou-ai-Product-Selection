@@ -36,4 +36,15 @@ test("M00-05.A08/A16 dependency error and retry are explicit at 390px", async ({
   await page.goto("/?view=api");
   await expect(page.getByTestId("api-error")).toBeVisible();
   await expect(page.getByRole("button", { name: "重新检查" })).toBeVisible();
+  let retries = 0;
+  await page.route("**/api/v1/health/ready", (route) => {
+    retries += 1;
+    expect(route.request().method()).toBe("GET");
+    return route.fulfill({
+      json: { data: { status: "ready" }, request_id: "retry-ready", trace_id: "retry-ready" },
+    });
+  });
+  await page.getByRole("button", { name: "重新检查" }).click();
+  await expect(page.getByTestId("api-ready")).toBeVisible();
+  expect(retries).toBe(1);
 });

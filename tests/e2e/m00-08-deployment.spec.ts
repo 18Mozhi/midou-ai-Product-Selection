@@ -33,6 +33,19 @@ test("M07-03.A07/A15 Baota S0 production health is visually stable", async ({ pa
   await expect(page.getByRole("heading", { name: "宝塔单机生产部署", exact: true })).toBeVisible();
   await expect(page.getByText("健康 · 已部署")).toBeVisible();
   await expect(page.getByText("8ae80a501809")).toBeVisible();
+  await page.goto("/?view=deployment&state=blocked");
+  await expect(page.getByTestId("deployment-blocked")).toBeVisible();
+  const requests: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.startsWith("/api/v1/"))
+      requests.push(`${request.method()} ${new URL(request.url()).pathname}`);
+  });
+  await page.getByRole("button", { name: "回滚模式" }).click();
+  await expect(page.getByText("回滚 · 恢复模式")).toBeVisible();
+  expect(requests).toEqual([]);
+  await page.getByRole("button", { name: "恢复实时状态" }).click();
+  await expect(page.getByText("健康 · 已部署")).toBeVisible();
+  expect(requests.sort()).toEqual(["GET /api/v1/health/ready", "GET /api/v1/health/version"]);
 });
 
 test("M07-03.A08/A16 blocked and rollback remain truthful at 390px", async ({ page }) => {
@@ -40,6 +53,4 @@ test("M07-03.A08/A16 blocked and rollback remain truthful at 390px", async ({ pa
   await expect(page.getByText("已阻断 · 依赖受阻")).toBeVisible();
   await page.getByRole("button", { name: "回滚模式" }).click();
   await expect(page.getByText("回滚 · 恢复模式")).toBeVisible();
-  if (page.viewportSize()?.width === 390) {
-  }
 });

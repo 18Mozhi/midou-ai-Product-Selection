@@ -189,3 +189,31 @@ npm run format:check
 88张原型图保持pending-user-review。76图的图库在1440/390各遍历全部场景，通过且控制台错误0、网络请求0；任务采图的既有Vue夹具14个语义案例通过。新增浏览器几何回归用例要求小字号、小热区和小正文各自失败，合法尺寸通过，隐藏小字不误报。图片哈希与当前共享CSS一致；不将局部通过推广为全站或生产通过。
 
 没有修改apps/web/src、API/权限/数据库/.env/依赖/生产配置，OpenAPI不变，Feature Map仅同步本地证据检查边界；无需生产构建、重启或部署。新增/重采的PNG、元数据、原型、文档及回归测试都是永久交付物，无另建临时文件目录；浏览器及任务采图短时Vite由finally关闭。用户方向仍待审，下一步按R01处理全站运行时语义归并，不缩减W02–W09及73路由范围。
+
+## 2026-09-07 · R01目录外54项语义归属与开发视图行为验证
+
+已核对原清单的54个目录外候选：53控件/事件及1原生确认调用，48项属于8个开发query视图，6项来自暂无显式渲染消费者的OpportunityMobileShell。原source-reconciliation已有文件级分类，本批推进到[逐动作语义记录](source-scope-review.md)及[source-scope-review.json](source-scope-review.json)，保留每个candidateId、条件、事件、handler、目标链接、读写调用及源哈希；归并42个语义动作、1个原生确认调用，另5个无handler当前/禁用Tab明确为非动作占位。不删除旧组件，不伪造生产入口，不把unmappedCandidates改为0，不冻结全站业务分母。
+
+App的DEV门在selectedView，不在解析query的requestedInternalView本身；本次复核澄清旧文件级说明。NavigationShell广泛glob仍可能打包这些组件，未声明生产bundle剔除或生产query不可达通过。独立补充文件不改原生成器/PAGES/source-reconciliation，现有任务与代表图源指纹因此不失效。
+
+新增只读命令node scripts/verify-ui-phase2-source-scope.mjs，无参数，检查54项与实际清单对应、源哈希、语义分类、原生确认及部分测试入口。4项单测验证有效记录、重复/缺项、源/指纹失效、伪造runtime通过、丢确认或改handler时失败关闭。人工业务语义不会因自动清单重生成丢失，但相关源变化后必须重新审核。
+
+补3个mysql/redis/file-audit本地预演用例、授权创建/延期/撤销合同用例及审计筛选/游标用例；扩展API重试、部署回滚说明零写入及恢复读取、角色空目录与拒绝后的重试。授权核对POST/PATCH路径、完整body、expected_version及幂等键，取消确认保留原因且无写入；未知写请求在夹具边界中拒绝。所有接口响应来自原M00/M01测试的隔离事实，未向生产发送写请求。
+
+首轮18项通过、3项新增检查失败：测试错误地从健康态查找受阻区入口，授权glob未覆盖expiry子路径，审计select按精确label定位失准。修正测试边界后3项定向复测通过；最终同一版本六文件桌面21项、390移动21项全部通过，无跳过。产品源码无修改，不以调整业务逻辑迎合测试。
+
+可复验命令（桌面结束后再运行移动）：
+
+```powershell
+node scripts/verify-ui-phase2-source-scope.mjs
+node --test tests/unit/ui-phase2-source-scope.test.mjs
+$scopeSpecs = @('tests/e2e/m00-05-api.spec.ts', 'tests/e2e/m00-08-deployment.spec.ts', 'tests/e2e/ui-phase2-internal-scope.spec.ts', 'tests/e2e/m01-04-rbac.spec.ts', 'tests/e2e/m01-05-resource-grants.spec.ts', 'tests/e2e/m01-06-audit-seed.spec.ts')
+npx --no-install playwright test @scopeSpecs --project=desktop-chromium
+npx --no-install playwright test @scopeSpecs --project=mobile-390
+```
+
+这不是54项每种状态/角色都已运行：导航多为源码/href证据，旧移动组件无可执行入口，生产、真实RBAC/数据库、并发及全站状态仍未覆盖。R01继续处理目录内候选与动态控件；A/B待用户选定，W02–W09与最终73页审核不缩减。
+
+无生产代码、API、权限、SQL、配置或依赖修改，OpenAPI不变；Feature Map仅新增本地检查入口。无需前端重采、生产重启或部署。本批临时输出统一位于系统临时目录scoutops-ui2-source-scope-20260907，含首轮失败追踪和最终测试元数据，收尾按精确目录清理；没有新增永久截图，长期保留语义清单、说明和回归测试。
+
+收尾结果：文档门、静态分析、格式门通过。4101/5173无监听，测试服务已退出。清理确认上述目录共13份本批测试文件，但工具策略拒绝Remove-Item删除（包括显式LiteralPath命令）；未绕过限制，文件没有进入Git。剩余精确路径为 `C:\Users\23136\AppData\Local\Temp\scoutops-ui2-source-scope-20260907`，需用户手动删除该目录；仅含隔离测试截图、追踪、错误上下文及.last-run，不是业务资料。此前“收尾清理”是要求，不代表这一次已成功删除。

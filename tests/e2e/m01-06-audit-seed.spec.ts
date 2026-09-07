@@ -98,3 +98,52 @@ test("M01-06.A08/A15 loading state does not expose seed credentials", async ({ p
   await expect(page.getByText("正在读取不可变审计记录")).toBeVisible();
   await expect(page.getByText(/PLATFORM_ADMIN_SEED_PASSWORD/)).toHaveCount(0);
 });
+
+test("UI2.scope.audit filters cursor and scope changes stay read-only", async ({ page }) => {
+  await ready(page);
+  const calls: { path: string; query: Record<string, string>; method: string }[] = [];
+  await page.route("**/api/v1/platform/audit-events*", (route) => {
+    const url = new URL(route.request().url());
+    calls.push({
+      path: url.pathname,
+      query: Object.fromEntries(url.searchParams),
+      method: route.request().method(),
+    });
+    const second = url.searchParams.has("cursor");
+    return route.fulfill({
+      json: envelope({
+        items: [{ ...event, id: second ? "00000000-0000-4000-8000-000000000625" : event.id }],
+        nextCursor: second ? null : "scope-next",
+      }),
+    });
+  });
+  await page.goto("/?view=audit-security");
+  await expect(page.getByRole("button", { name: "加载更多" })).toBeVisible();
+  await page.getByLabel("动作", { exact: true }).fill(event.action);
+  await page.getByRole("combobox", { name: /^结果/ }).selectOption("succeeded");
+  await page.getByLabel("资源类型", { exact: true }).fill("user");
+  await page.getByRole("button", { name: "筛选", exact: true }).click();
+  await expect(page.getByRole("button", { name: "加载更多" })).toBeVisible();
+  await page.getByRole("button", { name: "加载更多" }).click();
+  await expect(page.getByRole("button", { name: "加载更多" })).toHaveCount(0);
+  expect(calls.at(-1)).toEqual({
+    method: "GET",
+    path: "/api/v1/platform/audit-events",
+    query: {
+      limit: "50",
+      action: event.action,
+      outcome: "succeeded",
+      resource_type: "user",
+      cursor: "scope-next",
+    },
+  });
+  await expect(page.getByRole("button", { name: /成功.*platform_admin.seeded/ })).toHaveCount(2);
+  await page.getByRole("button", { name: "组织审计", exact: true }).click();
+  await expect(page.getByText("当前范围暂无审计记录")).toBeVisible();
+  await page.getByRole("button", { name: "刷新", exact: true }).click();
+  await expect(page.getByText("当前范围暂无审计记录")).toBeVisible();
+  await page.getByRole("button", { name: "平台审计", exact: true }).click();
+  await expect(page.getByRole("button", { name: "加载更多" })).toBeVisible();
+  expect(calls.at(-1)?.query).not.toHaveProperty("cursor");
+  expect(calls.every((call) => call.method === "GET")).toBe(true);
+});

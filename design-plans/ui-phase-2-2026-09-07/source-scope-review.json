@@ -1,0 +1,1434 @@
+{
+  "schemaVersion": 1,
+  "scope": "54 static candidates outside route attribution; source semantics only, not frozen business coverage",
+  "reviewer": "implementation-agent-source-review",
+  "reviewedAt": "2026-09-07",
+  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
+  "sources": {
+    "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
+    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
+    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
+    "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
+    "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
+    "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
+    "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
+    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/components/NavigationShell.vue": "993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150"
+  },
+  "limitations": [
+    "Development view selection is gated in App.selectedView; requestedInternalView itself only parses the query.",
+    "NavigationShell broad glob can still emit these components; no claim of production bundle removal.",
+    "OpportunityMobileShell has no explicit render consumer; retain its six source sites, do not delete or fabricate runtime acceptance.",
+    "Test files are partial contract evidence, not all 54 candidates or all roles/states passed.",
+    "No user design approval, production execution or G0 freeze is recorded."
+  ],
+  "records": [
+    {
+      "candidateId": "apps/web/src/components/ApiFoundation.vue#04355969b9542e61.1",
+      "file": "apps/web/src/components/ApiFoundation.vue",
+      "view": "api",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.api.recheck",
+      "dialogId": null,
+      "label": "重新检查",
+      "events": {
+        "@click": "check"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "check",
+          "file": "apps/web/src/components/ApiFoundation.vue",
+          "line": 16,
+          "endLine": 31
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": ["GET /health/ready"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m00-05-api.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#07db575ab56f90da.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.home",
+      "dialogId": null,
+      "label": "选 智能选品",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#489e5599df4fe402.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.audit",
+      "dialogId": null,
+      "label": "审计日志",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/?view=audit-security",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#ad505ab637ba2e57.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.security",
+      "dialogId": null,
+      "label": "安全设置",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/security/mfa",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#f9b3ca0d090d34ab.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.scope-platform",
+      "dialogId": null,
+      "label": "平台审计",
+      "events": {
+        "@click": "switchScope('platform')"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canPlatform"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "switchScope",
+          "file": "apps/web/src/components/AuditSecurityCenter.vue",
+          "line": 83,
+          "endLine": 87
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#0e89f08fac720b1e.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.scope-organization",
+      "dialogId": null,
+      "label": "组织审计",
+      "events": {
+        "@click": "switchScope('organization')"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "switchScope",
+          "file": "apps/web/src/components/AuditSecurityCenter.vue",
+          "line": 83,
+          "endLine": 87
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#2ac84a029b93c878.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.filter",
+      "dialogId": null,
+      "label": "动作 结果 全部 成功 失败 已阻止 资源类型 筛选",
+      "events": {
+        "@submit.prevent": "load()"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/AuditSecurityCenter.vue",
+          "line": 66,
+          "endLine": 82
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#3cacb9b51913365b.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.filter",
+      "dialogId": null,
+      "label": "筛选",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#5587941412d5210f.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.login",
+      "dialogId": null,
+      "label": "重新登录",
+      "events": {},
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "['error', 'forbidden', 'expired', 'blocked'].includes(state)"
+        },
+        {
+          "directive": "v-if",
+          "expression": "state === 'expired'"
+        }
+      ],
+      "navigationTarget": "/login",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#d0c2afbc2d458d60.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.reload",
+      "dialogId": null,
+      "label": "重新加载",
+      "events": {
+        "@click": "load()"
+      },
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "['error', 'forbidden', 'expired', 'blocked'].includes(state)"
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/AuditSecurityCenter.vue",
+          "line": 66,
+          "endLine": 82
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#167259dc7aa19c8c.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.reload",
+      "dialogId": null,
+      "label": "刷新",
+      "events": {
+        "@click": "load()"
+      },
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "state === 'empty'"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/AuditSecurityCenter.vue",
+          "line": 66,
+          "endLine": 82
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#f5a2a5a523eaa1ef.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.select-event",
+      "dialogId": null,
+      "label": "{{ outcomeLabel(event.outcome) }} {{ new Date(event.occurred_at).toLocaleString(\"zh-CN\") }} {{ event.action }} {{ event.resource_type }} {{ event.resource_id?.s",
+      "events": {
+        "@click": "selected = event"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-for",
+          "expression": "event in events"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#c83a3bca88e27b80.1",
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "view": "audit-security",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.audit-security.load-more",
+      "dialogId": null,
+      "label": "加载更多",
+      "events": {
+        "@click": "load(nextCursor)"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "nextCursor"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/AuditSecurityCenter.vue",
+          "line": 66,
+          "endLine": 82
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization (if uncached)",
+        "GET /platform/audit-events or /organizations/{organization_id}/audit-events; query: limit/action/outcome/resource_type/cursor"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-06-audit-seed.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#07db575ab56f90da.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.home",
+      "dialogId": null,
+      "label": "选 智能选品",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#2cd956e2a34fbdf0.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.select-context",
+      "dialogId": null,
+      "label": "组织资料",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/select-context",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#80a24f159b0c5640.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.self",
+      "dialogId": null,
+      "label": "角色与权限",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/?view=authorization",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#4b5b1e9d08662a99.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.select-context",
+      "dialogId": null,
+      "label": "切换组织",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/select-context",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#5587941412d5210f.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.login",
+      "dialogId": null,
+      "label": "重新登录",
+      "events": {},
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "state === 'error' || state === 'forbidden' || state === 'expired'"
+        },
+        {
+          "directive": "v-if",
+          "expression": "state === 'expired'"
+        }
+      ],
+      "navigationTarget": "/login",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#7a25c271eca8ba6d.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.reload",
+      "dialogId": null,
+      "label": "重新加载",
+      "events": {
+        "@click": "load"
+      },
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "state === 'error' || state === 'forbidden' || state === 'expired'"
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/AuthorizationCenter.vue",
+          "line": 36,
+          "endLine": 48
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": ["GET /me/authorization", "GET /org/{organization_id}/roles"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#c3f10fc30bf31b85.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.reload",
+      "dialogId": null,
+      "label": "重新加载",
+      "events": {
+        "@click": "load"
+      },
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "state === 'empty'"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/AuthorizationCenter.vue",
+          "line": 36,
+          "endLine": 48
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": ["GET /me/authorization", "GET /org/{organization_id}/roles"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/AuthorizationCenter.vue#7b29a06d3d4c9688.1",
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "view": "authorization",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.authorization.select-role",
+      "dialogId": null,
+      "label": "{{ role.name.slice(0, 1) }} {{ role.name }} 角色编号： {{ role.code }} {{ role.description }} {{ role.capabilities.length }} 项动作",
+      "events": {
+        "@click": "selected = role"
+      },
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "current"
+        },
+        {
+          "directive": "v-for",
+          "expression": "role in filtered"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-04-rbac.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/DeploymentFoundation.vue#c62cb1e0fba48ed8.1",
+      "file": "apps/web/src/components/DeploymentFoundation.vue",
+      "view": "deployment",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.deployment.preview-rollback",
+      "dialogId": null,
+      "label": "回滚模式",
+      "events": {
+        "@click": "state = 'rollback'"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "state !== 'rollback'"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m00-08-deployment.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/DeploymentFoundation.vue#d08074349ac35d7c.1",
+      "file": "apps/web/src/components/DeploymentFoundation.vue",
+      "view": "deployment",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.deployment.recheck",
+      "dialogId": null,
+      "label": "{{ state === \"rollback\" ? \"恢复实时状态\" : \"重新核验\" }}",
+      "events": {
+        "@click": "checkProduction"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "checkProduction",
+          "file": "apps/web/src/components/DeploymentFoundation.vue",
+          "line": 68,
+          "endLine": 101
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": ["GET /health/ready", "GET /health/version"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m00-08-deployment.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/FileAuditFoundation.vue#406d382793a68226.1",
+      "file": "apps/web/src/components/FileAuditFoundation.vue",
+      "view": "file-audit",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.file-audit.preview-protected",
+      "dialogId": null,
+      "label": "隔离通过",
+      "events": {
+        "@click": "state = 'protected'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/FileAuditFoundation.vue#5378e3e23cdcdc08.1",
+      "file": "apps/web/src/components/FileAuditFoundation.vue",
+      "view": "file-audit",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.file-audit.preview-denied",
+      "dialogId": null,
+      "label": "授权拒绝",
+      "events": {
+        "@click": "state = 'denied'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/FileAuditFoundation.vue#39267a79e0812d17.1",
+      "file": "apps/web/src/components/FileAuditFoundation.vue",
+      "view": "file-audit",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.file-audit.preview-redacted",
+      "dialogId": null,
+      "label": "审计脱敏",
+      "events": {
+        "@click": "state = 'redacted'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/MySqlFoundation.vue#09d7c01d22cba74b.1",
+      "file": "apps/web/src/components/MySqlFoundation.vue",
+      "view": "mysql",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.mysql.preview-available",
+      "dialogId": null,
+      "label": "合同通过",
+      "events": {
+        "@click": "state = 'available'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/MySqlFoundation.vue#bed89d06f6e88787.1",
+      "file": "apps/web/src/components/MySqlFoundation.vue",
+      "view": "mysql",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.mysql.preview-blocked",
+      "dialogId": null,
+      "label": "验收受阻",
+      "events": {
+        "@click": "state = 'blocked'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/MySqlFoundation.vue#f7da073d39f8fd3d.1",
+      "file": "apps/web/src/components/MySqlFoundation.vue",
+      "view": "mysql",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.mysql.preview-rollback",
+      "dialogId": null,
+      "label": "回滚中",
+      "events": {
+        "@click": "state = 'rollback'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityMobileShell.vue#5bd9b574ce218f28.1",
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "view": null,
+      "sourceClassification": "no-explicit-render-consumer-found-do-not-delete",
+      "semanticActionId": "dev.orphan-opportunity.back",
+      "dialogId": null,
+      "label": "← 返回机会",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/opportunities",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "not-executable-no-render-consumer",
+      "testFile": null
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityMobileShell.vue#00364dbde3ca8e16.1",
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "view": null,
+      "sourceClassification": "no-explicit-render-consumer-found-do-not-delete",
+      "semanticActionId": null,
+      "dialogId": null,
+      "label": "概览",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "non-action-placeholder",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "not-executable-no-render-consumer",
+      "testFile": null
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityMobileShell.vue#bbc33be18ca146ad.1",
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "view": null,
+      "sourceClassification": "no-explicit-render-consumer-found-do-not-delete",
+      "semanticActionId": null,
+      "dialogId": null,
+      "label": "市场",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "non-action-placeholder",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "not-executable-no-render-consumer",
+      "testFile": null
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityMobileShell.vue#1251c19f51284cf4.1",
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "view": null,
+      "sourceClassification": "no-explicit-render-consumer-found-do-not-delete",
+      "semanticActionId": null,
+      "dialogId": null,
+      "label": "竞争",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "non-action-placeholder",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "not-executable-no-render-consumer",
+      "testFile": null
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityMobileShell.vue#0306dc2a2d584502.1",
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "view": null,
+      "sourceClassification": "no-explicit-render-consumer-found-do-not-delete",
+      "semanticActionId": null,
+      "dialogId": null,
+      "label": "利润",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "non-action-placeholder",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "not-executable-no-render-consumer",
+      "testFile": null
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityMobileShell.vue#62d4b1edb11343a7.1",
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "view": null,
+      "sourceClassification": "no-explicit-render-consumer-found-do-not-delete",
+      "semanticActionId": null,
+      "dialogId": null,
+      "label": "风险",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "non-action-placeholder",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "not-executable-no-render-consumer",
+      "testFile": null
+    },
+    {
+      "candidateId": "apps/web/src/components/RedisFoundation.vue#a92895beabbe57e2.1",
+      "file": "apps/web/src/components/RedisFoundation.vue",
+      "view": "redis",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.redis.preview-available",
+      "dialogId": null,
+      "label": "可连接",
+      "events": {
+        "@click": "state = 'available'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/RedisFoundation.vue#14ee6a1b417a19fa.1",
+      "file": "apps/web/src/components/RedisFoundation.vue",
+      "view": "redis",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.redis.preview-unavailable",
+      "dialogId": null,
+      "label": "依赖失败",
+      "events": {
+        "@click": "state = 'unavailable'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/RedisFoundation.vue#ca5f71765559e62a.1",
+      "file": "apps/web/src/components/RedisFoundation.vue",
+      "view": "redis",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.redis.preview-recovering",
+      "dialogId": null,
+      "label": "恢复中",
+      "events": {
+        "@click": "state = 'recovering'"
+      },
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/ui-phase2-internal-scope.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#07db575ab56f90da.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.home",
+      "dialogId": null,
+      "label": "选 智能选品",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#80a24f159b0c5640.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.authorization",
+      "dialogId": null,
+      "label": "角色与权限",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/?view=authorization",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#736de6de74a4123c.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.self",
+      "dialogId": null,
+      "label": "资源授权",
+      "events": {},
+      "conditions": [],
+      "navigationTarget": "/?view=resource-grants",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#4b1e8ed96a003ebb.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.toggle-create",
+      "dialogId": null,
+      "label": "{{ showCreate ? \"取消\" : \"新建授权\" }}",
+      "events": {
+        "@click": "showCreate = !showCreate"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#5587941412d5210f.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.login",
+      "dialogId": null,
+      "label": "重新登录",
+      "events": {},
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "['error', 'forbidden', 'expired', 'blocked'].includes(state)"
+        },
+        {
+          "directive": "v-if",
+          "expression": "state === 'expired'"
+        }
+      ],
+      "navigationTarget": "/login",
+      "handlerDefinitions": [],
+      "effect": "navigation",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#7a25c271eca8ba6d.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.reload",
+      "dialogId": null,
+      "label": "重新加载",
+      "events": {
+        "@click": "load"
+      },
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "['error', 'forbidden', 'expired', 'blocked'].includes(state)"
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/ResourceGrantCenter.vue",
+          "line": 69,
+          "endLine": 90
+        }
+      ],
+      "effect": "read-api",
+      "apiReferences": [
+        "GET /me/authorization",
+        "GET /org/{organization_id}/resource-grants?page=1&limit=100 or /me/resource-grants",
+        "GET /org/{organization_id}/resource-grant-targets (canManage)"
+      ],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#5195fb6c24b3bcf3.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.create",
+      "dialogId": null,
+      "label": "授权指定资源 工作区 资源类型 {{ typeLabel(type) }} 资源 ID 目标成员 选择同组织活动成员 {{ member.email }} 最小必要动作 {{ action }} 业务原因 到期时间 {{ busy ? \"正在保存\" : \"创建并审计\" }} 不得超过 30 天；到期自动失效。",
+      "events": {
+        "@submit.prevent": "createGrant"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "showCreate && current"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "createGrant",
+          "file": "apps/web/src/components/ResourceGrantCenter.vue",
+          "line": 94,
+          "endLine": 120
+        }
+      ],
+      "effect": "write-api",
+      "apiReferences": ["POST /org/{organization_id}/resource-grants"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#705c8ed890f94ae4.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.select-type",
+      "dialogId": null,
+      "label": "{{ typeLabel(type) }}",
+      "events": {
+        "@change": "selectType"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "showCreate && current"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "selectType",
+          "file": "apps/web/src/components/ResourceGrantCenter.vue",
+          "line": 91,
+          "endLine": 93
+        }
+      ],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#56be3ac153b99d9a.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.create",
+      "dialogId": null,
+      "label": "{{ busy ? \"正在保存\" : \"创建并审计\" }}",
+      "events": {},
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "showCreate && current"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "write-api",
+      "apiReferences": ["POST /org/{organization_id}/resource-grants"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#346855fe8d145193.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.filter",
+      "dialogId": null,
+      "label": "{{ item === \"all\" ? \"全部\" : statusLabel(item as ResourceGrantStatus) }}",
+      "events": {
+        "@click": "setFilter(item)"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-for",
+          "expression": "item in ['all', 'active', 'expired', 'revoked']"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "setFilter",
+          "file": "apps/web/src/components/ResourceGrantCenter.vue",
+          "line": 189,
+          "endLine": 191
+        }
+      ],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#33ea9b4d9c72132c.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.open-create",
+      "dialogId": null,
+      "label": "创建首条授权",
+      "events": {
+        "@click": "showCreate = true"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "state === 'empty'"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#89fc4180a88c0217.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.select-grant",
+      "dialogId": null,
+      "label": "{{ statusLabel(grant.effective_status) }} {{ typeLabel(grant.resource_type) }} · {{ grant.resource_id.slice(0, 8) }} {{ grant.actions.join(\" · \") }} 到期 {{ new D",
+      "events": {
+        "@click": "selected = grant"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-for",
+          "expression": "grant in filtered"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "local-display",
+      "apiReferences": [],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#4c74179bcaeaae2b.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.extend",
+      "dialogId": null,
+      "label": "变更原因 新到期时间 延长授权 撤销授权",
+      "events": {
+        "@submit.prevent": "extend"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage && selected.effective_status === 'active'"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "extend",
+          "file": "apps/web/src/components/ResourceGrantCenter.vue",
+          "line": 121,
+          "endLine": 145
+        }
+      ],
+      "effect": "write-api",
+      "apiReferences": ["PATCH /org/{organization_id}/resource-grants/{id}/expiry"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#b7484a635bb827f3.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.extend",
+      "dialogId": null,
+      "label": "延长授权",
+      "events": {},
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage && selected.effective_status === 'active'"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "write-api",
+      "apiReferences": ["PATCH /org/{organization_id}/resource-grants/{id}/expiry"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#6fd22315d6945eb7.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.revoke",
+      "dialogId": null,
+      "label": "撤销授权",
+      "events": {
+        "@click": "revoke"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage && selected.effective_status === 'active'"
+        }
+      ],
+      "navigationTarget": null,
+      "handlerDefinitions": [
+        {
+          "name": "revoke",
+          "file": "apps/web/src/components/ResourceGrantCenter.vue",
+          "line": 146,
+          "endLine": 174
+        }
+      ],
+      "effect": "write-api",
+      "apiReferences": ["POST /org/{organization_id}/resource-grants/{id}/revoke"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    },
+    {
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#4bb78a0457a0971f.1",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "view": "resource-grants",
+      "sourceClassification": "development-query-view",
+      "semanticActionId": "dev.resource-grants.revoke",
+      "dialogId": "dev.resource-grants.revoke-confirm",
+      "label": "window.confirm(\"确认撤销这条指定资源授权？撤销后立即失效。\")",
+      "conditions": [],
+      "navigationTarget": null,
+      "handlerDefinitions": [],
+      "effect": "write-api",
+      "apiReferences": ["POST /org/{organization_id}/resource-grants/{id}/revoke"],
+      "sourceReview": "reviewed",
+      "runtimeStatus": "partial-tests-not-per-candidate-completion",
+      "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
+    }
+  ]
+}

@@ -115,3 +115,95 @@ test("M01-05.A08 expired session requires reauthentication", async ({ page }) =>
   await expect(page.getByText("登录已过期")).toBeVisible();
   await expect(page.getByRole("link", { name: "重新登录" })).toHaveAttribute("href", "/login");
 });
+
+test("UI2.scope.grants create extend cancel and revoke preserve exact request contracts", async ({
+  page,
+}) => {
+  const unexpectedWrites: string[] = [];
+  await page.route("**/api/v1/**", (route) => {
+    if (route.request().method() !== "GET") {
+      unexpectedWrites.push(route.request().url());
+      return route.abort();
+    }
+    return route.fallback();
+  });
+  await ready(page, []);
+  const writes: { method: string; path: string; body: Record<string, unknown> }[] = [];
+  await page.route(`**/api/v1/org/${org}/resource-grants**`, async (route) => {
+    const request = route.request();
+    if (request.method() === "GET") {
+      await route.fulfill({ json: envelope([], { page: 1, limit: 100, total: 0 }) });
+      return;
+    }
+    const pathname = new URL(request.url()).pathname;
+    const body = request.postDataJSON();
+    writes.push({ method: request.method(), path: pathname, body });
+    expect(request.headers()["idempotency-key"]).toBeTruthy();
+    const revoked = pathname.endsWith("/revoke");
+    await route.fulfill({
+      json: envelope({
+        ...grant,
+        reason: "UI2创建授权",
+        version: writes.length,
+        effective_status: revoked ? "revoked" : "active",
+        status: revoked ? "revoked" : "active",
+      }),
+    });
+  });
+  await page.goto("/?view=resource-grants");
+  await page.getByRole("button", { name: "创建首条授权" }).click();
+  await page.getByLabel("资源类型").selectOption("task");
+  await expect(page.getByLabel("task:read", { exact: true })).toBeChecked();
+  await page.getByLabel("资源类型").selectOption("opportunity");
+  await page.getByLabel("资源 ID").fill(resource);
+  await page.getByLabel("目标成员").selectOption(membership);
+  await page.getByLabel("业务原因").fill("UI2创建授权");
+  await page.getByLabel("到期时间", { exact: true }).fill("2026-08-15T18:00");
+  const expiry = await page
+    .getByLabel("到期时间", { exact: true })
+    .evaluate((node) => new Date((node as HTMLInputElement).value).toISOString());
+  await page.getByRole("button", { name: "创建并审计" }).click();
+  await expect(page.getByRole("status")).toHaveText("授权已创建并写入审计。");
+  expect(writes).toEqual([
+    {
+      method: "POST",
+      path: `/api/v1/org/${org}/resource-grants`,
+      body: {
+        workspace_id: workspace,
+        resource_type: "opportunity",
+        resource_id: resource,
+        grantee_membership_id: membership,
+        actions: ["opportunity:read"],
+        reason: "UI2创建授权",
+        expires_at: expiry,
+      },
+    },
+  ]);
+  await page.getByLabel("变更原因").fill("UI2延长授权");
+  await page.getByLabel("新到期时间").fill("2026-08-20T18:00");
+  const extendedExpiry = await page
+    .getByLabel("新到期时间")
+    .evaluate((node) => new Date((node as HTMLInputElement).value).toISOString());
+  await page.getByRole("button", { name: "延长授权" }).click();
+  await expect(page.getByRole("status")).toHaveText("到期时间已延长并写入审计。");
+  expect(writes[1]).toEqual({
+    method: "PATCH",
+    path: `/api/v1/org/${org}/resource-grants/${grant.id}/expiry`,
+    body: { expected_version: 1, reason: "UI2延长授权", expires_at: extendedExpiry },
+  });
+  await page.getByLabel("变更原因").fill("UI2撤销授权");
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.getByRole("button", { name: "撤销授权" }).click();
+  expect(writes).toHaveLength(2);
+  await expect(page.getByLabel("变更原因")).toHaveValue("UI2撤销授权");
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "撤销授权" }).click();
+  await expect(page.getByRole("status")).toHaveText("授权已撤销并立即失效。");
+  expect(writes[2]).toEqual({
+    method: "POST",
+    path: `/api/v1/org/${org}/resource-grants/${grant.id}/revoke`,
+    body: { expected_version: 2, reason: "UI2撤销授权" },
+  });
+  await expect(page.getByRole("button", { name: "撤销授权", exact: true })).toHaveCount(0);
+  expect(unexpectedWrites).toEqual([]);
+});

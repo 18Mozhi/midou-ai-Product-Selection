@@ -85,6 +85,9 @@ test("M01-04.A08 empty catalog keeps management denied", async ({ page }) => {
   await page.goto("/?view=authorization");
   await expect(page.getByText("暂无活动角色")).toBeVisible();
   await expect(page.getByText("管理动作保持默认拒绝")).toBeVisible();
+  await ready(page);
+  await page.getByRole("button", { name: "重新加载" }).click();
+  await expect(page.getByRole("heading", { name: "组织管理员", exact: true })).toBeVisible();
 });
 test("M01-04.A08/A16 forbidden catalog names the missing capability", async ({ page }) => {
   await page.route("**/api/v1/me/authorization", (route) =>
@@ -107,6 +110,9 @@ test("M01-04.A08/A16 forbidden catalog names the missing capability", async ({ p
   await page.goto("/?view=authorization");
   await expect(page.getByText("缺少 role:read 权限")).toBeVisible();
   await expect(page.getByText("请求标识：rbac-forbidden")).toBeVisible();
+  await ready(page);
+  await page.getByRole("button", { name: "重新加载" }).click();
+  await expect(page.getByRole("heading", { name: "组织管理员", exact: true })).toBeVisible();
 });
 test("M01-04.A08 expired session directs reauthentication", async ({ page }) => {
   await page.route("**/api/v1/me/authorization", (route) =>
