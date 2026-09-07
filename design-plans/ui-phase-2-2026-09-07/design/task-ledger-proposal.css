@@ -1,0 +1,387 @@
+/* W01 proposal only. Injected into isolated Vue captures; not imported by the application. */
+.phase2-task-study .task-workspace {
+  --study-paper: var(--so-panel);
+  --study-line: var(--so-border);
+  --study-ink: var(--so-text);
+  gap: 0;
+}
+.phase2-task-study
+  .task-workspace
+  :is(
+    .task-detail,
+    .task-actions,
+    .task-filter-panel,
+    .task-focus-strip,
+    .task-list,
+    .task-list > article,
+    .task-blocking-context,
+    .task-blocking-context > div,
+    dialog
+  ) {
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+}
+.phase2-task-study .task-title {
+  margin: 0;
+  padding: 14px 0;
+  align-items: center;
+  gap: 18px;
+}
+.phase2-task-study .task-title p {
+  margin: 0 0 3px;
+  font-size: 13px;
+}
+.phase2-task-study .task-title h2 {
+  font-size: 22px;
+  margin: 0;
+}
+.phase2-task-study .task-title > div > span {
+  display: none;
+}
+.phase2-task-study .task-title > button {
+  min-height: 44px;
+  padding: 10px 18px;
+}
+.phase2-task-study .task-view-tabs {
+  margin: 0;
+}
+.phase2-task-study .task-focus-strip {
+  margin: 0;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--study-line);
+  background: transparent;
+}
+.phase2-task-study .task-focus-strip p {
+  margin: 5px 0 0;
+  font-size: 13px;
+}
+.phase2-task-study .task-focus-strip dl {
+  min-width: 220px;
+}
+.phase2-task-study .task-filter-panel {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  margin: 0;
+}
+.phase2-task-study .task-queue-heading {
+  display: none;
+}
+.phase2-task-study .task-filter {
+  border-bottom: 1px solid var(--study-line);
+  margin: 0;
+}
+.phase2-task-study .task-filter > button {
+  min-height: 48px;
+}
+.phase2-task-study .task-filter-disclosure {
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid var(--study-line);
+}
+.phase2-task-study .task-filter-disclosure > summary {
+  min-height: 44px;
+  padding: 8px 0;
+}
+.phase2-task-study .task-select-current {
+  padding: 6px 0;
+  margin: 0;
+  min-height: 56px;
+}
+.phase2-task-study .task-list {
+  margin: 0;
+  border-top: 2px solid var(--study-ink);
+}
+.phase2-task-study .task-list > article {
+  border: 0;
+  border-bottom: 1px solid var(--study-line);
+  padding: 12px 0;
+}
+.phase2-task-study .task-row-main {
+  grid-template-columns: minmax(0, 1.8fr) minmax(140px, 0.8fr) minmax(160px, 0.8fr) 70px;
+  padding: 8px 12px;
+}
+.phase2-task-study .task-row-copy > strong {
+  font-size: 18px;
+  line-height: 1.6;
+}
+.phase2-task-study .task-row-copy > small {
+  font-size: 13px;
+}
+.phase2-task-study .task-workspace.task-detail-route .task-detail {
+  position: static;
+  inset: auto;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  max-height: none;
+  transform: none;
+  padding: 0;
+  border: 0;
+  border-top: 2px solid var(--study-ink);
+  background: var(--study-paper);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.8fr);
+  gap: 0 32px;
+  grid-template-areas: "header header" "facts activity" "blocking activity" "technical activity" "actions activity";
+  align-content: start;
+}
+.phase2-task-study .task-detail-header {
+  grid-area: header;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--study-line);
+  gap: 16px;
+  margin: 0;
+}
+.phase2-task-study .task-detail-header > div {
+  min-width: 0;
+  width: auto;
+}
+.phase2-task-study .task-detail-header h3 {
+  font-size: 30px;
+  line-height: 1.5;
+  max-width: none;
+  width: auto;
+  margin: 6px 0;
+}
+.phase2-task-study .task-detail-header p {
+  font-size: 13px;
+  margin: 0;
+}
+.phase2-task-study .task-detail-header > a {
+  width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--study-line);
+  text-decoration: none;
+}
+.phase2-task-study .task-detail-facts {
+  grid-area: facts;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  padding: 0 0 0 24px;
+  margin: 0;
+}
+.phase2-task-study .task-detail-facts > div {
+  min-width: 0;
+  border-bottom: 1px solid var(--study-line);
+  padding: 18px 0;
+}
+.phase2-task-study .task-detail-facts > div:nth-child(3) {
+  grid-column: 1 / -1;
+}
+.phase2-task-study .task-detail-facts dt {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.phase2-task-study .task-detail-facts dd {
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.phase2-task-study .task-detail-facts small {
+  font-size: 13px;
+}
+.phase2-task-study .task-detail-facts progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: 10px 0;
+  accent-color: var(--so-primary);
+}
+.phase2-task-study .task-blocking-context {
+  grid-area: blocking;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  padding: 16px 0 0 24px;
+  margin: 0;
+  background: transparent;
+  border: 0;
+}
+.phase2-task-study .task-blocking-context > div {
+  padding: 10px 12px;
+  background: var(--so-panel-soft);
+  border: 0;
+}
+.phase2-task-study .task-blocking-context span {
+  font-size: 13px;
+}
+.phase2-task-study .task-technical {
+  grid-area: technical;
+  margin: 12px 0 0 24px;
+}
+.phase2-task-study .task-technical summary {
+  min-height: 44px;
+  display: list-item;
+  padding: 10px 0;
+}
+.phase2-task-study .task-workspace.task-detail-route .task-actions {
+  grid-area: actions;
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 8px 0 24px 24px;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid var(--study-line);
+  background: transparent;
+  gap: 8px;
+}
+.phase2-task-study .task-actions > button {
+  min-height: 44px;
+}
+.phase2-task-study .task-detail-more {
+  flex-basis: 100%;
+}
+.phase2-task-study .task-detail-more > summary {
+  font-size: 16px;
+  min-height: 44px;
+}
+.phase2-task-study .task-detail-more[open] > div {
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 0;
+  padding: 8px 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+.phase2-task-study .task-activity {
+  grid-area: activity;
+  border-left: 1px solid var(--study-line);
+  padding: 20px 24px;
+  margin: 0;
+  min-width: 0;
+}
+.phase2-task-study .task-activity h4 {
+  margin: 0 0 20px;
+  font-size: 20px;
+}
+.phase2-task-study .task-activity article {
+  padding: 0 0 18px 14px;
+  margin-bottom: 20px;
+  border-left: 2px solid var(--study-line);
+}
+.phase2-task-study .task-activity form {
+  display: grid;
+  gap: 10px;
+}
+.phase2-task-study .task-activity textarea {
+  min-height: 110px;
+}
+.phase2-task-study .task-action-dialog {
+  border-radius: 0;
+  padding: 28px;
+  border: 2px solid var(--study-ink);
+  width: min(620px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  box-shadow: none;
+}
+.phase2-task-study .task-action-dialog h3 {
+  font-size: 28px;
+  line-height: 1.4;
+  margin-top: 0;
+  border-bottom: 1px solid var(--study-line);
+  padding-bottom: 16px;
+}
+.phase2-task-study .task-action-dialog form {
+  gap: 18px;
+}
+.phase2-task-study .task-action-dialog label {
+  font-size: 16px;
+}
+.phase2-task-study .task-action-dialog form > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--study-line);
+}
+@media (max-width: 840px) {
+  .phase2-task-study .task-title {
+    padding: 10px 0;
+  }
+  .phase2-task-study .task-title p {
+    display: none;
+  }
+  .phase2-task-study .task-title h2 {
+    font-size: 20px;
+  }
+  .phase2-task-study .task-focus-strip {
+    display: grid;
+    grid-template-columns: 3px 1fr;
+    padding: 12px 0;
+    gap: 10px;
+  }
+  .phase2-task-study .task-focus-strip dl {
+    grid-column: 2;
+    min-width: 0;
+    margin: 0;
+  }
+  .phase2-task-study .task-focus-strip strong {
+    font-size: 16px;
+  }
+  .phase2-task-study .task-filter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .phase2-task-study .task-filter > button {
+    padding: 8px 4px;
+  }
+  .phase2-task-study .task-row-main {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 6px 8px;
+  }
+  .phase2-task-study .task-row-copy > strong {
+    font-size: 17px;
+  }
+  .phase2-task-study .task-row-progress,
+  .phase2-task-study .task-row-deadline {
+    width: 100%;
+  }
+  .phase2-task-study .task-workspace.task-detail-route .task-detail {
+    display: block;
+    padding: 0;
+  }
+  .phase2-task-study .task-detail-header {
+    padding: 16px;
+    gap: 8px;
+  }
+  .phase2-task-study .task-detail-header h3 {
+    font-size: 24px;
+  }
+  .phase2-task-study .task-detail-facts {
+    padding: 0 16px;
+    gap: 0 16px;
+  }
+  .phase2-task-study .task-detail-facts > div {
+    padding: 12px 0;
+  }
+  .phase2-task-study .task-blocking-context {
+    padding: 12px 16px 0;
+    grid-template-columns: 1fr;
+  }
+  .phase2-task-study .task-technical {
+    margin: 8px 16px 0;
+  }
+  .phase2-task-study .task-workspace.task-detail-route .task-actions {
+    margin: 8px 16px 16px;
+  }
+  .phase2-task-study .task-activity {
+    border-left: 0;
+    border-top: 1px solid var(--study-line);
+    padding: 20px 16px;
+  }
+  .phase2-task-study .task-action-dialog {
+    padding: 20px;
+  }
+}

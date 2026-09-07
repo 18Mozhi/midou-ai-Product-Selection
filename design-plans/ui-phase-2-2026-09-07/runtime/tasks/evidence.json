@@ -1,0 +1,6229 @@
+{
+  "schemaVersion": 1,
+  "kind": "vue-contract-fixture-baseline-not-production",
+  "fixturePath": "tests/e2e/helpers/business-tasks.ts",
+  "fixtureSha256": "27dccad9cb04989181bd30b5668ba50e0922a9c6c1b091758da88f931875d307",
+  "textHashEncoding": "utf8-lf",
+  "proposal": null,
+  "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+  "pages": [
+    "P23",
+    "P24"
+  ],
+  "cases": [
+    {
+      "id": "task.list.create.open",
+      "candidateId": "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-fixture-passed",
+      "evidence": "runtime/tasks/1440-P23-create.png"
+    },
+    {
+      "id": "task.detail.pause.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#5f5bf5a382300046.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/1440-P24-pause.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.delay.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8a192d8df4bae23e.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/1440-P24-delay.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.transfer.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#b841d884628a5445.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/1440-P24-transfer.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.cancel.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#a6808a15ac396ea9.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/1440-P24-cancel.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.progress.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#d15fb86b9a1883f9.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-fixture-passed",
+      "evidence": "runtime/tasks/1440-P24-progress.png"
+    },
+    {
+      "id": "task.detail.progress.submit",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#950c1a9d40721d87.1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": "vue-contract-fixture-passed-not-database-execution",
+      "request": {
+        "method": "POST",
+        "path": "/tasks/{taskId}/actions",
+        "body": {
+          "action": "progress",
+          "expected_version": 2,
+          "progress_percent": 45,
+          "progress_note": "隔离验收：已核对报价，等待交期证据。"
+        }
+      },
+      "requests": 1
+    },
+    {
+      "id": "task.list.create.open",
+      "candidateId": "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-fixture-passed",
+      "evidence": "runtime/tasks/390-P23-create.png"
+    },
+    {
+      "id": "task.detail.pause.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#5f5bf5a382300046.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/390-P24-pause.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.delay.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8a192d8df4bae23e.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/390-P24-delay.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.transfer.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#b841d884628a5445.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/390-P24-transfer.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.cancel.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#a6808a15ac396ea9.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-fixture-open-cancel-passed",
+      "evidence": "runtime/tasks/390-P24-cancel.png",
+      "initialFocus": "inside-dialog",
+      "escape": "closed",
+      "focusReturn": "opener",
+      "writeRequests": 0,
+      "limitation": "Final submit, validation errors and other roles are not covered by this case."
+    },
+    {
+      "id": "task.detail.progress.open",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#d15fb86b9a1883f9.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-fixture-passed",
+      "evidence": "runtime/tasks/390-P24-progress.png"
+    },
+    {
+      "id": "task.detail.progress.submit",
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#950c1a9d40721d87.1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "vue-contract-fixture-passed-not-database-execution",
+      "request": {
+        "method": "POST",
+        "path": "/tasks/{taskId}/actions",
+        "body": {
+          "action": "progress",
+          "expected_version": 2,
+          "progress_percent": 45,
+          "progress_note": "隔离验收：已核对报价，等待交期证据。"
+        }
+      },
+      "requests": 1
+    }
+  ],
+  "screenshots": [
+    {
+      "routeId": "P23",
+      "state": "business-list",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P23-list.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:36.140Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "d8a5f3274d6ab05bae1c74991ecfa26d28fe5e33d35d190dfa6cfccacb6b7885",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "＋ 新建任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 115,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "业务任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "导出任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "全部7",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "待处理2",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "进行中1",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已暂停0",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已完成4",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已取消0",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "搜索与排序按需展开",
+          "disabled": false,
+          "expanded": null,
+          "width": 1346,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "搜索标题或说明",
+          "disabled": false,
+          "expanded": null,
+          "width": 896,
+          "height": 46,
+          "insideDialog": false
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "优先级与期限截止时间最早最近更新最近创建",
+          "disabled": false,
+          "expanded": null,
+          "width": 260,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "应用",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "重置",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "进行中高优先级核验便携净水杯供应商报价对照原始证据确认 MOQ 与交期执行中35%24 小时内到期2026/8/9 18:00:00查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 1304,
+          "height": 99,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：核验便携净水杯供应商报价",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 46,
+          "height": 124,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "待处理普通优先级补齐竞品价格证据对照原始证据确认 MOQ 与交期待开始35%未设置期限未设置查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 1304,
+          "height": 99,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：补齐竞品价格证据",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 46,
+          "height": 124,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P23",
+      "state": "create-dialog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P23-create.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:36.460Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "475215985c7c5b9bd88df4bc75d5051380b418717d31ac1f8275f088a3305e87",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "＋ 新建任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 115,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "业务任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "导出任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "全部7",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "待处理2",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "进行中1",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已暂停0",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已完成4",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已取消0",
+          "disabled": false,
+          "expanded": null,
+          "width": 221,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "搜索与排序按需展开",
+          "disabled": false,
+          "expanded": null,
+          "width": 1346,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "优先级与期限截止时间最早最近更新最近创建",
+          "disabled": false,
+          "expanded": null,
+          "width": 260,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "应用",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "重置",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "进行中高优先级核验便携净水杯供应商报价对照原始证据确认 MOQ 与交期执行中35%24 小时内到期2026/8/9 18:00:00查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 1304,
+          "height": 99,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：核验便携净水杯供应商报价",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "待处理普通优先级补齐竞品价格证据对照原始证据确认 MOQ 与交期待开始35%未设置期限未设置查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 1304,
+          "height": 99,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：补齐竞品价格证据",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 466,
+          "height": 50,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 466,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "低普通高紧急",
+          "disabled": false,
+          "expanded": null,
+          "width": 466,
+          "height": 46,
+          "insideDialog": true
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 466,
+          "height": 52,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-detail.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:36.745Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "2afced2d68da36705738db41e3dbece9978ab3aeb0211b5fa4bf507dacdac82d",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "more-actions",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-more.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:36.913Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "d9a9b3e40c019534ec1dbaa520982530b51da5723b796cb4f171ea933c062330",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "pause-dialog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-pause.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:37.195Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "1bc7908571eef0bafcf3654450575415943b0bea158743a82b15602f777fbd0b",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "delay-dialog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-delay.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:37.547Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "3173df88adb952bea46b0ef4045d47597e60559a3c5cec57ea15e6a29aaf137b",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 52,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "transfer-dialog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-transfer.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:37.885Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "b3ae963bfaaeb51729e3b91d3cbb365604a1bd0c0c6dc27df29471c343b35434",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "请选择可访问当前工作区的成员测试成员",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 46,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "cancel-dialog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-cancel.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:38.235Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "738eb2baa11cb4a30dc252bce81554a6d86e44551b0f02d440474122c1695182",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 196,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "progress-dialog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "file": "runtime/tasks/1440-P24-progress.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:38.618Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "7c2b6c43b3666bde23f60a1507c8c80528f053ef3d62fcd3c15d6c0a22ba0037",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 948,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "搜索快捷键",
+          "disabled": false,
+          "expanded": null,
+          "width": 141,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 114,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 554,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 126,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 922,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 50,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "说明已完成内容、当前阻塞和下一步",
+          "disabled": false,
+          "expanded": null,
+          "width": 500,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        }
+      ]
+    },
+    {
+      "routeId": "P23",
+      "state": "business-list",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P23-list.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:39.673Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "3e5263a34cf788b5592a4941fdef572df34bfe84a6392220bd3b72f228ea9747",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "＋ 新建任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "业务任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "导出任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "全部7",
+          "disabled": false,
+          "expanded": null,
+          "width": 83,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "待处理2",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "进行中1",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已暂停0",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已完成4",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已取消0",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "搜索与排序按需展开",
+          "disabled": false,
+          "expanded": null,
+          "width": 360,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "搜索标题或说明",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 46,
+          "insideDialog": false
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "优先级与期限截止时间最早最近更新最近创建",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "应用",
+          "disabled": false,
+          "expanded": null,
+          "width": 157,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "重置",
+          "disabled": false,
+          "expanded": null,
+          "width": 157,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "进行中高优先级核验便携净水杯供应商报价对照原始证据确认 MOQ 与交期执行中35%24 小时内到期2026/8/9 18:00:00查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 232,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：核验便携净水杯供应商报价",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 46,
+          "height": 124,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "待处理普通优先级补齐竞品价格证据对照原始证据确认 MOQ 与交期待开始35%未设置期限未设置查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 232,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：补齐竞品价格证据",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 46,
+          "height": 124,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P23",
+      "state": "create-dialog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P23-create.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:39.839Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "3016acddd921a6e9c87b0bd688ce123a62ae8b576656d85b9af0cd9d04ee4a15",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "＋ 新建任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "业务任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "导出任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 92,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "全部7",
+          "disabled": false,
+          "expanded": null,
+          "width": 83,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "待处理2",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "进行中1",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已暂停0",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已完成4",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "已取消0",
+          "disabled": false,
+          "expanded": null,
+          "width": 99,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "搜索与排序按需展开",
+          "disabled": false,
+          "expanded": null,
+          "width": 360,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "搜索标题或说明",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 46,
+          "insideDialog": false
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "优先级与期限截止时间最早最近更新最近创建",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "应用",
+          "disabled": false,
+          "expanded": null,
+          "width": 157,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "重置",
+          "disabled": false,
+          "expanded": null,
+          "width": 157,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "进行中高优先级核验便携净水杯供应商报价对照原始证据确认 MOQ 与交期执行中35%24 小时内到期2026/8/9 18:00:00查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 232,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：核验便携净水杯供应商报价",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 46,
+          "height": 124,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "待处理普通优先级补齐竞品价格证据对照原始证据确认 MOQ 与交期待开始35%未设置期限未设置查看 →",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 232,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "任务操作：补齐竞品价格证据",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 46,
+          "height": 124,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 304,
+          "height": 50,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 304,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "低普通高紧急",
+          "disabled": false,
+          "expanded": null,
+          "width": 304,
+          "height": 46,
+          "insideDialog": true
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 304,
+          "height": 52,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-detail.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.038Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "359a4e30de86d85ac21dcf0c1a57446aa3844c691ff23d31561e46f8d56713ab",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "more-actions",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-more.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.163Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "8a45cc24c6cd4f2ed55c5565bf65fbcbc531bcd164667d6a7e7ee211970aa7f2",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "pause-dialog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-pause.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.278Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "ff693ec61cfd9e3750ae2b5eb1b96a1675b561b00fff3e1dd28d2b6c155a1cf8",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "delay-dialog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-delay.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.424Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "43e7f0c3336d1fac754ebf14b19cb12cbaab4940d490b608f1c9e805f9ed3fd7",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 52,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "transfer-dialog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-transfer.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.552Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "595a29606ef5892f0196cb72eda3d6736e2cad5274ca739f7f5b07279370c88b",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "select",
+          "role": null,
+          "name": "请选择可访问当前工作区的成员测试成员",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 46,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "cancel-dialog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-cancel.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.695Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "f1c000617cbaa8dd1a589a67b1f289879b682d0f9c1fbd67a6425b250152b200",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "暂停",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "调整期限",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "转交负责人",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "编辑任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "取消任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "删除任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 288,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "请填写可审计的操作原因",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    },
+    {
+      "routeId": "P24",
+      "state": "progress-dialog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "runtime/tasks/390-P24-progress.png",
+      "kind": "vue-contract-fixture-baseline-not-production",
+      "capturedAt": "2026-09-07T07:58:40.866Z",
+      "browser": "151.0.7922.34",
+      "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+      "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+      "concretePath": "/tasks/00000000-0000-4000-8000-000000000801",
+      "role": "fixture-selection-manager-not-real-RBAC",
+      "theme": "deep-ocean",
+      "os": "win32",
+      "sha256": "2eefb3fec8543a95517d9b089783ffc9367f4023c6985ed2636b89a0977ef192",
+      "pageOverflow": false,
+      "controls": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "SCOUTOPS 智能选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 170,
+          "height": 30,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "打开导航菜单",
+          "disabled": false,
+          "expanded": "false",
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "切换界面主题",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "创建选品",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "个人中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "通知中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 45,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "运营工具",
+          "disabled": false,
+          "expanded": null,
+          "width": 329,
+          "height": 50,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "工作台",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "全部任务",
+          "disabled": false,
+          "expanded": null,
+          "width": 58,
+          "height": 15,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "当前范围米豆智能选品 · 跨境新品工作区",
+          "disabled": false,
+          "expanded": null,
+          "width": 362,
+          "height": 56,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "关闭任务详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 44,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "技术详情",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "完成",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更新进度",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "summary",
+          "role": null,
+          "name": "更多任务操作",
+          "disabled": false,
+          "expanded": null,
+          "width": 302,
+          "height": 44,
+          "insideDialog": false
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "添加可审计评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 75,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "添加评论",
+          "disabled": false,
+          "expanded": null,
+          "width": 324,
+          "height": 48,
+          "insideDialog": false
+        },
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 50,
+          "insideDialog": true
+        },
+        {
+          "tag": "textarea",
+          "role": null,
+          "name": "说明已完成内容、当前阻塞和下一步",
+          "disabled": false,
+          "expanded": null,
+          "width": 318,
+          "height": 75,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "返回",
+          "disabled": false,
+          "expanded": null,
+          "width": 62,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "确认提交",
+          "disabled": false,
+          "expanded": null,
+          "width": 94,
+          "height": 48,
+          "insideDialog": true
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日行动",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "今日工作",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "任务中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "审批中心",
+          "disabled": false,
+          "expanded": null,
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "更多",
+          "disabled": false,
+          "expanded": "false",
+          "width": 76,
+          "height": 61,
+          "insideDialog": false
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Existing route fixtures, not a live database or real authorization service.",
+    "Visible DOM sites are not a complete runtime action/role/state denominator.",
+    "Task action API success is simulated by the existing fixture; persisted progress is not proven.",
+    "These are pre-redesign baseline images, not approved design or final implementation evidence."
+  ]
+}

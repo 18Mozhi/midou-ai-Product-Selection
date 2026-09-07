@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>W01 任务账页 · 设计与真实 Vue 对照</title>
+    <style>
+      :root {
+        color: #202219;
+        background: #f4f0e6;
+        font:
+          16px/1.7 "Microsoft YaHei",
+          sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      header,
+      main,
+      footer {
+        max-width: 1600px;
+        margin: auto;
+        padding: 20px 28px;
+      }
+      header {
+        border-bottom: 2px solid #27291f;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      a {
+        color: inherit;
+        text-underline-offset: 4px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+      h1,
+      h2 {
+        font-family: SimSun, "Songti SC", serif;
+        font-weight: 500;
+      }
+      h1 {
+        font-size: 36px;
+        margin: 10px 0;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .eyebrow {
+        font:
+          13px Consolas,
+          monospace;
+        letter-spacing: 0.12em;
+        color: #a42c19;
+      }
+      .notice {
+        padding: 14px 18px;
+        border-left: 4px solid #a42c19;
+        background: #eae5d8;
+      }
+      .toolbar {
+        display: flex;
+        gap: 18px;
+        margin: 28px 0;
+        flex-wrap: wrap;
+        align-items: end;
+      }
+      label {
+        display: grid;
+        gap: 6px;
+      }
+      select {
+        font: inherit;
+        border: 1px solid #888a78;
+        border-radius: 0;
+        background: #fffdf5;
+        min-height: 44px;
+        padding: 8px 14px;
+      }
+      button {
+        font: inherit;
+        min-height: 44px;
+        border: 1px solid #888a78;
+        border-radius: 0;
+        padding: 8px 14px;
+        background: transparent;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #eae5d8;
+      }
+      :focus-visible {
+        outline: 3px solid #a42c19;
+        outline-offset: 3px;
+      }
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .comparison figure {
+        margin: 0;
+        min-width: 0;
+      }
+      .comparison figcaption {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        border-block: 1px solid #999b87;
+        padding: 12px 0;
+        margin-bottom: 16px;
+      }
+      .comparison img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #b6b6a5;
+      }
+      .comparison.mobile figure > a {
+        display: block;
+        width: min(100%, 390px);
+        margin: auto;
+      }
+      .comparison figure > a {
+        display: block;
+      }
+      .legend {
+        font-size: 13px;
+        color: #616653;
+      }
+      footer {
+        border-top: 1px solid #999b87;
+        margin-top: 32px;
+      }
+      .contract {
+        max-width: 1000px;
+        margin: 32px 0;
+      }
+      .contract li {
+        margin: 10px 0;
+      }
+      @media (max-width: 700px) {
+        header,
+        main,
+        footer {
+          padding: 16px;
+        }
+        .comparison {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 30px;
+        }
+        header {
+          flex-wrap: wrap;
+        }
+        .toolbar {
+          gap: 12px;
+        }
+        label {
+          width: 100%;
+        }
+        select {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="eyebrow">SCOUTOPS / W01 DESIGN STUDY</span
+      ><a href="../review.html">返回实施账册 ↗</a>
+    </header>
+    <main>
+      <p class="eyebrow">P23 · P24 / 第一组代表流程</p>
+      <h1>任务账页：先看事实，再执行动作。</h1>
+      <p class="notice">
+        左侧是现有 Vue 的隔离测试基线；右侧是向同一 Vue 注入提案 CSS
+        的设计预览。两侧使用同一份仓库测试数据。右侧尚待用户审核，没有进入生产样式；两侧都不是生产实景或数据库写入证明。
+      </p>
+      <div class="toolbar">
+        <label
+          >页面 / 状态<select id="scene">
+            <option value="P23-list">任务列表</option>
+            <option value="P23-create">新建任务弹窗</option>
+            <option value="P24-detail">任务详情</option>
+            <option value="P24-more">更多任务操作</option>
+            <option value="P24-progress">更新进度弹窗</option>
+            <option value="P24-pause">暂停任务弹窗</option>
+            <option value="P24-delay">调整期限弹窗</option>
+            <option value="P24-transfer">转交负责人弹窗</option>
+            <option value="P24-cancel">取消任务弹窗</option>
+          </select></label
+        ><label
+          >视口<select id="viewport">
+            <option value="1440">桌面 1440×1000</option>
+            <option value="390">移动 390×844</option>
+          </select></label
+        ><a href="../page-specs/P23.md">列表规格</a
+        ><a href="../page-specs/P24.md">详情与弹窗规格</a>
+      </div>
+      <p id="description"></p>
+      <div class="comparison" id="comparison">
+        <figure>
+          <figcaption>
+            <strong>01 / 现有界面</strong><span class="legend">Vue + 契约测试数据</span>
+          </figcaption>
+          <a id="before-link"><img id="before" alt="当前任务界面基线图" /></a>
+        </figure>
+        <figure>
+          <figcaption>
+            <strong>02 / 设计研究稿</strong><span class="legend">仅浏览器注入 · 待审核</span>
+          </figcaption>
+          <a id="after-link"><img id="after" alt="任务界面设计研究稿" /></a>
+        </figure>
+      </div>
+      <section class="contract">
+        <h2>本组研究的设计决策</h2>
+        <ul>
+          <li>
+            列表收拢重复提示与容器边框，使筛选、选择和任务记录形成连续账页；不改变列表排序、权限或汇总范围。
+          </li>
+          <li>
+            详情桌面分为“任务事实与动作 /
+            活动记录”，移动端顺序阅读；标题使用完整可用宽度，消除局部圆角和阴影。
+          </li>
+          <li>
+            更多动作保持原有展开入口；更新进度仍提交原
+            action、expected_version、progress_percent、progress_note，不增加写入字段。
+          </li>
+          <li>
+            本轮研究尚未完成全部按钮六态、只读/暂停等角色状态及全部业务弹窗变体，不把两页研究稿当作73页设计完成。
+          </li>
+        </ul>
+        <p>
+          请在实施账册中为 P23 / P24
+          记录具体修改意见。通过设计评审后，才将获批结构转成正式组件实现并做完整回归。
+        </p>
+      </section>
+    </main>
+    <footer><a href="../PROGRESS.md">完整进度与剩余事项 ↗</a></footer>
+    <script>
+      const scene = document.getElementById("scene"),
+        viewport = document.getElementById("viewport");
+      const descriptions = {
+        "P23-list": "列表研究：保留原状态筛选、搜索、选择和任务详情入口，削减重复结构。",
+        "P23-create": "新建弹窗：本轮主要验证打开与取消；字段及提交全链仍待专项设计与验收。",
+        "P24-detail": "详情研究：桌面事实与活动并读；移动端保留原顺序、完整标题和可达操作。",
+        "P24-more": "更多操作：保留原角色和任务状态条件，展开区域不覆盖其他事实。",
+        "P24-progress": "进度表单：保留0–100与说明字段，以及提交中、取消和版本校验合同。",
+      };
+      Object.assign(descriptions, {
+        "P24-pause": "暂停：保留操作原因；已验证打开、取消及焦点归还，未执行最终提交。",
+        "P24-delay": "调整期限：日期时间与原因分别输入；已验证取消不写入，未验证实际期限修改。",
+        "P24-transfer": "转交：接收成员来自原有成员选项；本图不证明真实分配权限或写入结果。",
+        "P24-cancel": "取消：原有原因表单研究；仅验证确认之前的取消路径，不作为真实取消成功证据。",
+      });
+      function render() {
+        const file = viewport.value + "-" + scene.value + ".png";
+        for (const [id, prefix] of [
+          ["before", "../runtime/tasks/"],
+          ["after", "tasks/"],
+        ]) {
+          document.getElementById(id).src = prefix + file;
+          document.getElementById(id + "-link").href = prefix + file;
+        }
+        document.getElementById("description").textContent = descriptions[scene.value];
+        document.getElementById("comparison").classList.toggle("mobile", viewport.value === "390");
+      }
+      scene.addEventListener("change", render);
+      viewport.addEventListener("change", render);
+      render();
+    </script>
+  </body>
+</html>
