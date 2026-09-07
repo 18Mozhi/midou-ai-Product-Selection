@@ -604,3 +604,21 @@ C研究关联产品源发生变化，实际执行verify-ui-phase2-account-direct
 本批临时根为`D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-platform-write-20260908`，含red/targeted/expanded/reason-targeted及本轮desktop-final/mobile-final；最终12个文件（6份.last-run与2次red各自截图/context/trace）。只读确认准确路径、无ReparsePoint及文件清单后，PowerShell精确递归清理调用被执行策略拒绝，命令未运行；不换工具、不重试绕过，目录保留且未入Git。旧16批材料未动；现在另外保留此一批，不能声称临时材料全部清理。所有测试/构建/研究采集/验证进程均结束，4101/5173/5181无监听；正常dist及浏览器助手运行包保留，不纳入源码提交。
 
 S0四类写归属技术验证通过，临时清理因策略受阻已交接；不代表全部PA-D01解决。密码/创建/组织资料状态回调、共享原因窗自动关闭及PA-D02/03仍按S1验收；没有具体审图意见时可继续B1来源/采集八页事实线，方向获审则优先F05正式图→Vue闭环。全部W00–W09、全按钮/弹窗、正式图、真实后端/宝塔与用户逐页签收仍待完成，目标保持进行中。
+
+## 2026-09-08 · PLAN 1.17 B1a来源定义/采集程序两页合同与空结果恢复
+
+从main/c306e88接续三项在途内容：P46/P47规格草稿和m03-03-provider-adapter测试；原始产品HEAD55a7439以来Registry/Adapter之外的账号改动已提交，本批不重做S0，也不继续修订计划。先读取AGENTS、Feature Map、实际入口、UI状态/表格/移动预览、API路由/服务及仓储。只交B1a两页：规格48→50/73，余23份；W06仍剩P48–P53六页，不把本批称八页完成或正式视觉交付。
+
+恢复原红测句柄86699并确认终态失败：点击清除后搜索input仍为no-such-adapter，期望空串失败；更早一次排序getByLabel定位失败不计产品复现。现有完整resetFilters已经重置六控件，故仅把Adapter过滤空态按钮接到该函数，并将说明改为搜索/筛选清除后显示当前目录；没有新接口/排序/持久化。新UI2-PR47四实例覆盖query、provider-status、registration、combined，断言六控件、2结果、首分页、单次目录GET、此目录零非GET，不执行真实探针。
+
+定向桌面4通过（18.9s）；完整Adapter原4+新4串行desktop-chromium 8通过（22.8s）、mobile-390 8通过（22.4s），无跳过。mobile为390×844；桌面沿现有Desktop Chrome项目配置，不称本轮采过1440正式图。后续Prettier只改变新测试换行，断言与语义未变；产品文件格式未变，不无变化重复业务回归。build:web/typecheck通过408模块、11.01s；组件边界1通过；frontend-budget通过251资源；docs通过73路由/60受保护/6角色/153文件；runtime-docs、static390文件及format changed=2/production=496/repositories=51通过。
+
+补provider-definition-contract-review.md和两份十项规格，消除原草稿不存在的合同链接；直接S/R/A映射41静态候选与34模型绑定，共享D/T/U另10候选与1绑定，总51源位置/35绑定，不当去重业务分母。记录PR47旧候选到新候选映射、P46创建/编辑×四步及五模式、两种共享移动预览、动态表格列、实际字段边界和源差异；只读内存检查通过51候选逐签名、35AST绑定、15份LF源hash、2页各10节与路由、5本地链接。未新增永久验证器或落盘验证夹具；全局清单/旧图保持原来源，R01仍待真实增量采证。
+
+事实纠偏：路由目录声明platform:operate/platform:superadmin，API检查provider:configure，不混同授权；P47没有程序登记/配置或兼容矩阵入口，矩阵只在类型出现，实际ProviderSourceCenter有相应消费者；健康POST可外发并持久化，和真实24h运行窗口/熔断恢复分开。PR-G01条款与烟测门的蓝图/入口差异仍需独立决定，不改业务；自建模态焦点/错误关联、读取写入归属、form展开附带属性、日期、快照401/403及状态按钮默认文案与handler差异列PR-G02–04待复现/验收，没有借局部reset通过注销。
+
+同步Feature Map、Adapter架构与运维说明及使用方式。代码仅ProviderAdapterCenter按钮和说明，永久测试保留；Registry与共享组件代码、CSS、API/OpenAPI、SQL/数据库、Node/Worker/Python、依赖、.env和运行参数未改。没有生产连接、部署、真实来源/凭证/探针写入；无新配置或独立后端重启要求，后续发布仍通过既有宝塔部署器核对迁移白名单及Node停启窗口。需求拆解技能用于事实合同，无障碍技能用于控件名称/键盘和模态未验边界，按计划永久回归要求使用Playwright。
+
+临时根为`D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-provider-definition-20260908`，包括接续的red/red-behavior和本轮targeted/desktop-final/mobile-final；共11文件（5份.last-run、两次失败各截图/context/trace）。已只读确认准确根路径、无ReparsePoint及完整文件清单，随后PowerShell精确递归删除被执行策略拒绝、命令未运行；不换工具、不重试绕过。该目录保留未入Git，旧17批材料未动，现在另留此一批；不称临时产物已全清理。所有已启动测试/构建/验证命令均终态，4101/5173/5181无监听；正常dist/浏览器助手构建包保留，不纳入源码提交。
+
+本批没有生成正式新图或研究图，没有获得新的方向/逐页通过记录。下一事实卡B1b为P48来源频道/P49启用门/P50凭证；一旦具体结构方向获审，优先F05正式图→Vue闭环，不用规格数或16项模块回归抵扣全站风格、真实后端、部署与用户签收。整体W00–W09目标保持进行中。

@@ -333,16 +333,8 @@ onMounted(load);
       </section>
       <section v-else-if="!filtered.length" class="adapter-empty">
         <h3>没有符合筛选条件的适配器</h3>
-        <p>调整模式或健康状态筛选，不会扩大查询范围。</p>
-        <button
-          type="button"
-          @click="
-            mode = 'all';
-            health = 'all';
-          "
-        >
-          清除筛选
-        </button>
+        <p>调整搜索或筛选条件，清除后显示当前来源目录。</p>
+        <button type="button" @click="resetFilters">清除筛选</button>
       </section>
       <ResponsiveDataView
         v-else

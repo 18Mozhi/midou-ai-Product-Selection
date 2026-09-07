@@ -188,6 +188,56 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, t
     ),
   ).toBeVisible();
 });
+for (const cause of ["query", "provider-status", "registration", "combined"] as const) {
+  test(`UI2-PR47 empty recovery resets all controls ${cause}`, async ({ page }) => {
+    await nav(page);
+    let reads = 0;
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/platform/provider-adapters") && request.method() !== "GET")
+        writes.push(request.url());
+    });
+    await page.route("**/api/v1/platform/provider-adapters", (route) => {
+      reads += 1;
+      return route.fulfill({
+        json: {
+          data: items.map((item) => ({ ...item, adapter_registered: true })),
+          request_id: "ui2-pr47-list",
+          trace_id: "ui2-pr47-list",
+        },
+      });
+    });
+    await page.goto("/platform-admin/providers/adapters");
+    await expect(page.getByText("2 个结果", { exact: true })).toBeVisible();
+    await page.getByRole("combobox", { name: "排序", exact: true }).selectOption("recent");
+    if (cause === "query" || cause === "combined")
+      await page.getByLabel("搜索来源", { exact: true }).fill("no-such-adapter");
+    if (cause === "provider-status" || cause === "combined")
+      await page.getByRole("combobox", { name: "来源状态", exact: true }).selectOption("enabled");
+    if (cause === "registration" || cause === "combined")
+      await page
+        .getByRole("combobox", { name: "登记状态", exact: true })
+        .selectOption("unregistered");
+    if (cause === "combined") {
+      await page.getByRole("combobox", { name: "接入模式", exact: true }).selectOption("manual");
+      await page.getByRole("combobox", { name: "健康状态", exact: true }).selectOption("degraded");
+    }
+    await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toBeVisible();
+    await page.getByRole("button", { name: "清除筛选", exact: true }).click();
+    await expect(page.getByLabel("搜索来源", { exact: true })).toHaveValue("");
+    for (const label of ["接入模式", "来源状态", "登记状态", "健康状态"])
+      await expect(page.getByRole("combobox", { name: label, exact: true })).toHaveValue("all");
+    await expect(page.getByRole("combobox", { name: "排序", exact: true })).toHaveValue(
+      "attention",
+    );
+    await expect(page.getByText("2 个结果", { exact: true })).toBeVisible();
+    await expect(page.getByText("第 1 / 1 页 · 每页 20 条", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toHaveCount(0);
+    expect(reads).toBe(1);
+    expect(writes).toEqual([]);
+  });
+}
+
 test("adapter catalog search, registration filter, reset and pagination bound the rendered rows", async ({
   page,
 }, testInfo) => {
