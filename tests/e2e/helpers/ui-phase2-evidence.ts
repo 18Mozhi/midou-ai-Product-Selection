@@ -1,5 +1,5 @@
-import { expect, type Page, type TestInfo } from "@playwright/test";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { type Page, type TestInfo } from "@playwright/test";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 const capturedByTest = new Map<string, string[]>();
@@ -46,9 +46,24 @@ export async function capturePhase2Evidence(
   try {
     await page.setViewportSize(viewport);
     await page.evaluate(() => document.fonts.ready);
-    await expect
-      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
-      .toBe(true);
+    // W00 records existing layout defects; it is not a visual-acceptance gate.
+    // Preserve measurements rather than suppressing a defective baseline screenshot.
+    const layout = await page.evaluate(() => ({
+      viewportWidth: innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      overflowingElements: Array.from(document.querySelectorAll("main *"))
+        .filter((node) => {
+          const rect = node.getBoundingClientRect();
+          return node.getClientRects().length && rect.right > innerWidth + 1;
+        })
+        .slice(0, 12)
+        .map((node) => ({
+          tag: node.tagName.toLowerCase(),
+          className: node.getAttribute("class") ?? "",
+          width: Math.round(node.getBoundingClientRect().width),
+          right: Math.round(node.getBoundingClientRect().right),
+        })),
+    }));
     const dialog = (await page.locator("dialog[open]").count()) > 0;
     if (!dialog) await page.evaluate(() => window.scrollTo(0, 0));
     await mkdir(output, { recursive: true });
@@ -81,6 +96,12 @@ export async function capturePhase2Evidence(
           })),
       );
     const baseline = JSON.parse(await readFile(path.join(root, "baseline.json"), "utf8"));
+    const stylesheets: Record<string, string> = {};
+    for (const relative of (await readdir("apps/web/src", { recursive: true })).sort()) {
+      if (!relative.endsWith(".css")) continue;
+      const source = `apps/web/src/${relative.split(path.sep).join("/")}`;
+      stylesheets[source] = hash(await readFile(source, "utf8"));
+    }
     await writeFile(
       path.join(output, `${filename}.json`),
       JSON.stringify(
@@ -99,13 +120,19 @@ export async function capturePhase2Evidence(
           sourceRevision: baseline.sourceRevision,
           testFile: path.relative(process.cwd(), testInfo.file).split(path.sep).join("/"),
           testFileSha256: hash(await readFile(testInfo.file, "utf8")),
+          captureHelperSha256: hash(
+            await readFile("tests/e2e/helpers/ui-phase2-evidence.ts", "utf8"),
+          ),
+          stylesheets,
           testTitle: testInfo.title,
           browser: "chromium",
           os: process.platform,
           capturedAt: new Date().toISOString(),
           assertions,
           controls,
-          pageOverflow: false,
+          pageOverflow: layout.documentWidth > layout.viewportWidth,
+          layout,
+          visualAcceptance: "not-evaluated-baseline-only",
           userReview: "pending",
           limitations: [
             "Route fixtures simulate backend responses; no real DB or RBAC is proven.",

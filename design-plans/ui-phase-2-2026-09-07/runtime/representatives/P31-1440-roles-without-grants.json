@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "testStatus": "passed",
+  "kind": "vue-existing-e2e-fixture-baseline-not-production",
+  "pageId": "P31",
+  "state": "roles-without-grants",
+  "concretePath": "/org-admin/roles",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "fullPage": true,
+  "file": "runtime/representatives/P31-1440-roles-without-grants.png",
+  "sha256": "56f9cc25b91296db21347329f76f9ae027004856d9a109d98d31dbf766147fbd",
+  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
+  "sourceRevision": "d9427bceb0701eafe7f105f02b70f04c829db483",
+  "testFile": "tests/e2e/m06-01-organization-admin.spec.ts",
+  "testFileSha256": "9774193831c69b36ec7be4eae6025e170ae7cc0a2255de0e85b9e683e2d988bc",
+  "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
+  "stylesheets": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/approval-workspace.css": "48f301f0f9bebb22b947e019c90bc288105f11a340fee90017f6bd3422686bce",
+    "apps/web/src/automatic-selection.css": "16ad760b25e5833dfa67d69e8a6df3fe9ac9188ef05f63f5ed2c2688663e305b",
+    "apps/web/src/automation-rules.css": "c006390dfdc5cc15371067d6f713ff18a2503c86693aa37e0e2a320cf5dd31f2",
+    "apps/web/src/capacity-boundary.css": "ebacd274b70ae5f2ec5cc83b7331137e2e45dfd125b3058ac8ddb27d9b3a3203",
+    "apps/web/src/collection-task-detail.css": "cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544",
+    "apps/web/src/collection-tasks.css": "7219c3d2c3261327c8373e0d59d1cb5c748fe4400722b99684afb91c9c60a0b4",
+    "apps/web/src/competitor.css": "3bdb58afd80a0de843d991bcdf2478d63cc94d0236ee4a3b404839ee1c57c332",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/commercial-operations.css": "d046fd8522d11fb502759783d6d33f65f0a45f22fc08107465451aad0c6ce90b",
+    "apps/web/src/components/platform-message-editor.css": "6aff48f90275d6bf6ea724a194e1524f66db78548b73a1fae21b04734544d12f",
+    "apps/web/src/crawler-runtime.css": "3d6f9d1a19357079254d606047176d243bef82e4f9bdd76dec86fd6dfadcbd2a",
+    "apps/web/src/crawler-scheduler.css": "4158c6bfee6e9588c8c3c9ec001f6010437d603abc4c819ab4d74269758a686b",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/data-quality.css": "92f7eb013a6275b261e946b1d768662395867fbd2169fd03335e0fbaf0f3faee",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/file-resilience.css": "eb74acc0ec6ecc57eb87783fed530d22c93096f078da6d5d32cc6f426b567874",
+    "apps/web/src/home-dashboard-priority.css": "b70ff7ea536bf0ed76fcb04a40f97620d3caba53a2027e966ae98d664c3a3ef1",
+    "apps/web/src/home-dashboard.css": "34ac28b4d9e357ececfc6cd39cbf758ed8f83f6f5e7d937c1c4459a83e390623",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/mysql-resilience.css": "a9bad3e12fdcbb70e131f20aa6d7d83c5e74fc8b0a489614b3e05d814e1df2fb",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/notification-center.css": "3b76371449dfee575dfc3cbe52e73425b3517d1f0f544e8116ce30f8bc56e386",
+    "apps/web/src/open-platform.css": "8dfa019837c69697ec32c53fe570b667fbb71e24077a27ee46b2c56ea2b8859b",
+    "apps/web/src/opportunities.css": "c660e6c976f625c299b2f39c71cb289cccb4db7d4da42e28a6d08c5d6579e1b7",
+    "apps/web/src/opportunity-ai.css": "04a645d0fc115f4376764359fbac24593ce569832e6e737ad40b49ed9956965f",
+    "apps/web/src/opportunity-profit.css": "1b6d499d244af25a2f95fab9eda5253f4a2cda35d6db6bc24d7d6413836a14df",
+    "apps/web/src/opportunity-selection-entry.css": "2cbf277471e73c9e8ace5e8303ced732743580d2969f202f576ed2c3d487ba46",
+    "apps/web/src/organization-admin.css": "831b6561d1cbc5c46e6b3f9a2092c21685a8d8bcebd436e4c33fa2f3ae1248ee",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/platform-notification-operations.css": "4796e8d3c6bff8df2c3dbee4a8adcc447196154b61b92bd90cdb9ecf67cac25c",
+    "apps/web/src/platform-polish.css": "a6cc1683ca67985187842734003f627f7fc8431f2b42980540165b753a8433b9",
+    "apps/web/src/profit.css": "b52a279a1c1e1512a796b728fb52c3a4ab92a9a3279e2f249854fbbf8e547364",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "81dcd2938dd30c404d7285e1952bbcb0a57dd6d8cb214c036651d55b300fcfb8",
+    "apps/web/src/provider-sources.css": "3a6b85383cfca82940d45927b7e6a927615b4d4ac8bf3805e56165e219d1b060",
+    "apps/web/src/redis-resilience.css": "57524b779d2994fcc084efb67cdd550004b2fccbb35114139797198321de8bf4",
+    "apps/web/src/report-center.css": "5c6b36025fbfed41a243557ac4d73b463fc1dd71d8b895c14f91c7506b49b8c1",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/runtime-topology.css": "951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8",
+    "apps/web/src/scoring.css": "9aeccbb66382e2a052080a7eb70fa2cd94b0b34e54cd1f84b2522197f77f483c",
+    "apps/web/src/security-operations.css": "7ce8308c1cdcb13abc6b256c66f152717703fb4aa3c5c7f2f0592fd649aae22e",
+    "apps/web/src/selection-journey-enhancements.css": "aa7d07bfb8bac3c56470062b076d7f5afa95b54db920315eb4c26f5493492740",
+    "apps/web/src/selection-journey.css": "9c1c726706d736b3d665f472b4bad8458e66e2c83c20ed24c1b0070dcafbb433",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/sourcing.css": "f6a4f5275aec7d139f19854e70cd9eb0a905fb90f9693ead93a8f214baeb0f20",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/task-workspace-enhancements.css": "a80867802134816efd26582662b14aec9f6ff84d0171d9184f022fea009e7ea6",
+    "apps/web/src/task-workspace.css": "7166859838759021634098e43f5692f50afaa203fc1e2b72b70f7147bdc9583b",
+    "apps/web/src/trends-quality.css": "c6b37c674ecaa123a2ab72b027ee5a8aca90b9d7d5916bbfe52fba0705cbeac9",
+    "apps/web/src/trends.css": "9dbec248cab8a4f50e7d43b4b11958f30f59575230d058891e49649c6b931b25"
+  },
+  "testTitle": "role catalog empty state is independent of resource grant count",
+  "browser": "chromium",
+  "os": "win32",
+  "capturedAt": "2026-09-07T09:10:06.193Z",
+  "assertions": [
+    "roles-visible-with-zero-grants",
+    "no-false-empty-role-notice"
+  ],
+  "controls": [
+    {
+      "tag": "a",
+      "name": "SCOUTOPS 智能选品",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "切换界面主题",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "邀请成员",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "个人中心",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "input",
+      "name": "搜索导航菜单",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "概览",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "人员与权限",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "组织结构",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "组织治理",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "安全与审计",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "返回成员工作台",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "组织后台",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "刷新数据",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "角色模板与能力",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "数据范围",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "指定资源授权 0",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "input",
+      "name": "例如：审批、审计或供应链",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "组组织管理员管理组织治理设置。2 项",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "审审计员查看组织审计记录。1 项",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "查看技术能力名称",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "input",
+      "name": "输入中文动作或能力名称",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "select",
+      "name": "全部业务域组织治理安全审计",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "重置",
+      "disabled": true,
+      "insideDialog": false
+    }
+  ],
+  "pageOverflow": false,
+  "layout": {
+    "viewportWidth": 1440,
+    "documentWidth": 1440,
+    "overflowingElements": []
+  },
+  "visualAcceptance": "not-evaluated-baseline-only",
+  "userReview": "pending",
+  "limitations": [
+    "Route fixtures simulate backend responses; no real DB or RBAC is proven.",
+    "Assertions describe this case only, not every action/variant/role on the page.",
+    "These are current Vue baselines, not approved redesign images."
+  ]
+}

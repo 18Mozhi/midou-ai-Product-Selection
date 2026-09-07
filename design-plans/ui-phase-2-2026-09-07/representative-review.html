@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>规则、权限、系统状态 · Vue 基线审核</title>
+    <link rel="stylesheet" href="review.css" />
+    <script src="representative-review-data.js" defer></script>
+    <script src="representative-review.js" defer></script>
+    <style>
+      main {
+        max-width: 1200px;
+        margin: auto;
+      }
+      h1 {
+        font-size: clamp(28px, 5vw, 52px);
+        line-height: 1.2;
+      }
+      .frame {
+        border: 1px solid #d0d5da;
+        background: #fff;
+        margin: 24px 0;
+      }
+      .frame img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .frame[data-width="390"] {
+        max-width: 390px;
+        margin-inline: auto;
+      }
+      .evidence-info {
+        overflow-wrap: anywhere;
+      }
+      #shot-status {
+        min-height: 28px;
+      }
+      .evidence-info li {
+        margin: 8px 0;
+      }
+      a:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #165c49;
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="masthead">
+      <a href="review.html">← 返回实施账册</a>
+      <span>W00 / 运行时基线</span>
+    </header>
+    <main>
+      <h1>规则、权限与异常恢复</h1>
+      <p class="notice">
+        36 张当前 Vue 基线图 · 隔离接口夹具 · 不是新设计稿，不是生产验收，全部待审核。
+      </p>
+      <p>
+        本页用于核对现有字段、按钮入口、弹窗和状态，为重新设计提供事实依据。测试通过不等于视觉方案获批；未展示的角色、动作及变体仍待补齐。
+      </p>
+      <div class="journal-tools">
+        <label>页面<select id="page-choice"></select></label>
+        <label
+          >截图视口<select id="width-choice">
+            <option value="1440">桌面 1440</option>
+            <option value="390">移动 390</option>
+          </select></label
+        >
+        <label>场景<select id="state-choice"></select></label>
+      </div>
+      <p id="shot-status" role="status"></p>
+      <p>
+        <a id="spec-link">查看页面十项规格 ↗</a> ·
+        <a id="image-link" target="_blank" rel="noopener">打开原尺寸截图 ↗</a>
+      </p>
+      <div class="frame" id="shot-frame"><img id="shot-image" alt="" /></div>
+      <section class="evidence-info" aria-labelledby="evidence-title">
+        <h2 id="evidence-title">此场景的证据与边界</h2>
+        <p id="test-source"></p>
+        <ul id="assertions"></ul>
+        <details>
+          <summary>源码与截图校验信息</summary>
+          <p id="hashes" class="mono"></p>
+        </details>
+        <p>
+          接口响应由现有 E2E 测试模拟；未执行真实数据库写入、后端权限验收或生产恢复。P31
+          固定角色矩阵只读；P61 重试成功不会抹去接口仍返回的依赖告警。
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

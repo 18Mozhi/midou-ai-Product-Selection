@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "05d4c1e816bfccf0c216900d04d8571504982fea39e0b7747e2b8dcfebef5a25",
+  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
   "status": "discovery-not-behavior-coverage",
   "candidates": [
     {
@@ -34498,7 +34498,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1",
       "signature": "24237df37bd7b7e4",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34558,7 +34558,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1",
       "signature": "f7e8f2a9a0457015",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34610,7 +34610,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1",
       "signature": "23a85da051801987",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34638,8 +34638,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 338,
       "sourceRange": {
-        "start": 10919,
-        "end": 11167
+        "start": 10915,
+        "end": 11163
       },
       "label": "重置",
       "attributes": {
@@ -34662,7 +34662,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1",
       "signature": "be3f3fa4fcf2fb2c",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34692,8 +34692,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 413,
       "sourceRange": {
-        "start": 13809,
-        "end": 14039
+        "start": 13805,
+        "end": 14035
       },
       "label": "重置",
       "attributes": {
@@ -34712,7 +34712,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1",
       "signature": "5235116f7947ac74",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34742,8 +34742,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 448,
       "sourceRange": {
-        "start": 14952,
-        "end": 15097
+        "start": 14948,
+        "end": 15093
       },
       "label": "{{ showGrantForm ? \"取消创建\" : \"创建授权\" }}",
       "attributes": {
@@ -34766,7 +34766,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1",
       "signature": "0aac14fac3c56e10",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34796,8 +34796,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 453,
       "sourceRange": {
-        "start": 15122,
-        "end": 17613
+        "start": 15118,
+        "end": 17609
       },
       "label": "带原因并审计 授权指定资源 工作区 选择工作区 {{ workspace.name }} 资源类型 {{ resourceTypeText(type) }} 资源编号 必须从真实资源详情页复制；实际访问仍会按工作区、资源和动作复核。 目标成员 选择同组织活动成员 {{ targetLabel(target.id) }} 最小必要动作 {{ capabilityText(action) }} 业务原因 到期时间 必须晚于当前时间，且最长 30 天。 {{ busy ? \"正在创建…\" : \"创建并写入审计\" }}",
       "attributes": {
@@ -34820,7 +34820,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1",
       "signature": "27eeda4bb377f413",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34848,8 +34848,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 473,
       "sourceRange": {
-        "start": 15744,
-        "end": 16088
+        "start": 15740,
+        "end": 16084
       },
       "label": "{{ resourceTypeText(type) }}",
       "attributes": {
@@ -34872,7 +34872,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1",
       "signature": "f0c0d3b1c8ae684b",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34900,8 +34900,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 518,
       "sourceRange": {
-        "start": 17484,
-        "end": 17599
+        "start": 17480,
+        "end": 17595
       },
       "label": "{{ busy ? \"正在创建…\" : \"创建并写入审计\" }}",
       "attributes": {
@@ -34920,7 +34920,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1",
       "signature": "b75d50f1f8f0cc17",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -34950,8 +34950,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 525,
       "sourceRange": {
-        "start": 17732,
-        "end": 18201
+        "start": 17728,
+        "end": 18197
       },
       "label": "{{ status === \"all\" ? `全部 ${grantTotal}` : `${grantStatusText(status)} ${grantCounts[status] ?? 0}` }}",
       "attributes": {
@@ -34977,7 +34977,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1",
       "signature": "8bd3f7b2e5dcb44f",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35007,8 +35007,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 550,
       "sourceRange": {
-        "start": 18524,
-        "end": 19199
+        "start": 18520,
+        "end": 19195
       },
       "label": "{{ grantStatusText(grant.effective_status) }} {{ resourceTypeText(grant.resource_type) }} · {{ targetLabel(grant.grantee_membership_id) }} {{ workspaceLabel(grant.workspace_id) }} 到期 {{ formatTime(grant.expires_at) }}",
       "attributes": {
@@ -35037,7 +35037,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1",
       "signature": "a162032f86484b89",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35067,8 +35067,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 604,
       "sourceRange": {
-        "start": 20531,
-        "end": 20556
+        "start": 20527,
+        "end": 20552
       },
       "label": "查看技术标识",
       "attributes": {},
@@ -35089,7 +35089,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1",
       "signature": "5f937fb211eb5840",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35117,8 +35117,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 608,
       "sourceRange": {
-        "start": 20699,
-        "end": 21850
+        "start": 20695,
+        "end": 21846
       },
       "label": "变更原因 新到期时间 {{ busy ? \"正在保存…\" : \"延长授权\" }} 撤销授权",
       "attributes": {
@@ -35149,7 +35149,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#64b97b8b5fe9de71.1",
       "signature": "64b97b8b5fe9de71",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35177,8 +35177,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 631,
       "sourceRange": {
-        "start": 21513,
-        "end": 21576
+        "start": 21509,
+        "end": 21572
       },
       "label": "{{ busy ? \"正在保存…\" : \"延长授权\" }}",
       "attributes": {
@@ -35205,7 +35205,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1",
       "signature": "8c59567be7cef9a3",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35235,8 +35235,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 632,
       "sourceRange": {
-        "start": 21591,
-        "end": 21813
+        "start": 21587,
+        "end": 21809
       },
       "label": "撤销授权",
       "attributes": {
@@ -35268,7 +35268,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1",
       "signature": "5be3d5846e4138fa",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35298,8 +35298,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 646,
       "sourceRange": {
-        "start": 22038,
-        "end": 22224
+        "start": 22034,
+        "end": 22220
       },
       "label": "上一页",
       "attributes": {
@@ -35322,7 +35322,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1",
       "signature": "bf5c2f057a07f3f3",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35352,8 +35352,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 654,
       "sourceRange": {
-        "start": 22330,
-        "end": 22529
+        "start": 22326,
+        "end": 22525
       },
       "label": "下一页",
       "attributes": {
@@ -35376,7 +35376,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1",
       "signature": "085ead5af6973fef",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35406,8 +35406,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 665,
       "sourceRange": {
-        "start": 22685,
-        "end": 22769
+        "start": 22681,
+        "end": 22765
       },
       "label": "创建首条授权",
       "attributes": {
@@ -35434,7 +35434,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1",
       "signature": "a6d03f8144116449",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -35464,8 +35464,8 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 670,
       "sourceRange": {
-        "start": 22935,
-        "end": 23051
+        "start": 22931,
+        "end": 23047
       },
       "label": "查看全部授权",
       "attributes": {
@@ -35488,7 +35488,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1",
       "signature": "cd26859a239383fd",
-      "sourceSha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690",
+      "sourceSha256": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,

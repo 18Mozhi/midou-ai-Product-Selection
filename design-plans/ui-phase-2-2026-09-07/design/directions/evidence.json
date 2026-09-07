@@ -16,7 +16,7 @@
       },
       "file": "design/directions/1440-focus-list.png",
       "sha256": "81ea138f3f54574ba62ac5184e3930db4e6437671b4ecd28b720a1758f506567",
-      "capturedAt": "2026-09-07T07:58:51.548Z"
+      "capturedAt": "2026-09-07T09:11:35.557Z"
     },
     {
       "direction": "focus",
@@ -27,7 +27,7 @@
       },
       "file": "design/directions/1440-focus-detail.png",
       "sha256": "7b35bdac2e619c9d00994bcf2ff9ef9f1c74c244f3f96f914ba6331bd672ce92",
-      "capturedAt": "2026-09-07T07:58:51.686Z"
+      "capturedAt": "2026-09-07T09:11:35.723Z"
     },
     {
       "direction": "focus",
@@ -38,7 +38,7 @@
       },
       "file": "design/directions/1440-focus-progress.png",
       "sha256": "efe311f5d79204019dc4fcea29c10ad13576d3e7d5f2e002d76b5f6977c9fd03",
-      "capturedAt": "2026-09-07T07:58:51.805Z"
+      "capturedAt": "2026-09-07T09:11:35.838Z"
     },
     {
       "direction": "brief",
@@ -49,7 +49,7 @@
       },
       "file": "design/directions/1440-brief-list.png",
       "sha256": "f130d41c98a450d236c5c0919fbce6f896f775f4881d53fe58ccceed1ee76991",
-      "capturedAt": "2026-09-07T07:58:52.045Z"
+      "capturedAt": "2026-09-07T09:11:36.095Z"
     },
     {
       "direction": "brief",
@@ -60,7 +60,7 @@
       },
       "file": "design/directions/1440-brief-detail.png",
       "sha256": "03865d2fa7f73f66d248c5efc617664bef76201270e842bb13c8874b59575a45",
-      "capturedAt": "2026-09-07T07:58:52.204Z"
+      "capturedAt": "2026-09-07T09:11:36.254Z"
     },
     {
       "direction": "brief",
@@ -71,7 +71,7 @@
       },
       "file": "design/directions/1440-brief-progress.png",
       "sha256": "9e0f9d107e54462fd7416f770051754686f2c99f263935ed7990c60347f026ec",
-      "capturedAt": "2026-09-07T07:58:52.305Z"
+      "capturedAt": "2026-09-07T09:11:36.382Z"
     },
     {
       "direction": "focus",
@@ -82,7 +82,7 @@
       },
       "file": "design/directions/390-focus-list.png",
       "sha256": "73698be3778fd2f949257b2b0426330a514ed3da48f99ad8a6d7037376c3defc",
-      "capturedAt": "2026-09-07T07:58:52.786Z"
+      "capturedAt": "2026-09-07T09:11:36.879Z"
     },
     {
       "direction": "focus",
@@ -93,7 +93,7 @@
       },
       "file": "design/directions/390-focus-detail.png",
       "sha256": "2a37082167bb0dbcb80d0406603978ee2ebfed3fb2e9fd30db910c26360cd554",
-      "capturedAt": "2026-09-07T07:58:52.926Z"
+      "capturedAt": "2026-09-07T09:11:37.018Z"
     },
     {
       "direction": "focus",
@@ -104,7 +104,7 @@
       },
       "file": "design/directions/390-focus-progress.png",
       "sha256": "06190ebd0cdc3258ca73daeccc10719e3419cd1883bcd6c190c85d3efd940dc4",
-      "capturedAt": "2026-09-07T07:58:53.000Z"
+      "capturedAt": "2026-09-07T09:11:37.095Z"
     },
     {
       "direction": "brief",
@@ -115,7 +115,7 @@
       },
       "file": "design/directions/390-brief-list.png",
       "sha256": "450dd020fe2eedd7652dbd0c9943030e018e6bccd965b2d3837d0c721f40ded2",
-      "capturedAt": "2026-09-07T07:58:53.219Z"
+      "capturedAt": "2026-09-07T09:11:37.311Z"
     },
     {
       "direction": "brief",
@@ -126,7 +126,7 @@
       },
       "file": "design/directions/390-brief-detail.png",
       "sha256": "3e4c15703eb4b796410738100a04013dd5a7bac47176f05259194ef6e1c52ef7",
-      "capturedAt": "2026-09-07T07:58:53.326Z"
+      "capturedAt": "2026-09-07T09:11:37.418Z"
     },
     {
       "direction": "brief",
@@ -137,7 +137,7 @@
       },
       "file": "design/directions/390-brief-progress.png",
       "sha256": "64a7512563d4832a842439e1492838033e1987d735af1083e000130c70f9aab9",
-      "capturedAt": "2026-09-07T07:58:53.384Z"
+      "capturedAt": "2026-09-07T09:11:37.477Z"
     }
   ],
   "checks": [

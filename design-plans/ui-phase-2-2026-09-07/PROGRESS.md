@@ -109,3 +109,36 @@ node scripts/build-ui-phase2-inventory.mjs --check
 本批没有新设计上线、数据库迁移或生产重启。上线空态修复需依既有宝塔部署流程重新上传前端静态构建，不需要新增后端环境变量或重启Python；本批没有执行部署。OpenAPI无需变更，Feature Map登记空态边界和测试专用开关。
 
 采图阶段另发现P31角色矩阵在390视口撑宽文档至814px，原功能用例没有检查该状态的横向溢出。将org-role-page网格单列约束为minmax(0, 1fr)，保留原矩阵内部横向滚动；新增常规E2E断言页面不溢出、矩阵可滚动，不依赖采图开关。采图器记录实际宽度及溢出观察而非伪造视觉通过，审核台明确区分功能用例通过和视觉验收。此项修复不批准旧布局或任何新方向，修复版本需要重新采集证据。
+
+### 代表页证据入口与复验
+
+[规则、权限与系统状态审核页](representative-review.html)按页面、视口、场景切换36张当前Vue图，展示场景断言、源码提交、截图和测试来源，支持原尺寸查看。P17共14张、P31共16张、P61共6张；不是36个页面，也不是36个已审核设计。元数据额外记录采图器与所有独立CSS哈希，弥补控件AST盘点只扫描Vue/TS的边界；功能用例通过和视觉验收保持独立。
+
+生成器只接受固定36份记录，检查最终测试状态、页面路径、当前源码指纹/版本、测试文件/采图器/样式和图片哈希；失败或缺项直接退出，不会把未执行项填为通过。检查布局时记录实际documentWidth及有限元素观察；图库明确标注发现的溢出，W03/W04最终响应式门仍要求修复后复测，不能用“采集成功”代替产品质量。
+
+完整重采前先运行node scripts/build-ui-phase2-inventory.mjs；然后在PowerShell执行以下命令（使用现有依赖，测试服务与浏览器由Playwright配置关闭）：
+
+```powershell
+$previousCapture = $env:SCOUTOPS_UI_PHASE2_CAPTURE
+try {
+  $env:SCOUTOPS_UI_PHASE2_CAPTURE = '1'
+  $captureSpecs = @('tests/e2e/m04-03-scoring.spec.ts', 'tests/e2e/m06-01-organization-admin.spec.ts', 'tests/e2e/m06-02-platform-dashboard.spec.ts')
+  $captureCases = 'score rule versions support|score rule approval controls|score rules read-only empty|organization roles expose searchable|organization resource grants validate|role catalog empty state|system status aggregates'
+  npx --no-install playwright test @captureSpecs --project=desktop-chromium --grep $captureCases
+  if ($LASTEXITCODE -ne 0) { throw 'Desktop capture failed' }
+  npx --no-install playwright test @captureSpecs --project=mobile-390 --grep $captureCases
+  if ($LASTEXITCODE -ne 0) { throw 'Mobile capture failed' }
+} finally {
+  $env:SCOUTOPS_UI_PHASE2_CAPTURE = $previousCapture
+}
+node scripts/build-ui-phase2-representative-review.mjs
+node scripts/verify-ui-phase2-representatives.mjs
+```
+
+生成器的--check仅验证，不写文件；浏览器验证器不接受参数，从file://打开图库，在1440/390各切换全部36张、检查对应来源/规格链接、44px选择器、键盘顺序、无外部请求及审核台自身不横向溢出，finally关闭浏览器。新图库的“页面不溢出”结论指图库自身；产品截图有独立测量和待审状态。源码变化后旧任务证据也必须重采，再运行任务证据14项单测和主审核台验证器。
+
+局部宽度修复后，组织模块再次桌面28项通过、移动27项通过/1项按既有超时策略跳过；前端构建、文档、静态分析和格式门通过。此前三个文件的42/40结果仅对应当时版本，未将其伪称为全站验收。本批无API、后端、权限、环境文件、依赖、数据库或生产操作变化；两项产品修改仅影响本地Vue空态显示与角色矩阵宽度。全站设计、G0分母冻结、六角色完整状态、真实后端/生产验收仍未完成。
+
+最终证据重采基于d9427bc：代表页桌面7项、移动7项功能用例均通过，36份记录均为passed、pageOverflow=false，P31移动文档宽度已回到390px。主审核台双视口通过，新图库双视口各切换全部36张通过（控制台错误0、外部请求0），旧任务基线/样式研究/双结构原型重新采集并通过14项单测。文档与格式门通过，清单及全部代表图哈希校验通过；仍不等于用户视觉签收。
+
+收尾删除本批唯一系统临时目录scoutops-phase2-representatives-20260907及其中23份测试输出（失败追踪/截图、error-context、.last-run），浏览器、短时Vite和E2E服务均已退出，4101/5173无监听。保留runtime/representatives的36张PNG和36份JSON、图库资产及重采的任务/审核台图片作为永久审核交付。临时产物无剩余；生产未部署，无重启要求。下一步继续W00其他路由与动态角色/状态盘点，同时等待用户选定全新布局方向；没有将A/B或任何页面自动批准。
