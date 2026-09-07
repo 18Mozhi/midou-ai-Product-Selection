@@ -1093,6 +1093,7 @@
     },
     "opportunityDomain": {
       "module": "M04-02",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md and P18.md have separate list/detail specifications. opportunity-contract-review.md and opportunity-candidate-map.md map 104 control/event candidates across 12 components, 41 v-model sites including forwarded models, and eight dialog definition/call candidates expanded into eleven local/shared caller variants. tests/e2e/ui-phase2-opportunity-contracts.spec.ts covers manual-create cancellation and payload, three current-page batch variants, observe/reject failure retention and explicit retry, read-only AI retry and immediate ERP-file import using isolated Vue responses. Cross-page selection scope, stale reads, full modal accessibility, cost/AI review recovery and real backend/production verification remain pending. No approved final redesign, frozen denominator, API or runtime contract change is implied.",
       "entrypoints": [
         "../apps/api/src/opportunity-service.ts",
         "../apps/api/src/mysql-opportunity-repository.ts",
