@@ -1764,6 +1764,7 @@
     },
     "platformDashboard": {
       "module": "M06-02",
+      "uiPhase2LogContract": "P62 and log-backup-release-contract-review.md under design-plans/ui-phase-2-2026-09-07 map the actual latest-200 filtered log union, partial trace grouping, real task/provider links, reason dialog and audited CSV export. No time filter, pagination or runtime execution button is added. This batch is documentation only for logs; request/URL/cache ownership, permission-failure snapshot handling, export lifecycle, complete accessibility and production remain pending.",
       "uiPhase2ContentNotificationEvidenceContract": "P56/P57/P63 and content-notification-evidence-contract-review.md under design-plans/ui-phase-2-2026-09-07 map 63 local candidates and 16 model/forwarding bindings across ten Vue files, including retained closed email branches and reused P61 consumers. Content status, notification delivery filters versus independent message pagination, manual synchronous publication and API coverage report scope are kept distinct. PlatformMessageWorkbench preserves a compact preview and exposes complete plain-text message bodies through native details in draft/published/cancelled states; UI2-PN57 covers keyboard expansion/collapse, unclipped content, viewport overflow and zero business writes. No API, permission, recipient selection, persistence, mail enablement or runtime configuration changes. Formal layouts/images, full lifecycle/accessibility and real backend/production acceptance remain pending.",
       "uiPhase2DataGovernanceContract": "P54/P55 and data-governance-contract-review.md under design-plans/ui-phase-2-2026-09-07 map 66 local control/event/dialog candidates and nine v-model bindings across PlatformDataCenter, DataQualityCenter and PlatformGovernanceCenter. Successful Web reads retain their own entity/section/filter scope. Pending or failed scope changes preserve original record labels, statuses, versions and governance row/detail workbench links, show the retained scope, and disable data export until the requested scope is read successfully. UI2-DG54/DG55 in m06-02-platform-dashboard.spec.ts cover retained records during held requests, non-retried 404 failures and successful recovery on desktop/mobile. Existing URLs, SQL/count/pagination, API bodies, permissions and runtime configuration are unchanged. Async lifecycle/export ownership and quality workflow gaps, formal redesign, real backend and production remain pending.",
       "entrypoints": [
@@ -2041,6 +2042,7 @@
     },
     "backupRecovery": {
       "module": "M07-04",
+      "uiPhase2Contract": "P64 and log-backup-release-contract-review.md under design-plans/ui-phase-2-2026-09-07 map the read-only recovery page and asset/detail consumers. The validity label now renders policy.maximum_drill_age_days instead of a hard-coded 90; UI2-OP64 verifies an isolated 30-to-120-day response refresh on desktop/mobile without changing policy or release eligibility. No API/config/default/SQL/task change. Real restore, lifecycle boundary cases, full accessibility, formal redesign and production remain pending.",
       "entrypoints": [
         "../scripts/backup-recovery.mjs",
         "../apps/api/src/backup-recovery-service.ts",
@@ -2083,6 +2085,7 @@
     },
     "releaseRollout": {
       "module": "M07-05",
+      "uiPhase2Contract": "P65 and log-backup-release-contract-review.md under design-plans/ui-phase-2-2026-09-07 distinguish current build identity from historical rollout gates and map read/detail/copy/coverage navigation only. No release, rollback, stop or write-probe UI action exists. This batch changes no release code or production state; missing-source evidence, historical wording, complete SHA access, cache lifecycle and formal design remain pending. Do not execute the historical dual-slot workflow.",
       "entrypoints": [
         "../infra/baota/service-manifest.json",
         "../scripts/deploy-baota.py",

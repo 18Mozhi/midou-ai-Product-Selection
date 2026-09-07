@@ -331,7 +331,7 @@ onBeforeUnmount(() => {
         <section class="panel">
           <div class="panel-title">
             <h3>恢复证据</h3>
-            <span>90 天有效期</span>
+            <span>{{ data.policy.maximum_drill_age_days }} 天有效期</span>
           </div>
           <dl>
             <div>

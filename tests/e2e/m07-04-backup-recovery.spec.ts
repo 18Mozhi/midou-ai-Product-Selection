@@ -50,6 +50,34 @@ async function navigation(page: Page) {
   );
 }
 test.beforeEach(async ({ page }) => navigation(page));
+test("UI2-OP64 drill validity label follows the returned policy after refresh", async ({
+  page,
+}) => {
+  let days = 30;
+  const methods: string[] = [];
+  await page.route("**/api/v1/platform/operations/backup-recovery", (route) => {
+    methods.push(route.request().method());
+    return route.fulfill({
+      json: env({
+        ...base,
+        state: "blocked",
+        policy: { ...base.policy, maximum_drill_age_days: days },
+      }),
+    });
+  });
+  await page.goto("/platform-admin/operations");
+  const evidence = page
+    .locator(".panel")
+    .filter({ has: page.getByRole("heading", { name: "恢复证据", exact: true }) });
+  await expect(evidence.getByText("30 天有效期", { exact: true })).toBeVisible();
+  await expect(evidence.getByText("90 天有效期", { exact: true })).toHaveCount(0);
+  await expect(evidence.getByText("尚无演练证据", { exact: true })).toBeVisible();
+  days = 120;
+  await page.getByRole("button", { name: "刷新事实", exact: true }).click();
+  await expect(evidence.getByText("120 天有效期", { exact: true })).toBeVisible();
+  await expect(evidence.getByText("30 天有效期", { exact: true })).toHaveCount(0);
+  expect(methods).toEqual(["GET", "GET"]);
+});
 test("M07-04.A07/A08/A15 desktop and 390 recovery truth", async ({ page }) => {
   await page.route("**/api/v1/platform/operations/backup-recovery", (route) =>
     route.fulfill({ json: env({ ...base, state: "blocked" }) }),
