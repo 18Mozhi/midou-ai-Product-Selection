@@ -1,0 +1,780 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "d94671efbb460119eba990d7f7d6bf91b10c8ec5",
+  "legacyRevision": "a9460a99c9bce018e65c5bce357f592669fa0a0d",
+  "sourceFingerprint": "10003685ac194a3ba064402b98e14fd501014c16a6ec69f5e53577783b83a973",
+  "status": "static-discovery-complete-runtime-inventory-pending",
+  "denominatorFrozen": false,
+  "counts": {
+    "routes": 73,
+    "controls": 1377,
+    "dialogs": 100,
+    "nativeButtons": 763,
+    "nativeDialogs": 57,
+    "legacyButtons": 648,
+    "legacyDialogs": 56,
+    "legacySourceMatches": 704,
+    "unmappedCandidates": 54,
+    "runtimeWarnings": 3
+  },
+  "evidenceTypes": {
+    "design-plans/ui-redesign-2026-09-05/screens/desktop": "concept-html-not-vue-not-production",
+    "design-plans/ui-redesign-2026-09-05/screens/mobile": "concept-html-not-vue-not-production",
+    "design-plans/ui-redesign-2026-09-05/implementation-proof": "vue-isolated-per-existing-report-not-new-version-proof"
+  },
+  "limitations": [
+    "Candidate IDs identify source sites, not reviewed business actions.",
+    "Shared surface imports over-approximate routes; mode, role, v-for and runtime variations remain unreviewed.",
+    "App DEV query views and unmapped source sites require explicit classification; absence of route attribution does not prove removal.",
+    "Shared reason helper and native dialog calls are discovered; arbitrary render functions or other helper aliases still need runtime audit.",
+    "Historical AST identity or unique handler-and-label matches reconcile old rows; no business disposition is automatically approved."
+  ],
+  "sources": [
+    {
+      "file": "apps/web/src/api-client.ts",
+      "sha256": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff"
+    },
+    {
+      "file": "apps/web/src/App.vue",
+      "sha256": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531"
+    },
+    {
+      "file": "apps/web/src/automatic-selection-readiness.ts",
+      "sha256": "8ee0c2efad0138393a5071a7798560477db812a3463a0f9312c5a4a753b99487"
+    },
+    {
+      "file": "apps/web/src/components/AccountShell.vue",
+      "sha256": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1"
+    },
+    {
+      "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+      "sha256": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f"
+    },
+    {
+      "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+      "sha256": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126"
+    },
+    {
+      "file": "apps/web/src/components/ApiFoundation.vue",
+      "sha256": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32"
+    },
+    {
+      "file": "apps/web/src/components/AppIcon.vue",
+      "sha256": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455"
+    },
+    {
+      "file": "apps/web/src/components/approval-workspace-types.ts",
+      "sha256": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792"
+    },
+    {
+      "file": "apps/web/src/components/ApprovalQueuePanel.vue",
+      "sha256": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+    },
+    {
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "sha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629"
+    },
+    {
+      "file": "apps/web/src/components/AuditedReasonDialog.vue",
+      "sha256": "10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee"
+    },
+    {
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "sha256": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80"
+    },
+    {
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "sha256": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920"
+    },
+    {
+      "file": "apps/web/src/components/AutomaticSelectionReadinessPanel.vue",
+      "sha256": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
+    },
+    {
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "sha256": "6e202a73e7b7924d128e29eb8588b748d1c634403b57419fb2b1a68b096b8a85"
+    },
+    {
+      "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+      "sha256": "0b87ddd493c028e30b659263a15fa025c519279f14dac12093a0356f83497b08"
+    },
+    {
+      "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+      "sha256": "2768ed772424adf9698987ca19e06c35037c24a0070da918743aef384578e166"
+    },
+    {
+      "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+      "sha256": "22498e4077c41845dd1c037b02fd0d6f63b34850c58d0d3a41334fa632281f66"
+    },
+    {
+      "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+      "sha256": "e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4"
+    },
+    {
+      "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+      "sha256": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335"
+    },
+    {
+      "file": "apps/web/src/components/CollectionTaskCenter.vue",
+      "sha256": "ac7690821c78b74b05e6b25509e03ae688bf07c20e6110b614be03a9dbc86b7b"
+    },
+    {
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "sha256": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33"
+    },
+    {
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "sha256": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7"
+    },
+    {
+      "file": "apps/web/src/components/ConfigBoundary.vue",
+      "sha256": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb"
+    },
+    {
+      "file": "apps/web/src/components/ConfirmDialog.vue",
+      "sha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f"
+    },
+    {
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "sha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47"
+    },
+    {
+      "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+      "sha256": "46b9438d92d3c9971b0cbc5e24746431bc98f2f4676ebef6982df8048c26b8e3"
+    },
+    {
+      "file": "apps/web/src/components/CredentialAssetCenter.vue",
+      "sha256": "e06e6e739cb5ffc7855ed1f88e3cf386d0095b5eada0e08c68132096201a8ad6"
+    },
+    {
+      "file": "apps/web/src/components/DataQualityCenter.vue",
+      "sha256": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c"
+    },
+    {
+      "file": "apps/web/src/components/DeploymentFoundation.vue",
+      "sha256": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8"
+    },
+    {
+      "file": "apps/web/src/components/DiscoveryOverlay.vue",
+      "sha256": "c3c3355805f8cf1c2bff0e52608f3b85d31b972e9372343fc4f0fb68edc75ff3"
+    },
+    {
+      "file": "apps/web/src/components/FileAuditFoundation.vue",
+      "sha256": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184"
+    },
+    {
+      "file": "apps/web/src/components/FileResilienceCenter.vue",
+      "sha256": "27755efd919d7f81dea37304c4edc007ba79ddf19b7df7f5d3d909e09d815bc3"
+    },
+    {
+      "file": "apps/web/src/components/HomeAutomationOverview.vue",
+      "sha256": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4"
+    },
+    {
+      "file": "apps/web/src/components/HomeDashboard.vue",
+      "sha256": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e"
+    },
+    {
+      "file": "apps/web/src/components/LandingRedirect.vue",
+      "sha256": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7"
+    },
+    {
+      "file": "apps/web/src/components/LocalIdentity.vue",
+      "sha256": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769"
+    },
+    {
+      "file": "apps/web/src/components/MySqlFoundation.vue",
+      "sha256": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3"
+    },
+    {
+      "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+      "sha256": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa"
+    },
+    {
+      "file": "apps/web/src/components/NavigationShell.vue",
+      "sha256": "993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92"
+    },
+    {
+      "file": "apps/web/src/components/NotFoundPage.vue",
+      "sha256": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b"
+    },
+    {
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "sha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e"
+    },
+    {
+      "file": "apps/web/src/components/OnboardingGuide.vue",
+      "sha256": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088"
+    },
+    {
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "sha256": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5"
+    },
+    {
+      "file": "apps/web/src/components/opportunity-decision-presentation.ts",
+      "sha256": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d"
+    },
+    {
+      "file": "apps/web/src/components/opportunity-workspace-forms.ts",
+      "sha256": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa"
+    },
+    {
+      "file": "apps/web/src/components/opportunity-workspace-presentation.ts",
+      "sha256": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16"
+    },
+    {
+      "file": "apps/web/src/components/opportunity-workspace-types.ts",
+      "sha256": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityAiPanel.vue",
+      "sha256": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+      "sha256": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "sha256": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+      "sha256": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityEvidencePanel.vue",
+      "sha256": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+      "sha256": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+      "sha256": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityListPanel.vue",
+      "sha256": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "sha256": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+      "sha256": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "sha256": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "sha256": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "sha256": "df418badfb3016644b3d726722d51065c8eea18d027d5efa104b1983a1c0d0df"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+      "sha256": "9ec2fb2e38b6b9ff11f81c3f314671dedec07667f96d137265c42c1ddf84b032"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+      "sha256": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+      "sha256": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationDataPanel.vue",
+      "sha256": "575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationMemberPanel.vue",
+      "sha256": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationRolePanel.vue",
+      "sha256": "d6bf42d8201a1a7f939a1888c369aa3263161ab2411d04c8edf89f41fc305690"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+      "sha256": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+      "sha256": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+      "sha256": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7"
+    },
+    {
+      "file": "apps/web/src/components/PersonalCenter.vue",
+      "sha256": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043"
+    },
+    {
+      "file": "apps/web/src/components/platform-management-presentation.ts",
+      "sha256": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133"
+    },
+    {
+      "file": "apps/web/src/components/platform-status-topology.ts",
+      "sha256": "e1442a8a3d6e28939865f063e6a155c9314445dab7f508f9a2c902da4e909c37"
+    },
+    {
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "sha256": "09e4f3d6bafb25ca576c091d25775d195de0cf47336cae5879a700db3c39fd0c"
+    },
+    {
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "sha256": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829"
+    },
+    {
+      "file": "apps/web/src/components/PlatformAdminRecords.vue",
+      "sha256": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297"
+    },
+    {
+      "file": "apps/web/src/components/PlatformContentPagination.vue",
+      "sha256": "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402"
+    },
+    {
+      "file": "apps/web/src/components/PlatformDashboard.vue",
+      "sha256": "7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95"
+    },
+    {
+      "file": "apps/web/src/components/PlatformDataCenter.vue",
+      "sha256": "f491418e71978de77f8dc2b4c649cbb21b954d14ce05451a0561a4817888773c"
+    },
+    {
+      "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+      "sha256": "0ae025e66bcddb8da0b1766b660213e8f7fa5cbace0956214117d7e31b719912"
+    },
+    {
+      "file": "apps/web/src/components/PlatformLogCenter.vue",
+      "sha256": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d"
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "sha256": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615"
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementFilter.vue",
+      "sha256": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9"
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementRecordList.vue",
+      "sha256": "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc"
+    },
+    {
+      "file": "apps/web/src/components/PlatformMessageEditor.vue",
+      "sha256": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea"
+    },
+    {
+      "file": "apps/web/src/components/PlatformMessageWorkbench.vue",
+      "sha256": "dbe5dde79e28d7356e1671e0f492e57f8ec0e23a05a0459a06707b98072d9373"
+    },
+    {
+      "file": "apps/web/src/components/PlatformNotificationManagement.vue",
+      "sha256": "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18"
+    },
+    {
+      "file": "apps/web/src/components/PlatformNotificationOperations.vue",
+      "sha256": "18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c"
+    },
+    {
+      "file": "apps/web/src/components/PlatformNotificationPagination.vue",
+      "sha256": "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606"
+    },
+    {
+      "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+      "sha256": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435"
+    },
+    {
+      "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+      "sha256": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82"
+    },
+    {
+      "file": "apps/web/src/components/PlatformRoleComparison.vue",
+      "sha256": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba"
+    },
+    {
+      "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "sha256": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24"
+    },
+    {
+      "file": "apps/web/src/components/PlatformUserMembershipForm.vue",
+      "sha256": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644"
+    },
+    {
+      "file": "apps/web/src/components/PlatformUserRecords.vue",
+      "sha256": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228"
+    },
+    {
+      "file": "apps/web/src/components/provider-source-types.ts",
+      "sha256": "dd7b314fe8189f5f51963e6835a9b56c4ffafe33abd7bb8f0007e436e63dc702"
+    },
+    {
+      "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+      "sha256": "58912768ec57f0078cf60591b05bfae9e2ffd08bc21795bbc1b96066567a808e"
+    },
+    {
+      "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+      "sha256": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334"
+    },
+    {
+      "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+      "sha256": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0"
+    },
+    {
+      "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+      "sha256": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a"
+    },
+    {
+      "file": "apps/web/src/components/ProviderRegistry.vue",
+      "sha256": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e"
+    },
+    {
+      "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+      "sha256": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6"
+    },
+    {
+      "file": "apps/web/src/components/ProviderSourceCenter.vue",
+      "sha256": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6"
+    },
+    {
+      "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+      "sha256": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01"
+    },
+    {
+      "file": "apps/web/src/components/RedisFoundation.vue",
+      "sha256": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea"
+    },
+    {
+      "file": "apps/web/src/components/RedisResilienceCenter.vue",
+      "sha256": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d"
+    },
+    {
+      "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+      "sha256": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1"
+    },
+    {
+      "file": "apps/web/src/components/ReportCenter.vue",
+      "sha256": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+    },
+    {
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "sha256": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970"
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveDataView.vue",
+      "sha256": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa"
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+      "sha256": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39"
+    },
+    {
+      "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+      "sha256": "d43acbe7d3337b6278ded3ed22e63121691d479952b2ec4cfa953e0d6285b52f"
+    },
+    {
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "sha256": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28"
+    },
+    {
+      "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+      "sha256": "fd6f66b721f768da5555ad9b6469e12bfd7e0710b4fee573935e9a9656abf003"
+    },
+    {
+      "file": "apps/web/src/components/SelectionJourney.vue",
+      "sha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e"
+    },
+    {
+      "file": "apps/web/src/components/shared/monitoring-readiness.ts",
+      "sha256": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073"
+    },
+    {
+      "file": "apps/web/src/components/shared/MonitoringReadinessStrip.vue",
+      "sha256": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b"
+    },
+    {
+      "file": "apps/web/src/components/shared/QualityGateSetupSummary.vue",
+      "sha256": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b"
+    },
+    {
+      "file": "apps/web/src/components/sourcing-workspace-types.ts",
+      "sha256": "70c451bf950fcd23c2a6dd87d693ceed46439ca68c9af92727302af09f025646"
+    },
+    {
+      "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+      "sha256": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406"
+    },
+    {
+      "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+      "sha256": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4"
+    },
+    {
+      "file": "apps/web/src/components/SourcingWorkspace.vue",
+      "sha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c"
+    },
+    {
+      "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "sha256": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8"
+    },
+    {
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "sha256": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff"
+    },
+    {
+      "file": "apps/web/src/components/task-workspace-types.ts",
+      "sha256": "72d4c541f6a09e9c4c05643f88fe7a8fdfc467ae1a07b605244fdff46e1e2b2e"
+    },
+    {
+      "file": "apps/web/src/components/TaskBatchActions.vue",
+      "sha256": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d"
+    },
+    {
+      "file": "apps/web/src/components/TaskDetailPanel.vue",
+      "sha256": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6"
+    },
+    {
+      "file": "apps/web/src/components/TaskListPanel.vue",
+      "sha256": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f"
+    },
+    {
+      "file": "apps/web/src/components/TaskWorkspace.vue",
+      "sha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb"
+    },
+    {
+      "file": "apps/web/src/components/TechnicalDetails.vue",
+      "sha256": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0"
+    },
+    {
+      "file": "apps/web/src/components/TenancyChooser.vue",
+      "sha256": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e"
+    },
+    {
+      "file": "apps/web/src/components/ThemeStudio.vue",
+      "sha256": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc"
+    },
+    {
+      "file": "apps/web/src/components/trend-workspace-types.ts",
+      "sha256": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94"
+    },
+    {
+      "file": "apps/web/src/components/TrendChangeQueue.vue",
+      "sha256": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f"
+    },
+    {
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "sha256": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64"
+    },
+    {
+      "file": "apps/web/src/components/TrendDetailPanel.vue",
+      "sha256": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b"
+    },
+    {
+      "file": "apps/web/src/components/TrendEvidenceTimeline.vue",
+      "sha256": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55"
+    },
+    {
+      "file": "apps/web/src/components/TrendFilterPanel.vue",
+      "sha256": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66"
+    },
+    {
+      "file": "apps/web/src/components/TrendRuleDialog.vue",
+      "sha256": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498"
+    },
+    {
+      "file": "apps/web/src/components/UiStatePanel.vue",
+      "sha256": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+    },
+    {
+      "file": "apps/web/src/components/UiStateShowcase.vue",
+      "sha256": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30"
+    },
+    {
+      "file": "apps/web/src/components/use-platform-content-list.ts",
+      "sha256": "48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9"
+    },
+    {
+      "file": "apps/web/src/components/use-platform-content-review.ts",
+      "sha256": "e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2"
+    },
+    {
+      "file": "apps/web/src/components/use-platform-notification-list.ts",
+      "sha256": "2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b"
+    },
+    {
+      "file": "apps/web/src/components/use-platform-status.ts",
+      "sha256": "735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a"
+    },
+    {
+      "file": "apps/web/src/components/VerificationFramework.vue",
+      "sha256": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf"
+    },
+    {
+      "file": "apps/web/src/config.ts",
+      "sha256": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64"
+    },
+    {
+      "file": "apps/web/src/design/theme.ts",
+      "sha256": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285"
+    },
+    {
+      "file": "apps/web/src/main.ts",
+      "sha256": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531"
+    },
+    {
+      "file": "apps/web/src/navigation-memory.ts",
+      "sha256": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f"
+    },
+    {
+      "file": "apps/web/src/navigation-shell-permissions.ts",
+      "sha256": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1"
+    },
+    {
+      "file": "apps/web/src/navigation-shell-route-state.ts",
+      "sha256": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+    },
+    {
+      "file": "apps/web/src/platform-account-types.ts",
+      "sha256": "7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2"
+    },
+    {
+      "file": "apps/web/src/realtime-client-metrics.ts",
+      "sha256": "2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93"
+    },
+    {
+      "file": "apps/web/src/route-catalog.ts",
+      "sha256": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956"
+    },
+    {
+      "file": "apps/web/src/router.ts",
+      "sha256": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4"
+    },
+    {
+      "file": "apps/web/src/ui/state-contract.ts",
+      "sha256": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
+    },
+    {
+      "file": "apps/web/src/ui/status-labels.ts",
+      "sha256": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a"
+    },
+    {
+      "file": "apps/web/src/use-audited-reason.ts",
+      "sha256": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8"
+    },
+    {
+      "file": "apps/web/src/use-modal-dialog.ts",
+      "sha256": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
+    },
+    {
+      "file": "apps/web/src/use-navigation-discovery.ts",
+      "sha256": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94"
+    },
+    {
+      "file": "apps/web/src/use-navigation-shell-theme.ts",
+      "sha256": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56"
+    }
+  ],
+  "sourceReconciliation": {
+    "schemaVersion": 1,
+    "reviewedAt": "2026-09-07",
+    "reviewer": "implementation-agent-source-review",
+    "scope": "Source correspondence only; not user design approval or runtime acceptance.",
+    "legacyOverrides": [
+      {
+        "legacyId": "button-203",
+        "file": "apps/web/src/components/NavigationShell.vue",
+        "attributes": {
+          "@click": "openDiscovery('create')",
+          ":aria-label": "quickActionLabel"
+        },
+        "disposition": "retained-shared-create-entry-label-binding-renamed-runtime-pending",
+        "reason": "Historical member entry used primaryActionLabel and role-create; current entry uses quickActionLabel and role-quick-action. Both call openDiscovery('create') under the member shell condition. Source checked against a9460a99 and current component."
+      },
+      {
+        "legacyId": "button-625",
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "label": "{{ enabledRules.length ? \"创建趋势监控\" : \"创建第一条监控规则\" }}",
+        "attributes": {
+          "@click": "showRule = true",
+          "v-if": "canManageTrends"
+        },
+        "disposition": "retained-rule-editor-entry-label-and-visibility-expanded-runtime-pending",
+        "reason": "Historical readiness slot showed first-rule creation only with no enabled rules. Current slot retains showRule=true and canManageTrends, with label selecting first-rule/create-monitor based on enabledRules.length. Visibility expansion is recorded, not treated as an unchanged runtime contract."
+      }
+    ],
+    "sourceScopes": [
+      {
+        "file": "apps/web/src/components/ApiFoundation.vue",
+        "classification": "development-query-view",
+        "view": "api"
+      },
+      {
+        "file": "apps/web/src/components/AuditSecurityCenter.vue",
+        "classification": "development-query-view",
+        "view": "audit-security"
+      },
+      {
+        "file": "apps/web/src/components/AuthorizationCenter.vue",
+        "classification": "development-query-view",
+        "view": "authorization"
+      },
+      {
+        "file": "apps/web/src/components/DeploymentFoundation.vue",
+        "classification": "development-query-view",
+        "view": "deployment"
+      },
+      {
+        "file": "apps/web/src/components/FileAuditFoundation.vue",
+        "classification": "development-query-view",
+        "view": "file-audit"
+      },
+      {
+        "file": "apps/web/src/components/MySqlFoundation.vue",
+        "classification": "development-query-view",
+        "view": "mysql"
+      },
+      {
+        "file": "apps/web/src/components/RedisFoundation.vue",
+        "classification": "development-query-view",
+        "view": "redis"
+      },
+      {
+        "file": "apps/web/src/components/ResourceGrantCenter.vue",
+        "classification": "development-query-view",
+        "view": "resource-grants"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityMobileShell.vue",
+        "classification": "no-explicit-render-consumer-found-do-not-delete",
+        "view": null
+      }
+    ],
+    "scopeEvidence": "App.vue computes requestedInternalView only when import.meta.env.DEV and internalViews includes the query, then switches the listed views. These are not separate route-catalog entries. The static source condition is verified, but production negative checks remain pending. OpportunityMobileShell has no named import or surfaceComponents entry in current source; NavigationShell's broad glob prevents treating it as proven absent from the bundle."
+  },
+  "runtimeWarnings": [
+    {
+      "file": "apps/web/src/App.vue",
+      "line": 91,
+      "reason": "dynamic-render-or-spread-requires-runtime-review"
+    },
+    {
+      "file": "apps/web/src/App.vue",
+      "line": 103,
+      "reason": "dynamic-render-or-spread-requires-runtime-review"
+    },
+    {
+      "file": "apps/web/src/components/NavigationShell.vue",
+      "line": 578,
+      "reason": "dynamic-render-or-spread-requires-runtime-review"
+    }
+  ]
+}

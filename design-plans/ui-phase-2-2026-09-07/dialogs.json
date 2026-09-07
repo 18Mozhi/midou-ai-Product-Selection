@@ -1,0 +1,4556 @@
+{
+  "schemaVersion": 1,
+  "sourceFingerprint": "10003685ac194a3ba064402b98e14fd501014c16a6ec69f5e53577783b83a973",
+  "status": "discovery-not-variant-coverage",
+  "candidates": [
+    {
+      "kind": "dialog-definition",
+      "tag": "aside",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 495,
+      "sourceRange": {
+        "start": 15112,
+        "end": 25577
+      },
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selected.decision_context.resource.label }} → 返回通知中心 影响范围 {{ resourceText(selected.resource_type) }} · {{ selected.title }} 当前节点 {{ selected.current_node_name || \"流程已结束\" }} 判断依据 证据完整度 {{ selected.decision_context.evidence.percent }} % {{ selected.decision_context?.evidence.note || \"按任务事实审批\" }} 证据完整度 {{ selected.decision_context.evidence.percent }} % 不适用 审批模板版本 {{ selected.decision_context.rule_versions.approval_template }} {{ selected.decision_context.snapshot_status === \"captured\" ? `发起审批时已锁定 · ${time(selected.decision_context.captured_at)}` : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}` }} 提交快照与当前证据 当前事实读取于 {{ time(selected.decision_context_diff.observed_at) }} 已有变化 保持一致 提交时完整度 {{ selected.decision_context_diff.evidence_summary.before_percent ?? \"不适用\" }} % → 当前完整度 {{ selected.decision_context_diff.evidence_summary.after_percent ?? \"不适用\" }} % 当前证据、事实和规则版本与提交审批时一致。 {{ change.label }} 提交时： {{ change.before_detail ?? \"无\" }} → 当前： {{ change.after_detail ?? \"无\" }} {{ change.label }} 提交时： {{ basisValue(change.before) }} → 当前： {{ basisValue(change.after) }} {{ change.label }} 提交时： {{ change.before ?? \"未生成\" }} → 当前： {{ change.after ?? \"未生成\" }} 缺失： {{ selected.decision_context.evidence.missing_items.join(\"、\") }} {{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }} {{ selected.decision_context.evidence.note }} 规则版本 审批模板 {{ selected.decision_context.rule_versions.approval_template }} 评分规则 {{ selected.decision_context.rule_versions.scoring ?? \"未生成\" }} 利润规则 {{ selected.decision_context.rule_versions.profit ?? \"未生成\" }} 申请决策 {{ statusText(selected.decision_context.decision.action) }} {{ selected.decision_context.decision.reason }} 基于机会第 {{ selected.decision_context.decision.opportunity_version }} 版 决策依据 {{ basis.label }} {{ basisValue(basis.value) }} {{ node.ordinal }} . {{ node.name }} {{ statusText(node.status) }} · {{ time(node.due_at) }} 当前审批人 {{ node.active_approver_name }} {{ node.approver_name }} 超时后 → {{ node.escalation_assignee_name }} 已于 {{ time(node.escalated_at) }} 升级 {{ node.decision_reason }} 操作记录 尚无批准、驳回或升级记录。 {{ actionText(action.action) }} {{ action.actor_name || \"未知成员\" }} · {{ time(action.created_at) }} {{ action.reason }} 证据仍有缺失；若继续审批，请在原因中明确说明判断依据。 审批原因（批准与驳回均必填） 驳回 批准并流转 当前节点不是由你审批，或审批已结束。 技术详情 审批编号 {{ selected.id }} 资源类型 {{ selected.resource_type }} 资源编号 {{ selected.resource_id }} 节点 {{ node.ordinal }} {{ node.id }} / {{ node.active_approver_id }}",
+      "attributes": {
+        "v-if": "selected",
+        "class": "approval-detail",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "approval-detail-title"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#92496ba501468962.1",
+      "signature": "92496ba501468962",
+      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-1"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 763,
+      "sourceRange": {
+        "start": 25582,
+        "end": 27764
+      },
+      "label": "新建审批模板草稿",
+      "attributes": {
+        "ref": "templateDialogElement",
+        "aria-label": "新建审批模板草稿",
+        "@cancel": "handleTemplateCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21471c244422699b.1",
+      "signature": "21471c244422699b",
+      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-2"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 819,
+      "sourceRange": {
+        "start": 27769,
+        "end": 28488
+      },
+      "label": "发布审批模板",
+      "attributes": {
+        "ref": "publishDialogElement",
+        "aria-label": "发布审批模板",
+        "@cancel": "handlePublishCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e6808d6bed4a59f1.1",
+      "signature": "e6808d6bed4a59f1",
+      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-3"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 841,
+      "sourceRange": {
+        "start": 28493,
+        "end": 29616
+      },
+      "label": "发起审批",
+      "attributes": {
+        "ref": "requestDialogElement",
+        "aria-label": "发起审批",
+        "@cancel": "handleRequestCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1",
+      "signature": "5eec193b0a9499f7",
+      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-4"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/AuditedReasonDialog.vue",
+      "line": 38,
+      "sourceRange": {
+        "start": 867,
+        "end": 1859
+      },
+      "label": "title",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "audited-reason-dialog",
+        ":aria-label": "title",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#f5d988e572723a07.1",
+      "signature": "f5d988e572723a07",
+      "sourceSha256": "10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P54",
+        "P56",
+        "P57",
+        "P61",
+        "P62",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-5"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "line": 452,
+      "sourceRange": {
+        "start": 13432,
+        "end": 14882
+      },
+      "label": "selected ? `${selected.name}执行记录` : '自动化执行记录'",
+      "attributes": {
+        "v-if": "selected",
+        "ref": "detailDialogElement",
+        "class": "automation-detail",
+        ":aria-label": "selected ? `${selected.name}执行记录` : '自动化执行记录'",
+        "@cancel": "handleDetailCancel"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#08d127ded2ba2429.1",
+      "signature": "08d127ded2ba2429",
+      "sourceSha256": "6e202a73e7b7924d128e29eb8588b748d1c634403b57419fb2b1a68b096b8a85",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P27"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-6"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "line": 488,
+      "sourceRange": {
+        "start": 14887,
+        "end": 20240
+      },
+      "label": "editing ? '编辑自动化规则' : '创建自动化规则'",
+      "attributes": {
+        "ref": "createDialogElement",
+        ":aria-label": "editing ? '编辑自动化规则' : '创建自动化规则'",
+        "@cancel": "handleCreateCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#a6561f91cc94ec7b.1",
+      "signature": "a6561f91cc94ec7b",
+      "sourceSha256": "6e202a73e7b7924d128e29eb8588b748d1c634403b57419fb2b1a68b096b8a85",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P27"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-7"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+      "line": 417,
+      "sourceRange": {
+        "start": 13947,
+        "end": 14231
+      },
+      "label": "",
+      "attributes": {
+        ":open": "confirming",
+        "title": "签认归档与恢复演练？",
+        "description": "服务端仅在同提交容量证据已证明归档与隔离恢复时允许签认。",
+        "impact": "不会启动新服务、删除数据或改变并发上限；失败时保持未验证状态。",
+        "confirm-label": "确认签认",
+        "confirmation-text": "确认签认",
+        "@cancel": "confirming = false",
+        "@confirm": "attest"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "confirming = false",
+        "@confirm": "attest"
+      },
+      "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1",
+      "signature": "0db1bef96a99927a",
+      "sourceSha256": "2768ed772424adf9698987ca19e06c35037c24a0070da918743aef384578e166",
+      "handlerDefinitions": [
+        {
+          "name": "attest",
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "line": 184,
+          "endLine": 219
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+      "line": 365,
+      "sourceRange": {
+        "start": 12693,
+        "end": 14466
+      },
+      "label": "组织内部编号 工作区内部编号 采集来源 全部来源 {{ source.name }} 观测时间 最近 24 小时 最近 7 天 最近 30 天 全部时间 重置 {{ refreshing ? \"正在应用\" : \"应用范围\" }}",
+      "attributes": {
+        "label": "采集范围与时间",
+        ":active-count": "scopeFilterCount"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#2506d9788c717641.1",
+      "signature": "2506d9788c717641",
+      "sourceSha256": "22498e4077c41845dd1c037b02fd0d6f63b34850c58d0d3a41334fa632281f66",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P51",
+        "P52",
+        "P53"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+      "line": 814,
+      "sourceRange": {
+        "start": 29344,
+        "end": 29660
+      },
+      "label": "",
+      "attributes": {
+        ":open": "batchPreview",
+        "title": "确认批量重放开放死信？",
+        "description": "系统将逐条调用既有受控重放事务；并发状态变化或已处理任务会安全失败，不会覆盖原任务。",
+        ":impact": "batchImpact",
+        "confirm-label": "确认批量重放",
+        "destructive": "",
+        "confirmation-text": "确认重放",
+        "@cancel": "batchPreview = false",
+        "@confirm": "confirmBatchReplay"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "batchPreview = false",
+        "@confirm": "confirmBatchReplay"
+      },
+      "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#f843252676c8b85b.1",
+      "signature": "f843252676c8b85b",
+      "sourceSha256": "22498e4077c41845dd1c037b02fd0d6f63b34850c58d0d3a41334fa632281f66",
+      "handlerDefinitions": [
+        {
+          "name": "confirmBatchReplay",
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "line": 321,
+          "endLine": 348
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P51",
+        "P52",
+        "P53"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+      "line": 552,
+      "sourceRange": {
+        "start": 18871,
+        "end": 19154
+      },
+      "label": "",
+      "attributes": {
+        ":open": "confirming",
+        "title": "回收所有已过期租约？",
+        "description": "仅回收服务端确认已经过期的档案租约，并把对应运行标记为超时。",
+        "impact": "不会终止有效租约，不会删除运行历史、浏览器档案或凭证。",
+        "confirm-label": "确认回收",
+        "confirmation-text": "确认回收",
+        "@cancel": "confirming = false",
+        "@confirm": "recover"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "confirming = false",
+        "@confirm": "recover"
+      },
+      "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#4806dd12035653ce.1",
+      "signature": "4806dd12035653ce",
+      "sourceSha256": "e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4",
+      "handlerDefinitions": [
+        {
+          "name": "recover",
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "line": 190,
+          "endLine": 211
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P51",
+        "P52",
+        "P53"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "aside",
+      "file": "apps/web/src/components/CollectionTaskCenter.vue",
+      "line": 710,
+      "sourceRange": {
+        "start": 24781,
+        "end": 33281
+      },
+      "label": "正在读取任务详情… 超过 15 秒会自动停止等待，不会显示上一条任务的数据。 任务详情未能读取 {{ detailIssue }} 重试 关闭 采集任务详情 任务 {{ detail.task.id.slice(0, 8) }} … {{ label(detail.task.status) }} · 更新于 {{ time(detail.task.updated_at) }} × 状态 {{ label(detail.task.status) }} 覆盖 {{ label(detail.task.coverage_status) }} 尝试 {{ detail.attempts.length }} 事件 {{ detail.events.length }} 下一步 {{ recoveryAction.label }} {{ recoveryAction.description }} 进入重放 {{ recoveryAction.label }} 子查询覆盖 {{ item.provider_name }} {{ item.is_required ? \"必需来源\" : \"可选来源\" }} {{ label(item.status) }} 结果 {{ item.available_result_count }} 条 · {{ subqueryDurationText(item.started_at, item.finished_at) }} · {{ item.error_code || \"无错误\" }} {{ item.missing_fields.length ? `缺失 ${item.missing_fields.join(\"、\")}` : \"无缺失字段\" }} {{ resultKindText(item.result_kind) }} robots 判定： {{ robotsDecisionText(item.robots_decision) }} 判定版本 {{ item.robots_decision.decision_version }} · User-agent {{ item.robots_decision.matched_user_agent || \"未命中分组\" }} {{ subqueryRetryText(detail.task, item.retryable) }} 执行尝试 尚无执行尝试。 第 {{ cell(item.attempt_number) || index + 1 }} 次 · {{ label(cell(item.status)) }} 执行器 {{ cell(item.worker_id || item.lease_owner) }} · 开始 {{ cell(item.started_at) }} · 完成 {{ cell(item.finished_at) }} {{ cell(item.error_code || \"无错误\") }} 状态事件 尚无状态事件。 {{ cell(item.event_type) }} · {{ label(cell(item.from_status)) }} → {{ label(cell(item.to_status)) }} {{ cell(item.actor_type) }} · {{ cell(item.actor_id) }} · {{ cell(item.occurred_at) }} 死信记录 该任务没有死信记录。 {{ cell(detail.dead_letter.error_code || detail.dead_letter.status) }} 进入死信： {{ cell(detail.dead_letter.created_at || detail.dead_letter.updated_at) }} 状态： {{ label(cell(detail.dead_letter.status)) }} 重放原因： {{ cell(detail.dead_letter.replay_reason) }} 技术标识与关联信息 任务 ID {{ detail.task.id }} 组织 ID {{ detail.task.organization_id }} 工作区 ID {{ detail.task.workspace_id }} 请求 ID {{ detail.task.request_id }} 错误码 {{ detail.task.last_error_code || \"—\" }} {{ replayIssue }} 人工重放原因 仅在确认依赖恢复后提交；已输入 {{ replayReason.trim().length }} / 500 字。 {{ saving ? \"正在创建重放任务…\" : \"人工重放\" }}",
+      "attributes": {
+        "ref": "detailPanel",
+        "class": "collection-task-detail",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "collection-detail-title",
+        "aria-describedby": "collection-detail-description",
+        "aria-live": "polite",
+        "@keydown": "detailKeydown"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "detailOpen"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1",
+      "signature": "472cf13bb7c4d799",
+      "sourceSha256": "ac7690821c78b74b05e6b25509e03ae688bf07c20e6110b614be03a9dbc86b7b",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P51",
+        "P52",
+        "P53"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-8"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CollectionTaskCenter.vue",
+      "line": 906,
+      "sourceRange": {
+        "start": 33315,
+        "end": 33626
+      },
+      "label": "",
+      "attributes": {
+        ":open": "confirming",
+        "title": "重放这个死信任务？",
+        "description": "将复制原任务的内部子查询，创建一个新的 scheduled 任务；原任务改为 manually_replayed。",
+        "impact": "原任务、全部尝试、死信与审计事件都会保留，不会覆盖历史结果。",
+        "confirm-label": "确认重放",
+        "confirmation-text": "确认重放",
+        "@cancel": "confirming = false",
+        "@confirm": "replay"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "confirming = false",
+        "@confirm": "replay"
+      },
+      "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#e9f14f18f727a992.1",
+      "signature": "e9f14f18f727a992",
+      "sourceSha256": "ac7690821c78b74b05e6b25509e03ae688bf07c20e6110b614be03a9dbc86b7b",
+      "handlerDefinitions": [
+        {
+          "name": "replay",
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "line": 358,
+          "endLine": 382
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P51",
+        "P52",
+        "P53"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 951,
+      "sourceRange": {
+        "start": 33118,
+        "end": 35217
+      },
+      "label": "新建配额方案",
+      "attributes": {
+        "ref": "createDialogElement",
+        "aria-label": "新建配额方案",
+        "@cancel": "handleCreateCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1",
+      "signature": "6d27a406542824e4",
+      "sourceSha256": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P58"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-9"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1015,
+      "sourceRange": {
+        "start": 35265,
+        "end": 36929
+      },
+      "label": "编辑配额方案",
+      "attributes": {
+        "ref": "planDialogElement",
+        "aria-label": "编辑配额方案",
+        "@cancel": "handlePlanCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2580b7a172938724.1",
+      "signature": "2580b7a172938724",
+      "sourceSha256": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P58"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-10"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1058,
+      "sourceRange": {
+        "start": 36977,
+        "end": 38139
+      },
+      "label": "确认配额变更",
+      "attributes": {
+        "ref": "confirmDialogElement",
+        "aria-label": "确认配额变更",
+        "@cancel": "handleConfirmCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#d3b00b7eb8292418.1",
+      "signature": "d3b00b7eb8292418",
+      "sourceSha256": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P58"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-11"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 929,
+      "sourceRange": {
+        "start": 34052,
+        "end": 37168
+      },
+      "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.product_url }} 市场 {{ form.market }} 监控名称 {{ form.title }} 关联机会 {{ form.opportunity_id || \"未关联\" }} 确认后读取公开商品页并建立首个证据快照；页面未披露的数据继续显示为未采到。 {{ notice }} {{ requestId }} 取消 上一步 {{ busy ? \"保存中…\" : createStep === 3 ? \"确认并开始采集\" : \"下一步\" }}",
+      "attributes": {
+        "v-if": "showCreate && canManage",
+        "ref": "createDialog",
+        "class": "competitor-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "new-competitor"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate && canManage"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
+      "signature": "de57fe420db167ea",
+      "sourceSha256": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-12"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1018,
+      "sourceRange": {
+        "start": 37173,
+        "end": 39365
+      },
+      "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条规则；只有达到显式阈值的变化才排队通知与任务。 {{ notice }} {{ requestId }} 取消 启用规则",
+      "attributes": {
+        "v-if": "showRule && canManage",
+        "ref": "ruleDialog",
+        "class": "competitor-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "new-rule"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showRule && canManage"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
+      "signature": "b3cda3ddc35e3a69",
+      "sourceSha256": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-13"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1080,
+      "sourceRange": {
+        "start": 39370,
+        "end": 40513
+      },
+      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
+      "attributes": {
+        "v-if": "deleting && canManage",
+        "ref": "deleteDialog",
+        "class": "competitor-modal",
+        "role": "dialog",
+        "aria-modal": "true"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+      "signature": "9d3c873673ab0556",
+      "sourceSha256": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-14"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "section",
+      "file": "apps/web/src/components/ConfirmDialog.vue",
+      "line": 92,
+      "sourceRange": {
+        "start": 2664,
+        "end": 4144
+      },
+      "label": "{{ destructive ? \"!\" : \"i\" }} {{ destructive ? \"HIGH IMPACT ACTION\" : \"CONFIRM ACTION\" }} {{ title }} {{ description }} 影响范围 {{ impact }} 我已阅读影响范围，并确认只处理上述对象 输入 {{ confirmationText }} 继续 {{ cancelLabel }} {{ confirmLabel }}",
+      "attributes": {
+        "ref": "dialog",
+        "class": "confirm-dialog",
+        "role": "alertdialog",
+        "aria-modal": "true",
+        "aria-labelledby": "confirm-title",
+        "aria-describedby": "confirm-description",
+        "@keydown": "keydown"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ConfirmDialog.vue#47b44d75a30b19d9.1",
+      "signature": "47b44d75a30b19d9",
+      "sourceSha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P60",
+        "P70",
+        "P71",
+        "P72"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "line": 727,
+      "sourceRange": {
+        "start": 24592,
+        "end": 28928
+      },
+      "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机壳（Amazon + 1688 高置信匹配） 1 CNY = 目标币种 汇率日期 官方来源页面 {{ createValidation || \"费用与可选换算依据已显式填写，可以保存草稿。\" }} {{ createError }} {{ requestId }} 保存仅创建草稿；必须完成两类真实角色审批后才能发布。 取消 {{ busy ? \"保存中…\" : \"保存草稿\" }}",
+      "attributes": {
+        "v-if": "showCreate",
+        "ref": "createDialogElement",
+        "class": "cost-modal",
+        "aria-labelledby": "new-cost-rule",
+        "@cancel": "cancelCreate"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1",
+      "signature": "0cffdbc28160492d",
+      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P22"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-15"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "line": 856,
+      "sourceRange": {
+        "start": 28933,
+        "end": 30656
+      },
+      "label": "actionTitle",
+      "attributes": {
+        "v-if": "showAction && selected && pendingAction",
+        "ref": "actionDialogElement",
+        "class": "cost-modal cost-action-modal",
+        ":aria-label": "actionTitle",
+        "@cancel": "cancelAction"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showAction && selected && pendingAction"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1",
+      "signature": "777ba93e8ff0f331",
+      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P22"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-16"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+      "line": 749,
+      "sourceRange": {
+        "start": 26701,
+        "end": 26982
+      },
+      "label": "",
+      "attributes": {
+        ":open": "confirming",
+        "title": "回收过期调度租约？",
+        "description": "仅删除服务端确认已经过期的 Worker、Crawler 与来源调度槽位。",
+        ":impact": "expiredLeaseImpact",
+        "confirm-label": "确认回收",
+        "confirmation-text": "确认回收",
+        "@cancel": "confirming = false",
+        "@confirm": "recover"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "confirming = false",
+        "@confirm": "recover"
+      },
+      "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1",
+      "signature": "b107542a89a71d5c",
+      "sourceSha256": "46b9438d92d3c9971b0cbc5e24746431bc98f2f4676ebef6982df8048c26b8e3",
+      "handlerDefinitions": [
+        {
+          "name": "recover",
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "line": 314,
+          "endLine": 346
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P70"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+      "line": 759,
+      "sourceRange": {
+        "start": 26987,
+        "end": 27299
+      },
+      "label": "",
+      "attributes": {
+        ":open": "Boolean(circuitConfirm)",
+        "title": "解除该来源的运行熔断？",
+        "description": "仅当来源启用，且熔断后已完成一次结果正常的来源健康检查时才会恢复。",
+        "impact": "只恢复当前来源；其他来源、任务结果和历史证据不会被修改。",
+        "confirm-label": "确认解除",
+        "confirmation-text": "确认解除",
+        "@cancel": "circuitConfirm = null",
+        "@confirm": "recoverProvider"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "circuitConfirm = null",
+        "@confirm": "recoverProvider"
+      },
+      "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#9e9fa4a77b724507.1",
+      "signature": "9e9fa4a77b724507",
+      "sourceSha256": "46b9438d92d3c9971b0cbc5e24746431bc98f2f4676ebef6982df8048c26b8e3",
+      "handlerDefinitions": [
+        {
+          "name": "recoverProvider",
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "line": 348,
+          "endLine": 379
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P70"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "form",
+      "file": "apps/web/src/components/CredentialAssetCenter.vue",
+      "line": 757,
+      "sourceRange": {
+        "start": 24453,
+        "end": 27370
+      },
+      "label": "editor === 'rotate' ? `轮换 ${selected?.name}` : '创建凭证资产'",
+      "attributes": {
+        "v-if": "editor === 'asset' || editor === 'rotate'",
+        "ref": "editorPanel",
+        "class": "credential-editor",
+        "role": "dialog",
+        "aria-modal": "true",
+        ":aria-label": "editor === 'rotate' ? `轮换 ${selected?.name}` : '创建凭证资产'",
+        "@keydown.tab": "trapEditorFocus",
+        "@submit.prevent": "saveAsset"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editor"
+        },
+        {
+          "directive": "v-if",
+          "expression": "editor === 'asset' || editor === 'rotate'"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#da4ba31460b3f422.1",
+      "signature": "da4ba31460b3f422",
+      "sourceSha256": "e06e6e739cb5ffc7855ed1f88e3cf386d0095b5eada0e08c68132096201a8ad6",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-17"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "form",
+      "file": "apps/web/src/components/CredentialAssetCenter.vue",
+      "line": 837,
+      "sourceRange": {
+        "start": 27379,
+        "end": 29626
+      },
+      "label": "创建浏览器档案引用",
+      "attributes": {
+        "v-if": "editor === 'profile'",
+        "ref": "editorPanel",
+        "class": "credential-editor",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-label": "创建浏览器档案引用",
+        "@keydown.tab": "trapEditorFocus",
+        "@submit.prevent": "saveProfile"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editor"
+        },
+        {
+          "directive": "v-if",
+          "expression": "editor === 'profile'"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#921f04fe23cc343e.1",
+      "signature": "921f04fe23cc343e",
+      "sourceSha256": "e06e6e739cb5ffc7855ed1f88e3cf386d0095b5eada0e08c68132096201a8ad6",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-18"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "form",
+      "file": "apps/web/src/components/CredentialAssetCenter.vue",
+      "line": 900,
+      "sourceRange": {
+        "start": 29635,
+        "end": 33124
+      },
+      "label": "导入已经登录的浏览器档案",
+      "attributes": {
+        "v-if": "editor === 'login'",
+        "ref": "editorPanel",
+        "class": "credential-editor login-editor",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-label": "导入已经登录的浏览器档案",
+        "@keydown.tab": "trapEditorFocus",
+        "@submit.prevent": "saveLogin"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editor"
+        },
+        {
+          "directive": "v-if",
+          "expression": "editor === 'login'"
+        }
+      ],
+      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#178c3ac2db1eee78.1",
+      "signature": "178c3ac2db1eee78",
+      "sourceSha256": "e06e6e739cb5ffc7855ed1f88e3cf386d0095b5eada0e08c68132096201a8ad6",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-19"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/CredentialAssetCenter.vue",
+      "line": 996,
+      "sourceRange": {
+        "start": 33158,
+        "end": 33495
+      },
+      "label": "",
+      "attributes": {
+        ":open": "Boolean(revokeTarget)",
+        "title": "确认撤销凭证资产？",
+        ":description": "`${revokeTarget?.name ?? ''} 撤销后不能轮换或用于新档案。`",
+        "impact": "只撤销当前平台资产；不会删除历史密文与审计。后续任务必须改用其他已授权凭证。",
+        "confirm-label": "撤销资产",
+        "destructive": "",
+        "confirmation-text": "确认撤销",
+        "@cancel": "revokeTarget = null",
+        "@confirm": "revoke"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "revokeTarget = null",
+        "@confirm": "revoke"
+      },
+      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#4b5b10b71f689dc3.1",
+      "signature": "4b5b10b71f689dc3",
+      "sourceSha256": "e06e6e739cb5ffc7855ed1f88e3cf386d0095b5eada0e08c68132096201a8ad6",
+      "handlerDefinitions": [
+        {
+          "name": "revoke",
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "line": 484,
+          "endLine": 497
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/DataQualityCenter.vue",
+      "line": 967,
+      "sourceRange": {
+        "start": 33751,
+        "end": 34059
+      },
+      "label": "",
+      "attributes": {
+        ":open": "confirming",
+        "title": "将此质量问题标记为已解决？",
+        "description": "系统会用 expected_version 防止覆盖他人更新，并保存原因、操作人和关联标识。",
+        "impact": "原始证据、规范记录、字段溯源和核对历史不会被删除或改写。",
+        "confirm-label": "确认解决",
+        "confirmation-text": "确认解决",
+        "@cancel": "confirming = false",
+        "@confirm": "resolveIssue"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "confirming = false",
+        "@confirm": "resolveIssue"
+      },
+      "candidateId": "apps/web/src/components/DataQualityCenter.vue#a2e5b3b777187bdd.1",
+      "signature": "a2e5b3b777187bdd",
+      "sourceSha256": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+      "handlerDefinitions": [
+        {
+          "name": "resolveIssue",
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "line": 344,
+          "endLine": 371
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P54"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/DataQualityCenter.vue",
+      "line": 977,
+      "sourceRange": {
+        "start": 34064,
+        "end": 34357
+      },
+      "label": "",
+      "attributes": {
+        ":open": "batchConfirming",
+        "title": "确认批量处理质量问题？",
+        "description": "系统会逐条校验当前版本和开放状态；任一问题已变化时整批失败，不会部分覆盖。",
+        ":impact": "batchImpact",
+        "confirm-label": "确认批量处理",
+        "confirmation-text": "确认处理",
+        "@cancel": "batchConfirming = false",
+        "@confirm": "executeBatch"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "batchConfirming = false",
+        "@confirm": "executeBatch"
+      },
+      "candidateId": "apps/web/src/components/DataQualityCenter.vue#d8aabe3a13b05163.1",
+      "signature": "d8aabe3a13b05163",
+      "sourceSha256": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+      "handlerDefinitions": [
+        {
+          "name": "executeBatch",
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "line": 394,
+          "endLine": 423
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P54"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/DiscoveryOverlay.vue",
+      "line": 195,
+      "sourceRange": {
+        "start": 5912,
+        "end": 10376
+      },
+      "label": "mode === 'search' ? '全局搜索' : '快捷创建'",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "discovery-backdrop",
+        ":aria-label": "mode === 'search' ? '全局搜索' : '快捷创建'",
+        "@cancel": "handleCancel",
+        "@mousedown.self": "emit('close')"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/DiscoveryOverlay.vue#ceb391d01220c696.1",
+      "signature": "ceb391d01220c696",
+      "sourceSha256": "c3c3355805f8cf1c2bff0e52608f3b85d31b972e9372343fc4f0fb68edc75ff3",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-20"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "DiscoveryOverlay",
+      "file": "apps/web/src/components/NavigationShell.vue",
+      "line": 642,
+      "sourceRange": {
+        "start": 23078,
+        "end": 23263
+      },
+      "label": "",
+      "attributes": {
+        ":open": "Boolean(discoveryMode)",
+        ":mode": "discoveryMode || 'search'",
+        ":shell": "shell",
+        ":api-base-url": "apiBaseUrl",
+        "@close": "closeDiscovery"
+      },
+      "conditions": [],
+      "events": {
+        "@close": "closeDiscovery"
+      },
+      "candidateId": "apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1",
+      "signature": "5e8a6b546ab251fb",
+      "sourceSha256": "993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 512,
+      "sourceRange": {
+        "start": 15755,
+        "end": 18136
+      },
+      "label": "消息详情",
+      "attributes": {
+        "v-if": "selected",
+        "ref": "detailDialogElement",
+        "class": "notification-detail",
+        "aria-label": "消息详情",
+        "@cancel": "handleDetailCancel"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1",
+      "signature": "1eb1c4db747d37c9",
+      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P26"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-21"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 590,
+      "sourceRange": {
+        "start": 18141,
+        "end": 19114
+      },
+      "label": "通知偏好",
+      "attributes": {
+        "ref": "preferencesDialogElement",
+        "class": "notification-preferences",
+        "aria-label": "通知偏好",
+        "@cancel": "handlePreferencesCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#b332799077351299.1",
+      "signature": "b332799077351299",
+      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P26"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-22"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1072,
+      "sourceRange": {
+        "start": 36619,
+        "end": 36927
+      },
+      "label": "",
+      "attributes": {
+        ":open": "Boolean(pending)",
+        ":title": "pending?.title ?? ''",
+        ":description": "pending?.description ?? ''",
+        ":impact": "pending?.impact ?? ''",
+        ":destructive": "pending?.destructive ?? false",
+        "confirm-label": "确认执行",
+        "@cancel": "pending = null",
+        "@confirm": "confirm"
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "pending = null",
+        "@confirm": "confirm"
+      },
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0e765674026efce4.1",
+      "signature": "0e765674026efce4",
+      "sourceSha256": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+      "handlerDefinitions": [
+        {
+          "name": "confirm",
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "line": 280,
+          "endLine": 285
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P60"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/OpportunityListPanel.vue",
+      "line": 186,
+      "sourceRange": {
+        "start": 6240,
+        "end": 8671
+      },
+      "label": "市场 决策状态 全部状态 待决策 已采纳 继续观察 已驳回 证据完整度 全部完整度 不完整 部分完整 完整 阻断原因 全部原因 缺少可采纳证据 尚无可靠推荐结论 阶段 全部阶段 候选 验证中 可决策 已采纳 观察中 已驳回 已归档 负责人 全部负责人 {{ member.label }} 机会名称 筛选 重置",
+      "attributes": {
+        "label": "高级筛选",
+        ":active-count": "activeFilterCount"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/OpportunityListPanel.vue#3b502c874c5bc655.1",
+      "signature": "3b502c874c5bc655",
+      "sourceSha256": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "OpportunityWorkspaceDialogs",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 873,
+      "sourceRange": {
+        "start": 30556,
+        "end": 31077
+      },
+      "label": "",
+      "attributes": {
+        "v-if": "canDecide",
+        "v-modelerp-import-open": "showErpImport",
+        "v-modelcreate-open": "showCreate",
+        "v-modeldecision-open": "showDecision",
+        "v-modelerp-import-limit": "erpImportLimit",
+        "v-modeldecision-reason": "decisionReason",
+        ":busy": "busy",
+        ":form": "form",
+        ":decision-action": "decisionAction",
+        ":has-detail": "Boolean(detail)",
+        "@create": "create",
+        "@decide": "decide",
+        "@import-browser": "importFromErpBrowser",
+        "@import-file": "importErpFile"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canDecide"
+        }
+      ],
+      "events": {
+        "@create": "create",
+        "@decide": "decide",
+        "@import-browser": "importFromErpBrowser",
+        "@import-file": "importErpFile"
+      },
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+      "signature": "4f1225f6705d3e1d",
+      "sourceSha256": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "handlerDefinitions": [
+        {
+          "name": "create",
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "line": 270,
+          "endLine": 281
+        },
+        {
+          "name": "importFromErpBrowser",
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "line": 328,
+          "endLine": 350
+        },
+        {
+          "name": "importErpFile",
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "line": 351,
+          "endLine": 365
+        },
+        {
+          "name": "decide",
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "line": 371,
+          "endLine": 383
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 889,
+      "sourceRange": {
+        "start": 31082,
+        "end": 32535
+      },
+      "label": "机会批量操作影响预览",
+      "attributes": {
+        "v-if": "canDecide",
+        "ref": "batchDialogElement",
+        "class": "opportunity-modal opportunity-batch-dialog",
+        "aria-label": "机会批量操作影响预览",
+        "@cancel": "handleBatchCancel"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canDecide"
+        }
+      ],
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
+      "signature": "acc11467e72e9b66",
+      "sourceSha256": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-23"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "AuditedReasonDialog",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 933,
+      "sourceRange": {
+        "start": 32540,
+        "end": 32912
+      },
+      "label": "",
+      "attributes": {
+        ":open": "aiReviewReasonOpen",
+        ":title": "aiReviewReasonRequest?.title || '填写复核说明'",
+        ":description": "aiReviewReasonRequest?.description || ''",
+        ":initial-value": "aiReviewReasonRequest?.initialValue",
+        ":minimum-length": "aiReviewReasonRequest?.minimumLength",
+        "@submit": "submitAiReviewReason",
+        "@cancel": "cancelAiReviewReason"
+      },
+      "conditions": [],
+      "events": {
+        "@submit": "submitAiReviewReason",
+        "@cancel": "cancelAiReviewReason"
+      },
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
+      "signature": "38deb219e719849f",
+      "sourceSha256": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askAiReviewReason",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 495,
+      "target": "askAiReviewReason",
+      "expression": "askAiReviewReason({ title: outcome === \"approved\" ? \"填写抽检通过说明\" : \"填写驳回原因\", description: \"说明会写入 AI 分析人工复核记录，原始输出不会被改写。\", })",
+      "label": "askAiReviewReason({ title: outcome === \"approved\" ? \"填写抽检通过说明\" : \"填写驳回原因\", description: \"说明会写入 AI 分析人工复核记录，原始输出不会被改写。\", })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1",
+      "signature": "36cdbd1cb98185c2",
+      "sourceSha256": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 44,
+      "sourceRange": {
+        "start": 1425,
+        "end": 2998
+      },
+      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ERP JSON 接受接口返回的 list 数组或商品数组。 下载浏览器助手 取消 {{ busy ? \"读取并导入中…\" : \"从当前浏览器读取\" }}",
+      "attributes": {
+        "v-if": "erpImportOpen",
+        "ref": "erpDialog",
+        "class": "opportunity-modal",
+        "aria-labelledby": "erp-import-title",
+        "@cancel": "cancelErp"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "erpImportOpen"
+        }
+      ],
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1",
+      "signature": "1ed288cd855ce1c0",
+      "sourceSha256": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-24"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 100,
+      "sourceRange": {
+        "start": 3002,
+        "end": 4247
+      },
+      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。 取消 {{ busy ? \"创建中…\" : \"创建机会\" }}",
+      "attributes": {
+        "v-if": "createOpen",
+        "ref": "createDialog",
+        "class": "opportunity-modal",
+        "aria-labelledby": "opportunity-create-title",
+        "@cancel": "cancelCreate"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "createOpen"
+        }
+      ],
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1",
+      "signature": "ac06eb6f17f7829e",
+      "sourceSha256": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-25"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 137,
+      "sourceRange": {
+        "start": 4251,
+        "end": 5420
+      },
+      "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
+      "attributes": {
+        "v-if": "decisionOpen && hasDetail",
+        "ref": "decisionDialog",
+        "class": "opportunity-modal",
+        "aria-labelledby": "opportunity-decision-title",
+        "@cancel": "cancelDecision"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "decisionOpen && hasDetail"
+        }
+      ],
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1",
+      "signature": "8b4dc3f5856d3c5a",
+      "sourceSha256": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-26"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "AuditedReasonDialog",
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "line": 1209,
+      "sourceRange": {
+        "start": 40536,
+        "end": 40901
+      },
+      "label": "",
+      "attributes": {
+        ":open": "auditedReasonOpen",
+        ":title": "auditedReasonRequest?.title || '填写审计原因'",
+        ":description": "auditedReasonRequest?.description || ''",
+        ":initial-value": "auditedReasonRequest?.initialValue",
+        ":minimum-length": "auditedReasonRequest?.minimumLength",
+        "@submit": "submitAuditedReason",
+        "@cancel": "cancelAuditedReason"
+      },
+      "conditions": [],
+      "events": {
+        "@submit": "submitAuditedReason",
+        "@cancel": "cancelAuditedReason"
+      },
+      "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#f3515ca45998a840.1",
+      "signature": "f3515ca45998a840",
+      "sourceSha256": "df418badfb3016644b3d726722d51065c8eea18d027d5efa104b1983a1c0d0df",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askAuditedReason",
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "line": 486,
+      "target": "askAuditedReason",
+      "expression": "askAuditedReason({ title: `${action}原因`, description: \"原因会与组织、操作者和目标对象一起写入审计记录。\", initialValue: action, })",
+      "label": "askAuditedReason({ title: `${action}原因`, description: \"原因会与组织、操作者和目标对象一起写入审计记录。\", initialValue: action, })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#7a51bff83af3db69.1",
+      "signature": "7a51bff83af3db69",
+      "sourceSha256": "df418badfb3016644b3d726722d51065c8eea18d027d5efa104b1983a1c0d0df",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askAuditedReason",
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "line": 694,
+      "target": "askAuditedReason",
+      "expression": "askAuditedReason({ title: rotating ? `轮换“${item.name}”密钥` : `撤销“${item.name}”访问`, description: rotating ? \"提交后旧令牌立即失效，新明文只在本次成功响应中显示一次。原因会写入组织审计。\" : \"提交后该令牌立即失效且不能恢复。原因会写入组织审计。\", initialValue: \"\", })",
+      "label": "askAuditedReason({ title: rotating ? `轮换“${item.name}”密钥` : `撤销“${item.name}”访问`, description: rotating ? \"提交后旧令牌立即失效，新明文只在本次成功响应中显示一次。原因会写入组织审计。\" : \"提交后该令牌立即失效且不能恢复。原因会写入组织审计。\", initialValue: \"\", })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1",
+      "signature": "e828f4ab0fdb0415",
+      "sourceSha256": "df418badfb3016644b3d726722d51065c8eea18d027d5efa104b1983a1c0d0df",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+      "line": 46,
+      "sourceRange": {
+        "start": 940,
+        "end": 3809
+      },
+      "label": "新建组织",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "organization-wizard",
+        "aria-label": "新建组织",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#0b065ffdf54ab12b.1",
+      "signature": "0b065ffdf54ab12b",
+      "sourceSha256": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-27"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "line": 708,
+      "sourceRange": {
+        "start": 24015,
+        "end": 24895
+      },
+      "label": "全部状态 正常使用 已停用 已停用组织 搜索 重置",
+      "attributes": {
+        ":label": "filterLabel",
+        ":active-count": "activeFilterCount"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "events": {},
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#3ba83336a51e7303.1",
+      "signature": "3ba83336a51e7303",
+      "sourceSha256": "09e4f3d6bafb25ca576c091d25775d195de0cf47336cae5879a700db3c39fd0c",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "PlatformAccountDialogs",
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "line": 789,
+      "sourceRange": {
+        "start": 27351,
+        "end": 28125
+      },
+      "label": "",
+      "attributes": {
+        ":create-user-open": "createUserOpen",
+        ":create-user-error": "createUserError",
+        ":account-overview-route": "accountOverviewRoute",
+        ":tab": "tab",
+        ":user-form": "userForm",
+        ":organizations": "data?.organizations || []",
+        ":password-open": "passwordOpen",
+        ":password-error": "passwordError",
+        ":password-form": "passwordForm",
+        ":reason-open": "reasonOpen",
+        ":reason-title": "reasonTitle",
+        ":reason-text": "reasonText",
+        ":busy": "Boolean(busy)",
+        "@close-create-user": "closeCreateUser",
+        "@create-user": "createUser",
+        "@close-password": "passwordOpen = false",
+        "@reset-password": "resetPassword",
+        "@close-reason": "cancelReason",
+        "@submit-reason": "submitReason",
+        "@update:reason-text": "reasonText = $event"
+      },
+      "conditions": [],
+      "events": {
+        "@close-create-user": "closeCreateUser",
+        "@create-user": "createUser",
+        "@close-password": "passwordOpen = false",
+        "@reset-password": "resetPassword",
+        "@close-reason": "cancelReason",
+        "@submit-reason": "submitReason",
+        "@update:reason-text": "reasonText = $event"
+      },
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+      "signature": "1fff4198190d6ece",
+      "sourceSha256": "09e4f3d6bafb25ca576c091d25775d195de0cf47336cae5879a700db3c39fd0c",
+      "handlerDefinitions": [
+        {
+          "name": "submitReason",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 333,
+          "endLine": 340
+        },
+        {
+          "name": "cancelReason",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 341,
+          "endLine": 344
+        },
+        {
+          "name": "closeCreateUser",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 491,
+          "endLine": 494
+        },
+        {
+          "name": "createUser",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 495,
+          "endLine": 512
+        },
+        {
+          "name": "resetPassword",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 539,
+          "endLine": 559
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "PlatformOrganizationDetailDialog",
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "line": 811,
+      "sourceRange": {
+        "start": 28130,
+        "end": 28636
+      },
+      "label": "",
+      "attributes": {
+        ":open": "organizationDetailOpen",
+        ":organization": "selected",
+        ":form": "organizationForm",
+        ":busy": "Boolean(busy)",
+        ":missing": "organizationMissing",
+        ":error-message": "organizationError",
+        ":success-message": "organizationSuccess",
+        ":status-text": "statusText",
+        "@close": "closeOrganizationDetail",
+        "@retry": "load",
+        "@clear-feedback": "clearOrganizationFeedback",
+        "@save": "updateOrganization",
+        "@toggle-status": "toggleOrganization"
+      },
+      "conditions": [],
+      "events": {
+        "@close": "closeOrganizationDetail",
+        "@retry": "load",
+        "@clear-feedback": "clearOrganizationFeedback",
+        "@save": "updateOrganization",
+        "@toggle-status": "toggleOrganization"
+      },
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#c43be07eff2d7020.1",
+      "signature": "c43be07eff2d7020",
+      "sourceSha256": "09e4f3d6bafb25ca576c091d25775d195de0cf47336cae5879a700db3c39fd0c",
+      "handlerDefinitions": [
+        {
+          "name": "load",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 202,
+          "endLine": 248
+        },
+        {
+          "name": "toggleOrganization",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 345,
+          "endLine": 364
+        },
+        {
+          "name": "closeOrganizationDetail",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 432,
+          "endLine": 437
+        },
+        {
+          "name": "clearOrganizationFeedback",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 438,
+          "endLine": 441
+        },
+        {
+          "name": "updateOrganization",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 464,
+          "endLine": 481
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "PlatformUserDetailDialog",
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "line": 826,
+      "sourceRange": {
+        "start": 28641,
+        "end": 29210
+      },
+      "label": "",
+      "attributes": {
+        ":open": "detailOpen",
+        ":detail": "detail",
+        ":selected": "selected",
+        ":busy": "Boolean(busy)",
+        ":error-message": "detailError",
+        ":success-message": "detailSuccess",
+        ":organizations": "data?.organizations || []",
+        ":status-text": "statusText",
+        ":role-text": "roleText",
+        "@close": "closeUserDetail",
+        "@retry": "selected && openUserDetail(selected)",
+        "@toggle-status": "toggleUser",
+        "@role": "role",
+        "@add-membership": "addMembership",
+        "@reset-password": "openPassword",
+        "@revoke-sessions": "revokeSessions"
+      },
+      "conditions": [],
+      "events": {
+        "@close": "closeUserDetail",
+        "@retry": "selected && openUserDetail(selected)",
+        "@toggle-status": "toggleUser",
+        "@role": "role",
+        "@add-membership": "addMembership",
+        "@reset-password": "openPassword",
+        "@revoke-sessions": "revokeSessions"
+      },
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+      "signature": "cab997ead119619a",
+      "sourceSha256": "09e4f3d6bafb25ca576c091d25775d195de0cf47336cae5879a700db3c39fd0c",
+      "handlerDefinitions": [
+        {
+          "name": "toggleUser",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 365,
+          "endLine": 387
+        },
+        {
+          "name": "role",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 388,
+          "endLine": 410
+        },
+        {
+          "name": "addMembership",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 411,
+          "endLine": 418
+        },
+        {
+          "name": "closeUserDetail",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 517,
+          "endLine": 520
+        },
+        {
+          "name": "openUserDetail",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 521,
+          "endLine": 532
+        },
+        {
+          "name": "openPassword",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 533,
+          "endLine": 538
+        },
+        {
+          "name": "revokeSessions",
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "line": 560,
+          "endLine": 578
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "line": 61,
+      "sourceRange": {
+        "start": 1578,
+        "end": 3422
+      },
+      "label": "新建用户或平台管理员",
+      "attributes": {
+        "ref": "createUserDialogElement",
+        "aria-label": "新建用户或平台管理员",
+        "@cancel": "handleCreateUserCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1",
+      "signature": "96a5d8f14ce43590",
+      "sourceSha256": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-28"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "line": 116,
+      "sourceRange": {
+        "start": 3426,
+        "end": 4170
+      },
+      "label": "强制重置密码",
+      "attributes": {
+        "ref": "passwordDialogElement",
+        "aria-label": "强制重置密码",
+        "@cancel": "handlePasswordCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1",
+      "signature": "0a0c76ebc577d650",
+      "sourceSha256": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-29"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "line": 139,
+      "sourceRange": {
+        "start": 4174,
+        "end": 4807
+      },
+      "label": "reasonTitle",
+      "attributes": {
+        "ref": "reasonDialogElement",
+        ":aria-label": "reasonTitle",
+        "@cancel": "handleReasonCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#8cb5dc651024abe9.1",
+      "signature": "8cb5dc651024abe9",
+      "sourceSha256": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-30"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/PlatformDataCenter.vue",
+      "line": 311,
+      "sourceRange": {
+        "start": 10680,
+        "end": 11868
+      },
+      "label": "搜索 记录状态 全部状态 {{ statusName(value) }} {{ refreshing ? \"正在筛选…\" : \"筛选\" }} 重置 {{ exporting ? \"正在导出…\" : \"导出表格文件\" }}",
+      "attributes": {
+        "label": "筛选近期数据",
+        ":active-count": "activeFilterCount"
+      },
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "events": {},
+      "candidateId": "apps/web/src/components/PlatformDataCenter.vue#55e6e39c4bfea115.1",
+      "signature": "55e6e39c4bfea115",
+      "sourceSha256": "f491418e71978de77f8dc2b4c649cbb21b954d14ce05451a0561a4817888773c",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P54"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "AuditedReasonDialog",
+      "file": "apps/web/src/components/PlatformDataCenter.vue",
+      "line": 473,
+      "sourceRange": {
+        "start": 16782,
+        "end": 17140
+      },
+      "label": "",
+      "attributes": {
+        ":open": "exportReasonOpen",
+        ":title": "exportReasonRequest?.title || '填写导出原因'",
+        ":description": "exportReasonRequest?.description || ''",
+        ":initial-value": "exportReasonRequest?.initialValue",
+        ":minimum-length": "exportReasonRequest?.minimumLength",
+        "@submit": "submitExportReason",
+        "@cancel": "cancelExportReason"
+      },
+      "conditions": [],
+      "events": {
+        "@submit": "submitExportReason",
+        "@cancel": "cancelExportReason"
+      },
+      "candidateId": "apps/web/src/components/PlatformDataCenter.vue#3e7c31e734a056fa.1",
+      "signature": "3e7c31e734a056fa",
+      "sourceSha256": "f491418e71978de77f8dc2b4c649cbb21b954d14ce05451a0561a4817888773c",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P54"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askExportReason",
+      "file": "apps/web/src/components/PlatformDataCenter.vue",
+      "line": 183,
+      "target": "askExportReason",
+      "expression": "askExportReason({ title: \"填写受控导出原因\", description: \"导出原因会与筛选范围、操作者和文件审计记录一起保存。\", initialValue: \"平台运营数据核对\", })",
+      "label": "askExportReason({ title: \"填写受控导出原因\", description: \"导出原因会与筛选范围、操作者和文件审计记录一起保存。\", initialValue: \"平台运营数据核对\", })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformDataCenter.vue#f65c3340e428d8ed.1",
+      "signature": "f65c3340e428d8ed",
+      "sourceSha256": "f491418e71978de77f8dc2b4c649cbb21b954d14ce05451a0561a4817888773c",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P54"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+      "line": 297,
+      "sourceRange": {
+        "start": 9433,
+        "end": 10327
+      },
+      "label": "搜索 状态 全部状态 {{ statusName(value) }} 应用筛选 重置",
+      "attributes": {
+        "label": "筛选治理记录",
+        ":active-count": "activeFilterCount"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/PlatformGovernanceCenter.vue#1a97224c567e5a16.1",
+      "signature": "1a97224c567e5a16",
+      "sourceSha256": "0ae025e66bcddb8da0b1766b660213e8f7fa5cbace0956214117d7e31b719912",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P55"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+      "line": 510,
+      "sourceRange": {
+        "start": 16936,
+        "end": 19508
+      },
+      "label": "selected ? `${selected.name}详情` : '治理详情'",
+      "attributes": {
+        "ref": "detailDialogElement",
+        "class": "governance-detail",
+        ":aria-label": "selected ? `${selected.name}详情` : '治理详情'",
+        "@cancel": "handleDetailCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformGovernanceCenter.vue#a96089c835f25daa.1",
+      "signature": "a96089c835f25daa",
+      "sourceSha256": "0ae025e66bcddb8da0b1766b660213e8f7fa5cbace0956214117d7e31b719912",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P55"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-31"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/PlatformLogCenter.vue",
+      "line": 274,
+      "sourceRange": {
+        "start": 9472,
+        "end": 10386
+      },
+      "label": "检索条件 运行面 全部运行面 API Worker 爬虫 重置 检索",
+      "attributes": {
+        "label": "筛选链路日志",
+        ":active-count": "activeFilterCount"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/PlatformLogCenter.vue#e4314256fea2aeac.1",
+      "signature": "e4314256fea2aeac",
+      "sourceSha256": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P62"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "AuditedReasonDialog",
+      "file": "apps/web/src/components/PlatformLogCenter.vue",
+      "line": 481,
+      "sourceRange": {
+        "start": 17158,
+        "end": 17459
+      },
+      "label": "",
+      "attributes": {
+        ":open": "exportReasonOpen",
+        ":title": "exportReasonRequest?.title || '填写日志导出原因'",
+        ":description": "exportReasonRequest?.description || ''",
+        ":initial-value": "exportReasonRequest?.initialValue",
+        "@submit": "submitExportReason",
+        "@cancel": "cancelExportReason"
+      },
+      "conditions": [],
+      "events": {
+        "@submit": "submitExportReason",
+        "@cancel": "cancelExportReason"
+      },
+      "candidateId": "apps/web/src/components/PlatformLogCenter.vue#1bfd5d9fa0fdcd5e.1",
+      "signature": "1bfd5d9fa0fdcd5e",
+      "sourceSha256": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P62"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askExportReason",
+      "file": "apps/web/src/components/PlatformLogCenter.vue",
+      "line": 193,
+      "target": "askExportReason",
+      "expression": "askExportReason({ title: \"填写日志导出原因\", description: \"当前检索条件、运行面、记录数和导出原因会写入平台审计。\", initialValue: \"导出当前链路日志用于故障排查\", })",
+      "label": "askExportReason({ title: \"填写日志导出原因\", description: \"当前检索条件、运行面、记录数和导出原因会写入平台审计。\", initialValue: \"导出当前链路日志用于故障排查\", })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformLogCenter.vue#5d23ad02d6538b9c.1",
+      "signature": "5d23ad02d6538b9c",
+      "sourceSha256": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P62"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "line": 595,
+      "sourceRange": {
+        "start": 20672,
+        "end": 21578
+      },
+      "label": "审核热点内容",
+      "attributes": {
+        "ref": "reviewDialogElement",
+        "aria-label": "审核热点内容",
+        "@cancel": "handleReviewCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformManagementCenter.vue#ca5a09f3ba2d41f2.1",
+      "signature": "ca5a09f3ba2d41f2",
+      "sourceSha256": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P56",
+        "P57",
+        "P61",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-32"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "AuditedReasonDialog",
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "line": 630,
+      "sourceRange": {
+        "start": 21851,
+        "end": 22209
+      },
+      "label": "",
+      "attributes": {
+        ":open": "actionReasonOpen",
+        ":title": "actionReasonRequest?.title || '填写操作原因'",
+        ":description": "actionReasonRequest?.description || ''",
+        ":initial-value": "actionReasonRequest?.initialValue",
+        ":minimum-length": "actionReasonRequest?.minimumLength",
+        "@submit": "submitActionReason",
+        "@cancel": "cancelActionReason"
+      },
+      "conditions": [],
+      "events": {
+        "@submit": "submitActionReason",
+        "@cancel": "cancelActionReason"
+      },
+      "candidateId": "apps/web/src/components/PlatformManagementCenter.vue#4b3a546a74b4e7c1.1",
+      "signature": "4b3a546a74b4e7c1",
+      "sourceSha256": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P56",
+        "P57",
+        "P61",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askActionReason",
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "line": 239,
+      "target": "askActionReason",
+      "expression": "askActionReason({ title: `填写${actionName}原因`, description: \"原因会与邮件队列记录、操作者和执行结果一起保存。\", initialValue: \"人工处理邮件队列\", })",
+      "label": "askActionReason({ title: `填写${actionName}原因`, description: \"原因会与邮件队列记录、操作者和执行结果一起保存。\", initialValue: \"人工处理邮件队列\", })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformManagementCenter.vue#b285a03c301c82db.1",
+      "signature": "b285a03c301c82db",
+      "sourceSha256": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P56",
+        "P57",
+        "P61",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "askActionReason",
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "line": 318,
+      "target": "askActionReason",
+      "expression": "askActionReason({ title: `填写${actionName}原因`, description: \"原因会与消息版本、受众范围、操作者和执行结果一起保存。\", initialValue: `${actionName}平台消息`, })",
+      "label": "askActionReason({ title: `填写${actionName}原因`, description: \"原因会与消息版本、受众范围、操作者和执行结果一起保存。\", initialValue: `${actionName}平台消息`, })",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformManagementCenter.vue#f85ae0968844933a.1",
+      "signature": "f85ae0968844933a",
+      "sourceSha256": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P56",
+        "P57",
+        "P61",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/PlatformManagementFilter.vue",
+      "line": 12,
+      "sourceRange": {
+        "start": 472,
+        "end": 2588
+      },
+      "label": "{{ domain === \"notifications\" ? \"全部类型\" : \"全部状态\" }} 展示中 无关 已过期 已归档 任务 审批 竞品 系统 成功 空结果 受阻 越权拒绝 未执行 已送达 服务商受阻 死信 失败 筛选 重置",
+      "attributes": {
+        ":label": "`筛选${label}`",
+        ":active-count": "activeCount"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/PlatformManagementFilter.vue#ef05faf55a95a9e3.1",
+      "signature": "ef05faf55a95a9e3",
+      "sourceSha256": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P56",
+        "P57",
+        "P61",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformMessageEditor.vue",
+      "line": 20,
+      "sourceRange": {
+        "start": 466,
+        "end": 3666
+      },
+      "label": "editor?.id ? '编辑平台消息草稿' : '新建平台消息草稿'",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "message-dialog",
+        ":aria-label": "editor?.id ? '编辑平台消息草稿' : '新建平台消息草稿'",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#c18fb34a85c44a13.1",
+      "signature": "c18fb34a85c44a13",
+      "sourceSha256": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P56",
+        "P57",
+        "P61",
+        "P63"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-33"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+      "line": 29,
+      "sourceRange": {
+        "start": 616,
+        "end": 3677
+      },
+      "label": "organization?.name ?? (missing ? '未找到组织' : '组织详情')",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "organization-detail-dialog",
+        ":aria-label": "organization?.name ?? (missing ? '未找到组织' : '组织详情')",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#f1666fd06fb5d95e.1",
+      "signature": "f1666fd06fb5d95e",
+      "sourceSha256": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-34"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "line": 39,
+      "sourceRange": {
+        "start": 1097,
+        "end": 5033
+      },
+      "label": "detail?.user?.email ?? selected?.email ?? '账号详情'",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "detail-dialog",
+        ":aria-label": "detail?.user?.email ?? selected?.email ?? '账号详情'",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#316970a74be81a74.1",
+      "signature": "316970a74be81a74",
+      "sourceSha256": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-35"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+      "line": 26,
+      "sourceRange": {
+        "start": 679,
+        "end": 2715
+      },
+      "label": "真实页面观测 解析器与页面版本 · {{ sourceName }} 页面版本来自仍在保留期内的 DOM 或 HTML 证据 SHA-256，不读取或展示页面内容。 × 当前采集程序版本： {{ adapterVersion }} 正在汇总真实页面版本… {{ error }} 页面版本（DOM SHA-256） {{ fingerprint(row.page_version_sha256) }} {{ statusText(row.status) }} 解析器版本 {{ row.parser_version }} 观测次数 {{ row.observation_count }} 成功 / 解析失败 {{ row.succeeded_count }} / {{ row.parser_failure_count }} 最近观测 {{ time(row.last_observed_at) }} 技术详情 {{ row.page_version_sha256 }} 尚无可比较的真实页面版本 先运行真实页面采集；系统只使用已留存的 DOM/HTML 证据生成矩阵。",
+      "attributes": {
+        "class": "source-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "compatibility-title"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#190aaa5dd734c333.1",
+      "signature": "190aaa5dd734c333",
+      "sourceSha256": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-36"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+      "line": 63,
+      "sourceRange": {
+        "start": 1854,
+        "end": 5195
+      },
+      "label": "真实登录采集验收 固定样本回放 · {{ sourceName }} × 只能从同时保存截图、DOM 和结构化快照的真实浏览器作业固化；当前解析器回放一致且另一管理员审批通过后，才允许启用来源。 正在读取固定样本… 可固定的真实作业 {{ new Date(candidate.captured_at).toLocaleString(\"zh-CN\") }} {{ candidate.item_count }} 条结果 {{ savingCandidateId === candidate.browser_job_id ? \"保存中…\" : \"固定为样本\" }} 技术详情 {{ candidate.parser_version }} 暂无合格候选；先完成一条真实登录采集。 已固定样本 {{ sample.name }} {{ replayText(sample.last_replay_status) }} · {{ reviewText(sample.review_status) }} 审批结论： {{ sample.review_reason }} {{ replayingSampleId === sample.id ? \"回放中…\" : \"运行差异回放\" }} 技术详情 {{ sample.baseline_parser_version }} 还没有固定样本。 本次回放： {{ replayText(latestReplay.status) }} 解析器未能读取固定样本，来源继续停用。 {{ item.path }} {{ displayValue(item.before) }} → {{ displayValue(item.after) }} 字段、路径与结果顺序均与基线一致。",
+      "attributes": {
+        "class": "source-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "parser-sample-title"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#288313c7a451cdfc.1",
+      "signature": "288313c7a451cdfc",
+      "sourceSha256": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-37"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "form",
+      "file": "apps/web/src/components/ProviderRegistry.vue",
+      "line": 752,
+      "sourceRange": {
+        "start": 26544,
+        "end": 34781
+      },
+      "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeText(form.access_mode) }} 应用技术模板 来源代码（技术标识） {{ formErrors.code }} 名称 {{ formErrors.name }} 目标 URL {{ formErrors.target_url }} 负责人 {{ formErrors.owner_label }} 接入模式 {{ accessModeText(v) }} 市场 {{ formErrors.markets }} 语言 {{ formErrors.languages }} 字段清单 {{ formErrors.fields }} 去重键 {{ formErrors.dedupe_key }} 解析器版本 {{ formErrors.parser_version }} 健康检查 URL {{ formErrors.healthcheck_url }} 频率（分钟） {{ formErrors.schedule_minutes }} 并发 {{ formErrors.concurrency_limit }} 超时 ms {{ formErrors.timeout_ms }} 重试 {{ formErrors.retry_limit }} 熔断阈值 {{ formErrors.circuit_failure_threshold }} 保留天数 {{ formErrors.retention_days }} 失败规则 {{ formErrors.failure_rules }} 平台条款复核 待复核 已批准 已拒绝 发布状态 草稿 未启用 已启用 条款参考 URL {{ formErrors.terms_reference_url }} 条款版本 {{ formErrors.terms_version }} 条款到期时间 {{ formErrors.terms_expires_at }} 发布预览 {{ form.name || \"未命名来源\" }} · {{ accessModeText(form.access_mode) }} {{ list(form.markets).join(\" · \") || \"未填写市场\" }} / {{ list(form.languages).join(\" · \") || \"未填写语言\" }} 每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} · {{ providerStatusText(form.status) }} {{ message }} 技术详情 {{ requestId }} 上一步 第 {{ editorStep }} / 4 步 · {{ currentStepErrors.length }} 项待修正 下一步 {{ saving ? \"保存中…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
+      "attributes": {
+        "ref": "editorPanel",
+        "class": "provider-editor",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "provider-editor-title",
+        "novalidate": "",
+        "@keydown.esc.stop.prevent": "closeEditor",
+        "@submit.prevent": "save"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editorOpen"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ProviderRegistry.vue#33a2c5d568a6c67c.1",
+      "signature": "33a2c5d568a6c67c",
+      "sourceSha256": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-38"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ProviderSourceConfigurationDialog",
+      "file": "apps/web/src/components/ProviderSourceCenter.vue",
+      "line": 852,
+      "sourceRange": {
+        "start": 30586,
+        "end": 31168
+      },
+      "label": "",
+      "attributes": {
+        ":editing": "editing",
+        ":form": "form",
+        ":preview": "configurationPreview",
+        ":saving": "saving",
+        ":version-source": "versionSource",
+        ":version-loading": "versionLoading",
+        ":version-history": "versionHistory",
+        ":rolling-back": "rollingBack",
+        ":rollback-reason": "rollbackReason",
+        "@close-edit": "editing = null",
+        "@save": "save",
+        "@close-versions": "versionSource = null",
+        "@rollback": "rollbackConfiguration",
+        "@update:form": "Object.assign(form, $event)",
+        "@update:rollback-reason": "rollbackReason = $event"
+      },
+      "conditions": [],
+      "events": {
+        "@close-edit": "editing = null",
+        "@save": "save",
+        "@close-versions": "versionSource = null",
+        "@rollback": "rollbackConfiguration",
+        "@update:form": "Object.assign(form, $event)",
+        "@update:rollback-reason": "rollbackReason = $event"
+      },
+      "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#6fc08db08d269bea.1",
+      "signature": "6fc08db08d269bea",
+      "sourceSha256": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+      "handlerDefinitions": [
+        {
+          "name": "save",
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "line": 362,
+          "endLine": 407
+        },
+        {
+          "name": "rollbackConfiguration",
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "line": 434,
+          "endLine": 457
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ProviderParserSampleDialog",
+      "file": "apps/web/src/components/ProviderSourceCenter.vue",
+      "line": 869,
+      "sourceRange": {
+        "start": 31173,
+        "end": 31697
+      },
+      "label": "",
+      "attributes": {
+        "v-if": "sampleSource",
+        ":source-name": "sampleSource.name",
+        ":loading": "sampleLoading",
+        ":samples": "sampleOverview.samples",
+        ":candidates": "sampleOverview.candidates",
+        ":latest-replay": "latestReplay",
+        ":saving-candidate-id": "sampleSaving",
+        ":replaying-sample-id": "sampleReplaying",
+        ":reviewing-sample-id": "sampleReviewing",
+        "@close": "sampleSource = null",
+        "@create": "createParserSample",
+        "@replay": "replayParserSample",
+        "@review": "reviewParserSample"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "sampleSource"
+        }
+      ],
+      "events": {
+        "@close": "sampleSource = null",
+        "@create": "createParserSample",
+        "@replay": "replayParserSample",
+        "@review": "reviewParserSample"
+      },
+      "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#f00736f4664ddd07.1",
+      "signature": "f00736f4664ddd07",
+      "sourceSha256": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+      "handlerDefinitions": [
+        {
+          "name": "createParserSample",
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "line": 521,
+          "endLine": 539
+        },
+        {
+          "name": "replayParserSample",
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "line": 540,
+          "endLine": 561
+        },
+        {
+          "name": "reviewParserSample",
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "line": 562,
+          "endLine": 591
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ProviderCompatibilityMatrixDialog",
+      "file": "apps/web/src/components/ProviderSourceCenter.vue",
+      "line": 884,
+      "sourceRange": {
+        "start": 31702,
+        "end": 32021
+      },
+      "label": "",
+      "attributes": {
+        "v-if": "compatibilitySource",
+        ":source-name": "compatibilitySource.name",
+        ":adapter-version": "compatibilityAdapterVersion",
+        ":loading": "compatibilityLoading",
+        ":error": "compatibilityError",
+        ":rows": "compatibilityRows",
+        "@close": "compatibilitySource = null"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "compatibilitySource"
+        }
+      ],
+      "events": {
+        "@close": "compatibilitySource = null"
+      },
+      "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#ad3654482438f488.1",
+      "signature": "ad3654482438f488",
+      "sourceSha256": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+      "line": 58,
+      "sourceRange": {
+        "start": 1810,
+        "end": 4855
+      },
+      "label": "编辑采集来源 {{ editing.name }} × 采集频率（分钟） 单次超时（毫秒） 失败重试次数 {{ editing.availability === \"automatic\" ? \"运行状态\" : \"来源设置状态\" }} 启用 停用 启用时会先以停用状态保存这版配置，再访问真实来源页面并验证解析结果；烟测失败不会启用来源。 保存前运行预估 调度同频与当前并发占用 同频来源 {{ preview.same_interval_enabled_count }} 个已启用来源配置为 {{ form.schedule_minutes }} 分钟 当前并发占用 {{ preview.active_count }} / {{ preview.configured_limit }} ， 剩余 {{ preview.available_count }} 个配置槽位 同频数量只提示可能进入同一调度窗口；系统未保存每个来源的独立相位，因此不把同频直接判定为必然冲突。并发占用来自当前待执行或执行中的真实子查询快照，不预测未来任务量。 变更原因 取消 {{ saving ? \"处理中…\" : requiresSmokeTest(editing, form) ? \"烟测并启用\" : \"保存配置\" }}",
+      "attributes": {
+        "v-if": "editing",
+        "class": "source-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "source-edit-title"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editing"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ProviderSourceConfigurationDialog.vue#d30e612863853f7f.1",
+      "signature": "d30e612863853f7f",
+      "sourceSha256": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-39"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+      "line": 159,
+      "sourceRange": {
+        "start": 4858,
+        "end": 7034
+      },
+      "label": "配置版本 版本、差异与回滚 · {{ versionSource.name }} × 只展示采集频率、超时、重试和启停状态；凭证、Cookie 与受限环境值不会进入版本详情。 回滚原因 正在读取配置版本… 第 {{ version.version }} 版 {{ configurationActionText(version.action) }} · {{ new Date(version.created_at).toLocaleString(\"zh-CN\") }} 当前版本 {{ rollingBack === version.version ? \"恢复中…\" : \"恢复此版本\" }} {{ configurationFieldText(change.field) }} {{ displayValue(change.before) }} → {{ displayValue(change.after) }} 与上一版本的可见采集设置一致。 还没有可用配置版本。",
+      "attributes": {
+        "v-if": "versionSource",
+        "class": "source-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "configuration-version-title"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "versionSource"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ProviderSourceConfigurationDialog.vue#0af3a3a9da1e07ad.1",
+      "signature": "0af3a3a9da1e07ad",
+      "sourceSha256": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-40"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ReportCenter.vue",
+      "line": 444,
+      "sourceRange": {
+        "start": 14523,
+        "end": 16911
+      },
+      "label": "`${labels[selectedExport.report_type as ReportType]}导出详情`",
+      "attributes": {
+        "v-if": "selectedExport",
+        "ref": "detailDialogElement",
+        "class": "report-detail",
+        ":aria-label": "`${labels[selectedExport.report_type as ReportType]}导出详情`",
+        "@cancel": "handleDetailCancel"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selectedExport"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ReportCenter.vue#771186d2cb192900.1",
+      "signature": "771186d2cb192900",
+      "sourceSha256": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P28"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-41"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "window.confirm",
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "line": 150,
+      "target": "window.confirm",
+      "expression": "window.confirm(\"确认撤销这条指定资源授权？撤销后立即失效。\")",
+      "label": "window.confirm(\"确认撤销这条指定资源授权？撤销后立即失效。\")",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#4bb78a0457a0971f.1",
+      "signature": "4bb78a0457a0971f",
+      "sourceSha256": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "development-query-view"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "section",
+      "file": "apps/web/src/components/ResponsiveDataView.vue",
+      "line": 60,
+      "sourceRange": {
+        "start": 1959,
+        "end": 2543
+      },
+      "label": "detailTitle(selected)",
+      "attributes": {
+        "class": "responsive-data-view__drawer",
+        "role": "dialog",
+        "aria-modal": "true",
+        ":aria-label": "detailTitle(selected)"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1",
+      "signature": "e23893d134b1daa1",
+      "sourceSha256": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-42"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 491,
+      "sourceRange": {
+        "start": 15965,
+        "end": 18867
+      },
+      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 规则名称 推荐阈值 观察阈值 评分维度 仅权重大于 0 的维度会提交；合计必须为 100。 {{ item.label }} 权重 证据组 市场 竞争 成本 其他 必填 {{ createValidation || `权重合计 ${weightTotal}%，可以保存草稿。` }} {{ createError }} {{ requestId }} 规则不会自动生效；需持有相应权限的人员提交、批准并启用。 取消 {{ busy ? \"保存中…\" : \"保存草稿\" }}",
+      "attributes": {
+        "v-if": "showCreate",
+        "ref": "createDialogElement",
+        "class": "opportunity-modal",
+        "aria-labelledby": "score-rule-create-title",
+        "@cancel": "cancelCreate"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1",
+      "signature": "26b43594a71d94ad",
+      "sourceSha256": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P17"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-43"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 574,
+      "sourceRange": {
+        "start": 18872,
+        "end": 22578
+      },
+      "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ preview.items.length }} / 共 {{ preview.total }} 个机会；只比较当前页，不改规则、机会或历史评分。 分数上升 {{ preview.page_summary.increased }} 分数下降 {{ preview.page_summary.decreased }} 新可计算 {{ preview.page_summary.newly_calculable }} 结论变化 {{ preview.page_summary.recommendation_changed }} 仍数据不足 {{ preview.page_summary.insufficient_data }} {{ item.opportunity_name }} {{ lifecycleLabels[item.lifecycle_status] ?? item.lifecycle_status }} · 当前规则 {{ item.current_rule_version ?? \"未评分\" }} 当前 {{ scoreText(item.current_score) }} 试算 {{ scoreText(item.projected_score) }} 变化 {{ deltaText(item.score_delta) }} 结论 {{ recommendationLabels[item.projected_recommendation_status] ?? item.projected_recommendation_status }} 有变化 覆盖 {{ item.projected_coverage_percent }} % 当前工作区尚无机会可预览。 上一页 第 {{ preview.page }} 页 下一页",
+      "attributes": {
+        "v-if": "showPreview && previewRule",
+        "ref": "previewDialogElement",
+        "class": "opportunity-modal score-preview-modal",
+        "aria-labelledby": "score-rule-preview-title",
+        "@cancel": "cancelPreview"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showPreview && previewRule"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1",
+      "signature": "23f0c5ed2b2a7243",
+      "sourceSha256": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P17"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-44"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 675,
+      "sourceRange": {
+        "start": 22583,
+        "end": 24106
+      },
+      "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{ rule.status }} {{ actionError }} {{ requestId }} 状态变化和原因会写入审计与事务消息；历史评分运行保持不变。 取消 确认 {{ actionLabels[action] }}",
+      "attributes": {
+        "v-if": "showAction && selected",
+        "ref": "actionDialogElement",
+        "class": "opportunity-modal",
+        "aria-labelledby": "score-rule-action-title",
+        "@cancel": "cancelAction"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showAction && selected"
+        }
+      ],
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1",
+      "signature": "910e3d1f243c3fed",
+      "sourceSha256": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P17"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-45"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "SourcingWorkspaceDialogs",
+      "file": "apps/web/src/components/SourcingWorkspace.vue",
+      "line": 652,
+      "sourceRange": {
+        "start": 23012,
+        "end": 23725
+      },
+      "label": "",
+      "attributes": {
+        "v-if": "canManage",
+        ":show-search": "showSearch",
+        ":search-form": "form",
+        ":quote-candidate": "quoteCandidate",
+        ":quote": "quote",
+        ":evidence-options": "evidenceOptions",
+        ":purchase-candidate": "purchaseCandidate",
+        ":purchase-form": "purchaseForm",
+        ":deleting": "deleting",
+        ":delete-reason": "deleteReason",
+        ":busy": "busy",
+        "@close-search": "closeSearch",
+        "@create": "create",
+        "@close-quote": "quoteCandidate = null",
+        "@confirm-quote": "confirm",
+        "@close-purchase": "purchaseCandidate = null",
+        "@purchase": "purchase",
+        "@close-delete": "deleting = null",
+        "@remove-search": "removeSearch",
+        "@update-delete-reason": "deleteReason = $event"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "events": {
+        "@close-search": "closeSearch",
+        "@create": "create",
+        "@close-quote": "quoteCandidate = null",
+        "@confirm-quote": "confirm",
+        "@close-purchase": "purchaseCandidate = null",
+        "@purchase": "purchase",
+        "@close-delete": "deleting = null",
+        "@remove-search": "removeSearch",
+        "@update-delete-reason": "deleteReason = $event"
+      },
+      "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+      "signature": "fca0d2d5d8880776",
+      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "handlerDefinitions": [
+        {
+          "name": "create",
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "line": 220,
+          "endLine": 226
+        },
+        {
+          "name": "closeSearch",
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "line": 232,
+          "endLine": 235
+        },
+        {
+          "name": "confirm",
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "line": 247,
+          "endLine": 260
+        },
+        {
+          "name": "purchase",
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "line": 300,
+          "endLine": 313
+        },
+        {
+          "name": "removeSearch",
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "line": 322,
+          "endLine": 344
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P21"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "line": 92,
+      "sourceRange": {
+        "start": 2554,
+        "end": 3955
+      },
+      "label": "发起供应商找货 × 输入类型 关键词 图片 机会 商品链接 {{ inputLabel }} 系统会直接爬取公开供应商商品页，保存供应商、商品、价格、图片、网址与采集时间；网页没有披露的 MOQ、规格和交期会明确标为待确认。 取消 开始公开网页采集",
+      "attributes": {
+        "v-if": "showSearch",
+        "ref": "searchDialog",
+        "class": "sourcing-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "sourcing-search-title",
+        "@keydown.esc": "emit('closeSearch')"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showSearch"
+        }
+      ],
+      "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1",
+      "signature": "73d110263ae493f0",
+      "sourceSha256": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P21"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-46"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "line": 139,
+      "sourceRange": {
+        "start": 3958,
+        "end": 6326
+      },
+      "label": "确认完整供应商报价 × 规格 最小起订量 交期（天） 所在地 可信度（0–100） 稳定性 稳定 波动 未知 风险 低 中 高 未知 观测时间 确认依据证据（可搜索） {{ option.label }} 取消 确认新版本",
+      "attributes": {
+        "v-if": "quoteCandidate",
+        "ref": "quoteDialog",
+        "class": "sourcing-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "sourcing-quote-title",
+        "@keydown.esc": "emit('closeQuote')"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "quoteCandidate"
+        }
+      ],
+      "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1",
+      "signature": "aa8a9b645036fe7e",
+      "sourceSha256": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P21"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-47"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "line": 211,
+      "sourceRange": {
+        "start": 6329,
+        "end": 8112
+      },
+      "label": "结构化采购创建 创建采购任务 × 供应商 {{ purchaseCandidate.supplier_name }} 锁定报价版本 v {{ purchaseCandidate.quote?.version }} 最小起订量（MOQ） {{ purchaseCandidate.moq }} 报价证据 {{ purchaseCandidate.quote?.evidence_id }} 采购数量 创建原因 取消 确认创建",
+      "attributes": {
+        "v-if": "purchaseCandidate",
+        "ref": "purchaseDialog",
+        "class": "sourcing-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "purchase-task-title",
+        "@keydown.esc": "emit('closePurchase')"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "purchaseCandidate"
+        }
+      ],
+      "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1",
+      "signature": "f21fd23c2e4b9d60",
+      "sourceSha256": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P21"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-48"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "line": 280,
+      "sourceRange": {
+        "start": 8115,
+        "end": 9089
+      },
+      "label": "删除找货记录 × 删除“ {{ searchName(deleting) }} ”后不再显示在工作台，候选证据和审计记录仍保留。 删除原因 取消 确认删除",
+      "attributes": {
+        "v-if": "deleting",
+        "ref": "deleteDialog",
+        "class": "sourcing-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "sourcing-delete-title",
+        "@keydown.esc": "emit('closeDelete')"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting"
+        }
+      ],
+      "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1",
+      "signature": "d0e8a832293a76e5",
+      "sourceSha256": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P21"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-49"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/TaskBatchActions.vue",
+      "line": 49,
+      "sourceRange": {
+        "start": 1408,
+        "end": 3295
+      },
+      "label": "确认批量任务操作",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "task-batch-impact",
+        "aria-label": "确认批量任务操作",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1",
+      "signature": "6b0b774adfa59ad6",
+      "sourceSha256": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P13",
+        "P23",
+        "P24"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-50"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/TaskDetailPanel.vue",
+      "line": 225,
+      "sourceRange": {
+        "start": 6493,
+        "end": 9128
+      },
+      "label": "任务操作表单",
+      "attributes": {
+        "ref": "dialogElement",
+        "class": "task-action-dialog",
+        "aria-label": "任务操作表单",
+        "@cancel": "handleCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/TaskDetailPanel.vue#dfce0d7d3dc167b7.1",
+      "signature": "dfce0d7d3dc167b7",
+      "sourceSha256": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P13",
+        "P23",
+        "P24"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-51"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/TaskWorkspace.vue",
+      "line": 874,
+      "sourceRange": {
+        "start": 27815,
+        "end": 29045
+      },
+      "label": "editing ? '编辑任务' : '新建任务'",
+      "attributes": {
+        "ref": "createDialogElement",
+        ":aria-label": "editing ? '编辑任务' : '新建任务'",
+        "@cancel": "handleCreateCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1",
+      "signature": "8bf4c56bada725b4",
+      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P13",
+        "P23",
+        "P24"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-52"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "dialog",
+      "file": "apps/web/src/components/TaskWorkspace.vue",
+      "line": 933,
+      "sourceRange": {
+        "start": 29843,
+        "end": 30575
+      },
+      "label": "删除任务",
+      "attributes": {
+        "ref": "deleteDialogElement",
+        "class": "task-delete-dialog",
+        "aria-label": "删除任务",
+        "@cancel": "handleDeleteCancel"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1",
+      "signature": "078999112ae5397e",
+      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P13",
+        "P23",
+        "P24"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-53"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "TrendRuleDialog",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 668,
+      "sourceRange": {
+        "start": 23219,
+        "end": 23370
+      },
+      "label": "",
+      "attributes": {
+        "v-if": "showRule && canManageTrends",
+        ":busy": "Boolean(busy)",
+        "@close": "showRule = false",
+        "@submit": "createRule"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showRule && canManageTrends"
+        }
+      ],
+      "events": {
+        "@close": "showRule = false",
+        "@submit": "createRule"
+      },
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
+      "signature": "14e2daa05c9f34c8",
+      "sourceSha256": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+      "handlerDefinitions": [
+        {
+          "name": "createRule",
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "line": 347,
+          "endLine": 356
+        }
+      ],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P14"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 674,
+      "sourceRange": {
+        "start": 23375,
+        "end": 24705
+      },
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
+      "attributes": {
+        "v-if": "anomalyEvidence && canManageTrends",
+        "class": "trend-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "trend-anomaly-title"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "anomalyEvidence && canManageTrends"
+        }
+      ],
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1",
+      "signature": "2b5e528bd9cb343d",
+      "sourceSha256": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P14"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-54"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 714,
+      "sourceRange": {
+        "start": 24710,
+        "end": 25849
+      },
+      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 确认并记录",
+      "attributes": {
+        "v-if": "relevanceDialog && canManageTrends",
+        "class": "trend-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "trend-relevance-title"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManageTrends"
+        }
+      ],
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1",
+      "signature": "75e0cda23916c7c2",
+      "sourceSha256": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P14"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-55"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ResponsiveFilterDrawer",
+      "file": "apps/web/src/components/TrendFilterPanel.vue",
+      "line": 21,
+      "sourceRange": {
+        "start": 624,
+        "end": 2311
+      },
+      "label": "市场 全部市场 US 分类 状态 活跃 已标记无关 已过期 全部状态 关键词 排序 影响程度 最新信号 增长速度 我的关注优先 筛选 清除 保存视图链接",
+      "attributes": {
+        "label": "筛选趋势",
+        ":active-count": "activeCount"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/TrendFilterPanel.vue#574e84bbfac61d8b.1",
+      "signature": "574e84bbfac61d8b",
+      "sourceSha256": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P14"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-definition",
+      "tag": "div",
+      "file": "apps/web/src/components/TrendRuleDialog.vue",
+      "line": 52,
+      "sourceRange": {
+        "start": 1275,
+        "end": 3323
+      },
+      "label": "监控规则 创建趋势监控 × 规则名称 包含关键词（逗号分隔） 排除关键词（可选） 市场 语言 分类（可选） 自动采集周期 每 15 分钟 每 30 分钟 每 1 小时 每 3 小时 每 6 小时 每 12 小时 每天 候选来源门槛 命中 1 个真实来源后形成候选 至少 2 个独立来源后形成候选 至少 3 个独立来源后形成候选 候选不等于建议采纳 达到来源门槛只显示“规则命中候选”；五项质量门全部通过后才显示“建议采纳”，最终仍由你采纳。 通知渠道 站内通知。邮件服务尚未确认，不能选择。 取消 {{ busy ? \"保存中…\" : \"创建并启用\" }}",
+      "attributes": {
+        "class": "trend-modal",
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "trend-rule-title"
+      },
+      "conditions": [],
+      "candidateId": "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1",
+      "signature": "ee0ee052b72fc674",
+      "sourceSha256": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P14"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [
+        "dialog-56"
+      ],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-component-call",
+      "tag": "ConfirmDialog",
+      "file": "apps/web/src/components/UiStateShowcase.vue",
+      "line": 151,
+      "sourceRange": {
+        "start": 4812,
+        "end": 5153
+      },
+      "label": "",
+      "attributes": {
+        ":open": "dialogOpen",
+        "title": "确认撤销示例授权？",
+        "description": "这是通用确认组件的交互演示，不会请求后端。",
+        "impact": "仅演示当前弹窗；不修改角色、权限、数据或审计。",
+        "confirm-label": "确认演示",
+        "destructive": "",
+        "confirmation-text": "确认撤销",
+        "@cancel": "dialogOpen = false",
+        "@confirm": "\n        dialogOpen = false;\n        confirmed = true;\n      "
+      },
+      "conditions": [],
+      "events": {
+        "@cancel": "dialogOpen = false",
+        "@confirm": "\n        dialogOpen = false;\n        confirmed = true;\n      "
+      },
+      "candidateId": "apps/web/src/components/UiStateShowcase.vue#2067b78f30a4668d.1",
+      "signature": "2067b78f30a4668d",
+      "sourceSha256": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P72"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "dialog-script-call",
+      "tag": "dialogElement.value.showModal",
+      "file": "apps/web/src/use-modal-dialog.ts",
+      "line": 14,
+      "target": "dialogElement.value.showModal",
+      "expression": "dialogElement.value.showModal()",
+      "label": "dialogElement.value.showModal()",
+      "attributes": {},
+      "conditions": [],
+      "candidateId": "apps/web/src/use-modal-dialog.ts#524dddb64d598a2e.1",
+      "signature": "524dddb64d598a2e",
+      "sourceSha256": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    }
+  ]
+}

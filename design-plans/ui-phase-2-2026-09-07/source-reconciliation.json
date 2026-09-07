@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-07",
+  "reviewer": "implementation-agent-source-review",
+  "scope": "Source correspondence only; not user design approval or runtime acceptance.",
+  "legacyOverrides": [
+    {
+      "legacyId": "button-203",
+      "file": "apps/web/src/components/NavigationShell.vue",
+      "attributes": { "@click": "openDiscovery('create')", ":aria-label": "quickActionLabel" },
+      "disposition": "retained-shared-create-entry-label-binding-renamed-runtime-pending",
+      "reason": "Historical member entry used primaryActionLabel and role-create; current entry uses quickActionLabel and role-quick-action. Both call openDiscovery('create') under the member shell condition. Source checked against a9460a99 and current component."
+    },
+    {
+      "legacyId": "button-625",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "label": "{{ enabledRules.length ? \"创建趋势监控\" : \"创建第一条监控规则\" }}",
+      "attributes": { "@click": "showRule = true", "v-if": "canManageTrends" },
+      "disposition": "retained-rule-editor-entry-label-and-visibility-expanded-runtime-pending",
+      "reason": "Historical readiness slot showed first-rule creation only with no enabled rules. Current slot retains showRule=true and canManageTrends, with label selecting first-rule/create-monitor based on enabledRules.length. Visibility expansion is recorded, not treated as an unchanged runtime contract."
+    }
+  ],
+  "sourceScopes": [
+    {
+      "file": "apps/web/src/components/ApiFoundation.vue",
+      "classification": "development-query-view",
+      "view": "api"
+    },
+    {
+      "file": "apps/web/src/components/AuditSecurityCenter.vue",
+      "classification": "development-query-view",
+      "view": "audit-security"
+    },
+    {
+      "file": "apps/web/src/components/AuthorizationCenter.vue",
+      "classification": "development-query-view",
+      "view": "authorization"
+    },
+    {
+      "file": "apps/web/src/components/DeploymentFoundation.vue",
+      "classification": "development-query-view",
+      "view": "deployment"
+    },
+    {
+      "file": "apps/web/src/components/FileAuditFoundation.vue",
+      "classification": "development-query-view",
+      "view": "file-audit"
+    },
+    {
+      "file": "apps/web/src/components/MySqlFoundation.vue",
+      "classification": "development-query-view",
+      "view": "mysql"
+    },
+    {
+      "file": "apps/web/src/components/RedisFoundation.vue",
+      "classification": "development-query-view",
+      "view": "redis"
+    },
+    {
+      "file": "apps/web/src/components/ResourceGrantCenter.vue",
+      "classification": "development-query-view",
+      "view": "resource-grants"
+    },
+    {
+      "file": "apps/web/src/components/OpportunityMobileShell.vue",
+      "classification": "no-explicit-render-consumer-found-do-not-delete",
+      "view": null
+    }
+  ],
+  "scopeEvidence": "App.vue computes requestedInternalView only when import.meta.env.DEV and internalViews includes the query, then switches the listed views. These are not separate route-catalog entries. The static source condition is verified, but production negative checks remain pending. OpportunityMobileShell has no named import or surfaceComponents entry in current source; NavigationShell's broad glob prevents treating it as proven absent from the bundle."
+}

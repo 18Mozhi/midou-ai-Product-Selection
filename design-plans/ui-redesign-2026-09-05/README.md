@@ -20,8 +20,8 @@
 
 - `FULL-RECOMMENDATIONS.md`：全局与逐页优化建议。
 - `page-matrix.md`：路由、角色、全新布局、焦点和图片索引。
-- `button-inventory.md`：每一个真实按钮的源码位置和新层级。
-- `dialog-inventory.md`：每一个真实弹窗的源码位置和新类型。
+- `button-inventory.md`：生成时正则匹配的原生按钮源码位置和建议层级，不是完整业务动作清单。
+- `dialog-inventory.md`：生成时正则匹配的原生弹窗位置和建议类型，不包括全部共享调用与动态变体。
 - `screens/desktop` / `screens/mobile`：逐路由设计图。
 - `boards`：视觉、按钮、状态与弹窗设计板。
 
@@ -30,3 +30,7 @@
 `node design-plans/ui-redesign-2026-09-05/build.mjs`
 
 `node design-plans/ui-redesign-2026-09-05/verify.mjs`
+
+## 证据类型与第二阶段
+
+`screens/desktop`、`screens/mobile`及`boards`由独立HTML概念模板渲染，不是Vue或生产截图；`implementation-proof`按其说明为真实Vue与隔离API数据。概念图校验通过不能证明业务动作执行通过。第二阶段进度及未验事项见 [实施账册](../ui-phase-2-2026-09-07/review.html)。

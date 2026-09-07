@@ -54,7 +54,11 @@ await writeFile(path.join(here,"dialog-inventory.md"),`# 弹窗逐项清单\n\n�
 
 await writeFile(path.join(here,"README.md"),`# ScoutOps 全新 UI 重构审核包\n\n## 审核入口\n\n启动静态服务后打开 \`index.html\`。审核台包含 ${routes.length} 个真实路由的桌面与移动稿、3 张基础系统板和 ${dialogVariants.length} 张弹窗板。\n\n## 这版与旧版的关系\n\n旧版视觉和布局不作为继承基础。本包重新定义导航、页面模板、颜色、字体、按钮、表单、状态、弹窗和移动端结构；只保留真实路由、业务任务、权限范围与按钮/弹窗源码清单作为事实依据。\n\n## 建议审核顺序\n\n1. \`boards/design-system.png\`：先确认整体风格是否彻底脱离旧版。\n2. \`screens/desktop/12-home.png\`、\`15-opportunities.png\`、\`18-opportunities__opportunityId.png\`：确认首页、列表和详情三种核心构图。\n3. \`screens/mobile/12-home.png\` 与 \`18-opportunities__opportunityId.png\`：确认移动端不是桌面缩小版。\n4. \`boards/button-system.png\`、\`state-system.png\` 与 10 张弹窗板：确认细节合同。\n5. 再按审核台筛选逐页查看 73 条路由。\n\n## 文件说明\n\n- \`FULL-RECOMMENDATIONS.md\`：全局与逐页优化建议。\n- \`page-matrix.md\`：路由、角色、全新布局、焦点和图片索引。\n- \`button-inventory.md\`：每一个真实按钮的源码位置和新层级。\n- \`dialog-inventory.md\`：每一个真实弹窗的源码位置和新类型。\n- \`screens/desktop\` / \`screens/mobile\`：逐路由设计图。\n- \`boards\`：视觉、按钮、状态与弹窗设计板。\n\n## 重新生成与验证\n\n\`node design-plans/ui-redesign-2026-09-05/build.mjs\`\n\n\`node design-plans/ui-redesign-2026-09-05/verify.mjs\`\n+`,"utf8");
 
-await writeFile(path.join(here,"README.md"),(await readFile(path.join(here,"README.md"),"utf8")).replace(/\n\+\s*$/,"\n"),"utf8");
+await writeFile(path.join(here,"README.md"),(await readFile(path.join(here,"README.md"),"utf8"))
+  .replace(/\n\+\s*$/,"\n")
+  .replace("每一个真实按钮的源码位置和新层级。", "生成时正则匹配的原生按钮源码位置和建议层级，不是完整业务动作清单。")
+  .replace("每一个真实弹窗的源码位置和新类型。", "生成时正则匹配的原生弹窗位置和建议类型，不包括全部共享调用与动态变体。")
+  + "\n## 证据类型与第二阶段\n\n`screens/desktop`、`screens/mobile`及`boards`由独立HTML概念模板渲染，不是Vue或生产截图；`implementation-proof`按其说明为真实Vue与隔离API数据。概念图校验通过不能证明业务动作执行通过。第二阶段进度及未验事项见 [实施账册](../ui-phase-2-2026-09-07/review.html)。\n","utf8");
 const contentTypes={".html":"text/html; charset=utf-8",".mjs":"text/javascript; charset=utf-8",".css":"text/css; charset=utf-8",".png":"image/png",".md":"text/markdown; charset=utf-8"};
 const server=createServer(async(request,response)=>{try{const url=new URL(request.url,"http://127.0.0.1"),requested=decodeURIComponent(url.pathname==="/"?"/index.html":url.pathname),file=path.resolve(here,`.${requested}`);if(!file.startsWith(here)||!existsSync(file))throw new Error("not found");response.writeHead(200,{"content-type":contentTypes[path.extname(file)]||"application/octet-stream"});response.end(await readFile(file))}catch{response.writeHead(404);response.end("not found")}});
 await new Promise(resolve=>server.listen(0,"127.0.0.1",resolve));
