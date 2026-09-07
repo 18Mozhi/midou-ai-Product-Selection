@@ -217,3 +217,30 @@ npx --no-install playwright test @scopeSpecs --project=mobile-390
 无生产代码、API、权限、SQL、配置或依赖修改，OpenAPI不变；Feature Map仅新增本地检查入口。无需前端重采、生产重启或部署。本批临时输出统一位于系统临时目录scoutops-ui2-source-scope-20260907，含首轮失败追踪和最终测试元数据，收尾按精确目录清理；没有新增永久截图，长期保留语义清单、说明和回归测试。
 
 收尾结果：文档门、静态分析、格式门通过。4101/5173无监听，测试服务已退出。清理确认上述目录共13份本批测试文件，但工具策略拒绝Remove-Item删除（包括显式LiteralPath命令）；未绕过限制，文件没有进入Git。剩余精确路径为 `C:\Users\23136\AppData\Local\Temp\scoutops-ui2-source-scope-20260907`，需用户手动删除该目录；仅含隔离测试截图、追踪、错误上下文及.last-run，不是业务资料。此前“收尾清理”是要求，不代表这一次已成功删除。
+
+## 2026-09-07 · R01任务三页合同与定向运行验证
+
+从main / 3ac5bea干净工作树开始，执行PLAN 1.3的S02。复用54项目录外复核，不再次盘点该范围。新增page-specs/P13.md，修订P23/P24，新增task-contract-review.md；四个实际任务组件的71个控件/事件候选均有局部语义映射，4个原生dialog定义展开为新建/编辑/删除、5个单项及5个批量变体，共13个。人工表与自动清单分离；只读内联校验确认71项各对应一次，没有改全站分母或审核状态。
+
+沿routes→service→MySQL确认两项旧规格偏差：新建/编辑表单实际内联在TaskWorkspace，并非TaskEditForm；summary固定按actor统计本人工作区任务，P23列表不带mine，两者不保证同一总量。只修正文档事实，不改变后端统计范围、权限或数据规则。
+
+新增tests/e2e/ui-phase2-task-contracts.spec.ts共18项参数化用例，复用原business-tasks helper且不修改夹具。覆盖5个单项表单的取消/焦点/准确POST、3个直接生命周期动作、进度503重试与草稿保留、5个批量变体的取消/资格/参数、今日工作mine及返回、快捷创建取消、编辑/删除与详情404重载。每项能力边界在合同表列明；模拟响应不持久化PATCH，不能称数据库、真实权限或审计验证。
+
+首轮17项通过，UI2-T05失败后依次纠正中文URL编码、壳层h1与业务h2的定位歧义。进一步证据发现NavigationShell的KeepAlive缓存页仍运行TaskWorkspace的query watch，切页时会额外读取未筛选的mine=true列表；首次与返回有效请求仍带原筛选。T05据实际合同分别验证范围和恢复，不断言不存在额外请求，也不把发现隐藏为测试错误。缓存页读取与迟到响应是下一步优先修复/回归项，尚未修复；动作弹窗的错误提示位于外层、提交中关闭竞态等也仍未完成。
+
+T05最小复测通过后，最终同一版本全文件桌面18项通过（32.8s）、390移动18项通过（34.1s），无跳过。清单--check及文档门通过；旧产品源、共享夹具和原型样式未变，不重复生成现有图片或运行无关业务全量回归。Feature Map仅添加本地合同与测试入口，没有API、SQL、依赖、环境变量、生产运行或重启变更。
+
+复验按桌面→移动顺序执行：
+
+```text
+npx --no-install playwright test tests/e2e/ui-phase2-task-contracts.spec.ts --project=desktop-chromium
+npx --no-install playwright test tests/e2e/ui-phase2-task-contracts.spec.ts --project=mobile-390
+node scripts/build-ui-phase2-inventory.mjs --check
+npm run verify:docs
+npm run format:check
+git diff --check
+```
+
+本轮6次测试运行的临时产物均在 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-tasks-20260907`，共15份文件（三次失败的截图/追踪/错误上下文及各轮.last-run）。4101/5173无监听，所有自建测试服务已退出。精确路径核实后尝试Remove-Item被工具策略拒绝，未绕过；该目录仍需手动清理，不在Git中，不是长期设计交付。上一批系统临时目录未触碰。永久保留本轮规格、合同和测试，不新增截图交付。
+
+R01仍未全站冻结；六份页面规格不等于六页设计通过。A/B方向与正式Vue重构、全73页图和验收、生产发布、用户签收仍待完成。
