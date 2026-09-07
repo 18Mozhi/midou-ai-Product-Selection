@@ -248,7 +248,7 @@ const exceptionalQueues = computed(() =>
   ),
 );
 const visibleQueues = computed(() =>
-  (showAllQueues.value ? queueRows.value : exceptionalQueues.value).slice(0, 18),
+  showAllQueues.value ? queueRows.value : exceptionalQueues.value,
 );
 const hiddenIdleQueueCount = computed(() =>
   Math.max(0, queueRows.value.length - exceptionalQueues.value.length),

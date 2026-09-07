@@ -760,3 +760,23 @@ Feature Map增加三页合同索引，backup runbook补显示使用及策略/发
 临时浏览器根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-log-backup-release-20260908，执行前确认不存在，包含red/targeted/module；6文件、4子目录、根和后代0 ReparsePoint。核对绝对路径及清单后，原生PowerShell删除调用执行前被策略拒绝，未重试或换工具绕过，6文件仍未入Git、需用户手动清理；旧23批保留不动。本批另调用既有备份单测，其内部mkdtemp自检/验证目录由finally自动清理且单测检查cleanup passed；结束按精确selftest/verify前缀检查0残留（随机临时路径未被测试输出，不伪造逐路径追踪）。旧OS备份测试目录未删除。所有本批句柄终态、4101/5173/5181无监听；正常dist、类型/依赖缓存、助手包保留。
 
 OP-G01–OP-G08仍含日志URL/旧数据与权限失败处理、导出生命周期、备份边界值、发布未知身份/历史文案、共享焦点/复制及运维路径核对等未完成项。F00-1.18-r1待用户具体意见，未选择A/B/C、未生成正式批准图；获审后优先正式代表图→Vue闭环。下一事实批B3b P66–P69，随后P70/P71；G0未冻结、G1–G5待验、用户通过0，全部73路由正式新布局/图、全部动作/弹窗/状态、真实后端/生产部署与签收目标继续进行中。
+
+## 2026-09-08 · B3b运行拓扑与依赖韧性四页合同
+
+从main/ea91a57干净工作树接续B3b；上一计划修订不是实施进度。本批按AGENTS、Feature Map、蓝图及实际Vue/API/service/repository/probe追踪，使用需求拆解、UI无障碍和计划要求的永久Playwright测试，无子代理。新增P66/P67/P68/P69四份十节规格及runtime-resilience-contract-review.md，事实规格67→71/73，仅P70/P71未补；不代表71页正式设计交付。
+
+四局部Vue共23候选（11/4/4/4），共享TechnicalDetails另2项，共25精确签名/序号/行/类型；0处v-model、12处共享披露调用，无局部表单或业务模态。29份LF归一源码指纹、25候选、0绑定、四页真实路由/十节、8处相对链接及71份规格计数机械校验通过，不替代行为或生产验收，不更新全站冻结分母和历史图hash。
+
+合同明确：P66当前节点/Worker/监督器/探针状态不同，24小时最多600历史记录及五分钟观测不是连续全量监控；P67当前GET探针只覆盖部分配置与有界内存采样，不证明整个Feature Map运维目标，失败零值不是实测；P68累计指标、慢查询窗口近似与恢复策略分层不可混用；P69文件系统水位和目录索引体积不同，失败10000占位不是实测满盘，抽样完整性与固定public_access标志不等于全量资产和Nginx安全验收。四GET均有审计/观测写入，不把只读UI描述为服务零写入。
+
+两处产品最小修复：RuntimeTopologyCenter移除全部/异常队列共同的slice(0,18)，不改筛选顺序或Worker调度，真实registry当前19类；FileResilienceCenter三容量条增加kind派生aria-label及现有percent派生aria-valuetext，value/max与容量算法不变。UI2-RS66旧源在19对18断言red失败，定向1项14.8秒通过，拓扑模块desktop-chromium/mobile-390共8项35.5秒通过；UI2-RS69旧源在名称为空断言red失败，定向1项14.9秒通过，文件模块两项目共8项36.5秒通过。合计16项模块回归，部分既有用例主动切390，不将全部desktop项目说成固定桌面宽度。未更新或接受视觉快照。
+
+新拓扑用例从实际静态队列策略生成夹具，验证Space全部展开、19项、末项Enter披露、收起及刷新后19项异常，精确两GET；不启动Worker。容量条用例验证2.5/5.0/7.5刷新到0/87.5/100.0时名称/value/max/值文本准确，精确两GET。这些是隔离响应与Vue交互，不证明真实后端、全部浏览器请求零写入、完整读屏或所有状态。Redis/MySQL产品未变，未重跑其无关完整E2E。
+
+最终拓扑/文件单测合并21项通过0失败（源码合同、求值器和伪依赖注入，不是实时生产）；build:web含助手确定性构建、严格vue-tsc、408模块Vite10.69秒通过。组件边界1项、frontend-budget251资源、static-analysis390文件、docs73路由/60受保护/6角色/153文档、runtime-docs及format changed=4/production=496/repositories=51通过；两Vue/两永久测试/Feature Map显式Prettier通过，git diff --check通过。未运行全站全部功能/安全或生产验收，不复用历史verified冒充本轮上线证明。
+
+Feature Map补四合同索引及验证边界，两runbook补实际操作和隔离验收边界。未改API/OpenAPI、路由、后端/Worker/Python、SQL/迁移、业务/权限/安全规则、依赖、环境变量/.env、部署器或正式视觉风格；这些运行契约同步不适用。无新参数/配置、无迁移、无当前服务重启要求，未连接生产或部署。未来仍用固定python scripts/deploy-baota.py并预检当次迁移与停启窗口，Web回退不执行数据库down迁移。
+
+本轮唯一临时根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-runtime-resilience-20260908，含red/targeted/module/topology-red/topology-targeted/topology-module，12文件、8子目录，根及后代0 ReparsePoint。核对精确绝对路径/清单后的原生PowerShell清理调用被执行策略拒绝，未重试或绕过；12文件仍留存未入Git，需要用户手动清理此精确目录。旧24批材料未动，不能称清理完成。测试/构建/门禁句柄均已终态，结束检查4101/5173/5181无监听；正常dist、缓存及助手包按项目要求保留，无新增临时脚本或服务需交接。
+
+RS-G01–RS-G08保留生命周期/迟到归属、探针失败占位与热点部分失败、队列老化/标签、指标/恢复边界、共享复制/焦点和真实后端验收缺口。下一安全事实批P70/P71；F00-1.18-r1仍待用户具体方向意见，未自动选A/B/C。G0未冻结、G1–G5待验，全73路由正式新布局/全套图、全部实际按钮/弹窗/状态、真实验证、宝塔发布及用户签收均未完成，目标保持进行中。

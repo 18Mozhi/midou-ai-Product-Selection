@@ -67,6 +67,57 @@ async function navigation(page: Page) {
   );
 }
 test.beforeEach(async ({ page }) => navigation(page));
+test("UI2-RS69 directory watermarks expose names and current percentage after refresh", async ({
+  page,
+}) => {
+  let calls = 0;
+  const methods: string[] = [];
+  const updated = [0, 8750, 10000];
+  await page.route("**/api/v1/platform/operations/files", (route) => {
+    methods.push(route.request().method());
+    calls += 1;
+    const data =
+      calls === 1
+        ? base
+        : {
+            ...base,
+            state: "blocked",
+            directories: base.directories.map((root, index) => ({
+              ...root,
+              usage_basis_points: updated[index],
+              used_bytes: (root.total_bytes * updated[index]) / 10000,
+            })),
+            findings: [
+              { code: "file_capacity_stop", severity: "blocked", action_hint: "核验目录水位。" },
+            ],
+          };
+    return route.fulfill({ json: envelope(data) });
+  });
+  await page.goto("/platform-admin/files");
+  const surface = page.locator(".file-resilience");
+  await expect(surface.getByRole("progressbar")).toHaveCount(3);
+  for (const [index, label] of ["证据目录", "导出目录", "临时目录"].entries()) {
+    const bar = surface.getByRole("progressbar").nth(index);
+    await expect(bar).toHaveAccessibleName(`${label}所在文件系统已用比例`);
+    await expect(bar).toHaveAttribute("value", String(base.directories[index].usage_basis_points));
+    await expect(bar).toHaveAttribute("max", "10000");
+    await expect(bar).toHaveAttribute(
+      "aria-valuetext",
+      `${(base.directories[index].usage_basis_points / 100).toFixed(1)}%`,
+    );
+  }
+  await page.getByRole("button", { name: "刷新文件事实", exact: true }).click();
+  await expect(page.getByText("本机文件韧性门已阻断")).toBeVisible();
+  for (const [index, label] of ["证据目录", "导出目录", "临时目录"].entries()) {
+    const bar = surface.getByRole("progressbar", {
+      name: `${label}所在文件系统已用比例`,
+      exact: true,
+    });
+    await expect(bar).toHaveAttribute("value", String(updated[index]));
+    await expect(bar).toHaveAttribute("aria-valuetext", `${(updated[index] / 100).toFixed(1)}%`);
+  }
+  expect(methods).toEqual(["GET", "GET"]);
+});
 test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => {
   await page.route("**/api/v1/platform/operations/files", (route) =>
     route.fulfill({ json: envelope(base) }),

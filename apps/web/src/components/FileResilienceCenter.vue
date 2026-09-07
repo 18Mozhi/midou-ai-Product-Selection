@@ -242,7 +242,12 @@ onBeforeUnmount(() => {
                 <b>{{ rootPurpose(root.kind) }}</b
                 ><span>{{ root.available && root.writable ? "可读写" : "不可用" }}</span>
               </div>
-              <progress :value="root.usage_basis_points" max="10000"></progress>
+              <progress
+                :aria-label="`${rootLabel(root.kind)}所在文件系统已用比例`"
+                :aria-valuetext="percent(root.usage_basis_points)"
+                :value="root.usage_basis_points"
+                max="10000"
+              ></progress>
               <dl>
                 <div>
                   <dt>索引体积</dt>

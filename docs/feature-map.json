@@ -2333,6 +2333,7 @@
       "statusDetail": "module_verified"
     },
     "runtimeTopology": {
+      "uiPhase2Contract": "P66 and runtime-resilience-contract-review.md under design-plans/ui-phase-2-2026-09-07 map read-only controls, native disclosures, GET audit effects, sampled restart history, health windows and cache lifecycle gaps. The Web list no longer truncates all or exceptional queues at 18; UI2-RS66 uses the current 19-policy Worker registry in isolated responses and verifies keyboard disclosure and two GETs without changing scheduling policy. Full formal design, remaining state semantics, real backend and production remain pending.",
       "module": "M08-01",
       "entrypoints": [
         "../packages/runtime-topology/src/index.ts",
@@ -2421,6 +2422,7 @@
       "statusDetail": "module_verified"
     },
     "redisResilience": {
+      "uiPhase2Contract": "P67 and runtime-resilience-contract-review.md under design-plans/ui-phase-2-2026-09-07 document read/retry/login and shared request-detail copy only. The current probe/evaluator proves a narrower runtime subset than the broad operational truthBoundary: appendfsync, bind/protected-mode and recovery-drill facts are not read by this endpoint; static everysec text is not fresh proof. Sampling failures and occupancy, local risk thresholds and cached lifecycle need follow-up. This batch changes no Redis product code, rule, API or production state.",
       "module": "M08-02",
       "entrypoints": [
         "../packages/redis/src/index.ts",
@@ -2481,6 +2483,7 @@
       "statusDetail": "redis_live_mysql57_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_failure_and_responsive_verification_completed"
     },
     "mysqlResilience": {
+      "uiPhase2Contract": "P68 and runtime-resilience-contract-review.md under design-plans/ui-phase-2-2026-09-07 distinguish sampled slow-query deltas with a minimum one-minute denominator, cumulative buffer/lock counters, probe-level recovery checks and evaluator policy. The page has read/retry/login and shared request-detail copy, no SQL or recovery action. This batch changes no MySQL code or policy; cache lifecycle, unknown values, all accessibility, formal design and real production remain pending.",
       "module": "M08-03",
       "entrypoints": [
         "../packages/database/src/index.ts",
@@ -2552,6 +2555,7 @@
       "statusDetail": "mysql57_live_api_worker_crawler_permission_single_flight_refresh_timeout_snapshot_preservation_dependency_503_recovery_and_responsive_verification_completed"
     },
     "fileResilience": {
+      "uiPhase2Contract": "P69 and runtime-resilience-contract-review.md under design-plans/ui-phase-2-2026-09-07 map filesystem watermarks versus indexed bytes, evidence-first bounded checksums, recovery facts and read-only controls. Three native progress elements now expose directory-specific accessible names and current percentage text; UI2-RS69 checks initial and refreshed values with isolated responses and two GETs. No filesystem operation, API/config/threshold/SQL change. Failed-root placeholders, full accessibility, formal design and current third-root production proof remain pending.",
       "module": "M08-04",
       "entrypoints": [
         "../packages/storage/src/index.ts",

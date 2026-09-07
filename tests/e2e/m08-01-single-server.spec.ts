@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { WORKER_QUEUE_POLICIES } from "../../apps/worker/src/worker-queue-registry";
 
 const envelope = (data: unknown) => ({ data, request_id: "m08-01-e2e", trace_id: "m08-01-e2e" });
 const node = {
@@ -255,6 +256,73 @@ async function navigation(page: Page) {
 }
 test.beforeEach(async ({ page }) => navigation(page));
 
+test("UI2-RS66 all registered policies and exceptional queues remain reachable beyond eighteen", async ({
+  page,
+}) => {
+  const policies = Object.entries(WORKER_QUEUE_POLICIES);
+  expect(policies.length).toBeGreaterThan(18);
+  const methods: string[] = [];
+  await page.route("**/api/v1/platform/operations/topology", (route) => {
+    methods.push(route.request().method());
+    const due = methods.length > 1;
+    return route.fulfill({
+      json: envelope({
+        ...base,
+        alerts: [],
+        worker_scheduler: {
+          ...base.worker_scheduler,
+          active_runs: 0,
+          due_queue_count: due ? policies.length : 0,
+          max_queue_delay_ms: due ? 1 : 0,
+          backpressure: false,
+          failed_last_minute: 0,
+          failure_rate_percent: 0,
+          queues: policies.map(([name, policy]) => ({
+            ...base.worker_scheduler.queues[0],
+            name,
+            priority: policy.priority,
+            effective_priority: policy.priority,
+            timeout_ms: policy.timeoutMs,
+            max_retries: policy.maxRetries,
+            maximum_aging_boost: policy.maximumAgingBoost,
+            aging_interval_ms: policy.agingIntervalMs,
+            max_concurrency: policy.maxConcurrency,
+            active_runs: 0,
+            running: false,
+            due,
+            queue_delay_ms: due ? 1 : 0,
+            longest_running_ms: 0,
+            last_result_at: null,
+            last_result_status: null,
+            last_result_error_code: null,
+            last_business_objects: [],
+          })),
+        },
+      }),
+    });
+  });
+  await page.goto("/platform-admin/topology");
+  const rows = page.locator(".topology-queue-list > article");
+  await expect(rows).toHaveCount(0);
+  const showAll = page.getByRole("button", {
+    name: `查看全部 ${policies.length} 个队列策略`,
+    exact: true,
+  });
+  await showAll.focus();
+  await page.keyboard.press("Space");
+  await expect(rows).toHaveCount(policies.length);
+  const lastPolicy = rows.last().getByText("调度策略", { exact: true });
+  await lastPolicy.focus();
+  await page.keyboard.press("Enter");
+  await expect(rows.last().locator("details")).toHaveAttribute("open", "");
+  await expect(rows.last()).toContainText(`超时 ${policies.at(-1)![1].timeoutMs} ms`);
+  await page.getByRole("button", { name: "仅看运行与异常", exact: true }).click();
+  await expect(rows).toHaveCount(0);
+  expect(methods).toEqual(["GET"]);
+  await page.getByRole("button", { name: "刷新运行事实", exact: true }).click();
+  await expect(rows).toHaveCount(policies.length);
+  expect(methods).toEqual(["GET", "GET"]);
+});
 test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) => {
   await page.route("**/api/v1/platform/operations/topology", (route) =>
     route.fulfill({ json: envelope(base) }),
