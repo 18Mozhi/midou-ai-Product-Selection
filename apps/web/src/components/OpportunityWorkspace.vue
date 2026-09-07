@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import OpportunityListPanel from "./OpportunityListPanel.vue";
@@ -11,6 +11,7 @@ import OpportunityEvidencePanel from "./OpportunityEvidencePanel.vue";
 import OpportunityDetailInsights from "./OpportunityDetailInsights.vue";
 import OpportunityAiPanel from "./OpportunityAiPanel.vue";
 import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
+import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
 import UiStatePanel from "./UiStatePanel.vue";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import { durationLabel, statusLabel } from "../ui/status-labels";
@@ -73,47 +74,8 @@ const props = defineProps<{
   batchReason = ref(""),
   batchAssigneeId = ref(""),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
-  decisionReason = ref(""),
-  filters = reactive({
-    q: "",
-    market: "",
-    decision_status: "",
-    coverage_status: "",
-    blocking_reason: "",
-    lifecycle_status: "",
-    owner_id: "",
-  }),
-  form = reactive({
-    name: "",
-    market: "US",
-    category: "",
-    source_topic_id: "",
-  }),
-  costForm = reactive({
-    platform: "amazon",
-    input_type: "sale_price" as "sale_price" | "purchase_price" | "logistics",
-    amount_value: 0,
-    currency: "USD",
-    source_type: "manual_confirmation",
-    source_ref_id: "",
-    evidence_id: "",
-    observed_at: new Date().toISOString().slice(0, 16),
-    reviewer_id: "",
-  }),
-  feedbackForm = reactive({
-    period_start: new Date().toISOString().slice(0, 10),
-    period_end: new Date().toISOString().slice(0, 10),
-    sales_units: 0,
-    revenue_amount: 0,
-    ad_spend_amount: 0,
-    returned_units: 0,
-    purchase_lead_time_days: 0,
-    actual_profit_amount: 0,
-    currency: "USD",
-    source_ref: "",
-    notes: "",
-    observed_at: new Date().toISOString(),
-  });
+  decisionReason = ref("");
+const { filters, form, costForm, feedbackForm } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
   () => (showBatch.value = false),
