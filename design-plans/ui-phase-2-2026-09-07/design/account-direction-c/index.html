@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>P43 用户管理 · C 方向研究</title>
+    <link rel="stylesheet" href="study.css" />
+    <script src="study.js" defer></script>
+  </head>
+  <body>
+    <aside class="study-bar" aria-label="设计审核工具">
+      <span><b>C · 清晰目录</b> / 未批准结构研究 · 合成数据 · 不连接 API</span>
+      <label
+        >审图场景
+        <select id="scene">
+          <option value="directory">用户目录</option>
+          <option value="detail">账号详情</option>
+          <option value="create">新建用户</option>
+          <option value="create-error">创建失败</option>
+          <option value="reason">操作原因</option>
+          <option value="password">强制改密</option>
+          <option value="membership">加入组织</option>
+          <option value="empty">无搜索结果</option>
+        </select>
+      </label>
+    </aside>
+    <a class="skip" href="#directory">跳到用户目录</a>
+    <header class="brand-bar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">m.</span><b>米豆智选</b
+        ><span class="product-label">平台管理</span>
+      </div>
+      <div class="breadcrumb" aria-label="当前位置">
+        组织与用户 <span aria-hidden="true">/</span> <b>用户管理</b>
+      </div>
+      <span class="operator"><span class="operator-dot" aria-hidden="true"></span>超级管理员</span>
+    </header>
+    <main class="workspace">
+      <aside class="scope-panel" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">ACCOUNT DIRECTORY</p>
+          <h1 id="page-title">
+            用户<br class="desktop-break" />管理<span class="title-dot">.</span>
+          </h1>
+          <p class="scope-description">先找到账号，<br />再处理组织关系与访问权限。</p>
+          <button class="create-button" id="create-open">
+            <span aria-hidden="true">＋</span> 新建用户 <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <div class="scope-facts">
+          <p class="eyebrow">平台账号 · 演示范围</p>
+          <dl>
+            <div>
+              <dt>用户总数</dt>
+              <dd id="total">8</dd>
+            </div>
+            <div>
+              <dt>正常使用</dt>
+              <dd id="active-total">6</dd>
+            </div>
+          </dl>
+          <p class="scope-note">这里是平台总量，<br />不随右侧搜索结果改变。</p>
+        </div>
+        <div class="scope-foot">
+          <span aria-hidden="true">◎</span
+          ><span>账号操作有迹可查<br /><small>平台角色与组织角色分别管理</small></span>
+        </div>
+      </aside>
+      <section class="directory" id="directory" tabindex="-1" aria-labelledby="directory-title">
+        <header class="directory-heading">
+          <div>
+            <p class="eyebrow">全部账号</p>
+            <h2 id="directory-title">找到要管理的人</h2>
+          </div>
+          <button id="refresh" class="quiet"><span aria-hidden="true">↻</span> 刷新</button>
+        </header>
+        <form id="filter-form" class="filters">
+          <label class="query-field"
+            ><span>搜索账号</span
+            ><input id="query" type="search" maxlength="120" placeholder="输入邮箱关键词"
+          /></label>
+          <label class="status-field"
+            ><span>账号状态</span
+            ><select id="status">
+              <option value="">全部状态</option>
+              <option value="active">正常使用</option>
+              <option value="disabled">已停用</option>
+            </select></label
+          >
+          <button class="primary" type="submit">搜索</button>
+          <button type="button" id="filter-reset" class="quiet" disabled>重置</button>
+        </form>
+        <div class="result-line">
+          <p id="result-count" role="status">显示 8 条用户记录</p>
+          <span>邮箱识别账号 · 组织名称辅助定位</span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <caption class="sr-only">
+              平台用户目录，所有记录均为合成数据
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">账号身份</th>
+                <th scope="col">所在组织</th>
+                <th scope="col">平台角色</th>
+                <th scope="col">账号状态</th>
+                <th scope="col"><span class="sr-only">操作</span></th>
+              </tr>
+            </thead>
+            <tbody id="records"></tbody>
+          </table>
+        </div>
+        <section class="empty-state" id="empty" hidden>
+          <span aria-hidden="true">⌕</span>
+          <h3>没有找到匹配的用户</h3>
+          <p>试试更短的邮箱关键词，或清除当前筛选。</p>
+          <button id="empty-reset">清除筛选</button>
+        </section>
+        <p class="directory-foot">按邮箱与状态定位账号，更多身份信息可在详情查看。</p>
+        <p id="notice" class="notice" role="status" hidden></p>
+      </section>
+    </main>
+
+    <dialog id="detail-dialog" class="account-detail" aria-labelledby="detail-email">
+      <header class="mobile-detail-top">
+        <span>账号详情</span
+        ><button data-close="detail-dialog" aria-label="关闭账号详情">关闭 ×</button>
+      </header>
+      <div class="detail-layout">
+        <aside class="identity-panel">
+          <p class="eyebrow">账号详情</p>
+          <div class="large-avatar" id="detail-avatar" aria-hidden="true"></div>
+          <h2 id="detail-email"></h2>
+          <span id="detail-status" class="badge"></span>
+          <dl>
+            <div>
+              <dt>首次安全设置</dt>
+              <dd id="detail-security"></dd>
+            </div>
+            <div>
+              <dt>注册日期</dt>
+              <dd id="detail-date"></dd>
+            </div>
+          </dl>
+          <details>
+            <summary>技术详情</summary>
+            <p id="detail-id"></p>
+          </details>
+          <p class="identity-note">先核对账号身份，再执行操作。<br />平台角色不等同于组织角色。</p>
+        </aside>
+        <section class="detail-content">
+          <header class="detail-heading">
+            <h3>关系与访问</h3>
+            <button data-close="detail-dialog" class="quiet" aria-label="关闭账号详情">
+              关闭 <span aria-hidden="true">×</span>
+            </button>
+          </header>
+          <p id="detail-notice" class="notice" role="status" hidden></p>
+          <section class="detail-section">
+            <div class="section-heading">
+              <h4>组织与角色</h4>
+              <button id="membership-open" class="quiet">
+                加入其他组织 <span aria-hidden="true">＋</span>
+              </button>
+            </div>
+            <ul id="memberships" class="relation-list"></ul>
+          </section>
+          <section class="detail-section">
+            <div class="section-heading">
+              <h4>平台角色</h4>
+              <span class="meta">独立授权</span>
+            </div>
+            <p id="detail-role" class="muted"></p>
+            <div id="role-actions" class="role-actions"></div>
+            <p id="role-disabled" class="meta" hidden>
+              账号非正常使用状态，不能授予或撤销平台角色。
+            </p>
+          </section>
+          <section class="detail-section">
+            <div class="section-heading">
+              <h4>登录会话</h4>
+              <span id="session-count" class="meta"></span>
+            </div>
+            <ul id="sessions" class="relation-list"></ul>
+          </section>
+          <footer class="risk-zone">
+            <div>
+              <b>账号安全操作</b>
+              <p>影响此账号的登录与访问，请确认操作对象。</p>
+            </div>
+            <div>
+              <button id="toggle-user" class="danger"></button
+              ><button id="password-open">强制改密</button
+              ><button id="sessions-revoke">撤销全部会话</button>
+            </div>
+          </footer>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog id="create-dialog" class="form-dialog" aria-labelledby="create-title">
+      <form id="create-form">
+        <header class="form-heading">
+          <div>
+            <p class="eyebrow">新账号</p>
+            <h2 id="create-title">建立用户身份</h2>
+          </div>
+          <button type="button" data-close="create-dialog" aria-label="关闭新建用户">×</button>
+        </header>
+        <p class="form-intro">首次登录必须修改临时密码；平台管理员还需要绑定 MFA。</p>
+        <p id="create-error" class="error" role="alert" hidden>
+          演示错误：邮箱已存在。请检查邮箱后重试，表单内容已保留。
+        </p>
+        <div class="form-body">
+          <label
+            >邮箱 <span class="required">必填</span
+            ><input
+              id="create-email"
+              name="email"
+              type="email"
+              required
+              maxlength="254"
+              autocomplete="off"
+              aria-describedby="create-error"
+          /></label>
+          <label
+            >临时密码 <span class="required">必填</span
+            ><input
+              id="create-password"
+              name="temporary_password"
+              type="password"
+              required
+              minlength="12"
+              maxlength="128"
+              autocomplete="new-password"
+              aria-describedby="password-hint"
+            /><small id="password-hint">12–128 个字符，仅用作首次登录。</small></label
+          >
+          <div class="form-divider"><b>关系与权限</b><span>可保持普通用户，暂不加入组织</span></div>
+          <label
+            >平台角色<select name="platform_role_code">
+              <option value="">普通用户</option>
+              <option value="platform_operations_admin">运营管理员</option>
+              <option value="platform_security_admin">安全管理员</option>
+              <option value="platform_super_admin">超级管理员</option>
+            </select></label
+          >
+          <label
+            >加入组织<select id="create-organization" name="organization_id">
+              <option value="">暂不加入组织</option>
+              <option value="org-a">山海选品研究室</option>
+              <option value="org-b">青禾供应链</option>
+              <option value="org-c">远帆跨境</option>
+            </select></label
+          >
+          <label id="create-org-role-label" hidden
+            >组织角色<select name="organization_role_code">
+              <option value="member">普通成员</option>
+              <option value="organization_admin">组织管理员</option>
+            </select></label
+          >
+        </div>
+        <footer class="form-footer">
+          <span>仅演示，不创建真实账号</span>
+          <div>
+            <button type="button" data-close="create-dialog">取消</button
+            ><button class="primary" type="submit">确认创建</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="reason-dialog" class="form-dialog compact-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header class="form-heading">
+          <div>
+            <p class="eyebrow">确认操作</p>
+            <h2 id="reason-title"></h2>
+          </div>
+          <button type="button" data-close="reason-dialog" aria-label="关闭原因确认">×</button>
+        </header>
+        <p id="reason-target" class="target-line"></p>
+        <p id="reason-impact" class="form-intro"></p>
+        <div class="form-body">
+          <label
+            >操作原因 <span class="required">必填</span
+            ><textarea
+              id="reason"
+              required
+              minlength="2"
+              maxlength="300"
+              aria-describedby="reason-hint"
+            ></textarea
+            ><small id="reason-hint"
+              >2–300 字。实际操作将写入平台审计；本样稿不会提交。</small
+            ></label
+          >
+        </div>
+        <footer class="form-footer">
+          <div>
+            <button type="button" data-close="reason-dialog">取消</button
+            ><button class="primary" type="submit">确认执行</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog
+      id="password-dialog"
+      class="form-dialog compact-dialog"
+      aria-labelledby="password-title"
+    >
+      <form id="password-form">
+        <header class="form-heading">
+          <div>
+            <p class="eyebrow">账号安全</p>
+            <h2 id="password-title">强制重置密码</h2>
+          </div>
+          <button type="button" data-close="password-dialog" aria-label="关闭强制改密">×</button>
+        </header>
+        <p class="form-intro">保存后撤销该用户全部活动会话，并要求首次登录修改密码。</p>
+        <div class="form-body">
+          <label
+            >新临时密码 <span class="required">必填</span
+            ><input
+              id="new-password"
+              type="password"
+              required
+              minlength="12"
+              maxlength="128"
+              autocomplete="new-password"
+              aria-describedby="new-password-hint"
+            /><small id="new-password-hint">12–128 个字符。下一步填写操作原因。</small></label
+          >
+        </div>
+        <footer class="form-footer">
+          <div>
+            <button type="button" data-close="password-dialog">取消</button
+            ><button class="primary" type="submit">确认重置</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog
+      id="membership-dialog"
+      class="form-dialog compact-dialog"
+      aria-labelledby="membership-title"
+    >
+      <form id="membership-form">
+        <header class="form-heading">
+          <div>
+            <p class="eyebrow">组织关系</p>
+            <h2 id="membership-title">加入其他组织</h2>
+          </div>
+          <button type="button" data-close="membership-dialog" aria-label="关闭加入组织">×</button>
+        </header>
+        <p class="form-intro">授予一项组织角色，不会改变此账号的平台角色。</p>
+        <div class="form-body">
+          <label>组织<select id="membership-org" required></select></label
+          ><label
+            >组织角色<select id="membership-role" required>
+              <option value="member">普通成员</option>
+              <option value="selection_manager">选品经理</option>
+              <option value="procurement_member">采购成员</option>
+              <option value="organization_admin">组织管理员</option>
+              <option value="auditor">审计员</option>
+            </select></label
+          ><label
+            >授权原因 <span class="required">必填</span
+            ><textarea
+              id="membership-reason"
+              required
+              minlength="2"
+              maxlength="300"
+              aria-describedby="membership-hint"
+            ></textarea
+            ><small id="membership-hint"
+              >2–300 字；后端仍需核验账号已验证、组织有效及关系不存在。</small
+            ></label
+          >
+        </div>
+        <footer class="form-footer">
+          <span>仅演示，不授予真实权限</span>
+          <div>
+            <button type="button" data-close="membership-dialog">取消</button
+            ><button type="submit" class="primary">加入组织</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

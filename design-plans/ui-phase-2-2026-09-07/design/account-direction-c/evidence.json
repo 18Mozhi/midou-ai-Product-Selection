@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "direction": "C-clear-directory",
+  "kind": "design-study",
+  "approval": "pending-user-review",
+  "production": false,
+  "data": "synthetic-local-only",
+  "sourceRevision": "1ad9db7228e92a6fa5b6c2a64cd1df43015945bb",
+  "capturedAt": "2026-09-07T18:25:47.379Z",
+  "browser": "151.0.7922.34",
+  "platform": "win32",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/index.html": "9211d3e9edf19187e729da4193bd1e9adeabcb9424297869de0d5d86af954479",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.js": "23151fa9d3ba8fc559ec7651fcf21540fd85ca8f1b65bd6f2e0769c950d863e5",
+    "scripts/verify-ui-phase2-account-direction.mjs": "ae72c9f6338c9dce04924fd7cb827e30112089181ee8d5d1fe013d534500fc2c",
+    "apps/web/src/components/PlatformAccountCenter.vue": "06ea539015a4f47b947a05eae41f5c8c7fe635b11992d5d01bc62fccc58970ae",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/use-platform-user-detail.ts": "e874ad5952d02f4d2e47c3a0c6ef94fdd63b1ddb2801fd4475109bd3a1e88da7",
+    "apps/api/src/platform-account-routes.ts": "79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d"
+  },
+  "screenshots": [
+    {
+      "file": "1440-directory.png",
+      "pageId": "P43",
+      "caseId": "study-P43-directory",
+      "scene": "directory",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "05e03f67eba8bc7382533b796cfdf7497f8c753b38fe8a8f0e6e64659906785d"
+    },
+    {
+      "file": "1440-detail.png",
+      "pageId": "P43",
+      "caseId": "study-P43-detail",
+      "scene": "detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "e7067a2b2d02459525dca636b3dac1cc4d886642b9895900b2d78e2d2e1f11ba"
+    },
+    {
+      "file": "1440-create.png",
+      "pageId": "P43",
+      "caseId": "study-P43-create",
+      "scene": "create",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "f117962dff9b24296eb1aaf74877646c913eee788e0e501932e7f9ec2306fa86"
+    },
+    {
+      "file": "1440-create-error.png",
+      "pageId": "P43",
+      "caseId": "study-P43-create-error",
+      "scene": "create-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "5e575a196c838fa5037760fe3a5f9676d4a756761ef4bf2ce9690857047897ec"
+    },
+    {
+      "file": "1440-reason.png",
+      "pageId": "P43",
+      "caseId": "study-P43-reason",
+      "scene": "reason",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "b595bc069063b9b26ca1f03bc7d032d0ce9b169a5257883d102ddcac9393b888"
+    },
+    {
+      "file": "1440-password.png",
+      "pageId": "P43",
+      "caseId": "study-P43-password",
+      "scene": "password",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "853eb98d5a98c493a5952072022e10f9de3297d9fcd070538093b6900b1b46df"
+    },
+    {
+      "file": "1440-membership.png",
+      "pageId": "P43",
+      "caseId": "study-P43-membership",
+      "scene": "membership",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "ffd82db3cdd6ce908e0a299f1b0680e6231b723142c882e9aefe9bcc7ce665ff"
+    },
+    {
+      "file": "1440-empty.png",
+      "pageId": "P43",
+      "caseId": "study-P43-empty",
+      "scene": "empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "39b7811286961b320fc84d467cdd32fbd6f1411cf9ff454a84d42585a8dd7b53"
+    },
+    {
+      "file": "1440-detail-access.png",
+      "pageId": "P43",
+      "caseId": "study-P43-detail-access",
+      "scene": "detail-access",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sha256": "e7067a2b2d02459525dca636b3dac1cc4d886642b9895900b2d78e2d2e1f11ba"
+    },
+    {
+      "file": "390-directory.png",
+      "pageId": "P43",
+      "caseId": "study-P43-directory",
+      "scene": "directory",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "be1e9f8f3fd51d71bdfaf7faffaa280c95cac021ecd4543ad4cfb8d54f8573b3"
+    },
+    {
+      "file": "390-detail.png",
+      "pageId": "P43",
+      "caseId": "study-P43-detail",
+      "scene": "detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "6cc2eb7647e9f2d495f36ded1b8b0f177868f1c91b31dedbe997d2798d95c0d5"
+    },
+    {
+      "file": "390-create.png",
+      "pageId": "P43",
+      "caseId": "study-P43-create",
+      "scene": "create",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "dec6ce4145162c2ed0591dee04383837f2619da1854cbdb1c64f47975a6997d1"
+    },
+    {
+      "file": "390-create-error.png",
+      "pageId": "P43",
+      "caseId": "study-P43-create-error",
+      "scene": "create-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "207210a6c450dc07b556d276090ac1bb56b7a0861e7c14aaa988a659d11e97b3"
+    },
+    {
+      "file": "390-reason.png",
+      "pageId": "P43",
+      "caseId": "study-P43-reason",
+      "scene": "reason",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "8381f186bfacaa8238d53779699662b4ec92a335dacc79e54fe813684206944c"
+    },
+    {
+      "file": "390-password.png",
+      "pageId": "P43",
+      "caseId": "study-P43-password",
+      "scene": "password",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "4ce6aec34041aa603689b9f92e5ef541a39a94f541bcc41952e8257ca6343c7d"
+    },
+    {
+      "file": "390-membership.png",
+      "pageId": "P43",
+      "caseId": "study-P43-membership",
+      "scene": "membership",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "9a4566651b18b48e648c9c8c79336d84e22320de99906591293bcf01215c5233"
+    },
+    {
+      "file": "390-empty.png",
+      "pageId": "P43",
+      "caseId": "study-P43-empty",
+      "scene": "empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "e1cd7e8fd46adb6e2f69600cbeee073d747b166fd6afaa991ab92d35855a1e6e"
+    },
+    {
+      "file": "390-detail-access.png",
+      "pageId": "P43",
+      "caseId": "study-P43-detail-access",
+      "scene": "detail-access",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sha256": "86b928fb6a9bee7cb937a1ebe2942989b03c0d21503833c01285ec79c0e409f9"
+    }
+  ],
+  "checks": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fonts": {
+        "body": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", DengXian, sans-serif",
+        "identity": "Bahnschrift, DengXian, sans-serif"
+      },
+      "cases": [
+        "scenes-render",
+        "no-page-overflow",
+        "44px-targets",
+        "filter-reset",
+        "global-total-stable",
+        "detail-identity",
+        "nested-modal-focus-return-and-loop",
+        "required-email",
+        "password-length",
+        "conditional-org-role",
+        "no-real-create",
+        "password-not-retained-after-demo-success"
+      ],
+      "errors": [],
+      "externalRequests": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fonts": {
+        "body": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", DengXian, sans-serif",
+        "identity": "Bahnschrift, DengXian, sans-serif"
+      },
+      "cases": [
+        "scenes-render",
+        "no-page-overflow",
+        "44px-targets",
+        "filter-reset",
+        "global-total-stable",
+        "detail-identity",
+        "nested-modal-focus-return-and-loop",
+        "required-email",
+        "password-length",
+        "conditional-org-role",
+        "no-real-create",
+        "password-not-retained-after-demo-success"
+      ],
+      "errors": [],
+      "externalRequests": []
+    }
+  ]
+}
