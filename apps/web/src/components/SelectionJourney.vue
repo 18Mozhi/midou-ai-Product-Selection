@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
+import { computed, onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -66,8 +66,13 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   message = ref(""),
   requestId = ref(""),
   selectedResultId = ref(""),
-  busy = ref(false);
+  busy = ref(false),
+  reading = ref(false),
+  resumeId = ref("");
 let timer: number | undefined;
+let active = false,
+  readVersion = 0;
+let readController: AbortController | undefined;
 const terminal = computed(
     () =>
       journey.value &&
@@ -121,7 +126,14 @@ function stop() {
 }
 function schedule() {
   stop();
-  if (!terminal.value) timer = window.setTimeout(load, 2000);
+  if (active && journey.value && !terminal.value) timer = window.setTimeout(load, 2000);
+}
+function stopRead() {
+  stop();
+  readVersion += 1;
+  readController?.abort();
+  readController = undefined;
+  reading.value = false;
 }
 function applyJourney(next: Journey) {
   journey.value = next;
@@ -136,6 +148,9 @@ function applyJourney(next: Journey) {
   else localStorage.setItem(progressStorageKey, next.id);
 }
 async function create() {
+  if (!active || busy.value || reading.value) return;
+  stopRead();
+  resumeId.value = "";
   busy.value = true;
   state.value = "loading";
   message.value = "";
@@ -152,19 +167,50 @@ async function create() {
   }
 }
 async function load() {
-  if (!journey.value) return;
+  if (journey.value) await readJourney(journey.value.id);
+}
+async function readJourney(id: string, restoring = false) {
+  if (!active || busy.value) return;
+  stopRead();
+  const version = readVersion;
+  const controller = new AbortController();
+  readController = controller;
+  reading.value = true;
+  const ownsRead = () => active && version === readVersion;
+  if (restoring) state.value = "loading";
   try {
-    const result = await request<Journey>(`/selection-journeys/${journey.value.id}`);
+    const result = await request<Journey>(`/selection-journeys/${id}`, {
+      signal: controller.signal,
+    });
+    if (!ownsRead()) return;
     requestId.value = result.request_id;
     applyJourney(result.data);
     state.value = "ready";
+    if (restoring)
+      message.value = result.data.state === "decided" ? "" : "已恢复上次未完成的选品进度。";
     schedule();
   } catch (error) {
-    applyFailure(error, "状态连接中断；任务不会因页面关闭而取消。");
+    if (!ownsRead()) return;
+    if (restoring && error instanceof ApiClientError && error.status === 404) {
+      localStorage.removeItem(progressStorageKey);
+      resumeId.value = "";
+      state.value = "ready";
+      return;
+    }
+    applyFailure(
+      error,
+      restoring ? "暂时无法恢复上次进度，请稍后重试。" : "状态连接中断；任务不会因页面关闭而取消。",
+    );
+  } finally {
+    if (ownsRead()) {
+      reading.value = false;
+      readController = undefined;
+    }
   }
 }
 async function decide() {
-  if (!journey.value) return;
+  if (!active || !journey.value || busy.value || reading.value) return;
+  stopRead();
   busy.value = true;
   message.value = "";
   try {
@@ -187,7 +233,9 @@ async function decide() {
   }
 }
 function reset() {
-  stop();
+  if (busy.value) return;
+  stopRead();
+  resumeId.value = "";
   journey.value = null;
   state.value = "ready";
   message.value = "";
@@ -216,28 +264,26 @@ async function resume() {
     localStorage.removeItem(progressStorageKey);
     return;
   }
-  state.value = "loading";
-  try {
-    const result = await request<Journey>(`/selection-journeys/${savedJourneyId}`);
-    requestId.value = result.request_id;
-    applyJourney(result.data);
-    state.value = "ready";
-    message.value = result.data.state === "decided" ? "" : "已恢复上次未完成的选品进度。";
-    schedule();
-  } catch (error) {
-    if (error instanceof ApiClientError && error.status === 404) {
-      localStorage.removeItem(progressStorageKey);
-      state.value = "ready";
-      return;
-    }
-    applyFailure(error, "暂时无法恢复上次进度，请稍后重试。");
-  }
+  resumeId.value = savedJourneyId;
+  await readJourney(savedJourneyId, true);
 }
-onMounted(resume);
-onUnmounted(stop);
+function activate() {
+  if (active) return;
+  active = true;
+  if (journey.value) void load();
+  else void resume();
+}
+function deactivate() {
+  active = false;
+  stopRead();
+}
+onMounted(activate);
+onActivated(activate);
+onDeactivated(deactivate);
+onUnmounted(deactivate);
 </script>
 <template>
-  <section class="selection-journey" aria-label="选品旅程">
+  <section class="selection-journey" aria-label="选品旅程" :aria-busy="reading || busy">
     <header>
       <div>
         <p>选品旅程</p>
@@ -251,7 +297,8 @@ onUnmounted(stop);
       :kind="state"
       :request-id="requestId"
       :action-hint="message"
-      @primary="journey ? load() : reset()"
+      :primary-label="journey || resumeId ? '重试读取进度' : undefined"
+      @primary="journey ? load() : resumeId ? resume() : reset()"
       @secondary="handleStateSecondary"
     />
     <form v-if="!journey" class="selection-start" @submit.prevent="create">
@@ -297,8 +344,8 @@ onUnmounted(stop);
         <strong>任务会在后台继续</strong
         ><span>关闭或离开本页不会取消任务，返回后会自动恢复当前进度。</span>
       </aside>
-      <button type="submit" :disabled="busy">
-        {{ busy ? "正在创建真实任务…" : "创建真实选品任务" }}
+      <button type="submit" :disabled="busy || reading">
+        {{ busy ? "正在创建真实任务…" : reading ? "正在恢复进度…" : "创建真实选品任务" }}
       </button>
     </form>
     <template v-else
@@ -441,7 +488,7 @@ onUnmounted(stop);
             maxlength="1000"
             rows="4"
           ></textarea></label
-        ><button type="submit" :disabled="busy">
+        ><button type="submit" :disabled="busy || reading">
           {{ busy ? "正在保存…" : "保存审计决策" }}
         </button>
       </form>
@@ -461,7 +508,7 @@ onUnmounted(stop);
       <footer class="selection-footer">
         <span v-if="message" role="status">{{ message }}</span
         ><code>关联编号 {{ requestId || journey.request_id }}</code
-        ><button type="button" @click="reset">开始下一次</button>
+        ><button type="button" :disabled="busy" @click="reset">开始下一次</button>
       </footer></template
     >
   </section>
