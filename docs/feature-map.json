@@ -635,6 +635,7 @@
     },
     "credentialAssets": {
       "module": "M03-02",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md and page-specs/P50.md separate assets, runtime profiles, metadata compatibility and source enablement. UI2-SC50 in m03-02-credential-assets.spec.ts verifies partial login save recovery via close, refresh and manual profile association without recreating the asset. Only recovery copy changes; defaults, independent writes, permissions and persistence remain unchanged. Other errors, secret callback ownership, focus, expiry and real backend/production checks remain pending.",
       "entrypoints": [
         "../packages/credentials/src/index.ts",
         "../apps/api/src/credential-asset-service.ts",
@@ -922,6 +923,7 @@
     },
     "providerSources": {
       "module": "M03-07",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md and page-specs/P48.md/P49.md map source configuration, smoke tests, version rollback, fixed-snapshot replay, second-person review and 1688 acceptance. Seven local Vue files including credentials contain 92 candidate sites and 25 v-model positions plus six forwarded configuration inputs, not a frozen global action denominator. Scheduled acceptance, passed gates and enabled source remain distinct. No source API, business rule or source-page behavior changes; PR-G01 and full design/runtime acceptance remain pending.",
       "entrypoints": [
         "../packages/provider-sources/src/index.ts",
         "../packages/provider-sources/src/catalog/index.ts",

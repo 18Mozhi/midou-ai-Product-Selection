@@ -13,6 +13,12 @@
 
 修改 `CREDENTIALS_MASTER_KEY`、`CREDENTIALS_MASTER_KEY_VERSION` 或 `CREDENTIAL_TEMP_ROOT` 后必须在宝塔重启 API、Worker 和 Crawler；这些值不是动态读取。
 
+## 网页登录部分保存恢复
+
+网页登录部分保存的恢复：如果加密资产保存成功、运行档案创建失败，不要重新导入同一份秘密。关闭导入窗口，点击“刷新数据”，再点击“关联运行档案”，选择刚保存的网页登录资产并填写档案引用。手动关联沿用当前默认disabled、en-US、America/Los_Angeles，按真实来源需要核对字段；本次没有修改这些默认值，也不提供不存在的档案编辑按钮。运行档案active只表示档案状态，不代表来源已启用或真实登录检查通过。
+
+此路径由UI2-SC50隔离Vue回归覆盖：一个资产创建、第一次档案失败、手动关联成功，且不会再次创建资产。当前页面路由要求platform:superadmin，API仍要求key_rotation:manage；蓝图角色职责不替代实际路由/API权限。其余错误、焦点和异步材料待验项见[第二阶段凭证合同](../../design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md)。这次仅前端恢复文案，无新增配置或迁移；通过既有发布流程上线，不能据本地回归称生产已更新。
+
 ## 主密钥轮换
 
 保持常驻服务使用旧主密钥，在宝塔创建一次性发布任务，并临时注入：

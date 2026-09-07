@@ -246,3 +246,114 @@ test("M03-02.A08 refresh failure preserves the last successful metadata", async 
   expect(assetRequestCount).toBeGreaterThan(1);
   expect(assetRequestCount).toBeLessThanOrEqual(4);
 });
+
+test("UI2-SC50 partial login save guides recovery without recreating the asset", async ({
+  page,
+}) => {
+  await nav(page);
+  const savedAsset = {
+    ...asset,
+    name: "登录页来源 Cookie登录档案",
+    kind: "cookie_bundle",
+    version: 1,
+  };
+  const writes: Array<{ path: string; body: any }> = [];
+  let assetSaved = false;
+  let savedProfile: Record<string, unknown> | null = null;
+  let profileAttempts = 0;
+  const envelope = (data: unknown) => ({ data, request_id: "ui2-sc50", trace_id: "ui2-sc50" });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({ json: envelope(assetSaved ? [savedAsset] : []) });
+      return;
+    }
+    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+    writes.push({ path: "assets", body: route.request().postDataJSON() });
+    assetSaved = true;
+    await route.fulfill({ status: 201, json: envelope(savedAsset) });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({ json: envelope(savedProfile ? [savedProfile] : []) });
+      return;
+    }
+    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+    const body = route.request().postDataJSON();
+    writes.push({ path: "profiles", body });
+    profileAttempts += 1;
+    if (profileAttempts === 1) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "dependency_unavailable",
+            message: "隔离档案创建失败",
+            action_hint: "稍后重试",
+          },
+          request_id: "ui2-sc50-failed",
+          trace_id: "ui2-sc50-failed",
+        },
+      });
+      return;
+    }
+    savedProfile = { ...profile, ...body, version: 1 };
+    await route.fulfill({ status: 201, json: envelope(savedProfile) });
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const login = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  const payload = JSON.stringify([
+    { name: "study", value: "synthetic-no-real-cookie", domain: "example.test", path: "/" },
+  ]);
+  await login.locator('input[type="file"]').setInputFiles({
+    name: "isolated.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from(payload),
+  });
+  await login.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect(login.getByRole("status")).toContainText("关闭此窗口并刷新数据");
+  await expect(login.getByRole("status")).toContainText("关联运行档案");
+  await expect(login.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+  expect(writes).toHaveLength(2);
+  expect(writes[0]).toEqual({
+    path: "assets",
+    body: {
+      provider_id: provider.id,
+      name: savedAsset.name,
+      kind: "cookie_bundle",
+      secret_payload: { encoding: "utf8", value: payload },
+      expires_at: null,
+    },
+  });
+  expect(writes[1].body).toMatchObject({
+    provider_id: provider.id,
+    credential_asset_id: savedAsset.id,
+    browser_family: "chromium",
+    locale: "zh-CN",
+    timezone: "Asia/Shanghai",
+    status: "active",
+  });
+  await login.getByRole("button", { name: "取消", exact: true }).click();
+  await page.getByRole("button", { name: "刷新数据", exact: true }).click();
+  await expect(page.getByRole("heading", { name: savedAsset.name, exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "关联运行档案", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: "创建浏览器档案引用" });
+  await expect(editor).toBeVisible();
+  await expect(editor.getByLabel("网页登录档案")).toHaveValue(savedAsset.id);
+  await editor.getByLabel("内部标识").fill("isolated_recovery");
+  await editor.getByLabel("名称", { exact: true }).fill("隔离恢复档案");
+  await editor.getByRole("button", { name: "保存档案引用", exact: true }).click();
+  await expect(editor).toBeHidden();
+  await expect(page.locator(".profile-list")).toContainText("隔离恢复档案");
+  expect(writes.filter((write) => write.path === "assets")).toHaveLength(1);
+  expect(writes.filter((write) => write.path === "profiles")).toHaveLength(2);
+  expect(writes[2].body).toEqual({
+    provider_id: provider.id,
+    credential_asset_id: savedAsset.id,
+    code: "isolated_recovery",
+    name: "隔离恢复档案",
+    browser_family: "chromium",
+    locale: "en-US",
+    timezone: "America/Los_Angeles",
+    status: "disabled",
+  });
+});

@@ -474,7 +474,7 @@ async function saveLogin() {
   loginPayload.value = "";
   if (!profile) {
     message.value =
-      "加密档案已保存，但运行档案未创建；请在下方“浏览器档案”中选择刚保存的档案继续。";
+      "加密档案已保存，但运行档案未创建。请关闭此窗口并刷新数据，再点击“关联运行档案”，选择刚保存的档案继续；无需重新导入。";
     return;
   }
   editor.value = null;
