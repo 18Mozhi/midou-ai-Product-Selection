@@ -5,6 +5,14 @@
   "scope": "Source correspondence only; not user design approval or runtime acceptance.",
   "legacyOverrides": [
     {
+      "legacyId": "button-554",
+      "file": "apps/web/src/components/SelectionJourney.vue",
+      "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
+      "attributes": { "type": "submit", ":disabled": "busy || reading" },
+      "disposition": "retained-journey-create-submit-restoring-label-and-read-guard-added",
+      "reason": "Historical button at line 300 and current line 347 remain the submit control of selection-start with @submit.prevent=create. Commit 16f524b adds a restoring label and reading guard, not a new business creation action. The exact label and attributes uniquely identify this control; source correspondence is not whole-action or production acceptance."
+    },
+    {
       "legacyId": "button-203",
       "file": "apps/web/src/components/NavigationShell.vue",
       "attributes": { "@click": "openDiscovery('create')", ":aria-label": "quickActionLabel" },

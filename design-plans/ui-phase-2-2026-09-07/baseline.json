@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "e1f7a9272b5017307754fa60aa691a8bb43b8329",
+  "sourceRevision": "16f524b66cf9dd48384c6cd78c475409ec5dd493",
   "legacyRevision": "a9460a99c9bce018e65c5bce357f592669fa0a0d",
-  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
+  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
   "status": "static-discovery-complete-runtime-inventory-pending",
   "denominatorFrozen": false,
   "counts": {
@@ -492,7 +492,7 @@
     },
     {
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "sha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e"
+      "sha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271"
     },
     {
       "file": "apps/web/src/components/shared/monitoring-readiness.ts",
@@ -689,6 +689,17 @@
     "reviewer": "implementation-agent-source-review",
     "scope": "Source correspondence only; not user design approval or runtime acceptance.",
     "legacyOverrides": [
+      {
+        "legacyId": "button-554",
+        "file": "apps/web/src/components/SelectionJourney.vue",
+        "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
+        "attributes": {
+          "type": "submit",
+          ":disabled": "busy || reading"
+        },
+        "disposition": "retained-journey-create-submit-restoring-label-and-read-guard-added",
+        "reason": "Historical button at line 300 and current line 347 remain the submit control of selection-start with @submit.prevent=create. Commit 16f524b adds a restoring label and reading guard, not a new business creation action. The exact label and attributes uniquely identify this control; source correspondence is not whole-action or production acceptance."
+      },
       {
         "legacyId": "button-203",
         "file": "apps/web/src/components/NavigationShell.vue",

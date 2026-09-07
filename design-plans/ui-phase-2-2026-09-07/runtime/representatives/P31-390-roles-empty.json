@@ -12,8 +12,8 @@
   "fullPage": true,
   "file": "runtime/representatives/P31-390-roles-empty.png",
   "sha256": "900394f6dd5842f8b863bb6761e10b16d3c9a021a3444a8b7977344516d60f0b",
-  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
-  "sourceRevision": "e1f7a9272b5017307754fa60aa691a8bb43b8329",
+  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
+  "sourceRevision": "16f524b66cf9dd48384c6cd78c475409ec5dd493",
   "testFile": "tests/e2e/m06-01-organization-admin.spec.ts",
   "testFileSha256": "9774193831c69b36ec7be4eae6025e170ae7cc0a2255de0e85b9e683e2d988bc",
   "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
@@ -83,7 +83,7 @@
   "testTitle": "role catalog empty state is independent of resource grant count",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-07T11:50:40.068Z",
+  "capturedAt": "2026-09-07T14:07:55.436Z",
   "assertions": [
     "empty-role-catalog",
     "matrix-not-rendered"

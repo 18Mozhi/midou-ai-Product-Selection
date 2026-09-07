@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
+  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
   "status": "discovery-not-behavior-coverage",
   "candidates": [
     {
@@ -57498,10 +57498,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 247,
+      "line": 293,
       "sourceRange": {
-        "start": 7590,
-        "end": 7641
+        "start": 8831,
+        "end": 8882
       },
       "label": "返回机会列表",
       "attributes": {
@@ -57511,7 +57511,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1",
       "signature": "feb47750cbf8d6c2",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -57529,10 +57529,10 @@
       "kind": "event-binding",
       "tag": "UiStatePanel",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 249,
+      "line": 295,
       "sourceRange": {
-        "start": 7660,
-        "end": 7897
+        "start": 8901,
+        "end": 9226
       },
       "label": "",
       "attributes": {
@@ -57540,7 +57540,8 @@
         ":kind": "state",
         ":request-id": "requestId",
         ":action-hint": "message",
-        "@primary": "journey ? load() : reset()",
+        ":primary-label": "journey || resumeId ? '重试读取进度' : undefined",
+        "@primary": "journey ? load() : resumeId ? resume() : reset()",
         "@secondary": "handleStateSecondary"
       },
       "conditions": [
@@ -57550,30 +57551,36 @@
         }
       ],
       "events": {
-        "@primary": "journey ? load() : reset()",
+        "@primary": "journey ? load() : resumeId ? resume() : reset()",
         "@secondary": "handleStateSecondary"
       },
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#ea132f1592801c04.1",
-      "signature": "ea132f1592801c04",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1",
+      "signature": "8026812b48a68031",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/SelectionJourney.vue",
-          "line": 154,
-          "endLine": 165
+          "line": 169,
+          "endLine": 171
         },
         {
           "name": "reset",
           "file": "apps/web/src/components/SelectionJourney.vue",
-          "line": 189,
-          "endLine": 197
+          "line": 235,
+          "endLine": 245
         },
         {
           "name": "handleStateSecondary",
           "file": "apps/web/src/components/SelectionJourney.vue",
-          "line": 198,
-          "endLine": 211
+          "line": 246,
+          "endLine": 259
+        },
+        {
+          "name": "resume",
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "line": 260,
+          "endLine": 269
         }
       ],
       "reviewStatus": "unreviewed",
@@ -57592,12 +57599,12 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 257,
+      "line": 304,
       "sourceRange": {
-        "start": 7902,
-        "end": 9441
+        "start": 9231,
+        "end": 10803
       },
-      "label": "{{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"HTTPS 商品链接\" }} 任务会在后台继续 关闭或离开本页不会取消任务，返回后会自动恢复当前进度。 {{ busy ? \"正在创建真实任务…\" : \"创建真实选品任务\" }}",
+      "label": "{{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"HTTPS 商品链接\" }} 任务会在后台继续 关闭或离开本页不会取消任务，返回后会自动恢复当前进度。 {{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
       "attributes": {
         "v-if": "!journey",
         "class": "selection-start",
@@ -57612,15 +57619,15 @@
       "events": {
         "@submit.prevent": "create"
       },
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#59498db8867f4665.1",
-      "signature": "59498db8867f4665",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
+      "signature": "8c00555eac0c2a19",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [
         {
           "name": "create",
           "file": "apps/web/src/components/SelectionJourney.vue",
-          "line": 138,
-          "endLine": 153
+          "line": 150,
+          "endLine": 168
         }
       ],
       "reviewStatus": "unreviewed",
@@ -57639,15 +57646,15 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 300,
+      "line": 347,
       "sourceRange": {
-        "start": 9328,
-        "end": 9429
+        "start": 10657,
+        "end": 10791
       },
-      "label": "{{ busy ? \"正在创建真实任务…\" : \"创建真实选品任务\" }}",
+      "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
       "attributes": {
         "type": "submit",
-        ":disabled": "busy"
+        ":disabled": "busy || reading"
       },
       "conditions": [
         {
@@ -57656,9 +57663,9 @@
         }
       ],
       "events": {},
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#09bdfc68bbfc5530.1",
-      "signature": "09bdfc68bbfc5530",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1",
+      "signature": "8471b8c4a13a52ef",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -57678,10 +57685,10 @@
       "kind": "control",
       "tag": "a",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 371,
+      "line": 418,
       "sourceRange": {
-        "start": 11809,
-        "end": 11938
+        "start": 13171,
+        "end": 13300
       },
       "label": "查看来源原文 ↗",
       "attributes": {
@@ -57709,7 +57716,7 @@
       },
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1",
       "signature": "ffaf47bf1a32fcaf",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -57727,10 +57734,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 405,
+      "line": 452,
       "sourceRange": {
-        "start": 12865,
-        "end": 14171
+        "start": 14227,
+        "end": 15544
       },
       "label": "留痕决策 对本次真实结果作出决策 决策不会改写原始证据 {{ item.label }} 决策原因 {{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "attributes": {
@@ -57753,13 +57760,13 @@
       },
       "candidateId": "apps/web/src/components/SelectionJourney.vue#5704caf4d4e8cd9d.1",
       "signature": "5704caf4d4e8cd9d",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [
         {
           "name": "decide",
           "file": "apps/web/src/components/SelectionJourney.vue",
-          "line": 166,
-          "endLine": 188
+          "line": 211,
+          "endLine": 234
         }
       ],
       "reviewStatus": "unreviewed",
@@ -57778,15 +57785,15 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 444,
+      "line": 491,
       "sourceRange": {
-        "start": 14058,
-        "end": 14157
+        "start": 15420,
+        "end": 15530
       },
       "label": "{{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "attributes": {
         "type": "submit",
-        ":disabled": "busy"
+        ":disabled": "busy || reading"
       },
       "conditions": [
         {
@@ -57799,9 +57806,9 @@
         }
       ],
       "events": {},
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#1e10e5e77e7fc48e.1",
-      "signature": "1e10e5e77e7fc48e",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1",
+      "signature": "dc2377b526f68954",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -57821,10 +57828,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 452,
+      "line": 499,
       "sourceRange": {
-        "start": 14444,
-        "end": 14582
+        "start": 15817,
+        "end": 15955
       },
       "label": "查看机会、证据与决策历史 ↗",
       "attributes": {
@@ -57848,7 +57855,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1",
       "signature": "2982f925c629be51",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -57866,10 +57873,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 455,
+      "line": 502,
       "sourceRange": {
-        "start": 14591,
-        "end": 14752
+        "start": 15964,
+        "end": 16125
       },
       "label": "打开自动生成的验证任务 ↗",
       "attributes": {
@@ -57893,7 +57900,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1",
       "signature": "d3e6b84b6df72d56",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -57911,14 +57918,15 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 464,
+      "line": 511,
       "sourceRange": {
-        "start": 14946,
-        "end": 14997
+        "start": 16319,
+        "end": 16387
       },
       "label": "开始下一次",
       "attributes": {
         "type": "button",
+        ":disabled": "busy",
         "@click": "reset"
       },
       "conditions": [
@@ -57930,15 +57938,15 @@
       "events": {
         "@click": "reset"
       },
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#2c481a724f0e9b09.1",
-      "signature": "2c481a724f0e9b09",
-      "sourceSha256": "b04dee068fe7424fca643205112da04a8aa4129820344455f1cf20a5fc40000e",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1",
+      "signature": "283a41d530253e0d",
+      "sourceSha256": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
       "handlerDefinitions": [
         {
           "name": "reset",
           "file": "apps/web/src/components/SelectionJourney.vue",
-          "line": 189,
-          "endLine": 197
+          "line": 235,
+          "endLine": 245
         }
       ],
       "reviewStatus": "unreviewed",

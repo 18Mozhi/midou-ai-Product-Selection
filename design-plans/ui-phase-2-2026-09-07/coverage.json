@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
+  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
   "denominatorFrozen": false,
   "pages": [
     {
@@ -124,9 +124,9 @@
       "sessionRequired": false,
       "capabilities": [],
       "productionResolver": null,
-      "desktopDirection": "新密码规则、确认输入、提交结果层级清楚",
+      "desktopDirection": "单个新密码输入、规则与提交结果层级清楚；现无确认密码字段",
       "mobileDirection": "软键盘下校验与操作可见",
-      "acceptanceSteps": "失效链接、不一致输入、失败保留、成功去向；隔离身份完成密码重置",
+      "acceptanceSteps": "新密码长度、缺失/失效token、失败保留、204成功与返回；隔离身份完成密码重置，不新增确认规则",
       "status": "inventory-in-progress",
       "designEvidence": [],
       "implementationEvidence": [],
@@ -148,7 +148,7 @@
       "productionResolver": null,
       "desktopDirection": "已开启状态与设置步骤区分，敏感材料独立区域",
       "mobileDirection": "顺序呈现设置/验证，敏感信息不外溢",
-      "acceptanceSteps": "无会话拒绝、开启/验证/关闭的现有流程、错误码反馈、复制反馈；敏感图仅用隔离数据并脱敏",
+      "acceptanceSteps": "无会话拒绝、开启/验证/关闭的现有流程、错误反馈与敏感材料生命周期；现无复制动作，敏感图仅用隔离数据并脱敏",
       "status": "inventory-in-progress",
       "designEvidence": [],
       "implementationEvidence": [],
@@ -192,7 +192,7 @@
       "productionResolver": null,
       "desktopDirection": "现有引导步骤和当前可行动入口分层",
       "mobileDirection": "单步焦点、上下步可达",
-      "acceptanceSteps": "首次/再次进入、已有进度、缺少范围及已有跳过行为；不能伪造已完成步骤",
+      "acceptanceSteps": "query初始化、局部step切换、刷新与非法步骤；跳过/完成到根入口再确定落点；现无服务端或本地持久化进度，不伪造已完成步骤",
       "status": "inventory-in-progress",
       "designEvidence": [],
       "implementationEvidence": [],
@@ -11891,7 +11891,7 @@
       "line": 300,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/SelectionJourney.vue#09bdfc68bbfc5530.1"
+        "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/SelectionJourney.vue#09bdfc68bbfc5530.1"
@@ -11900,8 +11900,9 @@
         "start": 9328,
         "end": 9429
       },
-      "disposition": "historical-source-match-needs-semantic-review",
-      "businessDisposition": null
+      "disposition": "source-reviewed-correspondence-runtime-pending",
+      "businessDisposition": "retained-journey-create-submit-restoring-label-and-read-guard-added",
+      "reviewReason": "Historical button at line 300 and current line 347 remain the submit control of selection-start with @submit.prevent=create. Commit 16f524b adds a restoring label and reading guard, not a new business creation action. The exact label and attributes uniquely identify this control; source correspondence is not whole-action or production acceptance."
     },
     {
       "legacyId": "button-555",
@@ -11909,7 +11910,7 @@
       "line": 444,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/SelectionJourney.vue#1e10e5e77e7fc48e.1"
+        "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/SelectionJourney.vue#1e10e5e77e7fc48e.1"
@@ -11927,7 +11928,7 @@
       "line": 464,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/SelectionJourney.vue#2c481a724f0e9b09.1"
+        "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/SelectionJourney.vue#2c481a724f0e9b09.1"
