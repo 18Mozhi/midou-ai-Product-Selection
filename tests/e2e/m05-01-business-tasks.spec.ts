@@ -372,8 +372,8 @@ test("member workspace shows Chinese context theme switch and task progress with
 }) => {
   await setup(page);
   await page.goto("/work");
-  await expect(page.getByText("米豆智能选品")).toHaveCount(1);
-  await expect(page.getByText("跨境新品工作区")).toHaveCount(1);
+  await expect(page.getByText("米豆智能选品").filter({ visible: true })).toHaveCount(1);
+  await expect(page.getByText("跨境新品工作区").filter({ visible: true })).toHaveCount(1);
   await expect(
     page.getByText(/navigation_member_allowed|权限由服务端裁决|前端菜单不是安全边界/),
   ).toHaveCount(0);

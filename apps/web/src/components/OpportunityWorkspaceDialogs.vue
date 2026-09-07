@@ -48,13 +48,20 @@ const decisionLabel = {
     aria-labelledby="erp-import-title"
     @cancel="cancelErp"
   >
-    <form @submit.prevent="emit('importBrowser')">
+    <form class="so-dialog-manifest" @submit.prevent="emit('importBrowser')">
       <header>
         <div>
           <p>使用已有商品数据补齐系统</p>
           <h3 id="erp-import-title">从米豆 ERP 商品列表导入</h3>
         </div>
-        <button type="button" aria-label="关闭 ERP 导入" @click="erpImportOpen = false">×</button>
+        <button
+          class="so-action-quiet"
+          type="button"
+          aria-label="关闭 ERP 导入"
+          @click="erpImportOpen = false"
+        >
+          ×
+        </button>
       </header>
       <aside class="erp-import-guide">
         <strong>真实数据流</strong>
@@ -80,8 +87,10 @@ const decisionLabel = {
       >
       <footer>
         <a href="/browser-helper/scoutops-browser-helper.zip">下载浏览器助手</a>
-        <button type="button" @click="erpImportOpen = false">取消</button>
-        <button type="submit" :disabled="busy">
+        <button class="so-action-secondary" type="button" @click="erpImportOpen = false">
+          取消
+        </button>
+        <button class="so-action-primary" type="submit" :disabled="busy">
           {{ busy ? "读取并导入中…" : "从当前浏览器读取" }}
         </button>
       </footer>
@@ -95,13 +104,15 @@ const decisionLabel = {
     aria-labelledby="opportunity-create-title"
     @cancel="cancelCreate"
   >
-    <form @submit.prevent="emit('create')">
+    <form class="so-dialog-manifest" @submit.prevent="emit('create')">
       <header>
         <div>
           <p>新候选项</p>
           <h3 id="opportunity-create-title">创建机会候选</h3>
         </div>
-        <button type="button" aria-label="关闭" @click="createOpen = false">×</button>
+        <button class="so-action-quiet" type="button" aria-label="关闭" @click="createOpen = false">
+          ×
+        </button>
       </header>
       <label>机会名称<input v-model="form.name" required maxlength="200" /></label>
       <div>
@@ -115,8 +126,10 @@ const decisionLabel = {
       /></label>
       <aside>创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。</aside>
       <footer>
-        <button type="button" @click="createOpen = false">取消</button>
-        <button type="submit" :disabled="busy">{{ busy ? "创建中…" : "创建机会" }}</button>
+        <button class="so-action-secondary" type="button" @click="createOpen = false">取消</button>
+        <button class="so-action-primary" type="submit" :disabled="busy">
+          {{ busy ? "创建中…" : "创建机会" }}
+        </button>
       </footer>
     </form>
   </dialog>
@@ -128,21 +141,36 @@ const decisionLabel = {
     aria-labelledby="opportunity-decision-title"
     @cancel="cancelDecision"
   >
-    <form @submit.prevent="emit('decide')">
+    <form class="so-dialog-manifest" @submit.prevent="emit('decide')">
       <header>
         <div>
           <p>留痕决策</p>
           <h3 id="opportunity-decision-title">记录{{ decisionLabel[decisionAction] }}决定</h3>
         </div>
-        <button type="button" aria-label="关闭" @click="decisionOpen = false">×</button>
+        <button
+          class="so-action-quiet"
+          type="button"
+          aria-label="关闭"
+          @click="decisionOpen = false"
+        >
+          ×
+        </button>
       </header>
       <label
         >原因（必填）<textarea v-model="decisionReason" required maxlength="1000"></textarea>
       </label>
       <aside>此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。</aside>
       <footer>
-        <button type="button" @click="decisionOpen = false">取消</button>
-        <button type="submit" :disabled="busy">{{ busy ? "保存中…" : "确认记录" }}</button>
+        <button class="so-action-secondary" type="button" @click="decisionOpen = false">
+          取消
+        </button>
+        <button
+          :class="decisionAction === 'reject' ? 'so-action-danger' : 'so-action-primary'"
+          type="submit"
+          :disabled="busy"
+        >
+          {{ busy ? "保存中…" : "确认记录" }}
+        </button>
       </footer>
     </form>
   </dialog>

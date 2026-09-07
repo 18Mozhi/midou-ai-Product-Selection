@@ -206,12 +206,21 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   width: 100%;
   height: 100dvh;
   padding: 18px;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   border: 0;
   color: var(--so-text);
   background: var(--so-bg-elevated);
   transform: translateX(100%);
   transition: transform 220ms ease;
+}
+
+.responsive-filter-drawer--overlay .responsive-filter-drawer__content {
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .responsive-filter-drawer--overlay

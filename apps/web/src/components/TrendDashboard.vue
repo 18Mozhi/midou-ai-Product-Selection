@@ -33,6 +33,7 @@ const props = defineProps<{
   state = ref<State>("loading"),
   topics = ref<Topic[]>([]),
   selected = ref<Detail | null>(null),
+  mobileDetailOpen = ref(typeof route.query.topic === "string"),
   rules = ref<Rule[]>([]),
   changeRequests = ref<TrendTopicChangeRequest[]>([]),
   requestId = ref(""),
@@ -49,7 +50,6 @@ const props = defineProps<{
   total = ref(0),
   page = ref(1),
   sort = ref<TrendSort>("impact"),
-  masterWidth = ref(38),
   filters = reactive<TrendFilters>({ q: "", market: "", category: "", status: "active" });
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
@@ -179,7 +179,12 @@ async function load() {
   }
 }
 async function selectTopic(topic: Topic) {
+  mobileDetailOpen.value = true;
   await router.push({ query: { ...route.query, topic: topic.id, section: undefined } });
+}
+
+function returnToTopicList() {
+  mobileDetailOpen.value = false;
 }
 function syncFromRoute() {
   filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -457,7 +462,12 @@ onMounted(() => {
       :tone="trendReadiness.summary.tone"
       :facts="trendReadiness.facts"
     >
-      <button v-if="canManageTrends" class="primary" type="button" @click="showRule = true">
+      <button
+        v-if="canManageTrends"
+        class="primary so-action-primary"
+        type="button"
+        @click="showRule = true"
+      >
         {{ enabledRules.length ? "创建趋势监控" : "创建第一条监控规则" }}
       </button>
       <button class="secondary" type="button" :disabled="Boolean(busy)" @click="refreshHotspots">
@@ -499,21 +509,13 @@ onMounted(() => {
         :primary-label="state === 'empty' ? '清除筛选并恢复' : '重新加载'"
         @primary="recoverTopics"
       />
-      <div v-else class="trend-workbench" :style="{ '--trend-master-width': `${masterWidth}%` }">
+      <div v-else class="trend-workbench" :class="{ 'is-mobile-detail-open': mobileDetailOpen }">
         <section id="trend-list" class="trend-list">
           <header>
             <div>
               <strong>趋势列表</strong><span>共 {{ total }} 个主题</span>
             </div>
-            <label class="trend-width-control"
-              >列表宽度<input
-                v-model.number="masterWidth"
-                type="range"
-                min="32"
-                max="48"
-                step="2"
-                aria-label="调整趋势列表宽度" /></label
-            ><small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
+            <small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
           </header>
           <button
             v-for="topic in sortedTopics"
@@ -555,6 +557,7 @@ onMounted(() => {
           :quality-issue-ids="qualityIssueIds"
           :opportunity-route="opportunityRoute"
           :can-manage="canManageTrends"
+          @back="returnToTopicList"
           @follow="follow"
           @create-rule="showRule = true"
           @change-relevance="openRelevance"

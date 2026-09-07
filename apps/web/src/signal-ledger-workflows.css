@@ -1,0 +1,50 @@
+/* Explicit roles for protected workflows. Compatibility selectors remain in signal-ledger.css. */
+html[data-design="signal-ledger"] body .so-action-primary {
+  min-height: var(--so-touch-target);
+  border: 1px solid var(--so-primary);
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+  font-weight: 800;
+}
+
+html[data-design="signal-ledger"] body .so-action-primary:hover:not(:disabled) {
+  border-color: var(--so-primary-strong);
+  background: var(--so-primary-strong);
+}
+
+html[data-design="signal-ledger"] body .so-action-secondary,
+html[data-design="signal-ledger"] body .so-action-quiet {
+  min-height: var(--so-touch-target);
+  border: 1px solid var(--so-border);
+  color: var(--so-text);
+  background: transparent;
+}
+
+html[data-design="signal-ledger"] body .so-action-quiet {
+  border-color: transparent;
+  color: var(--so-text-muted);
+}
+
+html[data-design="signal-ledger"] body .so-action-danger {
+  min-height: var(--so-touch-target);
+  border: 1px solid var(--so-danger);
+  color: var(--so-danger);
+  background: transparent;
+  font-weight: 800;
+}
+
+html[data-design="signal-ledger"] body .so-ledger-surface {
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+
+html[data-design="signal-ledger"] body .so-dialog-manifest {
+  border: 2px solid var(--so-text);
+  border-top: 8px solid var(--so-primary);
+  background: var(--so-panel);
+  box-shadow: var(--so-shadow-dialog);
+}
+
+html[data-design="signal-ledger"] body .trend-dashboard [class] {
+  backdrop-filter: none;
+}

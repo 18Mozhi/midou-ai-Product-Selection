@@ -269,9 +269,15 @@ onMounted(load);
           <p>系统持续发现和补证，你只负责最终采纳。</p>
         </div>
         <nav>
-          <RouterLink class="home-secondary-action" to="/trends?section=rules">管理规则</RouterLink>
-          <RouterLink class="home-secondary-action" to="/opportunities">查看推荐清单</RouterLink>
-          <RouterLink class="home-primary-action" to="/opportunities/start">创建选品 →</RouterLink>
+          <RouterLink class="home-secondary-action so-action-secondary" to="/trends?section=rules"
+            >管理规则</RouterLink
+          >
+          <RouterLink class="home-secondary-action so-action-secondary" to="/opportunities"
+            >查看推荐清单</RouterLink
+          >
+          <RouterLink class="home-primary-action so-action-primary" to="/opportunities/start"
+            >创建选品 →</RouterLink
+          >
         </nav>
       </header>
 
@@ -379,10 +385,8 @@ onMounted(load);
         </footer>
       </form>
 
-      <HomeAutomationOverview :selection="selection" />
-
       <section class="home-main-grid">
-        <section class="home-review-queue">
+        <section class="home-review-queue so-ledger-surface">
           <header>
             <div>
               <span>需要你决定</span>
@@ -426,7 +430,10 @@ onMounted(load);
         </section>
       </section>
 
-      <section v-if="otherActions.length || data?.health.length" class="home-operations-strip">
+      <section
+        v-if="otherActions.length || data?.health.length"
+        class="home-operations-strip so-ledger-surface"
+      >
         <header>
           <h3>其他待办与异常</h3>
           <span>只显示与你有关的事项</span>
@@ -445,6 +452,8 @@ onMounted(load);
           </RouterLink>
         </div>
       </section>
+
+      <HomeAutomationOverview :selection="selection" />
 
       <details class="home-truth">
         <summary>数据说明</summary>

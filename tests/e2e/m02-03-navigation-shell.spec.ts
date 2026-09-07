@@ -164,7 +164,7 @@ for (const item of [
 ])
   test(`M02-03.A07/A09/A15 ${item.shell} shell is isolated responsive and visual`, async ({
     page,
-  }) => {
+  }, testInfo) => {
     await allow(page, item.shell);
     await page.goto(item.path);
     await expect(page.getByRole("heading", { name: item.heading, level: 2 })).toBeVisible();
@@ -172,7 +172,13 @@ for (const item of [
     await expect(page.locator(".role-nav-groups details[open]")).toHaveCount(0);
     await expect(page.locator(".role-nav-menu").first()).toBeHidden();
     await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
-    await expect(page.locator(".role-context-rail")).toBeVisible();
+    if (testInfo.project.name === "mobile-390") {
+      await expect(page.locator(".role-context-rail")).toBeHidden();
+      await expect(page.locator(".role-context-drawer")).toBeVisible();
+    } else {
+      await expect(page.locator(".role-context-rail")).toBeVisible();
+      await expect(page.locator(".role-context-drawer")).toBeHidden();
+    }
     await expect(page.locator(".role-sidebar")).toHaveAttribute(
       "aria-label",
       new RegExp(
@@ -240,6 +246,18 @@ for (const item of [
     await allow(page, item.shell);
     await page.goto(item.path);
     const navigation = page.getByRole("navigation", { name: "移动快捷导航" });
+    const themeButton = page.getByRole("button", { name: "切换界面主题" });
+    await expect(themeButton).toBeVisible();
+    await expect(themeButton).toBeInViewport();
+    const contextDrawer = page.locator(".role-context-drawer");
+    await expect(page.locator(".role-context-rail")).toBeHidden();
+    await expect(contextDrawer).toBeVisible();
+    await expect(contextDrawer).not.toHaveAttribute("open");
+    await contextDrawer.locator("summary").click();
+    await expect(contextDrawer).toHaveAttribute("open", "");
+    await expect(contextDrawer.getByText("任务域", { exact: true })).toBeVisible();
+    await expect(contextDrawer.getByText("信号状态", { exact: true })).toBeVisible();
+    await expect(contextDrawer.getByText("当前角色", { exact: true })).toBeVisible();
     await expect(navigation.locator(":scope > *")).toHaveCount(5);
     await expect(navigation.getByRole("link")).toHaveCount(4);
     const more = navigation.getByRole("button", { name: "更多" });

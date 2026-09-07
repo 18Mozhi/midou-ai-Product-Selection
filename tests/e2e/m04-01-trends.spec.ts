@@ -222,6 +222,15 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(trendList.getByText("2 个来源")).toBeVisible();
   await expect(trendList.getByText(/新鲜度/)).toBeVisible();
   await expect(trendList.getByText("可信度 数据不足")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) <= 1100) {
+    await trendList.locator(":scope > button").first().click();
+    await expect(trendList).toBeHidden();
+    await expect(page.locator(".trend-detail")).toBeVisible();
+    await expect(page.getByRole("button", { name: "返回趋势列表" })).toBeVisible();
+  } else {
+    await expect(trendList).toHaveCSS("overflow-y", "auto");
+    await expect(page.locator(".trend-detail")).toHaveCSS("overflow-y", "auto");
+  }
   await expect(page.getByText("实际信号数", { exact: true })).toBeVisible();
   await expect(page.getByText("置信度：数据不足；不会用默认分数代替。")).toBeVisible();
   const evidence = page.locator(".trend-evidence-item").filter({
@@ -261,6 +270,8 @@ test("long trend timelines scroll inside the detail card without widening the pa
   }));
   await ready(page, [topic], { detailData: { ...detail, timeline, timeline_sources: [] } });
   await page.goto("/trends");
+  if ((page.viewportSize()?.width ?? 0) <= 1100)
+    await page.locator(".trend-list > button").first().click();
   await expect
     .poll(() =>
       page.evaluate(
@@ -319,6 +330,8 @@ test("trend:read-only loads topics and rules without requesting or exposing gove
 
   await page.goto("/trends?section=governance");
   await expect(page).not.toHaveURL(/section=governance/);
+  if ((page.viewportSize()?.width ?? 0) <= 1100)
+    await page.locator(".trend-list > button").first().click();
   await expect(page.getByRole("heading", { name: topic.title })).toBeVisible();
   await expect(page.getByRole("button", { name: "立即刷新来源" })).toBeVisible();
   await expect(page.getByRole("button", { name: /合并与拆分/ })).toHaveCount(0);
@@ -385,5 +398,7 @@ test("empty trend filters expose a one-step recovery action", async ({ page }) =
   await page.goto("/trends?q=no-match");
   await page.getByRole("button", { name: "清除筛选并恢复" }).click();
   await expect(page).toHaveURL(new RegExp(`/trends\\?topic=${topicId}$`));
+  if ((page.viewportSize()?.width ?? 0) <= 1100)
+    await page.locator(".trend-list > button").first().click();
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
 });

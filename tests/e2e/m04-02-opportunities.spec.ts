@@ -408,6 +408,11 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await expect(drawer).toHaveCSS("height", "844px");
   await expect(drawer).toHaveCSS("border-radius", "0px");
   await expect(drawer).toHaveCSS("box-shadow", "none");
+  const actionDock = drawer.locator(".opportunity-filter-actions");
+  await expect(actionDock).toHaveCSS("position", "fixed");
+  await expect
+    .poll(() => actionDock.evaluate((element) => element.getBoundingClientRect().bottom))
+    .toBe(844);
   await drawer.getByLabel("阻断原因").selectOption("recommendation_insufficient");
   await drawer.getByRole("button", { name: "关闭筛选条件" }).click();
   await page.getByRole("button", { name: /高级筛选/ }).click();

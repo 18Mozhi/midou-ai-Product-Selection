@@ -531,6 +531,36 @@ onUnmounted(() => {
             <strong>{{ roleSummary }}</strong>
           </div>
         </section>
+        <details
+          v-if="!opportunityId"
+          class="role-context-drawer"
+          role="region"
+          aria-label="上下文"
+        >
+          <summary>
+            <span>
+              <small>当前范围</small>
+              <strong v-if="shell === 'platform_admin'">平台全局</strong>
+              <strong v-else
+                >{{ contextName(guard?.organization_name, "未命名组织") }} ·
+                {{ contextName(guard?.workspace_name, "默认工作区") }}</strong
+              >
+            </span>
+            <AppIcon name="chevron" :size="16" />
+          </summary>
+          <div>
+            <span
+              ><small>任务域</small><strong>{{ activeItem?.group || shellTitle }}</strong></span
+            >
+            <span
+              ><small>信号状态</small
+              ><strong class="role-signal-status">已连接 · 可复核</strong></span
+            >
+            <span
+              ><small>当前角色</small><strong>{{ roleSummary }}</strong></span
+            >
+          </div>
+        </details>
         <nav
           v-if="isPlatformOperationsRoute"
           class="platform-secondary-nav"
@@ -620,3 +650,4 @@ onUnmounted(() => {
 </template>
 
 <style scoped src="../navigation-shell-scoped.css"></style>
+<style src="../signal-ledger-workflows.css"></style>

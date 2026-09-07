@@ -693,19 +693,21 @@ watch(
         <span>规则命中先进入候选；五项质量门全部通过后，才进入你的人工采纳清单。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
-        <RouterLink class="primary" to="/opportunities/start">创建选品 →</RouterLink
-        ><RouterLink class="secondary" to="/trends?section=rules">管理选品规则</RouterLink
+        <RouterLink class="primary so-action-primary" to="/opportunities/start"
+          >创建选品 →</RouterLink
+        ><RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
+          >管理选品规则</RouterLink
         ><button
           v-if="selectionView === 'all'"
           type="button"
-          class="ghost secondary"
+          class="ghost secondary so-action-secondary"
           @click="showErpImport = true"
         >
           从 ERP 导入</button
         ><button
           v-if="selectionView === 'all'"
           type="button"
-          class="ghost secondary"
+          class="ghost secondary so-action-secondary"
           @click="showCreate = true"
         >
           手工添加

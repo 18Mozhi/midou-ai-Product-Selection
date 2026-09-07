@@ -30,7 +30,7 @@ const description = computed(() =>
 
 <template>
   <section
-    class="automatic-selection-readiness"
+    class="automatic-selection-readiness so-ledger-surface"
     :data-ready="readiness.allReady"
     aria-labelledby="automatic-selection-readiness-title"
   >

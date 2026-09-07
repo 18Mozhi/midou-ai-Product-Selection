@@ -225,9 +225,15 @@ const opportunityStatus = (value: string) =>
               {{ member.label }}
             </option>
           </select></label
-        ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label
-        ><button class="filter-apply-action secondary" type="submit">筛选</button
-        ><button class="secondary" type="button" @click="emit('reset')">重置</button>
+        ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label>
+        <footer class="opportunity-filter-actions">
+          <button class="filter-apply-action secondary so-action-secondary" type="submit">
+            筛选
+          </button>
+          <button class="secondary so-action-secondary" type="button" @click="emit('reset')">
+            重置
+          </button>
+        </footer>
       </form>
     </ResponsiveFilterDrawer>
   </section>
@@ -355,6 +361,10 @@ const opportunityStatus = (value: string) =>
   color: var(--so-text);
   background-color: transparent;
   background-image: none;
+}
+
+.opportunity-filter-actions {
+  display: contents;
 }
 
 @media (max-width: 760px) {

@@ -12,6 +12,7 @@ defineProps<{
   canManage: boolean;
 }>();
 const emit = defineEmits<{
+  back: [];
   follow: [];
   createRule: [];
   changeRelevance: [status: "active" | "irrelevant"];
@@ -31,7 +32,9 @@ const freshness = (value: string) =>
   <article class="trend-detail" :aria-busy="busy === 'detail'">
     <header>
       <div>
-        <a href="#trend-list">← 返回趋势列表</a>
+        <button class="trend-detail-back so-action-quiet" type="button" @click="emit('back')">
+          返回趋势列表
+        </button>
         <p>{{ statusLabel(detail.status) }} · {{ detail.market }} · {{ detail.language }}</p>
         <h3>{{ detail.title }}</h3>
         <span
@@ -45,20 +48,26 @@ const freshness = (value: string) =>
       </div>
     </header>
     <div class="trend-actions">
-      <button v-if="canManage" type="button" @click="emit('follow')">
+      <button v-if="canManage" class="so-action-secondary" type="button" @click="emit('follow')">
         {{ detail.followed ? "已关注" : "关注" }}</button
-      ><button v-if="canManage" type="button" @click="emit('createRule')">创建监控</button
-      ><RouterLink :to="opportunityRoute">转为机会</RouterLink
+      ><button
+        v-if="canManage"
+        class="so-action-secondary"
+        type="button"
+        @click="emit('createRule')"
+      >
+        创建监控</button
+      ><RouterLink class="so-action-secondary" :to="opportunityRoute">转为机会</RouterLink
       ><button
         v-if="canManage && detail.status !== 'irrelevant'"
-        class="quiet"
+        class="quiet so-action-quiet"
         type="button"
         @click="emit('changeRelevance', 'irrelevant')"
       >
         标记无关</button
       ><button
         v-else-if="canManage"
-        class="quiet"
+        class="quiet so-action-quiet"
         type="button"
         @click="emit('changeRelevance', 'active')"
       >
