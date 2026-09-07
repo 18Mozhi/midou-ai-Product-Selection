@@ -46,6 +46,67 @@ async function navigation(page: Page) {
 }
 test.beforeEach(async ({ page }) => navigation(page));
 
+test("UI2-SC71 attestation failure remains readable without a capacity snapshot", async ({
+  page,
+}) => {
+  const writes: Array<{ key: string | undefined; body: unknown }> = [];
+  const readHint = "本轮尚无容量观测，请先核对事实。";
+  const writeHint = "先在宝塔有限任务中完成归档与隔离恢复事实核验。";
+  await page.route("**/api/v1/platform/operations/capacity", (route) =>
+    route.fulfill({
+      status: 404,
+      json: {
+        error: { code: "capacity_evidence_unavailable", action_hint: readHint },
+        request_id: "sc71-read",
+        trace_id: "sc71-read",
+      },
+    }),
+  );
+  await page.route("**/api/v1/platform/operations/capacity/drills", (route) => {
+    writes.push({
+      key: route.request().headers()["idempotency-key"],
+      body: route.request().postDataJSON(),
+    });
+    return route.fulfill({
+      status: 409,
+      json: {
+        error: { code: "capacity_drill_not_verified", action_hint: writeHint },
+        request_id: "sc71-write",
+        trace_id: "sc71-write",
+      },
+    });
+  });
+  await page.goto("/platform-admin/capacity");
+  await expect(page.getByText(readHint, { exact: true })).toBeVisible();
+  const trigger = page.getByRole("button", { name: "签认恢复演练", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("alertdialog", { name: "签认归档与恢复演练？" });
+  await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeFocused();
+  await expect(dialog.getByRole("button", { name: "确认签认", exact: true })).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  expect(writes).toHaveLength(0);
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await trigger.click();
+    await dialog.getByPlaceholder("确认签认").fill("确认签认");
+    await dialog.getByRole("button", { name: "确认签认", exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByText(writeHint, { exact: true })).toBeVisible();
+    await expect(page.getByText("归档与隔离恢复演练已签认。", { exact: true })).toHaveCount(0);
+    await expect(trigger).toBeEnabled();
+  }
+  expect(writes).toHaveLength(2);
+  expect(writes[0].key).toBeTruthy();
+  expect(writes[1].key).toBe(writes[0].key);
+  expect(writes.map((write) => write.body)).toEqual(
+    Array(2).fill({
+      kind: "archive_recovery",
+      reason: "平台运维确认本轮单机容量收尾演练",
+    }),
+  );
+});
+
 test("M08-06.A07/A08/A15 desktop and 390 measured single-host capacity truth", async ({ page }) => {
   await page.route("**/api/v1/platform/operations/capacity", (route) =>
     route.fulfill({ json: envelope(base) }),

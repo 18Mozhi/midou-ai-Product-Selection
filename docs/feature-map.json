@@ -2612,6 +2612,7 @@
       "statusDetail": "local_full_stack_live_api_permission_single_flight_refresh_bounded_abort_snapshot_preservation_dependency_503_filesystem_failure_recovery_and_responsive_verification_completed"
     },
     "crawlerSingleHostScheduler": {
+      "uiPhase2Contract": "P70 and scheduler-capacity-contract-review.md under design-plans/ui-phase-2-2026-09-07 map local filters/pagination, expired-slot and single-provider confirmation, real POST/audit effects, queue sample limits and shared dialogs. UI2-SC70 proves a hidden recovering query cannot bypass GET or start recovery. No scheduler policy, lease, permission or API changes. Same-instance writes/read overlap, confirmation object identity, full design and real production remain pending.",
       "module": "M08-05",
       "entrypoints": [
         "../database/migrations/0034_crawler_scheduler_m08_05.up.sql",
@@ -2694,6 +2695,7 @@
       "statusDetail": "local_full_stack_live_api_worker_python_crawler_mysql57_redis_browser_permission_single_flight_bounded_abort_snapshot_preservation_recovery_idempotency_and_sanitized_dependency_503_verified"
     },
     "capacityBoundary": {
+      "uiPhase2Contract": "P71 and scheduler-capacity-contract-review.md under design-plans/ui-phase-2-2026-09-07 separate optional measurements, latest database observations and archive_recovery attestation. UI2-SC71 checks visible failure without a snapshot, cancellation and same-key retries against isolated responses. The current read query does not itself check BUILD_SHA; attestation checks recovery flags rather than running the full capacity evaluator. These evidence gaps remain pending, not silently changed contracts or production proof.",
       "module": "M08-06",
       "entrypoints": [
         "../database/migrations/0035_capacity_boundary_m08_06.up.sql",

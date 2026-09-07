@@ -118,7 +118,7 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
     ),
   ).toBeVisible();
 });
-test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
+test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited and unavailable", async ({
   page,
 }) => {
   let status = 200,
@@ -165,8 +165,20 @@ test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited un
     await page.reload();
     await expect(page.getByText(label)).toBeVisible();
   }
+});
+
+test("UI2-SC70 hidden recovering query reads real facts without starting recovery", async ({
+  page,
+}) => {
+  const methods: string[] = [];
+  await page.route("**/api/v1/platform/operations/crawler-scheduler**", (route) => {
+    methods.push(route.request().method());
+    return route.fulfill({ json: envelope(base) });
+  });
   await page.goto("/platform-admin/crawler-scheduler?state=recovering");
-  await expect(page.getByText("正在回收过期租约")).toBeVisible();
+  await expect(page.getByText("采集调度已就绪", { exact: true })).toBeVisible();
+  await expect(page.getByText("正在回收过期租约", { exact: true })).toHaveCount(0);
+  expect(methods).toEqual(["GET"]);
 });
 
 test("M08-05 active lease links process role and collection task without exposing technical IDs by default", async ({

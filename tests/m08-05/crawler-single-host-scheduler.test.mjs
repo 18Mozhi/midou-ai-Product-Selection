@@ -737,7 +737,7 @@ test("M08-05 Worker resource gate fails closed before queue or lease access", as
   assert.equal(repositoryTouched, false);
 });
 
-test("M08-05.A07/A08/A15/A16 UI and rollback cover the full image-grounded state contract", async () => {
+test("M08-05.A07/A08/A15/A16 UI and rollback preserve documented runtime information", async () => {
   const [ui, e2e, architecture, runbook, verifier] = await Promise.all(
     [
       "apps/web/src/components/CrawlerSchedulerCenter.vue",
@@ -763,15 +763,18 @@ test("M08-05.A07/A08/A15/A16 UI and rollback cover the full image-grounded state
   assert.match(e2e, /390/);
   assert.match(ui, /queueSummary[\s\S]*采集排队摘要/);
   assert.match(ui, /queueRiskText[\s\S]*高于近 24 小时 P95[\s\S]*饥饿风险/);
-  for (const image of [
-    "61_平台运营-概览.jpg",
-    "62_采集来源管理.jpg",
-    "63_采集任务监控.jpg",
-    "64_系统监控.jpg",
-    "69_异常告警.jpg",
-    "10_霓虹科技平台驾驶舱_dashboard.png",
+  for (const fact of [
+    "## 页面与图片",
+    "采集调度",
+    "运行与配额",
+    "来源配额",
+    "活动租约关联",
+    "390px",
   ])
-    assert.match(architecture, new RegExp(image.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.ok(architecture.includes(fact), `missing documented UI fact: ${fact}`);
+  assert.match(ui, /ref<State>\("loading"\)/);
+  assert.doesNotMatch(ui, /new URLSearchParams\(location.search\)/);
+  assert.match(e2e, /UI2-SC70/);
   assert.match(runbook, /## 回滚/);
   assert.match(verifier, /maximumWorkers===1/);
   assert.doesNotMatch(

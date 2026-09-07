@@ -481,7 +481,7 @@ test("M08-06 archive recovery drill transaction has exact MySQL placeholders", a
   assert.equal(calls.at(-1)[0], "release");
 });
 
-test("M08-06.A07/A08/A15/A16 UI and rollback cover the complete image-grounded state contract", async () => {
+test("M08-06.A07/A08/A15/A16 UI and rollback preserve documented capacity boundaries", async () => {
   const [ui, e2e, architecture, runbook, verifier] = await Promise.all(
     [
       "apps/web/src/components/CapacityBoundaryCenter.vue",
@@ -515,16 +515,17 @@ test("M08-06.A07/A08/A15/A16 UI and rollback cover the complete image-grounded s
   ])
     assert.match(ui, new RegExp(token));
   assert.match(e2e, /390/);
-  for (const image of [
-    "61_平台运营-概览.jpg",
-    "63_采集任务监控.jpg",
-    "64_系统监控.jpg",
-    "65_日志中心.jpg",
-    "66_安全审计.jpg",
-    "69_异常告警.jpg",
-    "10_霓虹科技平台驾驶舱_dashboard.png",
+  for (const fact of [
+    "## 页面与图片",
+    "规划数永远与实测数分开",
+    "演练签认",
+    "390px",
+    "不是生产事实",
   ])
-    assert.match(architecture, new RegExp(image.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.ok(architecture.includes(fact), `missing documented UI fact: ${fact}`);
+  assert.match(ui, /v-if="operationMessage"/);
+  assert.doesNotMatch(ui, /v-if="data && operationMessage"/);
+  assert.match(e2e, /UI2-SC71/);
   assert.match(runbook, /## 回滚/);
   assert.match(verifier, /measuredConcurrentUsers|measuredConcurrency/);
   assert.doesNotMatch(

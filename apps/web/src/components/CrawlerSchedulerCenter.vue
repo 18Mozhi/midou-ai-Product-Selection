@@ -106,9 +106,7 @@ interface Dto {
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
-const state = ref<State>(
-  new URLSearchParams(location.search).get("state") === "recovering" ? "recovering" : "loading",
-);
+const state = ref<State>("loading");
 const data = ref<Dto | null>(null),
   requestId = ref(""),
   message = ref(""),
@@ -378,9 +376,7 @@ async function recoverProvider() {
   }
 }
 
-onMounted(() => {
-  if (state.value !== "recovering") void load();
-});
+onMounted(() => void load());
 onBeforeUnmount(() => {
   loadSequence += 1;
   loadController?.abort();

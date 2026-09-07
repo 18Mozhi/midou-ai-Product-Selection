@@ -256,11 +256,7 @@ onMounted(() => void load());
       </div>
       <button type="button" :disabled="refreshing" @click="() => load()">重新核验</button>
     </section>
-    <p
-      v-if="data && operationMessage"
-      class="capacity-boundary__operation-message"
-      aria-live="polite"
-    >
+    <p v-if="operationMessage" class="capacity-boundary__operation-message" aria-live="polite">
       {{ operationMessage }}
     </p>
     <section
