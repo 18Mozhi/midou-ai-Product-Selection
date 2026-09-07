@@ -164,3 +164,28 @@ node scripts/verify-ui-phase2-representatives.mjs
 本批所有图片、原型、脚本与说明都是永久审核交付；浏览器上下文在finally关闭，未启动HTTP/Vite/后端进程。失败采图的同名文件已由最终通过版本覆盖，没有另留临时截图、追踪或下载目录。主审核台验证的隔离批注与下载已按原脚本清理。
 
 下一步仍是补齐W00全站运行时分母与W01完整代表闭环。用户选定方向后，统一任务代表稿及共享设计规范、补全多主题/密度/断点/所有适用状态，再进入W02–W09；不能因这76张图存在就跳过完整73路由或用户签收。
+
+## 2026-09-07 · W01任务稿同系重构与88张原型可读性复核
+
+接续PLAN 1.2，本批收尾此前尚未提交的任务A/B稿：task-directions.html改为直接复用representative-directions.css，移除独立旧纸色/衬线布局，保持一案队列并读、一案独立详情。没有选择用户未批准的方向，也没有把新HTML原型接入生产Vue。
+
+核验截图发现共享字号原为11–14px，未达到计划标准；将基础正文、按钮与表单调整至16px，辅助文字至少13px，移动导航、规则字段、权限矩阵正文和依赖说明同步调整。共享CSS变化使原76张图失效，已与任务12张图全部重采；Vue基线及CSS隔离研究图不是本次全新结构图，仍分开计数。
+
+新增scripts/lib/ui-phase2-prototype-metrics.mjs供两个现有采图脚本复用，每张图记录实际计算字号、控件尺寸、计数及违规列表；无弹窗时检查页面，有弹窗时检查当前弹窗。检查非复选框按钮/输入/选择器/文本域至少16px及44×44px、可见直接文字至少13px。裸复选框、链接热区、对比度、软键盘和屏幕阅读器不由本指标证明；完整无障碍和全状态仍待后续验收。任务原型额外验证正反Tab边界、Escape归还、预演无网络、0–100校验和移动主动作首屏可见。
+
+复验命令：
+
+```text
+node scripts/capture-ui-phase2-tasks.mjs --proposal
+node scripts/capture-ui-phase2-representative-directions.mjs
+node scripts/capture-ui-phase2-representative-directions.mjs --check
+node scripts/verify-ui-phase2-representative-design-review.mjs
+node --test tests/unit/ui-phase2-task-study.test.mjs tests/unit/ui-phase2-inventory.test.mjs tests/unit/ui-phase2-prototype-metrics.test.mjs
+npm run verify:docs
+npm run verify:static-analysis
+npm run format:check
+```
+
+88张原型图保持pending-user-review。76图的图库在1440/390各遍历全部场景，通过且控制台错误0、网络请求0；任务采图的既有Vue夹具14个语义案例通过。新增浏览器几何回归用例要求小字号、小热区和小正文各自失败，合法尺寸通过，隐藏小字不误报。图片哈希与当前共享CSS一致；不将局部通过推广为全站或生产通过。
+
+没有修改apps/web/src、API/权限/数据库/.env/依赖/生产配置，OpenAPI不变，Feature Map仅同步本地证据检查边界；无需生产构建、重启或部署。新增/重采的PNG、元数据、原型、文档及回归测试都是永久交付物，无另建临时文件目录；浏览器及任务采图短时Vite由finally关闭。用户方向仍待审，下一步按R01处理全站运行时语义归并，不缩减W02–W09及73路由范围。

@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
+import { checkPrototypeMetrics } from "./lib/ui-phase2-prototype-metrics.mjs";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const root = path.join(repo, "design-plans/ui-phase-2-2026-09-07/design");
@@ -78,6 +79,9 @@ if (check) {
     );
     assert.equal(shot.sha256, hash(await readFile(path.join(output, shot.file))));
     assert.equal(shot.horizontalOverflow, false);
+    assert.ok(shot.metrics.minControlFont >= 16);
+    assert.ok(shot.metrics.minTextFont >= 13);
+    assert.deepEqual(shot.metrics.violations, []);
   }
   assert.equal(evidence.cases.length, 4);
   assert.ok(
@@ -125,12 +129,14 @@ try {
         const modal = await page.locator("dialog[open]").count();
         if (!modal) await page.evaluate(() => window.scrollTo(0, 0));
         const file = `${direction}-${viewport.width}-${surface}-${state}.png`;
+        const metrics = await checkPrototypeMetrics(page);
         await page.screenshot({
           path: path.join(output, file),
           fullPage: !modal,
           animations: "disabled",
         });
         screenshots.push({
+          metrics,
           direction,
           viewport,
           surface,

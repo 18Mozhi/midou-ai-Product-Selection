@@ -67,6 +67,15 @@ test("independent structure proposals contain both directions and never claim Vu
   const evidence = await readJson("design/directions/evidence.json");
   assert.match(evidence.kind, /not-vue-not-production/);
   assert.equal(evidence.approval, "pending-user-review");
+  assert.equal(evidence.sharedStyle.source, "design/representative-directions.css");
+  assert.equal(
+    evidence.sharedStyle.sha256,
+    digest(await readFile(resolve(root, evidence.sharedStyle.source), "utf8")),
+  );
+  assert.ok(evidence.checks.includes("forward-and-reverse-tab-loop"));
+  const taskDesign = await readFile(resolve(root, evidence.source), "utf8");
+  assert.ok(taskDesign.includes('href="representative-directions.css"'));
+  assert.ok(!/SimSun|Georgia|\.brief\s/u.test(taskDesign));
   assert.equal(
     evidence.sourceSha256,
     digest(await readFile(resolve(root, evidence.source), "utf8")),
@@ -81,6 +90,10 @@ test("independent structure proposals contain both directions and never claim Vu
             item.viewport.width === width && item.direction === direction && item.state === state,
         );
         assert.equal(matches.length, 1);
+        assert.ok(matches[0].metrics.controlsChecked > 0);
+        assert.ok(matches[0].metrics.minControlFont >= 16);
+        assert.ok(matches[0].metrics.minTextFont >= 13);
+        assert.deepEqual(matches[0].metrics.violations, []);
         assert.equal(matches[0].sha256, digest(await readFile(resolve(root, matches[0].file))));
       }
     }

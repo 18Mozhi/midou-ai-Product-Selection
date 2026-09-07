@@ -2,12 +2,23 @@
   "kind": "independent-html-design-prototypes-not-vue-not-production",
   "approval": "pending-user-review",
   "source": "design/task-directions.html",
-  "sourceSha256": "a5fd81f2833623111f1dac06c3605373734c5bb5302f3a45f3694d880e2b6613",
+  "sourceSha256": "c05f788c104604b0b32199dcd392d570fc7ec983f941af3a78cb472a5e3068c1",
+  "sharedStyle": {
+    "source": "design/representative-directions.css",
+    "sha256": "59956b4892480160fbbefb7e38f06f417e7ebe745e4d3ce61c0944b66f6e19d1"
+  },
   "fixturePath": "tests/e2e/helpers/business-tasks.ts",
   "fixtureSha256": "27dccad9cb04989181bd30b5668ba50e0922a9c6c1b091758da88f931875d307",
   "textHashEncoding": "utf8-lf",
   "screenshots": [
     {
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "focus",
       "state": "list",
       "viewport": {
@@ -15,10 +26,17 @@
         "height": 1000
       },
       "file": "design/directions/1440-focus-list.png",
-      "sha256": "81ea138f3f54574ba62ac5184e3930db4e6437671b4ecd28b720a1758f506567",
-      "capturedAt": "2026-09-07T09:11:35.557Z"
+      "sha256": "e1ed35183d9e99a15649e9edffd65cf89ef6a9d357aca6de4e15ccd6513b42dd",
+      "capturedAt": "2026-09-07T10:44:32.387Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "focus",
       "state": "detail",
       "viewport": {
@@ -26,10 +44,17 @@
         "height": 1000
       },
       "file": "design/directions/1440-focus-detail.png",
-      "sha256": "7b35bdac2e619c9d00994bcf2ff9ef9f1c74c244f3f96f914ba6331bd672ce92",
-      "capturedAt": "2026-09-07T09:11:35.723Z"
+      "sha256": "f797d5e05eeb9a362514130039939ad076ffe99676dca6daa40b72c281ccc89f",
+      "capturedAt": "2026-09-07T10:44:32.542Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 7,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "focus",
       "state": "progress",
       "viewport": {
@@ -37,10 +62,17 @@
         "height": 1000
       },
       "file": "design/directions/1440-focus-progress.png",
-      "sha256": "efe311f5d79204019dc4fcea29c10ad13576d3e7d5f2e002d76b5f6977c9fd03",
-      "capturedAt": "2026-09-07T09:11:35.838Z"
+      "sha256": "185937b6e040a9d237e03a685a90eda30ee39d97b3fe6954c2e30ed7903b8d0f",
+      "capturedAt": "2026-09-07T10:44:32.670Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 23,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "brief",
       "state": "list",
       "viewport": {
@@ -48,10 +80,17 @@
         "height": 1000
       },
       "file": "design/directions/1440-brief-list.png",
-      "sha256": "f130d41c98a450d236c5c0919fbce6f896f775f4881d53fe58ccceed1ee76991",
-      "capturedAt": "2026-09-07T09:11:36.095Z"
+      "sha256": "ca8d5644d2459657354d931536a41cfeb606208b433d9b2c17d0213d20702278",
+      "capturedAt": "2026-09-07T10:44:32.915Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "brief",
       "state": "detail",
       "viewport": {
@@ -59,10 +98,17 @@
         "height": 1000
       },
       "file": "design/directions/1440-brief-detail.png",
-      "sha256": "03865d2fa7f73f66d248c5efc617664bef76201270e842bb13c8874b59575a45",
-      "capturedAt": "2026-09-07T09:11:36.254Z"
+      "sha256": "fd675ea677e9fdce6a9adcd3d0ea0ccd843eca7894baa4b9ba2abb063e5f9a46",
+      "capturedAt": "2026-09-07T10:44:33.044Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 7,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "brief",
       "state": "progress",
       "viewport": {
@@ -70,10 +116,17 @@
         "height": 1000
       },
       "file": "design/directions/1440-brief-progress.png",
-      "sha256": "9e0f9d107e54462fd7416f770051754686f2c99f263935ed7990c60347f026ec",
-      "capturedAt": "2026-09-07T09:11:36.382Z"
+      "sha256": "ad66070fa28969d48ea8f8c9b146847a9d4a3914295a47273879850c30ad1fde",
+      "capturedAt": "2026-09-07T10:44:33.148Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 20,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "focus",
       "state": "list",
       "viewport": {
@@ -81,10 +134,17 @@
         "height": 844
       },
       "file": "design/directions/390-focus-list.png",
-      "sha256": "73698be3778fd2f949257b2b0426330a514ed3da48f99ad8a6d7037376c3defc",
-      "capturedAt": "2026-09-07T09:11:36.879Z"
+      "sha256": "1697af8de32c93b9618a961ef80e14550b236d796991b4c8d2b1220f5b70f8ca",
+      "capturedAt": "2026-09-07T10:44:33.692Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 29,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "focus",
       "state": "detail",
       "viewport": {
@@ -92,10 +152,17 @@
         "height": 844
       },
       "file": "design/directions/390-focus-detail.png",
-      "sha256": "2a37082167bb0dbcb80d0406603978ee2ebfed3fb2e9fd30db910c26360cd554",
-      "capturedAt": "2026-09-07T09:11:37.018Z"
+      "sha256": "acb24bfebf864d1890cf8f1f45ae54c093ad0b3e57731b82de5f1f5724039e5d",
+      "capturedAt": "2026-09-07T10:44:33.830Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 7,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "focus",
       "state": "progress",
       "viewport": {
@@ -103,10 +170,17 @@
         "height": 844
       },
       "file": "design/directions/390-focus-progress.png",
-      "sha256": "06190ebd0cdc3258ca73daeccc10719e3419cd1883bcd6c190c85d3efd940dc4",
-      "capturedAt": "2026-09-07T09:11:37.095Z"
+      "sha256": "1c9b79208355a024ac4ae93ee315ddec26efed2620704664afb9c219ba6be3f3",
+      "capturedAt": "2026-09-07T10:44:33.908Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 20,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "brief",
       "state": "list",
       "viewport": {
@@ -114,10 +188,17 @@
         "height": 844
       },
       "file": "design/directions/390-brief-list.png",
-      "sha256": "450dd020fe2eedd7652dbd0c9943030e018e6bccd965b2d3837d0c721f40ded2",
-      "capturedAt": "2026-09-07T09:11:37.311Z"
+      "sha256": "8ca3cc6f2b9fd1ed2f948f2664477ba237785f3da389a7ed7ac9ce0c8b164067",
+      "capturedAt": "2026-09-07T10:44:34.140Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 29,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "brief",
       "state": "detail",
       "viewport": {
@@ -125,10 +206,17 @@
         "height": 844
       },
       "file": "design/directions/390-brief-detail.png",
-      "sha256": "3e4c15703eb4b796410738100a04013dd5a7bac47176f05259194ef6e1c52ef7",
-      "capturedAt": "2026-09-07T09:11:37.418Z"
+      "sha256": "ba0965749620914a2bea8a6f53ff436606936a5439643f9e84b9f673b1938dbf",
+      "capturedAt": "2026-09-07T10:44:34.246Z"
     },
     {
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 7,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
       "direction": "brief",
       "state": "progress",
       "viewport": {
@@ -136,8 +224,8 @@
         "height": 844
       },
       "file": "design/directions/390-brief-progress.png",
-      "sha256": "64a7512563d4832a842439e1492838033e1987d735af1083e000130c70f9aab9",
-      "capturedAt": "2026-09-07T09:11:37.477Z"
+      "sha256": "347e86063b94c15fd8e9182997dcf56470a21d7756213043b31b766d70f3b998",
+      "capturedAt": "2026-09-07T10:44:34.308Z"
     }
   ],
   "checks": [
@@ -146,6 +234,7 @@
     "0-100-validation",
     "preview-only-submit",
     "escape-focus-return",
+    "forward-and-reverse-tab-loop",
     "no-network",
     "no-page-overflow"
   ],

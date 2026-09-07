@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import { createServer } from "vite";
 import ts from "typescript";
+import { checkPrototypeMetrics } from "./lib/ui-phase2-prototype-metrics.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const proposal = process.argv.includes("--proposal");
@@ -378,12 +379,14 @@ try {
             false,
           );
           const filename = `${viewport.width}-${direction}-${state}.png`;
+          const metrics = await checkPrototypeMetrics(conceptPage);
           await conceptPage.screenshot({
             path: path.join(conceptDir, filename),
             fullPage: state !== "progress",
             animations: "disabled",
           });
           conceptProof.push({
+            metrics,
             direction,
             state,
             viewport,
@@ -398,6 +401,19 @@ try {
         await conceptPage.locator("#percent-input").fill("45");
         await conceptPage.locator("#progress-form button[type=submit]").click();
         assert.equal(await conceptPage.locator("#preview-result").isVisible(), true);
+        await conceptPage.locator("#progress-form button[type=submit]").focus();
+        await conceptPage.keyboard.press("Tab");
+        assert.ok(
+          await conceptPage
+            .locator("#percent-input")
+            .evaluate((node) => node === document.activeElement),
+        );
+        await conceptPage.keyboard.press("Shift+Tab");
+        assert.ok(
+          await conceptPage
+            .locator("#progress-form button[type=submit]")
+            .evaluate((node) => node === document.activeElement),
+        );
         await conceptPage.keyboard.press("Escape");
         assert.ok(
           await conceptPage
@@ -421,6 +437,15 @@ try {
           sourceSha256: textSha(
             await readFile(path.join(inventoryRoot, "design/task-directions.html"), "utf8"),
           ),
+          sharedStyle: {
+            source: "design/representative-directions.css",
+            sha256: textSha(
+              await readFile(
+                path.join(inventoryRoot, "design/representative-directions.css"),
+                "utf8",
+              ),
+            ),
+          },
           fixturePath,
           fixtureSha256: textSha(fixtureSource),
           textHashEncoding: "utf8-lf",
@@ -431,6 +456,7 @@ try {
             "0-100-validation",
             "preview-only-submit",
             "escape-focus-return",
+            "forward-and-reverse-tab-loop",
             "no-network",
             "no-page-overflow",
           ],
