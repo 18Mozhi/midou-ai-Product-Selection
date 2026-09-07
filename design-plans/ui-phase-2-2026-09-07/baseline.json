@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "16f524b66cf9dd48384c6cd78c475409ec5dd493",
+  "sourceRevision": "060e0b591af732c4c69060a468f526c45cc1330c",
   "legacyRevision": "a9460a99c9bce018e65c5bce357f592669fa0a0d",
-  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
+  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
   "status": "static-discovery-complete-runtime-inventory-pending",
   "denominatorFrozen": false,
   "counts": {
@@ -132,7 +132,7 @@
     },
     {
       "file": "apps/web/src/components/ConfirmDialog.vue",
-      "sha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f"
+      "sha256": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b"
     },
     {
       "file": "apps/web/src/components/CostRuleConsole.vue",

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
+  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
   "status": "discovery-not-variant-coverage",
   "candidates": [
     {
@@ -791,8 +791,8 @@
       "file": "apps/web/src/components/ConfirmDialog.vue",
       "line": 92,
       "sourceRange": {
-        "start": 2664,
-        "end": 4144
+        "start": 2672,
+        "end": 4152
       },
       "label": "{{ destructive ? \"!\" : \"i\" }} {{ destructive ? \"HIGH IMPACT ACTION\" : \"CONFIRM ACTION\" }} {{ title }} {{ description }} 影响范围 {{ impact }} 我已阅读影响范围，并确认只处理上述对象 输入 {{ confirmationText }} 继续 {{ cancelLabel }} {{ confirmLabel }}",
       "attributes": {
@@ -812,7 +812,7 @@
       ],
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#47b44d75a30b19d9.1",
       "signature": "47b44d75a30b19d9",
-      "sourceSha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f",
+      "sourceSha256": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,

@@ -416,3 +416,271 @@ test("auditor can read monitoring rules without receiving rule write controls", 
   await expect(page.getByRole("button", { name: "新建监控规则" })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "新建监控规则" })).toHaveCount(0);
 });
+
+function competitorWrites(page: Page) {
+  const writes: Array<{ method: string; path: string; body: unknown; key: string | undefined }> =
+    [];
+  page.on("request", (request) => {
+    const path = new URL(request.url()).pathname;
+    if (
+      request.method() === "GET" ||
+      !/^\/api\/v1\/(competitors|competitor-monitor-rules|tasks)(\/|$)/.test(path)
+    )
+      return;
+    writes.push({
+      method: request.method(),
+      path,
+      body: request.postDataJSON(),
+      key: request.headers()["idempotency-key"],
+    });
+  });
+  return writes;
+}
+
+const writeFailure = {
+  error: {
+    code: "competitor_revision_conflict",
+    message: "revision conflict",
+    action_hint: "复核后重试本次操作",
+  },
+  request_id: "competitor-write-conflict",
+  trace_id: "competitor-write-trace",
+};
+
+test("UI2-CP01 creation cancellation keeps local fields and failed submission retries the exact contract", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes = competitorWrites(page);
+  let attempts = 0;
+  await page.route("**/api/v1/competitors", (route) => {
+    if (route.request().method() === "GET") return route.fulfill({ json: envelope([item]) });
+    attempts += 1;
+    return attempts === 1
+      ? route.fulfill({ status: 409, json: writeFailure })
+      : route.fulfill({
+          status: 201,
+          json: envelope({ id, task_id: "00000000-0000-4000-8000-000000000511" }),
+        });
+  });
+  await page.goto("/competitors");
+  await page.getByRole("button", { name: "添加竞品监控", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "添加竞品监控" });
+  const url = "https://www.amazon.com/dp/B0SCOUTOPS";
+  await dialog.getByLabel("商品网址").fill(url);
+  await dialog.getByRole("button", { name: "下一步" }).click();
+  await dialog.getByLabel("监控名称").fill("本地草稿竞品");
+  await dialog.getByRole("button", { name: "关闭新建竞品" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(writes).toEqual([]);
+  await page.getByRole("button", { name: "添加竞品监控", exact: true }).click();
+  await expect(dialog.getByLabel("商品网址")).toHaveValue(url);
+  await dialog.getByRole("button", { name: "下一步" }).click();
+  await expect(dialog.getByLabel("监控名称")).toHaveValue("本地草稿竞品");
+  await dialog.getByRole("button", { name: "下一步" }).click();
+  expect(writes).toEqual([]);
+  await dialog.getByRole("button", { name: "确认并开始采集" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("复核后重试本次操作");
+  await expect(dialog.getByText("3 确认采集")).toHaveAttribute("aria-current", "step");
+  await expect(dialog.getByText("本地草稿竞品")).toBeVisible();
+  expect(writes).toHaveLength(1);
+  await dialog.getByRole("button", { name: "确认并开始采集" }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(page.getByRole("status")).toContainText("竞品已建立");
+  expect(writes).toHaveLength(2);
+  for (const write of writes) {
+    expect(write.method).toBe("POST");
+    expect(write.path).toBe("/api/v1/competitors");
+    expect(write.body).toEqual({ market: "US", product_url: url, title: "本地草稿竞品" });
+    expect(write.key).toBeTruthy();
+  }
+});
+
+for (const ruleCase of [
+  { metric: "availability", direction: "became_unavailable", target: id, threshold: null },
+  { metric: "rank", direction: "increase", target: "", threshold: 0.25 },
+]) {
+  test(`UI2-CP02 ${ruleCase.metric} rule preserves failed input and sends only supported fields`, async ({
+    page,
+  }) => {
+    await setup(page);
+    const writes = competitorWrites(page);
+    let attempts = 0;
+    await page.route("**/api/v1/competitor-monitor-rules", (route) => {
+      if (route.request().method() === "GET") return route.fallback();
+      attempts += 1;
+      return attempts === 1
+        ? route.fulfill({ status: 409, json: writeFailure })
+        : route.fulfill({
+            status: 201,
+            json: envelope({
+              id: "00000000-0000-4000-8000-000000000508",
+              status: "enabled",
+              revision: 1,
+            }),
+          });
+    });
+    await page.goto("/competitors/monitoring-rules");
+    await expect(page.getByRole("heading", { name: "监控规则", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "新建监控规则", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "新建监控规则" });
+    await dialog.getByLabel("竞品（留空为工作区全局）").selectOption(ruleCase.target);
+    await dialog.getByLabel("指标").selectOption(ruleCase.metric);
+    await dialog.getByLabel("方向").selectOption(ruleCase.direction);
+    if (ruleCase.threshold === null)
+      await expect(dialog.getByLabel("阈值", { exact: true })).toHaveCount(0);
+    else await dialog.getByLabel("阈值", { exact: true }).fill(String(ruleCase.threshold));
+    await dialog.getByRole("button", { name: "启用规则" }).click();
+    await expect(dialog.getByRole("alert")).toContainText("复核后重试本次操作");
+    await expect(dialog.getByLabel("指标")).toHaveValue(ruleCase.metric);
+    await expect(dialog.getByLabel("方向")).toHaveValue(ruleCase.direction);
+    await expect(dialog.getByLabel("竞品（留空为工作区全局）")).toHaveValue(ruleCase.target);
+    expect(writes).toHaveLength(1);
+    await dialog.getByRole("button", { name: "启用规则" }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByRole("status")).toContainText("监控阈值已启用");
+    expect(writes).toHaveLength(2);
+    for (const write of writes) {
+      expect(write.method).toBe("POST");
+      expect(write.path).toBe("/api/v1/competitor-monitor-rules");
+      expect(write.body).toEqual({
+        competitor_id: ruleCase.target || null,
+        metric: ruleCase.metric,
+        direction: ruleCase.direction,
+        ...(ruleCase.threshold === null ? {} : { threshold_value: ruleCase.threshold }),
+      });
+      expect(write.key).toBeTruthy();
+    }
+  });
+}
+
+test("UI2-CP03 delete cancellation writes nothing and conflict retains the trimmed reason contract", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes = competitorWrites(page);
+  await page.route(`**/api/v1/competitors/${id}`, (route) =>
+    route.request().method() === "DELETE"
+      ? route.fulfill({ status: 409, json: writeFailure })
+      : route.fallback(),
+  );
+  await page.goto("/competitors");
+  await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
+  const more = page.locator(".competitor-mobile-actions summary");
+  if (await more.isVisible()) await more.click();
+  await page.getByRole("button", { name: "删除竞品监控", exact: true }).click();
+  const dialog = page
+    .getByRole("dialog")
+    .filter({ has: page.getByRole("heading", { name: "删除竞品监控" }) });
+  await dialog.getByLabel("删除原因").fill("取消的原因");
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(writes).toEqual([]);
+  await page.getByRole("button", { name: "删除竞品监控", exact: true }).click();
+  await expect(dialog.getByLabel("删除原因")).toHaveValue("");
+  await dialog.getByLabel("删除原因").fill("  不再跟踪该竞品  ");
+  await dialog.getByRole("button", { name: "确认删除" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("复核后重试本次操作");
+  await expect(dialog.getByLabel("删除原因")).toHaveValue("  不再跟踪该竞品  ");
+  expect(writes).toHaveLength(1);
+  expect(writes[0]).toMatchObject({
+    method: "DELETE",
+    path: `/api/v1/competitors/${id}`,
+    body: { expected_revision: 2, reason: "不再跟踪该竞品" },
+  });
+  expect(writes[0]?.key).toBeTruthy();
+  await dialog.getByRole("button", { name: "关闭删除确认" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(writes).toHaveLength(1);
+});
+
+test("UI2-CP04 paused monitoring cannot collect and resume uses the current revision", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes = competitorWrites(page);
+  const paused = { ...item, status: "paused", revision: 7 };
+  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([paused]) }));
+  await page.route(`**/api/v1/competitors/${id}`, (route) =>
+    route.fulfill({ json: envelope(paused) }),
+  );
+  await page.route(`**/api/v1/competitors/${id}/actions`, (route) =>
+    route.fulfill({ status: 409, json: writeFailure }),
+  );
+  await page.goto("/competitors");
+  await expect(page.getByRole("button", { name: "恢复后可采集" })).toBeDisabled();
+  const more = page.locator(".competitor-mobile-actions summary");
+  if (await more.isVisible()) await more.click();
+  expect(writes).toEqual([]);
+  await page.getByRole("button", { name: "恢复监控", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("复核后重试本次操作");
+  await expect(page.getByRole("button", { name: "恢复后可采集" })).toBeDisabled();
+  expect(writes).toHaveLength(1);
+  expect(writes[0]).toMatchObject({
+    method: "POST",
+    path: `/api/v1/competitors/${id}/actions`,
+    body: { status: "active", expected_revision: 7 },
+  });
+});
+
+test("UI2-CP05 rule cancellation clears the deep-link target and resets the next new rule", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes = competitorWrites(page);
+  await page.goto(`/competitors/monitoring-rules?competitor=${id}`);
+  const dialog = page.getByRole("dialog", { name: "新建监控规则" });
+  await expect(dialog.getByLabel("竞品（留空为工作区全局）")).toHaveValue(id);
+  await dialog.getByLabel("指标").selectOption("availability");
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(page).toHaveURL("/competitors/monitoring-rules");
+  await expect(dialog).toHaveCount(0);
+  await page.getByRole("button", { name: "新建监控规则", exact: true }).click();
+  await expect(dialog.getByLabel("竞品（留空为工作区全局）")).toHaveValue("");
+  await expect(dialog.getByLabel("指标")).toHaveValue("price");
+  await expect(dialog.getByLabel("方向")).toHaveValue("decrease");
+  await expect(dialog.getByLabel("阈值", { exact: true })).toHaveValue("1");
+  await dialog.getByRole("button", { name: "关闭告警规则" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(writes).toEqual([]);
+});
+
+test("UI2-CP06 task creation uses change evidence and its own permission without competitor management", async ({
+  page,
+}) => {
+  await setup(page, ["task:read", "task:create", "competitor:read"]);
+  const writes = competitorWrites(page);
+  const taskId = "00000000-0000-4000-8000-000000000520";
+  await page.route("**/api/v1/tasks", (route) =>
+    route.fulfill({
+      status: 201,
+      json: envelope({ id: taskId, title: route.request().postDataJSON().title }),
+    }),
+  );
+  await page.goto("/competitors");
+  await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
+  await expect(page.getByRole("button", { name: "立即采集", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "删除竞品监控", exact: true })).toHaveCount(0);
+  const event = page
+    .getByLabel("竞品处理时间轴")
+    .locator("article")
+    .filter({ hasText: "USD 29.99 → 26.99" });
+  await event.getByRole("button", { name: "生成验证任务" }).click();
+  await expect(event.getByRole("link", { name: "打开验证任务" })).toHaveAttribute(
+    "href",
+    `/tasks?task=${taskId}`,
+  );
+  await expect(event.getByRole("button", { name: "生成验证任务" })).toHaveCount(0);
+  expect(writes).toHaveLength(1);
+  expect(writes[0]).toMatchObject({
+    method: "POST",
+    path: "/api/v1/tasks",
+    body: {
+      title: `复核竞品变化 · 当前价格 · ${item.title}`.slice(0, 200),
+      description: `核验竞品 ${id} 的变化事件 c1。\n字段：当前价格\n变化：USD 29.99 → 26.99\n证据：${item.latest_snapshot.evidence_id}\n采集时间：2026-08-08T12:01:00.000Z\n请核对原始证据后记录结论，不覆盖竞品快照历史。`,
+      priority: "high",
+      due_at: null,
+    },
+  });
+  expect(writes[0]?.key).toBeTruthy();
+});

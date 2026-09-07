@@ -12,8 +12,8 @@
   "fullPage": false,
   "file": "runtime/representatives/P17-390-create-form.png",
   "sha256": "dbe667409048b685b79a2284d1b67a36ebfe74457ae4d64b6348f46863d54a96",
-  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
-  "sourceRevision": "16f524b66cf9dd48384c6cd78c475409ec5dd493",
+  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
+  "sourceRevision": "060e0b591af732c4c69060a468f526c45cc1330c",
   "testFile": "tests/e2e/m04-03-scoring.spec.ts",
   "testFileSha256": "4b8b55ec1d77f52f898bab47c6f9576bc60067e21dbabc2d0c1c87a50660bc89",
   "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
@@ -83,7 +83,7 @@
   "testTitle": "M04-03.A07/A08/A09/A15 score rule versions support audited responsive workflow",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-07T14:07:51.384Z",
+  "capturedAt": "2026-09-07T14:58:07.098Z",
   "assertions": [
     "blank-thresholds-no-invented-defaults",
     "create-modal-opens"

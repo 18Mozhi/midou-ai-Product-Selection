@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "92f0bffbe1a11fcce4d49c6e4fea83acc12eccb5045de9f33d078d34f5bc7504",
+  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
   "status": "discovery-not-behavior-coverage",
   "candidates": [
     {
@@ -11574,13 +11574,13 @@
       "line": 91,
       "sourceRange": {
         "start": 2590,
-        "end": 4155
+        "end": 4163
       },
       "label": "{{ destructive ? \"!\" : \"i\" }} {{ destructive ? \"HIGH IMPACT ACTION\" : \"CONFIRM ACTION\" }} {{ title }} {{ description }} 影响范围 {{ impact }} 我已阅读影响范围，并确认只处理上述对象 输入 {{ confirmationText }} 继续 {{ cancelLabel }} {{ confirmLabel }}",
       "attributes": {
         "v-if": "open",
         "class": "confirm-backdrop",
-        "@mousedown.self": "cancel"
+        "@mousedown.self.prevent": "cancel"
       },
       "conditions": [
         {
@@ -11589,11 +11589,11 @@
         }
       ],
       "events": {
-        "@mousedown.self": "cancel"
+        "@mousedown.self.prevent": "cancel"
       },
-      "candidateId": "apps/web/src/components/ConfirmDialog.vue#4505a8c2bbf9389c.1",
-      "signature": "4505a8c2bbf9389c",
-      "sourceSha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f",
+      "candidateId": "apps/web/src/components/ConfirmDialog.vue#0f50ae650a1895b3.1",
+      "signature": "0f50ae650a1895b3",
+      "sourceSha256": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
       "handlerDefinitions": [
         {
           "name": "cancel",
@@ -11632,8 +11632,8 @@
       "file": "apps/web/src/components/ConfirmDialog.vue",
       "line": 92,
       "sourceRange": {
-        "start": 2664,
-        "end": 4144
+        "start": 2672,
+        "end": 4152
       },
       "label": "{{ destructive ? \"!\" : \"i\" }} {{ destructive ? \"HIGH IMPACT ACTION\" : \"CONFIRM ACTION\" }} {{ title }} {{ description }} 影响范围 {{ impact }} 我已阅读影响范围，并确认只处理上述对象 输入 {{ confirmationText }} 继续 {{ cancelLabel }} {{ confirmLabel }}",
       "attributes": {
@@ -11656,7 +11656,7 @@
       },
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#30a3b6ddc206839e.1",
       "signature": "30a3b6ddc206839e",
-      "sourceSha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f",
+      "sourceSha256": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
       "handlerDefinitions": [
         {
           "name": "keydown",
@@ -11695,8 +11695,8 @@
       "file": "apps/web/src/components/ConfirmDialog.vue",
       "line": 123,
       "sourceRange": {
-        "start": 3764,
-        "end": 3858
+        "start": 3772,
+        "end": 3866
       },
       "label": "{{ cancelLabel }}",
       "attributes": {
@@ -11715,7 +11715,7 @@
       },
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1",
       "signature": "d1b7ac74d4f4ffc3",
-      "sourceSha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f",
+      "sourceSha256": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
       "handlerDefinitions": [
         {
           "name": "cancel",
@@ -11756,8 +11756,8 @@
       "file": "apps/web/src/components/ConfirmDialog.vue",
       "line": 124,
       "sourceRange": {
-        "start": 3858,
-        "end": 4109
+        "start": 3866,
+        "end": 4117
       },
       "label": "{{ confirmLabel }}",
       "attributes": {
@@ -11778,7 +11778,7 @@
       },
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#3003ba3e33804f38.1",
       "signature": "3003ba3e33804f38",
-      "sourceSha256": "fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f",
+      "sourceSha256": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
