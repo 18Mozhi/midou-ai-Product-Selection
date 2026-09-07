@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import {
   ApiClientError,
   createApiClient,
@@ -79,6 +79,8 @@ const props = defineProps<{
     expires_at: "",
   });
 let loadSequence = 0;
+let tokenSecretGeneration = 0;
+let surfaceActive = true;
 const {
   request: auditedReasonRequest,
   open: auditedReasonOpen,
@@ -387,11 +389,13 @@ async function submit(
 ) {
   if (busy.value) return;
   busy.value = true;
+  const secretGeneration = tokenSecretGeneration;
   try {
     const response = await api(path, { method, body: JSON.stringify(value) }),
       result = response.data,
       writeRequestId = response.request_id;
-    secret.value = result?.secret ?? "";
+    if (surfaceActive && view.value === "tokens" && secretGeneration === tokenSecretGeneration)
+      secret.value = result?.secret ?? "";
     if (!options.preserveForm) form.value = { reason: "" };
     await load({ background: true, preserveNotice: true });
     noticeKind.value = "success";
@@ -399,7 +403,6 @@ async function submit(
       ? "Token 明文仅显示这一次，请立即保存到受限位置。"
       : "操作已完成并写入审计。";
     requestId.value = writeRequestId;
-    if (result?.secret) secret.value = result.secret;
     return true;
   } catch (error) {
     applyFailure(
@@ -722,8 +725,21 @@ async function createOrganizationToken(value: {
   return Boolean(await submit("/org/admin/tokens", value, "POST", { preserveForm: true }));
 }
 function dismissTokenSecret() {
+  tokenSecretGeneration += 1;
   secret.value = "";
 }
+watch([() => props.routePath, () => props.organizationId], dismissTokenSecret, { flush: "sync" });
+onActivated(() => {
+  surfaceActive = true;
+});
+onDeactivated(() => {
+  surfaceActive = false;
+  dismissTokenSecret();
+});
+onBeforeUnmount(() => {
+  surfaceActive = false;
+  dismissTokenSecret();
+});
 const activeMembers = computed(() =>
     (data.value?.members ?? []).filter((item: any) => item.status === "active"),
   ),

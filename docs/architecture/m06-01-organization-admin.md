@@ -76,6 +76,10 @@
 
 创建表单必须显式勾选至少一个固定只读 scope，不再在空选择时静默补入 `task:read`。有效期继续使用既有 1–365 天合同，名称、原因和到期日期在提交前集中核对。创建或轮换成功返回的明文只在一次性提示区出现，操作者可以复制并主动清除；页面离开后无法找回。轮换确认明确说明旧令牌立即失效，撤销确认明确说明不能恢复，两个动作继续携带审计原因、幂等键和当前版本。
 
+一次性明文展示由 `OrganizationAdminCenter` 的独立代次控制：KeepAlive 离开、卸载、routePath/organizationId 变化以及“我已安全保存”都会清空并使旧代次失效。写入响应只有在仍处于原代次的活动令牌页时才能展示；写后元数据刷新不会再次赋值，避免主动清除后重新出现。离开不取消或重放已经发出的创建/轮换事务，不改变服务端结果。`UI2-OG01` 三时序回归覆盖缓存返回、迟到写响应与清除期间刷新；这不是组织全部读取/写入归属已验证的声明。
+
+第二阶段P29/P30/P32–P37的独立规格和候选映射见 `design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md`。该记录明确：组织审批和数据页只读，团队无后续编辑/归档接口；模板的 `updated_desc` 在当前前端按版本号排序而非更新时间。初始URL恢复与完整后退/多实例恢复分开验收，尚未覆盖的缓存、焦点、原因窗、刷新失败和真实后端边界保留为OG-G01–OG-G06；不以本批局部测试证明正式全站设计或生产完成。
+
 接口仍为 `GET/POST /api/v1/org/admin/tokens` 与 `POST /api/v1/org/admin/tokens/{id}/actions`，权限仍为 `organization_token:manage`，数据库仍为 `organization_api_tokens`。服务端会话确定组织边界，创建、轮换和撤销在同一事务写事实、`audit_logs`、`outbox_events` 与幂等结果；持久化与日志只保留哈希、前缀和生命周期元数据，不保留明文。本次页面治理不修改 API、数据库结构、Worker、爬虫或配置。
 
 - 路由分别要求 organization、membership、role、workspace、team、approval、organization_token、audit 或 report 能力；`/org-admin/data` 单独要求 `report:read`。

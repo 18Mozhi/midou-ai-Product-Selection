@@ -1422,3 +1422,276 @@ test("organization tokens stay readable without mobile overflow", async ({ page 
     .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().height));
   expect(Math.min(...buttonHeights)).toBeGreaterThanOrEqual(38);
 });
+
+async function navigateOrganization(page: Page, path: string) {
+  const navigation = page.getByRole("navigation", { name: "组织管理后台导航", exact: true });
+  const menuTrigger = page.getByRole("button", { name: "打开导航菜单" });
+  if (
+    (await menuTrigger.isVisible()) &&
+    (await menuTrigger.getAttribute("aria-expanded")) !== "true"
+  )
+    await menuTrigger.click();
+  const link = navigation.locator(`a[href="${path}"]`);
+  if (!(await link.isVisible()))
+    await navigation
+      .locator("details")
+      .filter({ has: page.locator(`a[href="${path}"]`) })
+      .locator("summary")
+      .click();
+  await link.click();
+  await expect(page).toHaveURL(new RegExp(`${path}$`));
+}
+
+async function fillOrganizationToken(page: Page) {
+  await page.getByLabel("令牌名称").fill("隔离生命周期测试");
+  await page.getByRole("checkbox", { name: /任务只读/ }).check();
+  await page.getByLabel("创建原因").fill("验证一次性展示边界");
+}
+
+test("UI2-OG02 member role cancellation and conflict retain the selected role", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: unknown[] = [];
+  await page.route(`**/api/v1/org/admin/members/${memberBuyer}/roles`, async (route) => {
+    writes.push(route.request().postDataJSON());
+    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "member_version_conflict",
+          message: "成员版本已变化",
+          action_hint: "刷新成员后重试",
+        },
+        request_id: "ui2-og-role-conflict",
+        trace_id: "ui2-og-role-conflict",
+      },
+    });
+  });
+  await page.goto("/org-admin/members");
+  const row = page.locator(".org-admin-line").filter({ hasText: "陈采购" });
+  const selector = row.getByRole("combobox", { name: "选择 陈采购 的角色" });
+  await expect(selector).toHaveValue("procurement_member");
+  await selector.selectOption("member");
+  const trigger = row.getByRole("button", { name: "分配角色" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "分配普通成员原因" });
+  await expect(dialog.getByRole("textbox")).toBeFocused();
+  await dialog.getByRole("textbox").fill("这次取消不应写入");
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  expect(writes).toHaveLength(0);
+  await trigger.click();
+  await dialog.getByRole("textbox").fill("按成员新职责调整");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.locator(".org-admin-notice")).toContainText("数据已被其他操作更新");
+  await expect(selector).toHaveValue("member");
+  expect(writes).toEqual([
+    { role_code: "member", expected_version: 1, reason: "按成员新职责调整" },
+  ]);
+});
+
+test("UI2-OG03 approval and data governance expose only their real read contracts", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/org/admin/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.url());
+  });
+  await page.route("**/api/v1/org/admin/data", (route) =>
+    route.fulfill({
+      json: env({
+        comparisons: [],
+        exports: [
+          {
+            id: "ui2-waiting",
+            workspace_name: "等待工作区",
+            report_type: "trend",
+            status: "queued",
+            row_count: null,
+            created_at: "2026-09-08T00:00:00.000Z",
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+          {
+            id: "ui2-empty",
+            workspace_name: "空文件工作区",
+            report_type: "trend",
+            status: "succeeded",
+            row_count: 0,
+            created_at: "2026-09-08T00:00:00.000Z",
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+        ],
+        observed_at: "2026-09-08T00:00:00.000Z",
+      }),
+    }),
+  );
+  await page.goto("/org-admin/approvals");
+  const approvals = page.locator(".org-approval-governance");
+  await expect(approvals).toBeVisible();
+  await approvals.getByRole("button", { name: /模板版本/ }).click();
+  await approvals.getByRole("button", { name: /采购首次审批模板/ }).click();
+  await expect(approvals.locator(".org-approval-diff-empty")).toContainText("没有上一持久化版本");
+  await expect(
+    approvals.getByRole("button", { name: /^(发布模板|回退模板|批准|驳回|保存|编辑模板)$/ }),
+  ).toHaveCount(0);
+  await expect(approvals.getByRole("link", { name: "前往审批工作台" })).toHaveAttribute(
+    "href",
+    "/tasks/approvals",
+  );
+  await navigateOrganization(page, "/org-admin/data");
+  const data = page.locator(".org-data-panel");
+  await expect(data).toContainText("数量不等于数据质量");
+  await data.getByRole("button", { name: /导出履历/ }).click();
+  await expect(data.locator("article").filter({ hasText: "等待工作区" })).toContainText("尚未生成");
+  await expect(data.locator("article").filter({ hasText: "空文件工作区" })).toContainText("0 行");
+  await expect(data.getByRole("button", { name: /下载|创建|删除|修复/ })).toHaveCount(0);
+  await expect(data.getByRole("link", { name: "前往报表工作台" })).toHaveAttribute(
+    "href",
+    "/reports",
+  );
+  expect(writes).toHaveLength(0); // Browser write requests only; not a database read-only claim.
+});
+
+test("UI2-OG04 token rotation revocation and refused clipboard preserve exact contracts", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: async () => {
+          throw new DOMException("Clipboard denied", "NotAllowedError");
+        },
+      },
+    });
+  });
+  let token = { ...organizationTokens[0], name: "验收只读令牌", version: 5 };
+  const writes: Array<{ path: string; body: unknown }> = [];
+  await page.route("**/api/v1/org/admin/tokens", (route) => route.fulfill({ json: env([token]) }));
+  await page.route("**/api/v1/org/admin/tokens/*/actions", async (route) => {
+    const body = route.request().postDataJSON();
+    writes.push({ path: new URL(route.request().url()).pathname, body });
+    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+    token =
+      body.action === "rotate"
+        ? { ...token, id: "00000000-0000-4000-8000-000000000999", version: 1 }
+        : { ...token, status: "revoked", version: 2 };
+    await route.fulfill({
+      json: env(
+        body.action === "rotate"
+          ? {
+              ...token,
+              secret: "synthetic-ui2-rotation-only",
+              rotated_from_id: organizationTokens[0].id,
+            }
+          : { id: token.id, status: token.status, version: token.version },
+      ),
+    });
+  });
+  await page.goto("/org-admin/tokens");
+  await page.getByRole("button", { name: "轮换密钥" }).click();
+  let dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("button", { name: "确认提交" })).toBeDisabled();
+  await dialog.getByRole("button", { name: "取消" }).click();
+  expect(writes).toHaveLength(0);
+  await page.getByRole("button", { name: "轮换密钥" }).click();
+  await dialog.getByRole("textbox").fill("定期轮换隔离令牌");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.getByRole("button", { name: "撤销访问" })).toBeEnabled();
+  await page.getByRole("button", { name: "复制明文" }).click();
+  await expect(page.locator(".org-token-secret [role=status]")).toContainText("浏览器拒绝复制");
+  await page.getByRole("button", { name: "我已安全保存" }).click();
+  await expect(page.locator(".org-token-secret")).toHaveCount(0);
+  await page.getByRole("button", { name: "撤销访问" }).click();
+  dialog = page.getByRole("dialog");
+  await expect(dialog).toContainText("不能恢复");
+  await dialog.getByRole("textbox").fill("结束隔离验收用途");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await expect(page.locator(".org-token-list article")).toHaveAttribute("data-status", "revoked");
+  await expect(page.getByRole("button", { name: "轮换密钥" })).toHaveCount(0);
+  await expect(page.locator(".org-token-secret")).toHaveCount(0);
+  expect(writes).toEqual([
+    {
+      path: `/api/v1/org/admin/tokens/${organizationTokens[0].id}/actions`,
+      body: { action: "rotate", expected_version: 5, reason: "定期轮换隔离令牌" },
+    },
+    {
+      path: "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000999/actions",
+      body: { action: "revoke", expected_version: 1, reason: "结束隔离验收用途" },
+    },
+  ]);
+});
+
+for (const timing of ["completed", "late-response", "dismiss-during-refresh"] as const) {
+  test(`UI2-OG01 token secret ownership ${timing}`, async ({ page }) => {
+    await setup(page);
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => (release = resolve));
+    let posts = 0;
+    let reads = 0;
+    await page.route("**/api/v1/org/admin/tokens", async (route) => {
+      if (route.request().method() === "POST") {
+        posts += 1;
+        expect(route.request().postDataJSON()).toEqual({
+          name: "隔离生命周期测试",
+          scopes: ["task:read"],
+          ttl_days: 90,
+          reason: "验证一次性展示边界",
+        });
+        expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+        if (timing === "late-response") await pending;
+        await route.fulfill({
+          status: 201,
+          json: env({ ...organizationTokens[0], secret: "synthetic-ui2-one-time-only" }),
+        });
+      } else {
+        reads += 1;
+        if (reads === 2 && timing === "dismiss-during-refresh") await pending;
+        await route.fulfill({ json: env(organizationTokens) });
+      }
+    });
+    try {
+      await page.goto("/org-admin/tokens");
+      await expect(page.getByRole("heading", { name: "组织只读访问凭据" })).toBeVisible();
+      await fillOrganizationToken(page);
+      await page.getByRole("button", { name: "创建并显示一次明文" }).click();
+      await expect.poll(() => posts).toBe(1);
+      const secretPanel = page.locator(".org-token-secret");
+      if (timing === "completed") {
+        await expect(secretPanel).toBeVisible();
+        await expect(page.getByRole("button", { name: "创建并显示一次明文" })).toBeEnabled();
+        await navigateOrganization(page, "/org-admin/data");
+        await expect(page.locator(".org-data-panel")).toBeVisible();
+        await navigateOrganization(page, "/org-admin/tokens");
+      } else if (timing === "late-response") {
+        await navigateOrganization(page, "/org-admin/data");
+        await expect(page.locator(".org-data-panel")).toBeVisible();
+        await navigateOrganization(page, "/org-admin/tokens");
+        const response = page.waitForResponse(
+          (item) => item.request().method() === "POST" && item.url().endsWith("/org/admin/tokens"),
+        );
+        release();
+        await (await response).finished();
+      } else {
+        await expect(secretPanel).toBeVisible();
+        await expect.poll(() => reads).toBe(2);
+        await page.getByRole("button", { name: "我已安全保存" }).click();
+        await expect(secretPanel).toHaveCount(0);
+        release();
+      }
+      await expect(page.getByRole("heading", { name: "组织只读访问凭据" })).toBeVisible();
+      await expect(page.getByRole("button", { name: "创建并显示一次明文" })).toBeEnabled();
+      await expect(secretPanel).toHaveCount(0);
+      expect(posts).toBe(1);
+      expect(reads).toBe(2); // Initial read and write refresh; navigation really reuses KeepAlive.
+    } finally {
+      release();
+    }
+  });
+}
