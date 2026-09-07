@@ -53,9 +53,9 @@
 | PA43-DETAIL | openUserDetail → GET /platform/accounts/users/{userId} | H02代次/身份/路由保护；成功user/memberships/sessions，不泄漏敏感原文 |
 | PA43-STATUS | toggleUser → POST users/{id}/status | status=disabled/active，reason；服务端禁止停用自己；停用撤销活动会话 |
 | PA43-ROLE | role → POST users/{id}/platform-role | role_code、enabled、reason；固定三角色；禁止撤销自己的超级管理员；非active前端禁用 |
-| PA43-MEMBERSHIP | addMembership → POST users/{id}/memberships | organization_id、五选一role_code、reason；后台检查active/已验证/组织/关系；当前写后重开读取selected，未验归属 |
+| PA43-MEMBERSHIP | addMembership → POST users/{id}/memberships | organization_id、五选一role_code、reason；后台检查active/已验证/组织/关系；写反馈及重读前检查捕获的窗口代次/账号/路由 |
 | PA43-PASSWORD | openPassword/resetPassword → POST users/{id}/password | temporary_password、reason；撤销活动会话，要求首次改密；前端密码关闭后保留待验 |
-| PA43-SESSION | revokeSessions → POST users/{id}/sessions/revoke | session_id为单ID或null、reason；成功重读详情；回调是否仍属于窗口未验 |
+| PA43-SESSION | revokeSessions → POST users/{id}/sessions/revoke | session_id为单ID或null、reason；原因确认及写反馈/成功重读均检查窗口归属；全部会话时序实例不代表每个业务变体验收 |
 
 users短路径均相对/platform/accounts。所有写入仍由既有Origin/Idempotency-Key/服务端能力校验和审计执行。浏览器中的无副作用C原型不证明这些真实合同已执行。
 
@@ -69,7 +69,7 @@ C原型提议将组织授权改为独立模态、移动直接开详情；这些�
 
 - 旧PAGES及旧概念图的分页、批量分配/导出、编辑邮箱等没有本页现有入口；不补造。当前本页规格优先描述真实合同；PAGES参与全局指纹，R01统一纠偏与增量采证，不单改指纹。
 - 列表返回最多200；管理员数组可能包含未赋平台角色用户，不能据名称推断为纯管理员集合。账号总量不能取过滤数组长度。
-- PA-D01–PA-D04原未关闭项仍有效。本批未修改父级写回调、密码清理、刷新权限失败、URL历史或移动预览实现，未重跑H02产品回归。
+- 初次研究未修改产品。后续PA-D01增量已保护状态/平台角色/会话/组织关系四类写反馈和对应原因确认，见[W05合同2.1](platform-account-contract-review.md#21-用户详情写入反馈归属增量)及PROGRESS实际验证；密码/创建/组织回调、原因窗自动关闭、权限失败与移动预览等剩余项继续待验，不把局部归属保护当全族关闭。
 - C合成身份字母图标只是从邮箱生成的装饰，不是新增个人姓名/头像字段。合成组织、角色、安全完成状态、会话用于布局示意，不能把样例之间的组合规律当成后端推导规则。
 - 正式三主题/两密度、全部断点/缩放/软键盘、屏幕阅读器、真实后端角色与生产尚未验证。后续W05事实批已补P38–P42/P44/P45七份规格和父/共享候选合同；不等于正式新图、运行时分母或全部行为已通过，当前边界见全族合同。
 

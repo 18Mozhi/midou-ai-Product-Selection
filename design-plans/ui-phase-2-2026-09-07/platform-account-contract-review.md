@@ -161,11 +161,19 @@ T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示�
 | PA42-SAVE | 详情三字段→原因；PATCH /platform/accounts/organizations/{id} | name/timezone/data_retention_days/reason，无expected_version；成功load后从数组找组织 |
 | PA42-STATUS | 组织状态→原因；POST organizations/{id}/status | active/archived+reason，保存/停用/恢复文案分别验 |
 | PA-USER-CREATE | P39/P40/P43或P44创建；POST /platform/accounts/users | 五字段，空组织/平台角色转null，无人工reason；P44默认运营角色但不改接口 |
-| PA43详情及写入 | 用户/管理员共享；GET users/{id}，status/platform-role/password/sessions/revoke/memberships写入 | 精确body见既有P43合同；H02只守详情GET展示代次，写完成回调/原因确认归属仍待验 |
+| PA43详情及写入 | 用户/管理员共享；GET users/{id}，status/platform-role/password/sessions/revoke/memberships写入 | 精确body见既有P43合同；H02守GET展示代次，2.1增量守四类写反馈及对应原因确认；password仍独立待验 |
 | PA45比较 | 两角色并集→差异/分组/查询过滤 | 本地计算无写API；P45写五个URL键，P44不写。重置启用只看query/group |
 | PA导航/共享 | RouterLink、预览/筛选、本地列工具、技术展开/复制 | 页内展开不等于业务请求；复制有剪贴板副作用；导航可能由新页触发API |
 
 账号写入由既有Origin/Idempotency-Key/鉴权及仓储事务审计约束。蓝图对创建也笼统写“原因”，但真实createOrganization/createUser请求并无人工reason；本批记录差异，沿真实合同设计，不新增字段或修改后端来迎合文案。所有资料、权限、密码及敏感操作仍由服务端裁定，不能让隐藏按钮替代拒绝测试。
+
+### 2.1 用户详情写入反馈归属增量
+
+后续实施起点8503d74，当前产品内容以第7节指纹为准。已有UI2-PA03隔离复现：甲状态写成功后把乙详情换回甲；甲加入组织成功后在乙显示甲的成功提示。新增captureDetailAction复用H02代次、用户及路由，登录状态、平台角色、会话撤销和加入组织四类操作在发起时捕获归属；原因确认前及成功/失败回调均检查仍属该窗口。关闭、重开同ID、换人、路由/KeepAlive离开使其失效。已发写入不取消、不自动重放，原概览刷新继续执行，不将关闭解释为事务撤销。
+
+UI2-PA03现有24个实例：四类各成功/错误×切到乙/停留甲共16；成员关系另有关闭/重开同ID×成功/错误4；平台角色另有共享路由/缓存概览离开与历史返回×成功/错误4。核对写目标/完整body/非空Idempotency-Key/仅一次写、详情GET次数及当前反馈；缓存路径另检查同一DOM节点复用。UI2-PA04核对尚未提交的角色原因窗在路由失效后确认不写。执行结果见PROGRESS，不以用例存在代替通过；真实MySQL/授权/审计、单会话及每个角色全部变体仍分别验收。
+
+创建、强制改密与组织资料/状态的回调没有在本增量修改；共享原因窗跨路由自动关闭也未实现，失效的四类原因动作只能安全地不执行。源码候选与输入未改变，32源指纹中父组件/详情辅助模块按实际复现、修复和复测更新；不把局部通过写成全站G0或正式风格通过。
 
 ## 3. 弹窗族、变体与关闭合同
 
@@ -188,7 +196,7 @@ T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示�
 
 | ID | 源码证据与风险 | 下一项验收，当前状态 |
 | --- | --- | --- |
-| PA-D01 | 用户toggle/role/revoke写后可重开旧用户，membership写后读实时selected；组织保存/改密原因回调也使用实时selected | 先隔离复现甲写→关闭/乙/离页→旧成功/失败，核对请求目标及反馈；未执行，不称已修 |
+| PA-D01 | 用户状态/角色/会话/成员关系已增加详情代次、用户、路由归属检查，见2.1；组织保存/改密仍使用实时selected | 四类隔离用例结果见PROGRESS；创建、改密、组织资料/状态及真实后台仍待补，不将整个PA-D01关闭 |
 | PA-D02 | 概览200/过滤记录驱动组织详情、??1计数、取消密码保留、角色/账号旧快照、query数组watch单飞 | 逐具体场景验证missing与筛选、写成功刷新失败、密码生命周期和最终查询归属；七页规格已补，但行为未关闭 |
 | PA-D03 | H02用户GET保护不代表所有销毁/角色撤回/其他错误，运营dashboard与superadmin accounts权限不同 | 真实六角色允许/拒绝及审计、壳层销毁、401/403快照和直接深链；未执行 |
 | PA-D04 | 现已有P38–P45八份规格和本族候选表；正式布局、完整图片/运行时分母/生产仍缺 | R01与W01/W05正式图→Vue→全验；不重列已补规格为缺失，不把本文当全量通过 |
@@ -196,7 +204,7 @@ T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示�
 | PA-W05-HISTORY | D window和R五键仅初始化/向URL写，没有反向route.query watch；C导航去query，S/Q无deactivate清理 | 前进后退/KeepAlive与窗口、筛选、数据观测范围一致；T换列索引及Q取消/提交也验；未执行 |
 | PA-W05-FACT | D仅部分字段参与empty；队列柱宽是装饰；admins含未授权用户；角色筛选仅两角色并集、reset禁用条件有限 | 零/缺失/仅趋势/同角色/单角色/过滤外组织/无角色用户用实际字段验证，不造指标或改业务判定 |
 
-这些是事实边界及待验条目，不是本轮浏览器发现的已复现缺陷。旧PAGES中分页、独立组织详情、权限保存等拟议描述需R01连同实际源清单/证据统一纠偏；本批不改全局fingerprint或覆盖用户审核记录。没有尚未授权的新API、SQL、依赖、安全规则决定。
+除2.1明确列出的用户写归属复现与修复外，其余仍是事实边界及待验条目，不能统称已复现或已修。旧PAGES中分页、独立组织详情、权限保存等拟议描述需R01连同实际源清单/证据统一纠偏；本批不改全局fingerprint或覆盖用户审核记录。没有尚未授权的新API、SQL、依赖、安全规则决定。
 
 ## 5. 验证矩阵与证据类型
 
@@ -216,9 +224,9 @@ T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示�
 
 ## 6. 交付、使用与未改变范围
 
-P38–P45八份规格至此都有文件；全站规格48/73，W06八份、W07八份、W08九份共25份尚缺。正式C方向仍pending，18研究图不重采；正式全站图、Vue重构、真实角色/业务/生产及用户签收继续按1.15计划。R01全局清单仍旧源，不将局部表自动当全站完成。
+P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、W08九份共25份尚缺。正式C方向仍pending，关联产品源变化后须实际复验再更新研究证据，结果见PROGRESS，图数不计为新增正式设计；正式全站图、Vue重构、真实角色/业务/生产及用户签收继续按1.16计划。R01全局清单仍旧源，不将局部表自动当全站完成。
 
-本批不改Vue/CSS、API/OpenAPI、SQL、Node/Worker/Python、依赖或.env；无新运行参数、迁移、部署或重启。Feature Map仅补规格与核对脚本索引；永久规格、合同、验证器保留。临时产物及进程情况、实际检查结果见PROGRESS；旧16批材料不动。正式图/实现槽位依各页第10节，用户审核需绑定具体新版本。
+初次规格批只改文档/验证器；2.1后续增量修改Vue父入口及详情辅助模块的四类写反馈归属，没有改变CSS、API/OpenAPI、SQL、Node/Worker/Python、依赖或.env，无新运行参数。本批不部署；以后更新Web静态包，正式发布仍按宝塔部署器核对迁移与停启窗口，不新增后端重启需求。永久规格、合同、验证器保留；临时产物及进程、实际检查见PROGRESS，旧16批材料不动。正式图/实现槽位依各页第10节，用户审核需绑定具体新版本。
 
 ## 7. 源码指纹（LF SHA-256）
 
@@ -227,7 +235,7 @@ P38–P45八份规格至此都有文件；全站规格48/73，W06八份、W07八
 | 文件 | SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 |
-| apps/web/src/components/PlatformAccountCenter.vue | 06ea539015a4f47b947a05eae41f5c8c7fe635b11992d5d01bc62fccc58970ae |
+| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 |
 | apps/web/src/components/PlatformOrganizationRecords.vue | c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82 |
 | apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |
 | apps/web/src/components/OrganizationCreationWizard.vue | 6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0 |
@@ -242,7 +250,7 @@ P38–P45八份规格至此都有文件；全站规格48/73，W06八份、W07八
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
 | apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
-| apps/web/src/use-platform-user-detail.ts | e874ad5952d02f4d2e47c3a0c6ef94fdd63b1ddb2801fd4475109bd3a1e88da7 |
+| apps/web/src/use-platform-user-detail.ts | 8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e |
 | apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/web/src/components/NavigationShell.vue | 993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92 |

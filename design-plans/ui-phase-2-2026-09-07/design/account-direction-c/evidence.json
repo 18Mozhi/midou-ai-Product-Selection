@@ -5,8 +5,8 @@
   "approval": "pending-user-review",
   "production": false,
   "data": "synthetic-local-only",
-  "sourceRevision": "1ad9db7228e92a6fa5b6c2a64cd1df43015945bb",
-  "capturedAt": "2026-09-07T18:25:47.379Z",
+  "sourceRevision": "65fd32a7b13155c570039524cf04d723235c07f3",
+  "capturedAt": "2026-09-07T19:27:26.423Z",
   "browser": "151.0.7922.34",
   "platform": "win32",
   "sourceHashes": {
@@ -14,12 +14,12 @@
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.js": "23151fa9d3ba8fc559ec7651fcf21540fd85ca8f1b65bd6f2e0769c950d863e5",
     "scripts/verify-ui-phase2-account-direction.mjs": "ae72c9f6338c9dce04924fd7cb827e30112089181ee8d5d1fe013d534500fc2c",
-    "apps/web/src/components/PlatformAccountCenter.vue": "06ea539015a4f47b947a05eae41f5c8c7fe635b11992d5d01bc62fccc58970ae",
+    "apps/web/src/components/PlatformAccountCenter.vue": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
     "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
     "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
-    "apps/web/src/use-platform-user-detail.ts": "e874ad5952d02f4d2e47c3a0c6ef94fdd63b1ddb2801fd4475109bd3a1e88da7",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
     "apps/api/src/platform-account-routes.ts": "79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226",
     "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d"
   },
@@ -55,7 +55,7 @@
         "width": 1440,
         "height": 1000
       },
-      "sha256": "f117962dff9b24296eb1aaf74877646c913eee788e0e501932e7f9ec2306fa86"
+      "sha256": "243d397e3efb9dfec14068918352ca328d5dc969d5dcff66e6db50e562172949"
     },
     {
       "file": "1440-create-error.png",
@@ -66,7 +66,7 @@
         "width": 1440,
         "height": 1000
       },
-      "sha256": "5e575a196c838fa5037760fe3a5f9676d4a756761ef4bf2ce9690857047897ec"
+      "sha256": "467885c52de986eca0f850df3b7726ce2292077af02ddd5d14abe4908f617b3c"
     },
     {
       "file": "1440-reason.png",
@@ -88,7 +88,7 @@
         "width": 1440,
         "height": 1000
       },
-      "sha256": "853eb98d5a98c493a5952072022e10f9de3297d9fcd070538093b6900b1b46df"
+      "sha256": "b4bdad9fe23a3d579392c0c09a83ca0db7c9b5c3ce724b97095453814943a0a1"
     },
     {
       "file": "1440-membership.png",
@@ -176,7 +176,7 @@
         "width": 390,
         "height": 844
       },
-      "sha256": "8381f186bfacaa8238d53779699662b4ec92a335dacc79e54fe813684206944c"
+      "sha256": "edca0eebbf9065a30a43048b3ae6ef8a0a69adf77db9c9ed6889ef71fcbc862b"
     },
     {
       "file": "390-password.png",

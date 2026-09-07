@@ -329,6 +329,267 @@ for (const destination of ["shared-account-route", "cached-dashboard"] as const)
   });
 }
 
+for (const action of ["status", "platform-role", "sessions/revoke", "memberships"] as const) {
+  for (const outcome of ["success", "error"] as const) {
+    const destinations = [
+      "second",
+      "stay",
+      ...(action === "memberships" ? ["closed", "reopened-same"] : []),
+      ...(action === "platform-role" ? ["shared-route", "cached-dashboard"] : []),
+    ];
+    for (const destination of destinations) {
+      test(`UI2-PA03 account write ownership ${action} ${outcome} ${destination}`, async ({
+        page,
+      }) => {
+        await setup(page);
+        const second = {
+          ...overview.users[0],
+          id: "00000000-0000-4000-8000-000000000627",
+          email: "second@example.test",
+        };
+        await page.route("**/api/v1/platform/accounts?**", (route) =>
+          route.fulfill({ json: env({ ...overview, users: [overview.users[0], second] }) }),
+        );
+        if (destination === "cached-dashboard")
+          await page.route("**/api/v1/platform/dashboard?**", (route) =>
+            route.fulfill({
+              json: env({
+                window: "24h",
+                summary: {
+                  active_organizations: 0,
+                  active_users: 0,
+                  enabled_providers: 0,
+                  task_success_rate: null,
+                  queue_backlog: 0,
+                  open_alerts: 0,
+                  storage_bytes: 0,
+                  file_growth_bytes: 0,
+                },
+                queues: [],
+                provider_health: [],
+                task_trend: [],
+                health_signals: [],
+                alerts: [],
+                activity: [],
+                observed_at: "2026-09-08T00:00:00Z",
+              }),
+            }),
+          );
+        let release!: () => void;
+        const pending = new Promise<void>((resolve) => (release = resolve));
+        const writes: Array<{ path: string; body: any; key: string | undefined }> = [];
+        const reads: string[] = [];
+        await page.route("**/api/v1/platform/accounts/users/**", async (route) => {
+          const request = route.request();
+          const path = new URL(request.url()).pathname;
+          if (request.method() !== "GET") {
+            writes.push({
+              path,
+              body: request.postDataJSON(),
+              key: request.headers()["idempotency-key"],
+            });
+            await pending;
+            await route.fulfill(
+              outcome === "success"
+                ? { json: env({ id: user, status: "active" }) }
+                : {
+                    status: 409,
+                    json: {
+                      error: {
+                        code: "account_operation_conflict",
+                        message: "旧账号操作失败",
+                        action_hint: "旧账号操作失败，不应显示在当前窗口",
+                      },
+                    },
+                  },
+            );
+            return;
+          }
+          reads.push(path);
+          const account = path.endsWith(second.id) ? second : overview.users[0];
+          await route.fulfill({
+            json: env({
+              user: { ...account, must_change_password: false, must_enroll_mfa: false },
+              memberships: [],
+              sessions: [
+                {
+                  id: session,
+                  status: "active",
+                  device_label: "测试会话",
+                  last_seen_at: "2026-09-08T00:00:00Z",
+                },
+              ],
+            }),
+          });
+        });
+        try {
+          await page.goto("/platform-admin/users");
+          const navigates = destination === "shared-route" || destination === "cached-dashboard";
+          if (navigates) {
+            if (destination === "shared-route") {
+              await page
+                .getByRole("navigation", { name: "账号与组织二级导航" })
+                .getByRole("link", { name: "管理员管理", exact: true })
+                .click();
+              await expect(page).toHaveURL(/\/platform-admin\/admins$/);
+            } else {
+              await page
+                .getByRole("navigation", { name: "面包屑" })
+                .getByRole("link", { name: "平台后台", exact: true })
+                .click();
+              await expect(page).toHaveURL(/\/platform-admin$/);
+            }
+            await page.goBack();
+            await expect(page).toHaveURL(/\/platform-admin\/users$/);
+          }
+          await openAccountRecord(page, overview.users[0].email);
+          const original = page.getByRole("dialog", { name: overview.users[0].email, exact: true });
+          await expect(original).toContainText("测试会话");
+          const originalNode = await original.elementHandle();
+          if (action === "memberships") {
+            await original.getByLabel("加入组织", { exact: true }).selectOption(org);
+            await original.getByLabel("组织角色", { exact: true }).selectOption("member");
+            await original.getByLabel("授权原因", { exact: true }).fill("窗口归属回归");
+            await original.getByRole("button", { name: "加入组织", exact: true }).click();
+          } else {
+            const button =
+              action === "status"
+                ? "停用登录"
+                : action === "platform-role"
+                  ? "授予运营管理员"
+                  : "撤销全部会话";
+            await original.getByRole("button", { name: button, exact: true }).click();
+            const reason = page.getByRole("dialog").filter({
+              has: page.getByRole("heading", {
+                name:
+                  action === "status"
+                    ? "停用用户并撤销会话"
+                    : action === "platform-role"
+                      ? "授予运营管理员"
+                      : "撤销全部活动会话",
+                exact: true,
+              }),
+            });
+            await reason.getByLabel("操作原因", { exact: true }).fill("窗口归属回归");
+            await reason.getByRole("button", { name: "确认执行", exact: true }).click();
+          }
+          await expect.poll(() => writes.length).toBe(1);
+          const currentAccount = destination === "second" ? second : overview.users[0];
+          if (navigates) {
+            await page.goForward();
+            await expect(page).toHaveURL(
+              destination === "shared-route" ? /\/platform-admin\/admins$/ : /\/platform-admin$/,
+            );
+            await expect(page.getByRole("dialog")).toHaveCount(0);
+          } else if (destination !== "stay") {
+            await original.getByRole("button", { name: "关闭账号详情", exact: true }).click();
+            if (destination !== "closed") {
+              await openAccountRecord(page, currentAccount.email);
+              await expect(
+                page.getByRole("dialog", { name: currentAccount.email, exact: true }),
+              ).toContainText("测试会话");
+            }
+          }
+          const response = page.waitForResponse((item) =>
+            item.url().endsWith(`/users/${user}/${action}`),
+          );
+          release();
+          await (await response).finished();
+          await page.waitForTimeout(200); // Let both the write and follow-up account read settle.
+          if (navigates) {
+            await page.goBack();
+            await expect(page).toHaveURL(/\/platform-admin\/users$/);
+            expect(
+              await originalNode?.evaluate(
+                (node) =>
+                  node.isConnected && node === document.querySelector("dialog.detail-dialog"),
+              ),
+            ).toBe(true);
+          }
+          if (destination === "closed" || navigates) {
+            await expect(page.getByRole("dialog")).toHaveCount(0);
+          } else {
+            const current = page.getByRole("dialog", { name: currentAccount.email, exact: true });
+            await expect(current).toContainText(currentAccount.email);
+            await expect(current.getByRole("alert")).toHaveCount(
+              destination === "stay" && outcome === "error" ? 1 : 0,
+            );
+            await expect(current.getByRole("status")).toHaveCount(
+              destination === "stay" && outcome === "success" ? 1 : 0,
+            );
+          }
+          const expectedReads = [`/api/v1/platform/accounts/users/${user}`];
+          if (
+            destination === "second" ||
+            destination === "reopened-same" ||
+            (destination === "stay" && outcome === "success")
+          )
+            expectedReads.push(`/api/v1/platform/accounts/users/${currentAccount.id}`);
+          expect(reads).toEqual(expectedReads);
+          expect(writes).toHaveLength(1);
+          expect(writes[0].path).toBe(`/api/v1/platform/accounts/users/${user}/${action}`);
+          expect(writes[0].key).toBeTruthy();
+          expect(writes[0].body).toEqual({
+            ...(action === "status"
+              ? { status: "disabled" }
+              : action === "platform-role"
+                ? { role_code: "platform_operations_admin", enabled: true }
+                : action === "sessions/revoke"
+                  ? { session_id: null }
+                  : { organization_id: org, role_code: "member" }),
+            reason: "窗口归属回归",
+          });
+        } finally {
+          release();
+        }
+      });
+    }
+  }
+}
+
+test("UI2-PA04 stale account reason cannot submit after route change", async ({ page }) => {
+  await setup(page);
+  const writes: string[] = [];
+  await page.route("**/api/v1/platform/accounts/users/**", async (route) => {
+    if (route.request().method() !== "GET") {
+      writes.push(route.request().url());
+      await route.fulfill({ json: env({ id: user }) });
+      return;
+    }
+    await route.fulfill({
+      json: env({
+        user: { ...overview.users[0], must_change_password: false, must_enroll_mfa: false },
+        memberships: [],
+        sessions: [],
+      }),
+    });
+  });
+  await page.goto("/platform-admin/users");
+  await page
+    .getByRole("navigation", { name: "账号与组织二级导航" })
+    .getByRole("link", { name: "管理员管理", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/platform-admin\/admins$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/users$/);
+  await openAccountRecord(page, overview.users[0].email);
+  await page
+    .getByRole("dialog", { name: overview.users[0].email, exact: true })
+    .getByRole("button", { name: "授予运营管理员", exact: true })
+    .click();
+  const reason = page
+    .getByRole("dialog")
+    .filter({ has: page.getByRole("heading", { name: "授予运营管理员", exact: true }) });
+  await expect(reason).toBeVisible();
+  await page.goForward();
+  await expect(page).toHaveURL(/\/platform-admin\/admins$/);
+  // Shared reason-dialog route cleanup is a separate boundary; its obsolete action must be inert.
+  await reason.getByRole("button", { name: "确认执行", exact: true }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.waitForTimeout(200);
+  expect(writes).toHaveLength(0);
+});
+
 test("platform permission page reads only the real role catalog and preserves comparison state", async ({
   page,
 }) => {

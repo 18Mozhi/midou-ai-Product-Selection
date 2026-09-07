@@ -17,6 +17,18 @@ export function usePlatformUserDetail(
     detailSuccess.value = "";
   }
 
+  function captureDetailAction() {
+    const actionSequence = sequence;
+    const userId = selected.value?.id;
+    const actionRoute = routePath();
+    clearDetailFeedback();
+    return () =>
+      actionSequence === sequence &&
+      detailOpen.value &&
+      selected.value?.id === userId &&
+      routePath() === actionRoute;
+  }
+
   function closeUserDetail() {
     sequence += 1;
     detailOpen.value = false;
@@ -56,6 +68,7 @@ export function usePlatformUserDetail(
     detailError,
     detailSuccess,
     clearDetailFeedback,
+    captureDetailAction,
     closeUserDetail,
     openUserDetail,
   };

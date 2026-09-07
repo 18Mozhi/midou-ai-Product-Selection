@@ -78,7 +78,7 @@ const {
   detail,
   detailError,
   detailSuccess,
-  clearDetailFeedback,
+  captureDetailAction,
   closeUserDetail,
   openUserDetail,
 } = usePlatformUserDetail(request, selected, () => props.routePath);
@@ -369,8 +369,9 @@ async function toggleOrganization(item: any) {
   });
 }
 async function toggleUser(item: any) {
-  clearDetailFeedback();
+  const isCurrent = captureDetailAction();
   askReason(item.status === "active" ? "停用用户并撤销会话" : "恢复用户", async (why) => {
+    if (!isCurrent()) return;
     if (
       await write(
         `/platform/accounts/users/${item.id}/status`,
@@ -379,9 +380,10 @@ async function toggleUser(item: any) {
           reason: why,
         },
         "POST",
-        (value) => (detailError.value = value),
+        (value) => isCurrent() && (detailError.value = value),
       )
     ) {
+      if (!isCurrent()) return;
       const updated = [...(data.value?.users ?? []), ...(data.value?.admins ?? [])].find(
         (row) => row.id === item.id,
       );
@@ -392,8 +394,9 @@ async function toggleUser(item: any) {
   });
 }
 async function role(userId: string, roleCode: string, enabled: boolean) {
-  clearDetailFeedback();
+  const isCurrent = captureDetailAction();
   askReason(`${enabled ? "授予" : "撤销"}${roleText(roleCode)}`, async (why) => {
+    if (!isCurrent()) return;
     if (
       await write(
         `/platform/accounts/users/${userId}/platform-role`,
@@ -403,9 +406,10 @@ async function role(userId: string, roleCode: string, enabled: boolean) {
           reason: why,
         },
         "POST",
-        (value) => (detailError.value = value),
+        (value) => isCurrent() && (detailError.value = value),
       )
     ) {
+      if (!isCurrent()) return;
       const updated = [...(data.value?.users ?? []), ...(data.value?.admins ?? [])].find(
         (row) => row.id === userId,
       );
@@ -415,10 +419,15 @@ async function role(userId: string, roleCode: string, enabled: boolean) {
   });
 }
 async function addMembership(userId: string, value: MembershipInput) {
-  clearDetailFeedback();
+  const isCurrent = captureDetailAction();
   const path = `/platform/accounts/users/${userId}/memberships`;
-  const created = await write(path, value, "POST", (error) => (detailError.value = error));
-  if (!created) return;
+  const created = await write(
+    path,
+    value,
+    "POST",
+    (error) => isCurrent() && (detailError.value = error),
+  );
+  if (!created || !isCurrent()) return;
   detailSuccess.value = `${roleText(value.role_code)}组织关系已创建。`;
   await openUserDetail(selected.value, true);
 }
@@ -544,8 +553,9 @@ async function resetPassword() {
   });
 }
 function revokeSessions(item: any, sessionId: string | null = null) {
-  clearDetailFeedback();
+  const isCurrent = captureDetailAction();
   askReason(sessionId ? "撤销该会话" : "撤销全部活动会话", async (why) => {
+    if (!isCurrent()) return;
     if (
       await write(
         `/platform/accounts/users/${item.id}/sessions/revoke`,
@@ -554,9 +564,10 @@ function revokeSessions(item: any, sessionId: string | null = null) {
           reason: why,
         },
         "POST",
-        (value) => (detailError.value = value),
+        (value) => isCurrent() && (detailError.value = value),
       )
     ) {
+      if (!isCurrent()) return;
       detailSuccess.value = sessionId ? "该会话已撤销。" : "全部活动会话已撤销。";
       if (detailOpen.value) await openUserDetail(item, true);
     }
