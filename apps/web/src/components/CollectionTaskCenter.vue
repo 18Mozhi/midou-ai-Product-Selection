@@ -440,6 +440,8 @@ watch(
   async (value) => {
     const taskId = typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value) ? value : "";
     if (!taskId) {
+      detailController?.abort("closed");
+      detailSequence += 1;
       detail.value = null;
       detailIssue.value = "";
       detailLoading.value = false;

@@ -383,3 +383,38 @@ test("M06-03.A08/A16 empty forbidden blocked", async ({ page }) => {
   await page.reload();
   await expect(page.getByRole("heading", { name: "采集控制台依赖受阻" })).toBeVisible();
 });
+
+for (const sourceCount of [0, 1, 8, 9]) {
+  test(`UI2-CL52 source health empty state matches ${sourceCount} records`, async ({ page }) => {
+    await navigation(page);
+    const sources = Array.from({ length: sourceCount }, (_, index) => ({
+      ...data.sources[0],
+      id: `00000000-0000-4000-8000-${String(630 + index).padStart(12, "0")}`,
+      name: `隔离来源 ${index + 1}`,
+    }));
+    await page.route("**/api/v1/platform/collection/console?**", (route) =>
+      route.fulfill({ json: envelope({ ...data, sources }) }),
+    );
+    await page.goto("/platform-admin/collection/overview");
+    const section = page
+      .locator(".collection-ops-grid > section")
+      .filter({ has: page.getByRole("heading", { name: "来源与健康", exact: true }) });
+    await expect(section).toContainText(`共 ${sourceCount} 个`);
+    await expect(section.getByText("当前范围没有来源健康记录。", { exact: true })).toHaveCount(
+      sourceCount === 0 ? 1 : 0,
+    );
+    const visibleRegion = section.locator(
+      (page.viewportSize()?.width ?? 1000) <= 760
+        ? ".responsive-data-view__mobile"
+        : ".responsive-data-view__desktop",
+    );
+    if (sourceCount > 0)
+      await expect(visibleRegion.getByText("隔离来源 1", { exact: true })).toBeVisible();
+    if (sourceCount === 9) {
+      await section.getByRole("button", { name: /查看全部 9 个来源/ }).click();
+      await expect(visibleRegion.getByText("隔离来源 9", { exact: true })).toBeVisible();
+      await section.getByRole("button", { name: /收起来源/ }).click();
+      await expect(visibleRegion.getByText("隔离来源 9", { exact: true })).toHaveCount(0);
+    } else await expect(section.getByRole("button", { name: /查看全部/ })).toHaveCount(0);
+  });
+}

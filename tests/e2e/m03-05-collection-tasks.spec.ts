@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Request } from "@playwright/test";
 
 const navigation = {
   shell: "platform_admin",
@@ -440,3 +440,89 @@ test("detail read failure never leaves the previous task visible", async ({ page
   await expect(page.getByRole("alert")).toContainText("任务详情未能读取");
   await expect(page.getByRole("dialog")).not.toContainText(tasks[0].id.slice(0, 8));
 });
+
+for (const outcome of ["success", "failure"] as const) {
+  test(`UI2-CL51 history return discards late detail ${outcome}`, async ({ page }) => {
+    await nav(page);
+    await list(page);
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let started!: () => void;
+    const entered = new Promise<void>((resolve) => {
+      started = resolve;
+    });
+    let pendingRequest: Request | undefined;
+    const terminal = new Promise<void>((resolve) => {
+      const finish = (request: Request) => {
+        if (request === pendingRequest) resolve();
+      };
+      page.on("requestfinished", finish);
+      page.on("requestfailed", finish);
+    });
+    let reads = 0;
+    await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}`, async (route) => {
+      const first = ++reads === 1;
+      if (first) {
+        pendingRequest = route.request();
+        started();
+        await held;
+      }
+      try {
+        await route.fulfill(
+          first && outcome === "failure"
+            ? {
+                status: 404,
+                json: {
+                  error: {
+                    code: "not_found",
+                    message: "隔离迟到失败",
+                    action_hint: "隔离迟到详情错误",
+                  },
+                  request_id: "ui2-cl51-failed",
+                  trace_id: "ui2-cl51-failed",
+                },
+              }
+            : {
+                json: {
+                  data: detail(),
+                  request_id: "ui2-cl51-detail",
+                  trace_id: "ui2-cl51-detail",
+                },
+              },
+        );
+      } catch (error) {
+        if (!route.request().failure()) throw error;
+      }
+    });
+    await page.goto("/platform-admin/collection");
+    if ((page.viewportSize()?.width ?? 1000) <= 760) {
+      await page.getByRole("button", { name: /死信 · 0 条证据/ }).click();
+      await page.getByRole("button", { name: "打开完整任务详情" }).click();
+    } else await page.getByRole("button", { name: "查看" }).nth(1).click();
+    await entered;
+    await expect(page).toHaveURL(new RegExp(`task=${ids.dead}`));
+    await expect(page.getByText("正在读取任务详情…", { exact: true })).toBeVisible();
+    await page.goBack();
+    await expect(page).not.toHaveURL(/task=/);
+    await expect(page.locator(".collection-task-detail")).toHaveCount(0);
+    release();
+    await terminal;
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
+    await expect(page.locator(".collection-task-detail")).toHaveCount(0);
+    await expect(page.locator("body")).not.toHaveClass(/collection-detail-open/);
+    await expect(page.getByText("隔离迟到详情错误", { exact: true })).toHaveCount(0);
+    await page.goForward();
+    await expect(page.getByRole("button", { name: "关闭任务详情" })).toBeVisible();
+    expect(reads).toBe(2);
+    await page.getByRole("button", { name: "关闭任务详情" }).click();
+    await expect(page).not.toHaveURL(/task=/);
+    await expect(page.locator(".collection-task-detail")).toHaveCount(0);
+  });
+}

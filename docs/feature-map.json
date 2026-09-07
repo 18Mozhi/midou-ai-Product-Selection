@@ -722,6 +722,7 @@
     },
     "playwrightCrawler": {
       "module": "M03-04",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md and collection-runtime-contract-review.md map the browser runtime page, global profile and metric scope versus filtered runs, expiry-derived login metadata, and server-wide expired-lease recovery. The runtime page, API and lifecycle tests are unchanged in B1c; no real browser, lease recovery, production or formal design acceptance is implied. Read/write ownership and accessibility gaps remain explicit.",
       "entrypoints": [
         "../packages/playwright-crawler/src/index.ts",
         "../apps/crawler/scoutops_crawler/playwright_bridge.py",
@@ -795,6 +796,7 @@
     },
     "collectionTaskStateMachine": {
       "module": "M03-05",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md and collection-runtime-contract-review.md map current-page metrics, detail and replay semantics. Removing or invalidating the task query now aborts and invalidates the detail read sequence so a late success or terminal failure cannot reopen detail after history return. UI2-CL51 covers both isolated outcomes and forward/close behavior; this does not verify all cached-route or write ownership, all accessibility, real backend or production behavior. API, replay, task states and configuration are unchanged.",
       "entrypoints": [
         "../packages/collection-tasks/src/index.ts",
         "../apps/worker/src/collection-task-worker.ts",
@@ -1833,6 +1835,7 @@
     },
     "collectionOperationsConsole": {
       "module": "M06-03",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md and collection-runtime-contract-review.md separate platform source-health scope, independently filtered statistics and batch replay. The source empty notice renders only when sources.length is zero, independently of the show-all button; UI2-CL52 covers 0/1/8/9 records and expansion/collapse with visible desktop/mobile locators. Source ordering, eight-row disclosure, existing APIs, batch payloads and runtime configuration are unchanged. Full async batch ownership, formal redesign and production remain pending.",
       "entrypoints": [
         "../apps/api/src/collection-console-service.ts",
         "../apps/api/src/mysql-collection-console-repository.ts",

@@ -544,7 +544,9 @@ async function confirmBatchReplay() {
                 : `查看全部 ${data.sources.length} 个来源（还有 ${hiddenSourceCount} 个）`
             }}
           </button>
-          <p v-else class="collection-section-empty">当前范围没有来源健康记录。</p>
+          <p v-if="!data.sources.length" class="collection-section-empty">
+            当前范围没有来源健康记录。
+          </p>
         </section>
         <section>
           <h3>任务状态</h3>
