@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>公共按钮六态 · A/B 设计提案</title>
+    <link rel="stylesheet" href="representative-directions.css" />
+    <style>
+      main {
+        max-width: 1200px;
+        margin: auto;
+      }
+      .state-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 16px;
+        margin: 24px 0 36px;
+      }
+      .state-sample {
+        display: grid;
+        gap: 16px;
+        padding: 18px 12px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        text-align: center;
+      }
+      .state-sample span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .study-hover {
+        background: var(--soft);
+        border-color: var(--accent);
+      }
+      .primary.study-hover {
+        background: #124c48;
+        color: #fff;
+      }
+      [data-direction="brief"] .primary.study-hover {
+        background: #1b3c77;
+      }
+      .danger.study-hover {
+        background: #fff1f3;
+        border-color: #a73744;
+      }
+      .study-focus {
+        outline: 3px solid #157fb3;
+        outline-offset: 3px;
+      }
+      .study-pressed {
+        transform: translateY(1px);
+        box-shadow: inset 0 2px 4px #152d3730;
+      }
+      .study-busy:disabled {
+        opacity: 1;
+      }
+      .icon-study {
+        width: 44px;
+        justify-self: center;
+        font-size: 22px;
+        padding: 6px;
+      }
+      @media (max-width: 800px) {
+        .state-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+        .state-sample {
+          padding: 16px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body data-direction="focus">
+    <header class="review-tools">
+      <label
+        >方案<select id="direction">
+          <option value="focus">A · 专注工位</option>
+          <option value="brief">B · 工作简报</option>
+        </select></label
+      >
+      <p>设计状态板 · Hover / Focus / Pressed 为静态示意，不是业务按钮覆盖率</p>
+      <a href="representative-directions.html">返回代表方案</a>
+    </header>
+    <main>
+      <p class="eyebrow">SHARED CONTROL CONTRACT / 草案</p>
+      <h1>同一动作，六种清楚的状态。</h1>
+      <p class="note">
+        主动作只承载当前步骤；次动作不抢焦点；危险动作写明影响对象，最终确认必须收集原因。禁用不代替后端权限校验。
+      </p>
+      <div id="state-board"></div>
+      <div class="scope-strip" role="status" id="demo-result">
+        点击可操作的样本仅展示反馈，不发出请求。
+      </div>
+      <div class="warning-box failure">
+        <strong>失败后保留输入</strong>
+        <p>错误说明放在对应表单中，提供明确重试入口。成功提示须区分已保存、已提交审批与已生效。</p>
+      </div>
+      <p class="note">
+        44px最小点击范围，键盘可见焦点；加载期间防重复提交但保留状态说明。减少动态效果偏好下取消非必要动效。本板没有替每个页面批准动作与权限分母。
+      </p>
+    </main>
+    <script>
+      const states = [
+        ["default", "默认"],
+        ["hover", "悬停示意"],
+        ["focus", "聚焦示意"],
+        ["pressed", "按下示意"],
+        ["busy", "处理中"],
+        ["disabled", "不可用"],
+      ];
+      const types = [
+        ["primary", "主要操作", "预览提交"],
+        ["secondary", "次要操作", "返回"],
+        ["danger", "危险操作", "撤销授权"],
+        ["icon", "图标操作", "×"],
+      ];
+      for (const [kind, title, label] of types) {
+        const section = document.createElement("section");
+        const heading = document.createElement("h2");
+        heading.textContent = title;
+        section.append(heading);
+        const grid = document.createElement("div");
+        grid.className = "state-grid";
+        for (const [state, name] of states) {
+          const sample = document.createElement("div");
+          sample.className = "state-sample";
+          const text = document.createElement("span");
+          text.textContent = name;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `${kind === "icon" ? "icon-study" : kind} study-${state}`;
+          button.textContent = state === "busy" ? (kind === "icon" ? "…" : "处理中…") : label;
+          if (kind === "icon") button.setAttribute("aria-label", `${name}关闭示意`);
+          if (state === "disabled" || state === "busy") button.disabled = true;
+          if (state === "busy") button.setAttribute("aria-busy", "true");
+          button.addEventListener("click", () => {
+            document.getElementById("demo-result").textContent =
+              "仅演示视觉反馈；没有发送请求，没有改变业务事实。";
+          });
+          sample.append(text, button);
+          grid.append(sample);
+        }
+        section.append(grid);
+        document.getElementById("state-board").append(section);
+      }
+      document.getElementById("direction").addEventListener("change", (event) => {
+        document.body.dataset.direction = event.target.value;
+      });
+    </script>
+  </body>
+</html>

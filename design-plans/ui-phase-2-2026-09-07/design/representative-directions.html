@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ScoutOps · 全新结构代表方案</title>
+    <link rel="stylesheet" href="representative-directions.css" />
+    <script src="representative-directions.js" defer></script>
+  </head>
+  <body data-direction="focus">
+    <div class="review-tools">
+      <label
+        >方案<select id="direction">
+          <option value="focus">A · 专注工位</option>
+          <option value="brief">B · 工作简报</option>
+        </select></label
+      >
+      <label
+        >代表页面<select id="surface">
+          <option value="rules">P17 评分规则</option>
+          <option value="roles">P31 组织权限</option>
+          <option value="status">P61 系统状态</option>
+        </select></label
+      >
+      <p>独立设计原型 · 隔离样本 · 无网络与数据写入 · 尚未获批</p>
+      <a href="../review.html">审核账册 ↗</a>
+    </div>
+    <div class="workspace">
+      <aside class="rail" aria-label="代表页面导航">
+        <div class="brand">s<span>coutops</span><i>设计研究</i></div>
+        <nav>
+          <button type="button" data-surface="rules">评分规则</button
+          ><button type="button" data-surface="roles">组织权限</button
+          ><button type="button" data-surface="status">系统状态</button>
+        </nav>
+        <div class="rail-foot">DESIGN LAB<br />方向研究 / 02</div>
+      </aside>
+      <div class="body">
+        <header class="page-head">
+          <div>
+            <p class="eyebrow" id="area-label"></p>
+            <h1 id="page-title"></h1>
+            <p id="page-description"></p>
+          </div>
+          <div class="context-chip">隔离样本<span>不是实时业务数据</span></div>
+        </header>
+        <main id="main" tabindex="-1"></main>
+        <footer class="source-footer">
+          字段与状态来自仓库现有 E2E 样本。原型只演示本页列出的路径，未覆盖所有角色与异常。<a
+            id="spec-link"
+            >查看完整页面规格</a
+          >
+        </footer>
+      </div>
+    </div>
+    <dialog id="modal" aria-labelledby="modal-title">
+      <form id="modal-form" novalidate>
+        <header class="modal-head">
+          <div>
+            <p class="eyebrow">设计预演 / 不执行业务写入</p>
+            <h2 id="modal-title"></h2>
+          </div>
+          <button type="button" id="close-modal" aria-label="关闭弹窗">×</button>
+        </header>
+        <div id="modal-body" class="modal-body"></div>
+        <p id="form-feedback" class="feedback" role="status" hidden></p>
+        <footer class="modal-foot">
+          <button type="button" id="cancel-modal">取消</button
+          ><button type="submit" class="primary" id="preview-submit">预览提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>76 张新设计图 · A/B 代表方案审核</title>
+    <link rel="stylesheet" href="representative-directions.css" />
+    <script src="representative-directions/evidence-data.js" defer></script>
+    <style>
+      main {
+        max-width: 1240px;
+        margin: auto;
+      }
+      .image-frame {
+        background: #fff;
+        border: 1px solid var(--line);
+        margin: 24px 0;
+      }
+      .image-frame[data-width="390"] {
+        max-width: 390px;
+        margin-inline: auto;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        width: 100%;
+      }
+      .proof {
+        overflow-wrap: anywhere;
+        font-size: 12px;
+      }
+      .review-tools {
+        flex-wrap: wrap;
+      }
+      #scene {
+        max-width: min(420px, 100%);
+      }
+      #image-status {
+        min-height: 28px;
+      }
+      @media (max-width: 800px) {
+        .review-tools label:last-of-type {
+          width: 100%;
+        }
+        .review-tools label:last-of-type select {
+          max-width: 100%;
+          flex: 1;
+          min-width: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="review-tools">
+      <label
+        >方向<select id="direction">
+          <option value="focus">A · 专注工位</option>
+          <option value="brief">B · 工作简报</option>
+        </select></label
+      ><label
+        >视口<select id="width">
+          <option value="1440">桌面 1440</option>
+          <option value="390">移动 390</option>
+        </select></label
+      ><label>页面与场景<select id="scene"></select></label><a href="../review.html">实施账册 ↗</a>
+    </header>
+    <main>
+      <p class="eyebrow">W01 / 全新结构方向研究</p>
+      <h1>逐个场景，比较两种结构。</h1>
+      <p class="note">
+        76 张独立 HTML 原型图，不是已上线
+        Vue，不是用户验收通过。当前仅覆盖三类代表页与公共控件状态，完整 73 路由仍在实施。
+      </p>
+      <p>
+        <a href="representative-directions.html">操作可点击原型</a> ·
+        <a href="button-states.html">查看按钮六态板</a> ·
+        <a href="../representative-review.html">对照现有 Vue 基线</a> ·
+        <a href="representative-directions.md">设计与验证说明</a>
+      </p>
+      <p id="image-status" role="status"></p>
+      <div class="image-frame" id="image-frame"><img id="design-image" alt="" /></div>
+      <p><a id="original" target="_blank" rel="noopener">打开原图</a></p>
+      <p class="proof" id="proof"></p>
+    </main>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const evidence = window.SCOUTOPS_DESIGN_DIRECTIONS;
+        const labels = {
+          rules: "P17 评分规则",
+          roles: "P31 组织权限",
+          status: "P61 系统状态",
+          controls: "公共控件",
+        };
+        const states = {
+          overview: "目录总览",
+          detail: "对象详情",
+          create: "新建规则",
+          "create-middle": "新建规则 / 中段字段",
+          "create-bottom": "新建规则 / 底部字段",
+          preview: "影响预览",
+          submit: "提交原因",
+          "submit-feedback": "提交预演反馈",
+          grants: "指定资源授权",
+          grant: "新增授权表单",
+          "grant-bottom": "新增授权 / 底部字段",
+          revoke: "撤销原因",
+          "refresh-failed": "刷新失败保留旧数据",
+          "refresh-recovered": "读取恢复仍保留告警",
+          "six-states": "按钮六态板",
+        };
+        const scene = document.getElementById("scene");
+        const keys = [
+          ...new Set(evidence.screenshots.map((shot) => `${shot.surface}/${shot.state}`)),
+        ];
+        for (const key of keys) {
+          const [surface, state] = key.split("/");
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = `${labels[surface]} · ${states[state]}`;
+          scene.append(option);
+        }
+        function render() {
+          const direction = document.getElementById("direction").value;
+          const width = Number(document.getElementById("width").value);
+          const [surface, state] = scene.value.split("/");
+          const shot = evidence.screenshots.find(
+            (item) =>
+              item.direction === direction &&
+              item.viewport.width === width &&
+              item.surface === surface &&
+              item.state === state,
+          );
+          if (!shot) throw new Error("Missing design evidence");
+          const img = document.getElementById("design-image");
+          const status = document.getElementById("image-status");
+          const label = `${direction === "focus" ? "A 专注工位" : "B 工作简报"} · ${labels[surface]} · ${states[state]} · ${width}px`;
+          status.textContent = label + " · 正在加载";
+          img.onload = () => {
+            status.textContent = label + " · 已加载 / 待用户审核";
+          };
+          img.onerror = () => {
+            status.textContent = label + " · 图片读取失败";
+          };
+          img.alt = label + "；独立设计原型，未获批";
+          img.src = `representative-directions/${shot.file}`;
+          document.getElementById("image-frame").dataset.width = String(width);
+          document.getElementById("original").href = img.getAttribute("src");
+          document.getElementById("proof").textContent =
+            `采图 ${shot.capturedAt} · SHA256 ${shot.sha256} · 无业务写入，仅验证该原型路径。`;
+        }
+        for (const id of ["direction", "width", "scene"])
+          document.getElementById(id).addEventListener("change", render);
+        render();
+      });
+    </script>
+  </body>
+</html>
