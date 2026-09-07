@@ -352,3 +352,17 @@ TR01最小验证1例通过（16.2s）；随后原m04-01的8例与新8例，桌�
 需求拆解、无障碍技能用于两页任务与错误/焦点验收；UI技能目录读取成功，使用本地fixing-accessibility；按计划永久测试要求使用Playwright及既有测试体系。正式方向仍待用户审核，不代选A/B，不把规格/旧Vue回归说成新图已经完成。下一步N03补P16创建流程，随后N04该族整合；保留OP06–OP10与其他页面待验项，目标仍为W00–W09全73路由、全图、实现、生产及用户签收。
 
 本批唯一临时目录：`D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-opportunity-contracts-20260907`，共8文件（五轮.last-run和首轮失败截图/trace/error-context）。已核对绝对路径、普通目录非链接属性与最终测试结果，Remove-Item被工具策略拒绝，未绕过；目录未入Git，需手动清理。4101/5173无监听，本批所有测试服务与技能查询进程已退出；历史七批临时目录未动。永久规格、合同和测试保留。
+
+## 2026-09-07 · PLAN 1.6 N03创建旅程规格与局部合同回归
+
+从main/d0c1bb6干净工作树开始。新增[旅程合同](selection-journey-contract-review.md)、page-specs/P16.md十项规格和永久ui-phase2-journey-contracts.spec.ts九例，Feature Map只加selectionAcceptance复核索引。依地图→SelectionJourney→旅程路由/服务/MySQL仓库核对输入、创建、服务端进度、候选、三种决定和关联对象；NavigationShell的KeepAlive及reset_on_scope键另核实。只读检查通过：本地10候选稳定键/行号/源码SHA逐项一致，5处v-model、0本地弹窗，P16十节；规格累计22份、余51份，G0与用户审核计数不变。
+
+发现需用户决定的业务冲突J07：旅程adopt直接创建/复用机会并写adopted，未检查P18与蓝图要求的五项质量门。已询问统一质量门或保留独立规则，未答复前不改后端、SQL、权限或相关产品行为。observe/reject真实不生成机会，但三种决定都可能创建验证任务；新增夹具据此返回null机会ID和真实形状的验证任务ID，不沿用旧m07-06 observe夹具的偏差。GET在超时且采集任务仍未终态时可能登记blocked事件与Outbox，零浏览器POST不等于零数据库写入。
+
+新增九例覆盖：三种输入的原生required/ASIN长度与精确两字段请求；非法活动ID零旅程请求；恢复404清活动ID而不重建；观察/驳回required、原原因/null候选准确提交与返回验证任务链接；创建503保留输入、不自动重放、显式重试新幂等键；accepted后GET已有ID，使用服务端终态和elapsed，再开始下一次。最小关键词1例通过（14.9s）；旧三例加新九例桌面12项通过（24.1s）、390移动12项通过（25.9s），无失败或跳过。移动命令首次误写不存在的mobile-chromium，启动前报项目名错误；按实际配置改为mobile-390后整组通过，无产品或用例修改。最终desktop/mobile .last-run均passed、failedTests为空。
+
+以上只是隔离Vue局部合同，不是实际来源采集、真实事务/RBAC、生产180秒指标、全状态或全套图通过。J08读取归属/缓存与恢复竞态、J09重置草稿/错误恢复/字段合同、J10完整无障碍与正式图/真实验收仍待逐项完成；N03因此是规格与局部回归交付，不宣称创建页全部验收完成。下一步N04整合该族及这些未验卡，未变化的P14/P17测试不无条件重跑。正式A/B方向和J07业务规则是两项独立待确认。
+
+inventory --check通过（73路由、1377控件候选、100弹窗候选）；文档门通过（73路由、60受保护、6角色、153必需文件）；静态分析通过（389文件）；format:check通过（changed=1、production=495、repositories=51）。产品Vue/CSS、既有测试/采图夹具、PAGES、生成清单和产品源指纹未变，不重复生产构建或刷新有效图。API、业务规则、SQL、依赖、环境配置无变化，OpenAPI/.env无配套变更，无部署、迁移或重启；不把历史发布当本次线上验证。
+
+需求拆解技能用于状态/任务卡，无障碍技能用于字段名称、键盘/焦点及恢复验收，按计划的永久测试要求使用Playwright及现有测试体系。只创建临时目录 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-journey-contracts-20260907`，含minimal/desktop/mobile三份.last-run，无失败截图。核对精确绝对路径、普通目录非链接属性后Remove-Item被工具策略拒绝，未绕过；该目录仍在且不入Git，需手动清理。4101/5173无监听，本批测试服务已退出；历史八批遗留目录未动。永久规格、合同及回归测试保留。

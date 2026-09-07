@@ -2216,6 +2216,7 @@
     },
     "selectionAcceptance": {
       "module": "M07-06",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md and selection-journey-contract-review.md map ten local control/event candidates, five v-model sites and zero local dialogs. tests/e2e/ui-phase2-journey-contracts.spec.ts covers three create inputs, invalid/missing saved-ID recovery, observe/reject null candidate and returned verification task, explicit create retry and accepted-to-terminal polling with isolated Vue responses. Journey adoption currently writes opportunity adopted without the P18 five-gate check; this rule conflict is awaiting user direction and is not changed or certified here. GET may persist a deadline-blocked event; zero browser POSTs do not prove a read-only database. Cache/read races, precise recovery actions, full accessibility and real backend/production evidence remain pending; no runtime, permission or database contract change.",
       "entrypoints": [
         "../apps/api/src/selection-journey-service.ts",
         "../apps/api/src/mysql-selection-journey-repository.ts",
