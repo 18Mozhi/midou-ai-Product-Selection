@@ -33,6 +33,10 @@ defineEmits<{
           <b>{{ stateName(item.status) }}</b>
         </header>
         <p>{{ item.body }}</p>
+        <details class="message-body">
+          <summary>完整正文</summary>
+          <p>{{ item.body }}</p>
+        </details>
         <dl>
           <div>
             <dt>接收范围</dt>
@@ -129,13 +133,21 @@ defineEmits<{
 }
 .message-list article p {
   min-height: 42px;
-  display: -webkit-box;
-  overflow: hidden;
   color: var(--so-text);
   overflow-wrap: anywhere;
   white-space: pre-wrap;
+}
+.message-list article > p {
+  display: -webkit-box;
+  overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+}
+.message-body summary {
+  min-height: var(--so-touch-target);
+  padding: 10px 0;
+  color: var(--so-primary);
+  cursor: pointer;
 }
 .message-list dl {
   margin: 12px 0;

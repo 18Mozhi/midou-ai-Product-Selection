@@ -7,6 +7,98 @@ const envelope = (data: unknown) => ({
   trace_id: "platform-message-e2e",
 });
 
+for (const status of ["draft", "published", "cancelled"]) {
+  test(`UI2-PN57 ${status} message exposes its complete body without a write`, async ({ page }) => {
+    const body = Array.from(
+      { length: 18 },
+      (_, index) => `第 ${index + 1} 行：通知正文应当完整可读。`,
+    ).join("\n");
+    let reads = 0;
+    const writes: string[] = [];
+    await page.route("**/api/v1/me/navigation?**", (route) =>
+      route.fulfill({
+        json: envelope({
+          shell: "platform_admin",
+          organization_id: null,
+          workspace_id: null,
+          roles: [],
+          capabilities: [],
+          platform_roles: ["platform_super_admin"],
+          platform_capabilities: ["platform:operate"],
+          guard_reason: "navigation_platform_admin_allowed",
+        }),
+      }),
+    );
+    await page.route("**/api/v1/platform/management**", async (route) => {
+      if (route.request().method() !== "GET") {
+        writes.push(route.request().method());
+        return route.fulfill({ status: 500, json: {} });
+      }
+      reads += 1;
+      return route.fulfill({
+        json: envelope({
+          domain: "notifications",
+          summary: { total: 0, unread: 0, critical: 0 },
+          items: [],
+          templates: [],
+          channels: [],
+          subscriptions: {},
+          alert_routes: [],
+          pagination: { page: 1, page_size: 20, total: 0, total_pages: 1 },
+          message_pagination: { page: 1, page_size: 10, total: 1, total_pages: 1 },
+          messages: [
+            {
+              id: messageId,
+              kind: "notification",
+              title: "长正文审核通知",
+              body,
+              status,
+              version: 2,
+              category: "system",
+              severity: "info",
+              audience_type: "all_users",
+              in_app_enabled: true,
+              email_enabled: false,
+              updated_at: "2026-09-08T00:00:00.000Z",
+            },
+          ],
+          audience_options: { organizations: [], users: [] },
+          observed_at: "2026-09-08T00:00:00.000Z",
+        }),
+      });
+    });
+    await page.goto("/platform-admin/notifications");
+    const card = page
+      .getByRole("article")
+      .filter({ has: page.getByRole("heading", { name: "长正文审核通知" }) });
+    const disclosure = card.locator("details");
+    const trigger = disclosure.locator("summary");
+    const content = disclosure.locator("p");
+    await expect(trigger).toHaveText("完整正文");
+    await expect(content).not.toBeVisible();
+    await trigger.focus();
+    await trigger.press("Enter");
+    await expect(disclosure).toHaveAttribute("open", "");
+    await expect(content).toBeVisible();
+    await expect(content).toHaveText(body);
+    await expect
+      .poll(() => content.evaluate((element) => element.scrollHeight - element.clientHeight))
+      .toBeLessThanOrEqual(1);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
+      .toBeLessThanOrEqual(1);
+    await trigger.press("Space");
+    await expect(content).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+    await expect(card.getByRole("button", { name: "编辑", exact: true })).toHaveCount(
+      status === "draft" ? 1 : 0,
+    );
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    expect(reads).toBe(1);
+    expect(writes).toEqual([]);
+  });
+}
+
 test("platform administrator can create and publish a Chinese notification", async ({ page }) => {
   let messages: any[] = [];
   let createBody: any = null;
