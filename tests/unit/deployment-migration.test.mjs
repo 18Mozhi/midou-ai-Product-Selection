@@ -35,6 +35,8 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
   assert.match(deploy, /EXPECTED_GITHUB_REPOSITORY = "18Mozhi\/midou-ai-Product-Selection"/);
+  assert.match(deploy, /REMOTE_STORAGE_ENCODING = "utf-8"/);
+  assert.match(deploy, /os\.fsencode\(str\(root\)\)\.decode\(v\["storage_encoding"\]\)/);
   assert.match(deploy, /git", "fetch", "--quiet", "--no-tags", "origin", "main"/);
   assert.match(deploy, /local main and origin\/main must be the same commit/);
   assert.match(deploy, /merge-base", "--is-ancestor", production_sha, target_sha/);

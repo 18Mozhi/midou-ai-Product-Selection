@@ -36,6 +36,7 @@ SITE_ID = 29
 SITE_NAME = "midouai.medouai.com"
 NODE_PROJECT = "ai选品"
 PYTHON_PROJECT = "ai选品-python"
+REMOTE_STORAGE_ENCODING = "utf-8"
 NODE_VERSION = "v20.19.6"
 NODE_BIN = f"/www/server/nodejs/{NODE_VERSION}/bin/node"
 NPM_BIN = f"/www/server/nodejs/{NODE_VERSION}/bin/npm"
@@ -777,11 +778,15 @@ print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"transient cleanup
 
 
 def production_identity_source() -> str:
-    values = json.dumps({"root": PROJECT_ROOT}, ensure_ascii=False)
-    return f'''import json
+    values = json.dumps(
+        {"root": PROJECT_ROOT, "storage_encoding": REMOTE_STORAGE_ENCODING},
+        ensure_ascii=False,
+    )
+    return f'''import json, os
 from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
 if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
+if os.fsencode(str(root)).decode(v["storage_encoding"]) != str(root): raise SystemExit("unexpected root encoding")
 release=root/"config"/"release.env"; build_sha=None
 if release.is_file():
     for line in release.read_text(encoding="utf-8").splitlines():
