@@ -35,11 +35,6 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /verify-release-change-ownership\.mjs/);
   assert.match(deploy, /release-change-ownership\.json/);
   assert.match(deploy, /EXPECTED_GITHUB_REPOSITORY = "18Mozhi\/midou-ai-Product-Selection"/);
-  assert.match(deploy, /def baota_storage_identifier\(value: str\)/);
-  assert.match(deploy, /value\.encode\("gbk"\)\.decode\("utf-8"\)/);
-  assert.match(deploy, /BAOTA_PROJECT_ROOT = baota_storage_identifier\(PROJECT_ROOT\)/);
-  assert.match(deploy, /BAOTA_NODE_PROJECT = baota_storage_identifier\(NODE_PROJECT\)/);
-  assert.match(deploy, /BAOTA_PYTHON_PROJECT = baota_storage_identifier\(PYTHON_PROJECT\)/);
   assert.match(deploy, /git", "fetch", "--quiet", "--no-tags", "origin", "main"/);
   assert.match(deploy, /local main and origin\/main must be the same commit/);
   assert.match(deploy, /merge-base", "--is-ancestor", production_sha, target_sha/);

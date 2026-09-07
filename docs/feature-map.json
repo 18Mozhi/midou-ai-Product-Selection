@@ -190,7 +190,7 @@
       "preflight": "../scripts/verify-baota-s0.mjs",
       "productionDeployed": true,
       "deploymentStatus": "healthy",
-      "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.medouai.com; deploy transport adapts the host GBK filename encoding while preserving this logical contract)",
+      "target": "192.168.1.220 /www/wwwroot/ai选品 (domain: midouai.medouai.com)",
       "productionVerifier": "../scripts/verify-baota-deployment.mjs --production",
       "spaHttpStatusBoundary": "deploy-baota generates an exact production route include from config/route-catalog.json; registered SPA deep links return index.html with HTTP 200 while unknown paths render the same fallback document with HTTP 404; BaoTa nginx -t must pass before reload and the previous site config is retained under project backups",
       "runtimeScope": "one Huizhou host with fixed frontend backend python config runtime backups directories and BaoTa-managed ai选品 Node plus ai选品-python Python 3.12 projects; disk and capacity are not product completion gates",

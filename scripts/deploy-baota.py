@@ -36,16 +36,6 @@ SITE_ID = 29
 SITE_NAME = "midouai.medouai.com"
 NODE_PROJECT = "ai选品"
 PYTHON_PROJECT = "ai选品-python"
-
-
-def baota_storage_identifier(value: str) -> str:
-    """Map the logical Chinese label to this BaoTa host's GBK-backed UTF-8 storage name."""
-    return value.encode("gbk").decode("utf-8")
-
-
-BAOTA_PROJECT_ROOT = baota_storage_identifier(PROJECT_ROOT)
-BAOTA_NODE_PROJECT = baota_storage_identifier(NODE_PROJECT)
-BAOTA_PYTHON_PROJECT = baota_storage_identifier(PYTHON_PROJECT)
 NODE_VERSION = "v20.19.6"
 NODE_BIN = f"/www/server/nodejs/{NODE_VERSION}/bin/node"
 NPM_BIN = f"/www/server/nodejs/{NODE_VERSION}/bin/npm"
@@ -55,12 +45,10 @@ PUBLIC_BASE_URL = "https://midouai.medouai.com"
 EXPECTED_GITHUB_REPOSITORY = "18Mozhi/midou-ai-Product-Selection"
 DEPLOYMENT_MIGRATION_VERSION = "0073_automatic_selection_migration_timestamp_timezone.up.sql"
 NODE_START_COMMAND = (
-    f"node --env-file={BAOTA_PROJECT_ROOT}/config/product_scout.env "
-    f"--env-file={BAOTA_PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
+    f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
+    f"--env-file={PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
 )
-PYTHON_START_COMMAND = (
-    f"python -m scoutops_crawler --env-file={BAOTA_PROJECT_ROOT}/config/product_scout.env"
-)
+PYTHON_START_COMMAND = f"python -m scoutops_crawler --env-file={PROJECT_ROOT}/config/product_scout.env"
 
 
 class CredentialAttribute(ctypes.Structure):
@@ -327,7 +315,7 @@ def panel_node_action_source(action: str) -> str:
     if action not in {"stop", "start"}:
         raise ValueError("unsupported Node project action")
     values = json.dumps(
-        {"root": BAOTA_PROJECT_ROOT, "node_project": BAOTA_NODE_PROJECT, "action": action},
+        {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action},
         ensure_ascii=False,
     )
     return f'''import json, sys, time
@@ -376,11 +364,11 @@ print("SCOUTOPS_RESULT=" + json.dumps({{"status": status, "message": v["action"]
 
 def panel_deploy_source(build_sha: str, initialize_layout: bool) -> str:
     values = {
-        "root": BAOTA_PROJECT_ROOT,
+        "root": PROJECT_ROOT,
         "site_id": SITE_ID,
         "site_name": SITE_NAME,
-        "node_project": BAOTA_NODE_PROJECT,
-        "python_project": BAOTA_PYTHON_PROJECT,
+        "node_project": NODE_PROJECT,
+        "python_project": PYTHON_PROJECT,
         "node_version": NODE_VERSION,
         "python_bin": PYTHON_BIN,
         "node_start": NODE_START_COMMAND,
@@ -446,7 +434,7 @@ previous_site = None
 previous_include = None
 
 try:
-    if str(root) != v["root"] or not root.is_dir():
+    if str(root) != "/www/wwwroot/ai选品" or not root.is_dir():
         raise RuntimeError("unexpected project root")
     if not stage.is_dir():
         raise RuntimeError("uploaded stage is missing")
@@ -608,7 +596,7 @@ try:
         raise RuntimeError("BaoTa website Nginx config is missing")
     previous_site = site_config.read_text(encoding="utf-8")
     managed_pattern = re.compile(
-        r"(?m)^(?P<indent>[ \\t]*)include " + re.escape(str(route_include)) + r";\\r?\\n"
+        r"(?m)^(?P<indent>[ \\t]*)include /www/wwwroot/ai选品/config/nginx-spa-routes\\.conf;\\r?\\n"
         r"(?P=indent)error_page 404 /index\\.html;\\r?\\n\\r?\\n"
         r"(?P=indent)location / \\{{\\r?\\n"
         r"(?P=indent)    try_files \\$uri \\$uri/ =404;\\r?\\n"
@@ -626,7 +614,7 @@ try:
     elif len(legacy_matches) == 1 and not managed_matches:
         indent = legacy_matches[0].group("indent")
         managed_block = (
-            indent + "include " + str(route_include) + ";\\n"
+            indent + "include /www/wwwroot/ai选品/config/nginx-spa-routes.conf;\\n"
             + indent + "error_page 404 /index.html;\\n\\n"
             + indent + "location / {{\\n"
             + indent + "    try_files $uri $uri/ =404;\\n"
@@ -687,7 +675,7 @@ try:
         create.framework = "python"
         create.project_cmd = v["python_start"]
         create.auto_run = True
-        create.logpath = "/www/wwwlogs/python/" + v["python_project"]
+        create.logpath = "/www/wwwlogs/python/ai选品-python"
         panel_ok(python_model.CreateProject(create), "create Python project")
     else:
         change = public.dict_obj(); change.name = v["python_project"]
@@ -697,7 +685,7 @@ try:
             "env_file": str(env_file),
             "user": "www",
             "auto_run": True,
-            "logpath": "/www/wwwlogs/python/" + v["python_project"],
+            "logpath": "/www/wwwlogs/python/ai选品-python",
         }}
         panel_ok(python_model.ChangeProjectConf(change), "update Python project")
 
@@ -748,11 +736,11 @@ except Exception as error:
 
 
 def cleanup_source(build_sha: str, initialize_layout: bool) -> str:
-    values = json.dumps({"root": BAOTA_PROJECT_ROOT, "sha": build_sha, "initialize": initialize_layout}, ensure_ascii=False)
+    values = json.dumps({"root": PROJECT_ROOT, "sha": build_sha, "initialize": initialize_layout}, ensure_ascii=False)
     return f'''import json, shutil, subprocess
 from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
-if str(root)!=v["root"] or not root.is_dir(): raise SystemExit("unexpected root")
+if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
 targets=[root/(".deploy-rollback-"+v["sha"])]
 if v["initialize"]: targets.append(root/"shared")
 for target in targets:
@@ -769,11 +757,11 @@ print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"cleanup complete"
 
 
 def transient_cleanup_source(build_sha: str) -> str:
-    values = json.dumps({"root": BAOTA_PROJECT_ROOT, "sha": build_sha}, ensure_ascii=False)
+    values = json.dumps({"root": PROJECT_ROOT, "sha": build_sha}, ensure_ascii=False)
     return f'''import json, shutil, subprocess
 from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
-if str(root)!=v["root"] or not root.is_dir(): raise SystemExit("unexpected root")
+if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
 targets=[root/(".deploy-stage-"+v["sha"]),root/(".deploy-upload-"+v["sha"]+".tar.gz")]
 for target in targets:
     resolved=target.resolve(strict=False)
@@ -789,11 +777,11 @@ print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"transient cleanup
 
 
 def production_identity_source() -> str:
-    values = json.dumps({"root": BAOTA_PROJECT_ROOT}, ensure_ascii=False)
+    values = json.dumps({"root": PROJECT_ROOT}, ensure_ascii=False)
     return f'''import json
 from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
-if str(root)!=v["root"] or not root.is_dir(): raise SystemExit("unexpected root")
+if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
 release=root/"config"/"release.env"; build_sha=None
 if release.is_file():
     for line in release.read_text(encoding="utf-8").splitlines():
@@ -889,8 +877,8 @@ def main() -> None:
         else:
             raise RuntimeError("SSH known_hosts is missing; refusing an unverified server identity")
         client.connect(HOST, username=SSH_USER, password=password, timeout=15)
-        remote_archive = f"{BAOTA_PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
-        remote_stage = f"{BAOTA_PROJECT_ROOT}/.deploy-stage-{build_sha}"
+        remote_archive = f"{PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
+        remote_stage = f"{PROJECT_ROOT}/.deploy-stage-{build_sha}"
         node_stopped_for_migration = False
         try:
             production_identity = remote_python(client, production_identity_source(), timeout=30)
@@ -899,7 +887,7 @@ def main() -> None:
             sftp.put(str(archive), remote_archive)
             sftp.close()
             extract = (
-                f"test \"$(readlink -f '{BAOTA_PROJECT_ROOT}')\" = '{BAOTA_PROJECT_ROOT}' && "
+                f"test \"$(readlink -f '{PROJECT_ROOT}')\" = '{PROJECT_ROOT}' && "
                 f"mkdir -p '{remote_stage}' && "
                 f"{PANEL_PYTHON} -c \"import tarfile; "
                 f"t=tarfile.open('{remote_archive}'); "
@@ -912,7 +900,7 @@ def main() -> None:
             ssh_exec(client, extract, timeout=600)
             migrate = (
                 f"cd '{remote_stage}/backend' && "
-                f"'{NODE_BIN}' --env-file='{BAOTA_PROJECT_ROOT}/config/product_scout.env' "
+                f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
                 "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql 0072_automatic_quality_evaluation.up.sql 0073_automatic_selection_migration_timestamp_timezone.up.sql"
             )
             remote_python(client, panel_node_action_source("stop"), timeout=90)
