@@ -74,6 +74,18 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     rate_limit_window_minutes: 60,
   }),
   form = ref(emptyForm());
+let previewSequence = 0;
+const previewSuccessNotice = "试运行完成；本次只读取历史匹配事实，没有执行动作。";
+watch(
+  () => [form.value, showCreate.value, editing.value?.id, route.fullPath],
+  () => {
+    previewSequence++;
+    preview.value = null;
+    previewing.value = false;
+    if (notice.value === previewSuccessNotice) notice.value = "";
+  },
+  { deep: true, flush: "sync" },
+);
 const { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
     () => showCreate.value,
     closeEditor,
@@ -261,10 +273,14 @@ function applyTemplate(template: RuleTemplate) {
   preview.value = null;
 }
 async function runPreview() {
-  if (!editorFormElement.value?.reportValidity()) return;
+  if (previewing.value || !editorFormElement.value?.reportValidity()) return;
+  const sequence = ++previewSequence;
+  const ownerPath = route.fullPath;
+  const isCurrent = () =>
+    sequence === previewSequence && showCreate.value && route.fullPath === ownerPath;
   previewing.value = true;
   try {
-    preview.value = await api("/automations/preview", {
+    const response = await request<AutomationPreview>("/automations/preview", {
       method: "POST",
       body: JSON.stringify({
         ...form.value,
@@ -272,11 +288,19 @@ async function runPreview() {
           form.value.action_type === "create_task" ? form.value.action_assignee_id : null,
       }),
     });
-    notice.value = "试运行完成；本次只读取历史匹配事实，没有执行动作。";
+    if (!isCurrent()) return;
+    preview.value = response.data;
+    requestId.value = response.request_id;
+    notice.value = previewSuccessNotice;
   } catch (error) {
+    if (!isCurrent()) return;
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    state.value = failure?.kind === "conflict" ? "version_conflict" : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
     rethrowUnexpectedError(error);
   } finally {
-    previewing.value = false;
+    if (isCurrent()) previewing.value = false;
   }
 }
 async function status(rule: Rule) {

@@ -278,3 +278,123 @@ test("M05-06.A07/A08/A15 mobile team report layout", async ({ page }) => {
     .toBeVisible({ timeout: 5000 })
     .catch(() => {});
 });
+
+test("UI2-RP01 late export detail cannot reopen after history closes it", async ({ page }) => {
+  await setup(page);
+  await page.clock.setFixedTime(new Date("2026-09-08T00:00:00Z"));
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const detailPath = "**/api/v1/report-exports/00000000-0000-4000-8000-000000000563";
+  await page.route(detailPath, async (route) => {
+    await held;
+    await route.fulfill({
+      json: envelope({
+        id: "00000000-0000-4000-8000-000000000563",
+        report_type: "opportunity",
+        status: "succeeded",
+        row_count: 28,
+        byte_size: 4096,
+        expires_at: "2026-09-09T12:00:00Z",
+        last_error_code: null,
+      }),
+    });
+  });
+  await page.goto("/reports");
+  await expect(page.locator(".report-conclusion")).toContainText("共 28 个机会");
+  const sent = page.waitForRequest(detailPath);
+  await page.getByRole("button", { name: "查看详情" }).first().click();
+  await sent;
+  await page.goBack();
+  await expect(page).not.toHaveURL(/export=/);
+  const response = page.waitForResponse(detailPath);
+  release();
+  await (await response).finished();
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+  );
+  // A negative assertion alone could pass before the response's JSON continuation renders.
+  await page.waitForTimeout(200);
+  await expect(page.locator(".report-detail")).toHaveCount(0);
+});
+
+test("UI2-RP02 failed download stays retryable and returns the actual CSV bytes", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.clock.setFixedTime(new Date("2026-09-08T00:00:00Z"));
+  let attempts = 0;
+  let recovered = false;
+  const csv = "name,value\r\nfixture,28\r\n";
+  await page.route("**/api/v1/report-exports/*/download", async (route) => {
+    expect(route.request().method()).toBe("GET");
+    expect(route.request().headers()["x-request-id"]).toBeTruthy();
+    attempts++;
+    if (!recovered) await route.abort("internetdisconnected");
+    else await route.fulfill({ contentType: "text/csv; charset=utf-8", body: csv });
+  });
+  await page.goto("/reports");
+  await page.getByRole("button", { name: "下载", exact: true }).click();
+  await expect(page.locator(".report-notice")).toBeVisible();
+  await expect(page.getByRole("button", { name: "下载", exact: true })).toBeEnabled();
+  const failedAttempts = attempts;
+  expect(failedAttempts).toBeGreaterThan(0);
+  recovered = true;
+  const received = page.waitForEvent("download");
+  await page.getByRole("button", { name: "下载", exact: true }).click();
+  const download = await received;
+  try {
+    expect(download.suggestedFilename()).toBe("scoutops-opportunity.csv");
+    const stream = await download.createReadStream();
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+    expect(Buffer.concat(chunks).toString("utf8")).toBe(csv);
+    expect(attempts).toBe(failedAttempts + 1);
+  } finally {
+    await download.delete();
+  }
+});
+
+test("UI2-RP03 missing aggregates remain missing and export creation preserves report type", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.clock.setFixedTime(new Date("2026-09-08T00:00:00Z"));
+  await page.route("**/api/v1/reports/trend", (route) =>
+    route.fulfill({
+      json: envelope({
+        type: "trend",
+        summary: {
+          total: 0,
+          signals: 0,
+          sources: 0,
+          average_confidence: null,
+          average_momentum: null,
+        },
+        series: [],
+        observed_at: null,
+      }),
+    }),
+  );
+  const writes: any[] = [];
+  await page.route("**/api/v1/report-exports", async (route) => {
+    if (route.request().method() === "POST") {
+      writes.push(route.request().postDataJSON());
+      expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+      await route.fulfill({
+        status: 202,
+        json: envelope({ id: "00000000-0000-4000-8000-000000000567", status: "queued" }),
+      });
+    } else await route.fulfill({ json: envelope([]) });
+  });
+  await page.goto("/reports?report=trend");
+  await expect(
+    page.locator(".report-metrics article").filter({ hasText: "平均置信度" }),
+  ).toContainText("数据不足");
+  await expect(page.getByRole("heading", { name: "暂无可聚合记录" })).toBeVisible();
+  await expect(page.locator(".report-scope")).toContainText("数据不足");
+  await page.getByRole("button", { name: "导出当前报表 CSV" }).click();
+  await expect(page.locator(".report-notice")).toContainText("导出任务已提交");
+  expect(writes).toEqual([{ report_type: "trend", format: "csv" }]);
+});
