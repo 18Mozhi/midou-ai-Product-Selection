@@ -307,7 +307,7 @@ watch(
           <small>角色分配在“成员与邀请”页完成；本页不创建自定义角色或绕过后端策略。</small>
         </article>
       </section>
-      <section v-if="!grantMeta?.total" class="org-admin-state">
+      <section v-if="!roles.length" class="org-admin-state">
         <h3>暂无活动角色</h3>
         <p>角色目录未初始化，所有管理动作保持默认拒绝。</p>
       </section>

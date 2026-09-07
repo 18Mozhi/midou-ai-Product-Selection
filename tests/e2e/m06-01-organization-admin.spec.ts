@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 import type { Page, Route } from "@playwright/test";
+import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
+test.afterEach(async ({}, testInfo) => finalizePhase2Evidence(testInfo));
 
 const org = "00000000-0000-4000-8000-000000000601";
 const ws = "00000000-0000-4000-8000-000000000602";
@@ -923,11 +925,15 @@ test("organization approval governance filters, paginates and restores URL-backe
 
 test("organization roles expose searchable role, capability, scope and grant facts", async ({
   page,
-}) => {
+}, testInfo) => {
   await setup(page);
   await page.goto("/org-admin/roles");
   await expect(page.getByRole("table", { name: "角色能力矩阵" })).toBeVisible();
   await expect(page.getByText("固定角色模板", { exact: true }).first()).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P31", "role-matrix", [
+    "fixed-role-catalog",
+    "capability-matrix-visible",
+  ]);
 
   await page.getByLabel("搜索角色或能力").fill("审计");
   await expect(page.getByRole("button", { name: /审计员/ })).toBeVisible();
@@ -942,6 +948,10 @@ test("organization roles expose searchable role, capability, scope and grant fac
 
   await page.getByRole("button", { name: "数据范围" }).click();
   await expect(page.getByRole("heading", { name: "我的有效数据范围" })).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P31", "data-scopes", [
+    "scope-section-switch",
+    "current-session-scope-visible",
+  ]);
   await page.getByLabel("搜索成员").fill("陈采购");
   await page.getByLabel("数据范围").selectOption("workspace");
   await expect(page.getByText("陈采购", { exact: true })).toBeVisible();
@@ -949,8 +959,16 @@ test("organization roles expose searchable role, capability, scope and grant fac
 
   await page.getByRole("button", { name: /指定资源授权 1/ }).click();
   await expect(page.getByText("采购团队核对供应报价")).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P31", "resource-grants", [
+    "existing-grant-reason",
+    "grants-not-role-definitions",
+  ]);
   await page.getByRole("button", { name: "已撤销 0" }).click();
   await expect(page.getByRole("heading", { name: "当前状态没有资源授权" })).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P31", "grants-filter-empty", [
+    "revoked-filter-empty",
+    "empty-is-filter-scoped",
+  ]);
   await page.getByRole("button", { name: "全部 1" }).click();
   await page.getByLabel("搜索当前页授权").fill("陈采购");
   await expect(page.getByText("采购团队核对供应报价")).toBeVisible();
@@ -996,7 +1014,7 @@ test("organization resource grants use truthful server pagination beyond one pag
 
 test("organization resource grants validate and send audited create, extend and revoke writes", async ({
   page,
-}) => {
+}, testInfo) => {
   const writes: Array<{ method: string; url: string; body: Record<string, unknown> }> = [];
   await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
   await setup(page);
@@ -1022,6 +1040,11 @@ test("organization resource grants validate and send audited create, extend and 
   await createForm.getByLabel("资源编号").fill(grantResource);
   await createForm.getByLabel("目标成员").selectOption(memberBuyer);
   await createForm.getByLabel("业务原因").fill("临时协作核价");
+  await capturePhase2Evidence(page, testInfo, "P31", "grant-create-form", [
+    "target-member-selected",
+    "resource-and-reason-entered",
+    "not-yet-submitted",
+  ]);
   await createForm.getByRole("button", { name: "创建并写入审计" }).click();
   await expect(page.getByText("指定资源授权已创建并写入审计。")).toBeVisible();
 
@@ -1032,6 +1055,10 @@ test("organization resource grants validate and send audited create, extend and 
   await page.getByRole("button", { name: "撤销授权" }).click();
   const dialog = page.getByRole("dialog", { name: "撤销指定资源授权原因" });
   await dialog.getByRole("textbox").fill("协作已经结束");
+  await capturePhase2Evidence(page, testInfo, "P31", "grant-revoke-reason", [
+    "revoke-requires-reason",
+    "not-yet-confirmed",
+  ]);
   await dialog.getByRole("button", { name: "确认提交" }).click();
   await expect(page.getByText("指定资源授权已撤销并写入审计。")).toBeVisible();
 
@@ -1055,6 +1082,30 @@ test("organization resource grants validate and send audited create, extend and 
     method: "POST",
     body: { expected_version: 1, reason: "协作已经结束" },
   });
+});
+
+test("role catalog empty state is independent of resource grant count", async ({
+  page,
+}, testInfo) => {
+  await setup(page);
+  await page.route(`**/api/v1/org/${org}/resource-grants*`, (route) =>
+    route.fulfill({ json: env([], { page: 1, limit: 20, total: 0 }) }),
+  );
+  await page.goto("/org-admin/roles");
+  await expect(page.getByRole("table", { name: "角色能力矩阵" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "暂无活动角色" })).toHaveCount(0);
+  await capturePhase2Evidence(page, testInfo, "P31", "roles-without-grants", [
+    "roles-visible-with-zero-grants",
+    "no-false-empty-role-notice",
+  ]);
+  await page.route("**/api/v1/org/admin/roles", (route) => route.fulfill({ json: env([]) }));
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "暂无活动角色" })).toBeVisible();
+  await expect(page.getByRole("table", { name: "角色能力矩阵" })).toHaveCount(0);
+  await capturePhase2Evidence(page, testInfo, "P31", "roles-empty", [
+    "empty-role-catalog",
+    "matrix-not-rendered",
+  ]);
 });
 
 test("organization data filters, sorts, paginates and preserves URL state", async ({ page }) => {

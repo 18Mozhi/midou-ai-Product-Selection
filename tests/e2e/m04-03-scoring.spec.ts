@@ -1,4 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
+import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
+test.afterEach(async ({}, testInfo) => finalizePhase2Evidence(testInfo));
 const opportunityId = "00000000-0000-4000-8000-000000000434",
   ruleId = "00000000-0000-4000-8000-000000000435",
   draftId = "00000000-0000-4000-8000-000000000436",
@@ -52,7 +54,7 @@ async function navigation(
 }
 test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive workflow", async ({
   page,
-}) => {
+}, testInfo) => {
   await navigation(page);
   let draftStatus = "draft",
     draftRevision = 1;
@@ -144,26 +146,53 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
     ),
   ).toBe(true);
   await expect(page).toHaveScreenshot("m04-03-score-rules.png", { fullPage: true });
+  await capturePhase2Evidence(page, testInfo, "P17", "versions", [
+    "active-and-draft-visible",
+    "missing-risk-dimension-not-ready",
+  ]);
+  await page.getByRole("button", { name: "创建新版本补齐配置" }).click();
+  const createDialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
+  await expect(createDialog).toBeVisible();
+  await expect(createDialog.getByLabel("推荐阈值", { exact: true })).toHaveValue("");
+  await expect(createDialog.getByLabel("观察阈值", { exact: true })).toHaveValue("");
+  await capturePhase2Evidence(page, testInfo, "P17", "create-form", [
+    "blank-thresholds-no-invented-defaults",
+    "create-modal-opens",
+  ]);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "创建新版本补齐配置" })).toBeFocused();
   await page.getByRole("button", { name: "预览影响" }).click();
   const previewDialog = page.getByRole("dialog", { name: /发布影响预览/ });
   await expect(previewDialog).toBeVisible();
   await expect(previewDialog).toHaveJSProperty("open", true);
   await expect(previewDialog.getByText("便携式智能净水杯机会")).toBeVisible();
   await expect(previewDialog.getByText("-1.80")).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P17", "preview", [
+    "read-only-preview",
+    "projected-delta-minus-1-80",
+  ]);
   await page.keyboard.press("Escape");
   await expect(previewDialog).toBeHidden();
   await expect(page.getByRole("button", { name: "预览影响" })).toBeFocused();
   await page.getByRole("button", { name: "提交" }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByLabel("原因（必填）").fill("提交候选权重等待审批");
+  await capturePhase2Evidence(page, testInfo, "P17", "submit-reason", [
+    "submit-reason-visible",
+    "not-yet-submitted",
+  ]);
   await dialog.getByRole("button", { name: "确认提交审批" }).click();
   await expect(page.getByText("提交审批已完成并写入审计记录。")).toBeVisible();
   await expect(page.getByText("待审批", { exact: true })).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P17", "pending-approval", [
+    "fixture-action-response-reread",
+    "pending-state-rendered",
+  ]);
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 test("M04-03 score rule approval controls follow real navigation capabilities", async ({
   page,
-}) => {
+}, testInfo) => {
   await navigation(page, ["opportunity:read", "opportunity:decide"]);
   await page.route("**/api/v1/opportunity-score-rules", (route) =>
     route.fulfill({
@@ -190,6 +219,24 @@ test("M04-03 score rule approval controls follow real navigation capabilities", 
   await expect(page.getByRole("button", { name: "预览影响" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "批准" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "拒绝" })).toHaveCount(0);
+  await capturePhase2Evidence(page, testInfo, "P17", "approval-restricted", [
+    "decide-without-approve",
+    "preview-approve-reject-hidden",
+  ]);
+});
+test("score rules read-only empty state does not expose creation", async ({ page }, testInfo) => {
+  await navigation(page, ["opportunity:read"]);
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
+  await page.goto("/opportunities/scoring-rules");
+  await expect(page.getByText("尚无评分规则", { exact: true })).toBeVisible();
+  await expect(page.getByText("当前身份仅可查看规则。", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /创建首个草稿|新建规则版本/ })).toHaveCount(0);
+  await capturePhase2Evidence(page, testInfo, "P17", "readonly-empty", [
+    "empty-not-default-rules",
+    "read-only-no-create",
+  ]);
 });
 test("M04-03.A07/A08/A15 opportunity score explanation exposes inputs evidence missing and confidence", async ({
   page,

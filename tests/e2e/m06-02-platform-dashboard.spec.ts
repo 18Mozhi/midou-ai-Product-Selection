@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
-import type { Page } from "@playwright/test";
+import type { Page, Route } from "@playwright/test";
+import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
+test.afterEach(async ({}, testInfo) => finalizePhase2Evidence(testInfo));
 const env = (data: any) => ({ data, request_id: "m06-02-e2e", trace_id: "m06-02-e2e" }),
   dashboard = {
     window: "24h",
@@ -781,7 +783,7 @@ test("platform completion exposes data governance notifications and user-panel s
 
 test("system status aggregates real operations observations and management links", async ({
   page,
-}) => {
+}, testInfo) => {
   await nav(page);
   await page.addInitScript(() =>
     sessionStorage.setItem(
@@ -887,6 +889,31 @@ test("system status aggregates real operations observations and management links
   await expect(
     page.locator(".platform-topology-node").filter({ hasText: /^Redis/ }),
   ).toHaveAttribute("href", "/platform-admin/redis");
+  await capturePhase2Evidence(page, testInfo, "P61", "dependency-degraded", [
+    "redis-warning",
+    "files-stale",
+    "propagation-visible",
+    "session-metrics-not-global",
+  ]);
+  const failRefresh = (route: Route) => route.abort("failed");
+  await page.route("**/api/v1/platform/management?**", failRefresh);
+  await page.getByRole("button", { name: "刷新数据", exact: true }).click();
+  await expect(page.locator(".platform-management-message")).toContainText("已保留上次成功数据");
+  await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P61", "refresh-failed-retained", [
+    "expected-transport-abort",
+    "last-success-data-retained",
+    "failure-message-visible",
+  ]);
+  await page.unroute("**/api/v1/platform/management?**", failRefresh);
+  await page.getByRole("button", { name: "刷新数据", exact: true }).click();
+  await expect(page.locator(".platform-management-message")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "刷新数据", exact: true })).toBeEnabled();
+  await capturePhase2Evidence(page, testInfo, "P61", "refresh-recovered", [
+    "refresh-retry-succeeds",
+    "failure-message-cleared",
+    "dependency-warning-still-truthful",
+  ]);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
