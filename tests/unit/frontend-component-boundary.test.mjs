@@ -29,6 +29,7 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     ["apps/web/src/navigation-shell-permissions.ts", 80],
     ["apps/web/src/use-navigation-shell-theme.ts", 100],
     ["apps/web/src/use-navigation-discovery.ts", 40],
+    ["apps/web/src/use-platform-user-detail.ts", 100],
   ]);
 
   for (const [path, limit] of limits) {
@@ -45,6 +46,7 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     readFile(`${components}/OrganizationAdminCenter.vue`, "utf8"),
   ]);
   assert.match(accounts, /import PlatformAdminRecords/);
+  assert.match(accounts, /usePlatformUserDetail\(request, selected,/);
   assert.match(accounts, /<PlatformAdminRecords/);
   assert.match(accounts, /import PlatformOrganizationRecords/);
   assert.match(accounts, /<PlatformOrganizationRecords/);

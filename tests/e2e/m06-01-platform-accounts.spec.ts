@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const user = "00000000-0000-4000-8000-000000000621";
 const org = "00000000-0000-4000-8000-000000000622";
@@ -107,6 +107,226 @@ async function setup(page: any) {
   await page.route("**/api/v1/platform/roles", (route: any) =>
     route.fulfill({ json: env(platformRoles) }),
   );
+}
+
+async function openAccountRecord(page: Page, email: string) {
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    await page
+      .getByRole("button", { name: new RegExp(`${email.replaceAll(".", "\\.")}.*查看详情`) })
+      .click();
+    await page
+      .getByRole("dialog", { name: email, exact: true })
+      .getByRole("button", { name: "打开账号详情" })
+      .click();
+  } else {
+    await page
+      .getByRole("row")
+      .filter({ hasText: email })
+      .getByRole("button", { name: "账号详情" })
+      .click();
+  }
+}
+
+for (const scenario of ["stale-success", "stale-error", "reopened-same-user"] as const) {
+  test(`UI2-PA01 account detail ownership ${scenario}`, async ({ page }) => {
+    await setup(page);
+    const second = {
+      ...overview.users[0],
+      id: "00000000-0000-4000-8000-000000000627",
+      email: "second@example.test",
+    };
+    const current = scenario === "reopened-same-user" ? overview.users[0] : second;
+    const payload = (account: typeof second, marker: string) => ({
+      user: { ...account, must_change_password: false, must_enroll_mfa: false },
+      memberships: [
+        {
+          id: `membership-${marker}`,
+          organization_id: org,
+          organization_name: marker,
+          roles: ["member"],
+          status: "active",
+        },
+      ],
+      sessions: [],
+    });
+    await page.route("**/api/v1/platform/accounts?**", (route) =>
+      route.fulfill({ json: env({ ...overview, users: [overview.users[0], second] }) }),
+    );
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => (release = resolve));
+    let reads = 0;
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (
+        request.url().includes("/api/v1/platform/accounts") &&
+        !["GET", "HEAD"].includes(request.method())
+      )
+        writes.push(request.url());
+    });
+    await page.route("**/api/v1/platform/accounts/users/*", async (route) => {
+      reads += 1;
+      if (reads === 1) {
+        await pending;
+        await route.fulfill(
+          scenario === "stale-error"
+            ? {
+                status: 404,
+                json: {
+                  error: {
+                    code: "account_not_found",
+                    message: "旧账号读取失败",
+                    action_hint: "旧详情不应污染当前账号",
+                  },
+                  request_id: "ui2-pa-old",
+                  trace_id: "ui2-pa-old",
+                },
+              }
+            : { json: env(payload(overview.users[0], "旧读取组织")) },
+        );
+      } else {
+        expect(new URL(route.request().url()).pathname).toBe(
+          `/api/v1/platform/accounts/users/${current.id}`,
+        );
+        await route.fulfill({ json: env(payload(current, "当前读取组织")) });
+      }
+    });
+    try {
+      await page.goto("/platform-admin/users");
+      await openAccountRecord(page, overview.users[0].email);
+      await expect(
+        page.getByRole("dialog", { name: overview.users[0].email, exact: true }),
+      ).toContainText("正在读取账号详情");
+      await expect.poll(() => reads).toBe(1);
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+      await openAccountRecord(page, current.email);
+      const dialog = page.getByRole("dialog", { name: current.email, exact: true });
+      await expect(dialog).toContainText("当前读取组织");
+      const staleResponse = page.waitForResponse((response) =>
+        response.url().endsWith(`/platform/accounts/users/${user}`),
+      );
+      release();
+      await (await staleResponse).finished();
+      await page.waitForTimeout(200); // Let the late handler settle before checking negative UI state.
+      await expect(dialog).toContainText("当前读取组织");
+      await expect(dialog).not.toContainText("旧读取组织");
+      await expect(dialog.getByRole("alert")).toHaveCount(0);
+      expect(reads).toBe(2);
+      expect(writes).toHaveLength(0);
+    } finally {
+      release();
+    }
+  });
+}
+
+for (const destination of ["shared-account-route", "cached-dashboard"] as const) {
+  test(`UI2-PA02 account detail closes on history navigation ${destination}`, async ({ page }) => {
+    await setup(page);
+    await page.route("**/api/v1/platform/dashboard?**", (route) =>
+      route.fulfill({
+        json: env({
+          window: "24h",
+          summary: {
+            active_organizations: 0,
+            active_users: 0,
+            enabled_providers: 0,
+            task_success_rate: null,
+            queue_backlog: 0,
+            open_alerts: 0,
+            storage_bytes: 0,
+            file_growth_bytes: 0,
+          },
+          queues: [],
+          provider_health: [],
+          task_trend: [],
+          health_signals: [],
+          alerts: [],
+          activity: [],
+          observed_at: "2026-09-08T00:00:00Z",
+        }),
+      }),
+    );
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => (release = resolve));
+    let reads = 0;
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      if (url.pathname.startsWith("/api/v1/platform/accounts") && request.method() !== "GET")
+        writes.push(request.url());
+    });
+    await page.route(`**/api/v1/platform/accounts/users/${user}`, async (route) => {
+      reads += 1;
+      const marker = reads === 1 ? "旧读取组织" : "重新打开后的组织";
+      if (reads === 1) await pending;
+      await route.fulfill({
+        json: env({
+          user: { ...overview.users[0], must_change_password: false, must_enroll_mfa: false },
+          memberships: [
+            {
+              id: "membership-ui2-pa",
+              organization_id: org,
+              organization_name: marker,
+              roles: ["member"],
+              status: "active",
+            },
+          ],
+          sessions: [],
+        }),
+      });
+    });
+    try {
+      await page.goto("/platform-admin/users");
+      await page.locator("dialog.detail-dialog").waitFor({ state: "attached" });
+      const cachedDialog = await page.locator("dialog.detail-dialog").elementHandle();
+      if (destination === "shared-account-route") {
+        await page
+          .getByRole("navigation", { name: "账号与组织二级导航" })
+          .getByRole("link", { name: "管理员管理", exact: true })
+          .click();
+        await expect(page).toHaveURL(/\/platform-admin\/admins$/);
+      } else {
+        await page
+          .getByRole("navigation", { name: "面包屑" })
+          .getByRole("link", { name: "平台后台", exact: true })
+          .click();
+        await expect(page).toHaveURL(/\/platform-admin$/);
+        await expect(page.getByText("平台还没有可展示的业务事实", { exact: true })).toBeVisible();
+      }
+      await page.goBack();
+      await expect(page).toHaveURL(/\/platform-admin\/users$/);
+      await openAccountRecord(page, overview.users[0].email);
+      await expect(page.getByRole("dialog")).toContainText("正在读取账号详情");
+      await expect.poll(() => reads).toBe(1);
+      await page.goForward();
+      await expect(page).toHaveURL(
+        destination === "shared-account-route" ? /\/platform-admin\/admins$/ : /\/platform-admin$/,
+      );
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+      const staleResponse = page.waitForResponse((response) =>
+        response.url().endsWith(`/platform/accounts/users/${user}`),
+      );
+      release();
+      await (await staleResponse).finished();
+      await page.waitForTimeout(200);
+      await page.goBack();
+      await expect(page).toHaveURL(/\/platform-admin\/users$/);
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+      await openAccountRecord(page, overview.users[0].email);
+      const dialog = page.getByRole("dialog", { name: overview.users[0].email, exact: true });
+      await expect(dialog).toContainText("重新打开后的组织");
+      await expect(dialog).not.toContainText("旧读取组织");
+      expect(reads).toBe(2);
+      expect(
+        await cachedDialog?.evaluate(
+          (node) => node.isConnected && node === document.querySelector("dialog.detail-dialog"),
+        ),
+      ).toBe(true); // A route-triggered refresh does not mean the cached Vue surface was remounted.
+      expect(writes).toHaveLength(0);
+    } finally {
+      release();
+    }
+  });
 }
 
 test("platform permission page reads only the real role catalog and preserves comparison state", async ({

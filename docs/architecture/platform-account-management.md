@@ -20,6 +20,8 @@
 
 账号管理弹窗统一进入浏览器原生模态顶层，支持焦点约束、Escape 关闭和关闭后返回触发控件；不透明弹窗表面与遮罩避免底层页面文字透出。
 
+账号详情读取由`use-platform-user-detail.ts`独立管理，绑定本次打开代次、目标用户和routePath。关闭、切路由、KeepAlive离开或卸载均清除详情并使旧读取失效；迟到成功/错误不能覆盖新用户或同一用户重新打开的窗口。父页面保留列表、共享selected和写操作编排，原低于850行边界不变。此边界只处理详情GET显示，不改变接口或安全读取重试，也不覆盖各写操作完成后的重新打开逻辑。永久用例UI2-PA01/PA02和未验边界见[第二阶段详情合同](../../design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md)。
+
 所有写操作要求 `platform:superadmin`、同源 Origin、Idempotency-Key 和 2–300 字原因，使用 `platform_account_operations` 幂等，并写入 `platform_audit_events`。当前账号不能停用自己，也不能撤销自己的超级管理员角色。
 
 管理员、组织管理员和普通成员继续使用三套独立导航。平台主导航只显示平台概览、组织与用户、热点来源、采集任务、数据质量、安全与审计、高级设置；Redis、MySQL、文件与容量等技术页不再占据小白用户的一级菜单，但历史受保护路由未被删除。

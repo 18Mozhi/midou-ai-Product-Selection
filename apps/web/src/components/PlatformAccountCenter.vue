@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
+import { usePlatformUserDetail } from "../use-platform-user-detail";
 import type { AccountData, AccountTab, MembershipInput } from "../platform-account-types";
 import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
@@ -50,9 +51,6 @@ const props = withDefaults(
   organizationMissing = ref(false),
   organizationError = ref(""),
   organizationSuccess = ref(""),
-  detailOpen = ref(false),
-  detailError = ref(""),
-  detailSuccess = ref(""),
   passwordOpen = ref(false),
   passwordError = ref(""),
   reasonOpen = ref(false),
@@ -60,7 +58,6 @@ const props = withDefaults(
   reasonText = ref("平台管理员人工操作"),
   pendingReasonAction = ref<null | ((value: string) => Promise<void>)>(null),
   selected = ref<any>(null),
-  detail = ref<any>(null),
   createOpen = ref(props.routePath.endsWith("/new")),
   form = reactive({ name: "", slug: "", initial_admin_user_id: "" }),
   organizationForm = reactive({
@@ -76,6 +73,15 @@ const props = withDefaults(
     organization_role_code: "member",
   }),
   passwordForm = reactive({ temporary_password: "" });
+const {
+  detailOpen,
+  detail,
+  detailError,
+  detailSuccess,
+  clearDetailFeedback,
+  closeUserDetail,
+  openUserDetail,
+} = usePlatformUserDetail(request, selected, () => props.routePath);
 watch(
   () => props.initialTab,
   (value) => {
@@ -508,26 +514,6 @@ async function createUser() {
   ) {
     createUserOpen.value = false;
     message.value = "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
-  }
-}
-function clearDetailFeedback() {
-  detailError.value = "";
-  detailSuccess.value = "";
-}
-function closeUserDetail() {
-  detailOpen.value = false;
-  clearDetailFeedback();
-}
-async function openUserDetail(item: any, preserveFeedback = false) {
-  if (!preserveFeedback) clearDetailFeedback();
-  selected.value = item;
-  detail.value = null;
-  detailOpen.value = true;
-  try {
-    const response = await request<any>(`/platform/accounts/users/${item.id}`);
-    detail.value = response.data;
-  } catch (e) {
-    detailError.value = e instanceof ApiClientError ? e.actionHint : "读取详情失败";
   }
 }
 function openPassword(item: any) {
