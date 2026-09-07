@@ -127,7 +127,9 @@ test("M02-04.A07/A15/A16/A17 visual recovery and delivery evidence exists", asyn
   assert.match(styles, /@media\s*\(\s*max-width:\s*780px\s*\)/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
-  assert.match(runbook, /宝塔网站/);
+  assert.match(runbook, /python scripts\/deploy-baota\.py/);
+  assert.match(runbook, /生产构建则验证/);
+  assert.match(runbook, /不能露出内部展示/);
   assert.match(feature, /commonUiStates/);
   assert.match(blueprint, /M02-04/);
 });

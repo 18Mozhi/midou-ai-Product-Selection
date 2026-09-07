@@ -88,7 +88,7 @@ function keydown(event: KeyboardEvent) {
 </script>
 <template>
   <Teleport to="body"
-    ><div v-if="open" class="confirm-backdrop" @mousedown.self="cancel">
+    ><div v-if="open" class="confirm-backdrop" @mousedown.self.prevent="cancel">
       <section
         ref="dialog"
         class="confirm-dialog"

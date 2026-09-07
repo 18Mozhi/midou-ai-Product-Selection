@@ -398,3 +398,19 @@ inventory --check、source-scope verifier、36图生成/校验及双视口图库
 P16当前十项映射、PAGES纠偏、Feature Map索引和旧盘点说明已同步；产品Vue/CSS、API、SQL、依赖、环境变量、生产配置不变，OpenAPI/.env无需配套改动，无部署/迁移/重启。本批是证据一致性收尾，不增加页面规格（仍22/73、余51），G0未冻结、用户审核0。J07业务规则及A/B正式方向仍待用户决定；J08剩余跨范围/多标签/写入归属、J09/J10仍待。下一步补W02尚缺的P72/P73独立规格，再按共享入口族推进W03等剩余页面，不把本批重采数量当作全套新图完成。
 
 需求拆解技能用于影响范围与版本证据，无障碍/Playwright技能用于已有图库和审核台的实际交互验证；不因重采延伸到新视觉或生产写入。本轮唯一临时目录 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-journey-evidence-refresh-20260907`，含desktop/mobile两份.last-run，精确路径及普通目录非链接属性核对后Remove-Item被工具策略拒绝，未绕过，仍需手动清理且不入Git。采集脚本/browser/Vite及测试服务均已返回退出，4101/5173无监听；历史十批遗留目录未动。审核图、JSON和清单是永久交付物，保留。
+
+## 2026-09-07 · PLAN 1.7 E01收尾、E02两页规格与遮罩焦点修复
+
+从main/71b4c29及58项已记录证据变更开始，先核对差异与归属并只读运行inventory --check（73/1377/100、704历史对应）、source-scope（54/42/1/6）及36图build --check，通过后精确暂存58项形成f55942d。采图和18单测等沿用上一批有效证据，没有重采或伪称本批重跑。Git add曾返回非零但实际暂存58项，随后cached范围/检查和提交结果确认恰为原58项，提交后工作树干净；未混入本批后续产品修复。
+
+依地图commonUiStates→route-catalog/router/App→UiStateShowcase/NotFoundPage/UiStatePanel/ConfirmDialog/navigation-memory完成E02盘点，新增page-specs/P72.md、P73.md及state-recovery-contract-review.md。14个控件/事件源码候选、2个定义/调用候选、两处v-model，按稳定语义与八态行为展开；P72开发演示与P73用户404明确分开。修复前逐项核对hash/line/ID，修复后将旧记录标历史并单列当前差异。规格24/73、余49；不是24页正式重设计完成，G0未冻结，用户通过0。
+
+新增永久ui-phase2-state-recovery-contracts.spec.ts七例：非法/多值query、同态history、loading按钮/aria-busy、清提示、确认双条件/trim、取消重开/焦点、unsafe最近路径两变体与storage失败。最小ST03通过（17.2s）；原12项非截图用例加新7项首轮桌面18通过、ST04遮罩取消后焦点丢失1失败。ConfirmDialog的mousedown先关闭而后浏览器默认聚焦夺走返回焦点；仅改@mousedown.self为@mousedown.self.prevent，保留取消时机并使内部输入/勾选/按钮不受影响。最小ST04通过（14.1s）；最终本族桌面19项通过（19.3s）、390移动19项通过（26.3s），无跳过。两项历史toHaveScreenshot用例明确不在本批集合，未修改图基线。
+
+核对9个组件/11次直接ConfirmDialog调用，取消均更新本地状态。补跑8个实际业务组件的已有相关隔离Vue回归：凭证撤销、浏览器回收、死信重放、质量解决、批量重放、开放平台确认取消、调度恢复、容量签认，桌面8项通过（28.6s）、390移动8项通过（27.9s）。四份final .last-run均passed/failedTests为空。现有批量重放用例通过DOM click两次测防重，不能称其覆盖鼠标命中；ST03/ST04使用实际交互测试。质量批量、来源熔断变体、叠加弹窗、辅助技术与真实后端/生产仍未全验。
+
+build:web（包含typecheck）通过，407模块、10.90s，frontend-budget通过251资源；实际dist JS与文件名扫描无UiStateShowcase/VerificationFramework，不等于线上URL/HTTP状态已验。文档门73路由/60受保护/6角色/153必需文件通过，静态分析389文件通过，format:check通过changed=2/production=495/repositories=51。最初裸node --test因Node22不能直接加载.ts而失败，按真实M02-04注册命令加--experimental-strip-types后5项通过；不改依赖或运行参数。运行手册更新后该单测的旧“宝塔网站”字样断言改为真实统一部署命令和生产内部不可见约束，再做收尾验证。
+
+同步Feature Map、架构和运行手册的焦点合同，并纠正旧文档要求生产开放内部展示的错误。产品只改ConfirmDialog一行，无API、权限、SQL、后端/Worker/Python、CSS、依赖或环境变量变化，OpenAPI/.env无需变更。修复本身只更新前端构建；实际发布仍用宝塔统一部署器并检查既有迁移/停启窗口，本轮未部署/迁移/重启。生成清单及旧图仍保留16f524b修复前指纹，需要在此产品提交后按影响刷新；不改哈希冒充复验。下一步收尾当前源证据，然后按E03补W03八份缺失规格；A/B方向、J07质量门决定和其他历史未验项仍保留，完整W00–W09目标不缩减。
+
+使用需求拆解、UI技能目录选择的无障碍技能及计划要求的Playwright永久测试流程。唯一新临时目录 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-state-recovery-20260907`，共10文件（7份.last-run及首轮失败截图/trace/context）。绝对路径与普通非链接目录已核对，Remove-Item被工具策略拒绝，未绕过，仍需手动清理且不入Git；历史11批目录不动。所有测试/构建工具已退出，4101/5173无监听，无服务交接。正常构建和浏览器助手包为项目运行输出保留；新规格、合同和测试为永久交付物。
