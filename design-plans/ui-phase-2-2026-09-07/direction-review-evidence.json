@@ -1,0 +1,20 @@
+{
+  "kind": "review-ui-not-new-page-design",
+  "capturedAt": "2026-09-07T20:27:59.324Z",
+  "outputs": [
+    {
+      "file": "direction-review-1440.png",
+      "width": 1440,
+      "sha256": "43213a6b38932840f2485efc38b1023399365bffc72510b5c3c069455e5c4f3f"
+    },
+    {
+      "file": "direction-review-390.png",
+      "width": 390,
+      "sha256": "76c05913577c9d21d2a85d237aa1d76ad4634f6c02d2cd7b1d547d0918da5c0e"
+    }
+  ],
+  "browser": "151.0.7922.34",
+  "platform": "win32",
+  "dataSha256": "451d866e603a52b3059756de8a6bd2ae0cd5a43e2da4664a4196e9ca155552e3",
+  "approval": "pending-user-review"
+}

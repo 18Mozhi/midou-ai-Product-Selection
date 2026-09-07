@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>第二阶段 · 新结构审核台</title>
+    <link rel="stylesheet" href="direction-review.css" />
+    <script src="direction-review-data.js" defer></script>
+    <script src="direction-review.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#review-controls">跳到审图筛选</a>
+    <header class="masthead">
+      <a class="wordmark" href="direction-review.html">米豆智选<span>DESIGN REVIEW</span></a>
+      <span class="review-state">方向待审核 · 未部署</span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="title">
+        <div>
+          <p class="eyebrow">第二阶段 / 结构先行</p>
+          <h1 id="title">先看工作方式，<br />再决定界面风格。</h1>
+        </div>
+        <div class="intro-note">
+          <p>这里比较导航、信息顺序和操作路径。旧账页风格不作为新设计的默认约束。</p>
+          <p>
+            现有研究覆盖任务、规则、权限、异常恢复、按钮和账号；不是全站最终图，也不是当前生产实景。
+          </p>
+          <a href="PAGES.md">查看完整 73 路由范围 ↗</a>
+        </div>
+      </section>
+      <section class="directions" aria-label="候选结构说明">
+        <article>
+          <span class="letter">A</span>
+          <h2>专注工位</h2>
+          <p>竖向导航，队列与详情并排。连续处理对象时，保留列表上下文。</p>
+        </article>
+        <article>
+          <span class="letter">B</span>
+          <h2>工作简报</h2>
+          <p>单层导航，全宽概览进入独立详情。当前事项拥有更完整的阅读空间。</p>
+        </article>
+        <article>
+          <span class="letter">C</span>
+          <h2>清晰目录</h2>
+          <p>范围与创建放在侧区，账号与访问分区。仅有用户管理研究，不是与 A/B 同页的全站第三案。</p>
+        </article>
+      </section>
+      <section class="viewer" aria-labelledby="viewer-title">
+        <div class="section-title">
+          <h2 id="viewer-title">按场景对照</h2>
+          <span id="version"></span>
+        </div>
+        <form id="review-controls" class="controls" aria-label="审图筛选">
+          <label>页面类型<select id="surface"></select></label>
+          <label>设计方向<select id="direction"></select></label>
+          <label>场景<select id="scene"></select></label>
+          <label
+            >图的视口<select id="viewport">
+              <option value="1440">桌面 · 1440</option>
+              <option value="390">移动 · 390</option>
+            </select></label
+          >
+        </form>
+        <p id="comparison-note" class="comparison-note"></p>
+        <p id="image-status" role="status" aria-live="polite"></p>
+        <div class="comparison">
+          <figure class="new-panel">
+            <figcaption>
+              <span>候选研究图 · 未获批</span
+              ><a id="new-original" target="_blank" rel="noopener">打开新稿原图 ↗</a>
+            </figcaption>
+            <div class="image-stage"><img id="new-image" alt="" /></div>
+            <p id="new-evidence" class="evidence"></p>
+          </figure>
+          <figure class="old-panel">
+            <figcaption>
+              <span>历史 Vue · 隔离数据</span
+              ><a id="old-original" target="_blank" rel="noopener">打开旧图原图 ↗</a>
+            </figcaption>
+            <div class="image-stage">
+              <img id="old-image" alt="" />
+              <p id="old-missing" hidden>
+                此场景没有逐项匹配的历史 Vue 图。这里不拿其他页面或概念图冒充对照。
+              </p>
+            </div>
+            <p id="old-evidence" class="evidence"></p>
+          </figure>
+        </div>
+        <details class="provenance">
+          <summary>证据边界与来源变化</summary>
+          <p>
+            图片哈希核对只证明文件与原采图记录一致；不证明业务、权限、数据库或生产已通过。本页复用研究图，不新计正式设计完成数。
+          </p>
+          <ul id="source-status"></ul>
+          <p>
+            历史 Vue 图始终按原版本标注，不能当作当前 HEAD 的完整验证。A/B 没有账号页、C
+            没有任务/规则页，不做虚假的三案同页比较。
+          </p>
+        </details>
+      </section>
+      <section class="feedback" aria-labelledby="feedback-title">
+        <div>
+          <p class="eyebrow">YOUR REVIEW</p>
+          <h2 id="feedback-title">告诉我，哪些结构留下。</h2>
+          <p>
+            可以接受方向、要求修改，或全部重做。这里仅整理回复文本，不保存、不提交审批、不更改任何通过状态。
+          </p>
+          <p>方向选定后，先完成任务与进度弹窗的正式图 → Vue → 测试，再分批覆盖全站。</p>
+        </div>
+        <form id="feedback-form">
+          <label
+            >对当前方向的意见<select id="decision" required>
+              <option value="">请选择意见</option>
+              <option value="接受当前方向，进入代表页正式设计">接受方向，继续代表页</option>
+              <option value="修改当前方向后重新审核">修改后再审</option>
+              <option value="全部方向重做，不沿用当前结构">全部重做</option>
+            </select></label
+          >
+          <label
+            >具体意见<textarea
+              id="notes"
+              maxlength="2000"
+              rows="3"
+              placeholder="例如：保留左右分栏；移动详情不要侧栏；弹窗操作区需要更清楚。"
+            ></textarea>
+          </label>
+          <button type="submit">生成本次审核回复</button>
+          <label id="reply-label" hidden
+            >复制下面文字，回复到当前任务<textarea id="reply" rows="5" readonly></textarea>
+          </label>
+          <p id="feedback-status" role="status"></p>
+        </form>
+      </section>
+      <footer>
+        <a href="review.html">实施账册</a
+        ><a href="design/account-direction-c/index.html">C 方向可点击原型</a
+        ><a href="design/task-directions.html">任务 A/B 原型</a
+        ><a href="design/representative-directions.html">规则 / 权限 / 恢复原型</a
+        ><a href="DIRECTION-REVIEW.md">使用与验证说明</a>
+      </footer>
+    </main>
+  </body>
+</html>
