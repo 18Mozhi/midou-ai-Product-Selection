@@ -66,6 +66,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   page = ref(/^\d{1,3}$/.test(queryValue("page")) ? Math.max(1, Number(queryValue("page"))) : 1),
   state = ref<State>("loading"),
   data = ref<any>({ summary: {}, items: [] }),
+  snapshotScope = ref<{ entity: Entity; query: string; status: string } | null>(null),
   message = ref(""),
   requestId = ref(""),
   exporting = ref(false),
@@ -94,14 +95,31 @@ const entities: Array<{
     secondary: "报价",
   },
 ];
-const current = computed(() => entities.find((item) => item.value === entity.value)!);
+const current = computed(() =>
+  entities.find((item) => item.value === (snapshotScope.value?.entity ?? entity.value))!,
+);
+const scopeMismatch = computed(() =>
+  Boolean(
+    snapshotScope.value &&
+    (snapshotScope.value.entity !== entity.value ||
+      snapshotScope.value.query !== query.value ||
+      snapshotScope.value.status !== status.value),
+  ),
+);
+const snapshotLabel = computed(() =>
+  snapshotScope.value
+    ? `${current.value.label} · 搜索：${snapshotScope.value.query || "不限"} · 状态：${snapshotScope.value.status ? statusName(snapshotScope.value.status, snapshotScope.value.entity) : "全部"}`
+    : "",
+);
 const summary = computed(() => Object.entries(data.value?.summary ?? {}));
 const statusOptions = computed(() => entityStatuses[entity.value]);
 const activeFilterCount = computed(
   () => Number(Boolean(queryDraft.value.trim())) + Number(Boolean(statusDraft.value)),
 );
-const statusName = (value: unknown) => statusLabels[entity.value][String(value)] ?? "状态未知";
-const summaryName = (key: string) => (key === "total" ? "当前筛选" : statusName(key));
+const statusName = (value: unknown, owner: Entity = entity.value) =>
+  statusLabels[owner][String(value)] ?? "状态未知";
+const summaryName = (key: string) =>
+  key === "total" ? "当前筛选" : statusName(key, current.value.value);
 const pagination = computed<Pagination>(() => {
     const total = data.value?.items?.length ?? 0,
       totalPages = total ? Math.ceil(total / pageSize) : 0;
@@ -142,6 +160,7 @@ async function syncRecordsUrl() {
 async function load(options: { updateUrl?: boolean } = {}) {
   if (refreshing.value) return;
   const hadData = Boolean(data.value?.items?.length);
+  const scope = { entity: entity.value, query: query.value, status: status.value };
   refreshing.value = true;
   if (!hadData) state.value = "loading";
   message.value = "";
@@ -158,6 +177,7 @@ async function load(options: { updateUrl?: boolean } = {}) {
     });
     requestId.value = response.request_id;
     data.value = response.data;
+    snapshotScope.value = scope;
     const totalPages = Math.max(1, Math.ceil(response.data.items.length / pageSize));
     if (page.value > totalPages) {
       page.value = totalPages;
@@ -179,7 +199,7 @@ async function load(options: { updateUrl?: boolean } = {}) {
   }
 }
 async function exportCsv() {
-  if (exporting.value || exportReasonOpen.value) return;
+  if (exporting.value || exportReasonOpen.value || refreshing.value || scopeMismatch.value) return;
   const reason = await askExportReason({
     title: "填写受控导出原因",
     description: "导出原因会与筛选范围、操作者和文件审计记录一起保存。",
@@ -335,12 +355,20 @@ onBeforeUnmount(() => activeController?.abort());
           >
             重置
           </button>
-          <button type="button" :disabled="exporting || refreshing" @click="exportCsv">
+          <button
+            type="button"
+            :disabled="exporting || refreshing || scopeMismatch"
+            :aria-describedby="scopeMismatch ? 'data-snapshot-scope' : undefined"
+            @click="exportCsv"
+          >
             {{ exporting ? "正在导出…" : "导出表格文件" }}
           </button>
         </form>
       </ResponsiveFilterDrawer>
       <p v-if="message" class="platform-data-notice" role="status">{{ message }}</p>
+      <p v-if="scopeMismatch" id="data-snapshot-scope" class="platform-data-notice" role="status">
+        新范围尚未读取成功，仍显示：{{ snapshotLabel }}。重新筛选成功后可导出新范围。
+      </p>
       <section v-if="state !== 'ready'" class="platform-data-state">
         <h3>
           {{
@@ -393,7 +421,7 @@ onBeforeUnmount(() => activeController?.abort());
                       {{ item.category || "—" }}<small>{{ item.market || "—" }}</small>
                     </td>
                     <td>
-                      <b :data-state="item.status">{{ statusName(item.status) }}</b>
+                      <b :data-state="item.status">{{ statusName(item.status, current.value) }}</b>
                     </td>
                     <td>{{ item.metric_primary }} / {{ item.metric_secondary }}</td>
                     <td>{{ new Date(item.updated_at).toLocaleString("zh-CN") }}</td>
@@ -409,7 +437,7 @@ onBeforeUnmount(() => activeController?.abort());
             </template>
             <template #summary="{ row }">
               <span class="responsive-record-summary">
-                <strong>{{ row.title }} · {{ statusName(row.status) }}</strong>
+                <strong>{{ row.title }} · {{ statusName(row.status, current.value) }}</strong>
                 <small>{{ row.organization_name }} · {{ row.workspace_name }}</small>
               </span>
             </template>
@@ -429,7 +457,7 @@ onBeforeUnmount(() => activeController?.abort());
                 </div>
                 <div>
                   <dt>当前状态</dt>
-                  <dd>{{ statusName(row.status) }}</dd>
+                  <dd>{{ statusName(row.status, current.value) }}</dd>
                 </div>
                 <div>
                   <dt>{{ current.primary }} / {{ current.secondary }}</dt>

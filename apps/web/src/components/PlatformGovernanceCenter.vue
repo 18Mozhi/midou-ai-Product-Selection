@@ -57,6 +57,9 @@ const route = useRoute(),
   section = ref<Section>(initialSection),
   state = ref<State>("loading"),
   data = ref<any>({ summary: {}, items: [], pagination: null }),
+  snapshotScope = ref<{ section: Section; query: string; status: string; page: number } | null>(
+    null,
+  ),
   query = ref(queryValue("q").trim()),
   queryDraft = ref(query.value),
   status = ref(initialStatus),
@@ -109,6 +112,22 @@ const sections: Array<{
   },
 ];
 const current = computed(() => sections.find((item) => item.value === section.value)!);
+const recordSection = computed(() => snapshotScope.value?.section ?? section.value);
+const recordType = computed(() => sections.find((item) => item.value === recordSection.value)!);
+const scopeMismatch = computed(() =>
+  Boolean(
+    snapshotScope.value &&
+    (snapshotScope.value.section !== section.value ||
+      snapshotScope.value.query !== query.value ||
+      snapshotScope.value.status !== status.value ||
+      snapshotScope.value.page !== page.value),
+  ),
+);
+const snapshotLabel = computed(() =>
+  snapshotScope.value
+    ? `${recordType.value.label} · 搜索：${snapshotScope.value.query || "不限"} · 状态：${snapshotScope.value.status ? statusName(snapshotScope.value.status) : "全部"} · 第 ${snapshotScope.value.page} 页`
+    : "",
+);
 const rows = computed<any[]>(() => data.value?.items ?? []);
 const pagination = computed<Pagination>(
   () => data.value?.pagination ?? { page: 1, page_size: pageSize, total: 0, total_pages: 0 },
@@ -173,14 +192,14 @@ const typeName = (value: unknown) =>
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
 const editHref = (item: any) =>
-  section.value === "automation_rules"
+  recordSection.value === "automation_rules"
     ? `/automations?rule=${item.id}&action=edit`
-    : current.value.href;
+    : recordType.value.href;
 const versionText = (item: any) => {
-  if (section.value === "releases") return item.name ? `版本 ${item.name}` : "未记录版本";
-  if (section.value === "approval_templates")
+  if (recordSection.value === "releases") return item.name ? `版本 ${item.name}` : "未记录版本";
+  if (recordSection.value === "approval_templates")
     return `第 ${item.current_version ?? item.revision} 版`;
-  if (section.value === "automation_rules") return `第 ${item.version} 版`;
+  if (recordSection.value === "automation_rules") return `第 ${item.version} 版`;
   return `第 ${item.revision} 版`;
 };
 const failureState = (error: ApiClientError): State =>
@@ -200,6 +219,7 @@ async function syncUrl() {
 async function load(options: { updateUrl?: boolean } = {}) {
   if (refreshing.value) return;
   const hadData = hasLoadedFacts.value;
+  const scope = { section: section.value, query: query.value, status: status.value };
   refreshing.value = true;
   if (!hadData) state.value = "loading";
   message.value = "";
@@ -222,6 +242,7 @@ async function load(options: { updateUrl?: boolean } = {}) {
     requestId.value = response.request_id;
     data.value = response.data;
     page.value = response.data.pagination.page;
+    snapshotScope.value = { ...scope, page: page.value };
     if (options.updateUrl !== false) await syncUrl();
     state.value = response.data.pagination.total ? "ready" : "empty";
   } catch (error) {
@@ -318,6 +339,9 @@ onBeforeUnmount(() => activeController?.abort());
       </form>
     </ResponsiveFilterDrawer>
     <p v-if="message" class="governance-notice">{{ message }}</p>
+    <p v-if="scopeMismatch" class="governance-notice" role="status">
+      新范围尚未读取成功，仍显示：{{ snapshotLabel }}。记录详情与工作台入口保持原范围。
+    </p>
     <section v-if="!hasLoadedFacts && state !== 'ready'" class="governance-state">
       <h3>
         {{
@@ -353,7 +377,7 @@ onBeforeUnmount(() => activeController?.abort());
         <ResponsiveDataView
           :rows="rows"
           :row-key="(item) => item.id"
-          :title="current.label"
+          :title="recordType.label"
           :detail-title="(item) => item.name"
           empty-message="当前分类没有匹配记录。"
         >
@@ -383,7 +407,10 @@ onBeforeUnmount(() => activeController?.abort());
                   <td>
                     {{
                       typeName(
-                        item.trigger_event_type || item.resource_type || item.platform || section,
+                        item.trigger_event_type ||
+                          item.resource_type ||
+                          item.platform ||
+                          recordSection,
                       )
                     }}
                   </td>
@@ -397,7 +424,7 @@ onBeforeUnmount(() => activeController?.abort());
                   <td>
                     <button type="button" @click="selected = item">查看详情</button
                     ><RouterLink :to="editHref(item)">{{
-                      section === "automation_rules" ? "编辑规则" : "进入工作台"
+                      recordSection === "automation_rules" ? "编辑规则" : "进入工作台"
                     }}</RouterLink>
                   </td>
                   <td>
@@ -430,7 +457,9 @@ onBeforeUnmount(() => activeController?.abort());
                 <dt>类型</dt>
                 <dd>
                   {{
-                    typeName(row.trigger_event_type || row.resource_type || row.platform || section)
+                    typeName(
+                      row.trigger_event_type || row.resource_type || row.platform || recordSection,
+                    )
                   }}
                 </dd>
               </div>
@@ -463,7 +492,7 @@ onBeforeUnmount(() => activeController?.abort());
               </dl>
             </details>
             <RouterLink :to="editHref(row)">{{
-              section === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
+              recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
             }}</RouterLink>
           </template>
         </ResponsiveDataView>
@@ -516,7 +545,7 @@ onBeforeUnmount(() => activeController?.abort());
       <section v-if="selected">
         <header>
           <div>
-            <small>{{ current.label }}详情</small>
+            <small>{{ recordType.label }}详情</small>
             <h3>{{ selected.name }}</h3>
           </div>
           <button aria-label="关闭" @click="selected = null">×</button>
@@ -586,7 +615,7 @@ onBeforeUnmount(() => activeController?.abort());
         <footer>
           <button @click="selected = null">关闭</button
           ><RouterLink :to="editHref(selected)">{{
-            section === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
+            recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
           }}</RouterLink>
         </footer>
       </section>

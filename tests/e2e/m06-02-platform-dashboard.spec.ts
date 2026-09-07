@@ -106,6 +106,193 @@ async function nav(
     }),
   );
 }
+test("UI2-DG54 retained data keeps its entity semantics until the new scope succeeds", async ({
+  page,
+}) => {
+  await nav(page);
+  let release!: () => void;
+  let started!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  let supplierReads = 0;
+  await page.route("**/api/v1/platform/management?**", async (route) => {
+    const entity = new URL(route.request().url()).searchParams.get("entity");
+    if (entity === "suppliers" && ++supplierReads === 1) {
+      started();
+      await held;
+      return route.fulfill({
+        status: 404,
+        json: {
+          error: {
+            code: "not_found",
+            message: "隔离读取失败",
+            action_hint: "供应商读取失败，请重新筛选。",
+          },
+          request_id: "ui2-dg54-failed",
+          trace_id: "ui2-dg54-failed",
+        },
+      });
+    }
+    const supplier = entity === "suppliers";
+    return route.fulfill({
+      json: env({
+        domain: "data",
+        entity,
+        summary: { total: 1, [supplier ? "ready" : "active"]: 1 },
+        items: [
+          {
+            id: supplier ? "supplier-54" : "trend-54",
+            title: supplier ? "隔离供应商" : "隔离热点",
+            organization_name: "测试组织",
+            workspace_name: "测试工作区",
+            status: supplier ? "ready" : "active",
+            metric_primary: 8,
+            metric_secondary: 2,
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+        ],
+        observed_at: "2026-09-08T00:00:00.000Z",
+      }),
+    });
+  });
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  const assertTrend = async () => {
+    if (mobile) {
+      await expect(page.getByRole("button", { name: /^隔离热点 · 展示中/ })).toBeVisible();
+      await page.getByRole("button", { name: /^隔离热点 · 展示中/ }).click();
+      const detail = page.getByRole("dialog", { name: "隔离热点", exact: true });
+      await expect(detail.getByText("信号 / 来源", { exact: true })).toBeVisible();
+      await detail.getByRole("button", { name: "关闭详情" }).click();
+    } else {
+      await expect(
+        page.getByRole("columnheader", { name: "信号 / 来源", exact: true }),
+      ).toBeVisible();
+      await expect(page.getByRole("table").getByText("展示中", { exact: true })).toBeVisible();
+    }
+  };
+  await page.goto("/platform-admin/data");
+  await assertTrend();
+  await page
+    .getByRole("navigation", { name: "数据类型", exact: true })
+    .getByRole("button", { name: "供应商" })
+    .click();
+  await entered;
+  try {
+    await assertTrend();
+  } finally {
+    release();
+  }
+  await expect(page.getByText("供应商读取失败，请重新筛选。", { exact: true })).toBeVisible();
+  await assertTrend();
+  await expect(page.getByRole("status").filter({ hasText: "仍显示" })).toContainText("热点");
+  if (mobile) await page.getByRole("button", { name: "筛选近期数据", exact: true }).click();
+  await expect(page.getByRole("button", { name: "导出表格文件", exact: true })).toBeDisabled();
+  await expect(page.getByLabel("记录状态")).toContainText("可评估");
+  await page.getByRole("button", { name: "筛选", exact: true }).click();
+  if (mobile) await expect(page.getByRole("dialog", { name: "筛选近期数据" })).not.toBeVisible();
+  if (mobile)
+    await expect(page.getByRole("button", { name: /^隔离供应商 · 可评估/ })).toBeVisible();
+  else
+    await expect(
+      page.getByRole("columnheader", { name: "最小起订量 / 报价", exact: true }),
+    ).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "仍显示" })).toHaveCount(0);
+  expect(supplierReads).toBe(2);
+});
+
+test("UI2-DG55 retained governance records keep their original workbench and version", async ({
+  page,
+}) => {
+  await nav(page);
+  let release!: () => void;
+  let started!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  let autoReads = 0;
+  await page.route("**/api/v1/platform/management?**", async (route) => {
+    const section = new URL(route.request().url()).searchParams.get("section");
+    if (section === "automation_rules" && ++autoReads === 1) {
+      started();
+      await held;
+      return route.fulfill({
+        status: 404,
+        json: {
+          error: {
+            code: "not_found",
+            message: "隔离读取失败",
+            action_hint: "自动化读取失败，请刷新事实。",
+          },
+          request_id: "ui2-dg55-failed",
+          trace_id: "ui2-dg55-failed",
+        },
+      });
+    }
+    const automation = section === "automation_rules";
+    return route.fulfill({
+      json: env({
+        domain: "governance",
+        section,
+        summary: { score_rules: 1, automation_rules: 1, provider_versions: 0 },
+        items: [
+          {
+            id: automation ? "auto-55" : "score-55",
+            name: automation ? "隔离自动化" : "隔离评分",
+            status: "active",
+            ...(automation ? { version: 3 } : { revision: 2 }),
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+        ],
+        pagination: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+        observed_at: "2026-09-08T00:00:00.000Z",
+      }),
+    });
+  });
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  const assertScore = async () => {
+    if (mobile) await page.getByRole("button", { name: /^隔离评分 · 启用/ }).click();
+    else await page.getByRole("table").getByRole("button", { name: "查看详情" }).click();
+    const dialog = page.getByRole("dialog", {
+      name: mobile ? "隔离评分" : "隔离评分详情",
+      exact: true,
+    });
+    await expect(dialog.getByText("第 2 版", { exact: true })).toBeVisible();
+    await expect(dialog.getByRole("link", { name: "进入所属工作台" })).toHaveAttribute(
+      "href",
+      "/opportunities/scoring-rules",
+    );
+    await dialog.press("Escape");
+    await expect(dialog).not.toBeVisible();
+  };
+  await page.goto("/platform-admin/governance");
+  await assertScore();
+  await page
+    .getByRole("navigation", { name: "治理数据类型" })
+    .getByRole("button", { name: "自动化规则" })
+    .click();
+  await entered;
+  try {
+    await assertScore();
+  } finally {
+    release();
+  }
+  await expect(page.getByText("自动化读取失败，请刷新事实。", { exact: true })).toBeVisible();
+  await assertScore();
+  await expect(page.getByRole("status").filter({ hasText: "仍显示" })).toContainText("评分规则");
+  await page.getByRole("button", { name: "刷新事实", exact: true }).click();
+  if (mobile) await page.getByRole("button", { name: /^隔离自动化 · 启用/ }).click();
+  else await page.getByRole("table").getByRole("button", { name: "查看详情" }).click();
+  const detail = page.getByRole("dialog", {
+    name: mobile ? "隔离自动化" : "隔离自动化详情",
+    exact: true,
+  });
+  await expect(detail.getByText("第 3 版", { exact: true })).toBeVisible();
+  await expect(detail.getByRole("link", { name: "进入规则编辑" })).toHaveAttribute(
+    "href",
+    "/automations?rule=auto-55&action=edit",
+  );
+  expect(autoReads).toBe(2);
+});
+
 test("API coverage dashboard exposes the current production truth dimensions on desktop and mobile", async ({
   page,
 }) => {

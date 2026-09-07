@@ -864,6 +864,7 @@
     },
     "evidenceDataQuality": {
       "module": "M03-06",
+      "uiPhase2ContractReview": "P54.md and data-governance-contract-review.md under design-plans/ui-phase-2-2026-09-07 map the embedded evidence/issues/reconciliation flows independently from recent business records. The quality Vue sends no organization/workspace filter; evidence and issues share page/20-row requests, runs are latest 20, and drilldown filters only loaded issues. Source review records original download/resolve/batch contracts and pending mobile selection, modal/busy, late reads and write-success/read-failure gaps. DataQualityCenter and its APIs are unchanged in this batch; formal design, full behavior, real database/files and production acceptance remain pending.",
       "entrypoints": [
         "../packages/data-quality/src/index.ts",
         "../apps/worker/src/evidence-persistence.ts",
@@ -1763,6 +1764,7 @@
     },
     "platformDashboard": {
       "module": "M06-02",
+      "uiPhase2DataGovernanceContract": "P54/P55 and data-governance-contract-review.md under design-plans/ui-phase-2-2026-09-07 map 66 local control/event/dialog candidates and nine v-model bindings across PlatformDataCenter, DataQualityCenter and PlatformGovernanceCenter. Successful Web reads retain their own entity/section/filter scope. Pending or failed scope changes preserve original record labels, statuses, versions and governance row/detail workbench links, show the retained scope, and disable data export until the requested scope is read successfully. UI2-DG54/DG55 in m06-02-platform-dashboard.spec.ts cover retained records during held requests, non-retried 404 failures and successful recovery on desktop/mobile. Existing URLs, SQL/count/pagination, API bodies, permissions and runtime configuration are unchanged. Async lifecycle/export ownership and quality workflow gaps, formal redesign, real backend and production remain pending.",
       "entrypoints": [
         "../apps/api/src/platform-dashboard-service.ts",
         "../apps/api/src/mysql-platform-dashboard-repository.ts",
