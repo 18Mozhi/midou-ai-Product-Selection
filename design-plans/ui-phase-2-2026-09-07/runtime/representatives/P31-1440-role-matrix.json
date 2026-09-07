@@ -12,14 +12,14 @@
   "fullPage": true,
   "file": "runtime/representatives/P31-1440-role-matrix.png",
   "sha256": "9ca0c7d2f8b34c1651877d1a963f815b2744b0c073ad1f9800b933dc561f46f5",
-  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
-  "sourceRevision": "060e0b591af732c4c69060a468f526c45cc1330c",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "sourceRevision": "4b835881c081af808713c76af323d866993f44c9",
   "testFile": "tests/e2e/m06-01-organization-admin.spec.ts",
   "testFileSha256": "9774193831c69b36ec7be4eae6025e170ae7cc0a2255de0e85b9e683e2d988bc",
   "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
   "stylesheets": {
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
-    "apps/web/src/approval-workspace.css": "48f301f0f9bebb22b947e019c90bc288105f11a340fee90017f6bd3422686bce",
+    "apps/web/src/approval-workspace.css": "3baa1bd6bd42b620024d8b0930e018e985929df2dce6b4a904333417c5ac2053",
     "apps/web/src/automatic-selection.css": "16ad760b25e5833dfa67d69e8a6df3fe9ac9188ef05f63f5ed2c2688663e305b",
     "apps/web/src/automation-rules.css": "c006390dfdc5cc15371067d6f713ff18a2503c86693aa37e0e2a320cf5dd31f2",
     "apps/web/src/capacity-boundary.css": "ebacd274b70ae5f2ec5cc83b7331137e2e45dfd125b3058ac8ddb27d9b3a3203",
@@ -83,7 +83,7 @@
   "testTitle": "organization roles expose searchable role, capability, scope and grant facts",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-07T14:57:38.541Z",
+  "capturedAt": "2026-09-07T16:14:36.652Z",
   "assertions": [
     "fixed-role-catalog",
     "capability-matrix-visible"

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
   "denominatorFrozen": false,
   "pages": [
     {
@@ -3938,7 +3938,7 @@
       "line": 524,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#2c957c49de664b62.1"
+        "apps/web/src/components/CostRuleConsole.vue#5e3909def7e4baa9.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CostRuleConsole.vue#2c957c49de664b62.1"
@@ -13642,9 +13642,7 @@
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
       "line": 495,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ApprovalWorkspace.vue#92496ba501468962.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ApprovalWorkspace.vue#92496ba501468962.1"
       ],
@@ -13652,7 +13650,7 @@
         "start": 15112,
         "end": 15266
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {

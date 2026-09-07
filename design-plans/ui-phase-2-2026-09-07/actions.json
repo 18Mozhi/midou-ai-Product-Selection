@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
   "status": "discovery-not-behavior-coverage",
   "candidates": [
     {
@@ -1022,10 +1022,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 401,
+      "line": 443,
       "sourceRange": {
-        "start": 12036,
-        "end": 12148
+        "start": 13596,
+        "end": 13708
       },
       "label": "管理模板",
       "attributes": {
@@ -1048,7 +1048,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
       "signature": "fe72f1f58d04daa7",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1068,10 +1068,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 404,
+      "line": 446,
       "sourceRange": {
-        "start": 12157,
-        "end": 12232
+        "start": 13717,
+        "end": 13792
       },
       "label": "＋ 发起审批",
       "attributes": {
@@ -1093,7 +1093,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
       "signature": "e11c8bef75450e78",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1113,10 +1113,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 405,
+      "line": 447,
       "sourceRange": {
-        "start": 12241,
-        "end": 12301
+        "start": 13801,
+        "end": 13861
       },
       "label": "配置第一个模板",
       "attributes": {
@@ -1138,7 +1138,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
       "signature": "21acc635baa945ea",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1158,10 +1158,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 412,
+      "line": 454,
       "sourceRange": {
-        "start": 12513,
-        "end": 12536
+        "start": 14073,
+        "end": 14096
       },
       "label": "技术详情",
       "attributes": {},
@@ -1178,7 +1178,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1",
       "signature": "1c008f867673db60",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1196,10 +1196,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 459,
+      "line": 501,
       "sourceRange": {
-        "start": 13859,
-        "end": 13896
+        "start": 15419,
+        "end": 15456
       },
       "label": "刷新最新状态",
       "attributes": {
@@ -1216,13 +1216,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1",
       "signature": "fa9213ee10c4bdaa",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 186,
-          "endLine": 210
+          "line": 191,
+          "endLine": 215
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1243,10 +1243,10 @@
       "kind": "event-binding",
       "tag": "ApprovalQueuePanel",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 461,
+      "line": 503,
       "sourceRange": {
-        "start": 13916,
-        "end": 14345
+        "start": 15476,
+        "end": 15905
       },
       "label": "",
       "attributes": {
@@ -1280,25 +1280,25 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
       "signature": "8b14c8822fa2158e",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "open",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 231,
-          "endLine": 233
+          "line": 237,
+          "endLine": 239
         },
         {
           "name": "setQueue",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 238,
-          "endLine": 251
+          "line": 278,
+          "endLine": 291
         },
         {
           "name": "setFilter",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 252,
-          "endLine": 260
+          "line": 292,
+          "endLine": 300
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1317,10 +1317,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 482,
+      "line": 524,
       "sourceRange": {
-        "start": 14571,
-        "end": 14637
+        "start": 16131,
+        "end": 16197
       },
       "label": "关闭提示",
       "attributes": {
@@ -1338,7 +1338,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1",
       "signature": "59336a98bd70e13c",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1358,10 +1358,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 485,
+      "line": 527,
       "sourceRange": {
-        "start": 14739,
-        "end": 14808
+        "start": 16299,
+        "end": 16368
       },
       "label": "上一页",
       "attributes": {
@@ -1379,13 +1379,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
       "signature": "c4a35037858480fb",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "setPage",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 261,
-          "endLine": 267
+          "line": 301,
+          "endLine": 307
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1406,10 +1406,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 487,
+      "line": 529,
       "sourceRange": {
-        "start": 14885,
-        "end": 14962
+        "start": 16445,
+        "end": 16522
       },
       "label": "下一页",
       "attributes": {
@@ -1427,13 +1427,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1",
       "signature": "a0fa8a0a8fe3a4f1",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "setPage",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 261,
-          "endLine": 267
+          "line": 301,
+          "endLine": 307
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1452,19 +1452,22 @@
     },
     {
       "kind": "event-binding",
-      "tag": "div",
+      "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 489,
+      "line": 531,
       "sourceRange": {
-        "start": 14978,
-        "end": 15107
+        "start": 16538,
+        "end": 27191
       },
-      "label": "",
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selected.decision_context.resource.label }} → 返回通知中心 影响范围 {{ resourceText(selected.resource_type) }} · {{ selected.title }} 当前节点 {{ selected.current_node_name || \"流程已结束\" }} 判断依据 证据完整度 {{ selected.decision_context.evidence.percent }} % {{ selected.decision_context?.evidence.note || \"按任务事实审批\" }} 证据完整度 {{ selected.decision_context.evidence.percent }} % 不适用 审批模板版本 {{ selected.decision_context.rule_versions.approval_template }} {{ selected.decision_context.snapshot_status === \"captured\" ? `发起审批时已锁定 · ${time(selected.decision_context.captured_at)}` : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}` }} 提交快照与当前证据 当前事实读取于 {{ time(selected.decision_context_diff.observed_at) }} 已有变化 保持一致 提交时完整度 {{ selected.decision_context_diff.evidence_summary.before_percent ?? \"不适用\" }} % → 当前完整度 {{ selected.decision_context_diff.evidence_summary.after_percent ?? \"不适用\" }} % 当前证据、事实和规则版本与提交审批时一致。 {{ change.label }} 提交时： {{ change.before_detail ?? \"无\" }} → 当前： {{ change.after_detail ?? \"无\" }} {{ change.label }} 提交时： {{ basisValue(change.before) }} → 当前： {{ basisValue(change.after) }} {{ change.label }} 提交时： {{ change.before ?? \"未生成\" }} → 当前： {{ change.after ?? \"未生成\" }} 缺失： {{ selected.decision_context.evidence.missing_items.join(\"、\") }} {{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }} {{ selected.decision_context.evidence.note }} 规则版本 审批模板 {{ selected.decision_context.rule_versions.approval_template }} 评分规则 {{ selected.decision_context.rule_versions.scoring ?? \"未生成\" }} 利润规则 {{ selected.decision_context.rule_versions.profit ?? \"未生成\" }} 申请决策 {{ statusText(selected.decision_context.decision.action) }} {{ selected.decision_context.decision.reason }} 基于机会第 {{ selected.decision_context.decision.opportunity_version }} 版 决策依据 {{ basis.label }} {{ basisValue(basis.value) }} {{ node.ordinal }} . {{ node.name }} {{ statusText(node.status) }} · {{ time(node.due_at) }} 当前审批人 {{ node.active_approver_name }} {{ node.approver_name }} 超时后 → {{ node.escalation_assignee_name }} 已于 {{ time(node.escalated_at) }} 升级 {{ node.decision_reason }} 操作记录 尚无批准、驳回或升级记录。 {{ actionText(action.action) }} {{ action.actor_name || \"未知成员\" }} · {{ time(action.created_at) }} {{ action.reason }} {{ decisionNotice }} 证据仍有缺失；若继续审批，请在原因中明确说明判断依据。 审批原因（批准与驳回均必填） 驳回 批准并流转 当前节点不是由你审批，或审批已结束。 技术详情 审批编号 {{ selected.id }} 资源类型 {{ selected.resource_type }} 资源编号 {{ selected.resource_id }} 节点 {{ node.ordinal }} {{ node.id }} / {{ node.active_approver_id }}",
       "attributes": {
         "v-if": "selected",
-        "class": "approval-detail-backdrop",
-        "aria-hidden": "true",
-        "@click": "closeDetail"
+        "ref": "detailDialogElement",
+        "class": "approval-detail",
+        "aria-labelledby": "approval-detail-title",
+        "@cancel": "handleDetailCancel",
+        "@click": "closeDetailBackdrop",
+        "@keydown": "keepDetailFocus"
       },
       "conditions": [
         {
@@ -1473,17 +1476,25 @@
         }
       ],
       "events": {
-        "@click": "closeDetail"
+        "@cancel": "handleDetailCancel",
+        "@click": "closeDetailBackdrop",
+        "@keydown": "keepDetailFocus"
       },
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bf35f6273b8d9953.1",
-      "signature": "bf35f6273b8d9953",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
+      "signature": "1dba0cb0b0844a3c",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
-          "name": "closeDetail",
+          "name": "closeDetailBackdrop",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 234,
-          "endLine": 237
+          "line": 244,
+          "endLine": 255
+        },
+        {
+          "name": "keepDetailFocus",
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "line": 261,
+          "endLine": 277
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1502,10 +1513,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 502,
+      "line": 540,
       "sourceRange": {
-        "start": 15273,
-        "end": 15377
+        "start": 16791,
+        "end": 16895
       },
       "label": "关闭审批详情",
       "attributes": {
@@ -1525,13 +1536,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1",
       "signature": "ed72f74cfb2fdb73",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "closeDetail",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 234,
-          "endLine": 237
+          "line": 240,
+          "endLine": 243
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1552,10 +1563,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 507,
+      "line": 545,
       "sourceRange": {
-        "start": 15543,
-        "end": 15779
+        "start": 17061,
+        "end": 17297
       },
       "label": "查看 {{ selected.decision_context.resource.label }} →",
       "attributes": {
@@ -1576,7 +1587,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#618d905faa5eb354.1",
       "signature": "618d905faa5eb354",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1594,10 +1605,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 513,
+      "line": 551,
       "sourceRange": {
-        "start": 15786,
-        "end": 15915
+        "start": 17304,
+        "end": 17433
       },
       "label": "返回通知中心",
       "attributes": {
@@ -1618,7 +1629,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5201b6777ca22abe.1",
       "signature": "5201b6777ca22abe",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1636,10 +1647,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 640,
+      "line": 678,
       "sourceRange": {
-        "start": 20900,
-        "end": 21376
+        "start": 22418,
+        "end": 22894
       },
       "label": "{{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }}",
       "attributes": {
@@ -1669,7 +1680,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#861502a87911f91f.1",
       "signature": "861502a87911f91f",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1687,10 +1698,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 735,
+      "line": 774,
       "sourceRange": {
-        "start": 24624,
-        "end": 24743
+        "start": 26237,
+        "end": 26356
       },
       "label": "驳回",
       "attributes": {
@@ -1713,13 +1724,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#86c54779008e879e.1",
       "signature": "86c54779008e879e",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "decide",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 268,
-          "endLine": 293
+          "line": 308,
+          "endLine": 335
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1740,10 +1751,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 737,
+      "line": 776,
       "sourceRange": {
-        "start": 24743,
-        "end": 24827
+        "start": 26356,
+        "end": 26440
       },
       "label": "批准并流转",
       "attributes": {
@@ -1765,13 +1776,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#3cfff8f4c2f74d66.1",
       "signature": "3cfff8f4c2f74d66",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "decide",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 268,
-          "endLine": 293
+          "line": 308,
+          "endLine": 335
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1792,10 +1803,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 742,
+      "line": 781,
       "sourceRange": {
-        "start": 24979,
-        "end": 25002
+        "start": 26592,
+        "end": 26615
       },
       "label": "技术详情",
       "attributes": {},
@@ -1808,7 +1819,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2",
       "signature": "1c008f867673db60",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1826,10 +1837,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 763,
+      "line": 802,
       "sourceRange": {
-        "start": 25582,
-        "end": 27764
+        "start": 27196,
+        "end": 29416
       },
       "label": "新建审批模板草稿",
       "attributes": {
@@ -1843,7 +1854,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
       "signature": "e5e612ec729070f4",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1861,28 +1872,36 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 768,
+      "line": 807,
       "sourceRange": {
-        "start": 25701,
-        "end": 27385
+        "start": 27315,
+        "end": 29037
       },
       "label": "新建审批模板草稿 模板名称 资源类型 任务 机会决策 节点名称 处理时限（分钟） 技术配置：审批人与超时接收人 审批人 请选择当前工作区成员 {{ member.label }} 超时接收人 请选择当前工作区成员 {{ member.label }} 草稿必须显式发布；超时只升级审批人，不会自动批准或驳回。 取消 保存草稿",
       "attributes": {
-        "@submit.prevent": "createTemplate"
+        "@submit.prevent": "createTemplate",
+        "@invalid.capture": "revealInvalidField"
       },
       "conditions": [],
       "events": {
-        "@submit.prevent": "createTemplate"
+        "@submit.prevent": "createTemplate",
+        "@invalid.capture": "revealInvalidField"
       },
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d87c13eed41f3d98.1",
-      "signature": "d87c13eed41f3d98",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
+      "signature": "a85a9e0937dede29",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
+        {
+          "name": "revealInvalidField",
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "line": 256,
+          "endLine": 260
+        },
         {
           "name": "createTemplate",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 294,
-          "endLine": 324
+          "line": 336,
+          "endLine": 366
         }
       ],
       "reviewStatus": "unreviewed",
@@ -1901,10 +1920,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 786,
+      "line": 825,
       "sourceRange": {
-        "start": 26429,
-        "end": 26462
+        "start": 28081,
+        "end": 28114
       },
       "label": "技术配置：审批人与超时接收人",
       "attributes": {},
@@ -1912,7 +1931,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1",
       "signature": "5f8fcd4eeb82af58",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1930,10 +1949,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 805,
+      "line": 844,
       "sourceRange": {
-        "start": 27226,
-        "end": 27318
+        "start": 28878,
+        "end": 28970
       },
       "label": "取消",
       "attributes": {
@@ -1947,7 +1966,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1",
       "signature": "33ba0693d19eb13e",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1967,10 +1986,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 806,
+      "line": 845,
       "sourceRange": {
-        "start": 27318,
-        "end": 27356
+        "start": 28970,
+        "end": 29008
       },
       "label": "保存草稿",
       "attributes": {
@@ -1980,7 +1999,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1",
       "signature": "19071354ae303ee4",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2000,10 +2019,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 815,
+      "line": 854,
       "sourceRange": {
-        "start": 27643,
-        "end": 27714
+        "start": 29295,
+        "end": 29366
       },
       "label": "发布",
       "attributes": {
@@ -2025,13 +2044,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1",
       "signature": "c02233bb6662b1ab",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "openPublish",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 325,
-          "endLine": 328
+          "line": 367,
+          "endLine": 370
         }
       ],
       "reviewStatus": "unreviewed",
@@ -2052,10 +2071,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 819,
+      "line": 858,
       "sourceRange": {
-        "start": 27769,
-        "end": 28488
+        "start": 29421,
+        "end": 30140
       },
       "label": "发布审批模板",
       "attributes": {
@@ -2069,7 +2088,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
       "signature": "27fc15dca539791e",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2087,10 +2106,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 820,
+      "line": 859,
       "sourceRange": {
-        "start": 27861,
-        "end": 28474
+        "start": 29513,
+        "end": 30126
       },
       "label": "发布审批模板 将发布“ {{ publishTarget?.name }} ”第 {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。 发布原因 返回 确认发布",
       "attributes": {
@@ -2102,13 +2121,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
       "signature": "132a2f4c870f90da",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
         {
           "name": "publish",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 329,
-          "endLine": 351
+          "line": 371,
+          "endLine": 393
         }
       ],
       "reviewStatus": "unreviewed",
@@ -2127,10 +2146,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 836,
+      "line": 875,
       "sourceRange": {
-        "start": 28301,
-        "end": 28382
+        "start": 29953,
+        "end": 30034
       },
       "label": "返回",
       "attributes": {
@@ -2144,7 +2163,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1",
       "signature": "227faf6f0cfb499d",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2164,10 +2183,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 837,
+      "line": 876,
       "sourceRange": {
-        "start": 28393,
-        "end": 28445
+        "start": 30045,
+        "end": 30097
       },
       "label": "确认发布",
       "attributes": {
@@ -2178,7 +2197,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1",
       "signature": "d5e7aa36e90f904e",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2198,10 +2217,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 841,
+      "line": 880,
       "sourceRange": {
-        "start": 28493,
-        "end": 29616
+        "start": 30145,
+        "end": 31306
       },
       "label": "发起审批",
       "attributes": {
@@ -2215,7 +2234,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
       "signature": "a05288e1768f6320",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2233,28 +2252,36 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 842,
+      "line": 881,
       "sourceRange": {
-        "start": 28583,
-        "end": 29602
+        "start": 30235,
+        "end": 31292
       },
       "label": "发起审批 已发布模板 请选择 {{ t.name }} 关联类型： {{ resourceText(selectedTemplate.resource_type) }} 。资源类型由模板锁定，不能单独改写。 技术配置：关联资源编号 资源编号 审批标题 取消 发起",
       "attributes": {
-        "@submit.prevent": "createRequest"
+        "@submit.prevent": "createRequest",
+        "@invalid.capture": "revealInvalidField"
       },
       "conditions": [],
       "events": {
-        "@submit.prevent": "createRequest"
+        "@submit.prevent": "createRequest",
+        "@invalid.capture": "revealInvalidField"
       },
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c9f114b3e62f8d99.1",
-      "signature": "c9f114b3e62f8d99",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
+      "signature": "1c352b89a4148f40",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [
+        {
+          "name": "revealInvalidField",
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "line": 256,
+          "endLine": 260
+        },
         {
           "name": "createRequest",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 352,
-          "endLine": 375
+          "line": 394,
+          "endLine": 417
         }
       ],
       "reviewStatus": "unreviewed",
@@ -2273,10 +2300,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 858,
+      "line": 897,
       "sourceRange": {
-        "start": 29179,
-        "end": 29209
+        "start": 30869,
+        "end": 30899
       },
       "label": "技术配置：关联资源编号",
       "attributes": {},
@@ -2284,7 +2311,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1",
       "signature": "bfb5c0c0da487c90",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2302,10 +2329,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 863,
+      "line": 902,
       "sourceRange": {
-        "start": 29425,
-        "end": 29516
+        "start": 31115,
+        "end": 31206
       },
       "label": "取消",
       "attributes": {
@@ -2319,7 +2346,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1",
       "signature": "74e09fbb8250bf10",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2339,10 +2366,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 864,
+      "line": 903,
       "sourceRange": {
-        "start": 29516,
-        "end": 29573
+        "start": 31206,
+        "end": 31263
       },
       "label": "发起",
       "attributes": {
@@ -2352,7 +2379,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#0afc0196f9054ef3.1",
       "signature": "0afc0196f9054ef3",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -11823,7 +11850,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ae99ecef74f5d4d3.1",
       "signature": "ae99ecef74f5d4d3",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -11844,26 +11871,26 @@
       "line": 524,
       "sourceRange": {
         "start": 17204,
-        "end": 17319
+        "end": 17378
       },
       "label": "新建规则版本",
       "attributes": {
-        "v-if": "canManage && state !== 'ready'",
+        "v-if": "canManage && (state !== 'ready' || activeCostRule)",
         "type": "button",
         "@click": "openCreate"
       },
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "canManage && state !== 'ready'"
+          "expression": "canManage && (state !== 'ready' || activeCostRule)"
         }
       ],
       "events": {
         "@click": "openCreate"
       },
-      "candidateId": "apps/web/src/components/CostRuleConsole.vue#2c957c49de664b62.1",
-      "signature": "2c957c49de664b62",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#5e3909def7e4baa9.1",
+      "signature": "5e3909def7e4baa9",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "openCreate",
@@ -11890,10 +11917,10 @@
       "kind": "event-binding",
       "tag": "UiStatePanel",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 532,
+      "line": 536,
       "sourceRange": {
-        "start": 17481,
-        "end": 18018
+        "start": 17540,
+        "end": 18077
       },
       "label": "",
       "attributes": {
@@ -11919,7 +11946,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#b2df3db97280e7e2.1",
       "signature": "b2df3db97280e7e2",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "handleStatePrimary",
@@ -11944,10 +11971,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 559,
+      "line": 563,
       "sourceRange": {
-        "start": 18280,
-        "end": 18488
+        "start": 18339,
+        "end": 18547
       },
       "label": "{{ nextCostRule ? \"创建后续版本\" : \"创建首个规则\" }}",
       "attributes": {
@@ -11971,7 +11998,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ed4cdadd71405209.1",
       "signature": "ed4cdadd71405209",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "openCreate",
@@ -11998,10 +12025,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 567,
+      "line": 571,
       "sourceRange": {
-        "start": 18495,
-        "end": 18547
+        "start": 18554,
+        "end": 18606
       },
       "label": "返回供应商与成本补全",
       "attributes": {
@@ -12016,7 +12043,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#6a49826ecb55d1fd.1",
       "signature": "6a49826ecb55d1fd",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12034,10 +12061,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 571,
+      "line": 575,
       "sourceRange": {
-        "start": 18705,
-        "end": 19412
+        "start": 18764,
+        "end": 19471
       },
       "label": "搜索规则 状态 全部状态 {{ statusLabels[status] ?? status }} 重置 共 {{ filteredRules.length }} 条",
       "attributes": {
@@ -12056,7 +12083,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#e4a92ae55317039d.1",
       "signature": "e4a92ae55317039d",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12074,10 +12101,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 583,
+      "line": 587,
       "sourceRange": {
-        "start": 19213,
-        "end": 19338
+        "start": 19272,
+        "end": 19397
       },
       "label": "重置",
       "attributes": {
@@ -12096,7 +12123,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#0aca31814d8e2a23.1",
       "signature": "0aca31814d8e2a23",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "resetFilters",
@@ -12123,10 +12150,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 589,
+      "line": 593,
       "sourceRange": {
-        "start": 19484,
-        "end": 20097
+        "start": 19543,
+        "end": 20156
       },
       "label": "{{ rule.name }} {{ rule.market }} · {{ rule.platform }} · {{ rule.version_code }} {{ statusLabels[rule.status] ?? rule.status }} 修订 {{ rule.revision }}",
       "attributes": {
@@ -12151,7 +12178,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#c4344a6ce7acbca8.1",
       "signature": "c4344a6ce7acbca8",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "selectRule",
@@ -12178,10 +12205,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 608,
+      "line": 612,
       "sourceRange": {
-        "start": 20288,
-        "end": 20360
+        "start": 20347,
+        "end": 20419
       },
       "label": "上一页",
       "attributes": {
@@ -12204,7 +12231,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#83d11b8719b1c99d.1",
       "signature": "83d11b8719b1c99d",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12224,10 +12251,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 610,
+      "line": 614,
       "sourceRange": {
-        "start": 20427,
-        "end": 20507
+        "start": 20486,
+        "end": 20566
       },
       "label": "下一页",
       "attributes": {
@@ -12250,7 +12277,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#bd43d7b540116c32.1",
       "signature": "bd43d7b540116c32",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12270,10 +12297,10 @@
       "kind": "control",
       "tag": "a",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 643,
+      "line": 647,
       "sourceRange": {
-        "start": 21758,
-        "end": 21889
+        "start": 21817,
+        "end": 21948
       },
       "label": "{{ rate.effective_on }} · 查看来源",
       "attributes": {
@@ -12302,7 +12329,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#9e33896b68e8e4fe.1",
       "signature": "9e33896b68e8e4fe",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12320,10 +12347,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 657,
+      "line": 661,
       "sourceRange": {
-        "start": 22266,
-        "end": 22454
+        "start": 22325,
+        "end": 22513
       },
       "label": "提交审批",
       "attributes": {
@@ -12350,7 +12377,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#55f48a15788735d1.1",
       "signature": "55f48a15788735d1",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12377,10 +12404,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 665,
+      "line": 669,
       "sourceRange": {
-        "start": 22534,
-        "end": 22767
+        "start": 22593,
+        "end": 22826
       },
       "label": "选品经理批准",
       "attributes": {
@@ -12411,7 +12438,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ea3ec6b286c61f0c.1",
       "signature": "ea3ec6b286c61f0c",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12438,10 +12465,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 672,
+      "line": 676,
       "sourceRange": {
-        "start": 22780,
-        "end": 23041
+        "start": 22839,
+        "end": 23100
       },
       "label": "选品经理拒绝",
       "attributes": {
@@ -12473,7 +12500,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#eac5ef200003454a.1",
       "signature": "eac5ef200003454a",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12500,10 +12527,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 680,
+      "line": 684,
       "sourceRange": {
-        "start": 23054,
-        "end": 23286
+        "start": 23113,
+        "end": 23345
       },
       "label": "组织管理员批准",
       "attributes": {
@@ -12534,7 +12561,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#6ac633aba6b533bd.1",
       "signature": "6ac633aba6b533bd",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12561,10 +12588,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 687,
+      "line": 691,
       "sourceRange": {
-        "start": 23299,
-        "end": 23559
+        "start": 23358,
+        "end": 23618
       },
       "label": "组织管理员拒绝",
       "attributes": {
@@ -12596,7 +12623,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#5d293fdba6594665.1",
       "signature": "5d293fdba6594665",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12623,10 +12650,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 696,
+      "line": 700,
       "sourceRange": {
-        "start": 23592,
-        "end": 23784
+        "start": 23651,
+        "end": 23843
       },
       "label": "发布规则",
       "attributes": {
@@ -12653,7 +12680,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#513ba8c3e39973c0.1",
       "signature": "513ba8c3e39973c0",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12680,10 +12707,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 703,
+      "line": 707,
       "sourceRange": {
-        "start": 23795,
-        "end": 24042
+        "start": 23854,
+        "end": 24101
       },
       "label": "回滚到历史版本",
       "attributes": {
@@ -12711,7 +12738,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#fab085a093adfa3a.1",
       "signature": "fab085a093adfa3a",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "beginAction",
@@ -12738,10 +12765,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 727,
+      "line": 731,
       "sourceRange": {
-        "start": 24592,
-        "end": 28928
+        "start": 24651,
+        "end": 28987
       },
       "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机壳（Amazon + 1688 高置信匹配） 1 CNY = 目标币种 汇率日期 官方来源页面 {{ createValidation || \"费用与可选换算依据已显式填写，可以保存草稿。\" }} {{ createError }} {{ requestId }} 保存仅创建草稿；必须完成两类真实角色审批后才能发布。 取消 {{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "attributes": {
@@ -12762,7 +12789,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#8dec9b05190c02c6.1",
       "signature": "8dec9b05190c02c6",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12780,10 +12807,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 734,
+      "line": 738,
       "sourceRange": {
-        "start": 24760,
-        "end": 28914
+        "start": 24819,
+        "end": 28973
       },
       "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机壳（Amazon + 1688 高置信匹配） 1 CNY = 目标币种 汇率日期 官方来源页面 {{ createValidation || \"费用与可选换算依据已显式填写，可以保存草稿。\" }} {{ createError }} {{ requestId }} 保存仅创建草稿；必须完成两类真实角色审批后才能发布。 取消 {{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "attributes": {
@@ -12800,7 +12827,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#1fcf5a2247b2ad3e.1",
       "signature": "1fcf5a2247b2ad3e",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "create",
@@ -12825,10 +12852,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 740,
+      "line": 744,
       "sourceRange": {
-        "start": 24928,
-        "end": 24997
+        "start": 24987,
+        "end": 25056
       },
       "label": "关闭",
       "attributes": {
@@ -12847,7 +12874,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1",
       "signature": "8695390d77702f3f",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "closeCreate",
@@ -12874,10 +12901,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 849,
+      "line": 853,
       "sourceRange": {
-        "start": 28671,
-        "end": 28753
+        "start": 28730,
+        "end": 28812
       },
       "label": "取消",
       "attributes": {
@@ -12896,7 +12923,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#4fa3694ad39564c9.1",
       "signature": "4fa3694ad39564c9",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "closeCreate",
@@ -12923,10 +12950,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 850,
+      "line": 854,
       "sourceRange": {
-        "start": 28753,
-        "end": 28882
+        "start": 28812,
+        "end": 28941
       },
       "label": "{{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "attributes": {
@@ -12942,7 +12969,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1",
       "signature": "bdb318fcff422d4c",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -12962,10 +12989,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 856,
+      "line": 860,
       "sourceRange": {
-        "start": 28933,
-        "end": 30656
+        "start": 28992,
+        "end": 30715
       },
       "label": "actionTitle",
       "attributes": {
@@ -12986,7 +13013,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#24b49021258ec509.1",
       "signature": "24b49021258ec509",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -13004,10 +13031,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 863,
+      "line": 867,
       "sourceRange": {
-        "start": 29142,
-        "end": 30642
+        "start": 29201,
+        "end": 30701
       },
       "label": "审计操作 {{ actionTitle }} × {{ selected.name }} · {{ selected.market }} / {{ selected.platform }} · {{ selected.version_code }} 恢复目标 {{ target.name }} · {{ target.version_code }} · {{ statusLabels[target.status] ?? target.status }} 操作原因（至少 2 个字） {{ actionError }} {{ requestId }} 原因会与操作者、角色、规则版本和请求链路一起保留。 取消 {{ busy ? \"提交中…\" : `确认${actionLabels[pendingAction.action]}` }}",
       "attributes": {
@@ -13024,7 +13051,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#a8b2803881a9f5ba.1",
       "signature": "a8b2803881a9f5ba",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "submitAction",
@@ -13049,10 +13076,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 869,
+      "line": 873,
       "sourceRange": {
-        "start": 29303,
-        "end": 29376
+        "start": 29362,
+        "end": 29435
       },
       "label": "关闭操作确认",
       "attributes": {
@@ -13071,7 +13098,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1",
       "signature": "9a6cc342b022be3d",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "closeAction",
@@ -13098,10 +13125,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 893,
+      "line": 897,
       "sourceRange": {
-        "start": 30359,
-        "end": 30441
+        "start": 30418,
+        "end": 30500
       },
       "label": "取消",
       "attributes": {
@@ -13120,7 +13147,7 @@
       },
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1",
       "signature": "ca4f082d1ca76f11",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [
         {
           "name": "closeAction",
@@ -13147,10 +13174,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 894,
+      "line": 898,
       "sourceRange": {
-        "start": 30441,
-        "end": 30610
+        "start": 30500,
+        "end": 30669
       },
       "label": "{{ busy ? \"提交中…\" : `确认${actionLabels[pendingAction.action]}` }}",
       "attributes": {
@@ -13166,7 +13193,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1",
       "signature": "1b870bc1240e4ab6",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23187,10 +23214,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 400,
+      "line": 401,
       "sourceRange": {
-        "start": 12144,
-        "end": 12241
+        "start": 12170,
+        "end": 12267
       },
       "label": "通知偏好",
       "attributes": {
@@ -23204,7 +23231,7 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1",
       "signature": "9b4302ca61b627ec",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23224,10 +23251,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 401,
+      "line": 402,
       "sourceRange": {
-        "start": 12241,
-        "end": 12296
+        "start": 12267,
+        "end": 12322
       },
       "label": "全部已读",
       "attributes": {
@@ -23240,13 +23267,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#fd5620d41b8a74b5.1",
       "signature": "fd5620d41b8a74b5",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "markAll",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 263,
-          "endLine": 275
+          "line": 264,
+          "endLine": 276
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23267,10 +23294,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 407,
+      "line": 408,
       "sourceRange": {
-        "start": 12455,
-        "end": 12478
+        "start": 12481,
+        "end": 12504
       },
       "label": "技术详情",
       "attributes": {},
@@ -23287,7 +23314,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1",
       "signature": "1c008f867673db60",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23305,10 +23332,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 426,
+      "line": 427,
       "sourceRange": {
-        "start": 12960,
-        "end": 13327
+        "start": 12986,
+        "end": 13353
       },
       "label": "{{ x.t }}",
       "attributes": {
@@ -23328,13 +23355,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1",
       "signature": "bfefb7250e532e63",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "setFilters",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 243,
-          "endLine": 262
+          "line": 244,
+          "endLine": 263
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23355,10 +23382,10 @@
       "kind": "event-binding",
       "tag": "input",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 440,
+      "line": 441,
       "sourceRange": {
-        "start": 13343,
-        "end": 13418
+        "start": 13369,
+        "end": 13444
       },
       "label": "",
       "attributes": {
@@ -23372,13 +23399,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1",
       "signature": "cafe657338aefab6",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "setFilters",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 243,
-          "endLine": 262
+          "line": 244,
+          "endLine": 263
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23397,10 +23424,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 444,
+      "line": 445,
       "sourceRange": {
-        "start": 13485,
-        "end": 13839
+        "start": 13511,
+        "end": 13865
       },
       "label": "{{ item.t }}",
       "attributes": {
@@ -23420,13 +23447,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1",
       "signature": "106ed8618827fe65",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "setFilters",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 243,
-          "endLine": 262
+          "line": 244,
+          "endLine": 263
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23447,10 +23474,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 479,
+      "line": 480,
       "sourceRange": {
-        "start": 14474,
-        "end": 14509
+        "start": 14500,
+        "end": 14535
       },
       "label": "重新加载",
       "attributes": {
@@ -23467,7 +23494,7 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1",
       "signature": "6a22c249121aeb4d",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -23494,10 +23521,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 486,
+      "line": 487,
       "sourceRange": {
-        "start": 14714,
-        "end": 15388
+        "start": 14740,
+        "end": 15414
       },
       "label": "{{ label(item.category).slice(0, 1) }} {{ item.title }} {{ displayBody(item) }} {{ time(item.created_at) }} {{ item.read_at ? \"已读\" : \"未读\" }} · {{ statusLabel(item.workflow_status) }} · 已合并 {{ item.group_count }} 条同根因通知",
       "attributes": {
@@ -23522,7 +23549,7 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#d953dfdf4cb40b85.1",
       "signature": "d953dfdf4cb40b85",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "open",
@@ -23549,10 +23576,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 508,
+      "line": 509,
       "sourceRange": {
-        "start": 15490,
-        "end": 15572
+        "start": 15516,
+        "end": 15598
       },
       "label": "上一页",
       "attributes": {
@@ -23570,13 +23597,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#01c7bba15fa9f7ce.1",
       "signature": "01c7bba15fa9f7ce",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "setFilters",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 243,
-          "endLine": 262
+          "line": 244,
+          "endLine": 263
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23597,10 +23624,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 510,
+      "line": 511,
       "sourceRange": {
-        "start": 15649,
-        "end": 15739
+        "start": 15675,
+        "end": 15765
       },
       "label": "下一页",
       "attributes": {
@@ -23618,13 +23645,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bd5dbf08f126da53.1",
       "signature": "bd5dbf08f126da53",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "setFilters",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 243,
-          "endLine": 262
+          "line": 244,
+          "endLine": 263
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23645,10 +23672,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 512,
+      "line": 513,
       "sourceRange": {
-        "start": 15755,
-        "end": 18136
+        "start": 15781,
+        "end": 18162
       },
       "label": "消息详情",
       "attributes": {
@@ -23669,7 +23696,7 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#a81227b33b62c0a9.1",
       "signature": "a81227b33b62c0a9",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23687,10 +23714,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 519,
+      "line": 520,
       "sourceRange": {
-        "start": 15922,
-        "end": 15998
+        "start": 15948,
+        "end": 16024
       },
       "label": "关闭消息详情",
       "attributes": {
@@ -23709,13 +23736,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#24417e6753ed4eb7.1",
       "signature": "24417e6753ed4eb7",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "closeDetail",
           "file": "apps/web/src/components/NotificationCenter.vue",
           "line": 237,
-          "endLine": 242
+          "endLine": 243
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23736,10 +23763,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 546,
+      "line": 547,
       "sourceRange": {
-        "start": 16860,
-        "end": 16993
+        "start": 16886,
+        "end": 17019
       },
       "label": "返回来源： {{ resourceLabel(selected.resource_type) }}",
       "attributes": {
@@ -23759,7 +23786,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9c8237833082965f.1",
       "signature": "9c8237833082965f",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23777,10 +23804,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 549,
+      "line": 550,
       "sourceRange": {
-        "start": 17002,
-        "end": 17199
+        "start": 17028,
+        "end": 17225
       },
       "label": "开始处理",
       "attributes": {
@@ -23804,13 +23831,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#d0ef81cb0803db4e.1",
       "signature": "d0ef81cb0803db4e",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "updateWorkflow",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 276,
-          "endLine": 301
+          "line": 277,
+          "endLine": 302
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23831,10 +23858,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 557,
+      "line": 558,
       "sourceRange": {
-        "start": 17208,
-        "end": 17405
+        "start": 17234,
+        "end": 17431
       },
       "label": "关闭",
       "attributes": {
@@ -23858,13 +23885,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#7490571390181453.1",
       "signature": "7490571390181453",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "updateWorkflow",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 276,
-          "endLine": 301
+          "line": 277,
+          "endLine": 302
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23885,10 +23912,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 565,
+      "line": 566,
       "sourceRange": {
-        "start": 17414,
-        "end": 17527
+        "start": 17440,
+        "end": 17553
       },
       "label": "重新打开",
       "attributes": {
@@ -23912,13 +23939,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#696dcabbd8c2d73e.1",
       "signature": "696dcabbd8c2d73e",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "updateWorkflow",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 276,
-          "endLine": 301
+          "line": 277,
+          "endLine": 302
         }
       ],
       "reviewStatus": "unreviewed",
@@ -23939,10 +23966,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 573,
+      "line": 574,
       "sourceRange": {
-        "start": 17703,
-        "end": 17726
+        "start": 17729,
+        "end": 17752
       },
       "label": "技术详情",
       "attributes": {},
@@ -23959,7 +23986,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2",
       "signature": "1c008f867673db60",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23977,10 +24004,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 590,
+      "line": 591,
       "sourceRange": {
-        "start": 18141,
-        "end": 19114
+        "start": 18167,
+        "end": 19140
       },
       "label": "通知偏好",
       "attributes": {
@@ -23995,7 +24022,7 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
       "signature": "bcb7add4c71c18a6",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -24013,10 +24040,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 596,
+      "line": 597,
       "sourceRange": {
-        "start": 18301,
-        "end": 19100
+        "start": 18327,
+        "end": 19126
       },
       "label": "通知偏好 站内通知 邮件通知（服务未接入，暂不可用） 任务事件 审批事件 竞品事件 邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。 取消 保存",
       "attributes": {
@@ -24028,13 +24055,13 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
       "signature": "72947e74a11b9abc",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [
         {
           "name": "savePreferences",
           "file": "apps/web/src/components/NotificationCenter.vue",
-          "line": 302,
-          "endLine": 326
+          "line": 303,
+          "endLine": 327
         }
       ],
       "reviewStatus": "unreviewed",
@@ -24053,10 +24080,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 607,
+      "line": 608,
       "sourceRange": {
-        "start": 18940,
-        "end": 19035
+        "start": 18966,
+        "end": 19061
       },
       "label": "取消",
       "attributes": {
@@ -24070,7 +24097,7 @@
       },
       "candidateId": "apps/web/src/components/NotificationCenter.vue#25755513ca77e550.1",
       "signature": "25755513ca77e550",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -24090,10 +24117,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 608,
+      "line": 609,
       "sourceRange": {
-        "start": 19035,
-        "end": 19071
+        "start": 19061,
+        "end": 19097
       },
       "label": "保存",
       "attributes": {
@@ -24103,7 +24130,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/NotificationCenter.vue#0285caea2e8607bf.1",
       "signature": "0285caea2e8607bf",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58059,10 +58086,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 384,
+      "line": 386,
       "sourceRange": {
-        "start": 12815,
-        "end": 12887
+        "start": 12960,
+        "end": 13032
       },
       "label": "供应商找货",
       "attributes": {
@@ -58073,7 +58100,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1",
       "signature": "4c5b0e4130d85030",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58091,10 +58118,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 385,
+      "line": 387,
       "sourceRange": {
-        "start": 12887,
-        "end": 12945
+        "start": 13032,
+        "end": 13090
       },
       "label": "费用与利润规则",
       "attributes": {
@@ -58104,7 +58131,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1",
       "signature": "4862df3dce4b0f1c",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58122,10 +58149,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 399,
+      "line": 401,
       "sourceRange": {
-        "start": 13448,
-        "end": 13523
+        "start": 13593,
+        "end": 13668
       },
       "label": "发起供应商找货",
       "attributes": {
@@ -58144,7 +58171,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1",
       "signature": "32fc6740cd676281",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "openSearch",
@@ -58171,10 +58198,10 @@
       "kind": "event-binding",
       "tag": "UiStatePanel",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 426,
+      "line": 428,
       "sourceRange": {
-        "start": 14315,
-        "end": 14589
+        "start": 14460,
+        "end": 14734
       },
       "label": "",
       "attributes": {
@@ -58198,7 +58225,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1",
       "signature": "307f53938ca7e688",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "handleStatePrimary",
@@ -58229,10 +58256,10 @@
       "kind": "event-binding",
       "tag": "UiStatePanel",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 435,
+      "line": 437,
       "sourceRange": {
-        "start": 14594,
-        "end": 14910
+        "start": 14739,
+        "end": 15055
       },
       "label": "",
       "attributes": {
@@ -58257,7 +58284,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1",
       "signature": "4ded8067979a3682",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -58294,10 +58321,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 447,
+      "line": 449,
       "sourceRange": {
-        "start": 14974,
-        "end": 15371
+        "start": 15119,
+        "end": 15516
       },
       "label": "{{ searchName(item) }} {{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }} {{ item.candidate_count }} 个候选 查看详情 →",
       "attributes": {
@@ -58321,7 +58348,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1",
       "signature": "95c07db60d43a586",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "detail",
@@ -58348,10 +58375,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 469,
+      "line": 471,
       "sourceRange": {
-        "start": 15844,
-        "end": 15951
+        "start": 15989,
+        "end": 16096
       },
       "label": "重新采集",
       "attributes": {
@@ -58378,13 +58405,13 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1",
       "signature": "100e00b6d8cb9e4a",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "refreshSearch",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 314,
-          "endLine": 321
+          "line": 316,
+          "endLine": 323
         }
       ],
       "reviewStatus": "unreviewed",
@@ -58405,10 +58432,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 472,
+      "line": 474,
       "sourceRange": {
-        "start": 15975,
-        "end": 16162
+        "start": 16120,
+        "end": 16307
       },
       "label": "费用与利润规则",
       "attributes": {
@@ -58428,7 +58455,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1",
       "signature": "dd2297ed2ff6c2a5",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58446,10 +58473,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 476,
+      "line": 478,
       "sourceRange": {
-        "start": 16162,
-        "end": 16363
+        "start": 16307,
+        "end": 16508
       },
       "label": "删除找货记录",
       "attributes": {
@@ -58477,7 +58504,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1",
       "signature": "0d91434c5f2ca144",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58497,10 +58524,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 536,
+      "line": 538,
       "sourceRange": {
-        "start": 18333,
-        "end": 18513
+        "start": 18478,
+        "end": 18658
       },
       "label": "查看采集任务明细",
       "attributes": {
@@ -58528,7 +58555,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1",
       "signature": "a9d2be84fdbc9665",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58546,10 +58573,10 @@
       "kind": "control",
       "tag": "a",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 557,
+      "line": 559,
       "sourceRange": {
-        "start": 19201,
-        "end": 19337
+        "start": 19346,
+        "end": 19482
       },
       "label": "打开 ERP 商品列表 ↗",
       "attributes": {
@@ -58574,7 +58601,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1",
       "signature": "46efe1c7f3d39475",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58592,16 +58619,16 @@
       "kind": "event-binding",
       "tag": "input",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 574,
+      "line": 576,
       "sourceRange": {
-        "start": 20007,
-        "end": 20175
+        "start": 20152,
+        "end": 20328
       },
       "label": "",
       "attributes": {
         "type": "checkbox",
         ":checked": "selectedQuotes.includes(item.quote.id)",
-        "@change": "choose(item)"
+        "@change": "choose(item, $event)"
       },
       "conditions": [
         {
@@ -58622,17 +58649,17 @@
         }
       ],
       "events": {
-        "@change": "choose(item)"
+        "@change": "choose(item, $event)"
       },
-      "candidateId": "apps/web/src/components/SourcingWorkspace.vue#221a8fab4df9f057.1",
-      "signature": "221a8fab4df9f057",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "candidateId": "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1",
+      "signature": "8fb00fc320cdc059",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "choose",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "line": 261,
-          "endLine": 268
+          "endLine": 270
         }
       ],
       "reviewStatus": "unreviewed",
@@ -58651,10 +58678,10 @@
       "kind": "control",
       "tag": "a",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 626,
+      "line": 628,
       "sourceRange": {
-        "start": 21967,
-        "end": 22088
+        "start": 22120,
+        "end": 22241
       },
       "label": "打开外部原始商品页（新窗口）",
       "attributes": {
@@ -58679,7 +58706,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1",
       "signature": "792656883236da58",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -58697,10 +58724,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 630,
+      "line": 632,
       "sourceRange": {
-        "start": 22205,
-        "end": 22329
+        "start": 22358,
+        "end": 22482
       },
       "label": "确认报价",
       "attributes": {
@@ -58731,13 +58758,13 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1",
       "signature": "1a57994baa2329f6",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "openQuote",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 269,
-          "endLine": 280
+          "line": 271,
+          "endLine": 282
         }
       ],
       "reviewStatus": "unreviewed",
@@ -58758,10 +58785,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 632,
+      "line": 634,
       "sourceRange": {
-        "start": 22329,
-        "end": 22448
+        "start": 22482,
+        "end": 22601
       },
       "label": "创建采购任务",
       "attributes": {
@@ -58792,13 +58819,13 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1",
       "signature": "6ec48a1f9259ef0d",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "openPurchase",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 294,
-          "endLine": 299
+          "line": 296,
+          "endLine": 301
         }
       ],
       "reviewStatus": "unreviewed",
@@ -58819,10 +58846,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 648,
+      "line": 650,
       "sourceRange": {
-        "start": 22878,
-        "end": 22994
+        "start": 23031,
+        "end": 23147
       },
       "label": "保存报价对比",
       "attributes": {
@@ -58841,13 +58868,13 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1",
       "signature": "658745acd55fced2",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "compare",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 281,
-          "endLine": 293
+          "line": 283,
+          "endLine": 295
         }
       ],
       "reviewStatus": "unreviewed",
@@ -58868,10 +58895,10 @@
       "kind": "event-binding",
       "tag": "SourcingWorkspaceDialogs",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 652,
+      "line": 654,
       "sourceRange": {
-        "start": 23012,
-        "end": 23725
+        "start": 23165,
+        "end": 23878
       },
       "label": "",
       "attributes": {
@@ -58915,7 +58942,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
       "signature": "c63aa5ea813e730c",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "create",
@@ -58938,14 +58965,14 @@
         {
           "name": "purchase",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 300,
-          "endLine": 313
+          "line": 302,
+          "endLine": 315
         },
         {
           "name": "removeSearch",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 322,
-          "endLine": 344
+          "line": 324,
+          "endLine": 346
         }
       ],
       "reviewStatus": "unreviewed",

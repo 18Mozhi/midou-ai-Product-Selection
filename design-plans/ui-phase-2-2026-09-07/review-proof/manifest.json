@@ -4,7 +4,7 @@
     "review.html": "94258ac05f6e171d95275edca8b33ede3538d32c868d53498db0e9879ebd9e1e",
     "review.js": "07376f54000f8a7e89075ce524d7d35e62cbc498106bc5c94acb700dd4021506",
     "review.css": "09e3776837868cee59b672f77110eeff21daf8cf001f1f0d7c03201ff1da8bc3",
-    "review-data.js": "dd07a3e12f9109b882c51ec09e6a61f5c9a8b9641d090fba5c24f6b0c566f3e1"
+    "review-data.js": "7bc86064c1312d4fceddb49f70ca61710192e94a96e946360e0b6192f944bf03"
   },
   "proof": [
     {
@@ -14,11 +14,11 @@
         "width": 1440,
         "height": 1000
       },
-      "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
-      "capturedAt": "2026-09-07T14:58:02.598Z",
+      "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+      "capturedAt": "2026-09-07T16:16:46.620Z",
       "browser": "151.0.7922.34",
       "platform": "win32",
-      "sha256": "b81035f41e87bddf08fbe8c46f649ac190858a81c44f4e29f1c18045c4deec66"
+      "sha256": "041f7c261c4ead821e85336a8c70cb6af3901e610b574a4c0a5305601a0e3b34"
     },
     {
       "kind": "local-review-tool-not-product-page",
@@ -27,11 +27,11 @@
         "width": 390,
         "height": 844
       },
-      "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
-      "capturedAt": "2026-09-07T14:58:04.132Z",
+      "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+      "capturedAt": "2026-09-07T16:16:48.086Z",
       "browser": "151.0.7922.34",
       "platform": "win32",
-      "sha256": "b9fa2512e17e84fadeacb96de68211cf0ea89a890794e5736e2c447821d0a04b"
+      "sha256": "69f7ed045789ea995db14741e7634e98658129031b9d8f0410876f023c4227c2"
     }
   ],
   "results": [

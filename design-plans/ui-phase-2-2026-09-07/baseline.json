@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "060e0b591af732c4c69060a468f526c45cc1330c",
+  "sourceRevision": "4b835881c081af808713c76af323d866993f44c9",
   "legacyRevision": "a9460a99c9bce018e65c5bce357f592669fa0a0d",
-  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
   "status": "static-discovery-complete-runtime-inventory-pending",
   "denominatorFrozen": false,
   "counts": {
@@ -13,7 +13,7 @@
     "nativeDialogs": 57,
     "legacyButtons": 648,
     "legacyDialogs": 56,
-    "legacySourceMatches": 704,
+    "legacySourceMatches": 703,
     "unmappedCandidates": 54,
     "runtimeWarnings": 3
   },
@@ -72,7 +72,7 @@
     },
     {
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "sha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629"
+      "sha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177"
     },
     {
       "file": "apps/web/src/components/AuditedReasonDialog.vue",
@@ -136,7 +136,7 @@
     },
     {
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "sha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47"
+      "sha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba"
     },
     {
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
@@ -200,7 +200,7 @@
     },
     {
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "sha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e"
+      "sha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
     },
     {
       "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -520,7 +520,7 @@
     },
     {
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "sha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c"
+      "sha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
     },
     {
       "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",

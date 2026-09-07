@@ -132,3 +132,9 @@ AW的11处绑定为reason；templateForm.name/resource_type/node_name/sla_minute
 | realtime-client-metrics.ts | 2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93 |
 
 永久回归：tests/e2e/m05-02-approval-workflow.spec.ts的AN01/AN02/AN04及原有用例；m05-03-notifications.spec.ts的AN03及原有用例；受影响m05-04-realtime.spec.ts。实际运行结果只记录PROGRESS，不预先写passed。设计图和最终实现图未产出，不以测试夹具截图冒充生产图。
+
+### 2026-09-08 R00全局来源关联
+
+全局清单已通过生成器与只读校验，绑定产品提交`4b835881c081af808713c76af323d866993f44c9`、指纹`fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591`。本表65个局部候选仍按当前源码解释；R00没有再次修改产品或重跑未变化的AN业务回归。
+
+历史`dialog-1`在ApprovalWorkspace旧495行，候选`92496ba501468962.1`是带role=dialog的aside；当前531行原生dialog候选为`1e3aa75fca121f17.1`，业务语义仍为D-AN-APPROVAL。因标签和事件合同改变，生成器保留`unresolved-source-changed-or-removed`而不自动认定相同，历史自动对应数从704变为703；本段给出人工来源对应，不将源码对应升级为全变体验收。G0归并冻结时须消费该人工记录，不能把旧详情删掉或遗漏当前原生模态。

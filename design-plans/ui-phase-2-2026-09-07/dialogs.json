@@ -1,24 +1,26 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
   "status": "discovery-not-variant-coverage",
   "candidates": [
     {
       "kind": "dialog-definition",
-      "tag": "aside",
+      "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 495,
+      "line": 531,
       "sourceRange": {
-        "start": 15112,
-        "end": 25577
+        "start": 16538,
+        "end": 27191
       },
-      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selected.decision_context.resource.label }} → 返回通知中心 影响范围 {{ resourceText(selected.resource_type) }} · {{ selected.title }} 当前节点 {{ selected.current_node_name || \"流程已结束\" }} 判断依据 证据完整度 {{ selected.decision_context.evidence.percent }} % {{ selected.decision_context?.evidence.note || \"按任务事实审批\" }} 证据完整度 {{ selected.decision_context.evidence.percent }} % 不适用 审批模板版本 {{ selected.decision_context.rule_versions.approval_template }} {{ selected.decision_context.snapshot_status === \"captured\" ? `发起审批时已锁定 · ${time(selected.decision_context.captured_at)}` : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}` }} 提交快照与当前证据 当前事实读取于 {{ time(selected.decision_context_diff.observed_at) }} 已有变化 保持一致 提交时完整度 {{ selected.decision_context_diff.evidence_summary.before_percent ?? \"不适用\" }} % → 当前完整度 {{ selected.decision_context_diff.evidence_summary.after_percent ?? \"不适用\" }} % 当前证据、事实和规则版本与提交审批时一致。 {{ change.label }} 提交时： {{ change.before_detail ?? \"无\" }} → 当前： {{ change.after_detail ?? \"无\" }} {{ change.label }} 提交时： {{ basisValue(change.before) }} → 当前： {{ basisValue(change.after) }} {{ change.label }} 提交时： {{ change.before ?? \"未生成\" }} → 当前： {{ change.after ?? \"未生成\" }} 缺失： {{ selected.decision_context.evidence.missing_items.join(\"、\") }} {{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }} {{ selected.decision_context.evidence.note }} 规则版本 审批模板 {{ selected.decision_context.rule_versions.approval_template }} 评分规则 {{ selected.decision_context.rule_versions.scoring ?? \"未生成\" }} 利润规则 {{ selected.decision_context.rule_versions.profit ?? \"未生成\" }} 申请决策 {{ statusText(selected.decision_context.decision.action) }} {{ selected.decision_context.decision.reason }} 基于机会第 {{ selected.decision_context.decision.opportunity_version }} 版 决策依据 {{ basis.label }} {{ basisValue(basis.value) }} {{ node.ordinal }} . {{ node.name }} {{ statusText(node.status) }} · {{ time(node.due_at) }} 当前审批人 {{ node.active_approver_name }} {{ node.approver_name }} 超时后 → {{ node.escalation_assignee_name }} 已于 {{ time(node.escalated_at) }} 升级 {{ node.decision_reason }} 操作记录 尚无批准、驳回或升级记录。 {{ actionText(action.action) }} {{ action.actor_name || \"未知成员\" }} · {{ time(action.created_at) }} {{ action.reason }} 证据仍有缺失；若继续审批，请在原因中明确说明判断依据。 审批原因（批准与驳回均必填） 驳回 批准并流转 当前节点不是由你审批，或审批已结束。 技术详情 审批编号 {{ selected.id }} 资源类型 {{ selected.resource_type }} 资源编号 {{ selected.resource_id }} 节点 {{ node.ordinal }} {{ node.id }} / {{ node.active_approver_id }}",
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selected.decision_context.resource.label }} → 返回通知中心 影响范围 {{ resourceText(selected.resource_type) }} · {{ selected.title }} 当前节点 {{ selected.current_node_name || \"流程已结束\" }} 判断依据 证据完整度 {{ selected.decision_context.evidence.percent }} % {{ selected.decision_context?.evidence.note || \"按任务事实审批\" }} 证据完整度 {{ selected.decision_context.evidence.percent }} % 不适用 审批模板版本 {{ selected.decision_context.rule_versions.approval_template }} {{ selected.decision_context.snapshot_status === \"captured\" ? `发起审批时已锁定 · ${time(selected.decision_context.captured_at)}` : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}` }} 提交快照与当前证据 当前事实读取于 {{ time(selected.decision_context_diff.observed_at) }} 已有变化 保持一致 提交时完整度 {{ selected.decision_context_diff.evidence_summary.before_percent ?? \"不适用\" }} % → 当前完整度 {{ selected.decision_context_diff.evidence_summary.after_percent ?? \"不适用\" }} % 当前证据、事实和规则版本与提交审批时一致。 {{ change.label }} 提交时： {{ change.before_detail ?? \"无\" }} → 当前： {{ change.after_detail ?? \"无\" }} {{ change.label }} 提交时： {{ basisValue(change.before) }} → 当前： {{ basisValue(change.after) }} {{ change.label }} 提交时： {{ change.before ?? \"未生成\" }} → 当前： {{ change.after ?? \"未生成\" }} 缺失： {{ selected.decision_context.evidence.missing_items.join(\"、\") }} {{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }} {{ selected.decision_context.evidence.note }} 规则版本 审批模板 {{ selected.decision_context.rule_versions.approval_template }} 评分规则 {{ selected.decision_context.rule_versions.scoring ?? \"未生成\" }} 利润规则 {{ selected.decision_context.rule_versions.profit ?? \"未生成\" }} 申请决策 {{ statusText(selected.decision_context.decision.action) }} {{ selected.decision_context.decision.reason }} 基于机会第 {{ selected.decision_context.decision.opportunity_version }} 版 决策依据 {{ basis.label }} {{ basisValue(basis.value) }} {{ node.ordinal }} . {{ node.name }} {{ statusText(node.status) }} · {{ time(node.due_at) }} 当前审批人 {{ node.active_approver_name }} {{ node.approver_name }} 超时后 → {{ node.escalation_assignee_name }} 已于 {{ time(node.escalated_at) }} 升级 {{ node.decision_reason }} 操作记录 尚无批准、驳回或升级记录。 {{ actionText(action.action) }} {{ action.actor_name || \"未知成员\" }} · {{ time(action.created_at) }} {{ action.reason }} {{ decisionNotice }} 证据仍有缺失；若继续审批，请在原因中明确说明判断依据。 审批原因（批准与驳回均必填） 驳回 批准并流转 当前节点不是由你审批，或审批已结束。 技术详情 审批编号 {{ selected.id }} 资源类型 {{ selected.resource_type }} 资源编号 {{ selected.resource_id }} 节点 {{ node.ordinal }} {{ node.id }} / {{ node.active_approver_id }}",
       "attributes": {
         "v-if": "selected",
+        "ref": "detailDialogElement",
         "class": "approval-detail",
-        "role": "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "approval-detail-title"
+        "aria-labelledby": "approval-detail-title",
+        "@cancel": "handleDetailCancel",
+        "@click": "closeDetailBackdrop",
+        "@keydown": "keepDetailFocus"
       },
       "conditions": [
         {
@@ -26,9 +28,9 @@
           "expression": "selected"
         }
       ],
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#92496ba501468962.1",
-      "signature": "92496ba501468962",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1e3aa75fca121f17.1",
+      "signature": "1e3aa75fca121f17",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -38,9 +40,7 @@
         "P25"
       ],
       "routeAttribution": "static-import-superset-not-runtime-proof",
-      "sourceInventoryIds": [
-        "dialog-1"
-      ],
+      "sourceInventoryIds": [],
       "evidence": [],
       "sourceScope": "catalog-route-candidate"
     },
@@ -48,10 +48,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 763,
+      "line": 802,
       "sourceRange": {
-        "start": 25582,
-        "end": 27764
+        "start": 27196,
+        "end": 29416
       },
       "label": "新建审批模板草稿",
       "attributes": {
@@ -62,7 +62,7 @@
       "conditions": [],
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21471c244422699b.1",
       "signature": "21471c244422699b",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -82,10 +82,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 819,
+      "line": 858,
       "sourceRange": {
-        "start": 27769,
-        "end": 28488
+        "start": 29421,
+        "end": 30140
       },
       "label": "发布审批模板",
       "attributes": {
@@ -96,7 +96,7 @@
       "conditions": [],
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e6808d6bed4a59f1.1",
       "signature": "e6808d6bed4a59f1",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -116,10 +116,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 841,
+      "line": 880,
       "sourceRange": {
-        "start": 28493,
-        "end": 29616
+        "start": 30145,
+        "end": 31306
       },
       "label": "发起审批",
       "attributes": {
@@ -130,7 +130,7 @@
       "conditions": [],
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1",
       "signature": "5eec193b0a9499f7",
-      "sourceSha256": "5208e72d0272eb0a84bd3229c5336eed679cfe5ce2aea5a0fe13a19408bfd629",
+      "sourceSha256": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -842,10 +842,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 727,
+      "line": 731,
       "sourceRange": {
-        "start": 24592,
-        "end": 28928
+        "start": 24651,
+        "end": 28987
       },
       "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机壳（Amazon + 1688 高置信匹配） 1 CNY = 目标币种 汇率日期 官方来源页面 {{ createValidation || \"费用与可选换算依据已显式填写，可以保存草稿。\" }} {{ createError }} {{ requestId }} 保存仅创建草稿；必须完成两类真实角色审批后才能发布。 取消 {{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "attributes": {
@@ -863,7 +863,7 @@
       ],
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1",
       "signature": "0cffdbc28160492d",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -883,10 +883,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 856,
+      "line": 860,
       "sourceRange": {
-        "start": 28933,
-        "end": 30656
+        "start": 28992,
+        "end": 30715
       },
       "label": "actionTitle",
       "attributes": {
@@ -904,7 +904,7 @@
       ],
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1",
       "signature": "777ba93e8ff0f331",
-      "sourceSha256": "9e38bc5b37820a0de3e17cdc5c31a4f11fa72df116609bd8396f8aae4f9a2d47",
+      "sourceSha256": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1516,10 +1516,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 512,
+      "line": 513,
       "sourceRange": {
-        "start": 15755,
-        "end": 18136
+        "start": 15781,
+        "end": 18162
       },
       "label": "消息详情",
       "attributes": {
@@ -1537,7 +1537,7 @@
       ],
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1",
       "signature": "1eb1c4db747d37c9",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -1557,10 +1557,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 590,
+      "line": 591,
       "sourceRange": {
-        "start": 18141,
-        "end": 19114
+        "start": 18167,
+        "end": 19140
       },
       "label": "通知偏好",
       "attributes": {
@@ -1572,7 +1572,7 @@
       "conditions": [],
       "candidateId": "apps/web/src/components/NotificationCenter.vue#b332799077351299.1",
       "signature": "b332799077351299",
-      "sourceSha256": "dae9c2ccaf8f70628b65cc657550c0223957470250328142183bda122ec18e9e",
+      "sourceSha256": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -3816,10 +3816,10 @@
       "kind": "dialog-component-call",
       "tag": "SourcingWorkspaceDialogs",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 652,
+      "line": 654,
       "sourceRange": {
-        "start": 23012,
-        "end": 23725
+        "start": 23165,
+        "end": 23878
       },
       "label": "",
       "attributes": {
@@ -3863,7 +3863,7 @@
       },
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
       "signature": "fca0d2d5d8880776",
-      "sourceSha256": "c5cb834b05133fc140cf3066cbeb448c43c50e144c2dc8540a72ecb6445fad4c",
+      "sourceSha256": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
       "handlerDefinitions": [
         {
           "name": "create",
@@ -3886,14 +3886,14 @@
         {
           "name": "purchase",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 300,
-          "endLine": 313
+          "line": 302,
+          "endLine": 315
         },
         {
           "name": "removeSearch",
           "file": "apps/web/src/components/SourcingWorkspace.vue",
-          "line": 322,
-          "endLine": 344
+          "line": 324,
+          "endLine": 346
         }
       ],
       "reviewStatus": "unreviewed",

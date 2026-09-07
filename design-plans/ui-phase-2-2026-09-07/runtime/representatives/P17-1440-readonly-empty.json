@@ -12,14 +12,14 @@
   "fullPage": true,
   "file": "runtime/representatives/P17-1440-readonly-empty.png",
   "sha256": "1c0283b5647a26000180c5ff8b8a7eaf7a658239ffa2f5a1db5eb2480f7b312a",
-  "sourceFingerprint": "caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d",
-  "sourceRevision": "060e0b591af732c4c69060a468f526c45cc1330c",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "sourceRevision": "4b835881c081af808713c76af323d866993f44c9",
   "testFile": "tests/e2e/m04-03-scoring.spec.ts",
   "testFileSha256": "4b8b55ec1d77f52f898bab47c6f9576bc60067e21dbabc2d0c1c87a50660bc89",
   "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
   "stylesheets": {
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
-    "apps/web/src/approval-workspace.css": "48f301f0f9bebb22b947e019c90bc288105f11a340fee90017f6bd3422686bce",
+    "apps/web/src/approval-workspace.css": "3baa1bd6bd42b620024d8b0930e018e985929df2dce6b4a904333417c5ac2053",
     "apps/web/src/automatic-selection.css": "16ad760b25e5833dfa67d69e8a6df3fe9ac9188ef05f63f5ed2c2688663e305b",
     "apps/web/src/automation-rules.css": "c006390dfdc5cc15371067d6f713ff18a2503c86693aa37e0e2a320cf5dd31f2",
     "apps/web/src/capacity-boundary.css": "ebacd274b70ae5f2ec5cc83b7331137e2e45dfd125b3058ac8ddb27d9b3a3203",
@@ -83,7 +83,7 @@
   "testTitle": "score rules read-only empty state does not expose creation",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-07T14:57:42.997Z",
+  "capturedAt": "2026-09-07T16:14:34.988Z",
   "assertions": [
     "empty-not-default-rules",
     "read-only-no-create"
