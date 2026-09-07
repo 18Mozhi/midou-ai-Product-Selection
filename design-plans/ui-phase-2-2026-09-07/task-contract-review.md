@@ -1,13 +1,13 @@
 # P13 / P23 / P24 任务动作与弹窗合同复核
 
-日期：2026-09-07；盘点起点 `3ac5bea`；以下候选行号及指纹对应历史产品源版本 `d9427bceb0701eafe7f105f02b70f04c829db483`。状态：源码语义已复核，运行验收部分覆盖，设计及用户审核未通过。后续读取生命周期修复见第6节；旧候选位置和旧图不是修复后新源的证明，须在清单刷新后重新对应。与自动生成的 actions/dialogs/coverage 分开维护，不改全站分母。
+日期：2026-09-07；盘点起点 `3ac5bea`；候选行号及指纹已按读取修复提交 `e1f7a9272b5017307754fa60aa691a8bb43b8329` 刷新。状态：源码语义已复核，运行验收部分覆盖，设计及用户审核未通过。71个局部控件及4个定义的candidateId不变，TaskWorkspace模板未改，位置整体后移66行；读取合同变化见第6节。与自动生成的 actions/dialogs/coverage 分开维护，不改全站分母。
 
 ## 1. 复核边界与证据
 
 - P13 `/work` 为 today 模式；P23 `/tasks` 为 all 模式；P24 `/tasks/:taskId` 使用同一 TaskWorkspace 加 TaskDetailPanel。NavigationShell 动态组件装配，不能把静态 import 归属等同于运行可见。
 - 直接检查 TaskWorkspace（下文 W）、TaskListPanel（L）、TaskDetailPanel（D）、TaskBatchActions（B），路径均在 `apps/web/src/components/`。四组件共71个控件/事件候选和4个dialog定义；共享壳层、全局菜单及其他组件不包含在这个局部数字中。
 - API依据：`apps/api/src/business-task-routes.ts`、`business-task-service.ts`、`mysql-business-task-repository.ts`；交互依据：`apps/web/src/use-modal-dialog.ts`。现有编辑表单内联在TaskWorkspace，不存在本链路消费的TaskEditForm组件。
-- 自动清单源指纹：`57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f`。下表行号仅定位；若指纹或源改变，重新对照candidateId、事件和处理函数，不机械沿用本表结论。
+- 自动清单源指纹：`c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183`。下表行号仅定位；若指纹或源改变，重新对照candidateId、事件和处理函数，不机械沿用本表结论。
 - 新验证入口：`tests/e2e/ui-phase2-task-contracts.spec.ts`，caseId为UI2-T01至T08；参数化共18项，桌面/移动分别执行。复用 `helpers/business-tasks.ts`，不改该共享夹具、不使已有任务图源失效。它们是隔离响应下的真实Vue合同测试，不证明持久化、数据库权限、生产数据或审计成功。
 
 ## 2. 真实范围与不可擅改事项
@@ -25,25 +25,25 @@
 
 | 组件行 | 语义ID（省略task.） | 入口/处理与结果 |
 | --- | --- | --- |
-| W726 | list.create.open | canCreate，showCreate=true；同壳头入口可在详情存在 |
-| W732 | view.business | setView，清status/page，保留query/sort |
-| W735 | view.exports | mode=all且report:read；GET /report-exports |
-| W770 | read.retry | 错误区load；列表/详情/导出按当前分支重读 |
-| W798 | batch.{x}.open/submit/close，batch.field.change | 子组件事件中转，不是独立控件 |
-| W816 | list.select/status/search/reset/create.open/delete.open | 子组件事件中转，不是独立控件 |
-| W842 | export.manage | 跳/reports |
-| W855 | export.open | 跳/reports?report=report_type，不是文件下载 |
-| W870 | list.page.previous | 页>1可用；清选择、URL更新 |
-| W872 | list.page.next | 页<pageCount可用；清选择、URL更新 |
-| W874 | editor.close | 原生cancel→handleCreateCancel→closeTaskEditor |
-| W879 | editor.{create,edit}.submit | 表单submit→create函数，按editing选择POST/PATCH |
-| W899 | editor.close | 取消按钮；busy禁用；清快捷创建query |
-| W900 | editor.{create,edit}.submit | 表单提交按钮；busy禁用，不另算业务动作 |
-| W906 | detail.{x}，editor.edit.open，delete.open，comment.submit | 详情事件中转，field更新只是本地模型 |
-| W933 | delete.close | 原生cancel→清目标及原因 |
-| W939 | delete.submit | 表单submit→removeTask |
-| W951 | delete.close | 取消按钮，busy禁用 |
-| W952 | delete.submit | 确认按钮，busy禁用 |
+| W792 | list.create.open | canCreate，showCreate=true；同壳头入口可在详情存在 |
+| W798 | view.business | setView，清status/page，保留query/sort |
+| W801 | view.exports | mode=all且report:read；GET /report-exports |
+| W836 | read.retry | 错误区load；列表/详情/导出按当前分支重读 |
+| W864 | batch.{x}.open/submit/close，batch.field.change | 子组件事件中转，不是独立控件 |
+| W882 | list.select/status/search/reset/create.open/delete.open | 子组件事件中转，不是独立控件 |
+| W908 | export.manage | 跳/reports |
+| W921 | export.open | 跳/reports?report=report_type，不是文件下载 |
+| W936 | list.page.previous | 页>1可用；清选择、URL更新 |
+| W938 | list.page.next | 页<pageCount可用；清选择、URL更新 |
+| W940 | editor.close | 原生cancel→handleCreateCancel→closeTaskEditor |
+| W945 | editor.{create,edit}.submit | 表单submit→create函数，按editing选择POST/PATCH |
+| W965 | editor.close | 取消按钮；busy禁用；清快捷创建query |
+| W966 | editor.{create,edit}.submit | 表单提交按钮；busy禁用，不另算业务动作 |
+| W972 | detail.{x}，editor.edit.open，delete.open，comment.submit | 详情事件中转，field更新只是本地模型 |
+| W999 | delete.close | 原生cancel→清目标及原因 |
+| W1005 | delete.submit | 表单submit→removeTask |
+| W1017 | delete.close | 取消按钮，busy禁用 |
+| W1018 | delete.submit | 确认按钮，busy禁用 |
 | L72 | list.status | 全部/todo/in_progress/paused/completed/cancelled六个显式变体 |
 | L83 | list.search.disclose | 原生details展开/关闭，无API写入 |
 | L88 | list.search.apply | 搜索trim，带当前sort；重置page与选中项 |
@@ -103,9 +103,9 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 
 | dialogId | 源与变体 | 输入及提交合同 | 取消/成功/失败 |
 | --- | --- | --- | --- |
-| task.editor.create | W874，新建 | 标题1–200、说明≤5000、priority四值、可选本地期限→ISO或null；POST /tasks，不传负责人则服务端使用actor | closeTaskEditor清create/title/description query；成功清表单并load；失败保持输入 |
-| task.editor.edit | W874，编辑 | PATCH /tasks/id；含原assignee_id、expected_version、固定reason=更新任务内容，期限转换同上 | 取消不写；成功重读；不改原负责人 |
-| task.delete | W933，删除 | DELETE /tasks/id，expected_version+trim原因1–500 | 取消清原因；详情删除成功replace(returnPath)，列表删除则load；失败保留 |
+| task.editor.create | W940，新建 | 标题1–200、说明≤5000、priority四值、可选本地期限→ISO或null；POST /tasks，不传负责人则服务端使用actor | closeTaskEditor清create/title/description query；成功清表单并load；失败保持输入 |
+| task.editor.edit | W940，编辑 | PATCH /tasks/id；含原assignee_id、expected_version、固定reason=更新任务内容，期限转换同上 | 取消不写；成功重读；不改原负责人 |
+| task.delete | W999，删除 | DELETE /tasks/id，expected_version+trim原因1–500 | 取消清原因；详情删除成功replace(returnPath)，列表删除则load；失败保留 |
 | task.action.{x} | D225，共5变体 | POST /tasks/id/actions，共有action+expected_version。progress只加percent/note；pause/cancel加reason；delay加reason/due_at；transfer加reason/assignee_id | 打开预填事实，原因每次清空；成功关闭并GET详情；失败不关闭；不自动提升version |
 | task.batch.{x} | B49，共5变体 | 同一actions端点逐项发送各自version；resume无reason；其余对应原因/期限/成员 | 显示选中/可执行/跳过/关联数；取消保留选择；完成后显示成功/失败/跳过，清选择并load；部分失败不伪装全成功 |
 
@@ -132,4 +132,4 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 
 `ui-phase2-task-cache.spec.ts`包含UI2-C01两列表入口、C02迟到详情200/404、C03详情ID切换及导出隔离、C04迟到列表200/403、C05成员目录在动作刷新后续读，共8项。C02/C04故意让目标GET忽略AbortSignal，再释放旧响应，验证归属检查不依赖网络取消成功。它们不证明真实生产或跨租户持久化权限。
 
-产品源改变使旧全局sourceFingerprint与旧Vue基线证据不再代表当前源。当前清单和旧图仍是历史交付，不改其哈希冒充新采图；下一步需在修复提交之后重新生成清单、复核候选对应并采集受影响Vue证据。独立A/B原型的样式、夹具没有变化，不以本次修复推定风格通过或要求全部无关原型重画。
+产品源改变使旧全局sourceFingerprint与旧Vue基线证据不再代表当前源。e1f7a92提交后已重新生成清单，按稳定candidateId校正本表，任务Vue基线18图及隔离CSS研究18图由原采集脚本实际重采、各14个语义案例通过。旧版材料可从Git历史追溯，没有只改图哈希冒充新采图。独立A/B原型样式和夹具未改；原脚本的proposal流程顺带复验并重采任务12图，其他76图未重画。它们仍待用户审核，不以本次修复推定风格通过。

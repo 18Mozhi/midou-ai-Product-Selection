@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
+  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
   "status": "discovery-not-variant-coverage",
   "candidates": [
     {
@@ -4158,10 +4158,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 874,
+      "line": 940,
       "sourceRange": {
-        "start": 27815,
-        "end": 29045
+        "start": 30020,
+        "end": 31250
       },
       "label": "editing ? '编辑任务' : '新建任务'",
       "attributes": {
@@ -4172,7 +4172,7 @@
       "conditions": [],
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1",
       "signature": "8bf4c56bada725b4",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4194,10 +4194,10 @@
       "kind": "dialog-definition",
       "tag": "dialog",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 933,
+      "line": 999,
       "sourceRange": {
-        "start": 29843,
-        "end": 30575
+        "start": 32048,
+        "end": 32780
       },
       "label": "删除任务",
       "attributes": {
@@ -4209,7 +4209,7 @@
       "conditions": [],
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1",
       "signature": "078999112ae5397e",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,

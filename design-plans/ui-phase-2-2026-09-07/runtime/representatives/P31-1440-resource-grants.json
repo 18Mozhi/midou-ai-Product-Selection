@@ -11,9 +11,9 @@
   },
   "fullPage": true,
   "file": "runtime/representatives/P31-1440-resource-grants.png",
-  "sha256": "5b33c47c535b6a5e764083f5678a0b712fd294cc9d1d605036190687e5428249",
-  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
-  "sourceRevision": "d9427bceb0701eafe7f105f02b70f04c829db483",
+  "sha256": "8bf7a5248480b7bc4eaa6c62b81c1e55a08772005035d963c6bfd8aada22533c",
+  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
+  "sourceRevision": "e1f7a9272b5017307754fa60aa691a8bb43b8329",
   "testFile": "tests/e2e/m06-01-organization-admin.spec.ts",
   "testFileSha256": "9774193831c69b36ec7be4eae6025e170ae7cc0a2255de0e85b9e683e2d988bc",
   "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
@@ -83,7 +83,7 @@
   "testTitle": "organization roles expose searchable role, capability, scope and grant facts",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-07T09:10:02.157Z",
+  "capturedAt": "2026-09-07T11:49:14.016Z",
   "assertions": [
     "existing-grant-reason",
     "grants-not-role-definitions"

@@ -12,8 +12,8 @@
   "fullPage": false,
   "file": "runtime/representatives/P17-390-submit-reason.png",
   "sha256": "35e66325a43697fe93a26a5fcbf140177921375e80291c456aa90de70f148aa7",
-  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
-  "sourceRevision": "d9427bceb0701eafe7f105f02b70f04c829db483",
+  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
+  "sourceRevision": "e1f7a9272b5017307754fa60aa691a8bb43b8329",
   "testFile": "tests/e2e/m04-03-scoring.spec.ts",
   "testFileSha256": "4b8b55ec1d77f52f898bab47c6f9576bc60067e21dbabc2d0c1c87a50660bc89",
   "captureHelperSha256": "b2d210193cf414c8ffdf0c3e81a2b055d59dbfdba22eb7dabbe6c9af7f272056",
@@ -83,7 +83,7 @@
   "testTitle": "M04-03.A07/A08/A09/A15 score rule versions support audited responsive workflow",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-07T09:11:35.230Z",
+  "capturedAt": "2026-09-07T11:50:36.477Z",
   "assertions": [
     "submit-reason-visible",
     "not-yet-submitted"

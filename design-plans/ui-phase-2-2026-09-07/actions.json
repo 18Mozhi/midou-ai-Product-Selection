@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
+  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
   "status": "discovery-not-behavior-coverage",
   "candidates": [
     {
@@ -62274,10 +62274,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 726,
+      "line": 792,
       "sourceRange": {
-        "start": 23032,
-        "end": 23099
+        "start": 25237,
+        "end": 25304
       },
       "label": "＋ 新建任务",
       "attributes": {
@@ -62295,7 +62295,7 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
       "signature": "2bed49a2c7d63100",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -62317,10 +62317,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 732,
+      "line": 798,
       "sourceRange": {
-        "start": 23313,
-        "end": 23421
+        "start": 25518,
+        "end": 25626
       },
       "label": "业务任务",
       "attributes": {
@@ -62338,13 +62338,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1",
       "signature": "833987c8ccb75906",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "setView",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 379,
-          "endLine": 389
+          "line": 437,
+          "endLine": 447
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62367,10 +62367,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 735,
+      "line": 801,
       "sourceRange": {
-        "start": 23428,
-        "end": 23587
+        "start": 25633,
+        "end": 25792
       },
       "label": "导出任务",
       "attributes": {
@@ -62393,13 +62393,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1",
       "signature": "3bec3ec2402b1420",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "setView",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 379,
-          "endLine": 389
+          "line": 437,
+          "endLine": 447
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62422,10 +62422,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 770,
+      "line": 836,
       "sourceRange": {
-        "start": 24370,
-        "end": 24405
+        "start": 26575,
+        "end": 26610
       },
       "label": "重新加载",
       "attributes": {
@@ -62442,13 +62442,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1",
       "signature": "6a22c249121aeb4d",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 325,
-          "endLine": 378
+          "line": 382,
+          "endLine": 436
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62471,10 +62471,10 @@
       "kind": "event-binding",
       "tag": "TaskBatchActions",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 798,
+      "line": 864,
       "sourceRange": {
-        "start": 25271,
-        "end": 25877
+        "start": 27476,
+        "end": 28082
       },
       "label": "",
       "attributes": {
@@ -62516,19 +62516,19 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
       "signature": "4910da2c0141bbb4",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "previewBatch",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 589,
-          "endLine": 596
+          "line": 653,
+          "endLine": 660
         },
         {
           "name": "confirmBatch",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 597,
-          "endLine": 644
+          "line": 661,
+          "endLine": 708
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62549,10 +62549,10 @@
       "kind": "event-binding",
       "tag": "TaskListPanel",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 816,
+      "line": 882,
       "sourceRange": {
-        "start": 25884,
-        "end": 26455
+        "start": 28089,
+        "end": 28660
       },
       "label": "",
       "attributes": {
@@ -62591,31 +62591,31 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
       "signature": "1673cf0154d40da1",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "setStatus",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 407,
-          "endLine": 412
+          "line": 471,
+          "endLine": 476
         },
         {
           "name": "applyFilters",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 413,
-          "endLine": 423
+          "line": 477,
+          "endLine": 487
         },
         {
           "name": "resetFilters",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 424,
-          "endLine": 435
+          "line": 488,
+          "endLine": 499
         },
         {
           "name": "askRemove",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 499,
-          "endLine": 503
+          "line": 563,
+          "endLine": 567
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62636,10 +62636,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 842,
+      "line": 908,
       "sourceRange": {
-        "start": 26617,
-        "end": 26663
+        "start": 28822,
+        "end": 28868
       },
       "label": "创建或管理导出",
       "attributes": {
@@ -62654,7 +62654,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1",
       "signature": "2f03957c77c45e54",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -62674,10 +62674,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 855,
+      "line": 921,
       "sourceRange": {
-        "start": 27158,
-        "end": 27275
+        "start": 29363,
+        "end": 29480
       },
       "label": "查看任务",
       "attributes": {
@@ -62700,7 +62700,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1",
       "signature": "7080532cf7836b46",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -62720,10 +62720,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 870,
+      "line": 936,
       "sourceRange": {
-        "start": 27576,
-        "end": 27645
+        "start": 29781,
+        "end": 29850
       },
       "label": "上一页",
       "attributes": {
@@ -62741,13 +62741,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1",
       "signature": "c4a35037858480fb",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "setPage",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 436,
-          "endLine": 444
+          "line": 500,
+          "endLine": 508
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62770,10 +62770,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 872,
+      "line": 938,
       "sourceRange": {
-        "start": 27722,
-        "end": 27799
+        "start": 29927,
+        "end": 30004
       },
       "label": "下一页",
       "attributes": {
@@ -62791,13 +62791,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1",
       "signature": "a0fa8a0a8fe3a4f1",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "setPage",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 436,
-          "endLine": 444
+          "line": 500,
+          "endLine": 508
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62820,10 +62820,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 874,
+      "line": 940,
       "sourceRange": {
-        "start": 27815,
-        "end": 29045
+        "start": 30020,
+        "end": 31250
       },
       "label": "editing ? '编辑任务' : '新建任务'",
       "attributes": {
@@ -62837,7 +62837,7 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1",
       "signature": "4caa7d3977955464",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -62857,10 +62857,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 879,
+      "line": 945,
       "sourceRange": {
-        "start": 27948,
-        "end": 29031
+        "start": 30153,
+        "end": 31236
       },
       "label": "{{ editing ? \"编辑任务\" : \"新建任务\" }} 这是什么任务？ 可以创建“复核热点”“分析亚马逊竞品”“查找货源”“确认利润”等具体工作。创建后点击任务详情，再点击开始运行。 标题 说明 优先级 低 普通 高 紧急 截止时间（可选） 未指定负责人时分配给当前用户；期限为空时明确显示“未设置”。 取消 {{ busy ? \"正在提交…\" : editing ? \"保存修改\" : \"创建任务\" }}",
       "attributes": {
@@ -62872,13 +62872,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#e394f71c3c789c95.1",
       "signature": "e394f71c3c789c95",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "create",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 445,
-          "endLine": 475
+          "line": 509,
+          "endLine": 539
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62899,10 +62899,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 899,
+      "line": 965,
       "sourceRange": {
-        "start": 28810,
-        "end": 28896
+        "start": 31015,
+        "end": 31101
       },
       "label": "取消",
       "attributes": {
@@ -62916,13 +62916,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1",
       "signature": "012988ab20dde0d0",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "closeTaskEditor",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 104,
-          "endLine": 108
+          "line": 140,
+          "endLine": 144
         }
       ],
       "reviewStatus": "unreviewed",
@@ -62945,10 +62945,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 900,
+      "line": 966,
       "sourceRange": {
-        "start": 28896,
-        "end": 29002
+        "start": 31101,
+        "end": 31207
       },
       "label": "{{ busy ? \"正在提交…\" : editing ? \"保存修改\" : \"创建任务\" }}",
       "attributes": {
@@ -62958,7 +62958,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1",
       "signature": "eede115bf64bea46",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -62980,10 +62980,10 @@
       "kind": "event-binding",
       "tag": "TaskDetailPanel",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 906,
+      "line": 972,
       "sourceRange": {
-        "start": 29050,
-        "end": 29838
+        "start": 31255,
+        "end": 32043
       },
       "label": "",
       "attributes": {
@@ -63031,37 +63031,37 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
       "signature": "cbfab60ce6b6b514",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "editTask",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 476,
-          "endLine": 486
+          "line": 540,
+          "endLine": 550
         },
         {
           "name": "askRemove",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 499,
-          "endLine": 503
+          "line": 563,
+          "endLine": 567
         },
         {
           "name": "action",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 528,
-          "endLine": 554
+          "line": 592,
+          "endLine": 618
         },
         {
           "name": "submitTaskAction",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 555,
-          "endLine": 588
+          "line": 619,
+          "endLine": 652
         },
         {
           "name": "addComment",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 652,
-          "endLine": 668
+          "line": 716,
+          "endLine": 732
         }
       ],
       "reviewStatus": "unreviewed",
@@ -63082,10 +63082,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 933,
+      "line": 999,
       "sourceRange": {
-        "start": 29843,
-        "end": 30575
+        "start": 32048,
+        "end": 32780
       },
       "label": "删除任务",
       "attributes": {
@@ -63100,7 +63100,7 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#184beea2f6fd5456.1",
       "signature": "184beea2f6fd5456",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -63120,10 +63120,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 939,
+      "line": 1005,
       "sourceRange": {
-        "start": 29987,
-        "end": 30561
+        "start": 32192,
+        "end": 32766
       },
       "label": "删除任务 将删除“ {{ deleting?.title }} ”。任务列表不再显示，但审计记录会保留。 删除原因 取消 {{ busy ? \"正在删除…\" : \"确认删除\" }}",
       "attributes": {
@@ -63135,13 +63135,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#a7d1ecc8ced537b9.1",
       "signature": "a7d1ecc8ced537b9",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "removeTask",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 504,
-          "endLine": 527
+          "line": 568,
+          "endLine": 591
         }
       ],
       "reviewStatus": "unreviewed",
@@ -63162,10 +63162,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 951,
+      "line": 1017,
       "sourceRange": {
-        "start": 30328,
-        "end": 30416
+        "start": 32533,
+        "end": 32621
       },
       "label": "取消",
       "attributes": {
@@ -63179,13 +63179,13 @@
       },
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1",
       "signature": "060b9320f351ee05",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [
         {
           "name": "closeDeleteDialog",
           "file": "apps/web/src/components/TaskWorkspace.vue",
-          "line": 109,
-          "endLine": 112
+          "line": 145,
+          "endLine": 148
         }
       ],
       "reviewStatus": "unreviewed",
@@ -63208,10 +63208,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 952,
+      "line": 1018,
       "sourceRange": {
-        "start": 30416,
-        "end": 30532
+        "start": 32621,
+        "end": 32737
       },
       "label": "{{ busy ? \"正在删除…\" : \"确认删除\" }}",
       "attributes": {
@@ -63223,7 +63223,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1",
       "signature": "e2b1aba214c4cb9e",
-      "sourceSha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb",
+      "sourceSha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,

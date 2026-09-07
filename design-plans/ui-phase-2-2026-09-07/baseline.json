@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "d9427bceb0701eafe7f105f02b70f04c829db483",
+  "sourceRevision": "e1f7a9272b5017307754fa60aa691a8bb43b8329",
   "legacyRevision": "a9460a99c9bce018e65c5bce357f592669fa0a0d",
-  "sourceFingerprint": "57721ceb995017a83adbcb523125576b3bdd28dfa1c1b59d468c2ad431bb022f",
+  "sourceFingerprint": "c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183",
   "status": "static-discovery-complete-runtime-inventory-pending",
   "denominatorFrozen": false,
   "counts": {
@@ -548,7 +548,7 @@
     },
     {
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "sha256": "5505d2bb7516e69eb9d22492883855a5f4f30af4b744bff9b638b6e041959eeb"
+      "sha256": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b"
     },
     {
       "file": "apps/web/src/components/TechnicalDetails.vue",
