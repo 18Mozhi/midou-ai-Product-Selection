@@ -1863,6 +1863,7 @@
     },
     "securityOperations": {
       "module": "M06-04",
+      "uiPhase2Contract": "P59 and commercial-security-open-platform-contract-review.md under design-plans/ui-phase-2-2026-09-07 document the read-only four-view contract, five mobile detail consumers, independent credential/token pagination and audit side effect of GET. Successful reads keep the workspace and collection-owned empty states even when all summary counts are zero. UI2-CS59 in m06-04-security-operations.spec.ts covers historical sessions, expired credentials, audits and empty/query/reset navigation with isolated responses. No permission, API, SQL or configuration change; rapid navigation/cache ownership, all modal accessibility, formal design, real backend and production remain pending.",
       "entrypoints": [
         "../apps/api/src/security-operations-service.ts",
         "../apps/api/src/mysql-security-operations-repository.ts",
@@ -1888,6 +1889,7 @@
     },
     "openPlatform": {
       "module": "M06-05",
+      "uiPhase2Contract": "P60 and commercial-security-open-platform-contract-review.md under design-plans/ui-phase-2-2026-09-07 map Client/Webhook/delivery actions, one-time-secret and shared confirmation boundaries, per-collection filters versus organization-only summaries, and queued versus externally delivered outcomes. This batch is fact documentation only for this page; no secret creation, rotation, replay or external delivery was executed. Async ownership, field error association, cached secret lifecycle, real permissions/backend and formal design remain pending.",
       "entrypoints": [
         "../apps/api/src/open-platform-service.ts",
         "../apps/api/src/mysql-open-platform-repository.ts",
@@ -1925,6 +1927,7 @@
     },
     "commercialOperations": {
       "module": "M06-06",
+      "uiPhase2Contract": "P58 and commercial-security-open-platform-contract-review.md under design-plans/ui-phase-2-2026-09-07 map quota-only plan/assignment/adjustment actions, three native dialogs and their variants, global plan summaries, explicit-period usage and independently paged adjustment history. Current assignment and all effective adjustments are not the same scope as the visible history page. This batch makes no product change here; organization snapshot ownership, impact-preview edge cases, write/read feedback, full accessibility, formal design and real backend/production remain pending.",
       "entrypoints": [
         "../apps/api/src/commercial-service.ts",
         "../apps/api/src/mysql-commercial-repository.ts",

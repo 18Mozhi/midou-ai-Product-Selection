@@ -183,7 +183,17 @@ test("M06-04.A08/A16 empty forbidden blocked", async ({ page }) => {
             json: env({
               ...data,
               summary: Object.fromEntries(Object.keys(data.summary).map((k) => [k, 0])),
+              security_events: [],
+              sessions: [],
+              credential_assets: [],
+              organization_tokens: [],
               audit_events: [],
+              pagination: Object.fromEntries(
+                Object.keys(data.pagination).map((key) => [
+                  key,
+                  { page: 1, page_size: 20, total: 0, total_pages: 1 },
+                ]),
+              ),
             }),
           }
         : {
@@ -198,11 +208,124 @@ test("M06-04.A08/A16 empty forbidden blocked", async ({ page }) => {
     ),
   );
   await page.goto("/platform-admin/security");
-  await expect(page.getByRole("heading", { name: "当前时间窗没有安全运营事实" })).toBeVisible();
+  await expect(page.getByText("没有匹配的事件。调整搜索、状态或时间窗后重试。")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "安全中心二级导航" })).toBeVisible();
   status = 403;
   await page.reload();
   await expect(page.getByRole("heading", { name: "你没有安全运营权限" })).toBeVisible();
   status = 503;
   await page.reload();
   await expect(page.getByRole("heading", { name: "安全运营依赖受阻" })).toBeVisible();
+});
+
+const zeroSummary = () => Object.fromEntries(Object.keys(data.summary).map((key) => [key, 0]));
+const securitySnapshot = (view: string, rows: Record<string, unknown[]> = {}) => ({
+  ...data,
+  view,
+  summary: zeroSummary(),
+  security_events: [],
+  sessions: [],
+  credential_assets: [],
+  organization_tokens: [],
+  audit_events: [],
+  ...rows,
+  pagination: Object.fromEntries(
+    Object.keys(data.pagination).map((key) => [
+      key,
+      { page: 1, page_size: 20, total: rows[key]?.length ?? 0, total_pages: 1 },
+    ]),
+  ),
+});
+
+for (const scenario of [
+  {
+    view: "sessions",
+    key: "sessions",
+    rows: [{ ...data.sessions[0], status: "expired" }],
+    text: "security@example.test",
+  },
+  {
+    view: "credentials",
+    key: "credential_assets",
+    rows: [{ ...data.credential_assets[0], status: "expired" }],
+    text: "生产读取凭证",
+  },
+  { view: "audit", key: "audit_events", rows: data.audit_events, text: "查看安全运营事实" },
+]) {
+  test(`UI2-CS59 zero summary preserves ${scenario.view} records`, async ({ page }) => {
+    await nav(page);
+    let reads = 0;
+    const writes: string[] = [];
+    await page.route("**/api/v1/platform/security/operations?**", (route) => {
+      if (route.request().method() !== "GET") writes.push(route.request().method());
+      reads += 1;
+      return route.fulfill({
+        json: env(securitySnapshot(scenario.view, { [scenario.key]: scenario.rows })),
+      });
+    });
+    await page.goto(`/platform-admin/security?view=${scenario.view}`);
+    const surface = page.locator(".security-ops");
+    await expect(surface.getByRole("navigation", { name: "安全中心二级导航" })).toBeVisible();
+    if ((page.viewportSize()?.width ?? 0) <= 760) {
+      await surface.getByRole("button", { name: new RegExp(scenario.text) }).click();
+      const dialog = page.getByRole("dialog", { name: scenario.text });
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole("button", { name: "关闭详情" }).click();
+    } else {
+      await expect(surface.getByText(scenario.text, { exact: true })).toBeVisible();
+    }
+    await expect(surface.locator(".security-kpis strong")).toHaveText([
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+    ]);
+    expect(reads).toBe(1);
+    expect(writes).toEqual([]);
+  });
+}
+
+test("UI2-CS59 empty view keeps query reset and view navigation usable", async ({ page }) => {
+  await nav(page);
+  const requests: URL[] = [];
+  const writes: string[] = [];
+  await page.route("**/api/v1/platform/security/operations?**", (route) => {
+    const request = route.request();
+    if (request.method() !== "GET") writes.push(request.method());
+    const url = new URL(request.url());
+    requests.push(url);
+    const view = url.searchParams.get("view") ?? "events";
+    const rows =
+      view === "sessions" && !url.searchParams.has("query")
+        ? { sessions: [{ ...data.sessions[0], status: "expired" }] }
+        : {};
+    return route.fulfill({ json: env(securitySnapshot(view, rows)) });
+  });
+  await page.goto("/platform-admin/security");
+  await expect(page.getByText("没有匹配的事件。调整搜索、状态或时间窗后重试。")).toBeVisible();
+  await page.getByRole("link", { name: "会话", exact: true }).click();
+  const search = page.getByRole("searchbox", { name: "搜索账号、设备或会话 ID" });
+  await expect(search).toBeVisible();
+  await expect(page.getByRole("button", { name: "查询", exact: true })).toBeEnabled();
+  await search.fill("no-match");
+  await page.getByRole("button", { name: "查询", exact: true }).click();
+  await expect(page).toHaveURL(/query=no-match/);
+  await expect(page.getByText("没有匹配的会话。调整搜索或状态后重试。")).toBeVisible();
+  await page.getByRole("button", { name: "重置", exact: true }).click();
+  await expect(page).not.toHaveURL(/query=/);
+  await expect(search).toHaveValue("");
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await expect(page.getByRole("button", { name: /security@example.test/ })).toBeVisible();
+  else await expect(page.getByText("security@example.test", { exact: true })).toBeVisible();
+  expect(
+    requests.map((url) => [url.searchParams.get("view"), url.searchParams.get("query")]),
+  ).toEqual([
+    ["events", null],
+    ["sessions", null],
+    ["sessions", "no-match"],
+    ["sessions", null],
+  ]);
+  expect(writes).toEqual([]);
 });

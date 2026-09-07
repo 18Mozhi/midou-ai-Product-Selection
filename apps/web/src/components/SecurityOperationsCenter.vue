@@ -13,7 +13,7 @@ const router = useRouter();
 const securityViews = ["events", "sessions", "credentials", "audit"] as const;
 type SecurityView = (typeof securityViews)[number];
 type PageState =
-  "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked" | "error";
+  "loading" | "ready" | "expired" | "forbidden" | "rate_limited" | "blocked" | "error";
 
 const emptyPagination = () => ({ page: 1, page_size: 20, total: 0, total_pages: 1 });
 const emptyData = () => ({
@@ -205,7 +205,9 @@ async function load() {
     page.value = mainPagination.value.page;
     tokenPage.value = tokenPagination.value.page;
     loadedOnce.value = true;
-    state.value = Object.values(data.value.summary).some(Number) ? "ready" : "empty";
+    // Summary counts do not include historical lifecycle records or platform audits.
+    // Keep the workspace available; each collection owns its own empty state.
+    state.value = "ready";
   } catch (error) {
     if (
       sequence !== loadSequence ||
@@ -329,7 +331,6 @@ const stateTitle = computed(
   () =>
     ({
       loading: "正在读取安全事实",
-      empty: "当前时间窗没有安全运营事实",
       expired: "登录已失效",
       forbidden: "你没有安全运营权限",
       rate_limited: "请求过于频繁",
