@@ -519,6 +519,7 @@
 }
 .org-role-page {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 .org-role-summary,

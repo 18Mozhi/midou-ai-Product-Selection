@@ -930,6 +930,23 @@ test("organization roles expose searchable role, capability, scope and grant fac
   await page.goto("/org-admin/roles");
   await expect(page.getByRole("table", { name: "角色能力矩阵" })).toBeVisible();
   await expect(page.getByText("固定角色模板", { exact: true }).first()).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+  if ((page.viewportSize()?.width ?? 1440) < 760) {
+    const matrix = page.locator(".org-role-matrix-scroll");
+    await expect(matrix.evaluate((node) => node.scrollWidth > node.clientWidth)).resolves.toBe(
+      true,
+    );
+    await expect(
+      matrix.evaluate((node) => {
+        node.scrollLeft = 100;
+        const moved = node.scrollLeft > 0;
+        node.scrollLeft = 0;
+        return moved;
+      }),
+    ).resolves.toBe(true);
+  }
   await capturePhase2Evidence(page, testInfo, "P31", "role-matrix", [
     "fixed-role-catalog",
     "capability-matrix-visible",
