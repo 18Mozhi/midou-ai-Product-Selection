@@ -1,0 +1,260 @@
+# W05 平台八页事实、控件与弹窗合同
+
+依据：main/c5d647c，2026-09-08实际源码核对；本批补七份规格及父/共享清单，复用P43，不宣称正式设计、完整运行时验证或生产通过。范围P38–P45，路由/组件见各页规格；API以下短路径均由既有客户端加/api/v1。全局导航属于W01共享壳层，本合同不代替NavigationShell及全站G0。当前G0未冻结、用户通过0。
+
+## 1. 数量口径与源码别名
+
+11个本族Vue文件共112个静态候选、23处v-model；其中P43四文件33候选/9绑定复用[用户合同](platform-user-design-contract.md)，本表补其余79候选/14绑定。四个跨模块共享组件另有16候选/1绑定，总计本次核对128候选/24绑定。不是128个业务动作，form/button、事件转发、定义/调用均可能归并；v-for实例、权限/状态及嵌套关系需要运行时扩展，不能凭数量冻结G0。
+
+别名全部位于apps/web/src/components/：D=PlatformDashboard.vue，C=PlatformAccountCenter.vue，O=PlatformOrganizationRecords.vue，M=PlatformAdminRecords.vue，W=OrganizationCreationWizard.vue，G=PlatformOrganizationDetailDialog.vue，R=PlatformRoleComparison.vue；P43既有A=PlatformAccountDialogs.vue、U=PlatformUserRecords.vue、V=PlatformUserDetailDialog.vue、F=PlatformUserMembershipForm.vue。共享S=ResponsiveDataView.vue、Q=ResponsiveFilterDrawer.vue、T=TableViewControls.vue、X=TechnicalDetails.vue。sig只在所属文件内唯一，不跨文件相加去重。
+
+### 1.1 本族新增79候选的逐对象归属
+
+| 文件 | candidate sig | 归属/真实语义 |
+| --- | --- | --- |
+| D | 41083a84c60ec185.1 | PA38-WINDOW 时间窗change→URL replace→load |
+| D | 15e83f4e8898e4d7.1 | PA38-REFRESH 页头刷新 |
+| D | 17f7411f1727355d.1 | PA38-REFRESH 首读失败重试 |
+| D | 5587941412d5210f.1 | PA38-LOGIN expired时跳/login |
+| D | 3569d8f0f015857e.1 | PA38-REFRESH 快照刷新失败重试 |
+| D | 65c09ba74ca8870b.1 | PA38-COLLECTION 跳/platform-admin/collection |
+| D | d1c0b626714a7ff9.1 | PA38-ROOTCAUSE 跳collection/overview?root_cause=1 |
+| D | 52444eba9c2a98bc.1 | PA38-ORGANIZATIONS 规模区跳组织列表，superadmin限定 |
+| D | c4dfc8f822a18263.1 | PA38-USERS 规模区跳用户列表，superadmin限定 |
+| D | 06b4b917d7a90e96.1 | PA38-SOURCES 规模区跳providers/sources |
+| D | 348b42f6f4eb388b.1 | PA38-COLLECTION 规模区跳采集任务 |
+| D | 9ae1b37e258dde35.1 | PA38-DATA 跳/platform-admin/data |
+| D | f84b8209be451866.1 | PA38-ORGANIZATIONS 常用入口，superadmin限定 |
+| D | 5074531b9e5b8a16.1 | PA38-SOURCES 常用来源入口 |
+| D | 1ce54f6253c32ad1.1 | PA38-QUEUE 常用collection/overview入口 |
+| D | ba487bb14816185a.1 | PA38-SOURCES 无趋势时配置来源入口 |
+| D | 2e8c2f831b1b02a5.1 | PA38-QUEUE 无趋势时查看队列入口 |
+| D | 1c008f867673db60.1 | PA38-TECH 来源预览ID/code展开，无复制 |
+| D | d604390773d9cd06.1 | PA38-PROVIDERS 展开/收起全部来源，本地 |
+| D | 1c008f867673db60.2 | PA38-TECH 告警org/workspace ID展开，无处理告警 |
+| C | adcd96ea7cc90712.1 | PA45-ADMINS 跳管理员管理 |
+| C | bcd4023ebe5d9ca9.1 | PA45-REFRESH 刷新角色目录 |
+| C | 280136c1a545dff9.1 | PA-ORG-CREATE 非P45页头打开组织向导 |
+| C | 1516ea5a6c3b1540.1 | PA-USER-CREATE 新用户/管理员，admins默认运营角色 |
+| C | eedb593a22243281.1 | PA-REFRESH 刷新账号，refreshing/busy禁用 |
+| C | c4cfef52bcc169fb.1 | PA45-REFRESH 角色首读错误重试 |
+| C | c526b71b2b59e702.1 | PA45-REFRESH 空角色目录重新检查 |
+| C | 6d8a89fda1f94214.1 | PA-NAV-ORG 跳P40 |
+| C | 454d991f8fed8550.1 | PA-NAV-USER 跳P43 |
+| C | 4681ec75ac4845ca.1 | PA-NAV-ADMIN 跳P44 |
+| C | 3ba83336a51e7303.1 | PA-FILTER-DRAWER 共享筛选调用，不是独立业务写窗 |
+| C | e112a995ce86318a.1 | PA-FILTER form→applyFilters |
+| C | ebbfe99328a93a8a.1 | PA-FILTER 搜索submit按钮，与form归并 |
+| C | 08063437101eb52f.1 | PA-RESET 重置query/status；无条件/刷新时禁用 |
+| C | 6a22c249121aeb4d.1 | PA-REFRESH 账号首读错误重试 |
+| C | d4e23c718ed64cd0.1 | PA-RESET 组织筛选空态清除 |
+| C | 9ea6aa71cb45580a.1 | PA-ORG-CREATE P40无组织空态新建 |
+| C | 15769a468957ac3f.1 | PA-ORG-DETAIL 组织记录事件转发 |
+| C | df9b0cebe8f296a1.1 | PA43-DETAIL 用户记录事件转发 |
+| C | d4e23c718ed64cd0.2 | PA-RESET 管理员筛选空态清除 |
+| C | 64fa4a4db515a792.1 | PA-USER-CREATE 管理员空态新建 |
+| C | 23e58bc5ed3b6439.1 | PA43-DETAIL 管理员记录转同一用户详情 |
+| C | 5db731eeed33ba4f.1 | PA41 向导clearError/close/submit事件集合 |
+| C | 559dcb14c786950e.1 | PA43窗口事件集合：创建、密码、原因、关闭、reason更新 |
+| C | 1fff4198190d6ece.1 | 同上一项AccountDialogs组件调用，非新增业务动作 |
+| C | 4eb362af5381776f.1 | PA42 close/retry/clearFeedback/save/toggleStatus转发 |
+| C | c43be07eff2d7020.1 | 同上一项组织详情组件调用 |
+| C | 39878a11789ae9ce.1 | PA43 close/retry/status/role/membership/password/session转发 |
+| C | cab997ead119619a.1 | 同上一项用户详情组件调用 |
+| O | 6923b73e52535ef3.1 | PA-ORG-DETAIL 桌面详情；busy禁用 |
+| O | 2a07373cb016b4b5.1 | PA-ORG-DETAIL 移动预览→详情并close预览 |
+| O | 1c008f867673db60.1 | PA-ORG-TECH 预览UUID展开 |
+| M | b77b1781563a48b8.1 | PA43-DETAIL 桌面管理员账号详情 |
+| M | 18553297e6cbdd0a.1 | PA43-DETAIL 移动预览→详情并close预览 |
+| M | 1c008f867673db60.1 | PA44-TECH 预览用户UUID展开 |
+| W | 0b065ffdf54ab12b.1 | PA41-DIALOG 原生向导定义 |
+| W | faacd7ed42835c46.1 | PA41-CANCEL 原生cancel→父关闭 |
+| W | fa23daedbd2c0827.1 | PA41-CREATE form提交 |
+| W | b18325f688280598.1 | PA41-INPUT name变化清错误 |
+| W | 494420d478dadefe.1 | PA41-INPUT slug变化清错误 |
+| W | 47a9ebd58cf57e57.1 | PA41-INPUT 初始管理员变化清错误 |
+| W | dbb9c697adbd2614.1 | PA41-CANCEL 按钮取消，step回1 |
+| W | d4a2da9643d6151e.1 | PA41-BACK 返回上一步清错误 |
+| W | 10583294b61e5704.1 | PA41-NEXT reportValidity后进入确认 |
+| W | 8f34ceeac7432a4a.1 | PA41-CREATE 最终submit按钮 |
+| G | f1666fd06fb5d95e.1 | PA42-DIALOG 原生组织详情定义 |
+| G | 452d85f008176563.1 | PA42-CLOSE Escape→父关闭/回列表 |
+| G | 6fbf23d3aefd32ed.1 | PA42-RETRY missing重新读取概览 |
+| G | e86ba35d079de0d3.1 | PA42-CLOSE missing返回列表 |
+| G | 806c920618d07330.1 | PA42-SAVE form→原因确认 |
+| G | 305725c44ab6a8ed.1 | PA42-CLOSE 页首关闭 |
+| G | c86975c19b2b8d14.1 | PA42-INPUT name清反馈 |
+| G | 68c23982ea6f10d3.1 | PA42-INPUT timezone清反馈 |
+| G | 1ddc3f63c9d2ad7d.1 | PA42-INPUT retention清反馈 |
+| G | 1c008f867673db60.1 | PA42-TECH slug/UUID展开 |
+| G | 758ab89691c1c72b.1 | PA42-STATUS 停用/恢复进入原因窗 |
+| G | 02668382bdda9d3b.1 | PA42-CLOSE 页尾关闭 |
+| G | b8fc8632d25866fd.1 | PA42-SAVE submit按钮，与form归并 |
+| R | e4a2fbf8875f3488.1 | PA45-RESET 比较重置，P44共享但不写URL |
+
+### 1.2 共享16候选及调用差异
+
+| 文件 | candidate sig | 归属/真实语义 |
+| --- | --- | --- |
+| S | 6da4dad42cb34c8d.1 | PA-S-PREVIEW 移动每条记录打开预览 |
+| S | 4fa7deb3456a41ae.1 | PA-S-CLOSE 预览Escape |
+| S | 53d89072117d7eda.1 | PA-S-CLOSE 遮罩按钮关闭 |
+| S | e23893d134b1daa1.1 | 共享role=dialog预览定义，不是native dialog |
+| S | 847801b2ac6e7a17.1 | PA-S-CLOSE 页首关闭与返回触发器焦点 |
+| Q | 28fb788b88500472.1 | PA-Q-KEY 外包装键盘处理 |
+| Q | beb5f8d5846aa028.1 | PA-Q-OPEN 移动打开筛选 |
+| Q | e03968eb8d9e92a8.1 | PA-Q-KEY Teleport后键盘处理 |
+| Q | 483082db5a776bf3.1 | PA-Q-CLOSE 筛选遮罩关闭 |
+| Q | df1390feb7424a07.1 | PA-Q-CLOSE 筛选页首关闭 |
+| Q | cd956325fcd081da.1 | PA-Q-CLOSE 捕获form submit先关闭抽屉 |
+| T | e2fd0d02cbd9f684.1 | PA-T-COLUMNS 原生details列设置 |
+| T | 921f4be18a3fe814.1 | PA-T-COLUMN 每列checked/change，至少留一列 |
+| T | d09cd5524db7bee5.1 | PA-T-FREEZE 冻结/取消首个可见列 |
+| X | b3ffca8eb967d682.1 | PA-X-EXPAND 请求/链路/技术项原生展开 |
+| X | c19091da9e2471f1.1 | PA-X-COPY 每项复制系统剪贴板，1500ms反馈 |
+
+S/T本族四类消费者为D来源健康、O组织记录、U用户记录、M管理员记录；动态列数分别4/5/5/3，T从实际th读取，不把这四组扩成四个不同共享组件。Q由父C调用，非P45筛选区使用；X在D失败态与ready观测footer调用，其props当前只给requestId；局部原生技术details没有自动获得X复制能力。
+
+Q动态`:role="overlay ? 'dialog' : 'group'"`未被当前扫描器识别为dialog-definition；已人工补记移动筛选模态，不能据零定义漏验。Q以760px matchMedia切换，离开移动关闭；submit捕获立即收起，不等待查询结果，重置type=button不触发这条关闭路径；取消保留父字段。S初始聚焦关闭按钮，close返焦点，但源码没有显式Tab循环、背景inert或KeepAlive离开清理；selectedKey所指记录临时消失后又回来也需复验，不直接推断安全。
+
+T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示、冻结、standard，至少一可见列。改变列结构只清越界索引，语义换列/缓存复用需验；不是后端分页/排序/持久化偏好。基础控件min-height=36，是否被生产令牌/选择器覆盖需实际computed检查，不称已满足44。X复制没有catch及卸载清理timer；本批不调用真实剪贴板，不宣称复制错误/迟到反馈已处理。
+
+### 1.3 输入绑定（24处，不以事件扫描替代）
+
+| 文件 | v-model表达式 | 当前合同 |
+| --- | --- | --- |
+| D | windowCode | 四个固定窗；change读API并替换URL |
+| C | query | URL初始化/服务截断120；提交trim |
+| C | status | URL初始化/服务截断30；选项按真实路由 |
+| A | userForm.email | 原生邮箱、后台normalize |
+| A | userForm.temporary_password | 新建12–128；不落浏览器存储 |
+| A | userForm.platform_role_code | 三固定平台角色或空 |
+| A | userForm.organization_id | 概览组织选项或空 |
+| A | userForm.organization_role_code | 初始组织member/organization_admin |
+| A | passwordForm.temporary_password | 改密12–128，再进原因窗 |
+| W | form.name | 必填2–120 |
+| W | form.slug | 必填2–63；首位字母/数字，末位连字符当前允许 |
+| W | form.initial_admin_user_id | 可选已有active用户，空取操作者 |
+| G | form.name | 必填2–120 |
+| G | form.timezone | 必填≤64，后端不做IANA目录校验 |
+| G | form.data_retention_days | v-model.number，整数30–3650 |
+| F | form.organization_id | 可加入的active组织且无既有关系 |
+| F | form.role_code | member/selection_manager/procurement_member/organization_admin/auditor |
+| F | form.reason | trim后2–300，内联表单而非共享原因窗 |
+| R | differencesOnly | 默认true；P45映射show_all |
+| R | compareLeft | 默认platform_operations_admin |
+| R | compareRight | 默认platform_security_admin |
+| R | capabilityQuery | 名称/编码包含过滤，最多80 |
+| R | capabilityGroup | 本地中文分组，初始化最多40 |
+| T | density | standard/compact，当前实例，不写URL/API |
+
+共享原因textarea是value/input转发，属于A的候选b313681d9ad25f0e.1，不是漏掉的第25处v-model；列开关为checked/change也非v-model。原生select弹层不作为产品业务弹窗。
+
+## 2. 语义动作与真实调用链
+
+| 动作族 | 前置→请求/效果 | 结果与边界 |
+| --- | --- | --- |
+| PA38读取 | platform:operate；GET /platform/dashboard?window | 返回聚合及request/trace ID；后端另写读取与审计事务，不执行采集控制 |
+| PA读取/筛选/刷新 | platform:superadmin；GET /platform/accounts?query&status | 各数组最多200，summary未筛选；无分页参数。query/status同条件主动load，不同条件replace后watch读取 |
+| PA45角色读取 | 父GET /platform/roles；本页不读accounts | P45角色空/错独立状态；P44先账号再角色，role失败不清账号事实 |
+| PA-ORG-CREATE/PA41 | 原生校验/两步；POST /platform/accounts/organizations | name/slug/可选initial_admin_user_id，成功原子创建默认范围并跳P42；无人工reason |
+| PA42-SAVE | 详情三字段→原因；PATCH /platform/accounts/organizations/{id} | name/timezone/data_retention_days/reason，无expected_version；成功load后从数组找组织 |
+| PA42-STATUS | 组织状态→原因；POST organizations/{id}/status | active/archived+reason，保存/停用/恢复文案分别验 |
+| PA-USER-CREATE | P39/P40/P43或P44创建；POST /platform/accounts/users | 五字段，空组织/平台角色转null，无人工reason；P44默认运营角色但不改接口 |
+| PA43详情及写入 | 用户/管理员共享；GET users/{id}，status/platform-role/password/sessions/revoke/memberships写入 | 精确body见既有P43合同；H02只守详情GET展示代次，写完成回调/原因确认归属仍待验 |
+| PA45比较 | 两角色并集→差异/分组/查询过滤 | 本地计算无写API；P45写五个URL键，P44不写。重置启用只看query/group |
+| PA导航/共享 | RouterLink、预览/筛选、本地列工具、技术展开/复制 | 页内展开不等于业务请求；复制有剪贴板副作用；导航可能由新页触发API |
+
+账号写入由既有Origin/Idempotency-Key/鉴权及仓储事务审计约束。蓝图对创建也笼统写“原因”，但真实createOrganization/createUser请求并无人工reason；本批记录差异，沿真实合同设计，不新增字段或修改后端来迎合文案。所有资料、权限、密码及敏感操作仍由服务端裁定，不能让隐藏按钮替代拒绝测试。
+
+## 3. 弹窗族、变体与关闭合同
+
+本族六个native dialog定义：W创建组织、G组织详情、V用户详情、A新建用户、A强制改密、A共享原因。C的四个dialog-component-call包括Q筛选和三个Dialog命名组件，不是四个额外业务模态；W命名无Dialog但真实有定义。另有S移动预览和Q动态筛选，列设置/技术信息为details。下表是族，不是全站冻结分母。
+
+| 族 | 调用方/变体 | 进入→提交/失败→取消/返回 |
+| --- | --- | --- |
+| PA41-DIALOG | P39/P40等页头，P40空态，/new直达；两步/错误/busy | reportValidity后下一步，最终提交；失败留第二步；取消回P40且父字段仍在；成功才清字段并跳P42 |
+| PA42-DIALOG | P39/P40组织入口或创建成功/ID直达；正常/missing | 资料form→共享原因；缺失重读概览；关闭回P40；错误/成功在详情，缺计数??1不是事实 |
+| PA43-DETAIL | P43/P44，共用GET；loading/error/ready和成员表单 | H02关闭/换路由/KeepAlive离开/卸载使GET失效；错误可重试；其他操作与回调另验 |
+| PA43-CREATE | P39概览/用户创建/P44管理员标题与默认角色差异 | 五字段提交，错误留窗；取消关闭不立即清密码；成功关闭但字段仍内存，不能称已修 |
+| PA43-PASSWORD | 用户/管理员详情 | 密码form→共享原因→写；失败回密码窗；关闭不写、不立即清密码；成功关闭密码/详情 |
+| PA-REASON | 组织3种+用户11种=14种已识别语义变体 | 默认“平台管理员人工操作”，trim2–300；确认先关闭再await action；取消清回调不写。异步后重开/反馈身份需验 |
+| PA-S-PREVIEW | 来源/O/U/M四类记录；长字段/技术展开 | 无业务写；U/M/O可进入二级真实详情并关闭预览；Escape/遮罩/关闭焦点独立核对 |
+| PA-Q-FILTER | C非权限页；组织/账号/管理员标签和状态选项差异 | 移动开关，desktop内联；submit先收起、失败仍需可恢复；取消保留输入，无业务写 |
+
+14种原因逐项为：组织保存1、停用/恢复2；用户停用/恢复2，运营/安全/超级管理员各授予/撤销6，单会话/全部会话2，强制改密1。加入组织有自己内联reason，不并入共享14；创建两族无reason。每种要覆盖准确主体/影响/权限、自保拒绝、确认中、失败和成功，不因为使用一个定义只拍一次。useModalDialog基于showModal/native cancel和触发器返回，没有显式手写Tab循环；C研究的循环修复不是生产助手改动。
+
+## 4. 当前差异与未关闭项
+
+| ID | 源码证据与风险 | 下一项验收，当前状态 |
+| --- | --- | --- |
+| PA-D01 | 用户toggle/role/revoke写后可重开旧用户，membership写后读实时selected；组织保存/改密原因回调也使用实时selected | 先隔离复现甲写→关闭/乙/离页→旧成功/失败，核对请求目标及反馈；未执行，不称已修 |
+| PA-D02 | 概览200/过滤记录驱动组织详情、??1计数、取消密码保留、角色/账号旧快照、query数组watch单飞 | 逐具体场景验证missing与筛选、写成功刷新失败、密码生命周期和最终查询归属；七页规格已补，但行为未关闭 |
+| PA-D03 | H02用户GET保护不代表所有销毁/角色撤回/其他错误，运营dashboard与superadmin accounts权限不同 | 真实六角色允许/拒绝及审计、壳层销毁、401/403快照和直接深链；未执行 |
+| PA-D04 | 现已有P38–P45八份规格和本族候选表；正式布局、完整图片/运行时分母/生产仍缺 | R01与W01/W05正式图→Vue→全验；不重列已补规格为缺失，不把本文当全量通过 |
+| PA-W05-A11Y | C查询input只有placeholder；S无显式焦点循环/inert；Q只有局部Tab处理；T基础36px；X无复制异常catch | 真实计算热区、名称、键盘循环/背景可交互、叠加模态、错误关联、clipboard失败/时序；本批只核源码，没有复现结果 |
+| PA-W05-HISTORY | D window和R五键仅初始化/向URL写，没有反向route.query watch；C导航去query，S/Q无deactivate清理 | 前进后退/KeepAlive与窗口、筛选、数据观测范围一致；T换列索引及Q取消/提交也验；未执行 |
+| PA-W05-FACT | D仅部分字段参与empty；队列柱宽是装饰；admins含未授权用户；角色筛选仅两角色并集、reset禁用条件有限 | 零/缺失/仅趋势/同角色/单角色/过滤外组织/无角色用户用实际字段验证，不造指标或改业务判定 |
+
+这些是事实边界及待验条目，不是本轮浏览器发现的已复现缺陷。旧PAGES中分页、独立组织详情、权限保存等拟议描述需R01连同实际源清单/证据统一纠偏；本批不改全局fingerprint或覆盖用户审核记录。没有尚未授权的新API、SQL、依赖、安全规则决定。
+
+## 5. 验证矩阵与证据类型
+
+现有文件：tests/e2e/m06-01-platform-accounts.spec.ts、m06-02-platform-dashboard.spec.ts、m02-03-navigation-shell.spec.ts。前两者内既有覆盖分别含账号/管理员/组织深链、创建失败、角色目录及H02 UI2-PA01/PA02，驾驶舱事实/来源展开/时间窗/超时。这里只核对用例入口与源码，不等于本轮跑过；H02桌面移动各21项通过仅引用PROGRESS历史。
+
+| 待验场景组 | 精确断言与边界 |
+| --- | --- |
+| 读取与范围 | 四时间窗、null/0/仅trend、运营/超级权限、200上限和summary不随筛选；捕获真实URL/请求/状态 |
+| 组织全链 | 列表→两步→最小响应/刷新失败→详情；name/slug边界及Enter、3原因变体、missing/过滤排除；不写生产组织 |
+| 账号写归属 | 每种请求先挂起，甲→乙/关闭/离页→旧成功与失败；当前身份/错误无污染，不能自动重发写入或将关闭当撤销 |
+| 比较与历史 | 两角色/同/单/空，query/group、reset条件、五URL键前进后退；P44内存与P45持久化区别 |
+| 共享控件 | 四记录类型列数、至少一列、冻结首可见列、两密度；移动预览/筛选键盘、遮罩、双层详情焦点、取消/submit区别 |
+| 无障碍与视觉 | 1440/390、768/1024及适用邻界、200%缩放、长文本、软键盘、16/13px与44px、三主题；真实屏幕阅读/错误和复制失败独立留证 |
+| 正式与生产 | 每页正式图/Vue对照+全部适用变体；真实鉴权/事务/审计及同SHA宝塔证据；未审/未执行不得passed |
+
+本批新增只读验证器`node scripts/verify-ui-phase2-platform-account-contract.mjs`：核对15个Vue文件的128候选及24绑定、八页十项规格/实际路径、文档本地链接与本文记录的源LF哈希；候选和源码漂移时失败。脚本不执行API/浏览器/数据库、不写生成清单，不验证业务语义是否正确，也不将任何review状态设为通过。新状态/变体须由人工查真实调用链补表再实际采证，不能为通过计数删候选。
+
+## 6. 交付、使用与未改变范围
+
+P38–P45八份规格至此都有文件；全站规格48/73，W06八份、W07八份、W08九份共25份尚缺。正式C方向仍pending，18研究图不重采；正式全站图、Vue重构、真实角色/业务/生产及用户签收继续按1.15计划。R01全局清单仍旧源，不将局部表自动当全站完成。
+
+本批不改Vue/CSS、API/OpenAPI、SQL、Node/Worker/Python、依赖或.env；无新运行参数、迁移、部署或重启。Feature Map仅补规格与核对脚本索引；永久规格、合同、验证器保留。临时产物及进程情况、实际检查结果见PROGRESS；旧16批材料不动。正式图/实现槽位依各页第10节，用户审核需绑定具体新版本。
+
+## 7. 源码指纹（LF SHA-256）
+
+下表只锁定本批读取的产品合同源，便于发现后续语义变化；不表示当前线上SHA或全站证据已刷新。验证器检查真实内容，而不是要求未来HEAD永远等于本次起点。
+
+| 文件 | SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 |
+| apps/web/src/components/PlatformAccountCenter.vue | 06ea539015a4f47b947a05eae41f5c8c7fe635b11992d5d01bc62fccc58970ae |
+| apps/web/src/components/PlatformOrganizationRecords.vue | c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82 |
+| apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |
+| apps/web/src/components/OrganizationCreationWizard.vue | 6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0 |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue | cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435 |
+| apps/web/src/components/PlatformRoleComparison.vue | d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba |
+| apps/web/src/components/PlatformAccountDialogs.vue | 53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829 |
+| apps/web/src/components/PlatformUserRecords.vue | a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24 |
+| apps/web/src/components/PlatformUserMembershipForm.vue | 553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644 |
+| apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
+| apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
+| apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
+| apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
+| apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
+| apps/web/src/use-platform-user-detail.ts | e874ad5952d02f4d2e47c3a0c6ef94fdd63b1ddb2801fd4475109bd3a1e88da7 |
+| apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
+| apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
+| apps/web/src/components/NavigationShell.vue | 993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92 |
+| apps/api/src/authorization-routes.ts | f670a9e21650e2fedd3ea691049de840cb2a47c9c6add471c38eb7e71e208975 |
+| apps/api/src/platform-account-routes.ts | 79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226 |
+| apps/api/src/platform-account-service.ts | 189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d |
+| apps/api/src/mysql-platform-account-repository.ts | 96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5 |
+| apps/api/src/platform-dashboard-routes.ts | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
+| apps/api/src/platform-dashboard-service.ts | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
+| apps/api/src/mysql-platform-dashboard-repository.ts | b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28 |
+| apps/api/src/mysql-platform-dashboard-scale-metrics.ts | 75f0800028a81a7456578b65699406b8d52593deb89926c4970a4b7bd9679c00 |
+| apps/api/src/mysql-platform-dashboard-collection-metrics.ts | dc37e16179b6c8d57d2b6ffcb23fcfce7d44d950bbfc9263104be1d6d74c438d |
+| apps/api/src/mysql-platform-dashboard-risk-metrics.ts | e49abd8f317094b4b34b5fb31f8cb47e9d3cc1dc9cffcd945035c8ecd648f094 |
+| apps/api/src/mysql-platform-dashboard-storage-metrics.ts | 16b1b6b5e04ae7b3f4438914cd88b7e985d4a836db42c6e6c1855567de0ca808 |
+| config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |

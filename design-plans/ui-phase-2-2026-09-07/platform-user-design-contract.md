@@ -4,7 +4,7 @@
 
 ## 1. 候选归属（33个直接候选，不是业务动作分母）
 
-文件别名均在apps/web/src/components：U=PlatformUserRecords.vue，V=PlatformUserDetailDialog.vue，A=PlatformAccountDialogs.vue，F=PlatformUserMembershipForm.vue。下表sig必须与扫描器逐对象一致；重复sig用文件名区分。父PlatformAccountCenter、NavigationShell、ResponsiveDataView、TableViewControls、ResponsiveFilterDrawer等共享入口尚需W05全族合同补齐，不把33项当P43全部运行时动作。
+文件别名均在apps/web/src/components：U=PlatformUserRecords.vue，V=PlatformUserDetailDialog.vue，A=PlatformAccountDialogs.vue，F=PlatformUserMembershipForm.vue。下表sig必须与扫描器逐对象一致；重复sig用文件名区分。父PlatformAccountCenter、ResponsiveDataView、TableViewControls、ResponsiveFilterDrawer等现已由[W05全族合同](platform-account-contract-review.md)补齐局部候选；NavigationShell仍归W01共享壳层，不把33项当P43全部运行时动作。
 
 | 文件 | candidate sig | 归属/真实语义 |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ C原型提议将组织授权改为独立模态、移动直接开详情；这些�
 - 列表返回最多200；管理员数组可能包含未赋平台角色用户，不能据名称推断为纯管理员集合。账号总量不能取过滤数组长度。
 - PA-D01–PA-D04原未关闭项仍有效。本批未修改父级写回调、密码清理、刷新权限失败、URL历史或移动预览实现，未重跑H02产品回归。
 - C合成身份字母图标只是从邮箱生成的装饰，不是新增个人姓名/头像字段。合成组织、角色、安全完成状态、会话用于布局示意，不能把样例之间的组合规律当成后端推导规则。
-- 正式三主题/两密度、全部断点/缩放/软键盘、屏幕阅读器、真实后端角色与生产尚未验证；W05剩P38–P42/P44/P45七份规格及全族共享清单尚缺。
+- 正式三主题/两密度、全部断点/缩放/软键盘、屏幕阅读器、真实后端角色与生产尚未验证。后续W05事实批已补P38–P42/P44/P45七份规格和父/共享候选合同；不等于正式新图、运行时分母或全部行为已通过，当前边界见全族合同。
 
 ## 5. 源与证据
 
