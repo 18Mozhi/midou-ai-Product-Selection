@@ -24,6 +24,7 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
   selected = ref<ApprovalItem | null>(null),
   detailBusy = ref(false),
   detailNotice = ref(""),
+  decisionNotice = ref(""),
   queue = ref<"decidable" | "requested">(
     route.query.view === "requested" ? "requested" : "decidable",
   ),
@@ -56,7 +57,11 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
     resource_id: "",
     title: "",
   });
-const { dialogElement: templateDialogElement, handleCancel: handleTemplateCancel } = useModalDialog(
+const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
+    () => Boolean(selected.value),
+    () => void closeDetail(),
+  ),
+  { dialogElement: templateDialogElement, handleCancel: handleTemplateCancel } = useModalDialog(
     () => showTemplate.value,
     () => (showTemplate.value = false),
   ),
@@ -211,6 +216,7 @@ async function load() {
 async function openById(id: string, syncUrl = true) {
   detailBusy.value = true;
   detailNotice.value = "";
+  decisionNotice.value = "";
   try {
     selected.value = await api<ApprovalItem>(`/tasks/approvals/${id}`, {}, false);
     reason.value = "";
@@ -234,6 +240,40 @@ async function open(item: ApprovalItem) {
 async function closeDetail() {
   selected.value = null;
   await router.replace({ query: { ...route.query, approval: undefined } });
+}
+function closeDetailBackdrop(event: MouseEvent) {
+  const dialog = detailDialogElement.value;
+  if (!dialog || event.target !== dialog) return;
+  const rect = dialog.getBoundingClientRect();
+  if (
+    event.clientX < rect.left ||
+    event.clientX > rect.right ||
+    event.clientY < rect.top ||
+    event.clientY > rect.bottom
+  )
+    void closeDetail();
+}
+function revealInvalidField(event: Event) {
+  if (!(event.target instanceof HTMLElement)) return;
+  const details = event.target.closest("details");
+  if (details) details.open = true;
+}
+function keepDetailFocus(event: KeyboardEvent) {
+  if (event.key !== "Tab" || !detailDialogElement.value) return;
+  const controls = [
+    ...detailDialogElement.value.querySelectorAll<HTMLElement>(
+      "button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary, [tabindex]",
+    ),
+  ].filter((element) => element.tabIndex >= 0 && element.getClientRects().length > 0);
+  const first = controls[0],
+    last = controls.at(-1);
+  if (event.shiftKey && document.activeElement === first && last) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last && first) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 async function setQueue(value: "decidable" | "requested") {
   queue.value = value;
@@ -267,6 +307,7 @@ async function setPage(value: number) {
 }
 async function decide(action: "approve" | "reject") {
   if (!selected.value || !reason.value.trim()) return;
+  decisionNotice.value = "";
   busy.value = true;
   try {
     await api(
@@ -286,6 +327,7 @@ async function decide(action: "approve" | "reject") {
     await closeDetail();
     await load();
   } catch (error) {
+    decisionNotice.value = notice.value;
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
@@ -486,18 +528,14 @@ watch(
       <span>第 {{ page }} / {{ pageCount }} 页 · 共 {{ total }} 项</span>
       <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>
     </nav>
-    <div
+    <dialog
       v-if="selected"
-      class="approval-detail-backdrop"
-      aria-hidden="true"
-      @click="closeDetail"
-    ></div>
-    <aside
-      v-if="selected"
+      ref="detailDialogElement"
       class="approval-detail"
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="approval-detail-title"
+      @cancel="handleDetailCancel"
+      @click="closeDetailBackdrop"
+      @keydown="keepDetailFocus"
     >
       <button class="close" aria-label="关闭审批详情" title="关闭审批详情" @click="closeDetail">
         ×
@@ -715,6 +753,7 @@ watch(
         </article>
       </section>
       <section v-if="selected.can_decide && canManage">
+        <p v-if="decisionNotice" class="approval-notice" role="alert">{{ decisionNotice }}</p>
         <p
           v-if="
             selected.decision_context?.evidence.applicable &&
@@ -759,13 +798,13 @@ watch(
           </div>
         </dl>
       </details>
-    </aside>
+    </dialog>
     <dialog
       ref="templateDialogElement"
       aria-label="新建审批模板草稿"
       @cancel="handleTemplateCancel"
     >
-      <form @submit.prevent="createTemplate">
+      <form @submit.prevent="createTemplate" @invalid.capture="revealInvalidField">
         <h3>新建审批模板草稿</h3>
         <label>模板名称<input v-model="templateForm.name" required maxlength="200" /></label
         ><label
@@ -839,7 +878,7 @@ watch(
       </form>
     </dialog>
     <dialog ref="requestDialogElement" aria-label="发起审批" @cancel="handleRequestCancel">
-      <form @submit.prevent="createRequest">
+      <form @submit.prevent="createRequest" @invalid.capture="revealInvalidField">
         <h3>发起审批</h3>
         <label
           >已发布模板<select v-model="requestForm.template_id" required>

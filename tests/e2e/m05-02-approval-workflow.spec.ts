@@ -451,3 +451,112 @@ test("approval empty state exposes only the next valid setup action", async ({ p
   await page.getByRole("button", { name: "配置第一个模板" }).click();
   await expect(page.getByRole("dialog", { name: "新建审批模板草稿" })).toBeVisible();
 });
+
+test("UI2-AN01 approval detail owns keyboard focus, Escape and return without deciding", async ({
+  page,
+}) => {
+  const observed = await setup(page);
+  await page.goto("/tasks/approvals");
+  const trigger = page.getByRole("button", { name: /便携净水杯采纳决策复核/ });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: item.title });
+  const close = dialog.getByRole("button", { name: "关闭审批详情" });
+  await expect.poll(() => dialog.evaluate((element) => element.matches(":modal"))).toBe(true);
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.locator("summary").last()).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(page).not.toHaveURL(/approval=/);
+  await expect(trigger).toBeFocused();
+  expect(observed.decisions).toBe(0);
+  await trigger.click();
+  await expect(close).toBeFocused();
+  await dialog.click({ position: { x: 20, y: 12 } });
+  await expect(dialog).toBeVisible();
+  const bounds = await dialog.boundingBox();
+  expect(bounds?.x).toBeGreaterThan(0);
+  await page.mouse.click(bounds!.x / 2, bounds!.y + 60);
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  expect(observed.decisions).toBe(0);
+});
+
+for (const form of ["template", "request"] as const) {
+  test(`UI2-AN02 ${form} reveals and focuses a required field inside collapsed details`, async ({
+    page,
+  }) => {
+    const observed = await setup(page);
+    const errors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    await page.goto("/tasks/approvals");
+    await page
+      .getByRole("button", { name: form === "template" ? "管理模板" : "＋ 发起审批" })
+      .click();
+    const dialog = page.getByRole("dialog", {
+      name: form === "template" ? "新建审批模板草稿" : "发起审批",
+      exact: true,
+    });
+    if (form === "template") {
+      await dialog.getByLabel("模板名称").fill("必填成员验证");
+      await dialog.getByLabel("节点名称").fill("当前工作区复核");
+    } else {
+      await dialog.getByLabel("已发布模板").selectOption(item.template_id);
+      await dialog.getByLabel("审批标题").fill("必填资源验证");
+    }
+    const details = dialog.locator(".approval-form-technical");
+    await expect(details).not.toHaveAttribute("open");
+    await dialog
+      .getByRole("button", { name: form === "template" ? "保存草稿" : "发起", exact: true })
+      .click();
+    await expect(details).toHaveAttribute("open");
+    const field = dialog.getByLabel(form === "template" ? "审批人" : "资源编号");
+    await expect(field).toBeVisible();
+    await expect(field).toBeFocused();
+    expect(errors.filter((message) => /not focusable/i.test(message))).toEqual([]);
+    expect(observed.templateCreates + observed.requestCreates).toBe(0);
+    await dialog.getByRole("button", { name: "取消", exact: true }).click();
+    await expect(dialog).not.toBeVisible();
+  });
+}
+
+test("UI2-AN04 approval conflict stays visible in the modal and preserves the audited reason", async ({
+  page,
+}) => {
+  await setup(page);
+  const bodies: unknown[] = [];
+  await page.route(`**/api/v1/tasks/approvals/${approvalId}/actions`, async (route) => {
+    bodies.push(route.request().postDataJSON());
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "approval_version_conflict",
+          message: "审批版本已变化",
+          action_hint: "刷新审批详情后再判断。",
+        },
+        request_id: "ui2-an-conflict",
+        trace_id: "ui2-an-conflict-trace",
+      },
+    });
+  });
+  await page.goto("/tasks/approvals");
+  const trigger = page.getByRole("button", { name: /便携净水杯采纳决策复核/ });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: item.title });
+  await dialog.getByLabel("审批原因（批准与驳回均必填）").fill("核对当前证据后驳回");
+  await dialog.getByRole("button", { name: "驳回", exact: true }).click();
+  await expect(dialog.getByRole("alert")).toHaveText("刷新审批详情后再判断。");
+  await expect(dialog.getByLabel("审批原因（批准与驳回均必填）")).toHaveValue("核对当前证据后驳回");
+  expect(bodies).toEqual([{ action: "reject", reason: "核对当前证据后驳回", expected_version: 1 }]);
+  await page.keyboard.press("Escape");
+  await expect(trigger).toBeFocused();
+  expect(bodies).toHaveLength(1);
+  await trigger.click();
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
+  await expect(dialog.getByLabel("审批原因（批准与驳回均必填）")).toHaveValue("");
+});

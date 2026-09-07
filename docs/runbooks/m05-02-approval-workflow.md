@@ -12,6 +12,12 @@
 
 失败租约到期可被其他轮询接管；同一 node run 只有一个升级任务。连续三次处理失败进入 dead_letter，运维核对 request_id/trace_id、成员范围及 MySQL 后再人工恢复为 queued，不得直接篡改审批结论。
 
+## 第二阶段审批交互核对（2026-09-07）
+
+P25规格及逐动作合同见`design-plans/ui-phase-2-2026-09-07/page-specs/P25.md`和`approval-notification-contract-review.md`。本次前端局部修复：详情采用原生模态，打开后焦点进入关闭按钮，Tab/Shift+Tab在可见控制间循环，Escape/关闭/真实遮罩点击返回触发器；详情内部留白不算遮罩。409决策错误应在详情内可读并保留原因，重开清旧原因/错误。模板/发起表单提交时，如果必填审批人、超时接收人或资源编号在折叠区，浏览器校验应自动展开该区并聚焦首个缺项，未填写时不得发请求。批准/驳回、版本、模板及超时升级合同没有改变。
+
+复验使用m05-02-approval-workflow中的UI2-AN01/AN02/AN04和原模块用例；这些是局部隔离Vue证据，不证明全新视觉或生产已验。运行代码只改变前端，无新增SQL/环境变量，修复自身无需Node/Python重启。正式发布仍走`python scripts/deploy-baota.py`，需核实既有迁移白名单、恢复材料和宝塔停启窗口，不假定部署器是纯前端上传。
+
 ## 回滚
 
 先在宝塔停止“ai选品”，等待 `approval_escalation_jobs.status='leased'` 的租约结束，再下线审批入口与 API。只回滚本次快照能力时，先回滚应用，再执行 `0047_approval_decision_context_snapshot.down.sql`；该操作会删除已保存快照，生产已有新审批时必须先备份且通常不应执行。若不存在任何需保留的审批历史，才可继续执行 `0018b_approval_workflow_m05_02.down.sql`；该脚本按外键逆序删除本模块表。审计、全局 Outbox 和已形成的审批动作不得为了回滚而删除。

@@ -235,6 +235,7 @@ async function open(item: Item) {
   }
 }
 async function closeDetail() {
+  if (busy.value) return;
   selected.value = null;
   await router.replace({
     query: { ...route.query, notification: undefined, notification_id: undefined },

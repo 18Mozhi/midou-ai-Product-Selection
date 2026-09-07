@@ -10,6 +10,12 @@
 
 回滚时先在宝塔停止“ai选品”并等待 leased 到期，再关闭通知路由。必须先执行 `0046_notification_workflow_root_cause.down.sql` 移除处理状态和根因索引，再按需执行 `0018c_notifications_m05_03.down.sql`；已有通知时只回滚应用并保留表只读。不要删除全局 Outbox、审计或其他模块事件来掩盖通知故障。
 
+## 第二阶段通知交互核对（2026-09-07）
+
+P26规格及合同位于`design-plans/ui-phase-2-2026-09-07/page-specs/P26.md`和`approval-notification-contract-review.md`。处理请求在途时，关闭消息详情按钮原本已禁用；本次同步限制Escape，防止键盘先清空selected再由迟到结果重建窗口。成功或失败结束busy后可正常关闭，保留分类/状态筛选，不自动重放。测试UI2-AN03检查受控在途、精确action/expected_version和成功后关闭；通知已读、处理状态、关联审批/任务仍是独立事实，邮件仍固定关闭。
+
+此修复只有前端，无新增环境变量、API或SQL，无独立Node/Python重启需求；统一正式部署仍按项目宝塔部署器及维护窗口执行。偏好草稿、跨路由读取归属、全部异常窗和真实生产验收见AN-G待验项，不能视为已完成。
+
 ## 补采后提醒验收
 
 - 对 `task.evidence_completion.redecision_ready`，核对通知标题为“机会可重新决策”、资源类型为 `opportunity`、资源 ID 为对应机会，并确认点击后进入机会详情；普通手动评分不得产生该提醒。

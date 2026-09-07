@@ -184,3 +184,38 @@ test("M05-03 mail preference stays disabled until the provider is connected", as
     }),
   ).toBeDisabled();
 });
+
+test("UI2-AN03 notification keeps the pending workflow modal and closes safely after acknowledgement", async ({
+  page,
+}) => {
+  await setup(page);
+  let release!: () => void;
+  const pending = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const bodies: unknown[] = [];
+  await page.route(`**/api/v1/notifications/${id}/actions`, async (route) => {
+    bodies.push(route.request().postDataJSON());
+    await pending;
+    await route.fulfill({ json: env({ ...item, workflow_status: "in_progress", version: 2 }) });
+  });
+  await page.goto(`/notifications?category=approval&status=open&notification=${id}`);
+  const dialog = page.getByRole("dialog", { name: "消息详情" });
+  await expect(dialog).toBeVisible();
+  try {
+    await dialog.getByRole("button", { name: "开始处理" }).click();
+    await expect.poll(() => bodies.length).toBe(1);
+    await expect(dialog.getByRole("button", { name: "关闭消息详情" })).toBeDisabled();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`notification=${id}`));
+  } finally {
+    release();
+  }
+  await expect(dialog.getByRole("button", { name: "关闭消息详情" })).toBeEnabled();
+  await expect(dialog.locator("dl").first()).toContainText("处理中");
+  expect(bodies).toEqual([{ action: "start", expected_version: 1 }]);
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(page).toHaveURL(/category=approval&status=open$/);
+});

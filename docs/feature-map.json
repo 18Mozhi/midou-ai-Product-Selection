@@ -1460,6 +1460,7 @@
     },
     "approvalWorkflow": {
       "module": "M05-02",
+      "uiPhase2ContractReview": "../design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md; P25 specification and local AN01/AN02/AN04 regressions: native detail modal with keyboard loop and focus return, decision conflict feedback inside the modal, collapsed required fields revealed by native invalid events; API permissions payloads template versions and escalation rules unchanged; final redesign all variants real backend and production acceptance remain pending",
       "entrypoints": [
         "../apps/api/src/approval-service.ts",
         "../apps/api/src/mysql-approval-repository.ts",
@@ -1492,6 +1493,7 @@
     },
     "notifications": {
       "module": "M05-03",
+      "uiPhase2ContractReview": "../design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md; P26 specification and local AN03 regression: closeDetail rejects Escape while busy just like the existing disabled close button, then permits closing after acknowledgement; notification read and workflow state stay separate, mail stays disabled; async ownership preference lifecycle full redesign and production acceptance remain pending",
       "entrypoints": [
         "../apps/api/src/notification-service.ts",
         "../apps/api/src/mysql-notification-repository.ts",
