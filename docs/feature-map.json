@@ -375,6 +375,7 @@
     },
     "designTokensThemes": {
       "module": "M02-01",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md and page-specs/P10.md separate server-versioned theme writes, local preview cache and in-memory density. tests/e2e/ui-phase2-account-contracts.spec.ts adds preview/restore, exact versioned PUTs and conflict refresh assertions; radio keyboard completion and save/restore races remain pending. Existing theme IDs and runtime contracts are unchanged.",
       "entrypoints": [
         "../packages/preferences/src/index.ts",
         "../apps/api/src/mysql-ui-preference-repository.ts",
@@ -441,6 +442,7 @@
     },
     "navigationShells": {
       "module": "M02-03",
+      "uiPhase2AccountReview": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md and page-specs/P11.md map AccountShell and PersonalCenter section ownership, profile-first loading, writes and partial-failure gaps. tests/e2e/ui-phase2-account-contracts.spec.ts verifies isolated profile PATCH without member navigation despite tenant-section failures and five notification preference booleans with returned versions. This does not prove per-section error safety, real RBAC, password/session operations, production or user acceptance.",
       "entrypoints": [
         "../packages/authorization/src/index.ts",
         "../apps/api/src/authorization-routes.ts",
@@ -544,6 +546,7 @@
     },
     "homeAndMobileShell": {
       "module": "M02-06",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md and page-specs/P12.md map HomeDashboard and HomeAutomationOverview controls, inline setup, exact create/resume payloads, conditional links and source-level gaps. Home-specific new cases UI2-A10-A12 remain planned, not executed. No final redesign, source-fingerprint refresh, runtime contract or production change is implied.",
       "entrypoints": [
         "../apps/api/src/home-dashboard-service.ts",
         "../apps/api/src/mysql-home-dashboard-repository.ts",

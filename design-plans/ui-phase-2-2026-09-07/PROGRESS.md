@@ -298,3 +298,21 @@ UI技能目录本次可读取，选择fixing-accessibility并完整阅读；据�
 使用需求拆解技能编制逐页任务卡，UI技能目录选择fixing-accessibility后据其要求补字段错误关联、模式焦点、状态播报及敏感动作忙碌态检查；没有借技能默认实施未批准的视觉或安全改动。下一批继续P10–P12偏好/个人/首页的缺失规格与共享行为，P01–P09上述缺项仍需按I01–I12补测；A/B方向未回复不代选，W02–W09正式重设计、全图包、Vue、生产及用户签收目标不变。
 
 收尾：npm run verify:docs通过（73路由、60受保护路由、6角色、153份必需文档），npm run format:check通过（production=495、repositories=51），git diff --check通过。4101/5173无监听，本批无临时产物或服务需要清理；只提交九份规格、合同、进度与Feature Map索引，不提交生成物、历史临时文件或生产修改。
+
+## 2026-09-07 · S03外观、个人中心、首页规格与局部合同回归
+
+从main / 915ee71干净工作树开始，新增P10–P12三份逐页规格及[外观/个人/首页合同](account-home-contract-review.md)。五个实际组件ThemeStudio、PersonalCenter、AccountShell、HomeDashboard、HomeAutomationOverview的51个控件/事件候选各映射一次，15个个人表单输入加7个首页规则输入另记；没有本地原生dialog，所有表单为内联。三页各十节、当前路由及相对链接、51行稳定键和行号、零本地dialog、12组验收卡的只读内联检查通过。规格累计18份，其余55份仍待补，未冻结G0或增加用户通过数。
+
+真实链核对包括主题GET/PUT与缓存/密度模块、账号壳层与profile-first读取、个人资料服务/通知接口、首页summary与监控规则接口。主题ID继续兼容，密度只在内存和DOM即时生效，不是服务器保存项；个人中心实际是account壳层，租户分区失败不应阻断资料，但目前失败区回退空/default，仅有汇总提示；首页规则读取失败回退空列表，changes/follows返回但未逐项展示。移动账号导航潜在无可访问名、radio缺完整键盘合同、字段报错关联、提交竞态、缓存/范围与迟到响应均保留待验/待修，不把源码说明当完整运行证据。
+
+按计划增加永久tests/e2e/ui-phase2-account-contracts.spec.ts五项：预览/撤销与密度零PUT、两次主题准确payload/版本及独立幂等键、409刷新版本再保存、三个租户分区403时本人资料仍可PATCH且零成员navigation GET、五个通知布尔值及两次返回版本。没有向实际账号、邮件或数据库写入，夹具沿既有UI与服务端字段；个人部分失败用例不认可失败区的空/default展示，也不证明密码/会话或真实RBAC通过。
+
+首轮4项通过、通知第二次保存断言失败；error-context显示“通知偏好已保存。”与requestId在同一个paragraph，exact全文匹配不成立。改为对已定位notice检查目标文本，保留完整请求/版本断言；产品代码不变。该项最小复测通过后，原3项主题测试加新5项最终桌面8项通过（21.1s）、390移动8项通过（20.8s），无跳过。之后仅对新测试做Prettier格式化，不改变测试语义、响应或断言。两个final的.last-run均passed、failedTests为空。
+
+验证范围：npm run verify:docs通过（73路由、60受保护路由、6角色、153份必需文档），npm run verify:static-analysis通过（389文件）。产品源、旧E2E及采图夹具、PAGES、生成器、清单与独立原型均未修改，既有全局源指纹仍有效，不重复生成图或做生产构建。Feature Map只补三处本地合同/测试索引，OpenAPI、SQL、依赖、环境变量、发布配置均不变，无部署、迁移和重启要求。
+
+本轮唯一临时目录为 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-account-contracts-20260907`，共7文件：首轮失败截图/trace/error-context及四轮.last-run。核对精确绝对路径、普通目录属性及最终结果后Remove-Item被工具策略拒绝，未绕过，目录仍需手动清理、不入Git。4101/5173无监听，所有本批测试服务和技能查询进程已结束；历史五批遗留目录未动。新增规格、合同和永久回归测试保留，不新增长期截图。
+
+需求拆解技能用于三页任务卡，fixing-accessibility用于命名、radio键盘、字段报错与状态要求；按计划的永久回归测试范围使用Playwright技能和仓库测试体系。下一批继续P14–P18趋势/机会入口（复用P17已有规格），同时保留P10–P12合同中A06–A12缺项，不把既有模块verified等同重设计完成。正式A/B方向仍待用户明确审核，全73路由设计、Vue实现、全量动作/状态、宝塔部署和用户签收目标保持。
+
+提交前收尾：format:check通过（changed=1、production=495、repositories=51），git diff --check通过；当前Git只包含本批七个交付文件，未混入生成物或临时文件。再次只读清点上述目录仍有7份文件，不宣称清理成功。
