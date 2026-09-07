@@ -1022,6 +1022,7 @@
     },
     "trendDomain": {
       "module": "M04-01",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md and trend-contract-review.md map 60 local control/event candidates, 18 v-model sites and five dialog candidates to four local business variants plus one shared filter drawer; governance forms remain inline. tests/e2e/ui-phase2-trend-contracts.spec.ts covers follow/unfollow, relevance version refresh, anomaly retry/reuse response, rule creation/status and split/decision payloads using isolated Vue responses. Source refresh explicitly uses trend:read, rule-result navigation is first-keyword filtering and sorting is current-page only. Modal focus/error retention, all-status filtering, stale reads and real backend/production boundaries remain pending; no frozen denominator, approved redesign or runtime contract change.",
       "entrypoints": [
         "../apps/api/src/trend-service.ts",
         "../apps/api/src/mysql-trend-repository.ts",
