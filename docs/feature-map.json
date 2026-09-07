@@ -411,6 +411,7 @@
     },
     "authOnboardingPages": {
       "module": "M02-02",
+      "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md and page-specs/P01.md through P09.md record nine route specifications, 38 local control/event candidates, 14 v-model source positions (17 mode-expanded input instances), inline identity modes and planned cases I01-I12. No native dialogs exist in the four local page components; the shared landing secondary action and tenancy account placeholder have no consumer handler. Source review is not browser, real identity/tenancy, production or user design acceptance; missing behavior and accessibility checks remain explicit. No runtime contract changes.",
       "entrypoints": [
         "../apps/web/src/components/LocalIdentity.vue",
         "../apps/web/src/components/TenancyChooser.vue",
