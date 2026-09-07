@@ -521,7 +521,11 @@ onMounted(load);
       </div>
       <div class="cost-head-actions">
         <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
-        <button v-if="canManage && state !== 'ready'" type="button" @click="openCreate">
+        <button
+          v-if="canManage && (state !== 'ready' || activeCostRule)"
+          type="button"
+          @click="openCreate"
+        >
           新建规则版本
         </button>
       </div>

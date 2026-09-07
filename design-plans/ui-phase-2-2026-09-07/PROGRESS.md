@@ -432,3 +432,21 @@ Feature Map仅登记竞品规格/局部测试与未验边界；产品Vue/CSS、A
 新增临时目录仅 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-competitor-contracts-20260907`（3份.last-run）及 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-backdrop-evidence-20260907`（2份.last-run）。两目录绝对路径、非链接属性及只包含预期文件核对后，以非递归逐文件/空目录删除成功，最后exists=false；旧12批历史目录未动，不绕过此前拒绝操作。所有本轮采集/测试/审核服务已退出，4101/5173无监听；审核图/记录与永久测试为交付物保留。
 
 下一步继续E03的P21/P22供应与费用规则两页，并按当前竞品CP-G01–CP-G06优先级逐项复现和修复，不只增加截图或测试数量。全站正式新稿仍待方向决定，后续W02–W09的图、Vue、真实验收、宝塔部署与用户签收均保留；J07质量门业务决定独立于风格审核。
+
+## 2026-09-07 · PLAN 1.9 F01供应/费用规格与两项真实交互修复
+
+上一轮3a886d3交付计划1.9，本轮从main/3a886d382000af8be7efad7e738eb7caf849cf76干净工作树开始实际实施F01，不再次编制计划。依AGENTS、Feature Map、蓝图3.4.1/3.6，追踪SourcingWorkspace/Dialogs/Comparison/CostConfirmation与CostRuleConsole，再追共享OpportunityProfitPanel/CostReviewQueue、API路由/服务/仓储。新增P21/P22两份十项独立规格及sourcing-cost-contract-review.md；只读scanSource逐项核对77个控件/事件、7个弹窗定义/调用、44处v-model和七个LF源码SHA。规格28/73，剩45份；这不是28页全新视觉实现，G0未冻结，正式方向和用户通过0不变。
+
+新增永久UI2-SC01–SC06共9实例，复用原m04-04与m04-06夹具。SC01先在旧版失败：成本规则已生效但新版本入口不存在，页首非ready与准备度无active两个条件把所有创建入口同时隐藏。CostRuleConsole仅扩展为管理者且(非ready或active)时显示页首按钮，保留ready且无active的原入口，仍走原草稿API/空费用/双角色审批。SC01最小复测通过（15.2s），覆盖取消焦点/重开清草稿、四显式0和精确POST、保存仍draft；SC02只读active无入口及安全返回，SC03本人角色/revision冲突/原因保留/取消零重放。
+
+SC04四类输入验证required、取消清create但保留草稿、精确两字段POST；SC05锁定quote版本、MOQ 100/99禁提交、取消重开、trim原因和queued；SC06用六条隔离报价复现第六checkbox假勾选：界面六框checked但selectedQuotes仅五个。新增九例首轮8通过/SC06失败（31.0s）。SourcingWorkspace.choose接收change事件并把原生checked同步到实际集合，不改变2–5规则或请求字段；SC06最小复测通过（15.9s）。两个问题都有修复前失败证据，不是仅凭源码猜测。
+
+最终两模块原15例加新9例，桌面24项通过（32.1s），390移动24项通过（36.3s），无失败或跳过；两个.last-run均passed且failedTests为空。原有两项toHaveScreenshot也执行通过，没有更新旧截图基线。实际运行包含原报价非UTC时刻、报价缺项/只读、机会成本入口、规则双审批/分页/拒绝/回滚与利润呈现；不能称真实数据库、来源采集、Outbox、采购消费或生产全链通过。SC-G01–SC-G08记录预填/variable标签、对比读取与文档差异、提交竞态、焦点/错误、异步归属、历史/多市场/反馈、成本时间与完整设计/真实验收，不因本批局部通过关闭。
+
+build:web包含typecheck通过，407模块、10.62s，正常dist与浏览器助手包保留为项目运行输出；frontend-budget通过251资源。组件边界单测1项通过，文档门通过73路由/60受保护/6角色/153文件，运行文档一致性通过，静态分析389文件通过，format:check通过changed=4/production=495/repositories=51，git diff --check通过。未重跑未改变的其他模块或Node/Python业务测试，不把局部验证当全站G3。第一次文档路径探测引用了不存在的顶层文件，随即用rg --files定位真实docs/architecture与docs/runbooks；未创建替代文档。Feature Map一次补丁上下文不匹配未生效，读取真实行后重试成功，没有改业务字段。
+
+产品仅改两个Vue局部条件/事件，Feature Map增加规格索引及准确未验边界，成本架构与两份运维文档同步入口、上限交互和发布要求。API字段、权限、SQL、Node/Worker/Python、费用算法、依赖、主题/CSS和环境变量均不变；OpenAPI/.env无需同步。修复本身只需更新前端静态包，无新增参数及后端重启要求；正式发布仍由python scripts/deploy-baota.py统一执行，须核实既有迁移记录与宝塔停启窗口。本轮无迁移、部署或生产连接。
+
+全局生成清单和旧图库仍绑定060e0b5/caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d，未重新宣称当前有效。新局部合同已记录SW/CR当前hash、旧→新候选映射及行号；产品提交后需按实际影响刷新全局源证据，不能只改哈希冒充复验。不重建PLAN/PAGES，不在未批准方向时生成冒充正式成果的同风格图。下一批是证据一致性收尾及F02 P25/P26审批/通知；若有正式方向意见则安排F05代表新图→Vue闭环，完整W00–W09不缩减，J07仍是单独业务待决。
+
+需求拆解技能用于两页合同与状态分层，无障碍技能用于按钮、字段、焦点及已复现交互的验收，按计划明确的永久回归要求使用Playwright现有测试体系。本轮唯一临时目录为 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-sourcing-cost-contracts-20260907`，12个文件：六轮.last-run与两次红灯各自的截图/trace/context。非递归逐文件/空目录清理命令被工具策略拒绝，未绕过；随后只读确认目录存在、12文件、无ReparsePoint，未入Git，需要手动清理。旧12批临时目录不动。所有本轮测试/构建工具均已结束，4101/5173监听数0，无服务交接；永久测试、规格及合同保留。

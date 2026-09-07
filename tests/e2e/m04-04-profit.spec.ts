@@ -34,6 +34,149 @@ async function navigation(
   );
 }
 
+const phase2CostRule = (status = "active") => ({
+  id: ruleId,
+  market: "US",
+  platform: "amazon",
+  version_code: "ui2-current",
+  name: "现行费用规则",
+  status,
+  fee_lines: [
+    { type: "platform_fee", mode: "percentage_of_sale", value: 10, currency: null },
+    { type: "payment_fee", mode: "percentage_of_sale", value: 3, currency: null },
+    { type: "tax", mode: "percentage_of_sale", value: 5, currency: null },
+    { type: "fulfillment", mode: "fixed_amount", value: 2, currency: "USD" },
+  ],
+  conversion_rates: [],
+  automatic_scope: null,
+  effective_from: "2026-08-08",
+  revision: 7,
+  approvals: status === "active" ? ["selection_manager", "organization_admin"] : [],
+  published_at: status === "active" ? "2026-08-08T10:00:00.000Z" : null,
+  updated_at: "2026-08-08T10:00:00.000Z",
+});
+
+test("UI2-SC01 active fees retain an authorized draft entry and zero explicit fees", async ({
+  page,
+}) => {
+  await navigation(page);
+  const current = phase2CostRule();
+  const bodies: Record<string, unknown>[] = [];
+  let created: Record<string, unknown> | null = null;
+  await page.route("**/api/v1/cost-rules", async (route) => {
+    if (route.request().method() === "POST") {
+      const body = route.request().postDataJSON() as Record<string, unknown>;
+      bodies.push(body);
+      created = { ...phase2CostRule("draft"), ...body, id: opportunityId, revision: 1 };
+      await route.fulfill({ status: 201, json: envelope(created) });
+    } else await route.fulfill({ json: envelope(created ? [created, current] : [current]) });
+  });
+  await page.goto("/sourcing/cost-rules");
+  await expect(page.getByText("成本规则已生效", { exact: true })).toBeVisible();
+  const trigger = page.getByRole("button", { name: "新建规则版本", exact: true });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "新建费用规则草稿" });
+  await dialog.getByLabel("版本号", { exact: true }).fill("discarded-version");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  expect(bodies).toEqual([]);
+  await trigger.click();
+  await expect(dialog.getByLabel("版本号", { exact: true })).toHaveValue("");
+  await dialog.getByLabel("版本号", { exact: true }).fill("ui2-zero");
+  await dialog.getByLabel("规则名称", { exact: true }).fill("显式零费用草稿");
+  await dialog.getByLabel("生效日期", { exact: true }).fill("2026-08-08");
+  const save = dialog.getByRole("button", { name: "保存草稿", exact: true });
+  for (const label of ["平台费 %", "支付手续费 %", "税费 %", "履约成本"]) {
+    await expect(save).toBeDisabled();
+    await dialog.getByLabel(label, { exact: true }).fill("0");
+  }
+  await expect(save).toBeEnabled();
+  await save.click();
+  await expect(dialog).toHaveCount(0);
+  expect(bodies).toEqual([
+    {
+      market: "US",
+      platform: "amazon",
+      version_code: "ui2-zero",
+      name: "显式零费用草稿",
+      effective_from: "2026-08-08",
+      fee_lines: [
+        { type: "platform_fee", mode: "percentage_of_sale", value: 0, currency: null },
+        { type: "payment_fee", mode: "percentage_of_sale", value: 0, currency: null },
+        { type: "tax", mode: "percentage_of_sale", value: 0, currency: null },
+        { type: "fulfillment", mode: "fixed_amount", value: 0, currency: "USD" },
+      ],
+      conversion_rates: [],
+      automatic_scope: null,
+    },
+  ]);
+  await expect(page.getByRole("heading", { name: "显式零费用草稿", exact: true })).toBeVisible();
+  await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("草稿");
+});
+
+test("UI2-SC02 read-only active fees never expose a new-version entry", async ({ page }) => {
+  await navigation(page, { roles: ["selection_manager"], capabilities: ["opportunity:read"] });
+  await page.route("**/api/v1/cost-rules", (route) =>
+    route.fulfill({ json: envelope([phase2CostRule()]) }),
+  );
+  await page.goto("/sourcing/cost-rules?from=https%3A%2F%2Fexample.test");
+  await expect(page.getByText("成本规则已生效", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /新建规则|创建后续版本|创建首个规则/ }),
+  ).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "返回当前找货记录" })).toHaveAttribute(
+    "href",
+    "/sourcing",
+  );
+});
+
+test("UI2-SC03 rule revision conflict keeps the audit reason and never auto-replays", async ({
+  page,
+}) => {
+  await navigation(page, { roles: ["selection_manager"] });
+  const pending = phase2CostRule("pending_approval");
+  const bodies: Record<string, unknown>[] = [];
+  await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope([pending]) }));
+  await page.route(`**/api/v1/cost-rules/${ruleId}/actions`, async (route) => {
+    bodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "cost_rule_revision_conflict",
+          message: "规则版本冲突",
+          action_hint: "刷新规则并使用最新 revision。",
+        },
+        request_id: "ui2-sc-conflict",
+        trace_id: "ui2-sc-conflict-trace",
+      },
+    });
+  });
+  await page.goto("/sourcing/cost-rules");
+  await expect(page.getByRole("button", { name: "组织管理员批准" })).toHaveCount(0);
+  await page.getByRole("button", { name: "选品经理批准" }).click();
+  const dialog = page.getByRole("dialog", { name: "选品经理审批" });
+  const reason = dialog.getByLabel("操作原因（至少 2 个字）");
+  await reason.fill("  已核对费用来源  ");
+  await dialog.getByRole("button", { name: "确认批准" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("规则已被其他操作更新");
+  await expect(reason).toHaveValue("  已核对费用来源  ");
+  expect(bodies).toEqual([
+    {
+      action: "approve",
+      reason: "已核对费用来源",
+      expected_revision: 7,
+      approval_role: "selection_manager",
+    },
+  ]);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "选品经理批准" })).toBeFocused();
+  expect(bodies).toHaveLength(1);
+});
+
 test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual approval", async ({
   page,
 }) => {

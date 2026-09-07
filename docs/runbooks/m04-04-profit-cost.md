@@ -5,7 +5,7 @@
 1. 在维护窗口按发布清单执行 `0017d_profit_cost_m04_04.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0072_automatic_quality_evaluation.up.sql` 与 `0073_automatic_selection_migration_timestamp_timezone.up.sql`，确认 MySQL 5.7、`product_scout` 业务账号和 `utf8mb4`。0073 只校正由 0072 同批创建、仍未领取且没有结果的自动评估任务时间，使其符合现有服务器本地 mysql2 DATETIME 读写约定；它不修改已经领取、重试、完成或人工产生的记录。
 2. 在宝塔 Node 项目中部署 API 和 Worker 构建；不得创建面板外 PM2、systemd、crontab 或 Docker 服务。
 3. 在宝塔 Worker 受限环境设置 `PROFIT_CALCULATION_POLL_MS` 与 `PROFIT_CALCULATION_LEASE_SECONDS`，然后重启宝塔 Node Worker。API 路由变更后同时重启宝塔 Node API。
-4. 访问 `/sourcing` 创建显式费用规则，完成选品经理与组织管理员双审批后发布；未审批规则不会参与计算。
+4. 访问 `/sourcing/cost-rules` 创建显式费用规则，完成选品经理与组织管理员双审批后发布；未审批规则不会参与计算。
 5. 自动证据评估由 `AUTOMATIC_SELECTION_EVALUATION_POLL_MS` 与 `AUTOMATIC_SELECTION_EVALUATION_LEASE_SECONDS` 控制。修改后通过宝塔重启 Node Worker；无需新增服务。
 6. Amazon/1688 跨币种规则必须保存币种对、换算值、生效日期和 HTTPS 来源页面；发布前由选品经理与组织管理员分别审批。汇率依据需要更新时创建新规则版本，不能改写历史利润运行。
 
@@ -19,6 +19,9 @@
 - 该规则必须设置 `automatic_scope.product_family=phone_case`。系统对非手机壳、型号不一致、版本冲突、少于三条高置信 1688 报价或缺少上述依据的商品保持“规则命中候选”。
 
 ## 运行检查
+
+- 现行规则已生效时，有 `opportunity:approve` 权限的成员仍可从“新建规则版本”创建下一版草稿；四项费率初始为空，只有显式填写的0才表示零费用。取消不会创建规则，保存不自动审批或发布；只读账号没有此入口。
+- 2026-09-07入口显示修复只涉及前端，无新SQL、API或环境参数；修复本身不要求重启后端。正式上线仍使用 `python scripts/deploy-baota.py` 统一宝塔部署，先核对其既有迁移白名单和维护窗口，不能据“前端修复”假设部署器不会停止或重启服务。
 
 - 确认队列没有长时间 `leased`，失败按 1/5/15 分钟重试，四次后进入 `dead_letter`。
 - 对 `insufficient_data` 先检查 `missing_fields`；不得直接把缺失费用或汇率填为零。

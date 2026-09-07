@@ -383,3 +383,150 @@ test("opening another incomplete quote resets carried risk choices", async ({ pa
   await expect(page.getByLabel("稳定性")).toHaveValue("unknown");
   await expect(page.getByLabel("风险")).toHaveValue("unknown");
 });
+
+for (const input of [
+  { type: "keyword", label: "商品关键词", value: "  折叠收纳箱  " },
+  { type: "image", label: "图片地址或图片证据编号", value: "https://example.test/source.png" },
+  { type: "opportunity", label: "机会编号", value: "00000000-0000-4000-8000-000000000612" },
+  { type: "product_url", label: "商品链接", value: "https://example.test/item/source" },
+]) {
+  test(`UI2-SC04 sourcing ${input.type} submits only its explicit input and cancel does not write`, async ({
+    page,
+  }) => {
+    await setup(page);
+    const bodies: unknown[] = [];
+    await page.route("**/api/v1/sourcing/searches", async (route) => {
+      if (route.request().method() !== "POST") return route.fallback();
+      bodies.push(route.request().postDataJSON());
+      await route.fulfill({
+        status: 202,
+        json: envelope({
+          id: searchId,
+          status: "queued",
+          collection_task_id: "00000000-0000-4000-8000-000000000620",
+        }),
+      });
+    });
+    await page.goto("/sourcing");
+    const trigger = page.getByRole("button", { name: "发起供应商找货", exact: true });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+    await dialog.getByLabel("输入类型").selectOption(input.type);
+    await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
+    expect(bodies).toEqual([]);
+    await expect(dialog).toBeVisible();
+    await dialog.getByLabel(input.label, { exact: true }).fill(input.value);
+    await dialog.getByRole("button", { name: "取消", exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page).not.toHaveURL(/create=1/);
+    expect(bodies).toEqual([]);
+    await trigger.click();
+    await expect(dialog.getByLabel(input.label, { exact: true })).toHaveValue(input.value);
+    await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
+    await expect(dialog).toHaveCount(0);
+    expect(bodies).toEqual([{ input_type: input.type, input_ref: input.value }]);
+    await expect(
+      page.getByText("公开供应商网页采集已排队，候选与原始证据会自动回填。"),
+    ).toBeVisible();
+  });
+}
+
+test("UI2-SC05 purchase enforces displayed MOQ and binds the current quote with a trimmed reason", async ({
+  page,
+}) => {
+  await setup(page);
+  const bodies: Record<string, unknown>[] = [];
+  await page.route("**/api/v1/sourcing/purchase-tasks", async (route) => {
+    const body = route.request().postDataJSON() as Record<string, unknown>;
+    bodies.push(body);
+    await route.fulfill({
+      status: 202,
+      json: envelope({
+        id: "00000000-0000-4000-8000-000000000621",
+        status: "queued",
+        quote_id: body.quote_id,
+        quantity: body.quantity,
+      }),
+    });
+  });
+  await page.goto("/sourcing");
+  const trigger = page.getByRole("button", { name: "创建采购任务", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "创建采购任务" });
+  await expect(dialog).toContainText("v2");
+  await expect(dialog.getByLabel("采购数量")).toHaveValue("100");
+  await dialog.getByLabel("采购数量").fill("99");
+  await expect(dialog.getByRole("button", { name: "确认创建", exact: true })).toBeDisabled();
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  expect(bodies).toEqual([]);
+  await trigger.click();
+  await expect(dialog.getByLabel("采购数量")).toHaveValue("100");
+  await dialog.getByLabel("创建原因").fill("  核对报价后采购  ");
+  await dialog.getByRole("button", { name: "确认创建", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(bodies).toEqual([
+    { quote_id: readyCandidate.quote.id, quantity: 100, reason: "核对报价后采购" },
+  ]);
+  await expect(page.getByText("采购任务已进入任务中心待消费队列。")).toBeVisible();
+});
+
+test("UI2-SC06 comparison accepts two through five current quote IDs and leaves a sixth unselected", async ({
+  page,
+}) => {
+  await setup(page);
+  const candidates = Array.from({ length: 6 }, (_, i) => ({
+    ...readyCandidate,
+    id: `00000000-0000-4000-8000-${String(630 + i).padStart(12, "0")}`,
+    supplier_name: `隔离报价供应商 ${i + 1}`,
+    quote: {
+      ...readyCandidate.quote,
+      id: `00000000-0000-4000-8000-${String(640 + i).padStart(12, "0")}`,
+      evidence_id: readyCandidate.evidence_id,
+    },
+  }));
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: searchId,
+        input_type: "keyword",
+        input_ref: "便携净水杯",
+        status: "completed",
+        candidate_count: 6,
+        missing_fields: [],
+        candidates,
+      }),
+    }),
+  );
+  const bodies: Record<string, unknown>[] = [];
+  await page.route("**/api/v1/sourcing/comparisons", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    const body = route.request().postDataJSON() as Record<string, unknown>;
+    bodies.push(body);
+    await route.fulfill({
+      status: 201,
+      json: envelope({
+        id: "00000000-0000-4000-8000-000000000650",
+        name: body.name,
+        quote_count: 5,
+      }),
+    });
+  });
+  await page.goto("/sourcing");
+  const boxes = page.getByLabel("加入对比");
+  await boxes.nth(0).check();
+  await expect(page.getByRole("button", { name: "保存报价对比" })).toBeDisabled();
+  await boxes.nth(1).check();
+  await expect(page.getByRole("button", { name: "保存报价对比" })).toBeEnabled();
+  for (let i = 2; i < 5; i++) await boxes.nth(i).check();
+  // A controlled checkbox may reject the sixth click; use a pointer click rather than check().
+  await boxes.nth(5).click();
+  await expect(page.getByText("一次最多比较五家供应商。")).toBeVisible();
+  await expect(page.getByText("已选 5 / 5 家供应商")).toBeVisible();
+  await expect(boxes.nth(5)).not.toBeChecked();
+  await page.getByRole("button", { name: "保存报价对比" }).click();
+  await expect(page.getByText("已保存 5 家报价对比。")).toBeVisible();
+  expect(bodies).toEqual([
+    { name: "便携净水杯 报价对比", quote_ids: candidates.slice(0, 5).map((item) => item.quote.id) },
+  ]);
+  await expect(page.locator(".sourcing-compare-tray")).toHaveCount(0);
+});

@@ -258,13 +258,15 @@ async function confirm() {
     notice.value = "报价已按新版本确认，原始候选和证据未改写。";
   }
 }
-function choose(candidate: Candidate) {
+function choose(candidate: Candidate, event: Event) {
   if (!candidate.quote) return;
   const id = candidate.quote.id,
     index = selectedQuotes.value.indexOf(id);
   if (index >= 0) selectedQuotes.value.splice(index, 1);
   else if (selectedQuotes.value.length < 5) selectedQuotes.value.push(id);
   else notice.value = "一次最多比较五家供应商。";
+  const checkbox = event.target;
+  if (checkbox instanceof HTMLInputElement) checkbox.checked = selectedQuotes.value.includes(id);
 }
 function openQuote(candidate: Candidate) {
   quoteCandidate.value = candidate;
@@ -574,7 +576,7 @@ watch(
                 ><input
                   type="checkbox"
                   :checked="selectedQuotes.includes(item.quote.id)"
-                  @change="choose(item)"
+                  @change="choose(item, $event)"
                 />加入对比</label
               ><b>{{ item.supplier_name }}</b
               ><span>{{ statusText(item.status) }}</span>
