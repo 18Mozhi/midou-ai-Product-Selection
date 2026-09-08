@@ -1,5 +1,7 @@
 # B1c · 采集任务、总览与浏览器运行合同
 
+2026-09-09追加P53：[BROWSER-RUNTIME-C-r1](design/browser-runtime-direction-c/README.md)蓝色全局风险/白色占用清单与运行台账，双端两类弹窗待审。R未传destructive，实际只输入“确认回收”无影响勾选，更正P53旧规格；不改变O批量确认规则。源函数复现读取状态漂移、成功回收覆盖刷新失败、未知结果错误声称未执行和忽略abort后引用更新；保护仅原型。31份源合同LF指纹未变，惰性service/repository适配不执行SQL或回收。真实服务还清过期调度租约，回收数不等于OS进程数。原三条与合成26条分页分开；具体审核、CL-G01–07与全73页实现部署签收未完成，下一P54数据中心。
+
 日期：2026-09-08；起点main/0ba784a，接续同一目标的两份采集E2E在途改动。对应[P51](page-specs/P51.md)、[P52](page-specs/P52.md)、[P53](page-specs/P53.md)。本批交付事实规格与两处局部UI修复，不是正式风格、全站行为、真实后端、生产或用户验收通过。
 
 2026-09-09追加：P51 [COLLECTION-TASKS-C-r1](design/collection-tasks-direction-c/README.md)63场景双端及长窗图稿待审；蓝色范围/当前页摘要、白色队列/来源事实，三模态变体。源函数复现状态单飞丢请求、确认目标/原因漂移与旧重放覆盖新详情，保护仅原型。T确认只需短语无勾选；20状态/19选项及旧重放响应夹具履历矛盾显式保留。31项合同源LF指纹未变，未真实重放或修改运行合同。P52/P53新图、CL-G01–07、真实Vue/权限/API/MySQL/Worker及全73页实现部署签收待办。
@@ -107,7 +109,7 @@
 | R:392 | queryDraft | 提交到query后请求，≤160 |
 | R:399 | status | 查询提交生效，不立即GET |
 
-O:743的checkbox另外由:checked/:disabled及@change转发到toggleDeadLetter；状态非open/batchBusy禁用，不能把这个输入漏在10个v-model之外。ConfirmDialog共享影响勾选仅在destructive=true时出现，不能一概计入三个调用；T未传该prop，默认false，实际只输入“确认重放”。共享签认输入不在局部v-model数量内；O/R仍按各自调用合同验收，本次不借T的结论改其规则。
+O:743的checkbox另外由:checked/:disabled及@change转发到toggleDeadLetter；状态非open/batchBusy禁用，不能把这个输入漏在10个v-model之外。ConfirmDialog共享影响勾选仅在destructive=true时出现，不能一概计入三个调用；T未传该prop，默认false，实际只输入“确认重放”。R也未传该prop，P53复核确认只输入“确认回收”。共享签认输入不在局部v-model数量内；O依其destructive调用保留影响勾选，不跨页套用。
 
 T详情loading/error/loaded、死信确认；O范围抽屉、来源/尝试记录详情、批量确认；R运行记录详情、租约回收确认分别出桌面/移动及全部适用状态图。原生details/summary不是模态，仍需展开/折叠与键盘验收。当前共享记录抽屉无完整Tab闭环的源码保证，实际验证不能只断言role存在。
 

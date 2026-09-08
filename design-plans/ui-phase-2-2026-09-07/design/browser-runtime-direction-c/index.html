@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P53 浏览器运行 · C 风格待审核</title>
+    <link rel="stylesheet" href="runtime.css" />
+    <script defer src="data.js"></script>
+    <script defer src="source-logic.js"></script>
+    <script defer src="runtime.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#runs-section">跳到运行记录</a>
+    <header class="appbar">
+      <strong>SCOUTOPS <span>平台管理</span></strong
+      ><span>P53 / C 风格 · 待审核</span>
+    </header>
+    <section class="runtime-context" aria-labelledby="page-title">
+      <div class="context-inner">
+        <div class="identity-block">
+          <h1 id="page-title">浏览器运行</h1>
+          <p>占用与运行台账</p>
+          <nav aria-label="采集管理">
+            <a href="/platform-admin/collection/overview">采集总览</a
+            ><a href="/platform-admin/collection">任务队列</a
+            ><a aria-current="page" href="/platform-admin/collection/browser-runtime">浏览器运行</a>
+          </nav>
+        </div>
+        <div class="global-context">
+          <p>全局范围，不受下方运行查询影响</p>
+          <dl id="global-metrics"></dl>
+          <div class="recovery-actions">
+            <button id="refresh">刷新数据</button
+            ><button id="recover-open" aria-describedby="recovery-help">回收过期租约</button>
+          </div>
+          <p id="recovery-help"></p>
+        </div>
+      </div>
+    </section>
+    <main id="main">
+      <p class="provenance" id="provenance"></p>
+      <div id="read-notice" role="status"></div>
+      <div id="write-notice" role="status"></div>
+      <div id="content"></div>
+      <p class="disclaimer">
+        设计审核原型。登录期限不等于目标站登录状态；租约过期只是风险信号，不是操作系统僵尸进程检测。无真实回收或采集。
+      </p>
+    </main>
+    <dialog id="run-dialog" aria-labelledby="run-title" aria-describedby="run-description"></dialog>
+    <dialog
+      id="confirm-dialog"
+      role="alertdialog"
+      aria-labelledby="confirm-title"
+      aria-describedby="confirm-description"
+    ></dialog>
+    <details id="review-tools">
+      <summary>审核工具（非业务界面）</summary>
+      <label>图稿场景<select id="scene-picker"></select></label>
+      <div class="actions">
+        <button data-result="success">模拟成功</button
+        ><button data-result="zero">模拟回收零项</button
+        ><button data-result="error">模拟明确失败</button
+        ><button data-result="unknown">模拟结果未知</button
+        ><button data-result="timeout">模拟读取超时</button>
+      </div>
+      <p id="simulation-note" role="status"></p>
+      <details>
+        <summary>本轮模拟请求意图</summary>
+        <pre id="intents"></pre>
+      </details>
+    </details>
+  </body>
+</html>
