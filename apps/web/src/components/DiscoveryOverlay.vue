@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, onUnmounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -108,9 +108,18 @@ const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("close"),
 );
+let readSequence = 0;
+let activeRead: AbortController | null = null;
+function invalidateRead() {
+  activeRead?.abort();
+  activeRead = null;
+  return ++readSequence;
+}
+onUnmounted(invalidateRead);
 watch(
-  () => [props.open, props.mode] as const,
+  () => [props.open, props.mode, props.shell] as const,
   async ([open, mode]) => {
+    const opening = invalidateRead();
     if (!open) return;
     state.value = "idle";
     requestId.value = "";
@@ -119,6 +128,7 @@ watch(
     results.value = [];
     actions.value = [];
     await nextTick();
+    if (opening !== readSequence || !props.open) return;
     if (mode === "search") input.value?.focus();
     else await loadActions();
   },
@@ -132,30 +142,37 @@ const failure = (kind: ApiFailureKind): State =>
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-async function get<T>(path: string): Promise<T | null> {
+async function get<T>(path: string, apply: (data: T) => void): Promise<void> {
+  const current = invalidateRead();
+  const controller = new AbortController();
+  activeRead = controller;
   state.value = "loading";
   actionHint.value = "";
   try {
-    const response = await request<T>(path);
+    const response = await request<T>(path, { signal: controller.signal });
+    if (current !== readSequence || controller.signal.aborted || !props.open) return;
     requestId.value = response.request_id;
     traceId.value = response.trace_id;
-    return response.data;
+    apply(response.data);
   } catch (error) {
+    if (current !== readSequence || controller.signal.aborted || !props.open) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       traceId.value = error.traceId;
       actionHint.value = error.actionHint;
       state.value = failure(error.kind);
-      return null;
+      return;
     }
     actionHint.value = "网络连接异常，请稍后重试。";
     state.value = "blocked";
-    return null;
+  } finally {
+    if (activeRead === controller) activeRead = null;
   }
 }
 async function search() {
   const value = query.value.trim();
   if (value.length < 2) {
+    invalidateRead();
     state.value = "error";
     return;
   }
@@ -164,26 +181,32 @@ async function search() {
   if (status.value) params.set("status", status.value);
   if (assigneeApplicable.value && assignee.value.trim())
     params.set("assignee", assignee.value.trim());
-  const data = await get<{ items: Result[] }>(`/me/global-search?${params}`);
-  if (!data) return;
-  results.value = data.items;
-  state.value = results.value.length ? "ready" : "empty";
+  await get<{ items: Result[] }>(`/me/global-search?${params}`, (data) => {
+    results.value = data.items;
+    state.value = results.value.length ? "ready" : "empty";
+  });
 }
 async function loadActions() {
-  const data = await get<Action[]>(`/me/quick-actions?shell=${props.shell}`);
-  if (!data) return;
-  actions.value = [...data].sort((left, right) => {
-    const leftRecent = recentActionIds.value.indexOf(left.id),
-      rightRecent = recentActionIds.value.indexOf(right.id);
-    if (leftRecent === rightRecent) return 0;
-    if (leftRecent < 0) return 1;
-    if (rightRecent < 0) return -1;
-    return leftRecent - rightRecent;
+  await get<Action[]>(`/me/quick-actions?shell=${props.shell}`, (data) => {
+    actions.value = [...data].sort((left, right) => {
+      const leftRecent = recentActionIds.value.indexOf(left.id),
+        rightRecent = recentActionIds.value.indexOf(right.id);
+      if (leftRecent === rightRecent) return 0;
+      if (leftRecent < 0) return 1;
+      if (rightRecent < 0) return -1;
+      return leftRecent - rightRecent;
+    });
+    state.value = actions.value.length ? "ready" : "empty";
   });
-  state.value = actions.value.length ? "ready" : "empty";
 }
 function rememberAction(id: string) {
   recentActionIds.value = [id, ...recentActionIds.value.filter((item) => item !== id)].slice(0, 5);
+}
+function navigateAway(event: MouseEvent, actionId?: string) {
+  if (actionId) rememberAction(actionId);
+  if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+    return;
+  emit("close");
 }
 watch(resourceType, () => {
   status.value = "";
@@ -279,7 +302,7 @@ watch(resourceType, () => {
           @primary="mode === 'search' ? search() : loadActions()"
         />
         <div v-else class="discovery-results">
-          <RouterLink v-for="item in results" :key="item.id" :to="item.route"
+          <RouterLink v-for="item in results" :key="item.id" :to="item.route" @click="navigateAway"
             ><i>⌕</i
             ><span
               ><strong>{{ item.title }}</strong
@@ -294,7 +317,7 @@ watch(resourceType, () => {
             v-for="item in actions"
             :key="item.id"
             :to="item.route"
-            @click="rememberAction(item.id)"
+            @click="navigateAway($event, item.id)"
             ><i>＋</i
             ><span
               ><strong>{{ item.label }}</strong
@@ -309,7 +332,9 @@ watch(resourceType, () => {
           <span>{{
             mode === "search" ? "搜索不跨组织或工作区" : "这里只提供入口，不提前创建业务对象"
           }}</span
-          ><RouterLink v-if="shell === 'member'" to="/notifications">打开通知中心</RouterLink>
+          ><RouterLink v-if="shell === 'member'" to="/notifications" @click="navigateAway"
+            >打开通知中心</RouterLink
+          >
         </footer>
       </section>
     </dialog></Teleport

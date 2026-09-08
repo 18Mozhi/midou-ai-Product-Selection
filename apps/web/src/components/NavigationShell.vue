@@ -257,19 +257,32 @@ const stateCopy = computed(
       }) as Record<State, [string, string]>
     )[state.value],
 );
+let navigationSequence = 0;
+let navigationRead: AbortController | null = null;
 async function load() {
+  const current = ++navigationSequence,
+    shell = props.shell;
+  navigationRead?.abort();
+  const controller = new AbortController();
+  navigationRead = controller;
   state.value = "loading";
   guard.value = null;
   requestId.value = "";
   traceId.value = "";
   actionHint.value = "";
   try {
-    const response = await request<GuardSummary>(`/me/navigation?shell=${props.shell}`);
+    const response = await request<GuardSummary>(`/me/navigation?shell=${shell}`, {
+      signal: controller.signal,
+    });
+    if (current !== navigationSequence || controller.signal.aborted || shell !== props.shell)
+      return;
     requestId.value = response.request_id;
     traceId.value = response.trace_id;
     guard.value = response.data;
     state.value = "ready";
   } catch (error) {
+    if (current !== navigationSequence || controller.signal.aborted || shell !== props.shell)
+      return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       traceId.value = error.traceId;
@@ -288,6 +301,8 @@ async function load() {
     }
     actionHint.value = "网络连接异常，请稍后重试。";
     state.value = "blocked";
+  } finally {
+    if (navigationRead === controller) navigationRead = null;
   }
 }
 onMounted(() => {
@@ -300,6 +315,7 @@ onMounted(() => {
 watch(
   () => route.fullPath,
   (fullPath) => {
+    closeDiscovery();
     if (props.shell === "member") rememberMemberRoute(fullPath);
   },
   { immediate: true },
@@ -307,12 +323,19 @@ watch(
 watch(
   () => props.shell,
   (shell) => {
+    closeDiscovery();
+    themeOpen.value = false;
+    menuOpen.value = false;
+    menuQuery.value = "";
+    void load();
     applyShellDensity(shell !== "member");
     applyCachedTheme();
     if (shell !== "platform_admin") void loadThemePreference(false);
   },
 );
 onUnmounted(() => {
+  ++navigationSequence;
+  navigationRead?.abort();
   window.removeEventListener("keydown", handleDiscoveryShortcut);
   if (props.shell !== "member") {
     applyShellDensity(false);

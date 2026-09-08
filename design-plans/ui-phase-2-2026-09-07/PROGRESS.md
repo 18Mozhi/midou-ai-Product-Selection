@@ -846,3 +846,29 @@ docs通过73路由/60受保护/6角色/153文件，runtime-docs通过，显式Pr
 verify:docs通过73路由/60受保护/6角色/153文件，verify:runtime-docs通过；显式Prettier与format:check通过（changed=1/production=496/repositories=51），git diff --check通过。Feature Map增加合同索引及边界；对账报告新增第7节，PLAN/EXECUTION只加已完成静态项及下一F04b领取点，1.25编制快照保留。无新增命令、参数、环境变量或依赖；不改Vue/CSS、业务API/OpenAPI、权限、SQL/迁移、后端/Worker/Python、.env、部署器、生成清单或审核记录，因此相关运行契约配套不适用，无需重启，未部署。
 
 未创建临时文件/图片/测试服务/浏览器或长期进程；生成文档及永久测试是交付物，探针与夹具只在内存。工具测试/格式进程均已终态，旧26批材料及正常构建/依赖缓存未动，不宣称历史清理完成。下一步直接领取F04b上述三个高优先复现，再补其余动态/角色/模态范围；F00-1.18-r1未获具体方向意见，未自动选A/B/C，获审后优先F05正式图→真实Vue→对照验证。全73路由新布局、所有实际按钮/弹窗/状态图、真实验收、宝塔部署及用户签收目标保持进行中。
+
+## 2026-09-08 · R00接管与F04b发现/壳层生命周期修复
+
+产品修复从main/498607f开始；中间b043fd7只修订1.26计划，保留两Vue、共享合同及新E2E四个在途文件且以SHA256证明未动。此次继续目标按R00接管原diff、实际测试文件与结果，不重复开发、不重复跑已有效的测试。上一目标轮提交计划属于实际进展；本轮完成产品与验证交付。读取AGENTS、Feature Map、蓝图导航/发现合同及真实组件/API客户端；需求拆解明确证据边界，UI技能选择无障碍用于关闭/键盘/模态场景；按用户实施计划中的永久测试要求复用仓库Playwright，不另装依赖或启动代理。
+
+修复前真实Vue+隔离响应的三个red用例全部失败：搜索结果已到目标URL而dialog仍打开、较早搜索成功覆盖较新可见结果、member切platform后guard请求只有member。修复后同三项通过，不改测试期望、不更新视觉快照。DiscoveryOverlay对普通结果/快捷/通知导航发close，同URL键盘Enter也可关闭；非左键/修饰键保留浏览器惯例。新读取、短非法查询、open/mode/shell变化和卸载失效旧读取并取消；成功、失败和开窗nextTick延续均校验当前归属，结果/标识/状态同步应用。NavigationShell在shell变化时清旧guard/菜单/浮层并重新GET导航，拒绝已过期成功/失败，route.fullPath变化关闭发现层，卸载失效读取。
+
+永久文件tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts共14参数化用例：DI02四项导航关层/同URL Enter及无观测业务非GET；DI04新搜索、重开、切create×旧成功/403六项；SH04切平台允许/拒绝、延迟平台成功/403时返回member四项。新搜索两项和浏览器返回两项故意只对目标读取剥离传输AbortSignal，真实迟到响应到达后仍不覆盖，证明不只依赖取消。测试为真实Vue浏览器+隔离响应，不证明任务详情业务、真实RBAC、MySQL、跨组织或六角色。
+
+实际验证记录（重复运行不相加为覆盖率）：
+
+- 最小：typecheck:web通过；red三项修复后3/3通过（16.1s）；组件边界/API客户端边界5/5通过。
+- 新14项桌面默认视口首次14/14（28.7s），随后测试明确desktop项目1440×1000，最终14/14（32.3s）。新14项最终mobile-390为390×844，14/14（32.2s），命令npx --no-install playwright test tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts --project=mobile-390 --workers=1 --output=output/playwright/ui-phase2-discovery-shell-20260908/contracts-mobile390。
+- 原m02-03-navigation-shell与m02-05-discovery桌面25/25（38.8s）；三文件移动合跑39/39（48.8s），含原25项。原测试部分主动调整断点，不宣称这25项都固定1440；原测试和产品源码未变，其证据复用。有效范围为新14×2+原25×2=78项执行，不将red、最小、旧视口重复运行叠加。
+- 源映射定向2/2通过；接管同一69507进程句柄取得终态：检查器/清单/组件边界/API边界/路由标题/主题图标相关单测46/46，0失败/跳过（9.8s），没有另起同一测试。
+- build:web通过，包含浏览器辅助包、vue-tsc及Vite构建（408模块，12.33s）；本轮复用未变源码的构建，不重复安装或构建。verify:frontend-budget通过（251资产），verify:static-analysis通过（390文件）；没有接受任何新截图基线。
+
+两Vue合计41候选按当前AST与LF hash重新绑定，Discovery三个click签名变化保留语义ID及498607f旧表，其余38项行移动；共享合同第8节记录旧hash/签名与运行子场景。当前扫描164源、28合同、1478候选全部有稳定引用，1641引用含125历史、26重复，73路由/规格issues=0；Web指纹8e642cadb9f02ec0f0fb18f3148371d1d3a29b98756a2ef09701957af87b6bf1，相对历史baseline的差异18文件。对账报告新增第8节，Feature Map同步导航/发现读取生命周期，PLAN/EXECUTION仅加R00实际增量。全局baseline/actions/dialogs/coverage、旧图hash与用户审核不更新；G0仍in-progress，分母未冻结，用户通过0。
+
+本批不改业务API/OpenAPI、查询字段/范围、快捷动作目录、权限规则、主题持久化、业务写入、后端/Worker/Python、SQL/迁移、.env、依赖、端口或部署器。已有API客户端支持signal，无新增运行参数或环境样例。无需当前服务重启，未部署；将来仍由现有本地构建/宝塔部署器执行并核对其迁移和Node停启窗口，不新增纯前端发布参数。
+
+最终文档门通过：verify:docs为73路由/60受保护/6角色/153文件；verify:runtime-docs通过；两Vue、新E2E、Feature Map及两计划显式Prettier通过，当前源码对账指纹与上述一致。未改运行契约的其他生产面不适用，不能将这些门当作真实后端测试。
+
+本批清理未完成：已解析并核实精确根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-discovery-shell-20260908及其子项均在范围内且无ReparsePoint，但原生PowerShell Remove-Item递归操作在启动前被执行策略拒绝（blocked by policy）。未重试、未改用其他工具绕过；目录仍保留且不纳入Git提交，需用户在允许的环境中处理后才能关闭清理项。包含red、targeted、contracts-desktop、contracts-desktop1440、modules-desktop、modules-mobile和contracts-mobile390，临时失败图/trace不是正式设计交付图。先前26批历史材料也未动，不宣称已清理；正常dist/依赖缓存/浏览器辅助运行包保留。接管单测69507与本轮浏览器97352均取得exit 0终态，4101/5173/5181最终无监听，无本批遗留测试服务。
+
+下一步F04b继续DI03两模式键盘/遮罩/返焦、反向quick-actions迟到及其余角色/共享模态消费者；本批仅关闭已列子场景，未注销完整DI/SH卡。F00-1.18-r1仍待用户具体方向，未自动选A/B/C；获审后优先F05正式图→Vue。全73路由全新结构、全部按钮/弹窗/状态图、真实后端/生产、宝塔发布及用户签收仍未完成，完整目标保持进行中。
