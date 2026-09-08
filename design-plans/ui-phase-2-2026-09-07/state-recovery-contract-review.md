@@ -93,3 +93,13 @@ ConfirmDialog当前SHA为6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636
 line91遮罩候选从4505a8c2bbf9389c.1变为0f50ae650a1895b3.1，事件为@mousedown.self.prevent=cancel，语义仍为ST-CANCEL.backdrop；其余line92/123/124候选30a3b6ddc206839e.1、d1b7ac74d4f4ffc3.1、3003ba3e33804f38.1及dialog定义不变。与HEAD中修复前清单逐对象比较，ConfirmDialog之外的控件和弹窗候选完全一致，目录外54项亦一致；其13个源文件哈希经source-scope验证器重算后通过，因此只更新该人工范围记录的全局关联指纹，不改变复核结论。
 
 任务与代表图库的现有校验要求同全局指纹，需要实际重新采集后更新元数据；源/样式未变的独立研究稿可以复用。实际命令、截图变化、测试结果和清理记录见本轮PROGRESS；仅本节映射不构成图库采证通过或全调用方行为通过。ST05/ST06/NF03/NF04仍保留未完成，用户审核不自动增加。
+
+## 8. P72/P73 C方向图稿（2026-09-08）
+
+[RECOVERY-C-r1](design/recovery-direction-c/README.md)交付63PNG：P72二十二场景双端44图加390×667确认1图，P73九组恢复双端18图。一个开发确认变体，不造异步提交/真实撤销；P73无确认、状态选择或业务壳层。桌面蓝目录/白预览与独立404单阅读区分别设计，不移植旧轨道装饰。
+
+源助手提取执行八态动作/selectState/query、canConfirm五组合、sanitizeCorrelationId以及NotFound computed与navigation-memory；实际Vue Router以生产过滤的原route-catalog表达式解析已登记/注销/内部目标，惰性存储模拟外部/协议相对/异常。/home带query仍保留fullPath且无重复次链接；当前路径仅path截断，title完整。此证据不是实际浏览器存储故障、会话守卫、生产HTTP或已发布bundle检查。
+
+浏览器验证所有可见主次动作、同态不push/非法多值不改URL/history/刷新、签认trim/勾选/重开/焦点双向循环/遮罩取消、同页返回与过滤标识；404九组正确目标/不露query/焦点/链接意图，320/768/780/781/1024及390×667无溢出。原型导航只记意图，确认仅本地提示，不写真实存储或业务。
+
+提案澄清默认error对写入结果的断言、not_found混入角色原因、blocked影响断言和error次按钮误称上一页；生产共享组件未修复，不将本图册当全调用方验证。ST05剩余主题/密度/200%缩放与辅助技术、ST06、NF03/NF04、具体图审核及73页Vue/发布验收继续待办。

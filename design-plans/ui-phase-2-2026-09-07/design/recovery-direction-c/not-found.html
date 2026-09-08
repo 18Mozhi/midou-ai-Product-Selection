@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>页面不存在 · C方向离线审稿</title>
+    <link rel="stylesheet" href="recovery.css" />
+    <script defer src="data.js"></script>
+    <script defer src="not-found.js"></script>
+  </head>
+  <body class="not-found">
+    <header class="masthead">
+      <a id="brand" href="#recovery-intent" data-target="/home" aria-label="返回智能选品今日行动"
+        >智能选品</a
+      ><span>页面恢复</span>
+    </header>
+    <main aria-labelledby="not-found-title">
+      <p class="code">404</p>
+      <h1 id="not-found-title" tabindex="-1">没有找到这个页面</h1>
+      <p class="description">地址可能有误、已变更或已下线。<br />请从已登记的入口重新进入。</p>
+      <div class="path"><span>当前地址</span><code id="requested-path" dir="ltr"></code></div>
+      <nav id="recovery-actions" aria-label="页面恢复操作"></nav>
+      <p id="destination" class="destination"></p>
+      <p id="recovery-intent" role="status" hidden></p>
+    </main>
+    <footer class="nf-footer">
+      <span>当前地址未匹配已登记页面</span><span>离线设计稿 / 隔离地址</span>
+    </footer>
+  </body>
+</html>

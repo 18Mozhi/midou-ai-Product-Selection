@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>通用状态 · C方向离线审稿</title>
+    <link rel="stylesheet" href="recovery.css" />
+    <script defer src="data.js"></script>
+    <script defer src="showcase.js"></script>
+  </head>
+  <body class="showcase">
+    <a class="skip" href="#preview-title">跳到状态预览</a>
+    <header class="masthead">
+      <a href="#home" id="brand">智能选品</a><span>开发专用 / 不发布到生产</span
+      ><a href="README.md">审核图册</a>
+    </header>
+    <div class="review-tools">
+      <label for="scene">审稿场景</label
+      ><select id="scene"></select
+      ><span>固定演示，无业务请求</span>
+    </div>
+    <div class="workspace">
+      <aside>
+        <h1>状态预览</h1>
+        <p>选择一种状态，核对提示与下一步。</p>
+        <nav id="states" aria-label="状态示例"></nav>
+      </aside>
+      <main>
+        <section id="preview" aria-live="polite"></section>
+        <p id="action-result" role="status" hidden></p>
+        <section class="confirm-example">
+          <div>
+            <h2>高影响确认</h2>
+            <p>先确认对象与影响，再完成签认。</p>
+          </div>
+          <button id="open-confirm">查看高影响确认弹窗</button>
+          <p id="confirmed" role="status" hidden>示例确认已完成；未触发任何业务写入。</p>
+        </section>
+        <p class="boundary">
+          这里的状态由你选择，并非实际账号、请求或服务状态。导航按钮只记录离线目标，不进入业务页面。
+        </p>
+      </main>
+    </div>
+    <dialog
+      id="confirm-dialog"
+      role="alertdialog"
+      aria-labelledby="confirm-title"
+      aria-describedby="confirm-description"
+    >
+      <h2 id="confirm-title">确认撤销示例授权？</h2>
+      <p id="confirm-description">这是通用确认组件的交互演示，不会请求后端。</p>
+      <div class="impact">
+        <h3>影响范围</h3>
+        <p>仅演示当前弹窗；不修改角色、权限、数据或审计。</p>
+      </div>
+      <label class="check"
+        ><input type="checkbox" id="ack" />我已阅读影响范围，并确认只处理上述对象</label
+      >
+      <label class="phrase" for="phrase"
+        >输入「确认撤销」继续<input id="phrase" autocomplete="off" placeholder="确认撤销"
+      /></label>
+      <footer>
+        <button id="cancel">取消</button
+        ><button id="confirm" class="danger" disabled>确认演示</button>
+      </footer>
+    </dialog>
+  </body>
+</html>
