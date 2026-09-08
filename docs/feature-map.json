@@ -1262,6 +1262,7 @@
     },
     "profitCost": {
       "module": "M04-04",
+      "uiPhase2ProfitCProposal": "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/README.md provides PROFIT-C-r1 pending-review P18 profit proposal: 50 scenes at two widths, 100 PNGs, four internal workfaces, nine cost fields and two inline review reason variants, zero dialogs. scripts/lib/ui-phase2-profit-design-data.mjs executes source payloads, service self-review rejection, reviewer-load failure and overdue pending review through an inert repository adapter; scripts/verify-ui-phase2-profit-c.mjs verifies snapshots unchanged by submission/review/queue, amount-zero distinction, time conversion, drafts, role projection and recovery without HTTP/storage. Source UTC-default offset, stale review form, reviewer failure becoming empty and historical fixture identity conflict are documented, not fixed in Vue. Other six P18 sections and outstanding actions, page integration, real SQL/RBAC/races, review and deployment remain pending; no fee defaults, API/config/schema or permission rule changes.",
       "entrypoints": [
         "../apps/api/src/profit-service.ts",
         "../apps/api/src/mysql-profit-repository.ts",

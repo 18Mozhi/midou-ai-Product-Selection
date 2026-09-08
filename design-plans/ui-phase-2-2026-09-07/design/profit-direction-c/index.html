@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P18 利润与成本 · C 方向待审</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="profit.css" />
+    <script src="data.js" defer></script>
+    <script src="profit.js" defer></script>
+  </head>
+  <body>
+    <a href="#work" class="skip">跳到成本工作面</a>
+    <header class="review-bar">
+      <span>P18 利润与成本图稿待审 · 隔离样例，非生产数据</span
+      ><label>审核场景<select id="scene" aria-label="审核场景"></select></label
+      ><a href="README.md">全部图片与边界</a>
+    </header>
+    <header class="masthead">
+      <strong>智能选品</strong><span>机会详情 / 利润与成本</span
+      ><a data-local id="back" href="/opportunities">返回机会</a>
+    </header>
+    <div class="profit-layout">
+      <aside class="cost-index">
+        <p>成本核对</p>
+        <h1>金额有据<br />生效有序</h1>
+        <p class="index-note">利润快照、已生效输入与待复核提交分别查看。</p>
+        <nav id="sections" aria-label="利润与成本工作面"></nav>
+        <p class="scope-note">提交并非生效。另一名指定成员复核通过后，成本才进入计算。</p>
+      </aside>
+      <main id="work" tabindex="-1"></main>
+    </div>
+  </body>
+</html>

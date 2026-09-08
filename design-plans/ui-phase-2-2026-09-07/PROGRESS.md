@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P18利润 / PROFIT-C-r1
+
+收尾：最终capture和无参数源/图片哈希及交互复验通过50场景双端；100PNG与manifest相符、README104链接全部存在。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）与format:check（2脚本）通过，diff检查无空白错误。4101/5173无监听，本批无临时文件或服务遗留。仅本批114文件精确暂存；生产源码、旧图/coverage和审批不变。
+
+从干净main/81fdb7d接续；上轮核心图稿为实质进展。本次读取被工具中断后检查工作树干净、ui-skills进程已结束，再继续读取，未重复在途服务。依AGENTS/Feature Map/总纲M04-04与P18规格追踪ProfitPanel/CostReviewQueue/Workspace/forms、服务/路由/仓库/Worker和M04-04夹具。ui-skills-root选frontend-design，已完整读取；使用现有Playwright永久脚本模式，不新增依赖。
+
+新增[100图](design/profit-direction-c/README.md)：50场景双端，计算快照、生效输入、成本复核、九字段提交，零业务弹窗。7分项依据、显式零/亏损/缺汇率、三种成本、两种确认方式、只读/指定他人/超时、通过驳回内联原因、名单读取与提交/排队失败恢复均为待审图稿。六个其余P18分区及未交付采集/评分动作仍待推进，不算完整P18。
+
+永久助手运行实际confirmCost/reviewCost/queueProfit和子级原因函数、成本验证、主加载名单失败分支；确认三类型原始body、当前机会与复核单version区别、后端规范化、自审拒绝。真实仓库reviewCost在惰性数据库适配器下处理超时pending驳回，说明超时不是失效规则，不证明SQL事务/真实RBAC。8小时时区默认偏移、成功review状态残留、名单失败退空均复现而未改Vue。
+
+目检桌面快照与手机九字段/失败原因后，补齐模拟提交pending记录、修正超时时间、自洽零/亏损布局分项和自动来源类型。旧夹具将可处理人448也放在可选名单，违反真实自审规则；本稿明确投影另一隔离成员451，服务函数验证448自审拒绝/451送入惰性适配器，不能当真实成员资格验证。最终50场景双端capture通过，原始利润快照不随提交/审批/排队而在浏览器重算。
+
+未修改Vue/API/OpenAPI、权限/配置/依赖/数据库、旧图/coverage或审批；无生产写入、部署或重启。100PNG和data/evidence为永久审核交付，没有新临时文件或服务，浏览器finally关闭。下一批市场/竞争/风险与关联动作，AI/血缘/复盘接续；P16采纳待决和全73页交付保持。
+
 ## 2026-09-08 · P18核心 / OPPORTUNITY-DETAIL-C-core-r1
 
 收尾：最终capture和无参数源/PNG哈希及双端交互复验均通过51场景；README106链接存在，102PNG与manifest相符且无多余图。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）和format:check（2脚本）通过，diff检查无空白错误。4101/5173无监听；生产源码、旧图/coverage与审批无改动，未生成临时文件或服务。仅本批116文件精确暂存提交。
