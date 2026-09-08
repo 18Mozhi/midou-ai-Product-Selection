@@ -1,0 +1,775 @@
+{
+  "proposal": "CONTENT-C-r1",
+  "contractRebindings": [
+    {
+      "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
+      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
+      "reason": "Audited reason dialog focus-test additions; historical table retained."
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/src/components/use-platform-content-list.ts": "48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9",
+    "apps/web/src/components/use-platform-content-review.ts": "e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2",
+    "apps/web/src/components/platform-management-presentation.ts": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133",
+    "apps/web/src/components/PlatformManagementCenter.vue": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+    "apps/web/src/components/PlatformManagementFilter.vue": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+    "apps/web/src/components/PlatformManagementRecordList.vue": "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
+    "apps/web/src/components/PlatformContentPagination.vue": "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
+    "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
+    "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
+    "tests/unit/platform-content.test.mjs": "b59646a32e72b3142d04fb2ead2a1e126dd5e5394466929e63bccbe443bd83ad",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
+    "scripts/lib/ui-phase2-content-design-data.mjs": "652aeeb3ce87088dc3c37ae380a81861bee67625592efe619de5802d90e87ac0",
+    "scripts/verify-ui-phase2-content-c.mjs": "e395c55769c34217c989e735654f767135fb3b83ab03d8064e021e9a17678327",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/index.html": "08ab5dc82c0beeb38a2e8f92d27327d8d71a01fda4be17a282713836c2c43f4f",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/content.css": "dca5f851c8dd7001d3b846b0cc7ec1264b4e49a97e5ddf6324bfc5753880dedd",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/content.js": "737e36520c8db6ea80d191cb100f8f22ed2fba537038af02676fe8d4e435a88f",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/data.js": "23816ef220adc450d8c8a92a3fa7e78cf749b5dc9c1a153c655f6991d90bee4b",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/source-logic.js": "dbc7d95d903a973dd3c220936b9d37f129e524ebe1da1d938f38c39c6d7910d6"
+  },
+  "sourceChecks": [
+    "Actual list: 15s timeout, replacement abort/sequence; edited pending query changes success URL without changing request; stop alone does not invalidate ignored-abort response. These are source boundaries, not fixed production code.",
+    "Actual first and retained timeout states; parent wrapper discards structured failure kind and empty branch hides summary/list/pagination (static consumer boundary).",
+    "Actual review: same-status body, duplicate submit reaches two PATCH adapters; old response closes newly opened item; successful write hides reload error. No HTTP or business writes occurred.",
+    "Actual service: four read/three write statuses, numeric-string version conversion, trimmed 2–300 reason boundary, loose 36-character hex/hyphen ID; no fabricated strict UUID or current-state rejection.",
+    "Actual read repository in inert adapter: summary query-only versus status-filtered total, escaped title/category/market LIKE, 0/1/20/21/135 counts, clamped page and deterministic LIMIT/OFFSET. Original fixture has one row, not 135 real records.",
+    "Actual moderation repository with inert connection: same-status increments version and writes three records, conflict/missing rolls back, idempotent result skips writes, connection always releases. No database was connected."
+  ],
+  "checks": [
+    "1440: four read/three write states, draft/apply/reset, original versus synthetic pagination, six modal focus loops/return, seven-column minimum, reason boundaries, same-status allowed, single-flight and frozen payload, conflict/unknown, separate write/refresh outcomes, closed and newer-dialog ownership; six breakpoints/CSS zoom2; offline only.",
+    "390: four read/three write states, draft/apply/reset, original versus synthetic pagination, six modal focus loops/return, seven-column minimum, reason boundaries, same-status allowed, single-flight and frozen payload, conflict/unknown, separate write/refresh outcomes, closed and newer-dialog ownership; six breakpoints/CSS zoom2; offline only."
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "scene": "default",
+      "width": 1440,
+      "file": "1440-default.png",
+      "sha256": "f4c55e5abbb6c37e06e822a34ea8caba689c8b3ab056aa3aa793f651b2765c7f"
+    },
+    {
+      "scene": "loading",
+      "width": 1440,
+      "file": "1440-loading.png",
+      "sha256": "6e0060d781c0c4fc2cf8249e4ca025bd4e117e3c776ef0f31cbd507c25587e08"
+    },
+    {
+      "scene": "empty",
+      "width": 1440,
+      "file": "1440-empty.png",
+      "sha256": "c8b3e37c5b6b0123bc876afbeec8de6b1aa3a5cdb38c9d8b2382d4e03f9c9b23"
+    },
+    {
+      "scene": "first-error",
+      "width": 1440,
+      "file": "1440-first-error.png",
+      "sha256": "2d08696ce457912f241ce5d4a17dba5102f9504c3d770a129eabfdfc0e81d604"
+    },
+    {
+      "scene": "refreshing",
+      "width": 1440,
+      "file": "1440-refreshing.png",
+      "sha256": "f05c8f28be41517e6bfcfea5d386d30c612e086e08ac8b66535c1673721c7fdc"
+    },
+    {
+      "scene": "retained-error",
+      "width": 1440,
+      "file": "1440-retained-error.png",
+      "sha256": "4dafea9755c03c895b3dd97da5a9dc01fee883d654a9fd6676daf72b380c5e05"
+    },
+    {
+      "scene": "first-timeout",
+      "width": 1440,
+      "file": "1440-first-timeout.png",
+      "sha256": "3a705116e4f2ba82e9bb755e9d439e656550c2d457c61eb20f9120d4fbb2029e"
+    },
+    {
+      "scene": "retained-timeout",
+      "width": 1440,
+      "file": "1440-retained-timeout.png",
+      "sha256": "c944834fa81ab037adf182bea738b70e50a20486f036696c3da2fe4d52ca3cac"
+    },
+    {
+      "scene": "filter-draft",
+      "width": 1440,
+      "file": "1440-filter-draft.png",
+      "sha256": "f0de096c6e918feffc03ab1704096c3665df3e3b95bd2ea9d4ec281d1b2d42ef"
+    },
+    {
+      "scene": "filter-active",
+      "width": 1440,
+      "file": "1440-filter-active.png",
+      "sha256": "bc1fc88dd6714c8099c1bf6674b5c12bee57c766be4a2688dca925ed45939995"
+    },
+    {
+      "scene": "filter-archived",
+      "width": 1440,
+      "file": "1440-filter-archived.png",
+      "sha256": "a85ba06cc29a2bd1c75212ece4c48d5b0bf2ac895ef021d3631757d55ad8f784"
+    },
+    {
+      "scene": "filter-long",
+      "width": 1440,
+      "file": "1440-filter-long.png",
+      "sha256": "4d1a5b4d1eac498998da893356f156933bd9cbe6ae295bd870d20df8528b75fd"
+    },
+    {
+      "scene": "filter-empty",
+      "width": 1440,
+      "file": "1440-filter-empty.png",
+      "sha256": "d1ce662af987da6041a53aa6729874e2b692b6c907c4f3bd2469c1fb46164e8b"
+    },
+    {
+      "scene": "filter-pending",
+      "width": 1440,
+      "file": "1440-filter-pending.png",
+      "sha256": "0d78244eb99b6b811839bd3f5d226b922605fdc7865f294b9caf28af306b03a5"
+    },
+    {
+      "scene": "filter-error",
+      "width": 1440,
+      "file": "1440-filter-error.png",
+      "sha256": "b902c42cca3ae0a508e81c3b2512ed2028ea6be95b5add8dd026d22ed2211cf8"
+    },
+    {
+      "scene": "page-first",
+      "width": 1440,
+      "file": "1440-page-first.png",
+      "sha256": "a24572946a619c127032a651bcfd199ffb6e7f16458534a354856b3c4a76d699"
+    },
+    {
+      "scene": "page-last",
+      "width": 1440,
+      "file": "1440-page-last.png",
+      "sha256": "2151ebd567860404878a78b523c69cbad5250bd2f907c578d73f23208fd325a8"
+    },
+    {
+      "scene": "page-pending",
+      "width": 1440,
+      "file": "1440-page-pending.png",
+      "sha256": "5e1bb5c7c883ad5ab09173186e49402e382a25108b7c2a981dfb4cf00ebb4f06"
+    },
+    {
+      "scene": "page-error",
+      "width": 1440,
+      "file": "1440-page-error.png",
+      "sha256": "4577a92caf285116f3bb8d094ad5beb2ade0de7f601c07668518e5b1514724b3"
+    },
+    {
+      "scene": "page-corrected",
+      "width": 1440,
+      "file": "1440-page-corrected.png",
+      "sha256": "53f47af8349df22d9f2c0a63db7b16b9df71fdc23aed46952e453a8d378cf599"
+    },
+    {
+      "scene": "detail",
+      "width": 1440,
+      "file": "1440-detail.png",
+      "sha256": "3bba7495f17bb7a39f38d8ff1011a95118e86eeb11beab2ba36d522abd9da26a"
+    },
+    {
+      "scene": "technical",
+      "width": 1440,
+      "file": "1440-technical.png",
+      "sha256": "c523fbf4cf1a4405804597eb76a88ebe4b6a6063e80d3ed3bcdfc50a31e5e1f3"
+    },
+    {
+      "scene": "long-detail",
+      "width": 1440,
+      "file": "1440-long-detail.png",
+      "sha256": "6f70de9c214a699e553651eed9ce3971aaff686ab2ca6f310a56568b579d9f72"
+    },
+    {
+      "scene": "missing-detail",
+      "width": 1440,
+      "file": "1440-missing-detail.png",
+      "sha256": "2bcf9a4743124ff3c6c50aa2cb7de689bab2973c61499070590468843873684a"
+    },
+    {
+      "scene": "archived-detail",
+      "width": 1440,
+      "file": "1440-archived-detail.png",
+      "sha256": "a47346a040293a0da886a27da3cf283c9b6a1068f2d6abad40823593f9106d2a"
+    },
+    {
+      "scene": "settings",
+      "width": 1440,
+      "file": "1440-settings.png",
+      "sha256": "09bb9e7cec7b172bbf5ff974f2d30d2f2d0a943a0b2cf6698f96b96a56c82619"
+    },
+    {
+      "scene": "one-column",
+      "width": 1440,
+      "file": "1440-one-column.png",
+      "sha256": "b877d2a3006a35da729477f1e4cc4e6cc6b6559fb7359c1ef4217719bbc75381"
+    },
+    {
+      "scene": "compact",
+      "width": 1440,
+      "file": "1440-compact.png",
+      "sha256": "17439ed4be43882eb9704fd78a9b3b202b00c4e1dca237210d04e47f1c298b69"
+    },
+    {
+      "scene": "frozen",
+      "width": 1440,
+      "file": "1440-frozen.png",
+      "sha256": "1ab300f6be57cfc13f412d8b39475fc39e5bb4087b280716daaceb08af9b8a75"
+    },
+    {
+      "scene": "dark",
+      "width": 1440,
+      "file": "1440-dark.png",
+      "sha256": "595d8a29b0c56f609ef7ad49e80a65163ef95d4f06867f02c57fc1581498c356"
+    },
+    {
+      "scene": "contrast",
+      "width": 1440,
+      "file": "1440-contrast.png",
+      "sha256": "8fb3032cb7b417204b261a493d79b21bbd89cd8e0eef1b37f3920161ab436ac8"
+    },
+    {
+      "scene": "focus",
+      "width": 1440,
+      "file": "1440-focus.png",
+      "sha256": "7447a8beddd84c54f5f2e5a4164047d7d246c71c17635468b28cf17a65a77a92"
+    },
+    {
+      "scene": "hover",
+      "width": 1440,
+      "file": "1440-hover.png",
+      "sha256": "3db6e8d95abcda9d7fce18dfc7ba7e673fee160ffad14341e0b1cb821662488a"
+    },
+    {
+      "scene": "pressed",
+      "width": 1440,
+      "file": "1440-pressed.png",
+      "sha256": "ea67a600881ac74dcefe49ece2dc56bcdd6b5c517fee98c28cc3c785238acdc6"
+    },
+    {
+      "scene": "review-active",
+      "width": 1440,
+      "file": "1440-review-active.png",
+      "sha256": "4540f5ae951adeb4efaf85adfbf0e7c20e02f7a399ecf11732bebd4b2eb4205d"
+    },
+    {
+      "scene": "review-irrelevant",
+      "width": 1440,
+      "file": "1440-review-irrelevant.png",
+      "sha256": "1655ccc7eb8cdb4ebdb34b9568d49e1bd6608b4501f165bf37fdb46558103589"
+    },
+    {
+      "scene": "review-stale",
+      "width": 1440,
+      "file": "1440-review-stale.png",
+      "sha256": "f7c94f683e75c021d73e5c425860d479a7c6c63de7319df116575c692794958c"
+    },
+    {
+      "scene": "reason-empty",
+      "width": 1440,
+      "file": "1440-reason-empty.png",
+      "sha256": "8cbb3ba90d74e116375a53e64086bccf3677553c3e47f9e3986e59c619e19046"
+    },
+    {
+      "scene": "reason-one",
+      "width": 1440,
+      "file": "1440-reason-one.png",
+      "sha256": "8952f9859b7ac5e30f6bafdbdd5c1e5ca36233fab9b50c2048836f7e826d10ef"
+    },
+    {
+      "scene": "reason-spaces",
+      "width": 1440,
+      "file": "1440-reason-spaces.png",
+      "sha256": "5036071ab7da61dd9de8cdd06715b87eca31c4d528d6786b4366b239e3db14b7"
+    },
+    {
+      "scene": "reason-min",
+      "width": 1440,
+      "file": "1440-reason-min.png",
+      "sha256": "34de8feb14e327d1e63387c8ba82711ed0f51c15386af7ea68c8cdee08a87b35"
+    },
+    {
+      "scene": "reason-max",
+      "width": 1440,
+      "file": "1440-reason-max.png",
+      "sha256": "74d31c7a0e895a9224ca3e49ff0f976892e5d3e51de79e8be7e2929761dba078"
+    },
+    {
+      "scene": "reason-over",
+      "width": 1440,
+      "file": "1440-reason-over.png",
+      "sha256": "0e8acf41293a9e2e6ff86d56bfc7a98734f827181f8eaa63238946a50f5c6104"
+    },
+    {
+      "scene": "same-status",
+      "width": 1440,
+      "file": "1440-same-status.png",
+      "sha256": "964b69d689c93d9035fbbfab743213207b5cfa3c89a4d4cd71aacead68b8d9e5"
+    },
+    {
+      "scene": "review-pending",
+      "width": 1440,
+      "file": "1440-review-pending.png",
+      "sha256": "acd434386cf7273bf960b54ebf6c5d13aa95c4d4f17bfe0f96b59399ac9f614d"
+    },
+    {
+      "scene": "review-error",
+      "width": 1440,
+      "file": "1440-review-error.png",
+      "sha256": "8cfc6e2f9724f57ae3f34df7ef388d3c97dee31d472e12661f3830cbd9e233b4"
+    },
+    {
+      "scene": "review-conflict",
+      "width": 1440,
+      "file": "1440-review-conflict.png",
+      "sha256": "eabf16f38c7fa63d2156f31addd4d349e779715d1f9808fbc3aa50fcb7fc1a42"
+    },
+    {
+      "scene": "review-forbidden",
+      "width": 1440,
+      "file": "1440-review-forbidden.png",
+      "sha256": "b56f27d77b73fc5d6ffc57c0daa9535e180499bcc3e25b5850a3acbe74326749"
+    },
+    {
+      "scene": "review-unknown",
+      "width": 1440,
+      "file": "1440-review-unknown.png",
+      "sha256": "0689afc0453921c62d5c4d5d0e44faacfbb2d799ef2e4436091593487f96f3d5"
+    },
+    {
+      "scene": "review-success",
+      "width": 1440,
+      "file": "1440-review-success.png",
+      "sha256": "ddf4f53e72182812ab24da03b847f7cd98fdeac707eeb4ff3e739b1b89f9ee5f"
+    },
+    {
+      "scene": "success-refresh-error",
+      "width": 1440,
+      "file": "1440-success-refresh-error.png",
+      "sha256": "a08e72b36381080e9859c07e97eb77432366262b9e7fedc62257618f51dc8843"
+    },
+    {
+      "scene": "closed-pending",
+      "width": 1440,
+      "file": "1440-closed-pending.png",
+      "sha256": "8ad0dfed6f90221aa5be9deeceb133d85f26b29bdc33bbe8d4114d9fea0ca377"
+    },
+    {
+      "scene": "new-review-old-result",
+      "width": 1440,
+      "file": "1440-new-review-old-result.png",
+      "sha256": "7f68028e2894c80b08510966d5fa45fc8d8e67635370e001fba776f14f481357"
+    },
+    {
+      "scene": "cancelled",
+      "width": 1440,
+      "file": "1440-cancelled.png",
+      "sha256": "6b8492365b6f473b0fad7f1c446a12a7e9221ab37976277c0e0566322d90883f"
+    },
+    {
+      "scene": "insufficient-data",
+      "width": 1440,
+      "file": "1440-insufficient-data.png",
+      "sha256": "bfee373b492d6c4b05fa66e05d827be0937a3e67a21aa2e5b407efbf70200ef3"
+    },
+    {
+      "scene": "unknown-status",
+      "width": 1440,
+      "file": "1440-unknown-status.png",
+      "sha256": "fccf4f4659ea7acd3829d0a53ec27fafb969edcec6d6d14d9bf0bed0fb946646"
+    },
+    {
+      "scene": "source-boundary",
+      "width": 1440,
+      "file": "1440-source-boundary.png",
+      "sha256": "b0885a43afa67371be346b20a6ae5535ded0ceaf8c66db29e68467b4520f07a2"
+    },
+    {
+      "scene": "default",
+      "width": 390,
+      "file": "390-default.png",
+      "sha256": "c830ca9a1e433d45f16202539804aa7b722b4d88942198078112cf748d8a6889"
+    },
+    {
+      "scene": "loading",
+      "width": 390,
+      "file": "390-loading.png",
+      "sha256": "2ba9b230dc8f3a5a9ce90ab2f6a7c4fc79ca21fdd14ea2e259790a10a830878b"
+    },
+    {
+      "scene": "empty",
+      "width": 390,
+      "file": "390-empty.png",
+      "sha256": "5e924f4dcd0a63bb0920ef8c7bc570e060e8bf072c95bcc9ffc88e90765b12cd"
+    },
+    {
+      "scene": "first-error",
+      "width": 390,
+      "file": "390-first-error.png",
+      "sha256": "576ebed17d07304faf9534dc426fa99e831e387c72c87c3825c78dc3c8ea53ec"
+    },
+    {
+      "scene": "refreshing",
+      "width": 390,
+      "file": "390-refreshing.png",
+      "sha256": "012a43534c47f080691237351d5508e6aed85295438ea9926e4f851bce8b07a8"
+    },
+    {
+      "scene": "retained-error",
+      "width": 390,
+      "file": "390-retained-error.png",
+      "sha256": "e57e5339be160864ec3a710f4d8402c9b67c5f6a6a071480191033dda879fcc5"
+    },
+    {
+      "scene": "first-timeout",
+      "width": 390,
+      "file": "390-first-timeout.png",
+      "sha256": "0ad6634b18940baff72395b4f8e5bcf5bab9ebffce249176672b5897f2676044"
+    },
+    {
+      "scene": "retained-timeout",
+      "width": 390,
+      "file": "390-retained-timeout.png",
+      "sha256": "310a062478b0291625fd0f14b7271a7c51724f5ab6e2e9abeff3cf22e5042643"
+    },
+    {
+      "scene": "filter-draft",
+      "width": 390,
+      "file": "390-filter-draft.png",
+      "sha256": "18075f30fbac92da713f75585e19c653afc1ee2c937fee9db8c64d7bf304bd97"
+    },
+    {
+      "scene": "filter-active",
+      "width": 390,
+      "file": "390-filter-active.png",
+      "sha256": "0ce907c165c4d78c2a1824046fe192a2c58ac5cb950858229f5d6715a95c2941"
+    },
+    {
+      "scene": "filter-archived",
+      "width": 390,
+      "file": "390-filter-archived.png",
+      "sha256": "d40582bb25ec1a33080ef19ee007bf9adb663631edd0a5e842c30c14a65d8b2b"
+    },
+    {
+      "scene": "filter-long",
+      "width": 390,
+      "file": "390-filter-long.png",
+      "sha256": "29173927b502ad4b9537a3970336b3b487e8a8c471559764d6423979e75ad49e"
+    },
+    {
+      "scene": "filter-empty",
+      "width": 390,
+      "file": "390-filter-empty.png",
+      "sha256": "abc46623b44a33afef13877425a29fa16b99b70ad47586d9482e6ede02268654"
+    },
+    {
+      "scene": "filter-pending",
+      "width": 390,
+      "file": "390-filter-pending.png",
+      "sha256": "09616020d39031060052810810fa6b60d256f67d44d55e414778d5c77a29acca"
+    },
+    {
+      "scene": "filter-error",
+      "width": 390,
+      "file": "390-filter-error.png",
+      "sha256": "300580dc84761e6a39d1c773b504635b218d2502dc69ca4dd29d255ea532b823"
+    },
+    {
+      "scene": "page-first",
+      "width": 390,
+      "file": "390-page-first.png",
+      "sha256": "2b0d9135cce78221bcb81a80cc6c7464a8505f6ad896f31c593d582b73396946"
+    },
+    {
+      "scene": "page-last",
+      "width": 390,
+      "file": "390-page-last.png",
+      "sha256": "73200ef2ca77c90b99f998119176136883f9970275cd463ebd5357630e2ccff4"
+    },
+    {
+      "scene": "page-pending",
+      "width": 390,
+      "file": "390-page-pending.png",
+      "sha256": "fe10e16220c56877ba904e7681e09759995724f1fdcfee5e52d6a57313a63f34"
+    },
+    {
+      "scene": "page-error",
+      "width": 390,
+      "file": "390-page-error.png",
+      "sha256": "e934dd6437662751d4e842ef57e91bd46326dd5040c221a2acd9ad7afc1536ec"
+    },
+    {
+      "scene": "page-corrected",
+      "width": 390,
+      "file": "390-page-corrected.png",
+      "sha256": "7c805795b2010f1a55e4811b6c7f29fd3cea04a22c54c950f8cadba94ac12c24"
+    },
+    {
+      "scene": "detail",
+      "width": 390,
+      "file": "390-detail.png",
+      "sha256": "11a7e8e32b46dde1d9e871582032eb239f8981dbc2d4fb0f75fa6b10e8a805f5"
+    },
+    {
+      "scene": "detail",
+      "width": 390,
+      "file": "390-detail-part1.png",
+      "sha256": "7bbf9b53f810778b389f6d98358b7094e4f07aa742b391a782318db920be2156"
+    },
+    {
+      "scene": "technical",
+      "width": 390,
+      "file": "390-technical.png",
+      "sha256": "afc0637ee1a95e754a48066949fc8136a90712675eed53ef695286bad5b1f3eb"
+    },
+    {
+      "scene": "technical",
+      "width": 390,
+      "file": "390-technical-part1.png",
+      "sha256": "2064e4458ec43acc2736d1f12fe5cb22381209d8f00c2d1145535025e637cbb0"
+    },
+    {
+      "scene": "long-detail",
+      "width": 390,
+      "file": "390-long-detail.png",
+      "sha256": "3dfcb24dffd133bd45309eaa6dddc30d37533c0292869538bc6e623f5061556f"
+    },
+    {
+      "scene": "long-detail",
+      "width": 390,
+      "file": "390-long-detail-part1.png",
+      "sha256": "08aea99641728eb91790909193ae37bfe54f8bfc222a22aa24dfb89682c74060"
+    },
+    {
+      "scene": "long-detail",
+      "width": 390,
+      "file": "390-long-detail-part2.png",
+      "sha256": "5d60168ce2511dbf99f1097ce005a1201949c53d2228564283f1fe7494f2931e"
+    },
+    {
+      "scene": "missing-detail",
+      "width": 390,
+      "file": "390-missing-detail.png",
+      "sha256": "c634e98544b5ba13fc4e2ccb11ea88df486cc85219b3f1addad159168c26a6a0"
+    },
+    {
+      "scene": "missing-detail",
+      "width": 390,
+      "file": "390-missing-detail-part1.png",
+      "sha256": "f3007b57de948ee5ad98b3423ea7fc9550bc55a2a466f11cdd33c6d2be2a2abd"
+    },
+    {
+      "scene": "archived-detail",
+      "width": 390,
+      "file": "390-archived-detail.png",
+      "sha256": "d0618b5af98994e6d7a593a15d34e3201be9b8c7d0b98a7977dd7ab4246a1e79"
+    },
+    {
+      "scene": "archived-detail",
+      "width": 390,
+      "file": "390-archived-detail-part1.png",
+      "sha256": "5e8592833b0407710bac1dff7ebb028d46fe5ae9c86e23bc37a7c5ad8521ad23"
+    },
+    {
+      "scene": "settings",
+      "width": 390,
+      "file": "390-settings.png",
+      "sha256": "d569b503c9266af291fea3366da4ab6365413e20d63a381f16ee151ff7c5b306"
+    },
+    {
+      "scene": "one-column",
+      "width": 390,
+      "file": "390-one-column.png",
+      "sha256": "b8fd37eb511b39237f00225f77a857f856b99d8596ded71eeffa0ffb959b09df"
+    },
+    {
+      "scene": "compact",
+      "width": 390,
+      "file": "390-compact.png",
+      "sha256": "1266d671641b7ac9d39d66582de1b64b3aabb72070642d8642d52f76b973f160"
+    },
+    {
+      "scene": "frozen",
+      "width": 390,
+      "file": "390-frozen.png",
+      "sha256": "7cc500ce13b5bf6b0dd4f50257bcc87437b9a60afbae1be226b665e2436ce4dc"
+    },
+    {
+      "scene": "dark",
+      "width": 390,
+      "file": "390-dark.png",
+      "sha256": "9e405abc8416940a31055d756dea5d86a16efd9ece4d431448a74f6cb4aefa06"
+    },
+    {
+      "scene": "contrast",
+      "width": 390,
+      "file": "390-contrast.png",
+      "sha256": "ad035dd2dabd25706c01c08183d72f68e6dc830739387351e389d3aa99cb71e6"
+    },
+    {
+      "scene": "focus",
+      "width": 390,
+      "file": "390-focus.png",
+      "sha256": "56cbbf014dcc1913dcf54124ce60d1657e53953b2970b4a9a26c2a05464eb179"
+    },
+    {
+      "scene": "hover",
+      "width": 390,
+      "file": "390-hover.png",
+      "sha256": "c2e6c0548fd4c54067902cd552d680f241f3ac0f2e098bcf33e48d7d4b6ed75c"
+    },
+    {
+      "scene": "pressed",
+      "width": 390,
+      "file": "390-pressed.png",
+      "sha256": "b916f8e0f5d09518315d49745cfa41868f721b92274409cd5091e462cb78e58f"
+    },
+    {
+      "scene": "review-active",
+      "width": 390,
+      "file": "390-review-active.png",
+      "sha256": "987ffca777b4308bf444adfeec12997f969d1e1194f16f4618246884555068b8"
+    },
+    {
+      "scene": "review-irrelevant",
+      "width": 390,
+      "file": "390-review-irrelevant.png",
+      "sha256": "bc710f76acffb2811167e56322e0d3a6c0f1b0b2f3b0809c51916cfe3dfd0a57"
+    },
+    {
+      "scene": "review-stale",
+      "width": 390,
+      "file": "390-review-stale.png",
+      "sha256": "6968d8b37512b4aadd9c08ddd02c33f5225496f392c16702ad722fd8bf1c0782"
+    },
+    {
+      "scene": "reason-empty",
+      "width": 390,
+      "file": "390-reason-empty.png",
+      "sha256": "f407e9a230b3d728477893e7ae3e86081bdd42157eb58370a776d99b3e122128"
+    },
+    {
+      "scene": "reason-one",
+      "width": 390,
+      "file": "390-reason-one.png",
+      "sha256": "6f8a1452cba69998f9469b33a67373b5d656a88950606e7e763c6ce6bacc505b"
+    },
+    {
+      "scene": "reason-spaces",
+      "width": 390,
+      "file": "390-reason-spaces.png",
+      "sha256": "f407e9a230b3d728477893e7ae3e86081bdd42157eb58370a776d99b3e122128"
+    },
+    {
+      "scene": "reason-min",
+      "width": 390,
+      "file": "390-reason-min.png",
+      "sha256": "243ae8e4bc479e35b070de6cb4bcc5de8e60f656200a284202790d7ba7909b30"
+    },
+    {
+      "scene": "reason-max",
+      "width": 390,
+      "file": "390-reason-max.png",
+      "sha256": "ae3b0b6cefd1ec042a56091c1017b3ebb5b5be01979033b62554a771f8c05711"
+    },
+    {
+      "scene": "reason-over",
+      "width": 390,
+      "file": "390-reason-over.png",
+      "sha256": "dd47db457c1726baf06af5f51ff80f619c5a4472ec3787e2e74273f478d0aa00"
+    },
+    {
+      "scene": "same-status",
+      "width": 390,
+      "file": "390-same-status.png",
+      "sha256": "96988378e1a92357e3f0485d49b600b37be3829a647ca70d62a02360cb3bc947"
+    },
+    {
+      "scene": "review-pending",
+      "width": 390,
+      "file": "390-review-pending.png",
+      "sha256": "3bb90c313dc10d818d98d873df282050549be3fbd2c7a4dba12c8281e3266980"
+    },
+    {
+      "scene": "review-error",
+      "width": 390,
+      "file": "390-review-error.png",
+      "sha256": "e86d3427af2dcb66482b06033830aeebbb23ed2bdb7dac209aa516f48c9e117c"
+    },
+    {
+      "scene": "review-conflict",
+      "width": 390,
+      "file": "390-review-conflict.png",
+      "sha256": "bc7c43709db4ec53214587962e08b53cd79b0392ed9f6cb2d19b71dab17a1976"
+    },
+    {
+      "scene": "review-forbidden",
+      "width": 390,
+      "file": "390-review-forbidden.png",
+      "sha256": "9b8679fe614fa83b8b7d63f726f9eac8bc2218c47b2f7b2df9a56b289f90e65c"
+    },
+    {
+      "scene": "review-unknown",
+      "width": 390,
+      "file": "390-review-unknown.png",
+      "sha256": "59c8706e0efa9c78c5e6d77b4ce36d83abd96d7adddba72f4b4c8ce201a423b8"
+    },
+    {
+      "scene": "review-success",
+      "width": 390,
+      "file": "390-review-success.png",
+      "sha256": "996a5a4b81d094ee7c8945b40feeb0fc11cdbddfb0d73852e17d45b482d1df53"
+    },
+    {
+      "scene": "success-refresh-error",
+      "width": 390,
+      "file": "390-success-refresh-error.png",
+      "sha256": "8dcd492ed1d715d1159314ed5a557e5be26ad47fc03a614ec4f299c3bbb0eef0"
+    },
+    {
+      "scene": "closed-pending",
+      "width": 390,
+      "file": "390-closed-pending.png",
+      "sha256": "0cda9db0e277ebf65b184ffaa2ddb6786f57ceaa3f033f426df760a31ff70aa7"
+    },
+    {
+      "scene": "new-review-old-result",
+      "width": 390,
+      "file": "390-new-review-old-result.png",
+      "sha256": "56e40eb0b6a726580393bc083169c8befa82bdcb1e2a1f371fb800737e04d9e8"
+    },
+    {
+      "scene": "cancelled",
+      "width": 390,
+      "file": "390-cancelled.png",
+      "sha256": "10da461c798ad1a6e2acfb5b2cc7833a932b2a7d92a740c899f0ed342d0a16e6"
+    },
+    {
+      "scene": "insufficient-data",
+      "width": 390,
+      "file": "390-insufficient-data.png",
+      "sha256": "735894d668beb7971d75d93925d20093d4ac80ca079224de9d32dfce3d7a3eb5"
+    },
+    {
+      "scene": "unknown-status",
+      "width": 390,
+      "file": "390-unknown-status.png",
+      "sha256": "0ee884035f30c57a8d4c0d02f84bae6704d8b96b46ed5ca0ca574f2b5f68d082"
+    },
+    {
+      "scene": "source-boundary",
+      "width": 390,
+      "file": "390-source-boundary.png",
+      "sha256": "b9d56f7e6c28dc3b51aa87fd0be590229a86509c03b2d7e7c95ab70e104b7218"
+    }
+  ]
+}
