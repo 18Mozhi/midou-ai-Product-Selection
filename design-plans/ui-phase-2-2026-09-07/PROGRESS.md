@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W03报表与导出 / REPORT-C-r1
+
+收尾：最终capture及无参数源/数据/图片哈希和交互验证均通过，41场景双端、90图；README91个本地链接存在，96份根目录永久文件精确匹配manifest。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过。104本批文件精确提交，不包含生产源码或临时产物；浏览器已关闭，4101/5173无监听。新图属于永久审核交付，无临时文件待清理。
+
+增补键盘检查曾失败：Shift+Tab从关闭按钮落到原生dialog容器而非末尾操作，独立浏览器只读复现。原型补显式首尾Tab循环，生产use-modal-dialog未改；重新采图和同源复验后才记录通过。期间旧证据哈希拒绝新源码符合预期，不以旧capture冒充最终验证。
+
+从干净main/c7fc220接续，未改旧批材料。按AGENTS→Feature Map reportsExports→蓝图M05-06→P28与AR/RP合同→真实Vue/路由/服务/仓库/原m05-06夹具追踪。ui-skills-root选择frontend-design，Playwright复用现有依赖和永久核验脚本，无子代理。
+
+新增[90图](design/report-direction-c/README.md)：41场景双端82主图（含2审核工具图）＋8长窗底部。三报表类型、横向分布、独立文件队列与一个生命周期详情窗；null/0、空汇总与空分布、长邮箱、七导出状态、ETA、inclusive expiry及下载/再生成失败分别展示。原团队夹具6人/29完成与3条明细合计22、8月ETA对9月固定时钟的差异保留，不造事实。截图目检移除详情重复队列/ETA及内部权限代码，窗内错误、可达关闭与底部操作保留。
+
+永久助手执行实际Vue脚本（惰性ref/router/transport，不是挂载Vue），验证三个CSV精确body、无body再生成与新ID、query、null/0和到期；真实仓库SQL经惰性pool检查组织活跃成员/当前工作区任务，真实服务经惰性repo/file验证状态先于过期的409/410/503及新旧ID。status-only expired UI/API差异保持待核验，没有改业务规则或数据契约。没有实际下载文件、SQL事务、Worker、HTTP或角色验证；未注销RP-G01–G04/F03-G05。
+
+本批HTML/CSS/JS/data/README/evidence、90PNG及两核验脚本是永久交付，未创建临时脚本/下载/日志或开发服务；浏览器与上下文finally关闭，历史不明来源产物未动。无生产源码/API/OpenAPI/env/依赖/权限/数据库/部署改动，无重启要求。具体稿待用户审核，下一设计工作面W04 P29组织治理，完整实现与全73页上线签收继续待办。最终门结果另补在本段，不提前宣称整体完成。
+
 ## 2026-09-08 · W03自动化规则 / AUTOMATION-C-r1
 
 收尾：最终capture及无参数源/数据/图哈希与交互复验通过52场景双端、122图，五类源body匹配。README125链接存在、128份根目录永久文件与manifest一致。verify:docs通过73路由/60保护/6角色/153文件，runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产文件/51仓库）与四原型文件Prettier检查通过；diff无空白错误，4101/5173无监听。136任务文件精确提交，不含生产源码、旧材料或临时服务；浏览器已关闭。

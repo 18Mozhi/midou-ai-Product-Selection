@@ -1,5 +1,7 @@
 # F03 自动化与报表局部交互合同
 
+2026-09-08报表增量：[P28 REPORT-C-r1](design/report-direction-c/README.md)90PNG，41场景双端加8长窗底部；蓝色类型目录、白报表与独立导出队列、唯一详情窗。源Vue脚本惰性执行验证三个CSV body、无body重建、新ID/query/null/0/到期，真实SQL与服务经惰性依赖验证团队口径和409/410/503顺序。不是挂载Vue、真实DB/Worker/文件或生产证明。原团队汇总/明细及旧ETA差异保留；status=expired但时间未到的UI允许/API拒绝差异显式演示，不改合同。窗内错误与读数层级仅提案；RP-G01–G04、F03-G05仍待办。下文“P28尚未出稿”为上一批历史状态，当前已有独立稿但未获审。
+
 2026-09-08设计增量：[P27 AUTOMATION-C-r1](design/automation-direction-c/README.md)122图。源Vue脚本在惰性环境检查五body/模板/循环/六类预览归属/URL及忙碌取消；实际服务校验器、预览SQL构造、Worker重试与死信失败分支有离线证据，不是真实Vue/数据库/审计/投递。列表dead_letter与详情succeeded、命中17但空样本均保留。原failureReason对action_failed一律承诺重试与终态冲突；图稿按终态解释，不改变实际代码。分区编辑器/窗内错误/打开及失败滚动重置、编辑不改启停为提案，AR-G01–G03及F03-G05保持待办。P28报表尚未出本方向业务稿，不把P27图重复计为P28。
 
 日期2026-09-08；产品起点3aaf061（产品源4b83588）。P27/P28的规格、动作归属与风险记录，不是全站G0冻结或正式设计通过。依据AGENTS→Feature Map automationRules/reportsExports→route-catalog→NavigationShell→真实组件、API路由/服务/仓储及既有m05-05/m05-06测试；概念图仅作历史参照，不把旧布局或概念字段当新合同。

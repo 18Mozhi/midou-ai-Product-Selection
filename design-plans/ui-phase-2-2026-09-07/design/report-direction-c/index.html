@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P28 报表与导出 / C 方向审核稿</title>
+    <link rel="stylesheet" href="report.css" />
+    <script defer src="data.js"></script>
+    <script defer src="report.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>设计审核稿 · P28 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-controls" hidden aria-label="审核工具">
+      <label for="scene-picker">切换场景（非业务筛选）</label
+      ><select id="scene-picker"></select>
+      <p id="scene-note"></p>
+      <pre id="intent-log">尚未触发动作。所有动作仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="app">
+      <aside class="directory">
+        <div class="brand">ScoutOps</div>
+        <p>分析与协作</p>
+        <h1>报表与导出</h1>
+        <nav id="types" aria-label="报表类型"></nav>
+        <div class="directory-note">以已落库事实为准<br />不推测缺失数据</div>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="export-detail" aria-labelledby="detail-title">
+      <header class="dialog-header">
+        <div>
+          <span>CSV 导出记录</span>
+          <h2 id="detail-title">导出详情</h2>
+        </div>
+        <button id="detail-close" aria-label="关闭导出详情">关闭</button>
+      </header>
+      <div id="detail-content"></div>
+      <footer id="detail-footer"></footer>
+    </dialog>
+  </body>
+</html>
