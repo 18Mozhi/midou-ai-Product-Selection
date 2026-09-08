@@ -6,6 +6,8 @@
 
 ## 1. 源码边界与角色
 
+2026-09-09追加P52：[COLLECTION-OVERVIEW-C-r1](design/collection-overview-direction-c/README.md)首轮双端具体稿待审，范围/来源/尝试/批确认四模态。O真实destructive确认需勾选及短语；源函数复现范围单飞丢请求、批原因漂移与尝试独存被隐藏，结果归属/固定快照/未知结果/焦点只在原型。真实service和SQL-filter构造验证不执行SQL或审计；原始分页/批次夹具meta不匹配返回条数保留并解释。31合同源不变，无生产写入。下一P53；CL-G01–07与全73页实现部署签收保持未完成。
+
 | 别名 | 实际入口 | 候选数 / v-model数 |
 | --- | --- | --- |
 | S | [CollectionRuntimeSurface.vue](../../apps/web/src/components/CollectionRuntimeSurface.vue) | 3 / 0 |
