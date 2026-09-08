@@ -336,3 +336,109 @@ test("task and scoring stable tables cover the exact current local source set wi
   }
   assert.equal(report.denominatorFrozen, false);
 });
+
+test("shared shell role and state contract binds every current source site without collapsing business variants", () => {
+  const report = runContractAudit();
+  const document = "shared-shell-role-state-contract-review.md";
+  const records = report.records.filter((record) => record.document.endsWith(`/${document}`));
+  const files = [
+    "apps/web/src/components/NavigationShell.vue",
+    "apps/web/src/components/DiscoveryOverlay.vue",
+    "apps/web/src/components/OrganizationRolePanel.vue",
+    "apps/web/src/components/NotFoundPage.vue",
+    "apps/web/src/components/UiStateShowcase.vue",
+    "apps/web/src/use-modal-dialog.ts",
+  ];
+  const source = (file) =>
+    readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll("\r\n", "\n");
+  const candidates = files.flatMap((file) => scanSource(source(file), file).candidates);
+  assert.equal(records.length, 70);
+  assert.deepEqual(
+    records.map((record) => record.candidateId).sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of records) {
+    assert.equal(record.temporalScope, "unclassified");
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine);
+    assert.ok(record.claim.split("|")[4].trim(), "Every site needs explicit semantic ownership");
+  }
+  const semantics = (file, semantic) =>
+    records.filter(
+      (record) =>
+        record.sourceFile.endsWith(`/${file}`) && record.claim.split("|")[4].trim() === semantic,
+    );
+  for (const [file, semantic] of [
+    ["NavigationShell.vue", "shell.navigation.item"],
+    ["DiscoveryOverlay.vue", "discovery.search"],
+    ["OrganizationRolePanel.vue", "grant.create.submit"],
+    ["OrganizationRolePanel.vue", "grant.expiry.submit"],
+  ])
+    assert.equal(semantics(file, semantic).length, 2, `${file}:${semantic}`);
+  const helper = semantics("use-modal-dialog.ts", "modal.native.lifecycle");
+  assert.equal(helper.length, 1);
+  assert.equal(helper[0].recordedKind, "dialog-script-call");
+  assert.equal(semantics("UiStateShowcase.vue", "ST-DEMO-CONFIRM").length, 1);
+  assert.equal(semantics("DiscoveryOverlay.vue", "discovery.dialog").length, 1);
+  assert.equal(semantics("NavigationShell.vue", "discovery.dialog").length, 1);
+  const oldState = report.records.filter(
+    (record) =>
+      record.document.endsWith("/state-recovery-contract-review.md") &&
+      record.temporalScope === "historical" &&
+      ["UiStateShowcase.vue", "NotFoundPage.vue"].some((name) =>
+        record.sourceFile?.endsWith(`/${name}`),
+      ),
+  );
+  assert.equal(oldState.length, 8);
+  for (const old of oldState) {
+    const current = records.filter((record) => record.candidateId === old.candidateId);
+    assert.equal(current.length, 1, old.candidateId);
+    const priorSemantic = old.claim.split("|")[3].split("，")[0].trim();
+    assert.equal(current[0].claim.split("|")[4].trim(), priorSemantic);
+  }
+  const hashes = report.sourceClaims.filter((claim) => claim.document.endsWith(`/${document}`));
+  assert.equal(hashes.length, 15);
+  for (const claim of hashes) assert.equal(digest(source(claim.file)), claim.hash, claim.file);
+  assert.equal(report.unreferenced.length, 0, "New source sites must gain explicit ownership");
+  assert.equal(report.summary.uniquelyReferencedCandidates, report.summary.sourceCandidates);
+  assert.equal(report.denominatorFrozen, false, "Source completeness must not approve runtime");
+});
+
+test("shared contract input inventory is separate from static actions and preserves approval state", () => {
+  const inputs = {
+    NavigationShell: ["menuQuery"],
+    DiscoveryOverlay: ["query", "resourceType", "status", "assignee"],
+    OrganizationRolePanel: [
+      "roleQuery",
+      "capabilityQuery",
+      "capabilityGroup",
+      "scopeQuery",
+      "scopeFilter",
+      "grantQuery",
+      "grantForm.workspace_id",
+      "grantForm.resource_id",
+      "grantForm.grantee_membership_id",
+      "grantForm.actions",
+      "grantForm.reason",
+      "grantForm.expires_at",
+      "grantMutation.reason",
+      "grantMutation.expires_at",
+    ],
+  };
+  for (const [name, expected] of Object.entries(inputs)) {
+    const text = readFileSync(
+      new URL(`../../apps/web/src/components/${name}.vue`, import.meta.url),
+      "utf8",
+    );
+    const actual = [...text.matchAll(/\bv-model(?:\.[\w-]+)*="([^"]+)"/g)].map((match) => match[1]);
+    assert.deepEqual(actual.sort(), [...expected].sort(), name);
+  }
+  const coveragePath = new URL(
+    "../../design-plans/ui-phase-2-2026-09-07/coverage.json",
+    import.meta.url,
+  );
+  const before = readFileSync(coveragePath, "utf8");
+  runContractAudit();
+  assert.equal(readFileSync(coveragePath, "utf8"), before);
+});
