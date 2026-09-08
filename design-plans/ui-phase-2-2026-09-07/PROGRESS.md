@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · 主题浮层 / THEME-C-r1
+
+收尾实测：capture及无参数源/文案/图哈希复验通过双端18场景，36PNG与40个README链接齐全；真实控制器knownGap重复复现且仍标记未修复。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）及diff检查通过。生产、旧图与coverage diff为空，不以产品build替代缺失的真实Vue验收。浏览器finally关闭，4101/5173无监听，无新增临时遗留；精确提交本批文件。
+
+从干净main/d575988继续共享主题。依AGENTS/Feature Map/总纲核对NavigationShell、useNavigationShellTheme、theme定义、偏好API及领域版本合同；ui-skills-root选择frontend-design，保留兼容ID但不沿用旧暖纸/朱砂视觉，提出目录蓝、冷雾蓝、净页白。非模态浮层可见展开状态、显式关闭、Escape和键盘离开属于待审UI改进。
+
+新增[36图](design/theme-direction-c/README.md)，18场景双端，包含三壳层/三配色、保存中/成功、六失败回滚、静默读取失败、先读再存、本地应用与已知竞态说明。预览工作面只展示样式，不计Pxx业务图，旧导航/发现稿及审批不改。
+
+永久助手在隔离DOM/cache适配器中执行实际控制器并使用Vue ref：较新cloud-white/version2成功后，较早PUT失败恢复deep-ocean，两写expected_version均1。此已知缺口已证实但未修复；验证器记录knownGap，不把现状断言伪称UI2-SH03通过。原始三ID/文案与浏览器稿深比较，正常单次保存、平台零偏好请求、失败回滚和先读失败后expected_version0均核对真实源。模拟串行交互不能代替真实并发/网络/幂等审计验证。
+
+没有改Vue/API/OpenAPI、权限、数据库、配置、依赖、coverage或生产，也没有生产重启。截图/脚本均永久交付，未创建临时服务或目录，历史受限材料不动。下一步仍需AccountShell及其余页面图稿、获审后的真实Vue与保存竞态修复和完整发布，不缩减73页目标。
+
 ## 2026-09-08 · 搜索与快捷创建 / DISCOVERY-C-r1
 
 收尾实测：capture与无参数复验均通过双端29场景，68PNG、71个README链接完整；verify:docs通过73路由/153必需文件，runtime-docs、static-analysis（390文件）、format:check（2个新增永久脚本）及git diff --check通过。生产/原图/coverage无变更，不重跑产品build伪称真实Vue验收。浏览器finally关闭，4101/5173无监听；无新增临时遗留，旧受限批次未操作。仅精确暂存本批交付。

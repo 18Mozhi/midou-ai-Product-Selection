@@ -1,0 +1,717 @@
+{
+  "version": "THEME-C-r1",
+  "kind": "proposal-not-vue-not-production",
+  "approval": "pending",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/theme-direction-c/index.html": "768dc95612e449842e3ba6536911a5cd504dce426983dd2f3803046ce2848f25",
+    "design-plans/ui-phase-2-2026-09-07/design/theme-direction-c/theme.js": "bbde2c13ba6243d1ccb8407ba571071a0a8dd623a162b4e5efa9c0a19b7cc2ad",
+    "design-plans/ui-phase-2-2026-09-07/design/theme-direction-c/theme.css": "feed1f7560edf2b55f4381db3285a8a85cc9e55c2dc0bac676427325e717d2e6",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/api/src/ui-preference-routes.ts": "f50785fa6a19860bf5b33e73a40321edc495037e494e9a30f74235475d2e30ef",
+    "packages/preferences/src/index.ts": "f86dc303c4911b88ec67765ba6a658465559450626dd2844b404f6e89d2de6c4",
+    "scripts/lib/ui-phase2-theme-design-data.mjs": "098b3fbce20bd1d7d2e3427bd84c1e09c75391e1dcd73ff1570be1456e74f5d0",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-theme-c.mjs": "0c4f6c7eda3048533adc7222290a43963e0cfb07a9f3d56db6d785f3073caf87"
+  },
+  "sourceData": {
+    "themes": [
+      {
+        "id": "deep-ocean",
+        "name": "信号纸",
+        "caption": "暖白纸张与朱砂信号，适合持续决策",
+        "mode": "纸张"
+      },
+      {
+        "id": "aurora-purple",
+        "name": "档案纸",
+        "caption": "偏暖档案底色，适合高密度复核",
+        "mode": "纸张"
+      },
+      {
+        "id": "cloud-white",
+        "name": "净页白",
+        "caption": "清晰白底，适合高照度环境",
+        "mode": "纸张"
+      }
+    ],
+    "themeIds": [
+      "deep-ocean",
+      "aurora-purple",
+      "cloud-white"
+    ],
+    "notices": [
+      "主题偏好暂时无法同步，已保留当前界面主题。",
+      "主题已沿用到当前后台；选择业务范围后会同步到账号偏好。",
+      "正在保存主题…",
+      "主题已应用到全部模块。",
+      "主题保存失败，已恢复原主题，请稍后重试。"
+    ]
+  },
+  "knownGap": {
+    "kind": "known-gap-reproduced-not-fixed",
+    "scenario": "older PUT failure arrives after newer PUT success",
+    "expectedLatestIntent": "cloud-white",
+    "observed": "deep-ocean",
+    "expectedVersions": [
+      1,
+      1
+    ],
+    "productionRequests": 0
+  },
+  "capturedAt": "2026-09-08T05:54:16.211Z",
+  "boundary": "Three proposed C palettes and names retain compatible IDs. Local demo is serial, no cache writes or HTTP. Known write race reproduced against current composable and explicitly not fixed; not UI2-SH03 full acceptance.",
+  "screenshots": [
+    {
+      "file": "1440-member-open.png",
+      "scene": "member-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "14f7cd4f3a5f270719e1d20467dfd118de0491c762804be653e298644d2b8152"
+    },
+    {
+      "file": "1440-organization-open.png",
+      "scene": "organization-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c03274617efaf92616ab3bb1516f3739da38e4c2aa587f9791026779d05c1d56"
+    },
+    {
+      "file": "1440-platform-open.png",
+      "scene": "platform-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9620e6b2315de176788cde708065f9eb9c6d8ed3f94194964a2f0941fa78d37f"
+    },
+    {
+      "file": "1440-deep-ocean-open.png",
+      "scene": "deep-ocean-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f4987f43f0ff33ebef915071facc638edfd3eac53fe252408c8244014d68e28b"
+    },
+    {
+      "file": "1440-aurora-purple-open.png",
+      "scene": "aurora-purple-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3609301624653b0a615fc90076d94467946ab4340b4b11caf601eb1e0b82a503"
+    },
+    {
+      "file": "1440-cloud-white-open.png",
+      "scene": "cloud-white-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "95000b4c0bf67a8c6f2c9af440fec0736a674357df89e1642f895c6ff11cbe6a"
+    },
+    {
+      "file": "1440-saving.png",
+      "scene": "saving",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f5d2f5afd3eb98c0648fe58922b41ab657a54ef664f8188649ab0a7460bd872e"
+    },
+    {
+      "file": "1440-saved.png",
+      "scene": "saved",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9b1ee2c6c08fe7128eafe222c7eabd575f33da25f56611544d1ac8ae0747ae8b"
+    },
+    {
+      "file": "1440-failed-401.png",
+      "scene": "failed-401",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "18e486e34f8917e4b1d3f0720e238e7b4a02b95964707413155d7367cfa07538"
+    },
+    {
+      "file": "1440-failed-403.png",
+      "scene": "failed-403",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3d42329bf28cd6c6e9615d71f8dea10f1631872a2b2c954b5de17def06688b54"
+    },
+    {
+      "file": "1440-failed-409.png",
+      "scene": "failed-409",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2893c4aa62ea894318af98ace8d41f3667b99f0580d36e1fa6d9dd8292891b4a"
+    },
+    {
+      "file": "1440-failed-429.png",
+      "scene": "failed-429",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "912ca07828425a4c1d913150cfe098b668c17f3344c176eb9e401055e7ae1334"
+    },
+    {
+      "file": "1440-failed-500.png",
+      "scene": "failed-500",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "39d5daff95c7e029082f65472abf7844a805333480b6c21f4d8c72528334c8f3"
+    },
+    {
+      "file": "1440-failed-503.png",
+      "scene": "failed-503",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "91e1889071d1987d4da1cac1f84541d684064b53a766066270bb4b4d4dad5f62"
+    },
+    {
+      "file": "1440-read-failed-silent.png",
+      "scene": "read-failed-silent",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "633eb7bbc8be5f05d7bd6fe5ea3c2df16241121d4e4d5811d43bf066c6644278"
+    },
+    {
+      "file": "1440-platform-local.png",
+      "scene": "platform-local",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8d3a835f8b8e505005be3ed18aee89357ccd9e7610cf98ed9e747a2b022ab0ad"
+    },
+    {
+      "file": "1440-read-before-save.png",
+      "scene": "read-before-save",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "58dcd0f94c3ac2bfea04a654b06bf748a1d58b72b53010c25b5522e32b2fcab1"
+    },
+    {
+      "file": "1440-known-race.png",
+      "scene": "known-race",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 22,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "76a96bd5be3da2ac29e5c13c6722c1435ec43000421531b2a1b762fec08fc726"
+    },
+    {
+      "file": "390-member-open.png",
+      "scene": "member-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "573ffba7771fd2d34dcbe1b636991e48637eae26ab4649fddb4b85fc9a3a7ba2"
+    },
+    {
+      "file": "390-organization-open.png",
+      "scene": "organization-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e70812e8bda11ba7bf68615be940ce14fa950fc9e48b94e2aeb6aa7100a04d3a"
+    },
+    {
+      "file": "390-platform-open.png",
+      "scene": "platform-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f8a70ce5a47db9d8e0adf1d6e6f58724536e30c8ef94b80de350b767154048e0"
+    },
+    {
+      "file": "390-deep-ocean-open.png",
+      "scene": "deep-ocean-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "163a6a555031de9f58f5dbaa5317382daf79212953ba226c1cc6769f87ef7aef"
+    },
+    {
+      "file": "390-aurora-purple-open.png",
+      "scene": "aurora-purple-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7fb11e9323349bb4cafd942dff6626edab47cb2807635bb7b6244318ab7d4f30"
+    },
+    {
+      "file": "390-cloud-white-open.png",
+      "scene": "cloud-white-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "97c847a463581bab68e4a5f9cbcddcc0e314b3a4cae8dbc31a786052e22a676c"
+    },
+    {
+      "file": "390-saving.png",
+      "scene": "saving",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e46255b91f6470440b4156450e6b4b1f6c1cb95ad4fe63e0397e1c8f1a962027"
+    },
+    {
+      "file": "390-saved.png",
+      "scene": "saved",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "90448a2c40dc040966120f5e5ce857c07b4cf8d03b0b24e42082154e0fa2cb37"
+    },
+    {
+      "file": "390-failed-401.png",
+      "scene": "failed-401",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2a8e4bcd0a5cde0d5b86551dc1f3609b20a39c319a29db3e91c0d590a8bf38c6"
+    },
+    {
+      "file": "390-failed-403.png",
+      "scene": "failed-403",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "46d4a9a4bb89d5e327e836c18009aa50c79f6c6a97bc78e569056f42e1d477bc"
+    },
+    {
+      "file": "390-failed-409.png",
+      "scene": "failed-409",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "09655c186879d05643bf16b13c12aa5bd54db93cfdc9b4fbc2d58550cec157d8"
+    },
+    {
+      "file": "390-failed-429.png",
+      "scene": "failed-429",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9ff5608cd5af977fd9eeeac77b2c02f7b0ba3a613fa66e5326d874c6b3449ad9"
+    },
+    {
+      "file": "390-failed-500.png",
+      "scene": "failed-500",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a16383a51c4aa39ed3a26f040a733d0aee13439ab55d492bd1a3c983be62c819"
+    },
+    {
+      "file": "390-failed-503.png",
+      "scene": "failed-503",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a2c084d292ce84694b0fc42bd5418350f6dd2a053ebbfbc3a883dff9492a960b"
+    },
+    {
+      "file": "390-read-failed-silent.png",
+      "scene": "read-failed-silent",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "09f5e06454636fd709ef8ecc245afcfc98a8bcd25eaa3cdef6a6730e7efa28f6"
+    },
+    {
+      "file": "390-platform-local.png",
+      "scene": "platform-local",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f24cd85f8837b536e39dd90ad303f4cc856f7118807e7d54f5f944a24ab3dd60"
+    },
+    {
+      "file": "390-read-before-save.png",
+      "scene": "read-before-save",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1e27a4cbb6cac6120f0969e6f75ba189a62be40b8d0fe07449620d43aeb6d5d0"
+    },
+    {
+      "file": "390-known-race.png",
+      "scene": "known-race",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 22,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "698af9ec2160eb673fff21862cb8348935efefa99db0eba31065417f1c26848e"
+    }
+  ]
+}

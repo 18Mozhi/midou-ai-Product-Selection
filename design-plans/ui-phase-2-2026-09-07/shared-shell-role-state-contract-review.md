@@ -1,5 +1,7 @@
 # F04a 共享壳层、发现、角色与状态入口合同复核
 
+2026-09-08 主题C提案：[THEME-C-r1](design/theme-direction-c/README.md)新增18场景/36图，非模态命名区域、三主题ID保留、新C配色/名称待审。永久助手执行真实主题控制器已复现UI2-SH03缺口：后一次PUT成功为cloud-white/version2，前一次迟到失败仍恢复deep-ocean，两请求expected_version均1；未修复，不将knownGap断言计作该卡通过。图稿不改原Vue、源表指纹或审批；键盘/关闭提议及真实跨壳层/卸载竞态继续待验。
+
 2026-09-08 发现入口C提案：[DISCOVERY-C-r1](design/discovery-direction-c/README.md)新增29场景/68图，覆盖下文Discovery搜索/创建的筛选、短词、最近使用、状态恢复与关闭合同。UI2-DI夹具和真实状态枚举由永久助手推导并深比较；本地计时模拟不替代UI2-DI真实HTTP/重试/权限验收。原源指纹、矩阵与用户审批未改，未修改生产Vue；上一导航批发现待办现有独立图稿，但仍未集成或获审。
 
 2026-09-08 C方向导航主体：[SHELL-C-nav-r1](design/shell-direction-c/README.md)新增25场景×双端50图，绑定下文shell菜单/路由/守卫/范围动作；移动导航原生抽屉和单一更多高亮为待审结构，不改本表真实源指纹。Theme/Discovery只标记入口与未实现说明，仍需独立C图稿与完整合同闭环；不能把此HTML证据算作UI2-SH01–SH06整卡通过、真实权限或Pxx业务截图。

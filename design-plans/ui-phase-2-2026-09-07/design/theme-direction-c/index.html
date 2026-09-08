@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ScoutOps · C方向主题浮层审核</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body>
+    <main class="review-board">
+      <p class="eyebrow">DIRECTION C / APPEARANCE / PROPOSAL</p>
+      <h1>同一套结构，三种清晰度。</h1>
+      <p>全新 C 方向主题浮层 · 尚未进入 Vue 或生产。下面仅为共享外观装配示意，不计业务页面设计。</p>
+      <label for="scene">审核场景（非生产控件）</label
+      ><select id="scene"></select>
+      <section id="shell-preview" data-palette="deep-ocean" aria-label="C方向外观预览">
+        <header class="shell-header">
+          <strong>SCOUTOPS</strong><span id="identity"></span
+          ><button id="theme-toggle" aria-expanded="false" aria-controls="theme-panel">
+            主题 <span aria-hidden="true">◐</span>
+          </button>
+        </header>
+        <div class="preview-layout">
+          <aside class="preview-rail">
+            <p class="eyebrow">APPEARANCE</p>
+            <h2 id="palette-name">目录蓝</h2>
+            <p id="scope-copy"></p>
+            <p class="rail-note">目录与内容分区<br />保留明确的阅读顺序</p>
+          </aside>
+          <section class="preview-work">
+            <p class="eyebrow">C / VISUAL STRUCTURE</p>
+            <h2>让工作面回归内容。</h2>
+            <p>此处只预览背景、文字、分隔线与焦点，不放入虚构业务数据。</p>
+            <div class="style-sample">
+              <h3>正文与辅助信息</h3>
+              <p>正文和控件至少 16 px</p>
+              <small>辅助信息至少 13 px · 触控区域至少 44 px</small>
+            </div>
+            <button id="focus-sample">焦点样式示例</button>
+            <p id="focus-note" hidden>仅展示焦点状态，无业务操作。</p>
+          </section>
+        </div>
+        <section id="theme-panel" aria-labelledby="panel-title" hidden>
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">APPEARANCE</p>
+              <h2 id="panel-title">切换界面主题</h2>
+            </div>
+            <button id="close-panel" aria-label="关闭主题面板">关闭 ×</button>
+          </div>
+          <p id="save-scope"></p>
+          <div id="theme-options"></div>
+          <a id="more-settings" href="/settings/theme">更多外观设置 →</a>
+        </section>
+        <p id="notice" role="status" hidden></p>
+      </section>
+      <p id="review-context">
+        审核稿不保存本机或账号偏好；三种新名称与配色均待审核，兼容 ID 不变。
+      </p>
+      <p id="known-gap" hidden>
+        已复现、未修复：较新保存成功后，较早保存失败仍会恢复旧主题。当前源码的版本值也可能保持较新值，不能宣称连续保存安全。本稿不制造“竞态已解决”演示。
+      </p>
+      <output id="destination" aria-live="polite"></output>
+    </main>
+    <script src="theme.js"></script>
+  </body>
+</html>
