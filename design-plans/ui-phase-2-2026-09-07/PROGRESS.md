@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P61 / STATUS-C-r1
+
+从干净main/dc0f4cc继续P61。先读AGENTS、Feature Map、产品总纲、P61与真实PlatformManagementCenter/use-platform-status/platform-status-topology、M06-02样本和后端status读模型。ui-skills-root路由至frontend-design，沿C蓝色目录与白色工作面，将需核查项放到首屏，完整依赖、当前浏览器会话、业务汇总分区；无需新增模态或服务启停操作。
+
+新增独立[46图与交互稿](design/status-direction-c/README.md)，20读取/业务/边界场景+3刷新控件状态×1440/390。永久脚本使用TypeScript AST定位历史status/metrics样本并深比较，拓扑导出定义深比较；原2026-08-18样本不伪装为当前健康。缺失、空计数、无告警、重连/零事件均显式标为派生边界。首次超时无数据的准确提示仅为待审文案，不改变真实Vue超时或API错误。
+
+初次最小检查因超时提示“并保留”与测试断言“已保留”不一致失败，修正定向断言后双端通过。随后对照真实会话独立来源，补充管理刷新不覆盖本地会话计数/重连状态的实现和测试。所有7个唯一管理目标都与路由目录核对；演示点击只报告路径，未离开页面或发出服务操作。真实15秒/AbortController/路由守卫/后端权限/生产健康不属于本地HTML验证。
+
+只新增永久图稿、验证脚本和相关记录，原任务/P17/P31图与审批、全站coverage保持不变。本批没有新临时服务、验证目录或缓存清理；未碰历史受限材料。浏览器在finally关闭。共享壳层及其他页面、具体稿审图后Vue实施、全量状态/主题/密度/缩放、生产部署和最终签收仍未完成。
+
+收尾验证：最终capture及无参数源码/图像哈希复验双端通过；46PNG、README49链接全部存在。verify:docs（73路由/60受保护/6角色/153必需文件）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（本批1个脚本）及git diff --check均通过。生产apps/packages/tests与旧C图稿、coverage的diff为空；无生产代码变化，不重跑产品build或业务E2E冒充新Vue验证。4101/5173无监听，所有本批工具句柄终态，无新增临时遗留；精确暂存新图包、永久脚本和5份配套记录后提交。
+
 ## 2026-09-08 · P31 / ROLE-C-r1
 
 从干净main/7b9a571继续P31。frontend-design技能将角色目录/只读矩阵、成员范围、单资源授权分开组织，保留创建与延期为页面内表单、撤销为共享原因语义。独立[48图与交互稿](design/roles-direction-c/README.md)覆盖24场景，原任务/P17及A/B图稿、业务测试与审批未改。

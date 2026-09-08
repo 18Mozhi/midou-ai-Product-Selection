@@ -86,6 +86,7 @@
       "dataQuality": "../packages/data-quality/src/index.ts"
     },
     "verification": {
+      "uiPhase2StatusCProposal": "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/README.md provides STATUS-C-r1 for P61: 20 scenes plus 3 control states at 1440/390, 46 images. Attention-first C directory separates dependencies, browser-session metrics and aggregate counts. node scripts/verify-ui-phase2-status-c.mjs --capture saves permanent evidence; no flag checks source/image hashes, AST-reviewed M06-02 fixture, exact topology definitions, seven real route targets, local single-flight/retention/retry, independent session metrics and zero HTTP/storage. Derived boundary scenes are explicitly labeled; accelerated local reads do not prove real network/15s timeout/RBAC/production health. No service actions, new dialogs, Vue/API/OpenAPI/schema/config/dependency or approval changes. First-timeout no-data copy is a proposal only; full implementation and production acceptance remain pending.",
       "moduleCommand": "npm run verify:module -- <module-id>",
       "phaseCommand": "npm run verify:phase -- <phase-id>",
       "allCommand": "npm run verify:all",

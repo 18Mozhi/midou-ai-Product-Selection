@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>系统状态 · C方向待审稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="status.css" />
+  </head>
+  <body>
+    <aside class="review-bar" aria-label="审核工具">
+      <span>C方向已选 · STATUS-C-r1待审<br />隔离历史样本，不代表当前生产状态</span>
+      <label>审核场景<select id="scene"></select></label>
+      <label
+        >下次读取模拟结果<select id="outcome">
+          <option value="success">成功（仍保留依赖警告）</option>
+          <option value="network">网络失败</option>
+          <option value="timeout">15秒超时分支</option>
+          <option value="permission">权限错误</option>
+          <option value="server">服务返回错误</option>
+        </select></label
+      >
+    </aside>
+    <header class="brand-bar">
+      <div class="brand"><span class="brand-mark">m.</span><b>米豆智选</b></div>
+      <span>平台运营 / 系统状态</span>
+    </header>
+    <main class="status-workspace">
+      <aside class="status-scope">
+        <span class="eyebrow">RUNTIME OBSERVATIONS</span>
+        <h1>系统状态<span>。</span></h1>
+        <p>先确认异常，<br />再追溯依赖与影响。</p>
+        <nav aria-label="状态页面分区" id="sections">
+          <button data-section="attention" aria-pressed="true">01 · 需核查</button>
+          <button data-section="dependencies" aria-pressed="false">02 · 依赖目录</button>
+          <button data-section="session" aria-pressed="false">03 · 浏览器会话</button>
+          <button data-section="activity" aria-pressed="false">04 · 业务汇总</button>
+        </nav>
+        <p class="scope-foot">
+          这里只读观测。<br />进入对应管理页核查，<br />不会自动重启或修复服务。
+        </p>
+      </aside>
+      <section class="status-paper">
+        <header class="status-heading">
+          <div>
+            <p class="eyebrow" id="section-kicker">ATTENTION FIRST</p>
+            <h2 id="section-title">先看需要核查的依赖</h2>
+          </div>
+          <button class="primary" id="refresh">刷新数据</button>
+        </header>
+        <div class="observation-strip">
+          <span id="observation"></span><span>历史样本 · 中国标准时间</span>
+        </div>
+        <p id="failure" role="status" class="failure" hidden></p>
+        <section id="unavailable" hidden>
+          <span class="state-index">—</span>
+          <h3 id="unavailable-title"></h3>
+          <p id="unavailable-description"></p>
+          <button id="retry">重新加载</button>
+        </section>
+        <div id="content">
+          <section id="attention-view">
+            <header class="attention-intro">
+              <strong id="attention-count"></strong>
+              <p>依赖告警不等于整条链路已经故障。<br />以下范围来自现有依赖关系，用于定位核查。</p>
+            </header>
+            <div id="alerts"></div>
+            <p class="footnote">观测过期按服务返回状态展示，不把本地打开图稿的时间当作新的采样。</p>
+          </section>
+          <section id="dependencies-view" hidden>
+            <p class="section-intro">
+              完整六项依赖 · 每一项保留状态、采样、影响与入口。缺失观测显示待检查。
+            </p>
+            <div id="dependencies"></div>
+            <a class="action-link" href="/platform-admin/topology">查看实时拓扑 ↗</a>
+          </section>
+          <section id="session-view" hidden aria-label="实时连接退化统计">
+            <div class="session-banner">
+              <h3>实时连接退化</h3>
+              <p>仅统计当前浏览器标签页会话，不代表全站或其他用户。</p>
+              <span id="reconnecting" class="state-label"></span>
+            </div>
+            <div class="session-stats">
+              <article>
+                <span>SSE 重连率</span><strong id="rate"></strong>
+                <p id="events"></p>
+              </article>
+              <article>
+                <span>降级轮询次数</span><strong id="polls"></strong>
+                <p>连接异常时刷新一次通知事实</p>
+              </article>
+            </div>
+            <dl class="session-times" id="session-times"></dl>
+            <p class="footnote">此处复现测试会话样本；演示不读取或写入浏览器会话存储。</p>
+          </section>
+          <section id="activity-view" hidden>
+            <p class="section-intro">接口汇总与依赖观测是不同层级，汇总“正常”不能覆盖单项警告。</p>
+            <dl class="summary-facts" id="summary"></dl>
+            <div class="activity-pair">
+              <article>
+                <h3>采集任务状态</h3>
+                <div id="collections"></div>
+                <a class="action-link" href="/platform-admin/collection/overview">查看任务详情 ↗</a>
+              </article>
+              <article>
+                <h3>来源状态</h3>
+                <div id="sources"></div>
+                <a class="action-link" href="/platform-admin/providers/sources">管理来源配置 ↗</a>
+              </article>
+            </div>
+          </section>
+          <footer class="evidence-footer">
+            <span>响应更新 <b id="response-time"></b></span>
+            <details id="technical">
+              <summary>技术详情</summary>
+              <p>关联编号 <code>m06-02-e2e</code></p>
+            </details>
+          </footer>
+        </div>
+      </section>
+    </main>
+    <p id="review-note" role="status">
+      本地交互稿：刷新仅模拟读取；管理链接保留真实路径，但不会离开图稿或操作服务。
+    </p>
+    <script src="data.js"></script>
+    <script src="status.js"></script>
+  </body>
+</html>
