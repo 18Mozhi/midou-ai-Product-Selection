@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · 搜索与快捷创建 / DISCOVERY-C-r1
+
+收尾实测：capture与无参数复验均通过双端29场景，68PNG、71个README链接完整；verify:docs通过73路由/153必需文件，runtime-docs、static-analysis（390文件）、format:check（2个新增永久脚本）及git diff --check通过。生产/原图/coverage无变更，不重跑产品build伪称真实Vue验收。浏览器finally关闭，4101/5173无监听；无新增临时遗留，旧受限批次未操作。仅精确暂存本批交付。
+
+从干净main/c221e76继续共享发现入口。依AGENTS/Feature Map/产品总纲定位DiscoveryOverlay、UiStatePanel、模态辅助函数、API客户端、discovery读模型和UI2-DI夹具；ui-skills-root选择frontend-design，使用现有Playwright做独立HTML审核验证。
+
+新增[68图与交互稿](design/discovery-direction-c/README.md)：29场景×双端58张主图，另10张手机滚动下部图。蓝色范围/筛选区与白色结果区分离，快捷入口呈现目录与组件内最近记录；六种失败码在两种模式下分别出图。具体稿仍待审，不修改旧导航图和未实现说明，不把本批计作真实壳层接入或Vue迁移。
+
+原始数据由永久助手通过TypeScript AST抽取UI2-DI夹具，读取当前状态选项/公共文案/注册入口；组织与平台场景明确是能力投影。查询参数、类型状态和负责人联动、短词无请求、输入跨重开保留、最近去重/卸载清空、两模式重新加载、晚到结果丢弃、链接目标及修饰键关闭差异均有本地断言。计时模拟不证明真实AbortController、API重试或后端授权。
+
+首轮双端交互通过，目检发现手机负责人标签因CSS网格自动排列提前；修正显式行序并增加顺序断言后重新截图。全部新增PNG与证据为永久审核交付，不创建测试服务或临时目录，不操作历史受限材料。Vue/API/OpenAPI、权限、数据库、配置、依赖、coverage和审批均未改，无需生产重启；主题、AccountShell、全站73页及真实部署继续待完成。
+
 ## 2026-09-08 · 共享导航 / SHELL-C-nav-r1
 
 从干净main/f6144c6继续三壳层共享导航。依AGENTS/Feature Map/产品总纲读NavigationShell、权限/路由/主题/发现辅助函数与M02-03夹具，ui-skills-root选择frontend-design，把旧横向账页索引改为蓝色目录和白色工作面。独立[50图](design/shell-direction-c/README.md)覆盖25场景，页面正文明确为装配说明，不计Pxx业务设计，未改原任务/P17/P31/P61图稿或审批。

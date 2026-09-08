@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ScoutOps · 搜索与快捷创建 C 方向审核稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="discovery.css" />
+  </head>
+  <body>
+    <main class="review-board">
+      <p class="eyebrow">SCOUTOPS / DIRECTION C / DISCOVERY</p>
+      <h1>从范围，找到下一步。</h1>
+      <p>搜索与快捷创建 · 独立交互审核稿，尚未迁入 Vue，尚未部署。</p>
+      <label for="scene">审核场景（不是生产控件）</label>
+      <select id="scene"></select>
+      <div class="review-actions">
+        <button id="open-search">打开全局搜索</button>
+        <button id="open-create">打开快捷创建</button>
+        <button id="reset">模拟组件卸载</button>
+      </div>
+      <p id="review-note">
+        固定隔离响应样例，不执行真实搜索、权限校验或业务写入。组织／平台场景只展示组件能力投影，不新增壳层入口。
+      </p>
+      <output id="navigation" aria-live="polite"></output>
+    </main>
+    <dialog id="discovery" aria-label="全局搜索">
+      <div class="dialog-frame">
+        <header class="dialog-header">
+          <div>
+            <p id="eyebrow" class="eyebrow"></p>
+            <h2 id="title"></h2>
+          </div>
+          <button id="close" aria-label="关闭">关闭 ×</button>
+        </header>
+        <div class="dialog-scroll">
+          <div class="discovery-layout">
+            <aside class="scope-rail">
+              <p class="rail-kicker">当前范围</p>
+              <h3 id="organization"></h3>
+              <p id="workspace"></p>
+              <p class="scope-note">范围由当前会话决定<br />不跨组织或工作区</p>
+              <form id="search-form" novalidate>
+                <label for="query">搜索关键词</label>
+                <input
+                  id="query"
+                  aria-label="搜索关键词"
+                  placeholder="输入至少 2 个字符"
+                  minlength="2"
+                  maxlength="100"
+                  autocomplete="off"
+                />
+                <p id="query-error" role="alert" hidden></p>
+                <label for="resource-type">对象类型</label>
+                <select id="resource-type">
+                  <option value="">全部对象</option>
+                  <option value="task">任务</option>
+                  <option value="opportunity">机会</option>
+                  <option value="evidence">证据</option>
+                  <option value="collection_task">采集任务</option>
+                </select>
+                <label for="status">状态</label
+                ><select id="status" disabled>
+                  <option value="">先选对象类型</option>
+                </select>
+                <label for="assignee">负责人</label
+                ><input id="assignee" maxlength="120" disabled placeholder="仅任务和机会可用" />
+                <button id="search-submit" type="submit">搜索</button>
+              </form>
+              <div id="create-note" hidden>
+                <p>先选择入口<br />再完成目标表单</p>
+                <p class="scope-note">仅展示服务端返回的已授权入口。最近使用仅保留在当前组件内。</p>
+              </div>
+            </aside>
+            <section class="working-surface" aria-label="结果区">
+              <div class="surface-heading">
+                <h3 id="surface-title">搜索结果</h3>
+                <span class="sample-label">隔离样例 · 非实时</span>
+              </div>
+              <p id="projection" hidden>
+                能力投影审核：不代表已登录账号获权，也不新增组织／平台壳层入口。
+              </p>
+              <div id="content" aria-live="polite"></div>
+            </section>
+          </div>
+        </div>
+        <footer class="dialog-footer">
+          <p id="footer-note"></p>
+          <a href="/notifications" id="notifications">查看通知 →</a>
+        </footer>
+      </div>
+    </dialog>
+    <script src="data.js"></script>
+    <script src="discovery.js"></script>
+  </body>
+</html>
