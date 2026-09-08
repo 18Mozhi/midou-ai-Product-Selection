@@ -1,0 +1,81 @@
+window.ORG_PROFILE_C_DATA = {
+  provenance:
+    "Original M06-01 E2E profile, summary and workspace fixtures; synthetic review states are labeled separately.",
+  profile: {
+    id: "00000000-0000-4000-8000-000000000601",
+    name: "Global Goods Co.",
+    logo_url: "https://example.test/logo.png",
+    slug: "global-goods",
+    status: "active",
+    timezone: "Asia/Shanghai",
+    data_retention_days: 365,
+    default_workspace_id: "00000000-0000-4000-8000-000000000602",
+    version: 3,
+    updated_at: "2026-08-08T12:00:00.000Z",
+  },
+  summary: {
+    organization: {
+      id: "00000000-0000-4000-8000-000000000601",
+      name: "Global Goods Co.",
+      timezone: "Asia/Shanghai",
+      data_retention_days: 365,
+      default_workspace_id: "00000000-0000-4000-8000-000000000602",
+      version: 3,
+    },
+    members: {
+      total: 128,
+      active: 96,
+    },
+    workspaces: {
+      total: 8,
+      active: 8,
+    },
+    teams: {
+      total: 24,
+      active: 24,
+    },
+    pending_approvals: 7,
+    active_tokens: 18,
+    recent_audit_events: 1238,
+    observed_at: "2026-08-08T12:00:00.000Z",
+  },
+  workspaces: [
+    {
+      id: "00000000-0000-4000-8000-000000000602",
+      name: "新品决策工作区",
+      slug: "new-products",
+      status: "active",
+      member_count: 96,
+      version: 3,
+    },
+  ],
+  initialForm: {
+    name: "Global Goods Co.",
+    logo_url: "https://example.test/logo.png",
+    timezone: "Asia/Shanghai",
+    data_retention_days: 365,
+    default_workspace_id: "00000000-0000-4000-8000-000000000602",
+    reason: "",
+  },
+  contract: {
+    url: "/org/admin/profile",
+    method: "PATCH",
+    body: {
+      name: "Global Goods Co.",
+      logo_url: "https://example.test/logo.png",
+      timezone: "Asia/Shanghai",
+      data_retention_days: 365,
+      default_workspace_id: "00000000-0000-4000-8000-000000000602",
+      reason: "核验组织资料",
+      expected_version: 3,
+    },
+  },
+  sourceChecks: [
+    "Three source read paths and exact versioned profile PATCH",
+    "Source success keeps write ID; conflict keeps form; forbidden replaces page",
+    "Source refresh overwrites draft and write-read failure is swallowed (OG-G02 reproduced)",
+    "Source HTTPS custom validity and actual service field validators",
+    "Source summary via inert SQL pool, zero counts and audit_logs seven-day scope",
+    "No active-only workspace or timezone enum invented",
+  ],
+};

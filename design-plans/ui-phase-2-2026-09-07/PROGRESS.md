@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04组织资料 / ORG-PROFILE-C-r1
+
+收尾：最终capture与无参数源/数据/图片哈希及交互复验通过37场景双端、74PNG，6字段、零弹窗，HTTP/console/pageerror/存储均0。README75本地链接存在，80根目录永久文件精确匹配manifest。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier、git diff --check通过；4101/5173无监听。88本批文件精确提交，不含生产源码、旧图或临时产物；无临时文件待清理。
+
+从干净main/0d8e516接续，上一报表批有已提交进展。按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P29/组织治理合同→实际父Vue、路由/服务/仓库和原m06-01夹具定位。ui-skills-root选择frontend-design，Playwright复用既有依赖与永久脚本，无子代理。
+
+新增[74图](design/organization-profile-direction-c/README.md)：37场景双端含2审核工具图，零业务弹窗；蓝色页内目录、白色已读身份、六字段分组编辑与辅助摘要。字段边界、缺失默认项/空选项/原始归档选项、零与缺失摘要、加载权限失败、刷新覆盖草稿、写入失败/冲突/合成成功/写后重读失败/未确认结果、按钮焦点/悬停/按下/禁用齐列。目检压缩手机重复说明，删除无关工程措辞，目录选中随点击且定位焦点；不补造组织业务功能。
+
+真实Vue函数在惰性ref/api环境验证三读取路径、精确版本PATCH、保存保留写编号、冲突留表单/403换页、刷新覆盖草稿；复现OG-G02，load消化写后读失败后submit覆盖success且form仅剩reason。真实服务校验边界与空Logo转null、时区非枚举；真实summary方法经惰性pool验证7查询组织范围、零计数及audit_logs七日口径。不执行真实SQL事务、并发版本、幂等或审计，未改生产缺口。提案保护把事务和重读结果分开，未知/重读失败不重复保存；仅合成控制结果与场景代次隔离，不当真实Vue缓存/跨组织验收。
+
+74PNG、HTML/CSS/JS/data/README/evidence和两脚本均为永久审核交付，无临时文件/下载/日志/开发服务；浏览器及上下文finally关闭。生产apps/API/OpenAPI/env/依赖/权限/数据库/部署均未改，无重启要求。具体P29稿和全主题/密度/角色/200%/软键盘/真实结果仍待办；下一P30成员与邀请，不跳过用户图审及全73页实现部署。最终门结果另补。
+
 ## 2026-09-08 · W03报表与导出 / REPORT-C-r1
 
 收尾：最终capture及无参数源/数据/图片哈希和交互验证均通过，41场景双端、90图；README91个本地链接存在，96份根目录永久文件精确匹配manifest。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过。104本批文件精确提交，不包含生产源码或临时产物；浏览器已关闭，4101/5173无监听。新图属于永久审核交付，无临时文件待清理。

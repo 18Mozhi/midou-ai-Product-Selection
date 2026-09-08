@@ -1,0 +1,493 @@
+{
+  "boundary": "Independent proposal and source inert adapters; not mounted Vue, real API/SQL transaction, audit or production verification.",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/index.html": "c7534b27e2d5ce1e81009ca6bd61cd1f578b883b12e8ca6bbef5d5a4f92d4fad",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.css": "8af2ac98bed39b910555fbf4dee23b33cae4ac944bc10a56e730be51115f9817",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.js": "e97992f37b251be8dc91342259b8a9001bc33db72ca5867c34b57c25e66aef99",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/data.js": "e6933867dba51bcaf548815b3f943ef6558c519719cd7103707e413ff78ee770",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-organization-profile-design-data.mjs": "47acf1b80de67d5cce6f86661d64e3e65eee0dd044ff13c5dc642ed0a7ceb70d",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355"
+  },
+  "sourceChecks": [
+    "Three source read paths and exact versioned profile PATCH",
+    "Source success keeps write ID; conflict keeps form; forbidden replaces page",
+    "Source refresh overwrites draft and write-read failure is swallowed (OG-G02 reproduced)",
+    "Source HTTPS custom validity and actual service field validators",
+    "Source summary via inert SQL pool, zero counts and audit_logs seven-day scope",
+    "No active-only workspace or timezone enum invented"
+  ],
+  "checks": [
+    {
+      "width": 1440,
+      "scenes": 37,
+      "dialogs": 0,
+      "fields": 6,
+      "interactions": "passed",
+      "httpRequests": 0,
+      "browserErrors": 0,
+      "storageEntries": 0
+    },
+    {
+      "width": 390,
+      "scenes": 37,
+      "dialogs": 0,
+      "fields": 6,
+      "interactions": "passed",
+      "httpRequests": 0,
+      "browserErrors": 0,
+      "storageEntries": 0
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1440-normal.png",
+      "width": 1440,
+      "scene": "normal",
+      "sha256": "a9da4cb94a3b4c305cf7726f6ecac4cf8c8fa646e2b07c79bff5e8fb94f68497"
+    },
+    {
+      "file": "1440-editing.png",
+      "width": 1440,
+      "scene": "editing",
+      "sha256": "5ad902e4faea0afe205433fa338a42744309753ef3993ab07960057e7a469181"
+    },
+    {
+      "file": "1440-blank_logo.png",
+      "width": 1440,
+      "scene": "blank_logo",
+      "sha256": "d8eb722cca047523036acc4357d122d5b9b6b0f63f1dece9161e71efd080e2d0"
+    },
+    {
+      "file": "1440-long_name.png",
+      "width": 1440,
+      "scene": "long_name",
+      "sha256": "c98e52e9130650e9a90ae96bf87052cd1449975b3901582f2b5820aa72a9f482"
+    },
+    {
+      "file": "1440-long_workspace.png",
+      "width": 1440,
+      "scene": "long_workspace",
+      "sha256": "360bad4e8b98e9236653023531be32ad170244fb22de520110ddec06f44baf0e"
+    },
+    {
+      "file": "1440-missing_workspace.png",
+      "width": 1440,
+      "scene": "missing_workspace",
+      "sha256": "7eb5880114b443e712dac033b21cc5284a099d7ee4c8c389f59dcb747299f05d"
+    },
+    {
+      "file": "1440-no_options.png",
+      "width": 1440,
+      "scene": "no_options",
+      "sha256": "7eb5880114b443e712dac033b21cc5284a099d7ee4c8c389f59dcb747299f05d"
+    },
+    {
+      "file": "1440-archived_option.png",
+      "width": 1440,
+      "scene": "archived_option",
+      "sha256": "cd232ff5c6c4de903151b7775a17b6e8b5cced89b8951e1dd037c3fed4d5354b"
+    },
+    {
+      "file": "1440-zero_summary.png",
+      "width": 1440,
+      "scene": "zero_summary",
+      "sha256": "4cada3e82b19ec975f550a0d773686d19b26c5241ba52b0832e0e64fd7dcbd18"
+    },
+    {
+      "file": "1440-missing_summary.png",
+      "width": 1440,
+      "scene": "missing_summary",
+      "sha256": "6345939c631cd8dea1aecf016ed826b7a6b67025cefffddb6d84f0563dc30138"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "scene": "loading",
+      "sha256": "96842acd39b3c2f8badf2f69e9e946888e1d0396f01857681fbe67441d7cc3f6"
+    },
+    {
+      "file": "1440-error.png",
+      "width": 1440,
+      "scene": "error",
+      "sha256": "70a0079028675b8c6410bcbab83074acb99a5d24336e5b08863e0d8bd127bd30"
+    },
+    {
+      "file": "1440-blocked.png",
+      "width": 1440,
+      "scene": "blocked",
+      "sha256": "14af902a6af4fd1c3e7fb8253242e46ede9e088bf048299ca756c0a72b54cbe3"
+    },
+    {
+      "file": "1440-expired.png",
+      "width": 1440,
+      "scene": "expired",
+      "sha256": "99aeac3dc21b9439089d74a73fc77cad70b347c5703294fccbab377d0d7daa18"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "sha256": "49467add115afafc9e28505b4a37ea7f47d0691b6c123fc218ca416ab5a966f1"
+    },
+    {
+      "file": "1440-rate_limited.png",
+      "width": 1440,
+      "scene": "rate_limited",
+      "sha256": "e4d7f13df34536f4a1ef7040671a74d6cfcfeaf4059ba8214778fc5d3512d26e"
+    },
+    {
+      "file": "1440-conflict_page.png",
+      "width": 1440,
+      "scene": "conflict_page",
+      "sha256": "e43992995d2492fc2569b16f19b0aa884117f2c8c8c75713efb4045bf86c992b"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "width": 1440,
+      "scene": "refreshing",
+      "sha256": "20bbee24cd6e317c930d268162d704a799b272a4094b63d31f5db315f0be843a"
+    },
+    {
+      "file": "1440-refresh_error.png",
+      "width": 1440,
+      "scene": "refresh_error",
+      "sha256": "15b801e39d9885735968dd47976e8b6635390acc39e8efcc021e409a4c4da12f"
+    },
+    {
+      "file": "1440-refresh_success.png",
+      "width": 1440,
+      "scene": "refresh_success",
+      "sha256": "9221b532c91552233cdf8b36d8cc30367a01d2c5e597ca7e756e01af01a3dc1d"
+    },
+    {
+      "file": "1440-dirty_refresh.png",
+      "width": 1440,
+      "scene": "dirty_refresh",
+      "sha256": "9221b532c91552233cdf8b36d8cc30367a01d2c5e597ca7e756e01af01a3dc1d"
+    },
+    {
+      "file": "1440-save_busy.png",
+      "width": 1440,
+      "scene": "save_busy",
+      "sha256": "24b3d333d21558e4602ca72e1c842a423d2bbc65d5f9d7f622fda7dd4fb4f047"
+    },
+    {
+      "file": "1440-save_error.png",
+      "width": 1440,
+      "scene": "save_error",
+      "sha256": "c4bfe77931ef60c4fdc26d4d5cd842e76686a13caf3a4ecae05c9764e3bbee04"
+    },
+    {
+      "file": "1440-save_conflict.png",
+      "width": 1440,
+      "scene": "save_conflict",
+      "sha256": "2bf01ab1eb052e2b1d3a099cebdf1b034d541d13905cca5f8c4fdb37f78701f4"
+    },
+    {
+      "file": "1440-save_success.png",
+      "width": 1440,
+      "scene": "save_success",
+      "sha256": "c65d8e72c3354f85bce3b655505a55e974c383321e6f847fc98250e08ce5b679"
+    },
+    {
+      "file": "1440-write_read_failed.png",
+      "width": 1440,
+      "scene": "write_read_failed",
+      "sha256": "d2ff8b88d566462a7b654aedda5da5275534b96e3996ed9d43c0a55b812478db"
+    },
+    {
+      "file": "1440-save_timeout.png",
+      "width": 1440,
+      "scene": "save_timeout",
+      "sha256": "3169d4681f3418b8d909af73f182605243ca1e228a9f19d54ca9b69c80f78062"
+    },
+    {
+      "file": "1440-logo_invalid.png",
+      "width": 1440,
+      "scene": "logo_invalid",
+      "sha256": "648a74efd2752c22de01c96884e70e7b7d93e1909e20406853e8fd09c5726fd9"
+    },
+    {
+      "file": "1440-reason_missing.png",
+      "width": 1440,
+      "scene": "reason_missing",
+      "sha256": "d1f5a57ab5aecc7030e61ddadfff3deea9e890a67ea31fed24de324e81b10008"
+    },
+    {
+      "file": "1440-retention_invalid.png",
+      "width": 1440,
+      "scene": "retention_invalid",
+      "sha256": "5a0012dbb5ee19a77c0f4467de8e964640c91e28508cad869d29aad7329424f6"
+    },
+    {
+      "file": "1440-timezone_invalid.png",
+      "width": 1440,
+      "scene": "timezone_invalid",
+      "sha256": "68999a6d06bf8b765affb14720cac425fce4cf9a84bd7fa32e7fd63ffc8a1622"
+    },
+    {
+      "file": "1440-name_invalid.png",
+      "width": 1440,
+      "scene": "name_invalid",
+      "sha256": "2e3edcd2a7a630a7bdc2603050af0c6346915f15d6e9d4f6cdc92b39c70453a7"
+    },
+    {
+      "file": "1440-technical.png",
+      "width": 1440,
+      "scene": "technical",
+      "sha256": "0d2fa8f15e6fdb04309d7256335c1a7c0629c88c5988869a9fb2991eb710c81b"
+    },
+    {
+      "file": "1440-focus.png",
+      "width": 1440,
+      "scene": "focus",
+      "sha256": "28f977315c5264fdbc9d2e4f2de0b713f784cca35290d07470b789259b92c08e"
+    },
+    {
+      "file": "1440-hover.png",
+      "width": 1440,
+      "scene": "hover",
+      "sha256": "d9fa0471ba81511d81462b6add685d70f91909b7a3571e479b062f61804087aa"
+    },
+    {
+      "file": "1440-pressed.png",
+      "width": 1440,
+      "scene": "pressed",
+      "sha256": "edcd27c40615c5be2c13742c1288351ac0ece27404feead68ec2f6fa19e9e22b"
+    },
+    {
+      "file": "1440-controls.png",
+      "width": 1440,
+      "scene": "controls",
+      "sha256": "e4f4da37a79df0e46d1e09ffb3833e9810e84a538df8347f6bf0897b05edbaa1"
+    },
+    {
+      "file": "390-normal.png",
+      "width": 390,
+      "scene": "normal",
+      "sha256": "7c7ef0664af0dc8d285df2234bd1aa24e2ce8c3498cbd60e5f463fa8ea0e100b"
+    },
+    {
+      "file": "390-editing.png",
+      "width": 390,
+      "scene": "editing",
+      "sha256": "921c86d04643a57738f55afb4f30901e4645144aeae90bff970fbeabf51e2b47"
+    },
+    {
+      "file": "390-blank_logo.png",
+      "width": 390,
+      "scene": "blank_logo",
+      "sha256": "24ae0e17b2dedf7a8c1b7367cdffdef8fbe8da0ef96a4323008e4446bd2f0745"
+    },
+    {
+      "file": "390-long_name.png",
+      "width": 390,
+      "scene": "long_name",
+      "sha256": "91730c709cd4c9e5075dad50d4303f972e27558db85d687c3c642d33f68912f8"
+    },
+    {
+      "file": "390-long_workspace.png",
+      "width": 390,
+      "scene": "long_workspace",
+      "sha256": "4ed072d9569522ed86839dc0131f0a198be7d032be63b70b87619b947d9a49da"
+    },
+    {
+      "file": "390-missing_workspace.png",
+      "width": 390,
+      "scene": "missing_workspace",
+      "sha256": "4b11de79a190ff3590f1639f1850186e00043af2eab5041c412a8a583e5ecce8"
+    },
+    {
+      "file": "390-no_options.png",
+      "width": 390,
+      "scene": "no_options",
+      "sha256": "4b11de79a190ff3590f1639f1850186e00043af2eab5041c412a8a583e5ecce8"
+    },
+    {
+      "file": "390-archived_option.png",
+      "width": 390,
+      "scene": "archived_option",
+      "sha256": "1594b2e3ffb6dd05fecaaeb594f0af7470c5f21ef72d5508dbcc231db41a61be"
+    },
+    {
+      "file": "390-zero_summary.png",
+      "width": 390,
+      "scene": "zero_summary",
+      "sha256": "f1d9e6a562d6193cdcf9f9264b776aba5ee16b8372bb730543e9bed29e6488b4"
+    },
+    {
+      "file": "390-missing_summary.png",
+      "width": 390,
+      "scene": "missing_summary",
+      "sha256": "da23308657727a9450e683cd762b66ae810534071900d6cd4959893459227d35"
+    },
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "scene": "loading",
+      "sha256": "6239e560206860e8ba5eb84e7b41461b57613cd4c09829ea9877c191c3ed7b39"
+    },
+    {
+      "file": "390-error.png",
+      "width": 390,
+      "scene": "error",
+      "sha256": "cd10036abd7e10d20794ac677ac636ea2a5c2740b5e5bce656a57678c06dfcc9"
+    },
+    {
+      "file": "390-blocked.png",
+      "width": 390,
+      "scene": "blocked",
+      "sha256": "371361061be67c6ddade984992db0236a7e5008bdbc3090ada39ba588c85e5ad"
+    },
+    {
+      "file": "390-expired.png",
+      "width": 390,
+      "scene": "expired",
+      "sha256": "9118528e58fa720e8d3e2d6e80e7b31e9314f7fad23080c6b3637f55bca6ca92"
+    },
+    {
+      "file": "390-forbidden.png",
+      "width": 390,
+      "scene": "forbidden",
+      "sha256": "abf0566dcd5fa007d90fdd10e838b75e6d0026f9a776a7dd2ec00c1f4bb64a3c"
+    },
+    {
+      "file": "390-rate_limited.png",
+      "width": 390,
+      "scene": "rate_limited",
+      "sha256": "69f9b854bcb8a822e4e646c18227de8c7221237b3a3a2f82caf85aa77c65257a"
+    },
+    {
+      "file": "390-conflict_page.png",
+      "width": 390,
+      "scene": "conflict_page",
+      "sha256": "b3d90113c06f33d6de33a7b2ff00e4c19678f65cc652476159747ebd98552f6a"
+    },
+    {
+      "file": "390-refreshing.png",
+      "width": 390,
+      "scene": "refreshing",
+      "sha256": "34d001d6104c74718353e7043892fd7bbbab88ea52a279b62a48e01ef7447991"
+    },
+    {
+      "file": "390-refresh_error.png",
+      "width": 390,
+      "scene": "refresh_error",
+      "sha256": "f131864b2350b22a214178daf89a49fdfef45ef8d250dffecaf45dc9324a6055"
+    },
+    {
+      "file": "390-refresh_success.png",
+      "width": 390,
+      "scene": "refresh_success",
+      "sha256": "8f7604efd0084eeb77f63abe33b62a0f62e8b1f19a1b2175e8059ced44ae6c69"
+    },
+    {
+      "file": "390-dirty_refresh.png",
+      "width": 390,
+      "scene": "dirty_refresh",
+      "sha256": "8f7604efd0084eeb77f63abe33b62a0f62e8b1f19a1b2175e8059ced44ae6c69"
+    },
+    {
+      "file": "390-save_busy.png",
+      "width": 390,
+      "scene": "save_busy",
+      "sha256": "4ba73f3f1ba5bdd8c003d0bdf599aab8cc99ef29b2a8ac45ceeacc9ec3b252cc"
+    },
+    {
+      "file": "390-save_error.png",
+      "width": 390,
+      "scene": "save_error",
+      "sha256": "625178d4b5c36308afa5c15dd033bc8205f6039f5436bfeda4d69235f997357e"
+    },
+    {
+      "file": "390-save_conflict.png",
+      "width": 390,
+      "scene": "save_conflict",
+      "sha256": "d4ff09f90d95d4e494006c58490d94c41f8d1f71bda2233830d5be64570f3182"
+    },
+    {
+      "file": "390-save_success.png",
+      "width": 390,
+      "scene": "save_success",
+      "sha256": "85761c4c5fe43029793ccbbcffa09019d61448dd57620f2b1a7c6a78282a9686"
+    },
+    {
+      "file": "390-write_read_failed.png",
+      "width": 390,
+      "scene": "write_read_failed",
+      "sha256": "b7e5ae6207e7fdfb714b4c09995a868db8b8ca0dbcd7aa4a85ec81e7b1d713f5"
+    },
+    {
+      "file": "390-save_timeout.png",
+      "width": 390,
+      "scene": "save_timeout",
+      "sha256": "f0db1c4d7e368f2ac9f7338896dff2d54eea6b465a6f787e41edd4f8abd1adc2"
+    },
+    {
+      "file": "390-logo_invalid.png",
+      "width": 390,
+      "scene": "logo_invalid",
+      "sha256": "b9e21f2db5073e300f3e64591f7caec11119830abee99c7649406fd66739226c"
+    },
+    {
+      "file": "390-reason_missing.png",
+      "width": 390,
+      "scene": "reason_missing",
+      "sha256": "ada9ead51f8c1abdcacb0e42e312923ef6d2e436706debcd72f71fc3abc3f8b6"
+    },
+    {
+      "file": "390-retention_invalid.png",
+      "width": 390,
+      "scene": "retention_invalid",
+      "sha256": "6e7c29d62d2ab258276d35145be820c40c64f0fe0d3ca63d0ed4aaf66153e405"
+    },
+    {
+      "file": "390-timezone_invalid.png",
+      "width": 390,
+      "scene": "timezone_invalid",
+      "sha256": "62a8e8a84998829aca906f77a25ef4c3420dbe19385c3b964a64d809c3d7606f"
+    },
+    {
+      "file": "390-name_invalid.png",
+      "width": 390,
+      "scene": "name_invalid",
+      "sha256": "20d7a919fe2e43bf8e07c2ad6df7be1b6ef19d5a00a3d41614826dda8b824e9c"
+    },
+    {
+      "file": "390-technical.png",
+      "width": 390,
+      "scene": "technical",
+      "sha256": "6bf3f575f0c9bde1378b233e08fff2e08279fceefb7a2c92381eb9ca0ac060a9"
+    },
+    {
+      "file": "390-focus.png",
+      "width": 390,
+      "scene": "focus",
+      "sha256": "e6a40b1d00ec633898c6a1d53ba99ad866bee1fc44a44a34aec37f92c56a4bb1"
+    },
+    {
+      "file": "390-hover.png",
+      "width": 390,
+      "scene": "hover",
+      "sha256": "db9ec352c8719475cb9a9fa192c716d66a44dac77a5454bbd28222d2334870f3"
+    },
+    {
+      "file": "390-pressed.png",
+      "width": 390,
+      "scene": "pressed",
+      "sha256": "aa6316541cbb3003747246b15a4cced6b916e6b2f2ff0119d0a2973493207591"
+    },
+    {
+      "file": "390-controls.png",
+      "width": 390,
+      "scene": "controls",
+      "sha256": "448410c9ae75f45ef56e74b1a4c50c29fc318f2ca30c9bfab739e2c46a268ec9"
+    }
+  ]
+}
