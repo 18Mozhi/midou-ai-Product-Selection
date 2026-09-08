@@ -1,0 +1,65 @@
+window.ORGANIZATIONS_C_DATA = {
+  overview: {
+    summary: {
+      organizations: 3,
+      active_organizations: 2,
+      users: 18,
+      active_users: 16,
+      platform_admins: 2,
+    },
+    organizations: [
+      {
+        id: "00000000-0000-4000-8000-000000000622",
+        name: "米豆选品团队",
+        slug: "midou-team",
+        status: "active",
+        timezone: "Asia/Shanghai",
+        data_retention_days: 365,
+        member_count: 8,
+        workspace_count: 2,
+        created_at: "2026-08-01T00:00:00Z",
+        updated_at: "2026-08-18T00:00:00Z",
+      },
+    ],
+    users: [
+      {
+        id: "00000000-0000-4000-8000-000000000621",
+        email: "buyer@example.test",
+        status: "active",
+        organization_names: "米豆选品团队",
+        platform_roles: [],
+        active_session_count: 1,
+        created_at: "2026-08-01T00:00:00Z",
+        updated_at: "2026-08-18T00:00:00Z",
+      },
+    ],
+    admins: [
+      {
+        id: "00000000-0000-4000-8000-000000000624",
+        email: "admin@example.test",
+        status: "active",
+        roles: ["platform_super_admin"],
+        granted_at: "2026-08-01T00:00:00Z",
+      },
+    ],
+  },
+  sourcePaths: [
+    "apps/web/src/components/PlatformAccountCenter.vue",
+    "apps/web/src/components/OrganizationCreationWizard.vue",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+    "apps/web/src/components/PlatformAccountDialogs.vue",
+    "apps/web/src/components/PlatformOrganizationRecords.vue",
+    "apps/api/src/platform-account-service.ts",
+    "apps/api/src/mysql-platform-account-repository.ts",
+    "tests/e2e/m06-01-platform-accounts.spec.ts",
+  ],
+  checks: [
+    "Original overview fixture: global organizations 3, returned rows 1; not a complete list",
+    "Actual service: name/slug normalization, trailing hyphen allowed, omitted admin resolves to actor",
+    "Actual service: retention 30..3650 integer; timezone nonempty/max64, not IANA validation",
+    "Actual service: active/archived only; trimmed reason 2..300",
+    "Actual parent updateOrganization: confirmation uses current selected id and current form; target drift reproduced with inert refs",
+    "Actual parent showOrganization: missing counts remain missing; form defaults Asia/Shanghai and 365",
+    "No mounted Vue, HTTP, SQL, real audit, MFA or production execution",
+  ],
+};
