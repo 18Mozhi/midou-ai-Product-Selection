@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04审批模板 / ORG-APPROVALS-C-r1
+
+收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过45场景双端90图，零业务弹窗；HTTP/console/pageerror/存储均0。README91本地链接存在，96根目录文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过。4101/5173无监听，浏览器及技能CLI会话已结束；104本批文件精确纳入提交，无生产源码/旧材料/临时产物混入。
+
+从干净main/6467806接续，上批P33已有提交进展。按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P34/组织治理合同→真实父子Vue、路由/服务/仓库与原m06-01测试定位。ui-skills-root CLI选择完整frontend-design，Playwright复用已有依赖/永久脚本；无安装、子代理或开发服务。
+
+新增[90图](design/org-approvals-direction-c/README.md)，45场景双端含2非业务工具图，零业务弹窗。蓝色双视图目录，记录按来源/状态/时间阅读，模板侧重节点前后差异。原10条审批/2模板保留，阶段数不强行匹配当前模板；8模板分页、长值、汇总差异和故障均标合成。首轮控件继承13px标签字号被最小验证捕获，修为16px后通过；目检后补一行模板状态统计、手机清筛选展开输入及记录分页焦点，重采验证。
+
+源computed及显式watch回调核对8/6分页、过滤选择/缩页、名称去重工作区、版本号排序；源URL读取200上限/正整数、默认移除/保留无关查询验证，route.query修改不回填ref已确认，不能称完整历史恢复。真实仓库diff方法离线执行最近低版本/ordinal/四字段/增删/首版/无差异，包括SLA零；未执行SQL或真实Vue/API/权限/审计。
+
+90PNG、原型四文件、README/evidence及两脚本为永久审核产物，不是临时文件。未改生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署，无重启要求；所有自有浏览器finally关闭，不留临时文件/日志/服务。具体稿、OG-G与完整主题密度/角色/原生200%/软键盘/真实生命周期未完成；下一P35组织数据，全73页实施部署仍待办。
+
 ## 2026-09-08 · W04团队 / TEAMS-C-r1
 
 收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过48场景双端96图、两原因变体；HTTP/console/pageerror/存储均0。README97本地链接存在，102根目录永久文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过。4101/5173无监听，所有自有浏览器/查询会话已结束；110本批文件精确纳入提交，不含生产源码/旧材料/临时产物，无临时文件待清理。
