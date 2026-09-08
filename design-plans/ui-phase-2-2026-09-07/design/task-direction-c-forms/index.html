@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>任务操作 · C 方向第二批待审稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="forms.css" />
+  </head>
+  <body>
+    <aside class="study-bar" aria-label="设计审核工具">
+      <span>C 方向已选 · TASK-C-forms-r2 · 具体稿件待审 · 隔离样本，非线上数据</span>
+      <label>审核场景<select id="scene"></select></label>
+    </aside>
+    <header class="brand-bar">
+      <div class="brand"><span class="brand-mark">m.</span><b>米豆智选</b></div>
+      <span class="product-label">协作空间</span>
+      <nav class="breadcrumb" aria-label="当前位置">任务 / 操作表单</nav>
+    </header>
+    <main class="workspace">
+      <aside class="scope-panel">
+        <span class="eyebrow">TASK DIRECTORY</span>
+        <h1>明确范围<br />再行动<span class="title-dot">。</span></h1>
+        <p class="scope-description">任务、负责人、操作原因。<br />每一次变更都有清晰的上下文。</p>
+        <p class="scope-foot">C 方向 · 表单与状态审核<br />不是拟上线的操作导航</p>
+      </aside>
+      <section class="directory" id="board" aria-labelledby="board-title">
+        <p class="eyebrow">TASK ACTIONS / REVIEW</p>
+        <h2 id="board-title">任务操作设计目录</h2>
+        <p class="muted">点击查看表单。这里只演示输入校验与退出，不提交业务操作。</p>
+        <article class="task-context">
+          <span class="badge">进行中 · 高优先级</span>
+          <h3 id="sample-title"></h3>
+          <p id="sample-note"></p>
+          <small>测试成员 · 单条隔离任务 · 第 2 版</small>
+        </article>
+        <div id="launchers"></div>
+        <a class="review-link" href="../task-direction-c/index.html">返回首批任务目录与详情稿 →</a>
+      </section>
+      <section class="directory state-panel" id="read-state" hidden aria-labelledby="state-title">
+        <span class="eyebrow">TASK DIRECTORY</span>
+        <div class="state-symbol" aria-hidden="true">—</div>
+        <h2 id="state-title"></h2>
+        <p id="state-description"></p>
+        <button id="reload" class="primary">重新加载</button>
+        <small>审核工具模拟读取状态；不代表当前服务健康或真实权限。</small>
+      </section>
+    </main>
+    <p id="review-note" role="status">
+      本稿未请求 API、不写存储、不改变任务。审核目录不是实际产品导航。
+    </p>
+    <dialog id="action-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+      <form id="action-form">
+        <header class="dialog-heading">
+          <div>
+            <span class="eyebrow">TASK ACTION</span>
+            <h2 id="dialog-title"></h2>
+          </div>
+          <button id="close" type="button" aria-label="关闭表单">×</button>
+        </header>
+        <div class="dialog-scroll">
+          <p id="dialog-description"></p>
+          <p id="target" class="target"></p>
+          <div id="impact" hidden></div>
+          <div id="fields"></div>
+          <p id="form-hint" class="muted"></p>
+          <p id="form-error" class="error" role="alert" hidden>
+            提交失败（设计模拟）。已填写内容保留，请核对后重试。
+          </p>
+        </div>
+        <footer class="dialog-footer">
+          <small>隔离演示 · 不执行业务写入</small>
+          <div>
+            <button id="cancel" type="button">返回</button
+            ><button id="submit" type="submit" class="primary">确认提交</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+    <script src="../task-concept-data.js"></script>
+    <script src="forms.js"></script>
+  </body>
+</html>
