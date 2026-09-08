@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04团队 / TEAMS-C-r1
+
+收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过48场景双端96图、两原因变体；HTTP/console/pageerror/存储均0。README97本地链接存在，102根目录永久文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过。4101/5173无监听，所有自有浏览器/查询会话已结束；110本批文件精确纳入提交，不含生产源码/旧材料/临时产物，无临时文件待清理。
+
+从干净main/a132530接续；AGENTS→Feature Map organizationAdmin→蓝图M06-01→P33/合同→父子Vue、原因窗、路由/服务/仓库与原m06-01夹具。ui-skills-root目录查询慢，改读完整已安装frontend-design；Playwright复用依赖与永久脚本，无安装/子代理。目录查询自有会话已结束。
+
+新增[96图](design/teams-direction-c/README.md)，48场景双端含2非业务审核工具图。团队目录、协作关系和四字段内联创建分区，两种原因窗。桌面/手机及移除窗目检；补正未选成员场景被初始化选择清掉提示，并加入截图前断言后重采。原1条与10条夹具独立，摘要24/列表1不补造，活动成员包括锁定账号、归档团队可操作、移除不清负责人等真实合同保留。
+
+真实源函数/computed和显式watch回调离线核对8条分页/过滤/选择、创建trim/焦点/busy/草稿，父三body/取消及实际服务边界。OG-G02复现成员请求等待中切团队后未选新成员会异常、选择新成员则反馈错归属；原型提交快照与限定反馈只为提案，不冒称生产已修。源SQL仅阅读，未执行真实Vue/API/MySQL事务/权限/审计。
+
+未改生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署，无重启要求。96PNG、原型/data/README/evidence和两脚本是永久交付，无临时脚本/文件/日志/下载/服务，浏览器在finally关闭，历史材料不动。具体P33稿与OG-G、完整主题密度/角色/原生200%/软键盘/范围和异步生命周期仍待办；下一P34只读审批模板，全73页实施部署目标保持。
+
 ## 2026-09-08 · W04工作区 / WORKSPACES-C-r1
 
 收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过46场景双端92图、两原因变体，HTTP/console/pageerror/存储均0。README93本地链接存在，98根目录永久文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过；4101/5173无监听。仅106本批文件精确提交，不含生产源码/旧材料/临时产物，browser/context已关闭，无临时文件待清理。

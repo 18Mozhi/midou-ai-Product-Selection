@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P33 团队 / C方向审核稿</title>
+    <link rel="stylesheet" href="teams.css" />
+    <script defer src="data.js"></script>
+    <script defer src="teams.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>P33 设计审核稿 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">审核状态</label
+      ><select id="scene-picker"></select>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="shell">
+      <aside class="blue-directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>团队</h1>
+        <nav aria-label="本页目录">
+          <a href="#catalog" aria-current="true">团队目录</a><a href="#relationship">协作关系</a>
+        </nav>
+        <p class="note">团队关系与账号分开<br />流程键不是流程状态</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <h2 id="reason-title"></h2>
+          <button id="reason-close" type="button" aria-label="关闭原因填写">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少2个字）</label
+        ><textarea
+          id="reason-input"
+          required
+          minlength="2"
+          maxlength="500"
+          aria-describedby="reason-help"
+        ></textarea>
+        <p id="reason-help">最多500个字符，随目标、操作者与时间保留。</p>
+        <footer>
+          <button id="reason-cancel" type="button">取消</button
+          ><button id="reason-confirm" class="primary" type="submit">确认提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>
