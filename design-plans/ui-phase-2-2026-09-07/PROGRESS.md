@@ -938,3 +938,15 @@ verify:docs通过73路由/60受保护/6角色/153文件，verify:runtime-docs通
 未改业务API/OpenAPI、权限、数据库/迁移、后端/Worker/Python、主题、CSS、.env/配置/端口/依赖或宝塔部署器，无新参数或环境样例要求。本地焦点行为无需用户配置，按Tab/Shift+Tab即可；当前未部署、不需重启，未来W09按当次宝塔迁移/停启预检发布。本批不是正式风格/全图包、真实鉴权/投递/数据库/生产验收；其他原因业务变体、SM02卸载/同tick/叠加、其余原生消费者与完整73路由重构、F00方向/用户签收继续进行。
 
 2026-09-08用户允许继续后，于main/b106331接管本批17路径；差异与上述同源验证一致，未额外改产品或业务测试。接管原最终门进程取得exit 0：定向Prettier、verify:docs（73路由/60受保护/6角色/153文件）、verify:runtime-docs、format:check（changed=7/production=496/repositories=51）及git diff --check通过。没有因计划文档提交重复运行不受影响的E2E/构建。4101/5173再次无监听；不重试已被策略拒绝的临时目录清理。完成本批独立提交后即回到F00方向审核；局部焦点交付不计为正式视觉完成。
+
+## 2026-09-08 · F00审核入口来源刷新与展示
+
+共享焦点批已独立提交ff46bfe，之后工作树干净。继续按CURRENT-DELIVERY-PLAN优先回到方向审核，使用frontend-design的结构差异要求核看任务A/B及用户目录C实图；三个研究均未选定，C仅P43，不冒称可替代任务页同页对照。
+
+方向索引只读检查首次失败：当前组织/平台测试文件已增加原因窗调用方验证，旧生成索引的representatives.changes仍为空。现有生成器已支持列出来源变化，无需改生成器或重写旧图hash。重新运行build-ui-phase2-direction-review后，仅该组记录两条变化：tests/e2e/m06-01-organization-admin.spec.ts、tests/e2e/m06-02-platform-dashboard.spec.ts；tasks/accounts组无变化。106张研究图、56组历史配对、原采集SHA及pending-user-review均保留。新指纹d0dbcf0700567dbb2614d8aeaacb00802991bceda295ff5052e30bf03af9e063；旧审批不迁移为通过。
+
+verify-ui-phase2-direction-review --capture完整通过：1440/390两个视口分别106场景，图像解码/精确映射/历史缺图声明、反馈版本绑定/切换失效、必选校验、键盘、44px目标和无横向溢出通过，console/page errors=0、HTTP请求=0、存储为空。浏览器及上下文finally关闭，未启动Vite/API/新生产服务。直接检查更新的桌面审核台截图，研究/旧Vue/缺对照及待审标识正确。
+
+永久交付更新为direction-review-data.js、direction-review-1440.png、direction-review-390.png、direction-review-evidence.json，均位于当前设计计划目录；两图仅是审核工具证据，不算新业务设计图。本轮没有新增临时文件，不删除永久图；历史30批清理限制不变。用户仍需对具体方向给意见，可全部否定；下一视觉任务是获审后P23/P24及进度弹窗正式稿→真实Vue闭环。当前不部署、不重启、不改API/配置/数据库/权限/依赖，全阶段仍在进行。
+
+本轮收口：索引只读复验、verify:docs（73/60/6/153）、verify:runtime-docs、format:check及git diff --check通过；只提交审核入口相关7路径，与ff46bfe产品批分开。Codex已接受本地审核页的打开请求并返回queued，不据此宣称用户已看到或已同意；最终同时提供文件和图的直接入口。
