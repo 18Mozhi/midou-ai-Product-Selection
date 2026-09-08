@@ -138,6 +138,8 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 ## 7. 当前源指纹（LF SHA-256）
 
+2026-09-09 P47设计增量：[PROVIDER-ADAPTERS-C-r1图册](design/provider-adapters-direction-c/README.md)，48场景双端96主图＋15连续详情局部，共111PNG（含2工具图）。原2/45行独立AST夹具、源13排序筛选/20-20-5/复位与夹页、真实load/probe/服务summary惰性执行；旧GET覆盖新探针版本复现归PR-G03。样本SQL列表全局LIMIT5000，不能宣称24h全量；原夹具未登记却ready的合成返回不证明实际后端。原型蓝目录/白诊断、手机展开筛选、native详情与迟到/未知保护为提案，以下15源未变；真实Vue/API/MySQL/权限/审计/采集及恢复仍未验证。具体稿未批准，下一P48，不将P46或P47图计作W06整体完成。
+
 2026-09-09 P46设计增量：[PROVIDER-REGISTRY-C-r1图册](design/provider-registry-direction-c/README.md)，63场景双端126主图＋50长窗局部，共176PNG（含2工具图）。源三排序全ID/25条20-5分页、23字段/五模板/POST-PUT及实际服务惰性验证；复现PR-G03只读字段残留、UTC切片本地再ISO的8小时差异、旧保存关新窗、重读失败仍称刷新及abort后resolve可覆盖新结果。源行为未改，下面15指纹不更新；原型窗口/读归属、未知结果暂停、保存/重读区分、状态准确文案与native模态焦点为提案。真实Vue/API/MySQL/RBAC/审计、PR-G01启用差异和全部主题生命周期待验；不是生产修复或P47稿完成。
 
 指纹对应本批真实内容，不声明该内容已存在于基线c306e88，也不修改旧图来源。以下15源用于本次静态可重检性，不是运行时证明。六Vue候选/绑定由现有scanSource及Vue AST只读核对；规格路由、十节、本地链接和源码hash另验。

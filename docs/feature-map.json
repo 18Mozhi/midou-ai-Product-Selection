@@ -701,6 +701,7 @@
     },
     "providerAdapters": {
       "module": "M03-03",
+      "uiPhase2CProposal": "PROVIDER-ADAPTERS-C-r1 at design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/README.md: P47 48 scenes, 96 dual-viewport main plus 15 continuous dialog-part PNG, 111 total including two review-tool shots. Blue directory with white five-column diagnosis, mobile collapsible filters and native detail proposal. Original 2-row/45-row fixtures separate; actual source computed/read/probe/service summary inert checks, not mounted Vue or real API/SQL/auth. Stale GET overwriting newer probe reproduced; ownership/unknown-result/focus protections are proposals only. Probe success is not collection success or circuit recovery; 24h SQL sample cap is not an all-run SLA. No production API/env/dependency/DB/deploy changes. Concrete review, PR-G03, full lifecycle/theme/density/RBAC/network/recovery and all 73-page Vue/BaoTa acceptance pending; next P48.",
       "entrypoints": [
         "../packages/provider-adapters/src/index.ts",
         "../packages/provider-sources/src/proxy-fetch.ts",
