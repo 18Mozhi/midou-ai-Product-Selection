@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · 共享导航 / SHELL-C-nav-r1
+
+从干净main/f6144c6继续三壳层共享导航。依AGENTS/Feature Map/产品总纲读NavigationShell、权限/路由/主题/发现辅助函数与M02-03夹具，ui-skills-root选择frontend-design，把旧横向账页索引改为蓝色目录和白色工作面。独立[50图](design/shell-direction-c/README.md)覆盖25场景，页面正文明确为装配说明，不计Pxx业务设计，未改原任务/P17/P31/P61图稿或审批。
+
+永久source-data助手从现有目录与纯权限函数推导菜单/可达路由/中文身份，从TypeScript AST抽取三壳层summary夹具；固定return_to/from和组织返回路径均来自原测试。数据与源推导结果深比较；安全能力投影和审计员派生边界明确不是生产RBAC。主题/发现/快捷创建只核对入口条件并显示待实施说明，不模拟保存或业务成功，后续必须继续对应正式C提案。
+
+初次最小检查发现测试把按分组渲染的菜单顺序误当作全路由原始顺序，修正为原分组顺序后双端通过。截图目检再发现蓝底容器继承造成输入/关闭文字对比不足，已显式使用C正文墨色并加入断言；手机个人入口缩为“我的”且保留“个人中心”可访问名称，顶栏动作不再额外换行。移动二级页只高亮更多，原生导航抽屉可关闭/Escape/首尾Tab/返焦且跨840断点还原唯一DOM；它们仍为待审UI提案，不改Vue。
+
+新增文件为永久交付，无新临时服务或验证目录；未操作历史受限材料。生产代码、API/OpenAPI、配置、数据库、依赖、导航记忆、权限、coverage与用户审批均未改，无需重启。完整主题/发现/AccountShell、各页实际工作面装配和Vue、跨角色/缓存/生产验证仍未完成。
+
+收尾：最终capture与无参数源/数据/图哈希复验双端25场景通过，53链接有效、50PNG齐全；逐项点击5种配置的全部授权菜单，读取恢复、返回参数、移动抽屉焦点/断点还原及末尾内容不被固定底栏阻挡均通过。verify:docs（73路由/153必需文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）与diff检查通过。生产与旧C图的diff为空，不重跑产品build/真实业务E2E冒充Vue改版验收。4101/5173无监听、浏览器全部finally关闭；没有新增临时遗留，精确暂存本批文件提交。
+
 ## 2026-09-08 · P61 / STATUS-C-r1
 
 从干净main/dc0f4cc继续P61。先读AGENTS、Feature Map、产品总纲、P61与真实PlatformManagementCenter/use-platform-status/platform-status-topology、M06-02样本和后端status读模型。ui-skills-root路由至frontend-design，沿C蓝色目录与白色工作面，将需核查项放到首屏，完整依赖、当前浏览器会话、业务汇总分区；无需新增模态或服务启停操作。
