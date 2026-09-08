@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04成员与邀请 / MEMBERS-C-r1
+
+收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过47场景双端94图，四原因变体；HTTP/console/pageerror/存储均0。README95本地链接存在，100份根目录永久文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过；4101/5173无监听，浏览器已关闭。仅108本批文件精确提交，不含生产源码/旧材料/临时文件，无临时产物待清理。
+
+从干净main/89015df接续，上批P29已有提交进展。按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P30/组织治理合同→真实父子Vue、原因窗、路由/服务/仓库及原m06-01夹具定位。ui-skills-root选择frontend-design，Playwright复用既有依赖与永久脚本，无子代理。
+
+新增[94图](design/members-direction-c/README.md)：47场景双端（含2非业务工具图），成员目录先行、身份/范围/动作分列，邀请独立，四原因变体及控件状态。原始3条成员不冒称摘要128人全量，11人分页和扩展状态明确合成。成员关系/账号、替换角色/添加角色、待投递/已发送分别表达。手机目检核对原因对象与底部操作；首次定向测试发现筛选toggle异步使输入后收起，原型改为读取当前open并忽略已脱离节点事件，44场景复测通过；补三控件状态后最终capture94图通过，收尾门另记。
+
+永久助手执行真实Vue函数/computed惰性绑定，四版本body/取消、邀请去重小写/部分失败、状态优先级/分页和服务字段校验有证据。OG-G02权限中断只保留失败邮箱、遗漏未处理尾部并覆盖notice已复现；提案保留尾部，真实403页面归属仍待验。源原因窗min2无maxlength，提案max500对齐服务，未改源。无真实API、数据库事务、幂等、权限、审计或邮件验证。
+
+94PNG及HTML/CSS/JS/data/README/evidence、两脚本为永久交付；无临时脚本/下载/日志/开发服务，browser/context finally关闭，历史材料不动。未改生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署，无重启要求。具体稿及全主题/密度/角色/200%/软键盘/跨组织与完整生命周期待办；下一P32工作区，P31已有48图待审，全73页真实实现部署继续。
+
 ## 2026-09-08 · W04组织资料 / ORG-PROFILE-C-r1
 
 收尾：最终capture与无参数源/数据/图片哈希及交互复验通过37场景双端、74PNG，6字段、零弹窗，HTTP/console/pageerror/存储均0。README75本地链接存在，80根目录永久文件精确匹配manifest。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier、git diff --check通过；4101/5173无监听。88本批文件精确提交，不含生产源码、旧图或临时产物；无临时文件待清理。

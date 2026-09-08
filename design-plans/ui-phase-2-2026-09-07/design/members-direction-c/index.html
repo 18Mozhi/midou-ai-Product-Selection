@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P30 成员与邀请 / C 方向审核稿</title>
+    <link rel="stylesheet" href="members.css" />
+    <script defer src="data.js"></script>
+    <script defer src="members.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>P30 设计审核稿 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">审核状态（非业务筛选）</label
+      ><select id="scene-picker"></select>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="app">
+      <aside class="directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>成员与邀请</h1>
+        <nav aria-label="本页目录">
+          <a href="#member-section" aria-current="true">组织成员</a
+          ><a href="#invitation-section">邀请成员</a>
+        </nav>
+        <p class="directory-note">角色分配与成员关系管理<br />账号锁定不在本页解除</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <div>
+            <p>审计原因</p>
+            <h2 id="reason-title"></h2>
+          </div>
+          <button id="reason-close" type="button" aria-label="关闭原因填写">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少 2 个字）</label
+        ><textarea
+          id="reason-input"
+          required
+          minlength="2"
+          maxlength="500"
+          rows="4"
+          aria-describedby="reason-help"
+        ></textarea>
+        <p id="reason-help">原因与操作者、时间和目标一起记录。最多 500 个字符。</p>
+        <footer>
+          <button id="reason-cancel" type="button">取消</button
+          ><button id="reason-confirm" class="primary" type="submit">确认提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>
