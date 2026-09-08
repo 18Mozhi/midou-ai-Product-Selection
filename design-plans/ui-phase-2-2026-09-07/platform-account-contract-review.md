@@ -230,6 +230,18 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 ## 7. 源码指纹（LF SHA-256）
 
+### P38 C方向后续提案增量 · 2026-09-09
+
+起点main/386336c，[PLATFORM-OVERVIEW-C-r1](design/platform-overview-direction-c/README.md)交付43场景双端86主图＋2异常局部＋3移动来源预览，共91PNG，含2非业务控件板。本页所有真实动作族和共享列设置/首可见冻结/密度/来源预览/请求编号复制保留；蓝目录与白异常优先构图不改权限、读取API或指标分母。用户C方向已选择，但具体P38稿没有获批，本节更新状态优先于第6节初始“方向pending/48规格”历史说明。
+
+源函数惰性验证并复现PA-W05-FACT的仅趋势判空、PA-W05-HISTORY的失败切7d保留24h快照、PA-D03的ready后401/403仍留数据和PA-W05-A11Y的复制reject无catch；不是挂载Vue/真实SQL/授权或完整历史路径。four windows的分钟换算、当前队列无since、open_alerts混合分母、GET写dashboard_views/audit事务由源阅读核对，不冒称DB试验。原provider critical优先却显示未知、parsing/validating回退“其他状态”保留并注明。
+
+本地Playwright验证来源8/15、列至少一列/冻结首可见/两密度、四精确URL、恢复/重复读取/失效响应与复制、三种移动预览关闭/焦点/长内容等，实际结果见PROGRESS/evidence。新增观测范围说明、逐点文本、复制/离开归属和native预览+显式Tab双边界仅提案，源共享组件未改；不将PA-W05或PA-D03整体关闭。完整Vue生命周期、浏览器历史、6角色/3主题/全局密度、原生200%/软键盘、MySQL审计及宝塔仍待验。
+
+本增量只改设计原型、验证脚本和直接相关计划/规格/地图，无新API/OpenAPI/.env/依赖/数据库/权限/重启；永久图不清理，临时与进程收尾见PROGRESS。
+
+追加W05合同门发现仅NavigationShell指纹过期。逐项核对真实load/watch/unmount与既有243941a提交：旧指纹对应243941a父版；该提交增加导航GET的sequence/shell/AbortController归属、切壳重新读取并收起搜索/主题/菜单、全路径改变收起搜索、卸载abort。没有改变PlatformDashboard的load、selectedSurfaceProps或KeepAlive结构，不能把壳层保护当成本页window/401/403风险已修。此处同步单一导航源指纹并记录语义差异；其余31项不变，128候选与24绑定也不变。本轮仅重新核源及合同门，不重跑或冒称此前导航生命周期E2E通过。
+
 下表只锁定本批读取的产品合同源，便于发现后续语义变化；不表示当前线上SHA或全站证据已刷新。验证器检查真实内容，而不是要求未来HEAD永远等于本次起点。
 
 | 文件 | SHA-256 |
@@ -253,7 +265,7 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 | apps/web/src/use-platform-user-detail.ts | 8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e |
 | apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
-| apps/web/src/components/NavigationShell.vue | 993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92 |
+| apps/web/src/components/NavigationShell.vue | 4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc |
 | apps/api/src/authorization-routes.ts | f670a9e21650e2fedd3ea691049de840cb2a47c9c6add471c38eb7e71e208975 |
 | apps/api/src/platform-account-routes.ts | 79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226 |
 | apps/api/src/platform-account-service.ts | 189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d |

@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · W05平台运行概览 / PLATFORM-OVERVIEW-C-r1
+
+收尾：最终capture与无参数源/数据/PNG哈希及交互复验91图通过，1440/390各43场景、3移动预览与759/760/768/1024检查通过；HTTP/console/pageerror/存储为0。图根97文件、README92链接与清单一致，本批105路径。verify:docs（73/60/6/153）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型Prettier和diff检查通过。追加旧W05合同门先报唯一NavigationShell指纹漂移，核对243941a及父版hash和真实load/watch/unmount后同步语义说明/单一指纹，复验8页/128候选/24绑定/32源/19链接通过；不掩盖既有修复与P38本页保护的区别。全部自有浏览器/验证进程结束，4101/5173无监听，无本轮临时产物；审核README打开返回queued，不算用户已见或批准。
+
+从干净main/386336c接续，上一P37已提交是实际进展。按AGENTS→Feature Map platformDashboard→蓝图M06-02→P38/W05→真实PlatformDashboard/ResponsiveDataView/TableViewControls/TechnicalDetails及服务/路由/四指标/仓库read与m06-02夹具定位。ui-skills-root选择完整frontend-design，Playwright复用永久验证器模式与已有依赖，无安装或子代理。
+
+W05平台运行概览：[PLATFORM-OVERVIEW-C-r1](design/platform-overview-direction-c/README.md)43场景双端86主图＋2异常局部＋3移动预览，共91PNG（含2非业务工具图）。蓝色页内目录、白色异常优先阅读面，明确时间窗与当前快照口径；保留8/15来源展开、列/冻结/密度与来源预览。原三来源/独立15来源/三点趋势夹具不改数，43/3与96.4%差异保留。源函数惰性检查四窗、单飞、12秒abort回调及复制拒绝；复现失败7d仍看24h、ready时401/403保留数据、仅trend判空。归属/范围提示/文本替代与模态焦点只提案，不是挂载Vue、SQL、真实权限或生产。具体稿与PA-W05、完整主题密度/角色/历史生命周期待验；下一P39组织与账号概览，全73页实现部署和签收未完成。下文“下一P38”为历史状态。
+
+真实Vue函数/computed以惰性ref/request/router运行，核对原8/15异常优先、43/3及曲线坐标、null/0、700/12MB、四window精确URL/保留query/非法默认24h、pending单飞及12000ms abort回调。复现新窗7d失败仍24h、ready时expired/forbidden保持ready、仅trend为空和TechnicalDetails复制拒绝无catch。不是挂载Vue/API/MySQL/实际授权或真实12秒等待；后端current/window分母与GET写审计事务是源码阅读，不是数据库执行。
+
+91PNG、四原型文件、README/evidence和两永久脚本是审核交付；目录platform-overview-direction-c。首轮检查发现场景select继承13px已修；目检发现移动数量与标签同一行已改独立行。补充Shift+Tab验证时native焦点会短暂落body，原型增加显式双边界循环后重新测试；生产共享预览不改。具体最终结果在本节收尾记录，失败时不提前宣布通过。
+
+无生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/配置/端口/宝塔变更，无重启要求；本轮没有临时脚本/日志/fixture写入/服务，所有自有浏览器finally关闭，旧材料不动。具体稿、PA-W05与完整主题密度/角色/历史生命周期/原生200%/软键盘和全73页真实实现部署签收仍待办。下一P39组织与账号概览。
+
 ## 2026-09-09 · W04组织审计 / ORG-AUDIT-C-r1
 
 收尾：最终capture与无参数源/数据/PNG哈希及交互复验104图通过，双端50场景、零弹窗、六搜索源ID、50→55游标和复制/旧页归属均通过，HTTP/console/pageerror/存储为0。README105链接存在、110原型根文件及118任务路径与manifest一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型Prettier、git diff --check通过。4101/5173无监听，全部自有浏览器/CLI/验证进程结束，无本轮临时产物。审核README打开返回queued，不当作用户已见或批准。
