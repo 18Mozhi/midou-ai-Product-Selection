@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>评分规则 · C方向正式设计提案</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="scoring.css" />
+  </head>
+  <body>
+    <aside class="study-bar" aria-label="审核工具">
+      <span>C 方向已选 · SCORE-C-r1 · 具体稿待审 · 隔离样本，非线上数据</span
+      ><label>审核场景<select id="scene"></select></label>
+    </aside>
+    <header class="brand-bar">
+      <div class="brand"><span class="brand-mark">m.</span><b>米豆智选</b></div>
+      <span class="product-label">决策工作区</span>
+      <nav class="breadcrumb" aria-label="当前位置">机会 / 评分规则</nav>
+    </header>
+    <main class="workspace">
+      <aside class="scope-panel">
+        <div>
+          <span class="eyebrow">SCORING RULES</span>
+          <h1>评分规则<span class="title-dot">。</span></h1>
+          <p class="scope-description">先核对生效版本，<br />再决定下一次变更。</p>
+        </div>
+        <button id="new-rule" class="create-button">
+          新建规则版本 <span aria-hidden="true">＋</span>
+        </button>
+        <p class="scope-foot">规则解释不等于人工决策。<br />新版本不会自动生效。</p>
+      </aside>
+      <section class="directory" id="directory" aria-labelledby="page-title">
+        <div class="directory-heading">
+          <div>
+            <p class="eyebrow">CURRENT CONFIGURATION</p>
+            <h2 id="page-title">评分与质量门</h2>
+          </div>
+          <span class="setup-status">配置未就绪</span>
+        </div>
+        <div id="coverage"></div>
+        <section id="versions" aria-label="规则版本"></section>
+      </section>
+      <section id="empty" class="directory empty-state" hidden>
+        <span aria-hidden="true">—</span>
+        <h2>尚无评分规则</h2>
+        <p>不提供虚构默认权重；请创建、审批并启用明确版本。</p>
+        <button id="first-rule" class="primary">创建首个草稿</button>
+        <p id="readonly-help" hidden>请联系具备规则提交权限的成员创建首个草稿。</p>
+      </section>
+    </main>
+    <p id="review-note" role="status">本稿不请求API、不写浏览器存储、不改变规则或历史评分。</p>
+    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-intro">
+      <form id="modal-form">
+        <header class="modal-heading">
+          <div>
+            <span class="eyebrow" id="modal-kicker"></span>
+            <h2 id="modal-title"></h2>
+          </div>
+          <button id="close" type="button" aria-label="关闭弹窗">×</button>
+        </header>
+        <div class="modal-scroll">
+          <p id="modal-intro"></p>
+          <div id="create-content" hidden>
+            <nav class="editor-nav" aria-label="表单分区">
+              <button id="show-basics" type="button" aria-pressed="true">版本与阈值</button
+              ><button id="show-dimensions" type="button" aria-pressed="false">
+                评分维度 · 8 项
+              </button>
+            </nav>
+            <section id="basics" class="basic-grid" aria-label="版本与阈值">
+              <label
+                >版本代码<input
+                  id="version_code"
+                  name="version_code"
+                  required
+                  maxlength="64"
+                  placeholder="例如 org-v1" /></label
+              ><label>规则名称<input id="rule_name" name="name" required maxlength="160" /></label>
+              <label
+                >推荐阈值<input
+                  id="recommend_min"
+                  name="recommend_min"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  required /></label
+              ><label
+                >观察阈值<input
+                  id="observe_min"
+                  name="observe_min"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  required
+              /></label>
+              <p class="help">阈值不预填。推荐阈值必须大于观察阈值；两者均为0–100。</p>
+            </section>
+            <section id="dimensions" hidden aria-label="评分维度">
+              <label class="mobile-dimension-picker"
+                >当前维度<select id="dimension-choice"></select
+              ></label>
+              <div class="dimension-layout">
+                <nav id="dimension-nav" aria-label="选择评分维度"></nav>
+                <div id="dimension-panels"></div>
+              </div>
+              <p class="help">
+                仅权重大于0的维度会提交，至少2项、合计100%，且至少1个已启用维度必填。
+              </p>
+            </section>
+            <p id="validation" class="validation" role="status"></p>
+          </div>
+          <div id="preview-content" hidden></div>
+          <div id="action-content" hidden>
+            <div id="action-target" class="target"></div>
+            <label
+              >原因（必填）<textarea
+                id="reason"
+                name="reason"
+                required
+                maxlength="1000"
+              ></textarea></label
+            ><label id="rollback-field" hidden
+              >回滚目标版本<select id="rollback-target" name="target_rule_id">
+                <option value="">请选择已批准或停用版本</option>
+              </select></label
+            >
+            <p id="action-error" class="error" hidden role="alert">
+              规则已被其他操作更新。（版本冲突设计模拟）
+            </p>
+            <p class="help">状态变化和原因会写入审计与事务消息；历史评分运行保持不变。</p>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <small id="footer-note">隔离演示 · 不保存业务数据</small>
+          <div>
+            <button id="cancel" type="button">取消</button
+            ><button id="save" class="primary" type="submit">保存草稿</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+    <script src="data.js"></script>
+    <script src="scoring.js"></script>
+  </body>
+</html>

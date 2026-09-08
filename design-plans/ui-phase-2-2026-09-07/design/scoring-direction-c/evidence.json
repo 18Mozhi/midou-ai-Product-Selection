@@ -1,0 +1,839 @@
+{
+  "version": "SCORE-C-r1",
+  "kind": "formal-design-proposal-not-vue-not-production",
+  "pageId": "P17",
+  "approval": "pending-user-review",
+  "capturedAt": "2026-09-08T04:26:56.428Z",
+  "browser": "151.0.7922.34",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/index.html": "e8df24c487053de6d1a600c69ec43c918992e210fad25cb6f05d65e152e239f6",
+    "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/scoring.css": "882e93bdf364d1bb76fb59a2d48d9c8ce48e98ca9175d07e564280fdf314ac86",
+    "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/scoring.js": "2bcdddfd4682ad7c453fefc42a6abff5c6cc317e32bd102b6cb6b0879b0382c0",
+    "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/data.js": "63d832ce615f4400bea1ab70804c2cfc1c902b06dbc48858316b4092c57e0383",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+    "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
+    "tests/e2e/m04-03-scoring.spec.ts": "4b8b55ec1d77f52f898bab47c6f9576bc60067e21dbabc2d0c1c87a50660bc89",
+    "tests/e2e/ui-phase2-scoring-contracts.spec.ts": "e508a88a74e7580b720773179a14903ec8dc74e29aed44e37d7caa506876f1f6",
+    "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c"
+  },
+  "screenshots": [
+    {
+      "file": "1440-versions.png",
+      "scene": "versions",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "bf865b4ed988b717e10872885cc493f795cc7f888f3643c1c7a82f4f84ff8c66",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-empty.png",
+      "scene": "empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "d2b3562c55ff55e3b2a6ec90929f5ad98d413c1fb94c265799a4b2c0d09a8157",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 18,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-readonly-empty.png",
+      "scene": "readonly-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "ef8e7bf285d85245a8d6da1d79b4e63bb78b59238c4fd816ffe87fa5e60770b6",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 16,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-readonly.png",
+      "scene": "readonly",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "cf7002445fd5b5c735686937ea9df11985c1dddea0294f898a3ba38afa99bbff",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 60,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-decide-only.png",
+      "scene": "decide-only",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "823150245c64506b914374c37d0de255c27cfda5be6fd1e0747a1521094304d5",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-basics.png",
+      "scene": "create-basics",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "ec4be917d3f80830765a29731ab9fecc6a5888df2b650c2ec0c660175fee65cb",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 15,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-market_demand.png",
+      "scene": "create-market_demand",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "76c032ed31dd7fe0ca1835f54890853387550a23bb03467aa79a0bf6a27f7d89",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-competition.png",
+      "scene": "create-competition",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "c2b2e42f0d34835995b229d97a117416b80ca086a2109ead7ea0006d917c22ca",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-profit.png",
+      "scene": "create-profit",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "5d5d359a5f72af9663ba356e19774a6c5c70f472cc4e9ebcbbc8bdea237fc4a1",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-fulfillment_efficiency.png",
+      "scene": "create-fulfillment_efficiency",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "f51f4c5b94a2766eb714c33f2515d4fe74edf97a4ffdd8ae7a18759f8c560ac6",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-customer_experience.png",
+      "scene": "create-customer_experience",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "e89d3cf884eef2bb6290e1187dd1cd55516a8fc71c1de1075312d41c1226e633",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-content_fit.png",
+      "scene": "create-content_fit",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "14b4585854f892436a3d065f20d6af5ed1d5fd05014f3bb53705b43110f86f76",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-risk.png",
+      "scene": "create-risk",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "40b38949693399ea3a4f80e03f2b3a33347214652d50b9013a5c47f12a90b085",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-create-data_quality.png",
+      "scene": "create-data_quality",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "c5cd32b72ce8a2862168d48c9f8921fa3ac798b011dc2b3292ebca2334283cb3",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-preview.png",
+      "scene": "preview",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "8ec3433a1c1e80f11d50c6c33a7c2ffbcbedc214029a595f752030b33667287c",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 31,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-preview-error.png",
+      "scene": "preview-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "c049ce679b9dd7af2e030bdb3edfde134d3ac01aca64cbe042049d1360fab857",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 8,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-preview-loading.png",
+      "scene": "preview-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "3f90befb3a3982769cac84dda4709914a7a5da90bbd25282c35acb1c5b48fadb",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 7,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-submit.png",
+      "scene": "submit",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "8ec840f42383181a061575bad862d49f015c6a7a539f532610af7c85fa245acc",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-approve.png",
+      "scene": "approve",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "2c11415ebe90d6a86d7eb584ab214ba82a045eeb5bdd412d334400ef29546761",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-reject.png",
+      "scene": "reject",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "d80e3649365b4d1fe34ab91c4ea37504e0b22aab00258b7ed6a7f306323a11a9",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-activate.png",
+      "scene": "activate",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "ee07b43d63c3d8bb8376e9dc16d9a3975698e8b270585a04a836ffef5f9c95a7",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-rollback.png",
+      "scene": "rollback",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "a03b87db1c84d84ba56dc39ebb8956dd7e437f9615f5ae1c622c67cfb106bf74",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-action-conflict.png",
+      "scene": "action-conflict",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "83dec4cfad3035e0175575196c5749c087094faa70ded2129fbe6eed990f40f9",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-action-busy.png",
+      "scene": "action-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "479a30a002b368bd37317bc51b4faf1031d158f01b81c12b8c496c84e7159170",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-versions.png",
+      "scene": "versions",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "93c23f44320a42cf36a440726cfcf1ff09b536f0f0f87d8af5bbf6a7e216d2ba",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 60,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-empty.png",
+      "scene": "empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "a88c312c2a102a3932e0cc0c0ce5e6501d5e71611407baa0b2ac47c03a344a05",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 13,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-readonly-empty.png",
+      "scene": "readonly-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "27cf71587545f99c4b8fd57089e9f6f600912e8722b3ee10142e4b0ab2852747",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-readonly.png",
+      "scene": "readonly",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "9ab308e865353b4576bd8a71ce63c40e52ca9ae5ba34fd3cc8cb361601d713d1",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 56,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-decide-only.png",
+      "scene": "decide-only",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "106d42bda8f0a223341596e754b177bf93720b3df37a4334cd330302420a5dea",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-basics.png",
+      "scene": "create-basics",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "b57b87c2d5d640bd01792f567bcf32958340d34f33996626bb8920fac2885fdb",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 15,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-market_demand.png",
+      "scene": "create-market_demand",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "db8c75697cafe3a3e1845065400f061e0d4553cc154a62aa92e6f8e4cd69a049",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-competition.png",
+      "scene": "create-competition",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "e9463eb4eb85015990023046e1d582d7a708d149dcf0d0fad19d76daa17b22e9",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-profit.png",
+      "scene": "create-profit",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "53ce3cfd75f617855b382f4b43daba1fbf5814c0ac2f6c3beefeae967de44fee",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-fulfillment_efficiency.png",
+      "scene": "create-fulfillment_efficiency",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "f543353d26b2b2cb9b9366da3ea40382b3886ed6b484067b7aa4f088d577c7a2",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-customer_experience.png",
+      "scene": "create-customer_experience",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "005a7ec736ff63f375ea4ab775916bb3b07533a9142ac6932ba41d9e2dd54bd7",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-content_fit.png",
+      "scene": "create-content_fit",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "3597471dd26c12d1a2596fee9cc195ef8bf93e51b6c90e8cb89a8fe76760332e",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-risk.png",
+      "scene": "create-risk",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "2b6c186caeacf6c25673e129890f522043ae4fbb8d1d650161b34ad368ff3733",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-create-data_quality.png",
+      "scene": "create-data_quality",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "aad592765e028b883b0d4a36a014ae8d3ac0b04c86e0afdde0f2ceff658640ae",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-preview.png",
+      "scene": "preview",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "00d0be728600d4665753346fa3ffe228af3804a594f8402f41b985c9deac9c86",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 31,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-preview-error.png",
+      "scene": "preview-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "75d7ce357a628132bf93b62e133b16febaae53af34644ee917001ad3b212a524",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 8,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-preview-loading.png",
+      "scene": "preview-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "361f14c82a9d119613c793b8d01e949457646082d252d32ae9b1c10b608d5c03",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 7,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-submit.png",
+      "scene": "submit",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "4ed22950d0b91ed5d27809295c0bb85406785b2b41ae3baa091eb8b92a01b222",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-approve.png",
+      "scene": "approve",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "a6c99fc63043207448d1dc22d9dab31a87284d61610bfb2c5fea54ffec0b1e54",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-reject.png",
+      "scene": "reject",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "29a2d5e6bacf548683dee9b19b4c304959444c280c30dc2c73fd592b22dfa67a",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-activate.png",
+      "scene": "activate",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "a29e87761eaa603e357a3ac96391c9d65fbe9691a1e3678b76299105f3e31194",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-rollback.png",
+      "scene": "rollback",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "2e3585f2b4b244f2fa89f59f5f53f83895307e92ebe620c79bef689337c59702",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-action-conflict.png",
+      "scene": "action-conflict",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "9fedd2042be2e6015985bc8c4d684624104e99aee874334e796dce61f2021159",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-action-busy.png",
+      "scene": "action-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "572e45891d40acb600984ab6e47dde0d0ff0539f669c9fd8d3bb30d3e76c55cd",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    }
+  ]
+}
