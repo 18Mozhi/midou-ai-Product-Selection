@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P18 机会详情 · C 方向核心图稿待审</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="detail.css" />
+    <script src="data.js" defer></script>
+    <script src="detail.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#work">跳到核对内容</a>
+    <header class="review-bar">
+      <span>P18 核心图稿待审 · 隔离样例，非实际推荐或生产页面</span>
+      <label>审核场景<select id="scene" aria-label="审核场景"></select></label>
+      <a href="README.md">范围与全部图片</a>
+    </header>
+    <header class="masthead">
+      <strong>智能选品</strong><span>机会详情</span
+      ><a id="return-link" href="/opportunities">返回来源列表</a>
+    </header>
+    <div class="detail-workspace">
+      <aside class="index-panel" aria-label="机会核对目录">
+        <p>核对机会</p>
+        <h1>把依据看清<br />再作决定</h1>
+        <p class="index-note">系统建议不代替你的判断。缺失数据保持缺失，不以零分填补。</p>
+        <details id="directory">
+          <summary id="directory-label">核对内容</summary>
+          <nav id="sections" aria-label="详情分区"></nav>
+        </details>
+        <p class="scope-note">本批：结论、证据、决策历史。其余七区仅保留真实入口，尚待出图。</p>
+      </aside>
+      <main id="work" tabindex="-1"></main>
+    </div>
+    <dialog
+      id="decision-dialog"
+      aria-labelledby="decision-dialog-title"
+      aria-describedby="decision-impact"
+    >
+      <form id="decision-form">
+        <header class="modal-head">
+          <div>
+            <p>人工决定</p>
+            <h2 id="decision-dialog-title"></h2>
+          </div>
+          <button type="button" data-close aria-label="关闭决定弹窗">×</button>
+        </header>
+        <div class="modal-body">
+          <p id="decision-target"></p>
+          <p id="decision-impact">此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。</p>
+          <label for="reason">原因（必填）</label
+          ><textarea
+            id="reason"
+            name="reason"
+            required
+            maxlength="1000"
+            aria-describedby="reason-help reason-error"
+          ></textarea>
+          <div class="reason-meta">
+            <small id="reason-help">写明核对依据；最多 1000 字。</small
+            ><small id="reason-count">0 / 1000</small>
+          </div>
+          <p id="reason-error" class="error" role="alert" hidden></p>
+          <p id="write-error" class="error" role="alert" hidden></p>
+          <p id="save-progress" role="status" hidden>正在记录；关闭弹窗不会取消已提交请求。</p>
+        </div>
+        <footer class="modal-foot">
+          <button type="button" data-close>取消</button
+          ><button id="save" type="submit" class="primary">确认记录</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

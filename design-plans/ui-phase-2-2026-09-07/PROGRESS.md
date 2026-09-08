@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P18核心 / OPPORTUNITY-DETAIL-C-core-r1
+
+收尾：最终capture和无参数源/PNG哈希及双端交互复验均通过51场景；README106链接存在，102PNG与manifest相符且无多余图。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）和format:check（2脚本）通过，diff检查无空白错误。4101/5173无监听；生产源码、旧图/coverage与审批无改动，未生成临时文件或服务。仅本批116文件精确暂存提交。
+
+从干净main/1973204接续；读取P18规格、Feature Map、蓝图与机会工作区/决定/证据/弹窗/表示层、服务/仓库及UI2-OP/M04-02样例。ui-skills-root路由frontend-design；本地技能文件不完整，已通过ui-skills get读取完整指导。蓝色核对目录与白色结论工作面分离，证据/历史采用不同阅读布局；具体稿未获审。
+
+新增[102张永久图](design/opportunity-detail-direction-c/README.md)：51场景双端，三种人工决定各空/编辑/busy/失败/成功，五项质量门逐项缺失、只读、补证、证据41条、历史长文及七种主读取状态。七个其余业务分区只有真实导航入口，不算业务工作面，AI两弹窗和成本/反馈内联态未交付；P18不能算完成。
+
+永久助手执行实际canAdopt/decide/startDecision/补证新建复用/证据分页与服务端原因验证，精确body保持原始原因和expected_version，后端才trim。源码复现重复标题ID与未知传输失败被称为未写入，图稿唯一ID/结果未知保护不代表Vue修复。图稿关闭在途请求仍模拟完成，不能声称Esc取消服务端请求；真实对象归属竞态保留待办。
+
+首轮双端50场景通过后目检发现手机完整目录占用过高，改为默认折叠、另加目录展开图；最终capture通过51场景双端。推荐样本为历史护肤夹具，不是实际自动评估支持范围；41条证据/历史/补证为明确合成布局态。无真实HTTP/storage写入，未访问外部证据或创建真实任务。
+
+未修改生产Vue/API/OpenAPI、配置/权限/依赖/DB、旧图/coverage或审批，没有部署和重启。无本批临时文件/服务；102PNG与evidence.json为永久审核交付，浏览器finally关闭。后续利润与成本、其余P18工作面/图审/实现和完整73页闭环继续；P16采纳规则待用户选择。
+
 ## 2026-09-08 · P16创建选品 / JOURNEY-C-r1
 
 收尾检查：双端48场景capture通过，96PNG与manifest相符、100个README链接齐全。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）和format:check（2脚本）通过；diff检查无空白错误，生产/旧P15稿/coverage无改动，4101/5173无监听。手机目检后将三类型改成一行完整文字并保留44px真实点击区，重新capture通过；无新临时文件/服务，PNG保留为交付。
