@@ -1,0 +1,741 @@
+{
+  "proposal": "DATA-RECORDS-C-r1",
+  "contractRebindings": [
+    {
+      "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
+      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
+      "reason": "Audited reason dialog focus-test additions; historical table retained."
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
+    "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
+    "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "scripts/lib/ui-phase2-data-records-design-data.mjs": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
+    "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/index.html": "c5ccf39bac61f7cf67b281ad5fda93e629f4152ed4df8f0fb34be9a0dc9cc3a3",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.css": "4559c4182eeb6e1198b7a4928628e08f40a0ad6c805a14785281fd07513ab330",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js": "ee46acbc06c4791043fca60b6a76d2cc0c3d9162768ceae5b7e23c623a53dfea"
+  },
+  "sourceChecks": [
+    "Actual Vue four entity labels, 13 status labels and local 0/1/20/21/100 row pagination/clamp; original trend/supplier fixture separated from synthetic boundaries.",
+    "Ten first/preserved source read failures, 15-second abort callback and single-flight, retaining entity interpretation; no real request or timer wait.",
+    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; ignored-abort late read still updates data reproduced in inert source bridge.",
+    "Actual export scope changes after reason await; filename changes again before response despite supplier request. Inert DOM records download intention only; no file, audit or POST executed.",
+    "Actual service accepts 13 entity/status pairs, trims query and rejects invalid entity/status/121 query plus export reason 1/301; accepts 2/300. Inert repository only.",
+    "Actual four repository readManagement data branches on synthetic SQL-row adapter: LIMIT100, returned-set summary, supplier search excluding workspace and null/undefined converted to zero; SQL was not executed.",
+    "Actual csvCell six cases and data export route BOM/non-idempotency contract checked; no CSV file, audit row, customer material or real download created."
+  ],
+  "checks": [
+    "1440: 57 scenes; exact four-entity query intent and old-snapshot scope, local 20/1 pagination without GET, full query export versus page, 0/1/2/300/301 reasons, frozen export scope/file name, single-flight, unknown and stale generation, three named focus-contained dialogs, technical copy simulation, quality handoff explicitly pending, table settings and six breakpoints/CSS zoom2. Static recent-records prototype only.",
+    "390: 57 scenes; exact four-entity query intent and old-snapshot scope, local 20/1 pagination without GET, full query export versus page, 0/1/2/300/301 reasons, frozen export scope/file name, single-flight, unknown and stale generation, three named focus-contained dialogs, technical copy simulation, quality handoff explicitly pending, table settings and six breakpoints/CSS zoom2. Static recent-records prototype only."
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "scene": "default",
+      "width": 1440,
+      "file": "1440-default.png",
+      "sha256": "332f5a4b091f4a58330dc524672f46c937625fa8d919bd84f19f7bc6d3c0fe0d"
+    },
+    {
+      "scene": "original-supplier",
+      "width": 1440,
+      "file": "1440-original-supplier.png",
+      "sha256": "95b318d430840c2eb100cc5f1bb72509b27f544e80093e95b34df32d0c231d49"
+    },
+    {
+      "scene": "trends",
+      "width": 1440,
+      "file": "1440-trends.png",
+      "sha256": "5cb3e3ed19058b2be767a1f6514ab29b88ca6c7158b91099825471cc2847a0f6"
+    },
+    {
+      "scene": "opportunities",
+      "width": 1440,
+      "file": "1440-opportunities.png",
+      "sha256": "38ba6e08061b77f6b489aae9f2dbad3018a57f6247b590a4624b5848c6d88d4d"
+    },
+    {
+      "scene": "competitors",
+      "width": 1440,
+      "file": "1440-competitors.png",
+      "sha256": "bd7e667db2ce7fb2f51efabad373f3841b3d9b2fc0a82f39a237c362e76c1358"
+    },
+    {
+      "scene": "suppliers",
+      "width": 1440,
+      "file": "1440-suppliers.png",
+      "sha256": "b6cc75617eefcd657cc9d5f997af9b2ce4064b2680928644f88cbe9736002b0a"
+    },
+    {
+      "scene": "empty",
+      "width": 1440,
+      "file": "1440-empty.png",
+      "sha256": "bb7e23151ac972441e98c975d999ca854d95463bfccb341c548e983ad7a314cc"
+    },
+    {
+      "scene": "loading",
+      "width": 1440,
+      "file": "1440-loading.png",
+      "sha256": "da831f0cb498ff4240c5dd2cebe4bd3e294231b1a2e7d20622d4af259e2304c6"
+    },
+    {
+      "scene": "expired",
+      "width": 1440,
+      "file": "1440-expired.png",
+      "sha256": "95973968786b92f58a07b9978a011c8f32a8a1e015d9557bbe87ef23be57aedf"
+    },
+    {
+      "scene": "forbidden",
+      "width": 1440,
+      "file": "1440-forbidden.png",
+      "sha256": "90ff6a26751e89a66bcc87f119bb8c3cb22a719fdf98cea447e7765f74880560"
+    },
+    {
+      "scene": "blocked",
+      "width": 1440,
+      "file": "1440-blocked.png",
+      "sha256": "03ff3e82947a5376a4edcd352e6b549382e917953603c8759c4831cc0d2fdd4b"
+    },
+    {
+      "scene": "error",
+      "width": 1440,
+      "file": "1440-error.png",
+      "sha256": "5b99aa7a50b74a950490f5bc6cf0c075d4721bbc16ac78a338c19547c90b8dcd"
+    },
+    {
+      "scene": "refreshing",
+      "width": 1440,
+      "file": "1440-refreshing.png",
+      "sha256": "f06049c140abd06c8b54ce65cd262d8b2e298cde91c3d0d09b76fbda03139a09"
+    },
+    {
+      "scene": "refresh-error",
+      "width": 1440,
+      "file": "1440-refresh-error.png",
+      "sha256": "dfa2630dd1ba0d9757b60257dd87673e9692d19968b7cdc895cec706a884d4af"
+    },
+    {
+      "scene": "refresh-timeout",
+      "width": 1440,
+      "file": "1440-refresh-timeout.png",
+      "sha256": "a23bbe12626710a0692665d249fe134ebd48408d0fa2f9cab40904712e6de880"
+    },
+    {
+      "scene": "scope-pending",
+      "width": 1440,
+      "file": "1440-scope-pending.png",
+      "sha256": "0250388017ef476ae8a9cea5268598dbf4d71e6e8d292cc181e230c0ab1685bd"
+    },
+    {
+      "scene": "scope-error",
+      "width": 1440,
+      "file": "1440-scope-error.png",
+      "sha256": "3fb0e25fa3a150a02fee9d85f4a4242f180dfcd23d1b93c54ea914d2deaf8d33"
+    },
+    {
+      "scene": "query-draft",
+      "width": 1440,
+      "file": "1440-query-draft.png",
+      "sha256": "2eb9258ba372c43d2a4ce4f7d829a140ac4f791fbfd1cf86c8cbb46cde17eba6"
+    },
+    {
+      "scene": "query-max",
+      "width": 1440,
+      "file": "1440-query-max.png",
+      "sha256": "1dcc30b1011645c8f198f8d5ea2c19688ae9fa3dd209ca3eb5b4f2cf71af293e"
+    },
+    {
+      "scene": "filtered",
+      "width": 1440,
+      "file": "1440-filtered.png",
+      "sha256": "d089393e001e3bc8b367ce7d9a67538335173668e8bcb74f2d0f50c61219cbb9"
+    },
+    {
+      "scene": "page-21",
+      "width": 1440,
+      "file": "1440-page-21.png",
+      "sha256": "1a083e819a3e98984b687cc964bff7672a3d4229478d8292314fd3bcbf3dd578"
+    },
+    {
+      "scene": "page-two",
+      "width": 1440,
+      "file": "1440-page-two.png",
+      "sha256": "8747e4b26f35705316aa2b6a204e9af7482bb52b3dae830665537355ea1c3785"
+    },
+    {
+      "scene": "limit-100",
+      "width": 1440,
+      "file": "1440-limit-100.png",
+      "sha256": "80f1f550f3aae25f152fd2b01884b0f80f8123c361ad4f206c49f44d6fc113fc"
+    },
+    {
+      "scene": "export-page-two",
+      "width": 1440,
+      "file": "1440-export-page-two.png",
+      "sha256": "06019b2c8da62cdb5eac0b795758fdca4ad89522e2e8b87589dbcd5d67181eda"
+    },
+    {
+      "scene": "filter",
+      "width": 1440,
+      "file": "1440-filter.png",
+      "sha256": "3e8f5b4072d44824727ad0f0221e952908c5c22174733c019fce2ff4131ab15e"
+    },
+    {
+      "scene": "detail",
+      "width": 1440,
+      "file": "1440-detail.png",
+      "sha256": "125d964a42fff072191b9b5f87fd68b5de562302d695200157fbc04e5e2feef8"
+    },
+    {
+      "scene": "long-detail",
+      "width": 1440,
+      "file": "1440-long-detail.png",
+      "sha256": "6861ce72021e59ac7fd682f4e11ef887af78ba36d1feb9cdaf89f053c75e1f06"
+    },
+    {
+      "scene": "export",
+      "width": 1440,
+      "file": "1440-export.png",
+      "sha256": "28a450113fc5207d7335bbb4bcf50da6a08b15271ec203afd4d8da6ddfa417a7"
+    },
+    {
+      "scene": "export-empty",
+      "width": 1440,
+      "file": "1440-export-empty.png",
+      "sha256": "ee62f1081908a8d882bc320d37d76a4c30eeb276bd7d19ba69037b3335628e11"
+    },
+    {
+      "scene": "export-short",
+      "width": 1440,
+      "file": "1440-export-short.png",
+      "sha256": "0bd36a468b06afbecc422fc7f6ebdd1933850eace1db4d2d2ff53e0b5dc5c574"
+    },
+    {
+      "scene": "export-max",
+      "width": 1440,
+      "file": "1440-export-max.png",
+      "sha256": "1ab3c149826fcc3f044e31d3ff551d7d32e0376812e5d97352e41cb53bff1d47"
+    },
+    {
+      "scene": "export-over",
+      "width": 1440,
+      "file": "1440-export-over.png",
+      "sha256": "3ad09aa6ce3619fea68ade90eb84f25c33238cd2a5e587e609c86eda9c900ee0"
+    },
+    {
+      "scene": "export-running",
+      "width": 1440,
+      "file": "1440-export-running.png",
+      "sha256": "9d79a1d8a618293cbd820a5c1577341b27a2867098d144cc266444c1a327f198"
+    },
+    {
+      "scene": "export-success",
+      "width": 1440,
+      "file": "1440-export-success.png",
+      "sha256": "330337d6a2087beeb8eaf9646b486389082f4222df6799bde80c963d5c807c8e"
+    },
+    {
+      "scene": "export-error",
+      "width": 1440,
+      "file": "1440-export-error.png",
+      "sha256": "2d2c43379050af75ce5df39b446aefa6f7a4da5c3ba219ddcdf7596f1915a90e"
+    },
+    {
+      "scene": "export-unknown",
+      "width": 1440,
+      "file": "1440-export-unknown.png",
+      "sha256": "9795ecf9ebfa3b77146e7bcc9b74602cba57b1112e324f1dc7bd0bdcf292d921"
+    },
+    {
+      "scene": "columns",
+      "width": 1440,
+      "file": "1440-columns.png",
+      "sha256": "5994a7028c8d8de14ee7dd0d8f21713906fcec0c82ad248fc8811a353d52c0de"
+    },
+    {
+      "scene": "compact",
+      "width": 1440,
+      "file": "1440-compact.png",
+      "sha256": "115b85b2e2649456d2e1954ddcfdba866575ce92f044492337d40bf1d4db1c65"
+    },
+    {
+      "scene": "technical",
+      "width": 1440,
+      "file": "1440-technical.png",
+      "sha256": "fd481870153bb12d73bb7e6ec22f7a9696ad423baf40787643b39ccbba8a5f26"
+    },
+    {
+      "scene": "copy-failed",
+      "width": 1440,
+      "file": "1440-copy-failed.png",
+      "sha256": "c57e75b195bafc86f82e284c0e134aa8e0ba70920931e505cf15b4e6467ed17e"
+    },
+    {
+      "scene": "quality-handoff",
+      "width": 1440,
+      "file": "1440-quality-handoff.png",
+      "sha256": "22f429ca594f27d5fd5533e850b374e1076dba4a1d573c88184b144d90a91870"
+    },
+    {
+      "scene": "hover",
+      "width": 1440,
+      "file": "1440-hover.png",
+      "sha256": "37f060ce05c80136a651f69ae8edcc955f92a2c343b1bdbd85d505f81ec9d498"
+    },
+    {
+      "scene": "pressed",
+      "width": 1440,
+      "file": "1440-pressed.png",
+      "sha256": "5b6dc7e0c6cb928f848d15145604c351f4d8e938283fe62a469f5d79d359b8a5"
+    },
+    {
+      "scene": "focus",
+      "width": 1440,
+      "file": "1440-focus.png",
+      "sha256": "332f5a4b091f4a58330dc524672f46c937625fa8d919bd84f19f7bc6d3c0fe0d"
+    },
+    {
+      "scene": "trends-active",
+      "width": 1440,
+      "file": "1440-trends-active.png",
+      "sha256": "3b3cf255ac2fbc8b833267bfa4deb54cc2fcfa95ef6b4046a13758651d7b2db0"
+    },
+    {
+      "scene": "trends-irrelevant",
+      "width": 1440,
+      "file": "1440-trends-irrelevant.png",
+      "sha256": "ee3339d7ecb1119a5c1740b7447389589ec1347f92f083f4df88b56b640491be"
+    },
+    {
+      "scene": "trends-stale",
+      "width": 1440,
+      "file": "1440-trends-stale.png",
+      "sha256": "716f49ffefbe4f2d8e89db9c1f397ab63d0cf0cd9671214b706ef4daf9975266"
+    },
+    {
+      "scene": "trends-archived",
+      "width": 1440,
+      "file": "1440-trends-archived.png",
+      "sha256": "79d90414b40188cde95dc07dca3cdf78341319e626683ec7fd4104fa96ab76e2"
+    },
+    {
+      "scene": "opportunities-pending",
+      "width": 1440,
+      "file": "1440-opportunities-pending.png",
+      "sha256": "348c93081035d9c8e7a8d8deeb2b39c4d103b4caf0c6cdcfda5f44c4b0b15b84"
+    },
+    {
+      "scene": "opportunities-adopted",
+      "width": 1440,
+      "file": "1440-opportunities-adopted.png",
+      "sha256": "ded2b349d42db8375bf9b3abe020ab335ca344dad0be832950979ad182ec7e17"
+    },
+    {
+      "scene": "opportunities-observing",
+      "width": 1440,
+      "file": "1440-opportunities-observing.png",
+      "sha256": "c93955ce379cf38a1f3c30c9c47bfe16df15a10e5cbcb6707e05832b41e02d60"
+    },
+    {
+      "scene": "opportunities-rejected",
+      "width": 1440,
+      "file": "1440-opportunities-rejected.png",
+      "sha256": "599341d832bac49b938b60efb8615003a3073220ab5dfac4a3b525d9927ac286"
+    },
+    {
+      "scene": "competitors-active",
+      "width": 1440,
+      "file": "1440-competitors-active.png",
+      "sha256": "1d1c2c26638658355fe7eaf95f437401888ce3d737f1f17a45a255a34c63b6b1"
+    },
+    {
+      "scene": "competitors-paused",
+      "width": 1440,
+      "file": "1440-competitors-paused.png",
+      "sha256": "d237996aa7a9adabb60011c2d259fec3becf79d2770b1be5ac49ae963b83fc4b"
+    },
+    {
+      "scene": "suppliers-incomplete",
+      "width": 1440,
+      "file": "1440-suppliers-incomplete.png",
+      "sha256": "7ce637524a5798d204452cf835c871509bd4c6c6dba6f9ac7cdde563f5692b7f"
+    },
+    {
+      "scene": "suppliers-ready",
+      "width": 1440,
+      "file": "1440-suppliers-ready.png",
+      "sha256": "a8bdfd8935197b83870dc9029005656a6d82332acc6ae9f210f029bae37db32b"
+    },
+    {
+      "scene": "suppliers-quarantined",
+      "width": 1440,
+      "file": "1440-suppliers-quarantined.png",
+      "sha256": "d8d62ac8db38b609b87a854a118b911c7bc06a875eed52b7d6bc1702fff44ad5"
+    },
+    {
+      "scene": "default",
+      "width": 390,
+      "file": "390-default.png",
+      "sha256": "0e863daffb0a3ef869851ceca474077c9c25dd827afa6b18046d7d4c3eb1a939"
+    },
+    {
+      "scene": "original-supplier",
+      "width": 390,
+      "file": "390-original-supplier.png",
+      "sha256": "a4b0ea5f2b9d0f73cc15237ea9521b2c1604f2e6dacfb8ec22d1d612045e4261"
+    },
+    {
+      "scene": "trends",
+      "width": 390,
+      "file": "390-trends.png",
+      "sha256": "5cf68f322dbe07beee140fc2e01d6565770a601d7f0e98e878c2f9208760dde3"
+    },
+    {
+      "scene": "opportunities",
+      "width": 390,
+      "file": "390-opportunities.png",
+      "sha256": "389195b2b9d93c8ca985ade0c248c9c656f57436222076410472cde187739484"
+    },
+    {
+      "scene": "competitors",
+      "width": 390,
+      "file": "390-competitors.png",
+      "sha256": "31c32c638407eda38f79172ac88c01d92e022699cb0b61f2b6251e4b7ab679c1"
+    },
+    {
+      "scene": "suppliers",
+      "width": 390,
+      "file": "390-suppliers.png",
+      "sha256": "4c19d1914ba51243fd7875dca37789a74d4bc20727154ca1511631baee49dd43"
+    },
+    {
+      "scene": "empty",
+      "width": 390,
+      "file": "390-empty.png",
+      "sha256": "88f026d5093488f8fd359a126c36db73ba9a8309248dea9dad5a6c4208072508"
+    },
+    {
+      "scene": "loading",
+      "width": 390,
+      "file": "390-loading.png",
+      "sha256": "95672b181a450c27333e36ce572f9d8c6090a2dbf552b84a243258a95f686dcf"
+    },
+    {
+      "scene": "expired",
+      "width": 390,
+      "file": "390-expired.png",
+      "sha256": "053c468f1e15a2015a401e07cffe1f079683c1a24dcfff498977473fb2d5da84"
+    },
+    {
+      "scene": "forbidden",
+      "width": 390,
+      "file": "390-forbidden.png",
+      "sha256": "5b6188e89804f2256df1e212e3fe7ddbf6d0147524c6363437a8b661cc8b9883"
+    },
+    {
+      "scene": "blocked",
+      "width": 390,
+      "file": "390-blocked.png",
+      "sha256": "87131530e69eea6260411c096a949ac27ffdf8386a7c0f1d6e415f4f8c949749"
+    },
+    {
+      "scene": "error",
+      "width": 390,
+      "file": "390-error.png",
+      "sha256": "4c878919f3d289fc17c7e1f9c38b5dc5ab4e7c40ad38449f5162bb69bba1d1b5"
+    },
+    {
+      "scene": "refreshing",
+      "width": 390,
+      "file": "390-refreshing.png",
+      "sha256": "046fabdcd1d9620c993faa0e294a8c6f7afa3d8fa7359d14593cbe74d0fe3daf"
+    },
+    {
+      "scene": "refresh-error",
+      "width": 390,
+      "file": "390-refresh-error.png",
+      "sha256": "f6590fe02923ae15bdced0cf0f07b00c7a9d49391497538d9817007130549eb0"
+    },
+    {
+      "scene": "refresh-timeout",
+      "width": 390,
+      "file": "390-refresh-timeout.png",
+      "sha256": "5ceef82e2d13910f9a6178bedcc99c045c02394284b63eaadb96412de4a9ebb7"
+    },
+    {
+      "scene": "scope-pending",
+      "width": 390,
+      "file": "390-scope-pending.png",
+      "sha256": "fc0fb5c08a436211a1ca59eba2b01e99dddc3bc5c4fc4c546c08b520517c146d"
+    },
+    {
+      "scene": "scope-error",
+      "width": 390,
+      "file": "390-scope-error.png",
+      "sha256": "3a04ba6456d81a356d6deacf259ceed1f054a0ce958ad6494e2c719876c60b99"
+    },
+    {
+      "scene": "query-draft",
+      "width": 390,
+      "file": "390-query-draft.png",
+      "sha256": "0e863daffb0a3ef869851ceca474077c9c25dd827afa6b18046d7d4c3eb1a939"
+    },
+    {
+      "scene": "query-max",
+      "width": 390,
+      "file": "390-query-max.png",
+      "sha256": "0e863daffb0a3ef869851ceca474077c9c25dd827afa6b18046d7d4c3eb1a939"
+    },
+    {
+      "scene": "filtered",
+      "width": 390,
+      "file": "390-filtered.png",
+      "sha256": "752eb9f6a8a3fe5325094c4c30ea4627be0e0e1975bdf8d5eafd76f7df747e64"
+    },
+    {
+      "scene": "page-21",
+      "width": 390,
+      "file": "390-page-21.png",
+      "sha256": "708f9d2e13ddff88eb9d3d64fbf401a0cd0fe54cd92284d7858563d4543b1e7c"
+    },
+    {
+      "scene": "page-two",
+      "width": 390,
+      "file": "390-page-two.png",
+      "sha256": "d1d044802437b9a1c78ffbd9b639930fe390b9fe9767c4290bd25ea2dbe45eb7"
+    },
+    {
+      "scene": "limit-100",
+      "width": 390,
+      "file": "390-limit-100.png",
+      "sha256": "e8cbc69da7216bb34efacc7d987f12b93bcbe951857ad0a06957452bb0b3406e"
+    },
+    {
+      "scene": "export-page-two",
+      "width": 390,
+      "file": "390-export-page-two.png",
+      "sha256": "40c71ce18d1089c33f9477d4bd817b17e46f98b12aa7df3f424d65f3f61b221f"
+    },
+    {
+      "scene": "filter",
+      "width": 390,
+      "file": "390-filter.png",
+      "sha256": "e586e145c45df045812a818f78a5315041a7ffb7904e5d71da8f471e5772aa39"
+    },
+    {
+      "scene": "detail",
+      "width": 390,
+      "file": "390-detail.png",
+      "sha256": "2884bb952cff233cc9aa7fe4e00ed6137eb84accc09f8e676b98bf1a36895b9c"
+    },
+    {
+      "scene": "long-detail",
+      "width": 390,
+      "file": "390-long-detail.png",
+      "sha256": "404110f35cc84d8abbf3eb04903a4d82a9cbf7f899a994dc26eef7ce1e0fca7b"
+    },
+    {
+      "scene": "long-detail",
+      "width": 390,
+      "file": "390-long-detail-part1.png",
+      "sha256": "cf595f50ed0c52f9370a2b2e2ea3dac6bf685de3cb395705a8f0cec5deb5dc8d"
+    },
+    {
+      "scene": "export",
+      "width": 390,
+      "file": "390-export.png",
+      "sha256": "aaf904a7600d05895da890b06aec5d2bad9f88a62120af579f38f1f5f567acb9"
+    },
+    {
+      "scene": "export-empty",
+      "width": 390,
+      "file": "390-export-empty.png",
+      "sha256": "2289f2ba5e9e2cef355c678cb326c2a2dffdc14e86030973f0f068784fa57924"
+    },
+    {
+      "scene": "export-short",
+      "width": 390,
+      "file": "390-export-short.png",
+      "sha256": "cbdf228a2752301a456a9c25a80173be691d93fa438d2ab9a33298540b5935ce"
+    },
+    {
+      "scene": "export-max",
+      "width": 390,
+      "file": "390-export-max.png",
+      "sha256": "1950face038096723ef66cd6b3fec0feaed6931fa87e37df5222a121d0cf89b8"
+    },
+    {
+      "scene": "export-over",
+      "width": 390,
+      "file": "390-export-over.png",
+      "sha256": "22921cc343b40830b533c9f0fd9c1a0c311d49932efb48dd7b6eb0ccb93cdeef"
+    },
+    {
+      "scene": "export-running",
+      "width": 390,
+      "file": "390-export-running.png",
+      "sha256": "59a67c81868b1086ea1d3e4b38579deb3894232b75fea9af9ced8bc2f6eb15b2"
+    },
+    {
+      "scene": "export-success",
+      "width": 390,
+      "file": "390-export-success.png",
+      "sha256": "3ad26819d83affe5fda757a718f4593abc662506dc46894b4fb3b557fc7ba460"
+    },
+    {
+      "scene": "export-error",
+      "width": 390,
+      "file": "390-export-error.png",
+      "sha256": "74d2abeddbed7f87e923f1b7a9eea06db60e7738bcd4ec04d1f5c467fcff5bd2"
+    },
+    {
+      "scene": "export-unknown",
+      "width": 390,
+      "file": "390-export-unknown.png",
+      "sha256": "604794d5be1adff4c542860b78eec2e5883f7629471ede92d83dfcb8d4081c5c"
+    },
+    {
+      "scene": "columns",
+      "width": 390,
+      "file": "390-columns.png",
+      "sha256": "0e863daffb0a3ef869851ceca474077c9c25dd827afa6b18046d7d4c3eb1a939"
+    },
+    {
+      "scene": "compact",
+      "width": 390,
+      "file": "390-compact.png",
+      "sha256": "0e863daffb0a3ef869851ceca474077c9c25dd827afa6b18046d7d4c3eb1a939"
+    },
+    {
+      "scene": "technical",
+      "width": 390,
+      "file": "390-technical.png",
+      "sha256": "f41a6ec359bb500c63c87490f87a3344d98acbd420743ca65c33d7051ab7ddf0"
+    },
+    {
+      "scene": "copy-failed",
+      "width": 390,
+      "file": "390-copy-failed.png",
+      "sha256": "f1349c11d327a6fad205452aee2080912120360a4399f266cb70f48dc2b61893"
+    },
+    {
+      "scene": "quality-handoff",
+      "width": 390,
+      "file": "390-quality-handoff.png",
+      "sha256": "399d14d10a3728790ae52d7c8001b25d7c695d2a8d3b8b484005c238ab8418a7"
+    },
+    {
+      "scene": "hover",
+      "width": 390,
+      "file": "390-hover.png",
+      "sha256": "5b8f07aaf1ce8a77c79f633c26a73cfa2c436a92951c8a6496fe67fadc664d5f"
+    },
+    {
+      "scene": "pressed",
+      "width": 390,
+      "file": "390-pressed.png",
+      "sha256": "08ef6fb348ff0d9351bb913c47fd9ca2dd88230aeaf4f18996fc2e6958ec7689"
+    },
+    {
+      "scene": "focus",
+      "width": 390,
+      "file": "390-focus.png",
+      "sha256": "0e863daffb0a3ef869851ceca474077c9c25dd827afa6b18046d7d4c3eb1a939"
+    },
+    {
+      "scene": "trends-active",
+      "width": 390,
+      "file": "390-trends-active.png",
+      "sha256": "b517808c380d212af3a77183a8b9c4248dc2d1f607b7a06a7134ec06df955da7"
+    },
+    {
+      "scene": "trends-irrelevant",
+      "width": 390,
+      "file": "390-trends-irrelevant.png",
+      "sha256": "5143c2bce1f8809ce8e61697537d6ab932b4df4b823adc83a039c1d35f491158"
+    },
+    {
+      "scene": "trends-stale",
+      "width": 390,
+      "file": "390-trends-stale.png",
+      "sha256": "bb857babe390629ed26f1001396686df9740b6ab2d84144b54936cfc62cb6744"
+    },
+    {
+      "scene": "trends-archived",
+      "width": 390,
+      "file": "390-trends-archived.png",
+      "sha256": "216cb9ad35697b1b51411a955b5de76d05b1d2bf18732802c6bc83eb441900d0"
+    },
+    {
+      "scene": "opportunities-pending",
+      "width": 390,
+      "file": "390-opportunities-pending.png",
+      "sha256": "015824b08f25f9f74ab2f24736a8db38702a8fd66f70f22b171ac115284b5555"
+    },
+    {
+      "scene": "opportunities-adopted",
+      "width": 390,
+      "file": "390-opportunities-adopted.png",
+      "sha256": "e400fc99bb4986b644b96b187687f73dd5bd51d1fbcd699eb90e317afde22305"
+    },
+    {
+      "scene": "opportunities-observing",
+      "width": 390,
+      "file": "390-opportunities-observing.png",
+      "sha256": "21fd9f6af031ad632696482141609e20a3ea55540855e30ec8fef9887dfdcca2"
+    },
+    {
+      "scene": "opportunities-rejected",
+      "width": 390,
+      "file": "390-opportunities-rejected.png",
+      "sha256": "50744d212752888ef6d682bdb3fe7ee359beb9aa0c938449d50d853b86cba9e3"
+    },
+    {
+      "scene": "competitors-active",
+      "width": 390,
+      "file": "390-competitors-active.png",
+      "sha256": "c784053607653ac07a3408ba2d1b2153795acade23ff4670f429032222e40653"
+    },
+    {
+      "scene": "competitors-paused",
+      "width": 390,
+      "file": "390-competitors-paused.png",
+      "sha256": "9b9aed4f387c386a00a3f58992d517d136e40a1bc32de342620f399afe118196"
+    },
+    {
+      "scene": "suppliers-incomplete",
+      "width": 390,
+      "file": "390-suppliers-incomplete.png",
+      "sha256": "4620fd159bf1c91496aa5e865106c901583a3d5c8325f105364533a27dc82736"
+    },
+    {
+      "scene": "suppliers-ready",
+      "width": 390,
+      "file": "390-suppliers-ready.png",
+      "sha256": "c24c90b279174f07c0ead0601af050e5a1f418d82a53e75ea12a1407b8a8f156"
+    },
+    {
+      "scene": "suppliers-quarantined",
+      "width": 390,
+      "file": "390-suppliers-quarantined.png",
+      "sha256": "890915b7757bd2eccf5dd8cc8958f42029221d010e2fc8d9ab0774f0d5154613"
+    }
+  ]
+}

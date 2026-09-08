@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P54 近期记录 · C 风格待审核</title>
+    <link rel="stylesheet" href="records.css" />
+    <script defer src="data.js"></script>
+    <script defer src="source-logic.js"></script>
+    <script defer src="records.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#records">跳到记录</a>
+    <header class="appbar">
+      <strong>SCOUTOPS <span>平台管理</span></strong
+      ><span>P54 近期记录 · 待审核</span>
+    </header>
+    <div class="data-layout">
+      <nav class="data-directory" aria-label="数据目录">
+        <h1>数据中心</h1>
+        <p>跨组织业务事实</p>
+        <div class="views">
+          <button id="view-records" aria-current="page">近期记录</button
+          ><button id="view-quality">证据与质量</button>
+        </div>
+        <h2>选择数据类型</h2>
+        <div id="entities"></div>
+        <p class="directory-note">按筛选读取最近 100 条。这里的数量不是全平台历史总量。</p>
+      </nav>
+      <main id="records">
+        <header class="records-heading">
+          <div>
+            <h2 id="record-title"></h2>
+            <p id="provenance"></p>
+          </div>
+          <div class="actions">
+            <button id="open-filter">筛选近期数据</button
+            ><button class="primary" id="export-open" aria-describedby="export-help">
+              导出表格文件
+            </button>
+          </div>
+        </header>
+        <p id="export-help"></p>
+        <div id="read-notice" role="status"></div>
+        <div id="write-notice" role="status"></div>
+        <div id="quality-handoff" hidden></div>
+        <div id="work">
+          <div id="filter-home"></div>
+          <section class="snapshot" aria-label="当前快照">
+            <p id="snapshot-scope"></p>
+            <dl id="summary"></dl>
+          </section>
+          <div id="content"></div>
+          <footer id="technical"></footer>
+        </div>
+        <p class="disclaimer">
+          设计审核原型，不访问服务器、不生成真实CSV、不写入审计。本包只交付近期记录；证据与质量图稿仍待交。
+        </p>
+      </main>
+    </div>
+    <dialog id="filter-dialog" aria-labelledby="filter-title" aria-describedby="filter-description">
+      <header class="dialog-header">
+        <h2 id="filter-title">筛选近期数据</h2>
+        <button data-close>关闭</button>
+      </header>
+      <div class="dialog-body">
+        <p id="filter-description">提交前仅保留草稿；关闭不会自动查询。</p>
+        <div id="filter-slot"></div>
+      </div>
+    </dialog>
+    <dialog
+      id="record-dialog"
+      aria-labelledby="detail-title"
+      aria-describedby="detail-description"
+    ></dialog>
+    <dialog
+      id="export-dialog"
+      aria-labelledby="export-title"
+      aria-describedby="export-description"
+    ></dialog>
+    <details id="review-tools">
+      <summary>审核工具（非业务界面）</summary>
+      <label>场景<select id="scene-picker"></select></label>
+      <div class="actions">
+        <button data-result="success">模拟成功返回</button
+        ><button data-result="error">模拟明确失败</button
+        ><button data-result="timeout">模拟读取超时</button
+        ><button data-result="unknown">模拟导出结果未知</button>
+      </div>
+      <p id="simulation-note"></p>
+      <pre id="intents"></pre>
+    </details>
+  </body>
+</html>
