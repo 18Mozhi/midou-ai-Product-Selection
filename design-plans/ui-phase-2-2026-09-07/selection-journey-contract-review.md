@@ -1,5 +1,7 @@
 # P16 创建选品旅程 · 输入、续办、候选与决定合同
 
+2026-09-08图稿接续：[JOURNEY-C-r1](design/journey-direction-c/README.md)48场景双端96图，零业务弹窗；具体稿待审。实际函数执行复现decide成功仍state=error、reset保留decision.reason，提案清理尚未修Vue。J07仓库直接adopted与P18五门冲突仍在，本轮再次请用户选择；采纳成功图/实现暂未交付，不把禁用审核控件当生产规则变化。输入、观察驳回及恢复可继续推进，不注销J07–J10。
+
 日期2026-09-07；N03；main/d0c1bb6；[页面规格](page-specs/P16.md)。源码入口为NavigationShell → SelectionJourney.vue → selection-journey-routes.ts → selection-journey-service.ts → mysql-selection-journey-repository.ts。当前产品源指纹沿用c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183。本批只补规格/合同/隔离回归，不改旅程业务、生产样式或已审状态。
 
 版本说明：第1–6节保留N03/42aee26的盘点快照和旧行号，不是后续修复后的当前源码声明。N04读取修复后的行为及证据见第7节；生成清单和既有图仍绑定原源码，待独立证据刷新后重新定位，不只改哈希冒充重验。

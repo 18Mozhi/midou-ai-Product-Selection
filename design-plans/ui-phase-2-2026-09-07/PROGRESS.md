@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P16创建选品 / JOURNEY-C-r1
+
+收尾检查：双端48场景capture通过，96PNG与manifest相符、100个README链接齐全。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）和format:check（2脚本）通过；diff检查无空白错误，生产/旧P15稿/coverage无改动，4101/5173无监听。手机目检后将三类型改成一行完整文字并保留44px真实点击区，重新capture通过；无新临时文件/服务，PNG保留为交付。
+
+从干净main/a6553e4接续；上批P15提交属于具体进展。按AGENTS/Feature Map/总纲读取P16全合同、真实SelectionJourney/服务/路由/仓库终态与决定链以及UI2-J夹具。ui-skills-root选frontend-design，拆为蓝色四阶段目录与白色当前工作面，候选原文和单选分离；本地HTML零业务弹窗。新增[96图](design/journey-direction-c/README.md)，48场景双端，具体稿待审。
+
+永久助手运行真实create/decide/reset/applyJourney及服务端输入校验；三类型原始body、观察/驳回null候选、单条自动选/多条显式选/first_result回退均有证据。复现decide成功未清state=error、reset保留旧决定原因，Vue未改；原型清错/清草稿作为待审保护。已有J07旅程直接adopted与P18五门冲突当前仍存在，再次向用户请求选择，未改业务且未模拟采纳成功；该分支不能算完成。
+
+初轮48场景双端及字段/恢复/来源链接不误选/busy检查通过。目检后修正操作前“已驳回”文案、accepted时间轴与空结果时间轴，再整批capture通过。20候选/28总量、空/受阻/失败、超时但task运行、长文/缺字段均为明确合成状态，服务端时长不做本地递增；审核顶部推进仅模拟GET，非真实2秒轮询。96PNG为永久交付，无新增临时文件或服务；Playwright finally关闭。
+
+未改生产Vue/API/OpenAPI、依赖/配置/权限/DB、旧图/coverage/审批，不部署或重启。恢复场景不证明真实storage或跨租户行为，GET在生产可能登记超时不能称DB纯只读。J07决定、J08–J10和P16图审/实现保留待办；下一业务面P18，全73页目标不缩减。
+
 ## 2026-09-08 · P15机会列表 / OPPORTUNITY-C-r1
 
 收尾：最终capture及无参数哈希/交互复验通过双端60场景；126PNG无多余文件，README130链接均存在。verify:docs（73路由/153必需文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本）通过。格式门发现验证脚本需第二次格式化，修正后重跑capture和无参数复验。diff检查通过；生产代码/旧P14图/coverage无改动，4101/5173无监听。无本批临时文件或服务遗留，精确暂存本批，不将原型结果计为Vue/生产/用户验收。
