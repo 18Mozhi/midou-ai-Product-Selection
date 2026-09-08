@@ -950,3 +950,17 @@ verify-ui-phase2-direction-review --capture完整通过：1440/390两个视口�
 永久交付更新为direction-review-data.js、direction-review-1440.png、direction-review-390.png、direction-review-evidence.json，均位于当前设计计划目录；两图仅是审核工具证据，不算新业务设计图。本轮没有新增临时文件，不删除永久图；历史30批清理限制不变。用户仍需对具体方向给意见，可全部否定；下一视觉任务是获审后P23/P24及进度弹窗正式稿→真实Vue闭环。当前不部署、不重启、不改API/配置/数据库/权限/依赖，全阶段仍在进行。
 
 本轮收口：索引只读复验、verify:docs（73/60/6/153）、verify:runtime-docs、format:check及git diff --check通过；只提交审核入口相关7路径，与ff46bfe产品批分开。Codex已接受本地审核页的打开请求并返回queued，不据此宣称用户已看到或已同意；最终同时提供文件和图的直接入口。
+
+## 2026-09-08 · 用户选择C，F05任务首批正式提案
+
+起点main/e29ad4e，工作树干净。用户本回合明确回复“C”，记录在DIRECTION-DECISION-C.md，关联F00-1.18-r1原内容指纹和P43原图hash。方向选择已解决，PLAN升级1.28；CURRENT/EXECUTION、P23/P24、DIRECTION-REVIEW与Feature Map同步当前入口。旧图/采集时pending、全局coverage、逐页签收计数未被改成通过。
+
+frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆角和中文无衬线应用到任务工作流：新design/task-direction-c包含本地HTML/CSS/JS和README，复用原C样式及不变的task-concept-data/业务任务隔离样本。P23范围与本人summary不混用；P24详情保留独立页面概念、事实/活动分栏和就近主操作；移动范围短顶区、筛选默认折叠，首个任务标题在844px首屏内。没有复制账号字段、虚构总量/活动或新增API。
+
+首批8场景×1440/390=16张永久设计图：目录、空结果、详情、更多操作、只读、进度打开/失败/处理中。普通页整页，弹窗为实际视口截图；最初移动整页采图会把滚动背景和固定元素拼入，视觉检查后改成视口采图并增加弹窗边界断言，保留焦点且防止程序聚焦滚动。图稿具体版本TASK-C-r1仍待审，不是全站图包、真实Vue或页面完成。
+
+新增永久scripts/verify-ui-phase2-task-c.mjs，--capture生成16图及源hash/图hash证据，无参数先核对同源证据再只读运行浏览器。已有Playwright/指标工具复用，无安装依赖。两个视口各8场景验证、非复选控件16px/44px与文本13px、无页面溢出、筛选/重置/选择、Tab双边界/Escape返焦、101非法输入、合法表单演示不改变35%事实、零HTTP/console/pageerror及空存储通过。取消/成功只是原型交互，不称真实任务写入成功。排序只有一个样本，未验证多页排序算法；新建/批量/其他动作提示独立图待补，不用假成功冒充功能。
+
+只读合同对账保持164源/28合同/1478候选全部有引用、73路由/规格问题0；verify:docs（73/60/6/153）、verify:runtime-docs、verify:static-analysis（390文件）通过。最后画面文案和移动折叠调整后重新采图/同源浏览器验证，最终格式及差异门单独收尾。未改apps生产源码、后端/API/OpenAPI、数据库/迁移、权限、.env/参数/依赖，不重复跑不受影响的产品构建或E2E。
+
+本轮新建的16张PNG、evidence.json和可交互稿全部是永久审核交付，目录精确为design-plans/ui-phase-2-2026-09-07/design/task-direction-c；未创建临时脚本/日志/服务。浏览器及上下文finally关闭，4101/5173无监听。历史30批清理受阻记录不变，不重试绕过。未部署、不重启；用户下一步审TASK-C-r1布局与密度，再补剩余具体稿及按原调用链进入Vue，不再让用户重复选A/B/C。

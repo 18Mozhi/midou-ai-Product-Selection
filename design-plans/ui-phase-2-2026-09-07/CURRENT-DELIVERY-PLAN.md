@@ -2,6 +2,8 @@
 
 日期：2026-09-08。性质：计划交付，不是实施或上线完成报告。
 
+最新决策：用户已明确选择C，[方向记录](DIRECTION-DECISION-C.md)取代下文历史“待选择”状态。当前进入F05，[任务C r1图稿](design/task-direction-c/README.md)已提供8场景×双视口；具体稿待审核，未自动通过页面或部署。下一步不是重复询问A/B/C，而是处理本批稿意见并完成真实Vue闭环。
+
 接续进展：用户允许继续后，17路径在途批已完成收尾并独立提交ff46bfe；原第1节保留编制时快照，不再把这些文件列为待提交。当前下一审核入口为[DIRECTION-REVIEW](DIRECTION-REVIEW.md)：F00-1.18-r1内容指纹d0dbcf0700567dbb2614d8aeaacb00802991bceda295ff5052e30bf03af9e063，方向仍待用户选择，不能跳过正式审图进入批量风格应用。
 
 本文件是既有 [PLAN](PLAN.md)、[EXECUTION](EXECUTION.md) 和 [逐页矩阵](PAGES.md) 的当前执行摘要，不建立第二套页面编号或覆盖统计。历史起点按当时版本保留；现在领取任务须先核对下述基线及 [PROGRESS](PROGRESS.md)，不能重复领取已经提交的修复。

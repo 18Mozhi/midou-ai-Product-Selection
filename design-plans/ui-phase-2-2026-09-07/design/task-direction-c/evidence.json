@@ -1,0 +1,313 @@
+{
+  "version": "TASK-C-r1",
+  "kind": "formal-design-proposal-not-vue-not-production",
+  "directionDecision": "../../DIRECTION-DECISION-C.md",
+  "pageApproval": "pending-user-review",
+  "capturedAt": "2026-09-08T03:50:52.588Z",
+  "platform": "win32",
+  "browser": "151.0.7922.34",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/index.html": "7c40fe2228cbdae955be205ba74e28d58dcba4178987e8105c837fca75c8c67c",
+    "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/tasks.css": "6abb575d4cc9ee9e07329ea56c4417de6c42969ea13cde8aa7f8a0d6010b0c38",
+    "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/tasks.js": "52d58f53f55dbfc4330bfff582c72c84f558a3670553b6190adff3e3728e99fe",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "design-plans/ui-phase-2-2026-09-07/design/task-concept-data.js": "78cb24c9e23077b733cc7d1e6b3e7dd7afb884543ab673bc1da9a643cbe83779",
+    "tests/e2e/helpers/business-tasks.ts": "27dccad9cb04989181bd30b5668ba50e0922a9c6c1b091758da88f931875d307",
+    "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+    "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
+    "apps/web/src/components/TaskDetailPanel.vue": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+    "apps/web/src/components/TaskBatchActions.vue": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+    "scripts/verify-ui-phase2-task-c.mjs": "683cfc2600bb744f82548143d5e9cce43798cba1c40dd88a67b7f94b9100c0bc",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c"
+  },
+  "screenshots": [
+    {
+      "file": "1440-list.png",
+      "scene": "list",
+      "pageId": "P23",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "42d5de976bd0797ec8330931ad95c33a525e87c4546915c7cbfea24c9dfd65b8",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 47,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-detail.png",
+      "scene": "detail",
+      "pageId": "P24",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "af0bff48fb9b8336dc167a8edfdcf29169928b6dd562c350b428d3b5d208d60b",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 61,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-progress.png",
+      "scene": "progress",
+      "pageId": "P24",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "14e99d029615e618687a3b452cb3b7386326adb85ff2923b529a192ea4bcc753",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-progress-error.png",
+      "scene": "progress-error",
+      "pageId": "P24",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "34c7054b789aa126776b0bcc912f5e6bff9a6c2172c9d7dc660bf6bc97aaac44",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-progress-busy.png",
+      "scene": "progress-busy",
+      "pageId": "P24",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "sha256": "7a84612e9c3b7c2dc7074004dad8aa195a64ad1d95fd9c4d9b78369ca17c1ccc",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-empty.png",
+      "scene": "empty",
+      "pageId": "P23",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "7b5ac407c0f4d8b1f613f1e7f5769737f5777c01737140f6e0526429581c77de",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-readonly.png",
+      "scene": "readonly",
+      "pageId": "P24",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "fae7759aca97341cc172a129bb7cffe393a6fe70953c1072ba5204e30ace3ec1",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "1440-more.png",
+      "scene": "more",
+      "pageId": "P24",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "sha256": "cce6c796bc48ba6a25b7c2a145a4dc764036c8963132aede21248c11df57ed51",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 61,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-list.png",
+      "scene": "list",
+      "pageId": "P23",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "afe99a111e6f4f50c2389143f239a550e54051a3c5be0f56b5f09ec043f0028d",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 35,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-detail.png",
+      "scene": "detail",
+      "pageId": "P24",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "661621a08a029120c4c42fffbafe5087ebfcbd650e4b12f29a1899f1c698b945",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-progress.png",
+      "scene": "progress",
+      "pageId": "P24",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "a8ac0ecf4b5ede9d49165279bac11d0c73854bd6ea745f2f885f6bb75e1b3504",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-progress-error.png",
+      "scene": "progress-error",
+      "pageId": "P24",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "b93bb9738c7b83d05d0d16d108c3ce83fae662488839e18cd74cf8db85e104f9",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-progress-busy.png",
+      "scene": "progress-busy",
+      "pageId": "P24",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "sha256": "d00759533ef9204c85f9f0fe200005f2f29f8315015676ff2ab995d218bb5a7c",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 11,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-empty.png",
+      "scene": "empty",
+      "pageId": "P23",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "c66dd937e4b78ab8c297a854235f105b7d1050515a9b096aaf5de76197a48b99",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 27,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-readonly.png",
+      "scene": "readonly",
+      "pageId": "P24",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "240b86ee51383185558f1177fe642a1f3a9626b2c957e5657b56087b5683d28f",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    },
+    {
+      "file": "390-more.png",
+      "scene": "more",
+      "pageId": "P24",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "sha256": "55ab03baa6d248a550e829547f53366b849dae14ef3a56d41429a19df121b375",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      }
+    }
+  ]
+}

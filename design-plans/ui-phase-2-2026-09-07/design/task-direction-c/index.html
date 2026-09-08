@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>C · 任务工作目录 · 正式设计提案 r1</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="tasks.css" />
+    <script src="../task-concept-data.js" defer></script>
+    <script src="tasks.js" defer></script>
+  </head>
+  <body>
+    <aside class="study-bar" aria-label="设计审核工具">
+      <span><b>C 方向已选定</b> · 任务提案 r1 待审 · 隔离样本 / 无 API</span>
+      <label
+        >审图场景<select id="scene">
+          <option value="list">任务目录</option>
+          <option value="detail">任务详情</option>
+          <option value="progress">更新进度</option>
+          <option value="progress-error">提交失败</option>
+          <option value="progress-busy">提交中</option>
+          <option value="empty">筛选无结果</option>
+          <option value="readonly">只读详情</option>
+          <option value="more">更多任务操作</option>
+        </select></label
+      >
+    </aside>
+    <a class="skip" href="#main">跳到任务内容</a>
+    <header class="brand-bar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">m.</span><b>米豆智选</b
+        ><span class="product-label">协作空间</span>
+      </div>
+      <nav class="breadcrumb" aria-label="当前位置">
+        <span>业务任务</span><span>/</span><b id="breadcrumb">全部任务</b>
+      </nav>
+      <span class="operator"><i class="operator-dot" aria-hidden="true"></i>隔离工作区成员</span>
+    </header>
+    <main class="workspace" id="main" tabindex="-1">
+      <aside class="scope-panel">
+        <div>
+          <p class="eyebrow">TASK DIRECTORY</p>
+          <h1>任务<br class="desktop-break" />工作目录<span class="title-dot">.</span></h1>
+          <p class="scope-description">找到当前要推进的事，<br />从事实走向下一步。</p>
+          <button class="create-button" data-deferred="新建任务">
+            <span>＋</span>新建任务<span>↗</span>
+          </button>
+        </div>
+        <div class="scope-facts">
+          <p>当前范围</p>
+          <strong>当前工作区 · 全部任务</strong>
+          <p class="scope-note">查看当前工作区内的任务，<br />按状态或关键词定位。</p>
+        </div>
+        <div class="scope-foot">
+          <span aria-hidden="true">◎</span>
+          <div>保留每一次推进的依据<small>进度、评论与任务活动关联</small></div>
+        </div>
+      </aside>
+      <section class="directory" id="list-view" aria-labelledby="list-heading">
+        <header class="directory-heading">
+          <div>
+            <p class="eyebrow">ALL TASKS</p>
+            <h2 id="list-heading">把待办变成下一步</h2>
+          </div>
+          <span class="sample-label">当前页 · 1 条记录</span>
+        </header>
+        <details id="filter-disclosure" open>
+          <summary>搜索与状态筛选</summary>
+          <form class="filters" id="filters" role="search">
+            <label class="query-field"
+              ><span>搜索任务</span><input id="query" maxlength="200" placeholder="搜索标题或说明"
+            /></label>
+            <label class="status-field"
+              ><span>状态</span
+              ><select id="status">
+                <option value="">全部状态</option>
+                <option value="todo">待处理</option>
+                <option value="in_progress">进行中</option>
+                <option value="paused">已暂停</option>
+                <option value="completed">已完成</option>
+                <option value="cancelled">已取消</option>
+              </select></label
+            >
+            <button class="primary" type="submit">应用</button
+            ><button type="button" id="reset">重置</button>
+          </form>
+        </details>
+        <div class="result-line">
+          <span id="result" role="status">显示 1 条任务</span
+          ><label class="sort-label"
+            >排序<select id="sort">
+              <option>优先级与期限</option>
+              <option>截止时间最早</option>
+              <option>最近更新</option>
+              <option>最近创建</option>
+            </select></label
+          >
+        </div>
+        <div id="task-record">
+          <div class="selection-line">
+            <label><input type="checkbox" id="selected" />选择本页 1 项</label
+            ><button class="quiet" id="clear" hidden>清除选择</button>
+          </div>
+          <div class="batch" id="batch" hidden>
+            <span>已选择 1 项</span><button data-deferred="批量暂停">批量暂停</button
+            ><button data-deferred="批量继续">批量继续</button
+            ><button data-deferred="批量延期">批量延期</button
+            ><button data-deferred="批量调整负责人">批量调整负责人</button
+            ><button class="danger" data-deferred="批量取消">批量取消</button>
+          </div>
+          <article class="task-record">
+            <div class="record-top">
+              <span class="badge">进行中</span><span class="priority">高优先级</span
+              ><span class="meta">系统生成</span>
+            </div>
+            <h3 id="task-title"></h3>
+            <p class="muted" id="task-description"></p>
+            <div class="record-bottom">
+              <div class="record-progress">
+                <div><span>当前进度</span><b>35%</b></div>
+                <progress max="100" value="35" aria-label="任务进度">35%</progress>
+              </div>
+              <div class="deadline"><span>即将到期</span><time>2026/08/09 18:00</time></div>
+              <button class="primary" id="open-detail">查看任务 ↗</button>
+            </div>
+          </article>
+        </div>
+        <section class="empty-state" id="empty" hidden>
+          <span aria-hidden="true">⌕</span>
+          <h3>没有符合条件的任务</h3>
+          <p>调整关键词或状态，重新查看工作区任务。</p>
+          <button id="empty-reset">重置筛选</button>
+        </section>
+        <footer class="directory-foot">查看详情以继续推进任务，或通过筛选定位其他待办。</footer>
+      </section>
+      <section class="directory" id="detail-view" aria-labelledby="detail-heading" hidden>
+        <header class="detail-heading">
+          <span class="eyebrow">TASK DETAIL / 第 2 版</span
+          ><button class="quiet" id="back">← 返回列表</button>
+        </header>
+        <div class="detail-title">
+          <div class="record-top">
+            <span class="badge">进行中</span><span class="priority">高优先级</span>
+          </div>
+          <h2 id="detail-heading"></h2>
+          <p class="muted" id="detail-description"></p>
+        </div>
+        <div class="detail-grid">
+          <section class="facts">
+            <div class="progress-heading">
+              <h3>当前进展</h3>
+              <b>35<span>%</span></b>
+            </div>
+            <progress value="35" max="100" aria-label="当前任务进度">35%</progress>
+            <p id="progress-note"></p>
+            <dl class="fact-list">
+              <div>
+                <dt>处理时限</dt>
+                <dd>即将到期<small>2026/08/09 18:00</small></dd>
+              </div>
+              <div>
+                <dt>负责人</dt>
+                <dd>测试成员<small>当前工作区成员</small></dd>
+              </div>
+              <div>
+                <dt>底层采集任务</dt>
+                <dd>未关联采集任务</dd>
+              </div>
+            </dl>
+            <details class="technical">
+              <summary>技术详情</summary>
+              <small id="task-id"></small>
+            </details>
+          </section>
+          <section class="activity">
+            <h3>任务活动</h3>
+            <div class="activity-empty">
+              <span aria-hidden="true">◷</span><strong>暂无任务活动</strong>
+              <p>进度更新与协作评论，<br />将在这里展示。</p>
+            </div>
+            <form id="comment-form">
+              <label
+                >添加评论<textarea
+                  id="comment"
+                  maxlength="2000"
+                  required
+                  placeholder="记录可追溯的协作说明"
+                ></textarea></label
+              ><button>添加评论</button>
+            </form>
+          </section>
+        </div>
+        <p class="notice" id="readonly-note" role="status" hidden>
+          当前角色仅可查看任务事实与活动记录，修改入口已按权限隐藏。
+        </p>
+        <footer class="action-dock" id="actions">
+          <button class="primary" id="open-progress">更新进度</button
+          ><button data-deferred="完成任务">完成</button>
+          <details id="more-actions">
+            <summary>更多任务操作</summary>
+            <div class="more-grid">
+              <button data-deferred="暂停任务">暂停</button
+              ><button data-deferred="调整期限">调整期限</button
+              ><button data-deferred="转交负责人">转交负责人</button
+              ><button data-deferred="编辑任务">编辑任务</button
+              ><button class="danger" data-deferred="取消任务">取消任务</button
+              ><button class="danger" data-deferred="删除任务">删除任务</button>
+            </div>
+          </details>
+        </footer>
+      </section>
+    </main>
+    <p class="review-note" id="review-note" role="status">
+      本批可交互：搜索、选择、查看、返回、进度表单。其他按钮保留入口，点击只提示后续设计范围，不执行写入。
+    </p>
+    <dialog
+      class="form-dialog"
+      id="progress-dialog"
+      aria-labelledby="progress-title"
+      aria-describedby="progress-intro"
+    >
+      <form id="progress-form">
+        <header class="form-heading">
+          <div>
+            <p class="eyebrow">PROGRESS UPDATE</p>
+            <h2 id="progress-title">更新任务进度</h2>
+          </div>
+          <button type="button" id="close-progress" aria-label="关闭进度表单">×</button>
+        </header>
+        <p class="form-intro" id="progress-intro">
+          提交时使用当前任务版本校验冲突，并保留活动与审计记录。
+        </p>
+        <p class="target-line" id="target-title"></p>
+        <div class="form-body">
+          <label
+            >完成进度（0–100）<input
+              id="progress-value"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              required
+              aria-describedby="percent-help" /></label
+          ><small id="percent-help">当前进度 35%，填写新的整数进度。</small
+          ><label
+            >本次进展说明<textarea
+              id="progress-note-input"
+              maxlength="500"
+              required
+              placeholder="说明已完成内容、当前阻塞和下一步"
+            ></textarea>
+          </label>
+          <div class="error" id="submit-error" role="alert" hidden>
+            提交失败，填写内容已保留。请重试。
+          </div>
+        </div>
+        <footer class="form-footer">
+          <span>第 2 版 · 隔离设计演示</span>
+          <div>
+            <button type="button" id="cancel-progress">返回</button
+            ><button class="primary" type="submit" id="submit-progress">确认提交</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>
