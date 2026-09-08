@@ -220,4 +220,3 @@ useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后ne
 命令：node --test tests/unit/ui-phase2-contract-audit.test.mjs tests/unit/ui-phase2-inventory.test.mjs；node scripts/audit-ui-phase2-contracts.mjs；npm run verify:docs；npm run verify:runtime-docs；npm run format:check。实际结果见[PROGRESS](PROGRESS.md)。默认构建清单工具有写入副作用，本批不运行其默认模式，不重写旧baseline、actions、dialogs、coverage或图hash。
 
 无产品Vue/CSS、API、权限、数据库、环境、依赖或部署改动；新增文档/永久校验与Feature Map索引不需重启。不创建临时截图、脚本文件、服务或浏览器。正式方向F00-1.18-r1仍待用户意见；获审后按F05代表页正式新图→Vue→测试继续，全73页目标不缩减。
-
