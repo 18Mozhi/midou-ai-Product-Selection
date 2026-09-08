@@ -1,0 +1,1239 @@
+{
+  "proposal": "1688-ACCEPTANCE-C-r1",
+  "sourceHashes": {
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/api/src/mysql-provider-source-sample-repository.ts": "c8e7aecfea77136a5257d16bc3bdb22cc624dcdb7b5377b607547824abd883d1",
+    "apps/api/src/provider-source-service.ts": "d1c7e567f59a5936cb4683f872681c6249839c065d63960f115c61a4610ea053",
+    "apps/api/src/provider-source-routes.ts": "b8976fbbf6d8400cd167a26bd2e4a349a4e38dfe2cd4511e778cfad8f657afd9",
+    "apps/api/src/mysql-provider-source-repository.ts": "04efb5c27fa0f7c0c4034ea3ff7e8fa2d8ab7285100d03e1ccf0d6473b3bb364",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe",
+    "scripts/lib/ui-phase2-1688-acceptance-design-data.mjs": "d48d151f489395743656c6451b76cf55fff80c0bfa301a06eb5a2c1b178886aa",
+    "scripts/verify-ui-phase2-1688-acceptance-c.mjs": "a286131735193b7ab06337b181a427657f14cb02152f77b9308dcd7e62e920e3",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/index.html": "3e89132b7035455d801ca8cbbed947549951781a4e55daf4ab88347e4359e543",
+    "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/acceptance.css": "8fa4d2c74d7de4d4e7bdf7bbae2eb535a725e7e487e7eea3af44f22c107574dd",
+    "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/acceptance.js": "54be94ecf65aaecbf1dcaf81b1fe218580ce3bb3b77beb746ea33d78d3e25516",
+    "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/data.js": "b8bd4da9a1ec47e9ada914a1f963d573dd041b8d79282be816ebf63ca2270db8",
+    "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/source-logic.js": "223af8c8a781279b830fc02b426b47b37cc81f97e89dc3913da85de3eaa89306"
+  },
+  "sourceChecks": [
+    "Original 2/3 gates and 12/3/1 coverage, independent all-pending fixture, exact links and nine run labels from actual source",
+    "Actual active scope/default workspace, trim/exact four-field POST, duplicate guard, one follow-up GET; reproduced scheduled success overwriting failed refresh notice while old facts remain",
+    "Eight actual first/existing read error paths, 12-second timer callback, single flight and unmount abort; no real elapsed network timeout or KeepAlive proof",
+    "24 actual repository read-method combinations using inert SQL rows; aggregate SQL not executed, coverage adapter deliberately returns no observations; enabled plus setup_required retained, no automatic disabling inferred"
+  ],
+  "checks": [
+    "1440: 67 full-page scenes, 24 source-method gate/status combinations, original fixtures, zero dialogs; exact POST/one GET and failed reread separation, four submit/five read/three scope results, active scope selection, unknown no retry, route intents, disclosure/keyboard, stale scene, six breakpoints and CSS zoom2; no real Vue/API/SQL/AT/theme/density/lifecycle proof",
+    "390: 67 full-page scenes, 24 source-method gate/status combinations, original fixtures, zero dialogs; exact POST/one GET and failed reread separation, four submit/five read/three scope results, active scope selection, unknown no retry, route intents, disclosure/keyboard, stale scene, six breakpoints and CSS zoom2; no real Vue/API/SQL/AT/theme/density/lifecycle proof"
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "scene": "default",
+      "label": "原始2/3门禁与12/3/1覆盖",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "891c3b52ddc87938b5af38a9032960c907d90f61c7d2022c82d94372f4ef63d1"
+    },
+    {
+      "file": "1440-pending.png",
+      "width": 1440,
+      "scene": "pending",
+      "label": "原始全部待验收",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "70d5d774a432cdc3fc9293e1e602629ee4fa4d914bb60270c975e98b3d952325"
+    },
+    {
+      "file": "1440-context.png",
+      "width": 1440,
+      "scene": "context",
+      "label": "手机结论与下一步展开",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "891c3b52ddc87938b5af38a9032960c907d90f61c7d2022c82d94372f4ef63d1"
+    },
+    {
+      "file": "1440-gates.png",
+      "width": 1440,
+      "scene": "gates",
+      "label": "三项证据全部展开",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "891c3b52ddc87938b5af38a9032960c907d90f61c7d2022c82d94372f4ef63d1"
+    },
+    {
+      "file": "1440-technical.png",
+      "width": 1440,
+      "scene": "technical",
+      "label": "技术详情",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "980e9b20aacf8428a0a02cff28587ee45f74fb82a095916efa30e3fcdf57776b"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "scene": "loading",
+      "label": "初次读取",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "a047cd3408b7b8b80e0aa862ca7e67d2b8a4f329260a7fab620e817b3d20d680"
+    },
+    {
+      "file": "1440-expired.png",
+      "width": 1440,
+      "scene": "expired",
+      "label": "登录过期",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "b62f0cebee998861e8591e522e666401ed5777a1a8eea0b28d6571abb7efe064"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "label": "权限拒绝",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "26e2097d61b648061d9c0f2f4831eb2c0e551136526ef6a5bf0015ff18bd3d7c"
+    },
+    {
+      "file": "1440-error.png",
+      "width": 1440,
+      "scene": "error",
+      "label": "首次读取失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "2cb278e66a4ae6cd2b7660090c978abe7a2351f7592e238b95fd0c5385c3a070"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "width": 1440,
+      "scene": "refreshing",
+      "label": "刷新保留原证据",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "f59aad2a5665ee61d4ca9fcbc27b9a839cee1f68a75454f4e8858d6f5048dd60"
+    },
+    {
+      "file": "1440-refresh-error.png",
+      "width": 1440,
+      "scene": "refresh-error",
+      "label": "刷新失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "7c7bbb1ecb3d227b6a5ff85d5a833f1df9bb20bdb0780e0a6eb2f8fa1e071791"
+    },
+    {
+      "file": "1440-refresh-timeout.png",
+      "width": 1440,
+      "scene": "refresh-timeout",
+      "label": "刷新超时",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "d4ac4b088e4906796de666f995cc1e257efd7e993d1acb4dd784a1a5198a724c"
+    },
+    {
+      "file": "1440-refresh-expired.png",
+      "width": 1440,
+      "scene": "refresh-expired",
+      "label": "刷新登录失效",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "872631d13409ca84440f29c0bea262f12b618e71ffbbd5dbf4f42ec70edd4cb5"
+    },
+    {
+      "file": "1440-refresh-forbidden.png",
+      "width": 1440,
+      "scene": "refresh-forbidden",
+      "label": "刷新权限拒绝",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ae79dddd8149a4ad2233eaa0ac01aeb85ccafb7a0fc112692daa753b93572481"
+    },
+    {
+      "file": "1440-scope-loading.png",
+      "width": 1440,
+      "scene": "scope-loading",
+      "label": "组织读取中",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0664bde1676c6bfc1a0e4ad8a8c87da727714a5528936cc7f6442d55cfc46bab"
+    },
+    {
+      "file": "1440-scope-error.png",
+      "width": 1440,
+      "scene": "scope-error",
+      "label": "组织读取失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ce172e3209cae2f005d754142358439fa0e5a111322d05944b61612c1dcfe8f0"
+    },
+    {
+      "file": "1440-scope-empty.png",
+      "width": 1440,
+      "scene": "scope-empty",
+      "label": "无活动组织",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "b4c68b68541a63c86f529ebe691107ba25505c2b61c1569fe4065cc1f108a866"
+    },
+    {
+      "file": "1440-workspace-loading.png",
+      "width": 1440,
+      "scene": "workspace-loading",
+      "label": "工作区读取中",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "aca4ff7215c9df060961a2de5d0cb8681347b9d6adc32197de1f68a4f3dc839c"
+    },
+    {
+      "file": "1440-workspace-empty.png",
+      "width": 1440,
+      "scene": "workspace-empty",
+      "label": "无活动工作区",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "55d0c42065e0e605f39e5d4e112b84d8d337fd70f176bb1ab1074e6d44ca9a21"
+    },
+    {
+      "file": "1440-workspace-error.png",
+      "width": 1440,
+      "scene": "workspace-error",
+      "label": "工作区读取失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "86f7dfd32b811108c247eec85b50d0e8e2a390584672bb486bca59210c978a5f"
+    },
+    {
+      "file": "1440-query-filled.png",
+      "width": 1440,
+      "scene": "query-filled",
+      "label": "已填写运行范围",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "54bea37fd2163caf32cb24a7b2c1ae87067627b0cbea971a63e6a85909878070"
+    },
+    {
+      "file": "1440-query-limit.png",
+      "width": 1440,
+      "scene": "query-limit",
+      "label": "200字关键词",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "e12b1c7d0c5d102e44d030bc03baa65ac90a368deb393f55501e6f3c643b5382"
+    },
+    {
+      "file": "1440-submitting.png",
+      "width": 1440,
+      "scene": "submitting",
+      "label": "提交进行中",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "40f2f30143f41f55cbc145d2be359e87c670fa33cd982f9ba44162b9987d1ee8"
+    },
+    {
+      "file": "1440-scheduled.png",
+      "width": 1440,
+      "scene": "scheduled",
+      "label": "已排队未完成",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "79ee56eb7dc6999bd633b36db2d3d55a8de05f554978e79c8b46361b98f09ec8"
+    },
+    {
+      "file": "1440-scheduled-read-error.png",
+      "width": 1440,
+      "scene": "scheduled-read-error",
+      "label": "已排队但重读失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "9685e361cb334cc99ec06a3be489ac8d1b8f3c96ad1779fdd090fb5520b168fe"
+    },
+    {
+      "file": "1440-submit-error.png",
+      "width": 1440,
+      "scene": "submit-error",
+      "label": "提交失败保留输入",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "739f31f45d3f1f32506b4cd35c04613ce42a2f8b71192211cb9db250343d0473"
+    },
+    {
+      "file": "1440-submit-unknown.png",
+      "width": 1440,
+      "scene": "submit-unknown",
+      "label": "提交结果未知",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "528517dc02e661af06b585a470a2e793a497ff57813d28a212e0a47f75861fbc"
+    },
+    {
+      "file": "1440-task-detail.png",
+      "width": 1440,
+      "scene": "task-detail",
+      "label": "已创建任务编号",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "3ba227a9754fca2d054cd344353c85c9023913709f08bc492313a56194103f80"
+    },
+    {
+      "file": "1440-coverage-invalid.png",
+      "width": 1440,
+      "scene": "coverage-invalid",
+      "label": "合成覆盖合同异常",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ec441d667c98aa02f88bf769827cd101e37cd4c9d51f22e0720c3fdb4cb46268"
+    },
+    {
+      "file": "1440-long-content.png",
+      "width": 1440,
+      "scene": "long-content",
+      "label": "合成长原因",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ab0e9b8635b2eea766cbfe2db80d4de070c0be70cc8862940597aa07413b89f8"
+    },
+    {
+      "file": "1440-focus.png",
+      "width": 1440,
+      "scene": "focus",
+      "label": "键盘焦点",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "9543109227375311671e1756a998f539b1da543ad290a946b15f7edecff16aee"
+    },
+    {
+      "file": "1440-hover.png",
+      "width": 1440,
+      "scene": "hover",
+      "label": "悬停",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "72eb75121186ae45e94f316daf4187f17a00b892cdf13f797935f3a581012177"
+    },
+    {
+      "file": "1440-pressed.png",
+      "width": 1440,
+      "scene": "pressed",
+      "label": "按下",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "67ac246cfd90cb9f81b0ef2e84bb683ddd2cf1e2e8d06dc00b5acd77b73f2f18"
+    },
+    {
+      "file": "1440-review-tools.png",
+      "width": 1440,
+      "scene": "review-tools",
+      "label": "非业务审核工具",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "6454929abecbadfe58ba13cba33ff274068a34cfdcc9bd3c44e2e0a4d98e27e6"
+    },
+    {
+      "file": "1440-no-profile-draft.png",
+      "width": 1440,
+      "scene": "no-profile-draft",
+      "label": "合成门禁组合 no-profile-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "46d57e770ba13682624e08c8eb3b0e1853c97821b61ed8048b1ea6854e6af56c"
+    },
+    {
+      "file": "1440-no-profile-disabled.png",
+      "width": 1440,
+      "scene": "no-profile-disabled",
+      "label": "合成门禁组合 no-profile-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "dfbc87647cd8ebe6a40241f4d57a8452324e904138a875b436bffdd5d9b85861"
+    },
+    {
+      "file": "1440-no-profile-enabled.png",
+      "width": 1440,
+      "scene": "no-profile-enabled",
+      "label": "合成门禁组合 no-profile-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "b682eb4afabe9d4e7181c9376243077d7a5f0611196c20c1eb07946b311a9440"
+    },
+    {
+      "file": "1440-no-run-draft.png",
+      "width": 1440,
+      "scene": "no-run-draft",
+      "label": "合成门禁组合 no-run-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "c78312427602a3030bfed22b6e59dfcad5785968f85ccb2f38a88a0a8591065c"
+    },
+    {
+      "file": "1440-no-run-disabled.png",
+      "width": 1440,
+      "scene": "no-run-disabled",
+      "label": "合成门禁组合 no-run-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "b34ee09113ef5a297d36d9f08100e4cd8f4a39acb3f4db861f9f075c320e072f"
+    },
+    {
+      "file": "1440-no-run-enabled.png",
+      "width": 1440,
+      "scene": "no-run-enabled",
+      "label": "合成门禁组合 no-run-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "d32ced986051798d3165376c500ccb581561039f2dcaa5334a9e94ed1197712f"
+    },
+    {
+      "file": "1440-login-expired-draft.png",
+      "width": 1440,
+      "scene": "login-expired-draft",
+      "label": "合成门禁组合 login-expired-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "559a32ef2fc635c8c792d4de27fee918a9ec18aa3ddf8fef20cfbedfa284068e"
+    },
+    {
+      "file": "1440-login-expired-disabled.png",
+      "width": 1440,
+      "scene": "login-expired-disabled",
+      "label": "合成门禁组合 login-expired-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "73b39e32c20c1b6c542e5551f4accf9e3de789cfdb96eb68a6a1388a29e00530"
+    },
+    {
+      "file": "1440-login-expired-enabled.png",
+      "width": 1440,
+      "scene": "login-expired-enabled",
+      "label": "合成门禁组合 login-expired-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "a1e9f871a5c850489d5a70fa2faf8f4bea636c5ddbac5c52f8a8148041386415"
+    },
+    {
+      "file": "1440-captcha-blocked-draft.png",
+      "width": 1440,
+      "scene": "captcha-blocked-draft",
+      "label": "合成门禁组合 captcha-blocked-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ea546ddcab3de879b5266630c246a7183a9a895687a6ec08a31b213478722e7f"
+    },
+    {
+      "file": "1440-captcha-blocked-disabled.png",
+      "width": 1440,
+      "scene": "captcha-blocked-disabled",
+      "label": "合成门禁组合 captcha-blocked-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "17a9b8625a162c3a37176938976d8eae2155aac10da7362f933ad34308e8f00a"
+    },
+    {
+      "file": "1440-captcha-blocked-enabled.png",
+      "width": 1440,
+      "scene": "captcha-blocked-enabled",
+      "label": "合成门禁组合 captcha-blocked-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "25175755a8661e3622f11e0ac58eda89d265d9dabf75dc0ac52eb3d83519cfa8"
+    },
+    {
+      "file": "1440-old-parser-draft.png",
+      "width": 1440,
+      "scene": "old-parser-draft",
+      "label": "合成门禁组合 old-parser-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ef79ab8b2a9c7c10ef3e417321063e8927691148c72492532847ed7ebac5455b"
+    },
+    {
+      "file": "1440-old-parser-disabled.png",
+      "width": 1440,
+      "scene": "old-parser-disabled",
+      "label": "合成门禁组合 old-parser-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "687ac1d898247fc4a3e95fb2f1ffe747ca622a90203e77681620c9b5a1476574"
+    },
+    {
+      "file": "1440-old-parser-enabled.png",
+      "width": 1440,
+      "scene": "old-parser-enabled",
+      "label": "合成门禁组合 old-parser-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "2a1e53c46304fd76626f26b5c2125d6803ce78a968a535fae8cfd7e599cfb94e"
+    },
+    {
+      "file": "1440-parser-changed-draft.png",
+      "width": 1440,
+      "scene": "parser-changed-draft",
+      "label": "合成门禁组合 parser-changed-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "9ebefe701b07b635a53c2b3888d757dfbf7e78defa3f542086b1be58bf796d47"
+    },
+    {
+      "file": "1440-parser-changed-disabled.png",
+      "width": 1440,
+      "scene": "parser-changed-disabled",
+      "label": "合成门禁组合 parser-changed-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "b5d256be1c784c3637c303962f6d43ae4299012605ac63eb84efe51d551cfa1a"
+    },
+    {
+      "file": "1440-parser-changed-enabled.png",
+      "width": 1440,
+      "scene": "parser-changed-enabled",
+      "label": "合成门禁组合 parser-changed-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "5fcd71a4ad6ab96abbd02ae9d24b3d6d85b3ca43c619f37a5ed714e37278e38e"
+    },
+    {
+      "file": "1440-review-pending-draft.png",
+      "width": 1440,
+      "scene": "review-pending-draft",
+      "label": "合成门禁组合 review-pending-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "622e69a6bc9c9d141fdfede9027ea5a347f05f8c6e33a5561baf46a62d627300"
+    },
+    {
+      "file": "1440-review-pending-disabled.png",
+      "width": 1440,
+      "scene": "review-pending-disabled",
+      "label": "合成门禁组合 review-pending-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "6afbca15577188050ce0a28d480f2912d9ee1dabb91d1e9117ff763e6a1a4b03"
+    },
+    {
+      "file": "1440-review-pending-enabled.png",
+      "width": 1440,
+      "scene": "review-pending-enabled",
+      "label": "合成门禁组合 review-pending-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "625f7d671f6a9962afd5fa00f0d9d34e3bdb30bce318be3a59c90e1fd47fb564"
+    },
+    {
+      "file": "1440-all-passed-draft.png",
+      "width": 1440,
+      "scene": "all-passed-draft",
+      "label": "合成门禁组合 all-passed-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "7e5bd2312d595f22ddf3f4c9a4002c6a3048f19215d38dd0aacac6fca36a54bf"
+    },
+    {
+      "file": "1440-all-passed-disabled.png",
+      "width": 1440,
+      "scene": "all-passed-disabled",
+      "label": "合成门禁组合 all-passed-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "cf10c000e5005adbff55ad68be35add5dbd1b4db8ef055a0f741bd3391025411"
+    },
+    {
+      "file": "1440-all-passed-enabled.png",
+      "width": 1440,
+      "scene": "all-passed-enabled",
+      "label": "合成门禁组合 all-passed-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "303f451a63ff55acdfe0558af404afeddc596a3f32e9c5c6ff3aecc8ec34c0c7"
+    },
+    {
+      "file": "1440-run-scheduled.png",
+      "width": 1440,
+      "scene": "run-scheduled",
+      "label": "合成最近运行 scheduled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "c49809a1ce33f68c9c202d1032d0358f0b8c3538cfe1818353fd9e7c1aadfbb6"
+    },
+    {
+      "file": "1440-run-leased.png",
+      "width": 1440,
+      "scene": "run-leased",
+      "label": "合成最近运行 leased",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0a562b3b8d4c5ece814ea4655dce8ce82258d1514ed5de8b4eb27b11a956cbb1"
+    },
+    {
+      "file": "1440-run-running.png",
+      "width": 1440,
+      "scene": "run-running",
+      "label": "合成最近运行 running",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "656ee4b6d7648ed841d92e531849896d38f978cb864d8d8e6178006deb57460c"
+    },
+    {
+      "file": "1440-run-succeeded.png",
+      "width": 1440,
+      "scene": "run-succeeded",
+      "label": "合成最近运行 succeeded",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "1afe5f80f02875f3b4e4895c81ca4d97d6545f47267447b40f2e325ba672366c"
+    },
+    {
+      "file": "1440-run-succeeded_empty.png",
+      "width": 1440,
+      "scene": "run-succeeded_empty",
+      "label": "合成最近运行 succeeded_empty",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "f39b4fd8c20be0cff145d89450de0cb104a6a78d16748d9759e78535628ede7f"
+    },
+    {
+      "file": "1440-run-failed.png",
+      "width": 1440,
+      "scene": "run-failed",
+      "label": "合成最近运行 failed",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "d00629bece0fdefbc48616b7736bf92995ba8dc658949edf7b0ae333c9d64625"
+    },
+    {
+      "file": "1440-run-blocked.png",
+      "width": 1440,
+      "scene": "run-blocked",
+      "label": "合成最近运行 blocked",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "76549eaba5382772bbc15cf0c51021813ecee913e4fc7908004e918583fdab51"
+    },
+    {
+      "file": "1440-run-cancelled.png",
+      "width": 1440,
+      "scene": "run-cancelled",
+      "label": "合成最近运行 cancelled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "3f941e7abf1b4598284372925f2a4d7d203da88836ffaec8c98f67b6a729d2e9"
+    },
+    {
+      "file": "1440-run-dead_letter.png",
+      "width": 1440,
+      "scene": "run-dead_letter",
+      "label": "合成最近运行 dead_letter",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "399e10b473aae9b74e959a3ef51bd9db86808e192b63ecf29388ec9d565ce174"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "scene": "default",
+      "label": "原始2/3门禁与12/3/1覆盖",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ea3ca729974efa3dc7d76bb84ab905894e98606dd07b184e3eda3c26adb20a56"
+    },
+    {
+      "file": "390-pending.png",
+      "width": 390,
+      "scene": "pending",
+      "label": "原始全部待验收",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "3cb1ba34ea2f629f49882e34bd2a8e7130e11bfb5330683b51c4edbfe4159319"
+    },
+    {
+      "file": "390-context.png",
+      "width": 390,
+      "scene": "context",
+      "label": "手机结论与下一步展开",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "de3f7bbed802f2d2931c29556f43e469fb76d44fd91d9fa72911f000f958e907"
+    },
+    {
+      "file": "390-gates.png",
+      "width": 390,
+      "scene": "gates",
+      "label": "三项证据全部展开",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "404263883774186df466614ad9a394721eb7d7a296d5d98b812b156a6762a141"
+    },
+    {
+      "file": "390-technical.png",
+      "width": 390,
+      "scene": "technical",
+      "label": "技术详情",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "a33296430fff6f38b2ddcbb440b604572b413c98ec3c7e0631960dd75f71fb1b"
+    },
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "scene": "loading",
+      "label": "初次读取",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0dc2beca25970017924a70cccb2d525246a35a1d3678a6805bde7232066411ed"
+    },
+    {
+      "file": "390-expired.png",
+      "width": 390,
+      "scene": "expired",
+      "label": "登录过期",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "68b506b620d603a68cdc1072b9fa26eb02a370f0c058f43578eb62be5cd963db"
+    },
+    {
+      "file": "390-forbidden.png",
+      "width": 390,
+      "scene": "forbidden",
+      "label": "权限拒绝",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "c0a2833b5d79c26ca3953c4c5c9717da0c581d8d106ab172928c96a4fc08fb98"
+    },
+    {
+      "file": "390-error.png",
+      "width": 390,
+      "scene": "error",
+      "label": "首次读取失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "870a6080861dbc236c163a044fb39431e05eea11bbbdc410db309d245c0c75c6"
+    },
+    {
+      "file": "390-refreshing.png",
+      "width": 390,
+      "scene": "refreshing",
+      "label": "刷新保留原证据",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "f4393735f222e2c90fbeae028b09518a95ac833325b41bee2fb3c78cb3fa9e8f"
+    },
+    {
+      "file": "390-refresh-error.png",
+      "width": 390,
+      "scene": "refresh-error",
+      "label": "刷新失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "03614f249e3df4588174d8de1a67f40223422e82b170a354bf22189e09416dc7"
+    },
+    {
+      "file": "390-refresh-timeout.png",
+      "width": 390,
+      "scene": "refresh-timeout",
+      "label": "刷新超时",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "52dec106ffdf8a44a38bfd10a18a3eb854973c3e64d3f1e1ea42846d0321cccc"
+    },
+    {
+      "file": "390-refresh-expired.png",
+      "width": 390,
+      "scene": "refresh-expired",
+      "label": "刷新登录失效",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "3014f2c20f0bbd03b9a02576e396aecffe033c6eb43bdae54cb39606ec332168"
+    },
+    {
+      "file": "390-refresh-forbidden.png",
+      "width": 390,
+      "scene": "refresh-forbidden",
+      "label": "刷新权限拒绝",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "84ba3e6ac23f6b6ce24e05c22317ff62762775bf14b7e1d56e0f39f5954ee72f"
+    },
+    {
+      "file": "390-scope-loading.png",
+      "width": 390,
+      "scene": "scope-loading",
+      "label": "组织读取中",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "a6e6bbb63efb1ecd87939c991b35e8d7d3e59d31ce368825885eb82de7d218f5"
+    },
+    {
+      "file": "390-scope-error.png",
+      "width": 390,
+      "scene": "scope-error",
+      "label": "组织读取失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "d87a0be37571ae60307305397be27e332f3710712ba72282d400ee6fa560f5a9"
+    },
+    {
+      "file": "390-scope-empty.png",
+      "width": 390,
+      "scene": "scope-empty",
+      "label": "无活动组织",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "f4dda812ed1fb70e9f5807e61c14cf4d0380971fa5225d3991fd49b8233b26eb"
+    },
+    {
+      "file": "390-workspace-loading.png",
+      "width": 390,
+      "scene": "workspace-loading",
+      "label": "工作区读取中",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "b462711f4807488859794ac093e59c2f92260ee63990f971f23215ddb9fd6200"
+    },
+    {
+      "file": "390-workspace-empty.png",
+      "width": 390,
+      "scene": "workspace-empty",
+      "label": "无活动工作区",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "fea6d5f6f4485eff7b399683585404f35202e86f1d23aa7d30bfd8ee6acfda4a"
+    },
+    {
+      "file": "390-workspace-error.png",
+      "width": 390,
+      "scene": "workspace-error",
+      "label": "工作区读取失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0b4dd7bff2ac0868dcd9836b116ae6d5b1f40d1a6d362d64f043a8d1898ab529"
+    },
+    {
+      "file": "390-query-filled.png",
+      "width": 390,
+      "scene": "query-filled",
+      "label": "已填写运行范围",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "3564fecc4e1239f66ba2e261e0b398da0e093612984bd64af8fc403b488e10ab"
+    },
+    {
+      "file": "390-query-limit.png",
+      "width": 390,
+      "scene": "query-limit",
+      "label": "200字关键词",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ba37f6177fa3174f3586b0dcd8594e3427bbaa499a25156f13d6e0088c9f37a3"
+    },
+    {
+      "file": "390-submitting.png",
+      "width": 390,
+      "scene": "submitting",
+      "label": "提交进行中",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "724123a72c66f79afa5caa377c9e3e61072bc9f87ec2f992403dff7187acd993"
+    },
+    {
+      "file": "390-scheduled.png",
+      "width": 390,
+      "scene": "scheduled",
+      "label": "已排队未完成",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "1c6d29a56fac616ab4064a8c20760cb23b85c6a2b1aa066aab80d584ea939221"
+    },
+    {
+      "file": "390-scheduled-read-error.png",
+      "width": 390,
+      "scene": "scheduled-read-error",
+      "label": "已排队但重读失败",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "60dd7df30be63ac8d7bffef9344565f08fc7d9cc907aed27a7e64d513a8a40a3"
+    },
+    {
+      "file": "390-submit-error.png",
+      "width": 390,
+      "scene": "submit-error",
+      "label": "提交失败保留输入",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ea995807efbfd77bfa372a66de21bff278a376d145ce74b59d3ab80e7f21c07f"
+    },
+    {
+      "file": "390-submit-unknown.png",
+      "width": 390,
+      "scene": "submit-unknown",
+      "label": "提交结果未知",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "3ca838c656f8dd19e654e395756a7be05cd72c33321b5857790acd8a05e2dabe"
+    },
+    {
+      "file": "390-task-detail.png",
+      "width": 390,
+      "scene": "task-detail",
+      "label": "已创建任务编号",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "e9c4fecc10074b2f6119b3ca6849c3fc704c3549b9dd86226d4e8189a62c6bde"
+    },
+    {
+      "file": "390-coverage-invalid.png",
+      "width": 390,
+      "scene": "coverage-invalid",
+      "label": "合成覆盖合同异常",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "f5b55bade93387a2f463ea97bf7d3e6e2026a9a96bef9e3ed0a669a67cd5ddf8"
+    },
+    {
+      "file": "390-long-content.png",
+      "width": 390,
+      "scene": "long-content",
+      "label": "合成长原因",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0b948d6344a1f852e8a117dd37d2b3f4240c103d3ecb5cfb22e084310891317f"
+    },
+    {
+      "file": "390-focus.png",
+      "width": 390,
+      "scene": "focus",
+      "label": "键盘焦点",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "70949772e16c24686a9540857dabf5992ac4c89d02dc723b0b17be9092863d93"
+    },
+    {
+      "file": "390-hover.png",
+      "width": 390,
+      "scene": "hover",
+      "label": "悬停",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "94fc6faa74a07b117721465ef95cf28597161eecf3f758adc71b1e1d603ab5c2"
+    },
+    {
+      "file": "390-pressed.png",
+      "width": 390,
+      "scene": "pressed",
+      "label": "按下",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "7ffa3818ea038b093c0a923fb2a122b7c079b1247ea8a284c98df2baa4e080ee"
+    },
+    {
+      "file": "390-review-tools.png",
+      "width": 390,
+      "scene": "review-tools",
+      "label": "非业务审核工具",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "8fb7ea8736f0db54663fd353de4e4d8ae734c48e8489e157ab8f47830994f779"
+    },
+    {
+      "file": "390-no-profile-draft.png",
+      "width": 390,
+      "scene": "no-profile-draft",
+      "label": "合成门禁组合 no-profile-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "cbc2b098febdd1012efe7eb1a2d2b0bc2142ce263f02d5d0defaeca3007ba138"
+    },
+    {
+      "file": "390-no-profile-disabled.png",
+      "width": 390,
+      "scene": "no-profile-disabled",
+      "label": "合成门禁组合 no-profile-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "86f71e30baefadf316417be4537f203902da2f5685674c4ba8661acac6567e1b"
+    },
+    {
+      "file": "390-no-profile-enabled.png",
+      "width": 390,
+      "scene": "no-profile-enabled",
+      "label": "合成门禁组合 no-profile-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "61109e96248de49458152b5b618e0c90b6d9a96f3f2bebbbc0775ce1b63675dd"
+    },
+    {
+      "file": "390-no-run-draft.png",
+      "width": 390,
+      "scene": "no-run-draft",
+      "label": "合成门禁组合 no-run-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "73a9d21397d346e7bd606e6de1aa216835d3415c079d810437cafca39bf595e3"
+    },
+    {
+      "file": "390-no-run-disabled.png",
+      "width": 390,
+      "scene": "no-run-disabled",
+      "label": "合成门禁组合 no-run-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0431232127f3702cb6ca6bd95ea0f987b5de0246169adebe5b1abb39843835f2"
+    },
+    {
+      "file": "390-no-run-enabled.png",
+      "width": 390,
+      "scene": "no-run-enabled",
+      "label": "合成门禁组合 no-run-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "a6ea805e96d797892eff60d1a4904e67d28a963b194cbefdba1a8eb57c0802c5"
+    },
+    {
+      "file": "390-login-expired-draft.png",
+      "width": 390,
+      "scene": "login-expired-draft",
+      "label": "合成门禁组合 login-expired-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "9411794e87339994cedf497ceb4a4da30e7ceac0f27f8618bd7777945b421794"
+    },
+    {
+      "file": "390-login-expired-disabled.png",
+      "width": 390,
+      "scene": "login-expired-disabled",
+      "label": "合成门禁组合 login-expired-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "2181e9496ba131bf8682eaf6cd450737d55ca351fae258f856b517aa7f904adb"
+    },
+    {
+      "file": "390-login-expired-enabled.png",
+      "width": 390,
+      "scene": "login-expired-enabled",
+      "label": "合成门禁组合 login-expired-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "e52bebc1aa5a68c43be3a903c5b6d937feb5ba47b25131536daaecef75068aa7"
+    },
+    {
+      "file": "390-captcha-blocked-draft.png",
+      "width": 390,
+      "scene": "captcha-blocked-draft",
+      "label": "合成门禁组合 captcha-blocked-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "c116b883d303a2ab0050606e8860e0793f6a7b4c30f0592a1ff003c3a8a13c36"
+    },
+    {
+      "file": "390-captcha-blocked-disabled.png",
+      "width": 390,
+      "scene": "captcha-blocked-disabled",
+      "label": "合成门禁组合 captcha-blocked-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "1e677638e04120601633b5c8ee8847c3337570adb1fac2702a6ef7c53daa4866"
+    },
+    {
+      "file": "390-captcha-blocked-enabled.png",
+      "width": 390,
+      "scene": "captcha-blocked-enabled",
+      "label": "合成门禁组合 captcha-blocked-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "fe7e4b7429be537202fd148653dd8e3980d403688962085add64048427eae635"
+    },
+    {
+      "file": "390-old-parser-draft.png",
+      "width": 390,
+      "scene": "old-parser-draft",
+      "label": "合成门禁组合 old-parser-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "45ec0e9d95dd48a7cd9a2a6307b41a31a98d84b9c3ce01a14f6baaf012c1dfd4"
+    },
+    {
+      "file": "390-old-parser-disabled.png",
+      "width": 390,
+      "scene": "old-parser-disabled",
+      "label": "合成门禁组合 old-parser-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "8cc655e23275f81e370c69c29faf5f465c3fa5e43b5ceb4762fccbd2b5dcf1d4"
+    },
+    {
+      "file": "390-old-parser-enabled.png",
+      "width": 390,
+      "scene": "old-parser-enabled",
+      "label": "合成门禁组合 old-parser-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "32fb8e69b69230753d67be9abec578ab283acdfa27f2ffc5d1651d0fbcfd3d3a"
+    },
+    {
+      "file": "390-parser-changed-draft.png",
+      "width": 390,
+      "scene": "parser-changed-draft",
+      "label": "合成门禁组合 parser-changed-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "4d882c418d36b91980914aad4572f7c49143839441447909caa8021639252e3e"
+    },
+    {
+      "file": "390-parser-changed-disabled.png",
+      "width": 390,
+      "scene": "parser-changed-disabled",
+      "label": "合成门禁组合 parser-changed-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "cb616342d0882a0209720aa02a4483d33554ca6bc0af3e8a1c6e100250839ff4"
+    },
+    {
+      "file": "390-parser-changed-enabled.png",
+      "width": 390,
+      "scene": "parser-changed-enabled",
+      "label": "合成门禁组合 parser-changed-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "dd762534eb76075ed924e3a6fef17de24bbcffb48d34f887c5379d45112a8729"
+    },
+    {
+      "file": "390-review-pending-draft.png",
+      "width": 390,
+      "scene": "review-pending-draft",
+      "label": "合成门禁组合 review-pending-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "91ffedcf406bdca8c987776e9422617d2c800a5d039f8692f4cf1f4c616d1f1b"
+    },
+    {
+      "file": "390-review-pending-disabled.png",
+      "width": 390,
+      "scene": "review-pending-disabled",
+      "label": "合成门禁组合 review-pending-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "182a63fcf548110d9f6c586dfd1c5bebd8af458252621ebd357587cf1ea053c5"
+    },
+    {
+      "file": "390-review-pending-enabled.png",
+      "width": 390,
+      "scene": "review-pending-enabled",
+      "label": "合成门禁组合 review-pending-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "ba45e9f6a27db66d00e17509993adf4bec548907c4f3d34bc66e0872ebea7df3"
+    },
+    {
+      "file": "390-all-passed-draft.png",
+      "width": 390,
+      "scene": "all-passed-draft",
+      "label": "合成门禁组合 all-passed-draft",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0b986c0695fd53fa7913c18bdcf029066cdc009d0682aeba45b7d60a00a7f0ce"
+    },
+    {
+      "file": "390-all-passed-disabled.png",
+      "width": 390,
+      "scene": "all-passed-disabled",
+      "label": "合成门禁组合 all-passed-disabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "23ce815763c44856ed319bead60e15e0b57d8c805fefe99291da3ffd65a6ac19"
+    },
+    {
+      "file": "390-all-passed-enabled.png",
+      "width": 390,
+      "scene": "all-passed-enabled",
+      "label": "合成门禁组合 all-passed-enabled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "1699393a832ac6c2057070d48c3d22f17fd58ab56c29e7aa5453d0f499554566"
+    },
+    {
+      "file": "390-run-scheduled.png",
+      "width": 390,
+      "scene": "run-scheduled",
+      "label": "合成最近运行 scheduled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "c5d687188ef4a551e80eb87da85936b2a414e05799028998d54cd87725f9608e"
+    },
+    {
+      "file": "390-run-leased.png",
+      "width": 390,
+      "scene": "run-leased",
+      "label": "合成最近运行 leased",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "0296013d1e85eff6a2428306db46c4d28adb0823d21c4761cdd02dc9c4160f27"
+    },
+    {
+      "file": "390-run-running.png",
+      "width": 390,
+      "scene": "run-running",
+      "label": "合成最近运行 running",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "5abf8af8fd17cf78ab86e7210c1f4f0d3dcdaa9763fe5d6f6ef126f492a1fa85"
+    },
+    {
+      "file": "390-run-succeeded.png",
+      "width": 390,
+      "scene": "run-succeeded",
+      "label": "合成最近运行 succeeded",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "5eaede576156ad6d0374b098f7ba5dc64a1d442cd7ea156d6006f1e6e278c9e5"
+    },
+    {
+      "file": "390-run-succeeded_empty.png",
+      "width": 390,
+      "scene": "run-succeeded_empty",
+      "label": "合成最近运行 succeeded_empty",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "27784a1f62d40c427250ab4ae7d40da5fc849d3ee14e6a04d27692e418161ddb"
+    },
+    {
+      "file": "390-run-failed.png",
+      "width": 390,
+      "scene": "run-failed",
+      "label": "合成最近运行 failed",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "355032a6a94a1773467adebfc510b85289802df29a587cd43db747929811f3ec"
+    },
+    {
+      "file": "390-run-blocked.png",
+      "width": 390,
+      "scene": "run-blocked",
+      "label": "合成最近运行 blocked",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "4358dff331e12b5dfbeff43cc58fcf060820b38d149e25dcd5cfb3abfb0948bf"
+    },
+    {
+      "file": "390-run-cancelled.png",
+      "width": 390,
+      "scene": "run-cancelled",
+      "label": "合成最近运行 cancelled",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "e3a3db3db4a32d402142b086af9abccbff6a02fe62c98ab554e9f686775232b7"
+    },
+    {
+      "file": "390-run-dead_letter.png",
+      "width": 390,
+      "scene": "run-dead_letter",
+      "label": "合成最近运行 dead_letter",
+      "pageId": "P49",
+      "proposal": "1688-ACCEPTANCE-C-r1",
+      "sha256": "a9d955bcf9d9d5b74b9dc9422064edf0461e0600f455c3edc3f763df3f61ca98"
+    }
+  ]
+}
