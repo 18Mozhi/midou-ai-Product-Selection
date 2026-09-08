@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>角色与权限 · C方向待审稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="roles.css" />
+  </head>
+  <body>
+    <aside class="study-bar" aria-label="审核工具">
+      <span
+        >C方向已选 · ROLE-C-r1待审 · 隔离历史样本<br />时间校验固定为2026-08-28
+        18:00，不代表当前线上状态</span
+      ><label>审核场景<select id="scene"></select></label>
+    </aside>
+    <header class="brand-bar">
+      <div class="brand"><span class="brand-mark">m.</span><b>米豆智选</b></div>
+      <span class="product-label">组织治理</span>
+      <nav class="breadcrumb" aria-label="当前位置">组织 / 角色与权限</nav>
+    </header>
+    <main class="workspace">
+      <aside class="scope-panel">
+        <span class="eyebrow">ACCESS BOUNDARIES</span>
+        <h1>权限边界<span class="title-dot">。</span></h1>
+        <p class="scope-description">谁能做什么，<br />在什么范围内，<br />对哪一个资源。</p>
+        <nav id="sections" aria-label="角色权限分区">
+          <button type="button" data-section="roles" aria-pressed="true">角色模板与能力</button
+          ><button type="button" data-section="scopes" aria-pressed="false">数据范围</button
+          ><button type="button" data-section="grants" aria-pressed="false">指定资源授权</button>
+        </nav>
+        <p class="scope-foot">角色模板只读。<br />成员分配在成员页完成。</p>
+      </aside>
+      <section class="directory">
+        <header class="page-heading">
+          <div>
+            <p class="eyebrow" id="eyebrow">FIXED ROLE CATALOG</p>
+            <h2 id="page-title">角色模板与能力</h2>
+          </div>
+          <span class="readonly-badge">边界独立核对</span>
+        </header>
+        <section id="roles-view">
+          <div class="filter-bar">
+            <label
+              >搜索角色或能力<input
+                id="role-query"
+                type="search"
+                placeholder="例如：审计或组织" /></label
+            ><span id="role-count"></span>
+          </div>
+          <div class="role-browser">
+            <nav id="role-list" aria-label="角色模板"></nav>
+            <article id="role-detail"></article>
+          </div>
+          <section id="matrix-section">
+            <header class="section-heading">
+              <h3>角色影响对比</h3>
+              <small>只读能力矩阵</small>
+            </header>
+            <div class="filter-bar">
+              <label
+                >搜索能力<input
+                  id="capability-query"
+                  type="search"
+                  placeholder="中文动作或能力名称" /></label
+              ><label
+                >业务域<select id="capability-group">
+                  <option value="">全部业务域</option>
+                  <option>组织治理</option>
+                  <option>安全审计</option>
+                </select></label
+              ><button type="button" id="reset-capabilities">重置</button>
+            </div>
+            <div
+              class="matrix-scroll"
+              role="region"
+              aria-label="角色能力矩阵横向滚动区"
+              tabindex="0"
+            >
+              <table id="matrix" aria-label="角色能力矩阵"></table>
+            </div>
+            <p id="matrix-empty" class="empty-note" hidden>当前筛选没有匹配能力。</p>
+            <p class="help">具备能力不等于可访问所有记录；数据范围与资源规则仍需同时校验。</p>
+          </section>
+        </section>
+        <section id="scopes-view" hidden>
+          <div id="scope-definitions"></div>
+          <article class="scope-current">
+            <h3>我的有效数据范围</h3>
+            <p>当前会话：组织范围</p>
+            <small>角色决定动作，范围决定记录；不包含平台全局数据。</small>
+          </article>
+          <header class="section-heading">
+            <h3>成员数据范围预览</h3>
+            <span id="member-count"></span>
+          </header>
+          <div class="filter-bar">
+            <label
+              >搜索成员<input
+                id="member-query"
+                type="search"
+                placeholder="姓名、邮箱或团队" /></label
+            ><label
+              >数据范围<select id="scope-filter">
+                <option value="">全部范围</option>
+              </select></label
+            ><button id="reset-scopes" type="button">重置</button>
+          </div>
+          <div id="member-list"></div>
+        </section>
+        <section id="grants-view" hidden>
+          <div class="grant-intro">
+            <p>只向同组织活动成员开放一个指定资源。下载、导出、凭证与任务重放不在授权范围内。</p>
+            <button type="button" id="toggle-create" class="primary">创建授权</button>
+          </div>
+          <p class="sample-note">以下生效状态来自历史隔离响应，不表示此授权当前有效。</p>
+          <form id="create-form" hidden>
+            <header class="section-heading">
+              <h3>授权指定资源</h3>
+              <span>页面内表单</span>
+            </header>
+            <div class="form-grid">
+              <label>工作区<select id="workspace" name="workspace_id" required></select></label
+              ><label
+                >资源类型<select id="resource-type" name="resource_type" required>
+                  <option value="task">任务</option>
+                  <option value="opportunity" selected>机会</option>
+                  <option value="competitor">竞品</option>
+                  <option value="sourcing">供应链</option>
+                </select></label
+              ><label
+                >资源编号<input
+                  id="resource-id"
+                  name="resource_id"
+                  required
+                  pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}"
+                  placeholder="从真实资源详情页复制UUID"
+                /><small>实际访问仍按工作区、资源与动作复核。</small></label
+              ><label
+                >目标成员<select id="member-target" name="grantee_membership_id" required>
+                  <option value="" disabled selected>选择同组织活动成员</option>
+                </select></label
+              >
+            </div>
+            <fieldset>
+              <legend>最小必要动作</legend>
+              <div id="grant-actions"></div>
+            </fieldset>
+            <div class="form-grid">
+              <label
+                >业务原因<textarea
+                  id="create-reason"
+                  name="reason"
+                  required
+                  maxlength="500"
+                ></textarea></label
+              ><label
+                >到期时间<input
+                  id="expires-at"
+                  name="expires_at"
+                  type="datetime-local"
+                  required
+                /><small>晚于校验时钟，且最长30天。</small></label
+              >
+            </div>
+            <p id="create-error" class="error" hidden role="alert"></p>
+            <div class="form-actions">
+              <small>设计演示，不生成授权或审计</small
+              ><button id="create-submit" type="submit" class="primary">创建并写入审计</button>
+            </div>
+          </form>
+          <div id="grant-statuses" class="status-filters" role="group" aria-label="授权状态"></div>
+          <label class="grant-query-label"
+            >搜索当前页授权<input
+              id="grant-query"
+              type="search"
+              placeholder="成员、工作区、类型或动作"
+          /></label>
+          <div id="grant-list"></div>
+          <article id="grant-detail">
+            <header class="section-heading">
+              <div>
+                <p class="eyebrow">RESOURCE EXCEPTION</p>
+                <h3>机会 · 陈采购</h3>
+              </div>
+              <span class="readonly-badge">生效中 · 样本状态</span>
+            </header>
+            <dl id="grant-facts"></dl>
+            <div class="grant-capabilities" id="granted-actions"></div>
+            <details id="grant-technical">
+              <summary>查看技术标识</summary>
+              <code id="resource-code"></code><code id="grant-code"></code>
+            </details>
+            <form id="extend-form">
+              <div class="form-grid">
+                <label
+                  >变更原因<input
+                    id="extend-reason"
+                    name="reason"
+                    required
+                    maxlength="500" /></label
+                ><label
+                  >新到期时间<input
+                    id="extend-expiry"
+                    name="expires_at"
+                    type="datetime-local"
+                    required
+                /></label>
+              </div>
+              <p id="extend-error" class="error" role="alert" hidden></p>
+              <div class="form-actions">
+                <button type="submit" id="extend-submit">延长授权</button
+                ><button type="button" id="revoke" class="danger">撤销授权</button>
+              </div>
+            </form>
+          </article>
+          <nav id="pagination" aria-label="资源授权分页">
+            <button type="button" disabled>上一页</button><span>第1 / 1页 · 共1条</span
+            ><button type="button" disabled>下一页</button>
+          </nav>
+        </section>
+      </section>
+    </main>
+    <p id="review-note" role="status">本地审核稿：不请求API、不写存储、不改变授权或角色。</p>
+    <dialog id="revoke-dialog" aria-labelledby="revoke-title" aria-describedby="revoke-description">
+      <form id="revoke-form">
+        <header class="dialog-heading">
+          <div>
+            <p class="eyebrow">AUDITED REASON</p>
+            <h2 id="revoke-title">撤销指定资源授权原因</h2>
+          </div>
+          <button id="close-revoke" type="button" aria-label="关闭原因填写">×</button>
+        </header>
+        <div class="dialog-body">
+          <p id="revoke-description">原因会与组织、操作者和目标对象一起写入审计记录。</p>
+          <div class="revoke-target">
+            <strong>机会 · 陈采购</strong>
+            <p>采购团队核对供应报价 · 第1版</p>
+          </div>
+          <label
+            >原因（至少2个字）<textarea
+              id="revoke-reason"
+              required
+              minlength="2"
+              aria-describedby="reason-help"
+            ></textarea></label
+          ><small id="reason-help">提交后会与操作者、时间和目标对象一起保留。</small>
+        </div>
+        <footer class="dialog-footer">
+          <small>隔离演示 · 不撤销授权</small>
+          <div>
+            <button id="cancel-revoke" type="button">取消</button
+            ><button id="confirm-revoke" type="submit" class="danger-fill">确认提交</button>
+          </div>
+        </footer>
+      </form>
+    </dialog>
+    <script src="data.js"></script>
+    <script src="roles.js"></script>
+  </body>
+</html>

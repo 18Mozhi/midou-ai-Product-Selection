@@ -1,0 +1,71 @@
+// Explicit reviewed subset of m06-01-organization-admin.spec.ts. Not live authorization.
+window.SCOUTOPS_ROLE_DESIGN = {
+  reviewNow: "2026-08-28T10:00:00.000Z", // Chosen deterministic validation clock, not a business observation.
+  organizationId: "00000000-0000-4000-8000-000000000601",
+  workspace: { id: "00000000-0000-4000-8000-000000000602", name: "新品决策工作区" },
+  roles: [
+    {
+      code: "organization_admin",
+      name: "组织管理员",
+      description: "管理组织治理设置。",
+      capabilities: ["organization:manage", "membership:manage"],
+    },
+    {
+      code: "auditor",
+      name: "审计员",
+      description: "查看组织审计记录。",
+      capabilities: ["audit:read"],
+    },
+  ],
+  members: [
+    {
+      id: "00000000-0000-4000-8000-000000000611",
+      display_name: "林管理员",
+      email: "admin@example.test",
+      roles: ["organization_admin"],
+      scopes: ["organization"],
+      teams: ["治理组"],
+    },
+    {
+      id: "00000000-0000-4000-8000-000000000612",
+      display_name: "陈采购",
+      email: "buyer@example.test",
+      roles: ["procurement_member"],
+      scopes: ["workspace"],
+      teams: ["采购协作组"],
+    },
+    {
+      id: "00000000-0000-4000-8000-000000000621",
+      display_name: "钱锁定",
+      email: "locked@example.test",
+      roles: ["member"],
+      scopes: ["organization"],
+      teams: [],
+    },
+  ],
+  grantTargets: ["00000000-0000-4000-8000-000000000612"],
+  authorization: {
+    capabilities: ["role:read", "role:manage", "membership:read"],
+    data_scopes: [{ scope: "organization" }],
+  },
+  grant: {
+    id: "00000000-0000-4000-8000-000000000625",
+    organization_id: "00000000-0000-4000-8000-000000000601",
+    workspace_id: "00000000-0000-4000-8000-000000000602",
+    resource_type: "opportunity",
+    resource_id: "00000000-0000-4000-8000-000000000624",
+    grantee_membership_id: "00000000-0000-4000-8000-000000000612",
+    grantor_id: "00000000-0000-4000-8000-000000000626",
+    reason: "采购团队核对供应报价",
+    status: "active",
+    effective_status: "active",
+    expires_at: "2026-09-01T10:00:00.000Z",
+    revoked_at: null,
+    revoked_by: null,
+    revocation_reason: null,
+    version: 1,
+    created_at: "2026-08-20T10:00:00.000Z",
+    updated_at: "2026-08-20T10:00:00.000Z",
+    actions: ["opportunity:read", "opportunity:decide"],
+  },
+};
