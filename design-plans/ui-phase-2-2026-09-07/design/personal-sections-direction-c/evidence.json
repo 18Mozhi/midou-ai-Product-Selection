@@ -1,0 +1,1153 @@
+{
+  "version": "PERSONAL-C-sections-r2",
+  "approval": "pending",
+  "kind": "four-sections-independent-proposal",
+  "capturedAt": "2026-09-08T06:21:48.306Z",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/index.html": "3da1602796fbaae04014225df7d1588027df39f74361ede7d93063debcb57e76",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/data.js": "d79f16bcae40c38edbb5ae03fc04cd3ea38e4a8a2c1d0e7c3b2cc0d68e1485e9",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/sections.js": "db28811e96d660bfc8bd096a010d38e640accfc19b6cd8f976858843979f4e73",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/sections.css": "e0d0a010f98ad915c53fe4b1c742949ec1d79a92cbaadd01b17dbc785d2ef1fd",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/personal.css": "14243cf2a0f636064e560001da98eb91816d783884be6d8c4d407bf649376773",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/api/src/auth-routes.ts": "5d5b22eefa875eeadd26ffa5a7bf7c1e5414c666b21006264e4a789248451fea",
+    "apps/api/src/mysql-auth-repository.ts": "c5027f7b83d1f2249661b5575010e713be18f4d9773c487047f4e6ff08c9359c",
+    "packages/auth/src/index.ts": "f1cb431af4cc9a00e2e3c073a9851f2509fe137974f37f6fbef4888a9b4ba5f1",
+    "apps/api/src/notification-routes.ts": "1a0fe7ff28d325be35eefe9c92ad19790f480bbf42ef03b38eee96cf5fd417d1",
+    "apps/api/src/notification-service.ts": "dedf65d09fd3572256f264a72c122d6ca6f87efe5b80858050ee09c353f8ed2b",
+    "apps/api/src/personal-center-routes.ts": "f134d4f607a6eaabaf89d32466068f20733d886d7574ec25f55ada282cb17ca1",
+    "apps/api/src/mysql-personal-center-repository.ts": "d0a764d834318829864ff630c579ecb4e2b4361f46bdeb767c46f4555508e2bb",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "tests/e2e/ui-phase2-account-contracts.spec.ts": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+    "scripts/lib/ui-phase2-personal-design-data.mjs": "6d293c57073db2ac536462a8944c2e9cc2e0fafb565efd6988889762c7e54178",
+    "scripts/lib/ui-phase2-personal-sections-data.mjs": "f75c8b3d4fb6686b43927b30101c17d71a95f6fc6a96d46dd81d81b6faa12f73",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9"
+  },
+  "mailBackendTruth": {
+    "code": "mail_provider_pending",
+    "statusCode": 503,
+    "actionHint": "邮件服务尚未接入，请关闭邮件通知并使用站内通知。"
+  },
+  "boundary": "62 images. Explicit synthetic contract-shape records; UI2-A05 preferences but real backend mail rejection. Only active sessions can be revoked successfully. Proposed per-section unknown-data guards/busy/focus not current Vue. No actual passwords in diagnostics, HTTP, storage, auth, session revocation or mail delivery.",
+  "screenshots": [
+    {
+      "file": "1440-permissions.png",
+      "scene": "permissions",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "80da76f0770ba4998fd639d00d989c49a241725d8a4e47be2d586b64e62c7bad"
+    },
+    {
+      "file": "1440-permissions-token.png",
+      "scene": "permissions-token",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "619c2a410692540f372f92161c842fba90f2e97a6f23c71ca6b68ec5226b935c"
+    },
+    {
+      "file": "1440-permissions-empty.png",
+      "scene": "permissions-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "51632ecc08958e7871b1fab33016018952080e1e3bef9e1335f4cb30482a50af"
+    },
+    {
+      "file": "1440-permissions-loading.png",
+      "scene": "permissions-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "92f7856fbe73a29c2bbedd8b1f2d694c9d784c7fa4401b2939cf6dcf1ce1c31c"
+    },
+    {
+      "file": "1440-permissions-error.png",
+      "scene": "permissions-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 31,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ed6a4a48f6e47ed830047197396d3f05f4c3152dc64ed1f495bafa8e22acd907"
+    },
+    {
+      "file": "1440-permissions-fallback.png",
+      "scene": "permissions-fallback",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ec70dffd976e1de2cf910457ec6060e53ef85fdad24395d1fa23d57f90a62e5e"
+    },
+    {
+      "file": "1440-security.png",
+      "scene": "security",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9de45f8e817a13d3d83427e661d9ddf26150d6fadfe60476bb0e9499c9dace56"
+    },
+    {
+      "file": "1440-security-empty.png",
+      "scene": "security-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3e2c7d6f6107b92745ee017ebf2fddf581c8a3b6e18fd0ad16dc98137a61699c"
+    },
+    {
+      "file": "1440-security-loading.png",
+      "scene": "security-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fa85ae8c68c9efd4144ed6678a76cfa6b7929a35e804a5577776db85e38fa693"
+    },
+    {
+      "file": "1440-security-error.png",
+      "scene": "security-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a58a87fe6864e156cf54714af7c97ac4f7e2328811f3a728bdf0ae4872351dc8"
+    },
+    {
+      "file": "1440-security-mismatch.png",
+      "scene": "security-mismatch",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "00bb5e4ef8fc5d217dfa55777661a2277cbc9d5f978887c40f96d16cac444048"
+    },
+    {
+      "file": "1440-security-password-busy.png",
+      "scene": "security-password-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c8935b837dfcaf99977adb22fa995a43179eaa6db60b99b93b3610b3e6bef626"
+    },
+    {
+      "file": "1440-security-password-failed.png",
+      "scene": "security-password-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ef7f1df747d6bc8908c28c7eec0d3bc3b54c8671edc50f6ed89feef597527acd"
+    },
+    {
+      "file": "1440-security-password-success.png",
+      "scene": "security-password-success",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "bb76fd5409401f85795e820c5af10ecc9cf4cadf6c28be328ebcdbbcf6d60668"
+    },
+    {
+      "file": "1440-security-revoke-busy.png",
+      "scene": "security-revoke-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "aff0eea47fa1c5c02561720b7b9fdb1c0507434192ebb11045f978ffedd0e421"
+    },
+    {
+      "file": "1440-security-revoke-failed.png",
+      "scene": "security-revoke-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8e7e3cdd079e4293c84a080835d6ecadc6e03552c61b6e881e087abf26508fd1"
+    },
+    {
+      "file": "1440-security-revoked-retry-failed.png",
+      "scene": "security-revoked-retry-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "08e41e1980f2bed42c5e6fe3cd06598c382dc22b5a56315c5b92f85a2b1a1c78"
+    },
+    {
+      "file": "1440-security-expired-retry-failed.png",
+      "scene": "security-expired-retry-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d385e2331d5fcf96259d175837be1f74a56d3574e56818d4aaaa75a6341d962e"
+    },
+    {
+      "file": "1440-security-revoked.png",
+      "scene": "security-revoked",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "16093ecb5a620cf6d04720f55dc16f1850be5e928409fc02baf24b1f1c8043d6"
+    },
+    {
+      "file": "1440-notifications.png",
+      "scene": "notifications",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d4054df75986e4223f39d83d68776ac85663a21d63ded05fe9dd88fec4689bd2"
+    },
+    {
+      "file": "1440-notifications-loading.png",
+      "scene": "notifications-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "154430085601c903eeb185f09be41cdb173e97fe38b5a1f98a7514a910a44a55"
+    },
+    {
+      "file": "1440-notifications-error.png",
+      "scene": "notifications-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 31,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a0a1368b0ca6424abcb166025d2a4e77c3c08f7b3a55b0552d33d92f78d144ec"
+    },
+    {
+      "file": "1440-notifications-edited.png",
+      "scene": "notifications-edited",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c4b5f47abca3bb9e18bbb2ffe7f2c994566167817ccd3fc34aabe3773f6efed1"
+    },
+    {
+      "file": "1440-notifications-mail-blocked.png",
+      "scene": "notifications-mail-blocked",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7a5a778719fbd1e48933c0537b16d306d283a78def36526675fec8cd67fb805a"
+    },
+    {
+      "file": "1440-notifications-saving.png",
+      "scene": "notifications-saving",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "04c9e8505ca2d2bb76771f9b79715db4da49376471b09658fdf4b29563ab3d75"
+    },
+    {
+      "file": "1440-notifications-saved.png",
+      "scene": "notifications-saved",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "53f6b67323a2dc0947a7cc9bc4dbbc0d827d4e384cee79c54e98bcc8b7fcad3b"
+    },
+    {
+      "file": "1440-notifications-save-failed.png",
+      "scene": "notifications-save-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "15d1393739e7f23ab8b11420ff807e5bcad3d70589b8c975359d0fe13cf386bb"
+    },
+    {
+      "file": "1440-assets.png",
+      "scene": "assets",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2fa00991679f12b7d2a1806ddfabf3b2d4f9783dd6eaf48165296fc6643c096f"
+    },
+    {
+      "file": "1440-assets-empty.png",
+      "scene": "assets-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 34,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b68801256b0a4bce538bc223f145bdc4769ea375a77d732423fdc5352df39b2a"
+    },
+    {
+      "file": "1440-assets-loading.png",
+      "scene": "assets-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d32551d3812451cf8311de060a4f3265d0dee75ee6c05041da6c2b4611881473"
+    },
+    {
+      "file": "1440-assets-error.png",
+      "scene": "assets-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 31,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8a6623c00a99e51061dffae2fba7596b2bc9d8040a56a3402ed3d4f0db018684"
+    },
+    {
+      "file": "390-permissions.png",
+      "scene": "permissions",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6c61ebfc08fe9b3f0aae17c83de0fa920e60e5b3224652e1b99391335b5f61d3"
+    },
+    {
+      "file": "390-permissions-token.png",
+      "scene": "permissions-token",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5e17218193614c133dddfddd7f6797063f6ee364db622e11f3d538ac4d358a8a"
+    },
+    {
+      "file": "390-permissions-empty.png",
+      "scene": "permissions-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e52453adb0586fb398a0035bd14aea14b74d86c68eb081aeeca9de138e225fdb"
+    },
+    {
+      "file": "390-permissions-loading.png",
+      "scene": "permissions-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7f3d7b8e4b30806948e2560dca01d17f4f5cf8566438dbc83f89da5b86307bca"
+    },
+    {
+      "file": "390-permissions-error.png",
+      "scene": "permissions-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 29,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3e4798e9591cb3ac703ed908d47e7d20657a1cfd53680497bbf69caa3eeb2736"
+    },
+    {
+      "file": "390-permissions-fallback.png",
+      "scene": "permissions-fallback",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9a3b4a7af9aac398ddb8d843378fa2d38f1e3d0de28369f95dbbe8596dd5c263"
+    },
+    {
+      "file": "390-security.png",
+      "scene": "security",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "56be77e57a3651649ddc916939ab84d25a95f07a06891cf17e5ec27de83c8e26"
+    },
+    {
+      "file": "390-security-empty.png",
+      "scene": "security-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "554f95d84c3df87d1533ed4d252613c859def3058902e420a762ead6a85b0525"
+    },
+    {
+      "file": "390-security-loading.png",
+      "scene": "security-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "36badb33403b8757c7ee80ea96d2ab73789a14efa980c6212c36dfcb7d468368"
+    },
+    {
+      "file": "390-security-error.png",
+      "scene": "security-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0136dfec64c6e651d57a28e79b2b9d42a944f1b4f69965857b98ece07ccb4fa0"
+    },
+    {
+      "file": "390-security-mismatch.png",
+      "scene": "security-mismatch",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 50,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4c127f8e938fa767e21fbd8fb858328aa24aa9f59a4184e00874462eaafd90e2"
+    },
+    {
+      "file": "390-security-password-busy.png",
+      "scene": "security-password-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5b44dda2e64f040cfb3e41671b7a3eca71309abb0617fe95d95f2088e18cd3a8"
+    },
+    {
+      "file": "390-security-password-failed.png",
+      "scene": "security-password-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 50,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a2b297e225f0b1e3d02da82af0d5f5f9efe7c3972845bd885c5afe0fec8107e3"
+    },
+    {
+      "file": "390-security-password-success.png",
+      "scene": "security-password-success",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 50,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1cba319e4c85b23d837dbdefdd3932fd3f6e528cb8ac8c86d2dff12383b7213b"
+    },
+    {
+      "file": "390-security-revoke-busy.png",
+      "scene": "security-revoke-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f3b4771a6a1af12033050a1731a8cf93b725aae69195a6850b23ace53ebbe827"
+    },
+    {
+      "file": "390-security-revoke-failed.png",
+      "scene": "security-revoke-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 50,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6131c8e83c54ea6446a0e58449f80284ef30243f9daf68b2d9406896831f5260"
+    },
+    {
+      "file": "390-security-revoked-retry-failed.png",
+      "scene": "security-revoked-retry-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b28fdd8f86985cceefe769840f392d2dc1c8b3f4c253ee6ad70922e0144fed69"
+    },
+    {
+      "file": "390-security-expired-retry-failed.png",
+      "scene": "security-expired-retry-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "abbc8ef20a2c4e8aa2c7fbd5e0517b2bcec7e88f17c147f121ba4d140971f4a1"
+    },
+    {
+      "file": "390-security-revoked.png",
+      "scene": "security-revoked",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 47,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6f076ae9e6c16b5b2ac2bf25ce633786a7a69f4af124b37f4d13ffb965922ef9"
+    },
+    {
+      "file": "390-notifications.png",
+      "scene": "notifications",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "45547a0080ba840ba58bd68ad1afa4c00517005305c1c342f2d62a4ea0640852"
+    },
+    {
+      "file": "390-notifications-loading.png",
+      "scene": "notifications-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8c03ca3e4e7b67249aaabb96200eb054f90da0b1d7de236bba404b07163f9f59"
+    },
+    {
+      "file": "390-notifications-error.png",
+      "scene": "notifications-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 29,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f492aaa7253a1bff97f67a3e3049df5d11ffbf8f95158640df865e64e0733c0d"
+    },
+    {
+      "file": "390-notifications-edited.png",
+      "scene": "notifications-edited",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e7c911f70ed86b53f85b34cd0304c33609f3ec51c2b0789485c56d95beda53ea"
+    },
+    {
+      "file": "390-notifications-mail-blocked.png",
+      "scene": "notifications-mail-blocked",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "32036292c5e0e998e27bd02aec01857b2187a0eccc96a53384cce3ae5f48bfca"
+    },
+    {
+      "file": "390-notifications-saving.png",
+      "scene": "notifications-saving",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3bcc3a3ac3c6415a131f18b2404c4059e4feaa9f4fe8956952021e3f52d69805"
+    },
+    {
+      "file": "390-notifications-saved.png",
+      "scene": "notifications-saved",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "16553bf92034afb0dcc20b8bd2bebd671a15c25b5815b51daeb9fd88763179f3"
+    },
+    {
+      "file": "390-notifications-save-failed.png",
+      "scene": "notifications-save-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a67e756e865fa34afe02121dfdf19706b03558656142b72b68aa1a403038678b"
+    },
+    {
+      "file": "390-assets.png",
+      "scene": "assets",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 35,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "782f52ae210ca58add8879507cf13a04859628028d16dd61192b454af3fb0b4c"
+    },
+    {
+      "file": "390-assets-empty.png",
+      "scene": "assets-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4ff96b98920bd3afaefc1530cefa726f11be7c46f00b44bc706a54d7031a1531"
+    },
+    {
+      "file": "390-assets-loading.png",
+      "scene": "assets-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fa3a1d67862af669d26ec82a4f610cc5134a5e173bb8b9d364d960bff8edbd4f"
+    },
+    {
+      "file": "390-assets-error.png",
+      "scene": "assets-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 29,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d8d1d463f7147a9cd12ec9d63351f3f2c4595e5a02e5e84ca5211980d8cd3c47"
+    }
+  ]
+}

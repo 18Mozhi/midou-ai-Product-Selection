@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>个人中心四分区 · C方向审核稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="../personal-direction-c/personal.css" />
+    <link rel="stylesheet" href="sections.css" />
+  </head>
+  <body>
+    <div class="review-tools">
+      <label for="scene">审核场景（非生产控件）</label
+      ><select id="scene"></select>
+      <p>
+        四分区 C 方向独立提案 · 合同形状合成样例，非真实账号/设备/权限；操作不访问网络、不写存储。
+      </p>
+    </div>
+    <div class="account-layout">
+      <header class="topbar">
+        <a class="brand" href="/">SCOUTOPS</a><span>个人中心</span
+        ><a href="/select-context">组织与工作区 →</a>
+      </header>
+      <aside class="account-directory">
+        <p class="eyebrow">ACCOUNT / 账号级设置</p>
+        <h1>你的账号</h1>
+        <p>查看已知事实<br />分开处理安全与偏好</p>
+        <nav id="sections" aria-label="个人中心分区"></nav>
+      </aside>
+      <main class="work-area">
+        <nav class="breadcrumb" aria-label="面包屑">
+          <a href="/">应用入口</a><span>/</span><span>个人中心</span>
+        </nav>
+        <header class="page-heading">
+          <div>
+            <p class="eyebrow">PERSONAL / 合成审核样例</p>
+            <h2 id="heading"></h2>
+            <p id="subtitle"></p>
+          </div>
+          <button id="refresh">刷新</button>
+        </header>
+        <p id="proposal-note">
+          待审改进：读取失败与真实空值分开展示；未知通知偏好不开放保存。当前 Vue
+          尚未具备这套分区状态保护。
+        </p>
+        <p id="notice" role="status" hidden></p>
+        <div id="content"></div>
+        <p class="boundary">
+          MFA使用独立页面；没有免打扰、权限申请或批量退出等新功能。所有成功提示仅演示，不是业务执行证明。
+        </p>
+      </main>
+    </div>
+    <output id="destination" aria-live="polite"></output>
+    <script src="data.js"></script>
+    <script src="sections.js"></script>
+  </body>
+</html>

@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P11四分区 / PERSONAL-C-sections-r2
+
+收尾实测：capture及无参数源/数据/图哈希复验双端31场景通过，62PNG与66个README链接齐全；verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）和diff检查通过。生产源码、旧资料/账号图与coverage diff为空；浏览器finally关闭，4101/5173无监听，无新增临时遗留，只精确暂存本批交付。
+
+从干净main/1e1fe8a继续。读取AGENTS/Feature Map/产品总纲/P11规格、PersonalCenter、通知/auth/个人资产后端和UI2-A05样本；ui-skills-root选择frontend-design，把上批四分区占位推进为权限三组、安全三域、通知五开关、资产三来源目录。独立[62图](design/personal-sections-direction-c/README.md)，31场景双端，旧24图/样式/审批均未改。
+
+永久助手抽取UI2-A05偏好、真实中文映射，并运行notification-service的validatePreferences确认邮件开启503，与旧隔离成功fixture不同，按实际后端作图。设备/权限/资产为明确合同形状合成样例，不声称真实主体授权。检查auth实际仓库后补两种已结束会话撤销失败图；当前Vue仍给其按钮，后端只有active可成功，原演示不得全按成功处理。
+
+新稿区分loading/真实empty/failed，未知偏好不展示可保存默认；安全会话读取失败不隐藏账号级MFA/改密。busy、错误关联与返焦仅为待审UI改进，源码未修复。改密仅记录POST字段名，密码值不进入诊断；所有动作仅本地模拟，无HTTP/storage/业务写入，不能代替真实会话/幂等/版本竞态验证。
+
+未改Vue/API/OpenAPI、权限、数据库、配置、依赖、coverage或生产，无重启。图和脚本为永久交付，未创建临时服务/目录，历史受限材料不操作；P11整合、用户审图与真实实现仍待办，全73页目标不缩减，接续P12首页工作面。
+
 ## 2026-09-08 · AccountShell与P11资料 / PERSONAL-C-profile-r1
 
 收尾：capture及无参数源/数据/图哈希复验双端12场景通过，24PNG与27个README链接齐全；verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）和diff检查通过。生产/旧图/coverage diff为空；不运行产品构建伪称Vue重构完成。浏览器finally关闭，4101/5173无监听，无新增临时遗留；只精确暂存本批。

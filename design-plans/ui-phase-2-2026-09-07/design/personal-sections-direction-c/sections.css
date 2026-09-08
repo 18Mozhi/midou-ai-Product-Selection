@@ -1,0 +1,225 @@
+#proposal-note {
+  padding: 12px 16px;
+  border: 1px solid #c8d5e7;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #445a77;
+}
+.panel {
+  background: white;
+  border: 1px solid #dbe1e9;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 0;
+}
+.panel h3 {
+  font-size: 20px;
+  margin: 0 0 14px;
+}
+.panel p {
+  color: #58677b;
+}
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #dbe1e9;
+  border-radius: 7px;
+  background: #f3f6fc;
+  font-size: 16px;
+}
+.quiet {
+  color: #58677b;
+  font-size: 13px;
+}
+.facts {
+  display: grid;
+  gap: 8px;
+}
+.facts p {
+  margin: 0;
+}
+.security-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.security-top p {
+  margin: 0;
+}
+.security-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+.password-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+}
+.password-fields {
+  display: grid;
+  gap: 16px;
+}
+.password-fields label {
+  display: grid;
+  gap: 6px;
+}
+.password-fields input {
+  padding: 10px 12px;
+  border: 1px solid #b7c4d6;
+  border-radius: 8px;
+  width: 100%;
+  color: #202c3d;
+  background: white;
+}
+.danger {
+  color: #92382f;
+  border: 1px solid #ceaaa5;
+  background: #fff8f6;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+.danger-primary {
+  background: #92382f;
+  color: white;
+  border: 1px solid #92382f;
+}
+.record {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #dbe1e9;
+}
+.record:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.record:first-of-type {
+  padding-top: 0;
+}
+.record b,
+.record small {
+  display: block;
+}
+.record small {
+  font-size: 13px;
+  color: #58677b;
+  margin-top: 6px;
+}
+.record a {
+  font-size: 18px;
+  min-height: 44px;
+}
+.record > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.record button {
+  flex-shrink: 0;
+}
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #dbe1e9;
+  min-height: 72px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+.switch-row input {
+  accent-color: #254a9c;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  margin: 10px;
+}
+.switch-row b,
+.switch-row small {
+  display: block;
+}
+.switch-row small {
+  font-size: 13px;
+  color: #58677b;
+  margin-top: 4px;
+}
+.form-actions {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.primary {
+  background: #254a9c;
+  color: white;
+}
+.read-panel {
+  padding: 24px;
+  border: 1px solid #dbe1e9;
+  background: #f8faff;
+  border-radius: 14px;
+}
+.read-panel h3 {
+  font-size: 20px;
+  margin-top: 0;
+}
+.read-panel button {
+  background: white;
+  color: #202c3d;
+}
+.asset-directory {
+  display: grid;
+  gap: 18px;
+}
+#password-error {
+  color: #92382f;
+  font-size: 16px;
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .panel-grid,
+  .password-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .panel {
+    padding: 20px;
+  }
+  .security-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .record {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .password-fields button {
+    width: 100%;
+  }
+}

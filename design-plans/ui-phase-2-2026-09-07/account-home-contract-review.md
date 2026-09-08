@@ -1,5 +1,7 @@
 # P10–P12 外观、个人中心与首页合同复核
 
+2026-09-08 P11四分区C提案：[PERSONAL-C-sections-r2](design/personal-sections-direction-c/README.md)31场景/62图覆盖权限、安全、通知、资产，旧资料批24图不变。当前notification-service.validatePreferences拒绝email_enabled=true（503 mail_provider_pending），与UI2-A05模拟邮件保存成功不同；本稿从真实函数提取拒绝结果，不以夹具覆盖后端。mysql-auth-repository仅active会话撤销affectedRows=1，已撤销/过期按钮虽被当前Vue呈现，点击应失败而非删除。新分区错误/未知值禁用、busy与密码错误焦点仅为待审行为改进，未更新真实Vue源或UI2-A07–09验收状态。
+
 2026-09-08 P11首批C提案：[PERSONAL-C-profile-r1](design/personal-direction-c/README.md)新增12场景/24图，账号壳层与基本资料表单先行。四非资料分区8图仅导航审阅，业务内容明确未实现；不计完整P11。源码AST与UI2-A04夹具深比较，七字段+expected_version及邮箱不提交、本地失败保留/刷新回填已覆盖；未改变实际源合同、矩阵、审批或写入竞态待验项。
 
 状态：S03局部语义复核，非全站运行分母冻结或用户设计通过。基线main / `915ee71`；产品源指纹仍为 `c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183`。逐页规格见page-specs/P10.md–P12.md。本文件独立保存人工结论，不覆写生成清单或历史PAGES。
