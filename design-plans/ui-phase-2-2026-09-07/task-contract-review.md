@@ -133,3 +133,101 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 `ui-phase2-task-cache.spec.ts`包含UI2-C01两列表入口、C02迟到详情200/404、C03详情ID切换及导出隔离、C04迟到列表200/403、C05成员目录在动作刷新后续读，共8项。C02/C04故意让目标GET忽略AbortSignal，再释放旧响应，验证归属检查不依赖网络取消成功。它们不证明真实生产或跨租户持久化权限。
 
 产品源改变使旧全局sourceFingerprint与旧Vue基线证据不再代表当前源。e1f7a92提交后已重新生成清单，按稳定candidateId校正本表，任务Vue基线18图及隔离CSS研究18图由原采集脚本实际重采、各14个语义案例通过。旧版材料可从Git历史追溯，没有只改图哈希冒充新采图。独立A/B原型样式和夹具未改；原脚本的proposal流程顺带复验并重采任务12图，其他76图未重画。它们仍待用户审核，不以本次修复推定风格通过。
+
+## 7. 01adf4d后的稳定源码映射
+
+日期2026-09-08；本次从main/01adf4d核对。五个关联组件的完整LF归一内容均与原合同引用的e1f7a9272b5017307754fa60aa691a8bb43b8329一致；以下4个文件在本合同范围内。先比较完整文件hash，再核对原表所在精确位置的事件/属性及候选类型；不是按最近行号或全局相同标签猜配。原行号表作为历史来源保留，本表给出可复核candidateId及旧行号/语义，不改变旧业务规则或审核结论。
+
+| 文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/TaskWorkspace.vue | c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b |
+| apps/web/src/components/TaskListPanel.vue | b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f |
+| apps/web/src/components/TaskDetailPanel.vue | c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6 |
+| apps/web/src/components/TaskBatchActions.vue | 7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d |
+
+共75个源候选：71个控件/事件、4个原生dialog定义。同一个dialog位置可分别有cancel事件候选和dialog-definition，二者不是重复业务；定义不能代替各变体的提交/关闭/焦点验收。下表业务前缀沿用task.；原语义中的{x}/{action}严格只代表前述显式变体，不扩展成任意动作。
+
+| 源candidateId | 当前行 | 类型 | 原行号记录 | 既有语义 / 实际入口 |
+| --- | --- | --- | --- | --- |
+| apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1 | 792 | control | W792 | list.create.open：canCreate，showCreate=true；同壳头入口可在详情存在 |
+| apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1 | 798 | control | W798 | view.business：setView，清status/page，保留query/sort |
+| apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1 | 801 | control | W801 | view.exports：mode=all且report:read；GET /report-exports |
+| apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1 | 836 | control | W836 | read.retry：错误区load；列表/详情/导出按当前分支重读 |
+| apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1 | 864 | event-binding | W864 | batch.{x}.open/submit/close，batch.field.change：子组件事件中转，不是独立控件 |
+| apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1 | 882 | event-binding | W882 | list.select/status/search/reset/create.open/delete.open：子组件事件中转，不是独立控件 |
+| apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1 | 908 | control | W908 | export.manage：跳/reports |
+| apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1 | 921 | control | W921 | export.open：跳/reports?report=report_type，不是文件下载 |
+| apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1 | 936 | control | W936 | list.page.previous：页>1可用；清选择、URL更新 |
+| apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1 | 938 | control | W938 | list.page.next：页<pageCount可用；清选择、URL更新 |
+| apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1 | 940 | event-binding | W940 | editor.close：原生cancel→handleCreateCancel→closeTaskEditor |
+| apps/web/src/components/TaskWorkspace.vue#e394f71c3c789c95.1 | 945 | form-event | W945 | editor.{create,edit}.submit：表单submit→create函数，按editing选择POST/PATCH |
+| apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1 | 965 | control | W965 | editor.close：取消按钮；busy禁用；清快捷创建query |
+| apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1 | 966 | control | W966 | editor.{create,edit}.submit：表单提交按钮；busy禁用，不另算业务动作 |
+| apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1 | 972 | event-binding | W972 | detail.{x}，editor.edit.open，delete.open，comment.submit：详情事件中转，field更新只是本地模型 |
+| apps/web/src/components/TaskWorkspace.vue#184beea2f6fd5456.1 | 999 | event-binding | W999 | delete.close：原生cancel→清目标及原因 |
+| apps/web/src/components/TaskWorkspace.vue#a7d1ecc8ced537b9.1 | 1005 | form-event | W1005 | delete.submit：表单submit→removeTask |
+| apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1 | 1017 | control | W1017 | delete.close：取消按钮，busy禁用 |
+| apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1 | 1018 | control | W1018 | delete.submit：确认按钮，busy禁用 |
+| apps/web/src/components/TaskListPanel.vue#2a0d4451e2faa34a.1 | 72 | control | L72 | list.status：全部/todo/in_progress/paused/completed/cancelled六个显式变体 |
+| apps/web/src/components/TaskListPanel.vue#ac860f86ea23bb4c.1 | 83 | control | L83 | list.search.disclose：原生details展开/关闭，无API写入 |
+| apps/web/src/components/TaskListPanel.vue#d344bde9e31f9f8c.1 | 88 | form-event | L88 | list.search.apply：搜索trim，带当前sort；重置page与选中项 |
+| apps/web/src/components/TaskListPanel.vue#faf2a52b6a6f528b.1 | 99 | event-binding | L99 | list.sort：四个sort白名单，选择即应用当前搜索草稿 |
+| apps/web/src/components/TaskListPanel.vue#b79994ab2dc7702d.1 | 114 | control | L114 | list.search.apply：与L88同一表单提交 |
+| apps/web/src/components/TaskListPanel.vue#1b36eaf01847b9f2.1 | 115 | control | L115 | list.reset：清status/query/sort/page与选中项，保留其他query |
+| apps/web/src/components/TaskListPanel.vue#9960c69204257423.1 | 120 | event-binding | L120 | list.select.page：canUpdate且有任务，选中/清空本页 |
+| apps/web/src/components/TaskListPanel.vue#2cb28f705efccf29.1 | 131 | control | L131 | list.select.clear：有选中时清空 |
+| apps/web/src/components/TaskListPanel.vue#86b8060a633774c0.1 | 145 | control | L145 | list.reset：无结果态重置入口，同L115 |
+| apps/web/src/components/TaskListPanel.vue#c92b78a436786dc5.1 | 146 | control | L146 | list.create.open：无任务且无筛选且canCreate，新建入口 |
+| apps/web/src/components/TaskListPanel.vue#fe99684a58d4750c.1 | 151 | event-binding | L151 | list.select.row：canUpdate，单行checkbox不等于详情跳转 |
+| apps/web/src/components/TaskListPanel.vue#a32f374b623fc146.1 | 158 | control | L158 | list.detail.open：/tasks/id?from=route.fullPath |
+| apps/web/src/components/TaskListPanel.vue#a52d2fd8d2453f5a.1 | 180 | control | L180 | list.row-menu：canUpdate，原生details，局部删除入口 |
+| apps/web/src/components/TaskListPanel.vue#b4c8f55424911113.1 | 181 | control | L181 | delete.open：askRemove(row)，清删除原因 |
+| apps/web/src/components/TaskDetailPanel.vue#0513954362e80472.1 | 61 | control | D61 | detail.return：只接受/work、/tasks及其query，否则/tasks |
+| apps/web/src/components/TaskDetailPanel.vue#a450361745c05a56.1 | 91 | control | D91 | detail.collection.open：有collection_task_id，跳平台采集页；权限由目标裁决 |
+| apps/web/src/components/TaskDetailPanel.vue#1c008f867673db60.1 | 107 | control | D107 | detail.technical.toggle：原生details，账号/任务编号渐进展示 |
+| apps/web/src/components/TaskDetailPanel.vue#f293cf86b53f5f82.1 | 123 | control | D123 | detail.start：canUpdate+todo；直接POST动作，无原因弹窗 |
+| apps/web/src/components/TaskDetailPanel.vue#86ef5792f91935ac.1 | 131 | control | D131 | detail.resume：canUpdate+paused；直接POST动作 |
+| apps/web/src/components/TaskDetailPanel.vue#41b7ff02cd9481cd.1 | 139 | control | D139 | detail.complete：canUpdate+todo/in_progress/paused；直接POST动作 |
+| apps/web/src/components/TaskDetailPanel.vue#d15fb86b9a1883f9.1 | 146 | control | D146 | detail.progress.open：canUpdate且未结束；预填进度及说明 |
+| apps/web/src/components/TaskDetailPanel.vue#d0b869ee32723b5a.1 | 154 | control | D154 | detail.more.toggle：canUpdate或canAssign，原生details |
+| apps/web/src/components/TaskDetailPanel.vue#5f5bf5a382300046.1 | 156 | control | D156 | detail.pause.open：canUpdate+in_progress |
+| apps/web/src/components/TaskDetailPanel.vue#8a192d8df4bae23e.1 | 164 | control | D164 | detail.delay.open：canUpdate且未结束 |
+| apps/web/src/components/TaskDetailPanel.vue#b841d884628a5445.1 | 172 | control | D172 | detail.transfer.open：canAssign，不自行附加终态限制 |
+| apps/web/src/components/TaskDetailPanel.vue#be1075cbce90c814.1 | 180 | control | D180 | editor.edit.open：canUpdate，预填selected事实 |
+| apps/web/src/components/TaskDetailPanel.vue#a6808a15ac396ea9.1 | 183 | control | D183 | detail.cancel.open：canUpdate且未结束 |
+| apps/web/src/components/TaskDetailPanel.vue#7ac1d2b58faaa7e3.1 | 192 | control | D192 | delete.open：canUpdate，目标为selected |
+| apps/web/src/components/TaskDetailPanel.vue#ed8efea9c40be3fa.1 | 212 | form-event | D212 | comment.submit：canUpdate；POST comments，非空、最多2000 |
+| apps/web/src/components/TaskDetailPanel.vue#164700beea75a50a.1 | 213 | event-binding | D213 | comment.change：本地草稿input，busy禁用；不落浏览器存储 |
+| apps/web/src/components/TaskDetailPanel.vue#3b0242c6256a5a86.1 | 221 | control | D221 | comment.submit：与D212同一表单提交，busy禁用 |
+| apps/web/src/components/TaskDetailPanel.vue#46e431fb8f9cec9e.1 | 225 | event-binding | D225 | detail.{x}.close：原生cancel→closeAction，五变体共用 |
+| apps/web/src/components/TaskDetailPanel.vue#950c1a9d40721d87.1 | 231 | form-event | D231 | detail.{x}.submit：submitTaskAction，五变体按action构造字段 |
+| apps/web/src/components/TaskDetailPanel.vue#fd868cd01ff93343.1 | 248 | event-binding | D248 | detail.transfer.assignee.change：成员目录select→本地模型 |
+| apps/web/src/components/TaskDetailPanel.vue#5223264cc91ca9cd.1 | 261 | event-binding | D261 | detail.delay.due.change：datetime-local→本地模型 |
+| apps/web/src/components/TaskDetailPanel.vue#d5c7036343c5823b.1 | 271 | event-binding | D271 | detail.progress.percent.change：数字0–100，整数步进 |
+| apps/web/src/components/TaskDetailPanel.vue#9548ae8bcbbf6e9e.1 | 288 | event-binding | D288 | detail.progress.note.change：必填说明，最多500 |
+| apps/web/src/components/TaskDetailPanel.vue#3d37f15c32bb38a7.1 | 299 | event-binding | D299 | detail.{pause,cancel,delay,transfer}.reason.change：必填原因，最多500 |
+| apps/web/src/components/TaskDetailPanel.vue#fbcbfc84994eaf3e.1 | 308 | control | D308 | detail.{x}.close：返回按钮，无写入；不同于取消任务动作 |
+| apps/web/src/components/TaskDetailPanel.vue#c74a96fead2d3bc1.1 | 309 | control | D309 | detail.{x}.submit：与D231同一表单提交，busy禁用 |
+| apps/web/src/components/TaskBatchActions.vue#dcc3dd67cea16d16.1 | 41 | control | B41 | batch.pause.open：有选中且canUpdate，预览in_progress可执行项 |
+| apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1 | 42 | control | B42 | batch.resume.open：有选中且canUpdate，预览paused可执行项 |
+| apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1 | 43 | control | B43 | batch.delay.open：有选中且canUpdate，未结束项可执行 |
+| apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1 | 44 | control | B44 | batch.transfer.open：另需canAssign，未结束项可执行 |
+| apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1 | 47 | control | B47 | batch.cancel.open：canUpdate，未结束项可执行 |
+| apps/web/src/components/TaskBatchActions.vue#446106c89d9d1204.1 | 49 | event-binding | B49 | batch.{x}.close：原生cancel→close，不清选中项 |
+| apps/web/src/components/TaskBatchActions.vue#e81628577b69db40.1 | 55 | form-event | B55 | batch.{x}.submit：confirmBatch，逐任务POST，不存在批量API |
+| apps/web/src/components/TaskBatchActions.vue#d4003ff11f44d9cc.1 | 80 | event-binding | B80 | batch.reason.change：resume之外必填原因，最多500 |
+| apps/web/src/components/TaskBatchActions.vue#0fc52b5608263ef6.1 | 88 | event-binding | B88 | batch.delay.due.change：延期必填日期 |
+| apps/web/src/components/TaskBatchActions.vue#f7f3da8b759864b6.1 | 97 | event-binding | B97 | batch.transfer.assignee.change：转交必选现有成员 |
+| apps/web/src/components/TaskBatchActions.vue#99031a2db9919db6.1 | 109 | control | B109 | batch.{x}.close：返回按钮，保留选择，无写入 |
+| apps/web/src/components/TaskBatchActions.vue#83d4d6c6f2015e2f.1 | 110 | control | B110 | batch.{x}.submit：busy或无eligible禁用 |
+
+| 源candidateId | 当前行 | 类型 | 业务dialogId / 变体 |
+| --- | --- | --- | --- |
+| apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1 | 940 | dialog-definition | task.editor.create / task.editor.edit（2变体） |
+| apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1 | 999 | dialog-definition | task.delete（1变体） |
+| apps/web/src/components/TaskDetailPanel.vue#dfce0d7d3dc167b7.1 | 225 | dialog-definition | task.action.progress / pause / cancel / delay / transfer（5变体） |
+| apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1 | 49 | dialog-definition | task.batch.pause / resume / delay / transfer / cancel（5变体） |
+
+本次只完善源码归属：本文件全部75个现行候选有精确ID、行、类型和源hash；测试保证它们与当前扫描集合相等，而不是只验证计数。原表语义/现有请求仍为依据，不用源码签名声称真实后端、权限、幂等或全状态已运行。13个弹窗变体、列表/本人摘要口径、单项/批量transfer条件差异、父子事件中转继续按前述合同逐项验证，未覆盖项不因映射补齐注销。
+
+运行node scripts/audit-ui-phase2-contracts.mjs --json可查看records/sourceClaims/unreferenced；新增永久断言核对本范围全部候选、源hash、历史行号表与新表的对应，退出成功仅代表静态对账。本次不重复未变化的产品构建/业务E2E，不出正式新图、不连接生产，不刷新旧清单/图hash或用户审核状态；F00方向仍待审，正式设计和F04b运行时覆盖继续。

@@ -270,3 +270,69 @@ test("CLI emits parseable full JSON and rejects write or extra arguments", () =>
     assert.match(invalid.stderr, /Read-only audit accepts only --json/);
   }
 });
+
+test("task and scoring stable tables cover the exact current local source set without promoting historical line rows", () => {
+  const report = runContractAudit();
+  const groups = [
+    {
+      document: "task-contract-review.md",
+      names: ["TaskWorkspace", "TaskListPanel", "TaskDetailPanel", "TaskBatchActions"],
+      controls: 71,
+      dialogs: 4,
+    },
+    {
+      document: "scoring-contract-review.md",
+      names: ["ScoreRuleConsole"],
+      controls: 25,
+      dialogs: 3,
+    },
+  ];
+  for (const group of groups) {
+    const records = report.records.filter((record) =>
+      record.document.endsWith(`/${group.document}`),
+    );
+    const current = records.filter((record) => record.temporalScope !== "historical");
+    const historical = records.filter((record) => record.temporalScope === "historical");
+    const candidates = group.names.flatMap((name) => {
+      const file = `apps/web/src/components/${name}.vue`;
+      const text = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+        "\r\n",
+        "\n",
+      );
+      return scanSource(text, file).candidates;
+    });
+    assert.equal(current.length, group.controls + group.dialogs);
+    assert.equal(historical.length, group.controls);
+    assert.equal(
+      current.filter((record) => record.recordedKind === "dialog-definition").length,
+      group.dialogs,
+    );
+    assert.deepEqual(
+      current.map((record) => record.candidateId).sort(),
+      candidates.map((candidate) => candidate.candidateId).sort(),
+    );
+    for (const record of current) {
+      assert.equal(record.status, "identity-current", record.candidateId);
+      assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+      assert.equal(record.recordedLine, record.currentLine);
+    }
+    for (const old of historical) {
+      assert.equal(old.status, "line-only-unbound");
+      const oldCells = old.claim.split("|").map((cell) => cell.trim());
+      const replacements = current.filter(
+        (record) => record.claim.split("|")[4]?.trim() === oldCells[1],
+      );
+      assert.equal(replacements.length, 1, `${group.document}:${oldCells[1]}`);
+      assert.equal(replacements[0].sourceFile, old.sourceFile);
+      assert.equal(replacements[0].recordedLine, old.recordedLine);
+      assert.ok(replacements[0].claim.split("|")[5].trim().startsWith(`${oldCells[2]}：`));
+    }
+    assert.equal(
+      report.unreferenced.filter((item) =>
+        group.names.some((name) => item.file.endsWith(`/${name}.vue`)),
+      ).length,
+      0,
+    );
+  }
+  assert.equal(report.denominatorFrozen, false);
+});
