@@ -1,0 +1,523 @@
+{
+  "version": "INSIGHTS-C-r1",
+  "approval": "pending",
+  "capturedAt": "2026-09-08T10:10:40.006Z",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/index.html": "805751046e908a2bc48f0387255700ff5b7bd25cf0047526628cb99935971c4d",
+    "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/data.js": "8a20013ada90d1288e5280ce6fdc04174f88ca059c02fbb9dc3ec1fd456e9c4c",
+    "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/insights.js": "99fe74416823f5f2bf4cbecaa962d0899efb8a97928dbd9b85abb568f0e7a586",
+    "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/insights.css": "247ac4a1390cac8338fe2097d1e906255cf8ad66977f646df7a8fe5b5158dff9",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+    "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
+    "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
+    "apps/api/src/competitor-routes.ts": "e2b3ba66db6d383b3ef062dab75653d9c47c2e573a6774b6a711644738c26b1d",
+    "apps/api/src/scoring-routes.ts": "ea693fd97648a96b1fcb820596e08e3b5f357f8180491bc5458f92891b3bebc4",
+    "apps/api/src/sourcing-routes.ts": "ab53d7fb9f03623aa5a2db55920fef199daf93f142cdd7ebcfdf8dfe14882c9c",
+    "tests/e2e/m04-03-scoring.spec.ts": "4b8b55ec1d77f52f898bab47c6f9576bc60067e21dbabc2d0c1c87a50660bc89",
+    "tests/e2e/m04-05-competitors.spec.ts": "6ac9a2c24edbd0cfdf8e3f6f38f0904109aff1742d1aa1c8253273a6e8675023",
+    "scripts/lib/ui-phase2-insights-design-data.mjs": "b0bcc74bb05ce48cfcb25fb7211c060fc2d7f4ab2049798c9ef64b9e7bd28505",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712"
+  },
+  "knownGaps": {
+    "supplierFailureHidesCompetitorSuccess": true,
+    "failedReadKeepsOldArrays": true,
+    "sourceFixed": false
+  },
+  "boundary": "Historical isolated M04-03/M04-05 fixtures. Cross-product association, supplier counts and scenario mutations are explicitly synthetic layout examples, not current business facts. VM source functions only; no real Vue/API/DB/RBAC or production. No market-demand chart, risk-category results or automatic post-queue score/count mutation.",
+  "screenshots": [
+    {
+      "file": "1440-overview.png",
+      "scene": "overview",
+      "width": 1440,
+      "sha256": "e70b25b205b0658645206ad82da2e2b4b86beaeec1605a91dee6ccedca83bb57"
+    },
+    {
+      "file": "1440-score.png",
+      "scene": "score",
+      "width": 1440,
+      "sha256": "eeb1545a2870692ec6878fc1ee6a98f9aebc14506b45549c91cc9d086a96210b"
+    },
+    {
+      "file": "1440-score-details.png",
+      "scene": "score-details",
+      "width": 1440,
+      "sha256": "b523c33127470eeb7957fb7ab429c17c5dfdffb66757f57ecf916e26f285d72d"
+    },
+    {
+      "file": "1440-score-missing.png",
+      "scene": "score-missing",
+      "width": 1440,
+      "sha256": "4162c25852e6c369b7e8c57fa6d6170a2f45e0f1b9331fa46cd21ead722f3aab"
+    },
+    {
+      "file": "1440-score-zero.png",
+      "scene": "score-zero",
+      "width": 1440,
+      "sha256": "60101dceeaaca6238a8154acdff559ac4b9356e861af574882c8395bf5c42992"
+    },
+    {
+      "file": "1440-score-no-run.png",
+      "scene": "score-no-run",
+      "width": 1440,
+      "sha256": "c58b31cf870a104179c9ebd1248c91dc11ba7ba1cefb8b975ffcfb506064e242"
+    },
+    {
+      "file": "1440-score-readonly.png",
+      "scene": "score-readonly",
+      "width": 1440,
+      "sha256": "6249255389e8b23d8793f7e6487329fe01750249e74434cd858b2d902e1ae7f5"
+    },
+    {
+      "file": "1440-market.png",
+      "scene": "market",
+      "width": 1440,
+      "sha256": "196e9c592bdc7d249260cc9cfcbd7f6c95de2c889e26e17dbb33af99e30aea29"
+    },
+    {
+      "file": "1440-market-missing.png",
+      "scene": "market-missing",
+      "width": 1440,
+      "sha256": "03cd30e925ebffc8ae075b5c1a82f02a6187aad1777a1bc4d14712c83c49ef33"
+    },
+    {
+      "file": "1440-market-empty.png",
+      "scene": "market-empty",
+      "width": 1440,
+      "sha256": "824d35a178754c8c8f34f20b3d732be19a357da1410ea635685a5185e0d6cac8"
+    },
+    {
+      "file": "1440-competition.png",
+      "scene": "competition",
+      "width": 1440,
+      "sha256": "c7d62ea6096e6cdd0a1325c517dc43c5e1bb54a287c87d2f118f4b2fcc7555aa"
+    },
+    {
+      "file": "1440-competition-details.png",
+      "scene": "competition-details",
+      "width": 1440,
+      "sha256": "6629d4876aa3e14c5547bfb2321dcf6e84f88edab7ea5577bc925227a8a014c7"
+    },
+    {
+      "file": "1440-competition-empty.png",
+      "scene": "competition-empty",
+      "width": 1440,
+      "sha256": "ae4bc3a7579fe0b9af09ce8b311c22a912b7497a8ef69bf0e00dec144566603c"
+    },
+    {
+      "file": "1440-competition-no-snapshot.png",
+      "scene": "competition-no-snapshot",
+      "width": 1440,
+      "sha256": "2fcc7a377948cf4f2b38eaafc6d78fc9a6639a7b2c609002b06baf6d72ac3e63"
+    },
+    {
+      "file": "1440-competition-null.png",
+      "scene": "competition-null",
+      "width": 1440,
+      "sha256": "df5b9fbc7b95e455ef6b47f6a7a84eb2b34ca2fd44b3938b4af85f7bb0b18ef9"
+    },
+    {
+      "file": "1440-competition-zero.png",
+      "scene": "competition-zero",
+      "width": 1440,
+      "sha256": "6d1e7efbc8c05363d07b28bf88e25a327ec03e6f3c9482d002e08a1008b27c26"
+    },
+    {
+      "file": "1440-competition-stale.png",
+      "scene": "competition-stale",
+      "width": 1440,
+      "sha256": "d2b331a9b522ca4fa41ddaea439ccf50624f18d98b0e7b36423e7dc4bbed3890"
+    },
+    {
+      "file": "1440-competition-no-access.png",
+      "scene": "competition-no-access",
+      "width": 1440,
+      "sha256": "72514b60b10dc18f27f805caf7f21759bcb1f9311c6360784ab7d95ef2a70eda"
+    },
+    {
+      "file": "1440-competition-loading.png",
+      "scene": "competition-loading",
+      "width": 1440,
+      "sha256": "d74b1ac7e857d676e77ec209644bd74734283e43cfbfc8706edbf3e3b4e82ae7"
+    },
+    {
+      "file": "1440-competition-error.png",
+      "scene": "competition-error",
+      "width": 1440,
+      "sha256": "cc81bc63b8ce8960e04962d26402d0a1c9793a238f2c8e5fdc3a70fef3b03e3b"
+    },
+    {
+      "file": "1440-risk.png",
+      "scene": "risk",
+      "width": 1440,
+      "sha256": "d1507c0724db4400ac9e847555d925bf48a927cefacc1c5a9a3952da24d7197b"
+    },
+    {
+      "file": "1440-risk-low-missing.png",
+      "scene": "risk-low-missing",
+      "width": 1440,
+      "sha256": "23f3211cffddb09c538a944f0d31ec01b3fac5b331cf2fd6c085388381baa023"
+    },
+    {
+      "file": "1440-risk-high.png",
+      "scene": "risk-high",
+      "width": 1440,
+      "sha256": "642b305b698f4589aed6bc1deab01e303e40376895bd09de6727d88415f26516"
+    },
+    {
+      "file": "1440-risk-covered.png",
+      "scene": "risk-covered",
+      "width": 1440,
+      "sha256": "638d1d9978f7ceb09aba49539a50f745648015d81bd0f0a297bda419e096ef83"
+    },
+    {
+      "file": "1440-overview-empty.png",
+      "scene": "overview-empty",
+      "width": 1440,
+      "sha256": "e1dda2236bdee87e8d9ce64022977e467ede48fbc1cbc76182b8ce52e1c44fc7"
+    },
+    {
+      "file": "1440-overview-loading.png",
+      "scene": "overview-loading",
+      "width": 1440,
+      "sha256": "56f0173602d29c0c09df60a1620bcfcf1d396fc95825b6b601d842d8bc426842"
+    },
+    {
+      "file": "1440-overview-error.png",
+      "scene": "overview-error",
+      "width": 1440,
+      "sha256": "400b4fe8ed3ab77ce566b1c7e5471d904aad225c3bee78cc55053f2c5a06b87b"
+    },
+    {
+      "file": "1440-overview-comp-only.png",
+      "scene": "overview-comp-only",
+      "width": 1440,
+      "sha256": "a968b97d6f17a600d5b7616d26b359995c571d178be533349a846aef8668be23"
+    },
+    {
+      "file": "1440-overview-supplier-only.png",
+      "scene": "overview-supplier-only",
+      "width": 1440,
+      "sha256": "e36dfdfad588bcf5ef64905c84a21212d40b66da37815c251ca2fdd9b3b49f2a"
+    },
+    {
+      "file": "1440-overview-no-access.png",
+      "scene": "overview-no-access",
+      "width": 1440,
+      "sha256": "42680d444c7190741cf1504239549429d92736e66fcb29b6c5c7a492b11a5fe4"
+    },
+    {
+      "file": "1440-competitor-busy.png",
+      "scene": "competitor-busy",
+      "width": 1440,
+      "sha256": "c2c3c53efa5e85f2a2d19a69c789c01a81187e0c55e803c836566142be0f2270"
+    },
+    {
+      "file": "1440-competitor-queued.png",
+      "scene": "competitor-queued",
+      "width": 1440,
+      "sha256": "f7f9e5eb1e350de2e78dfa27b4c9e189333eb5ba9a956f137592dbee97a82e46"
+    },
+    {
+      "file": "1440-competitor-failed.png",
+      "scene": "competitor-failed",
+      "width": 1440,
+      "sha256": "6a6cdd501c7a250b8f01d5ef3483cf5f2f4f615c6ec02e7ac8495e39634e49ae"
+    },
+    {
+      "file": "1440-supplier-busy.png",
+      "scene": "supplier-busy",
+      "width": 1440,
+      "sha256": "710893785072ccff650c95e3b95894e90b34c531c1824d7f3e78809140405432"
+    },
+    {
+      "file": "1440-supplier-queued.png",
+      "scene": "supplier-queued",
+      "width": 1440,
+      "sha256": "f366ad0b6cc594b8089eda2655447d576c3a12ebf16a79999ab93f2a17857921"
+    },
+    {
+      "file": "1440-supplier-failed.png",
+      "scene": "supplier-failed",
+      "width": 1440,
+      "sha256": "4aa997bada9bc6727097d5d7c43a467b743e42a4111508382472ec99e79b11b2"
+    },
+    {
+      "file": "1440-score-busy.png",
+      "scene": "score-busy",
+      "width": 1440,
+      "sha256": "db7ab47a17cc1fd41a711333870539e6874ed5f3522a6c9aa4e8ab6b5352d647"
+    },
+    {
+      "file": "1440-score-queued.png",
+      "scene": "score-queued",
+      "width": 1440,
+      "sha256": "1c038c70c42f8518bbf091875e48c4e3d5ba3ef370e68130311bf358b181a6da"
+    },
+    {
+      "file": "1440-score-failed.png",
+      "scene": "score-failed",
+      "width": 1440,
+      "sha256": "96620b7869a83977e7a603f1f62726f1840f9e98f950b38a8152fc538c16c971"
+    },
+    {
+      "file": "1440-score-reload-error.png",
+      "scene": "score-reload-error",
+      "width": 1440,
+      "sha256": "2aeccd6bf6cf9b6d7d9a355ddbbbd324ffefbbaf5eded727e1ae0fb7cf5948e7"
+    },
+    {
+      "file": "1440-write-unknown.png",
+      "scene": "write-unknown",
+      "width": 1440,
+      "sha256": "36f0b91aaa77b767845997b0f4066fcff4fdc5f318c6e6e13a95118f6de130ff"
+    },
+    {
+      "file": "390-overview.png",
+      "scene": "overview",
+      "width": 390,
+      "sha256": "385aebdb921915e7d247cfc1d656f4513c9e88b89f1b71e5c89dcf896cf68ba2"
+    },
+    {
+      "file": "390-score.png",
+      "scene": "score",
+      "width": 390,
+      "sha256": "740be45219120590d06d21007ce861c3b23cddf3feebd55c716acbd8f0402f6e"
+    },
+    {
+      "file": "390-score-details.png",
+      "scene": "score-details",
+      "width": 390,
+      "sha256": "7fe17286e8324b8b618f4be7fa149df936884cbc20c062df91b549dcf3dec6ed"
+    },
+    {
+      "file": "390-score-missing.png",
+      "scene": "score-missing",
+      "width": 390,
+      "sha256": "8b2501223e362a8ffa7fff76ae9ace4e9040206ecda4b7232720c32ad9a18ea8"
+    },
+    {
+      "file": "390-score-zero.png",
+      "scene": "score-zero",
+      "width": 390,
+      "sha256": "5feccdd3f7435a8234ca2f2591b10ceb07ee553ada8f2ad892a26a51d1ab4986"
+    },
+    {
+      "file": "390-score-no-run.png",
+      "scene": "score-no-run",
+      "width": 390,
+      "sha256": "43dc01a46a150d89e626aec3a6f5638df47a8874353fab0c035cec0376cc3274"
+    },
+    {
+      "file": "390-score-readonly.png",
+      "scene": "score-readonly",
+      "width": 390,
+      "sha256": "e6b99753b9161d067667951f14918586fb50b1afba11cb17d7db64955150b844"
+    },
+    {
+      "file": "390-market.png",
+      "scene": "market",
+      "width": 390,
+      "sha256": "68154e8bafb1f6af1fa72571d6cf5108861a8e933bc6b35322ca2216fbb9d788"
+    },
+    {
+      "file": "390-market-missing.png",
+      "scene": "market-missing",
+      "width": 390,
+      "sha256": "874762f8ff944b11847c83313a7f8858b9fba9f9383a6c47b5aae741ae59fddb"
+    },
+    {
+      "file": "390-market-empty.png",
+      "scene": "market-empty",
+      "width": 390,
+      "sha256": "bc5589fc32e6b87c6a11e4f46ebfba2ac0da604f92badfefedefd2c359e75e9e"
+    },
+    {
+      "file": "390-competition.png",
+      "scene": "competition",
+      "width": 390,
+      "sha256": "78a1138bd1eda523979a109af625fa37823dcf4cd25d9d730d26a802b6a2e26a"
+    },
+    {
+      "file": "390-competition-details.png",
+      "scene": "competition-details",
+      "width": 390,
+      "sha256": "e688c7b61098e782d3c3899ca6a88bbdbc4743613b36121ed267d887b1cc1859"
+    },
+    {
+      "file": "390-competition-empty.png",
+      "scene": "competition-empty",
+      "width": 390,
+      "sha256": "aa6fa39599e55fbf90a7ba7a01e4566e654ca3cd2a40dc907eed2e8c1cc6326f"
+    },
+    {
+      "file": "390-competition-no-snapshot.png",
+      "scene": "competition-no-snapshot",
+      "width": 390,
+      "sha256": "3131393e897b48e09dced4a0028d21c157a847d4b7e0342ff322f6560b4d9fd9"
+    },
+    {
+      "file": "390-competition-null.png",
+      "scene": "competition-null",
+      "width": 390,
+      "sha256": "25077713bd2b1c53f1fc1ab086b3452d2907d024e5f4ea3662d37291ee427f8a"
+    },
+    {
+      "file": "390-competition-zero.png",
+      "scene": "competition-zero",
+      "width": 390,
+      "sha256": "923518d01aaddbbeb017155413c9fc4510ec87bcc87c95c0389a7d4330a360ae"
+    },
+    {
+      "file": "390-competition-stale.png",
+      "scene": "competition-stale",
+      "width": 390,
+      "sha256": "843819cbdddb029321a9a4da54a705fbef86ce8380e09e33be87eec91733be73"
+    },
+    {
+      "file": "390-competition-no-access.png",
+      "scene": "competition-no-access",
+      "width": 390,
+      "sha256": "e1218b3dd2fa8258eb030dcb8e75963f10e1bbaeb8ca05ba5ca377b722c772f2"
+    },
+    {
+      "file": "390-competition-loading.png",
+      "scene": "competition-loading",
+      "width": 390,
+      "sha256": "877d3e078b72db30e243dbe9f1071ad3ca45581e0902d02e8727dd93a653cad5"
+    },
+    {
+      "file": "390-competition-error.png",
+      "scene": "competition-error",
+      "width": 390,
+      "sha256": "8e7f4be33d62759046ed06d0bad28055fd4efc3233a5eacd628317dad87645ea"
+    },
+    {
+      "file": "390-risk.png",
+      "scene": "risk",
+      "width": 390,
+      "sha256": "71079371643530fcb600c8a2e9973fbfb8e909074299f9e97df4c2591276e261"
+    },
+    {
+      "file": "390-risk-low-missing.png",
+      "scene": "risk-low-missing",
+      "width": 390,
+      "sha256": "52594aa6c0977667bfaa166d58324cde375f52ef0c041b61157df6d895a0b606"
+    },
+    {
+      "file": "390-risk-high.png",
+      "scene": "risk-high",
+      "width": 390,
+      "sha256": "8765e22485765f8d22ecc50fe16214fe4085f9751fe868592a2087708af47661"
+    },
+    {
+      "file": "390-risk-covered.png",
+      "scene": "risk-covered",
+      "width": 390,
+      "sha256": "42ad2fc38d0d0586c7c7eb75c504890554b4b4ad54f403d566eecec181a27224"
+    },
+    {
+      "file": "390-overview-empty.png",
+      "scene": "overview-empty",
+      "width": 390,
+      "sha256": "50e200bcddeb698d3489816ec1009c175e39672782be1091f9a8f0d21c8f0406"
+    },
+    {
+      "file": "390-overview-loading.png",
+      "scene": "overview-loading",
+      "width": 390,
+      "sha256": "a72f155df819355b98f8ae67aebe7fd4899b4feb1164529df0d585f033d44b6c"
+    },
+    {
+      "file": "390-overview-error.png",
+      "scene": "overview-error",
+      "width": 390,
+      "sha256": "2f4098f5b30bac2816347fbcdd3cd9dba40471355ae1d5a4eb299acdc11cde9d"
+    },
+    {
+      "file": "390-overview-comp-only.png",
+      "scene": "overview-comp-only",
+      "width": 390,
+      "sha256": "adf58cc52db403f49af7c302172e03ed7d80546f152550a18b227ad4e1b65a58"
+    },
+    {
+      "file": "390-overview-supplier-only.png",
+      "scene": "overview-supplier-only",
+      "width": 390,
+      "sha256": "f140c9bc306f4ee61d7c9dd0a3f6f8203d7c9d8b302ba6e38defcab960260a08"
+    },
+    {
+      "file": "390-overview-no-access.png",
+      "scene": "overview-no-access",
+      "width": 390,
+      "sha256": "75b51505aa0c23a00fe7c9672115d6620bb374b5386f97024bbde0142999420d"
+    },
+    {
+      "file": "390-competitor-busy.png",
+      "scene": "competitor-busy",
+      "width": 390,
+      "sha256": "c426b667b800b8ccff50b355417dc3a0f2d34c818132fee0563d8ed82c58452e"
+    },
+    {
+      "file": "390-competitor-queued.png",
+      "scene": "competitor-queued",
+      "width": 390,
+      "sha256": "2ffbd9e115198174d34f36955b70e3b080b929ceea545711c0c33aa721d24d99"
+    },
+    {
+      "file": "390-competitor-failed.png",
+      "scene": "competitor-failed",
+      "width": 390,
+      "sha256": "fcdb6f5bf01bef52afbc1cde46fa35a94a02607145e5be071fdc03238a4e52a8"
+    },
+    {
+      "file": "390-supplier-busy.png",
+      "scene": "supplier-busy",
+      "width": 390,
+      "sha256": "16ed67159dd5180a461992f7f0bce808fc57dee3658aeb89af180c2f4df5f0f9"
+    },
+    {
+      "file": "390-supplier-queued.png",
+      "scene": "supplier-queued",
+      "width": 390,
+      "sha256": "744ba7b2abb1faa3bf0db4bc5c2c537f5c9bd976815b1ad1a4c39defacd82fe5"
+    },
+    {
+      "file": "390-supplier-failed.png",
+      "scene": "supplier-failed",
+      "width": 390,
+      "sha256": "b283061d13fe56dafebe443bc3e0b54dd3c78506c62bdd5a2fadc4ebc18b52cb"
+    },
+    {
+      "file": "390-score-busy.png",
+      "scene": "score-busy",
+      "width": 390,
+      "sha256": "073738bd362e543e6324848c1233937fb346d5263762f0fac08ff30f9dc552a6"
+    },
+    {
+      "file": "390-score-queued.png",
+      "scene": "score-queued",
+      "width": 390,
+      "sha256": "aca3f3b9bbbf0ca11348b960780912f18ab2e5267c0923e898c5e4b9746cbbea"
+    },
+    {
+      "file": "390-score-failed.png",
+      "scene": "score-failed",
+      "width": 390,
+      "sha256": "79137977d39efdee14c08f0d0029de73ce6b457ffd1563e00435d9c7cafd7cea"
+    },
+    {
+      "file": "390-score-reload-error.png",
+      "scene": "score-reload-error",
+      "width": 390,
+      "sha256": "7458dfa18f153d0d6415197f6bd74f4ca0006043d7410ef820f21233a3760b3c"
+    },
+    {
+      "file": "390-write-unknown.png",
+      "scene": "write-unknown",
+      "width": 390,
+      "sha256": "a57150f323b7bdd1ff6ac6b7c0df1bb9db51e91b82812b4edf768370eccbdc5e"
+    }
+  ]
+}
