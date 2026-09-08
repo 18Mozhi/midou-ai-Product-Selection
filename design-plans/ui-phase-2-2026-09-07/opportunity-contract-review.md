@@ -1,5 +1,7 @@
 # P15/P18 机会列表与详情 · 源码合同复核
 
+2026-09-08 P15图稿接续：[OPPORTUNITY-C-r1](design/opportunity-direction-c/README.md)126图待审；本批不覆盖P18。永久助手实际执行confirmBatch复现selectedIds两项、当前items一项时body只含一项，OP06进入“已隔离复现、未修Vue/未真实验收”；提案分别展示有效范围和本页外选择。原activeFilterCount使用可变草稿、列表图片无error handler亦保留待修边界。创建/三批量/URL/ERP文件输入及rowFacts已与源执行结果核对，不等于后端事务/权限/ERP服务通过。
+
 日期：2026-09-07；N02；复核起点main/a329cfd。产品源码指纹仍为c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183，inventory --check通过。既有候选草稿经当前源码/清单核对后纳入本批，不改生成清单或全站通过计数。
 
 此文是后续重设计的真实合同，不是最终视觉稿或全量运行验收。两页分别见[列表规格](page-specs/P15.md)、[详情规格](page-specs/P18.md)；[104项候选逐行表](opportunity-candidate-map.md)保留所有候选尾键和位置。12个组件中的事件转发、表单submit与按钮可归并为一个动作，但每个实际入口仍需审图；8个弹窗定义/调用候选不等于8个独立业务弹窗。

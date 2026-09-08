@@ -1,0 +1,800 @@
+{
+  "version": "OPPORTUNITY-C-r1",
+  "approval": "pending",
+  "capturedAt": "2026-09-08T07:41:16.602Z",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/index.html": "3fd1c3a0e5d9a3f71ba765ec4282df93321c59365e8b1db29e5f81f3f883ec14",
+    "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/opportunity.css": "5691620330832578556b82862c87e131d7f106bbcce7360c9881d973d0e7d028",
+    "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/opportunity.js": "9d9caf3d7ebbaa24b5ec14d12daf4aa8ff86c2a10bde4f64c187901f78ff976b",
+    "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/view.js": "e618a8476ef4b85ebbe87da23c5b923ee3c34238d658a749271804060799aa23",
+    "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/data.js": "41f7725f990563ef702bc9de16464de8a55fecd0e43dc6ce9fdfa7ae5e1d95c8",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
+    "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
+    "apps/web/src/automatic-selection-readiness.ts": "8ee0c2efad0138393a5071a7798560477db812a3463a0f9312c5a4a753b99487",
+    "apps/api/src/opportunity-service.ts": "a43b52911778c4e85a84dd0d25607fab481a358441ad1b5254f770f19cca820e",
+    "apps/api/src/opportunity-routes.ts": "d65b60404750432d0290c0e71f22c0d4c09756fed95914063b78ac03a41e5546",
+    "apps/api/src/opportunity-selection-policy.ts": "9f72219e1f75373fadf173b18642737b4e0540f5ef286d667e699d27964c34ef",
+    "apps/api/src/erp-product-import-routes.ts": "3656222f0ebeebab432683f66a83582d141061d861154b75240e08801d6afd1f",
+    "apps/api/src/erp-product-import-service.ts": "c7a58090f8b8d3c486d7bcd67fc6cc36359a15067c28d63840373a01bdd8d36b",
+    "tests/e2e/ui-phase2-opportunity-contracts.spec.ts": "ad091f9e1bcb2948bdbc43e525af514f6a1d934f5636ea99d4c65a45950f1f6b",
+    "tests/e2e/m04-02-opportunities.spec.ts": "f0f68373124d776ceb3b2887d435ad26386a671030d0be5cbccc78e694704863",
+    "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95"
+  },
+  "knownGaps": {
+    "batchScope": {
+      "selectedCount": 2,
+      "submittedCount": 1,
+      "submittedId": "00000000-0000-4000-8000-000000000426",
+      "sourceFixed": false
+    },
+    "filterCount": "Actual activeFilterCount uses mutable draft fields rather than URL; proposal labels drafts separately.",
+    "imageFailure": "Actual list has no image error handler; proposal shows unavailable state without inventing product art."
+  },
+  "boundary": "Isolated C proposal only, historical fixture plus explicit synthetic variants. Six dialog variants, source function payload extraction, current-page effective selection, ERP close not cancellation. No actual Vue fixes, API writes, ERP helper, DB/RBAC, approval or production deployment. Draft/applied distinction, image fallback, modal protections and influence preview are pending proposals.",
+  "screenshots": [
+    {
+      "file": "1440-recommended.png",
+      "scene": "recommended",
+      "width": 1440,
+      "sha256": "5e8bc282ac61152874298173342e2c7abf7665a0c129dde0265b2623dd930fab"
+    },
+    {
+      "file": "1440-rule-candidates.png",
+      "scene": "rule-candidates",
+      "width": 1440,
+      "sha256": "9b1ba73db4abf82562c865ecb054d27694d17af18b7a7fc5ff2e562c369469ab"
+    },
+    {
+      "file": "1440-evidence-pending.png",
+      "scene": "evidence-pending",
+      "width": 1440,
+      "sha256": "ed832f5f21f3412ad1ecc89992391415be227a1898028ed431074a97735caf85"
+    },
+    {
+      "file": "1440-all.png",
+      "scene": "all",
+      "width": 1440,
+      "sha256": "d896bbd7d77e6436d8c231a6b21b6ceb3515d3453272baedf4dd13509247e3cc"
+    },
+    {
+      "file": "1440-readonly.png",
+      "scene": "readonly",
+      "width": 1440,
+      "sha256": "561f7b6405da03da4df05d7bcd174200d84474b049a533fb61360fa2c358e310"
+    },
+    {
+      "file": "1440-setup-open.png",
+      "scene": "setup-open",
+      "width": 1440,
+      "sha256": "3168cf055d8b1194205797f0209a9ce590a4514819de75075e221fe89b90ba9e"
+    },
+    {
+      "file": "1440-setup-ready.png",
+      "scene": "setup-ready",
+      "width": 1440,
+      "sha256": "7db7c98570ffa86a893d043e8c5a0687098e6232e2ba1275eb89bd498e51e7a4"
+    },
+    {
+      "file": "1440-setup-unknown.png",
+      "scene": "setup-unknown",
+      "width": 1440,
+      "sha256": "831106e2c7a57734cc54c4dde91d76549290fdde7fbf93e8cf8adee95871e9b2"
+    },
+    {
+      "file": "1440-members-failed.png",
+      "scene": "members-failed",
+      "width": 1440,
+      "sha256": "e6e8cabaeed8363e93f2b658cc32f6dedc747eb20498e5d31b786718bea2ed4f"
+    },
+    {
+      "file": "1440-members-empty.png",
+      "scene": "members-empty",
+      "width": 1440,
+      "sha256": "8af5316186775991bb2723f3a2c655e97da51c1430735530b67d89ba49e406cb"
+    },
+    {
+      "file": "1440-long-name.png",
+      "scene": "long-name",
+      "width": 1440,
+      "sha256": "569f290d0f5b818d4037e3412af3ad63b129e2f0ba7ebdd471c849c813c05372"
+    },
+    {
+      "file": "1440-image-failed.png",
+      "scene": "image-failed",
+      "width": 1440,
+      "sha256": "3cf232b456541e4ea6283338595c8056a94497605c0d4e59c585cb95b860a556"
+    },
+    {
+      "file": "1440-page-two.png",
+      "scene": "page-two",
+      "width": 1440,
+      "sha256": "1f3ff8e8438c0a58608a5f28078d4dc21f06d3350ef573306c725916392fc40f"
+    },
+    {
+      "file": "1440-selected.png",
+      "scene": "selected",
+      "width": 1440,
+      "sha256": "47e6bc83b4ca32da79382397e8b39452daf7813d91e34a43e701d0d3240b92a8"
+    },
+    {
+      "file": "1440-cross-page.png",
+      "scene": "cross-page",
+      "width": 1440,
+      "sha256": "4d7135146392fe6191dc73c1059a9dc05d51c493dd52d7b52f67c94b0e0c6439"
+    },
+    {
+      "file": "1440-hidden-selection.png",
+      "scene": "hidden-selection",
+      "width": 1440,
+      "sha256": "9a98be8229261903bb98c09efc7294cbea78422794426647263637030b7b574c"
+    },
+    {
+      "file": "1440-filter-open.png",
+      "scene": "filter-open",
+      "width": 1440,
+      "sha256": "c9ca9ce38c6d7b93e902f2f6538fbedd40245edeaac84df79df17d63d57bdfbd"
+    },
+    {
+      "file": "1440-filter-edited.png",
+      "scene": "filter-edited",
+      "width": 1440,
+      "sha256": "7c39700cd5d371ed60c63e7ac4ef825b356d15ed4a89a8b9ed1577d7607f2ce4"
+    },
+    {
+      "file": "1440-filtered.png",
+      "scene": "filtered",
+      "width": 1440,
+      "sha256": "58ccb8ab506667572587f5a0f66c015cf12c47aeddfd1aae3f156003a07158ab"
+    },
+    {
+      "file": "1440-empty-filtered.png",
+      "scene": "empty-filtered",
+      "width": 1440,
+      "sha256": "d51c575a4a7ef3ef8be04caa929c861a04d8e9823f67be3e52deff96c30487ac"
+    },
+    {
+      "file": "1440-empty-all.png",
+      "scene": "empty-all",
+      "width": 1440,
+      "sha256": "8894f9a237cd4d4583ff4a86db9c07ee392a735a394d1aeff1818de5cd5c837e"
+    },
+    {
+      "file": "1440-empty-recommended.png",
+      "scene": "empty-recommended",
+      "width": 1440,
+      "sha256": "9ccab305acd332206ec19f3c4bf645bf14684abc74c78c7f1bd3e201748c873c"
+    },
+    {
+      "file": "1440-empty-candidates.png",
+      "scene": "empty-candidates",
+      "width": 1440,
+      "sha256": "e2544ffdba1e5585a976fb6535830f9624fd3f46c0bd46192cefd25f9e1380fc"
+    },
+    {
+      "file": "1440-empty-pending.png",
+      "scene": "empty-pending",
+      "width": 1440,
+      "sha256": "f002a4ca65f16656158e53a140329437ad067f00b6ddb12efc6b16680b86c0c0"
+    },
+    {
+      "file": "1440-empty-readonly.png",
+      "scene": "empty-readonly",
+      "width": 1440,
+      "sha256": "35474d1e5097b7259406c79c38535baa22a8cb320d49953fa955749bec77aa46"
+    },
+    {
+      "file": "1440-loading.png",
+      "scene": "loading",
+      "width": 1440,
+      "sha256": "1aedc8d1bb94b84282c13d3d054c5dccfdc23359b5cbe0519990f931086c1249"
+    },
+    {
+      "file": "1440-error.png",
+      "scene": "error",
+      "width": 1440,
+      "sha256": "9b10f0c4522612f17913ee3f001ca812f191b340556e2e73f6d1ec61ac3641c3"
+    },
+    {
+      "file": "1440-expired.png",
+      "scene": "expired",
+      "width": 1440,
+      "sha256": "23c3f757ce0c0e5ab65d1cb79b69182c3c42e5b0d77971d35a0a0c3a17da7d94"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "scene": "forbidden",
+      "width": 1440,
+      "sha256": "840136136a300e1b681d8cf572d8c0268ba1e8c13a30fa147d21c41b0bd924fe"
+    },
+    {
+      "file": "1440-blocked.png",
+      "scene": "blocked",
+      "width": 1440,
+      "sha256": "a069ed8b9debb9260664ed9b393257964630b3c4b354075e39c4eab675ab8859"
+    },
+    {
+      "file": "1440-create-open.png",
+      "scene": "create-open",
+      "width": 1440,
+      "sha256": "3b91ec5db20482941054102e2efdc32e9d3ec7f42ba1eaac4c8e5f2ebb4becc1"
+    },
+    {
+      "file": "1440-create-edited.png",
+      "scene": "create-edited",
+      "width": 1440,
+      "sha256": "56c2e8da36e37b5c13207de28cb559b8efbe254aefc0491e20894dd4ac6c0d67"
+    },
+    {
+      "file": "1440-create-busy.png",
+      "scene": "create-busy",
+      "width": 1440,
+      "sha256": "f3de23697d14731d5363b176f249ea136796d15308f07869881193e0e2dc97fd"
+    },
+    {
+      "file": "1440-create-failed.png",
+      "scene": "create-failed",
+      "width": 1440,
+      "sha256": "0dc18b0e7fb4c5e327469b0be8d5bf536ec1c0df634b1cb95e502b603553e152"
+    },
+    {
+      "file": "1440-create-saved.png",
+      "scene": "create-saved",
+      "width": 1440,
+      "sha256": "309939c2beed379cb73580b16a85cc2c65bc058a825a5d6f5fffb3afea9407da"
+    },
+    {
+      "file": "1440-assign-open.png",
+      "scene": "assign-open",
+      "width": 1440,
+      "sha256": "f46e5bffe298a0d9f1a281abcad915339fec13497a176855989e0e2a2edecbc7"
+    },
+    {
+      "file": "1440-assign-edited.png",
+      "scene": "assign-edited",
+      "width": 1440,
+      "sha256": "a8a507c6ccfa961eec4c76211d8f0db2b815a2ab6c47589f8ce68dc2b901dd8e"
+    },
+    {
+      "file": "1440-assign-busy.png",
+      "scene": "assign-busy",
+      "width": 1440,
+      "sha256": "2634ebc2826e5d7cc89753ef81df1b185308b5f185a99f78de3fb93383a568c1"
+    },
+    {
+      "file": "1440-assign-failed.png",
+      "scene": "assign-failed",
+      "width": 1440,
+      "sha256": "bca6444203a45c20bebd9800a668494e5ccdb076576bca72d4151c82f3a78f5c"
+    },
+    {
+      "file": "1440-assign-saved.png",
+      "scene": "assign-saved",
+      "width": 1440,
+      "sha256": "745cbb273e342a0df14a3ce125ac96215d571ce3fa13640b82cd348782308326"
+    },
+    {
+      "file": "1440-review-open.png",
+      "scene": "review-open",
+      "width": 1440,
+      "sha256": "f3309b17cb81449a344d78de1983f5af4ebbd7d3166a1244a869bcc86eda8c09"
+    },
+    {
+      "file": "1440-review-edited.png",
+      "scene": "review-edited",
+      "width": 1440,
+      "sha256": "30e7bcbe1c7b5cad821a8ccd4b3be3d30080d10a8eeb07e6d51a9a0c4ee546b9"
+    },
+    {
+      "file": "1440-review-busy.png",
+      "scene": "review-busy",
+      "width": 1440,
+      "sha256": "0616b777f34c49565168f8c9fa89abff680b4cb0ba6748b0a75c970d70dfa19e"
+    },
+    {
+      "file": "1440-review-failed.png",
+      "scene": "review-failed",
+      "width": 1440,
+      "sha256": "506c54238207bae5066e89c944037400683d24bc7c21d4d074fa88a376305759"
+    },
+    {
+      "file": "1440-review-saved.png",
+      "scene": "review-saved",
+      "width": 1440,
+      "sha256": "a3cc8e9f0290468322f12b0137f54a1f29f7c3b3b7a0396978f3033547483cac"
+    },
+    {
+      "file": "1440-archive-open.png",
+      "scene": "archive-open",
+      "width": 1440,
+      "sha256": "5ff4295e10fc4ebdb678a5e96bd72cae2eda4a30fc645853ff7da0d5a5c8b9b9"
+    },
+    {
+      "file": "1440-archive-edited.png",
+      "scene": "archive-edited",
+      "width": 1440,
+      "sha256": "4cb0405477a4d6807642c29db86ec472642450b7079b7dc52aa2fcb3a101d98d"
+    },
+    {
+      "file": "1440-archive-busy.png",
+      "scene": "archive-busy",
+      "width": 1440,
+      "sha256": "ae4f7db719f1c17403d37c19ed895260da3845c0e3349e4d8819e2791811a9d8"
+    },
+    {
+      "file": "1440-archive-failed.png",
+      "scene": "archive-failed",
+      "width": 1440,
+      "sha256": "57d530109a9baf73aa09eb1d2d06e6ee13abae484e012261eb30ba132558297b"
+    },
+    {
+      "file": "1440-archive-saved.png",
+      "scene": "archive-saved",
+      "width": 1440,
+      "sha256": "3ce6f23be30361976bdba72bb88f0ccee5a8a6c9758d50704f0090613d053b46"
+    },
+    {
+      "file": "1440-erp-open.png",
+      "scene": "erp-open",
+      "width": 1440,
+      "sha256": "4c05f47a3512babdd553cd7eeb3b21b6e4c187658ba193bb1b80c05cb1c31aa3"
+    },
+    {
+      "file": "1440-erp-edited.png",
+      "scene": "erp-edited",
+      "width": 1440,
+      "sha256": "2afd8ba7b773f1ea25ab1391016c4e8136d84fa4450b1becccf826e52cf96a17"
+    },
+    {
+      "file": "1440-erp-busy.png",
+      "scene": "erp-busy",
+      "width": 1440,
+      "sha256": "37a81bc4645dd955d6bd619bfe9db6a16a709fff6a7d1cce9f7b280458c2beb1"
+    },
+    {
+      "file": "1440-erp-closed-busy.png",
+      "scene": "erp-closed-busy",
+      "width": 1440,
+      "sha256": "5e718c4eddff97f2e0b5d6a26552c00e1c2bd21be3f009f8d1d864a99a16745e"
+    },
+    {
+      "file": "1440-erp-login-opened.png",
+      "scene": "erp-login-opened",
+      "width": 1440,
+      "sha256": "eca221325dcd1ab1c222c3a13ef91229cb7433af69415aaf0071a34d13d37c14"
+    },
+    {
+      "file": "1440-erp-login-required.png",
+      "scene": "erp-login-required",
+      "width": 1440,
+      "sha256": "589d0a00265484644240ed3642e7e78b71f391fa86e24632d1450fa5b808e2fe"
+    },
+    {
+      "file": "1440-erp-helper-missing.png",
+      "scene": "erp-helper-missing",
+      "width": 1440,
+      "sha256": "7c506bb09ba311c7fb687b0aff6af31e2dcc712969f51a19d71d76441edceb4a"
+    },
+    {
+      "file": "1440-erp-file-invalid.png",
+      "scene": "erp-file-invalid",
+      "width": 1440,
+      "sha256": "cc89a20e80c51fe5c852ae6d49da86e5594fc33355cd76e3a7b44fde28dfa8e7"
+    },
+    {
+      "file": "1440-erp-failed.png",
+      "scene": "erp-failed",
+      "width": 1440,
+      "sha256": "0a960e651403106ec65be8f949b58bc7dea04d93471d27577749b41f52a009ee"
+    },
+    {
+      "file": "1440-erp-saved.png",
+      "scene": "erp-saved",
+      "width": 1440,
+      "sha256": "7b13b06f633abe0ceea4033191f372a85197c7b4ea643332d3115f4019508223"
+    },
+    {
+      "file": "390-recommended.png",
+      "scene": "recommended",
+      "width": 390,
+      "sha256": "83d4646d5e3aa915346e5bb614bb63e98350df651e7131bd17e1776c32dd95a9"
+    },
+    {
+      "file": "390-rule-candidates.png",
+      "scene": "rule-candidates",
+      "width": 390,
+      "sha256": "3e42645d73a0c52e597f18b00f8f06147baa700e453063c1bb77b7cd1d0f0fc5"
+    },
+    {
+      "file": "390-evidence-pending.png",
+      "scene": "evidence-pending",
+      "width": 390,
+      "sha256": "f83ae3853fe63573188a195e98fc79509720638c5137fb51eb834721fe575179"
+    },
+    {
+      "file": "390-all.png",
+      "scene": "all",
+      "width": 390,
+      "sha256": "2503190d18a9734d33c494396f355ce910a164cfcfcb3f510700c92a0a79b316"
+    },
+    {
+      "file": "390-readonly.png",
+      "scene": "readonly",
+      "width": 390,
+      "sha256": "6080433b0353104dadda9a0a3198043da48939ec9f2951bd93d01a5f2a2e8812"
+    },
+    {
+      "file": "390-setup-open.png",
+      "scene": "setup-open",
+      "width": 390,
+      "sha256": "0d8cb985bd1181fabed728807fb8a43e6ad1b3b094e792c4915d552d0705354a"
+    },
+    {
+      "file": "390-setup-ready.png",
+      "scene": "setup-ready",
+      "width": 390,
+      "sha256": "f185a514ca2c7df8cd9c8c70bb4f65a5025bed959f4198f3f265adf9ef76c0fa"
+    },
+    {
+      "file": "390-setup-unknown.png",
+      "scene": "setup-unknown",
+      "width": 390,
+      "sha256": "bca984e07e28d213da0636ac0fae20fa05784315c561555e302adc16f97d306e"
+    },
+    {
+      "file": "390-members-failed.png",
+      "scene": "members-failed",
+      "width": 390,
+      "sha256": "a8d9645a02a40d0ef4f4ced2f8b4c6c2711af20eea0786b8d6c6f10d47ee1018"
+    },
+    {
+      "file": "390-members-empty.png",
+      "scene": "members-empty",
+      "width": 390,
+      "sha256": "8828be01d4b28b1a91ae2726b0f29d5d033cd89b9b4d1c29a63791f4c5196eee"
+    },
+    {
+      "file": "390-long-name.png",
+      "scene": "long-name",
+      "width": 390,
+      "sha256": "615ca850ced3a2e80dd7a480c69111ae41f36bc4959e85e23a7752f99d2647d7"
+    },
+    {
+      "file": "390-image-failed.png",
+      "scene": "image-failed",
+      "width": 390,
+      "sha256": "1cac2ad57b0a1a34a40ee02247cad23c24e36af9718e5bc636c1a25bbf2b7166"
+    },
+    {
+      "file": "390-page-two.png",
+      "scene": "page-two",
+      "width": 390,
+      "sha256": "bdee8249889709165beefb41eaea0d482abf141437012a9983865f5595afdc96"
+    },
+    {
+      "file": "390-selected.png",
+      "scene": "selected",
+      "width": 390,
+      "sha256": "3a6bfcfecc415a952259f293360ce2338a9b6b5ab52f11d0dbd5a2e30d16a4a7"
+    },
+    {
+      "file": "390-cross-page.png",
+      "scene": "cross-page",
+      "width": 390,
+      "sha256": "32ea68ba97847943d0c7ef1a25bd806d21ad3b7dcac42da1e6ec470d843a3be2"
+    },
+    {
+      "file": "390-hidden-selection.png",
+      "scene": "hidden-selection",
+      "width": 390,
+      "sha256": "d98d622fa020f3dcdd394fdeeefdd3da7fda9767e86f4cdee96d36dbacc7e585"
+    },
+    {
+      "file": "390-filter-open.png",
+      "scene": "filter-open",
+      "width": 390,
+      "sha256": "5e1a1da446c134b4659e8973e864a2083075824ce2dd90e992c03c1c4f9bd916"
+    },
+    {
+      "file": "390-filter-open-lower.png",
+      "scene": "filter-open",
+      "width": 390,
+      "sha256": "d74640b5270a4e653dc1f7b7278255510c3bcb26fd3888d0442a49313023341a"
+    },
+    {
+      "file": "390-filter-edited.png",
+      "scene": "filter-edited",
+      "width": 390,
+      "sha256": "2767d04ae5223b8491ade283daf02d08c73ee6ef00cacf06aa644be83134017b"
+    },
+    {
+      "file": "390-filter-edited-lower.png",
+      "scene": "filter-edited",
+      "width": 390,
+      "sha256": "a373905ff253eb944fe92b66b566f259ee2813bdbe0a95cbba94e8b16e9431f6"
+    },
+    {
+      "file": "390-filtered.png",
+      "scene": "filtered",
+      "width": 390,
+      "sha256": "f8ab152d35fb3c849a30be87859cd5902d2335c7dcb95bb638fb806a48c9c794"
+    },
+    {
+      "file": "390-empty-filtered.png",
+      "scene": "empty-filtered",
+      "width": 390,
+      "sha256": "d85f333e54b1c99e6d683766eacaa7650e817be6feef955359780dc578141c84"
+    },
+    {
+      "file": "390-empty-all.png",
+      "scene": "empty-all",
+      "width": 390,
+      "sha256": "9f680be153695629817f79ea9805ebccc40784a518ea8c0b0c19a2b754087a1a"
+    },
+    {
+      "file": "390-empty-recommended.png",
+      "scene": "empty-recommended",
+      "width": 390,
+      "sha256": "a78fdacdbdaf50fe51c2e0ffb8c07e6221dd68ab2df4faca4da2c06fd8a63539"
+    },
+    {
+      "file": "390-empty-candidates.png",
+      "scene": "empty-candidates",
+      "width": 390,
+      "sha256": "5f3b6b955486567d26e74c948a79e9fabeb374220309ac82f268e725414ffcf1"
+    },
+    {
+      "file": "390-empty-pending.png",
+      "scene": "empty-pending",
+      "width": 390,
+      "sha256": "9bc529dd97c32adab3fca87f37d948bd74fcd02dc607ee514fa57fab43538aef"
+    },
+    {
+      "file": "390-empty-readonly.png",
+      "scene": "empty-readonly",
+      "width": 390,
+      "sha256": "e5349ca62dccee355db8aedd9c85404e7ebc89faf5d331d9767787bdb16a94c3"
+    },
+    {
+      "file": "390-loading.png",
+      "scene": "loading",
+      "width": 390,
+      "sha256": "a29e5aadb9be6d0a73dcbd5d0264a7370b0cc4b6038049bbdbe2d95a63ffe7bc"
+    },
+    {
+      "file": "390-error.png",
+      "scene": "error",
+      "width": 390,
+      "sha256": "8eeb6eb76390b8fdef0b429f892f91826f07970cb9e1e50b413e930ab2baded7"
+    },
+    {
+      "file": "390-expired.png",
+      "scene": "expired",
+      "width": 390,
+      "sha256": "fdeab14c123e67c32ee101fea505bf298d4e87446fcd9ffd128898051b45600e"
+    },
+    {
+      "file": "390-forbidden.png",
+      "scene": "forbidden",
+      "width": 390,
+      "sha256": "1c4c7956e72665a1b65a903dc58e75df9c034ed3eff0ddafe17b60690dce1a7f"
+    },
+    {
+      "file": "390-blocked.png",
+      "scene": "blocked",
+      "width": 390,
+      "sha256": "cd61d373ba68f0792fa895b70d9eecc9a2689f57ebc50f09f73e3b88eb9aec6b"
+    },
+    {
+      "file": "390-create-open.png",
+      "scene": "create-open",
+      "width": 390,
+      "sha256": "2e841003a5ae755c7ebc4a46675814b66bd66cf6dcdd7f33bd65b7538be6e451"
+    },
+    {
+      "file": "390-create-edited.png",
+      "scene": "create-edited",
+      "width": 390,
+      "sha256": "5175648ab0f6fa7d6ea13634450b6186d123229c7589d667f5a92dc610c97640"
+    },
+    {
+      "file": "390-create-busy.png",
+      "scene": "create-busy",
+      "width": 390,
+      "sha256": "3920a005751621265a69569980ced44dce67e5945ac331a5fb2f212605d15587"
+    },
+    {
+      "file": "390-create-failed.png",
+      "scene": "create-failed",
+      "width": 390,
+      "sha256": "e368fda9b94cf61d257f63a27b5eb96eea31bfb8b5537ad35ef5a497cc9482d3"
+    },
+    {
+      "file": "390-create-saved.png",
+      "scene": "create-saved",
+      "width": 390,
+      "sha256": "864f4d5dc91ae286a0101e2145c14fff932b5ed439d15c1475228ce7e4751fae"
+    },
+    {
+      "file": "390-assign-open.png",
+      "scene": "assign-open",
+      "width": 390,
+      "sha256": "657af88bebced1696ceafc788de0a497a475125bf393204df036bc007ff79cd5"
+    },
+    {
+      "file": "390-assign-edited.png",
+      "scene": "assign-edited",
+      "width": 390,
+      "sha256": "7b87c81044106341bded4032e7baf7cc940d0ed500b160653421b16f782af78d"
+    },
+    {
+      "file": "390-assign-busy.png",
+      "scene": "assign-busy",
+      "width": 390,
+      "sha256": "f11c53c897f0db795ddad71b76622d3113a65f888211bc486187881e7f2f9750"
+    },
+    {
+      "file": "390-assign-busy-lower.png",
+      "scene": "assign-busy",
+      "width": 390,
+      "sha256": "c9e7d7dbfd7bb3885e5c32453ab58367238f492419778cbb5f33d7e887acd7da"
+    },
+    {
+      "file": "390-assign-failed.png",
+      "scene": "assign-failed",
+      "width": 390,
+      "sha256": "019364f3fa0a22a77646e6df5f03f152e144a22cc2a17e0f2e7b9ed13c327f89"
+    },
+    {
+      "file": "390-assign-failed-lower.png",
+      "scene": "assign-failed",
+      "width": 390,
+      "sha256": "402bfad89ea7b412c966a51173fe39b4b60f3b05759cc1394387c856a3cd9f80"
+    },
+    {
+      "file": "390-assign-saved.png",
+      "scene": "assign-saved",
+      "width": 390,
+      "sha256": "af3d2a113cab8c4215e23e77f76fb8496f77ba1b9ea0941fce3334269ca7d14f"
+    },
+    {
+      "file": "390-review-open.png",
+      "scene": "review-open",
+      "width": 390,
+      "sha256": "34198b42b12d2888ec3768c5daa5d51aed37f2b44b3357ed69db7ff395e6f07d"
+    },
+    {
+      "file": "390-review-edited.png",
+      "scene": "review-edited",
+      "width": 390,
+      "sha256": "fe49d3d0101d811d7d3345c976b8cafb82c0bffe00be396512787491ffa7cb5a"
+    },
+    {
+      "file": "390-review-busy.png",
+      "scene": "review-busy",
+      "width": 390,
+      "sha256": "f5802aeea4ebf3e0a08a6ce34a314500b3c8aa7614263764ab44a3b9209db635"
+    },
+    {
+      "file": "390-review-busy-lower.png",
+      "scene": "review-busy",
+      "width": 390,
+      "sha256": "d611ee02727d536a09d6a2823d67b985d8db2ba0a4130642e6c458e09e4e66b5"
+    },
+    {
+      "file": "390-review-failed.png",
+      "scene": "review-failed",
+      "width": 390,
+      "sha256": "d271027545567c20277a6fb4dfe51aad2ae73ca0bf4972c195e397f15f341009"
+    },
+    {
+      "file": "390-review-saved.png",
+      "scene": "review-saved",
+      "width": 390,
+      "sha256": "71d2bbded37dae2d885924f11073d61b540cbf900f0fe704a361e1ee39dc4f6a"
+    },
+    {
+      "file": "390-archive-open.png",
+      "scene": "archive-open",
+      "width": 390,
+      "sha256": "fe09523bdd06edd7a20d76a522a78d2ae926e3534e131a2bff496491b6d87fa6"
+    },
+    {
+      "file": "390-archive-edited.png",
+      "scene": "archive-edited",
+      "width": 390,
+      "sha256": "ed65a74539572a9b5b79191a5bfdfbf4023780ff7cab78e930d8aeb9e373d46f"
+    },
+    {
+      "file": "390-archive-busy.png",
+      "scene": "archive-busy",
+      "width": 390,
+      "sha256": "40ca2ed332ca946a58738313dc148b430f80246d063a83b6c5617d249b929208"
+    },
+    {
+      "file": "390-archive-busy-lower.png",
+      "scene": "archive-busy",
+      "width": 390,
+      "sha256": "0e1ba01155eebe8aba9e0287dd11bf85ccf49d3b0b2f22d7b7fd1bb5299b6bfa"
+    },
+    {
+      "file": "390-archive-failed.png",
+      "scene": "archive-failed",
+      "width": 390,
+      "sha256": "fcb436b2c1c1c7c57f53903bba1f1a6df71e30fddfa122193a8395f8b2d4f964"
+    },
+    {
+      "file": "390-archive-saved.png",
+      "scene": "archive-saved",
+      "width": 390,
+      "sha256": "396f89e4d9e7740794bca7316d1dabbb9e8f69f1b3026cd0b818e30434094253"
+    },
+    {
+      "file": "390-erp-open.png",
+      "scene": "erp-open",
+      "width": 390,
+      "sha256": "d178efb85fbf39decdb6d633ef8528484dac4d68f6ad807bfa0e5240048d6076"
+    },
+    {
+      "file": "390-erp-edited.png",
+      "scene": "erp-edited",
+      "width": 390,
+      "sha256": "71e2e11bd94d6d7cebda5271227a7fcd649d33adda553f613a81f6616595922a"
+    },
+    {
+      "file": "390-erp-busy.png",
+      "scene": "erp-busy",
+      "width": 390,
+      "sha256": "e14f080cceae33b063bf02c5a2982dcce94910c8e0c247c1c09a2b9c133b42ff"
+    },
+    {
+      "file": "390-erp-closed-busy.png",
+      "scene": "erp-closed-busy",
+      "width": 390,
+      "sha256": "1a94922daba02fea8a7a76349e1e47dbee7883be12497881a1cfa52a2b806803"
+    },
+    {
+      "file": "390-erp-login-opened.png",
+      "scene": "erp-login-opened",
+      "width": 390,
+      "sha256": "6a7c02856182d4d48107899e7f44fde0f41ece46da43dd5466f4cfb1e31332fb"
+    },
+    {
+      "file": "390-erp-login-required.png",
+      "scene": "erp-login-required",
+      "width": 390,
+      "sha256": "cddbec14da3f8e8a2360589f8be5fb25df2e4bf41b16931a38686f848a5ed7d7"
+    },
+    {
+      "file": "390-erp-helper-missing.png",
+      "scene": "erp-helper-missing",
+      "width": 390,
+      "sha256": "2cdbc21e1b3daaa66dc6937a183ebf14a901c0a15711a5576f99e18b9e59eeee"
+    },
+    {
+      "file": "390-erp-file-invalid.png",
+      "scene": "erp-file-invalid",
+      "width": 390,
+      "sha256": "fd34cd9e18ccba15c02fb9bfbb73bc15e5ff71f39add14d691528fe28251e9e8"
+    },
+    {
+      "file": "390-erp-failed.png",
+      "scene": "erp-failed",
+      "width": 390,
+      "sha256": "76bd8ed605a30433b35df37707ad9796562f23fc88b6a258ab4295f9394c8357"
+    },
+    {
+      "file": "390-erp-saved.png",
+      "scene": "erp-saved",
+      "width": 390,
+      "sha256": "6a88854fd1329fa3ccdb20dbe9a20c106d40ec5fe502789ccfd65be31bcb2121"
+    }
+  ]
+}
