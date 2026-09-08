@@ -1532,6 +1532,7 @@
     },
     "notifications": {
       "module": "M05-03",
+      "uiPhase2NotificationCProposal": "P26 NOTIFICATION-C-r1 at design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/README.md provides 45 dual-viewport scenes plus 8 lower sections: 98 PNG including 2 non-business control boards. Independent blue category directory and white inbox, source-first detail and notification-only workflow, two modal types and five preference booleans. Source VM verifies six write bodies, auto-read versus already-read, unfiltered markAll, URL/source/close contracts; inert SQL and SSE adapters check scope/grouping and invalidation without real services. Original fixture group/raw-count and page-size inconsistencies stay explicit, extra states are synthetic, mutations are intent-only. Mobile first-fold and modal-local errors are proposals, not Vue fixes; concrete design approval, async ownership, real backend/SSE, full themes/density and 73-route production acceptance remain pending.",
       "uiPhase2ContractReview": "../design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md; P26 specification and local AN03 regression: closeDetail rejects Escape while busy just like the existing disabled close button, then permits closing after acknowledgement; notification read and workflow state stay separate, mail stays disabled; async ownership preference lifecycle full redesign and production acceptance remain pending",
       "entrypoints": [
         "../apps/api/src/notification-service.ts",

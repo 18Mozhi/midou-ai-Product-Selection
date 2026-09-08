@@ -1,5 +1,7 @@
 # P25/P26 审批、通知动作与弹窗合同
 
+2026-09-08通知设计增量：[P26 NOTIFICATION-C-r1](design/notification-direction-c/README.md)98图。源Vue函数/校验器验证六类body、自动read/已读不写、query/closeDetail/来源；惰性SQL检查list先分组再分页、summary与markAll接收范围，SSE适配器检查失效回读和重连守卫，均未访问实际服务。白收件箱与正文/处理分区、两窗顶部错误和手机首屏为新提案；偏好忙碌取消可关、详情忙碌不可关保留源码差异。原夹具独立响应不造一致快照，扩展态显式合成。没有修改真实Vue、AN-G02/G03/G05/G06结论、邮件/权限或审核；后续仍需真实API/数据库/并发/SSE/全主题密度与生产签收。
+
 2026-09-08设计增量：[P25 APPROVAL-C-r1](design/approval-direction-c/README.md)94图。源函数VM复现AN-G01全部刷新回pending、模板/发起/发布失败写页级notice；五body、字段校验器、compare diff和两scope SQL构造有惰性验证，未接DB。宽阅读/四窗、显式空筛选、就近错误、固定标题为原型提案，不修改真实Vue、候选/旧图、权限/升级规则或AN-G关闭状态。原夹具版本、升级与同ID名称差异明示；P26通知及完整审核/实现/生产继续待办。
 
 2026-09-07，PLAN 1.10 F02。从a4e0eed干净工作树开始，先读AGENTS→Feature Map的approvalWorkflow/notifications/realtimeSse→蓝图6.3→真实Vue/路由/服务/仓储与既有测试。本文是局部源码合同，不是最终设计、冻结后的全站动作分母或生产通过证明。
