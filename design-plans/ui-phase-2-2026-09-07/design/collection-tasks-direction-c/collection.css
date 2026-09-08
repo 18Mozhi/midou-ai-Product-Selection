@@ -1,0 +1,434 @@
+/* C palette/shared primitives reused from the preceding approved-direction study, not production CSS. */
+@import url("../credential-assets-direction-c/credentials.css");
+:root {
+  --blue: #254a9c;
+  --paper: #ffffff;
+  --bg: #edf1f6;
+  --ink: #202c3d;
+  --muted: #58677b;
+  --danger: #8c3c32;
+}
+aside nav {
+  margin: 0;
+  gap: 4px;
+}
+aside nav a {
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+aside nav a[aria-current="page"] {
+  background: white;
+  color: var(--blue);
+}
+aside nav a:hover {
+  background: #e4ecfc;
+  color: var(--blue);
+}
+aside label {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 8px;
+}
+aside input,
+aside select {
+  background: white;
+  color: var(--ink);
+  border-color: white;
+}
+aside small {
+  color: #e5ecfa;
+}
+aside .boundary {
+  font-size: 13px;
+  border-top: 1px solid #7992c6;
+  padding-top: 16px;
+}
+#metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px 0;
+}
+#metrics dt {
+  color: #dce6fa;
+}
+#metrics dd {
+  font-size: 26px;
+  font-weight: 600;
+}
+.pagehead {
+  align-items: start;
+}
+.pagehead p {
+  font-size: 14px;
+}
+.provenance {
+  margin-bottom: 0;
+}
+.table-tools > label {
+  white-space: nowrap;
+}
+.table-tools select {
+  width: auto;
+}
+.table-tools fieldset {
+  width: 270px;
+}
+.table-wrap table {
+  table-layout: fixed;
+}
+th,
+td {
+  min-width: 0;
+  padding: 15px 12px;
+  overflow-wrap: anywhere;
+}
+th:nth-child(1) {
+  width: 15%;
+}
+th:nth-child(2) {
+  width: 14%;
+}
+th:nth-child(3) {
+  width: 17%;
+}
+th:nth-child(4) {
+  width: 14%;
+}
+th:nth-child(5) {
+  width: 17%;
+}
+th:nth-child(6) {
+  width: 15%;
+}
+th:nth-child(7) {
+  width: 8%;
+}
+td small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+}
+td button {
+  padding: 8px 10px;
+}
+.table-wrap .status {
+  margin: 0;
+  padding: 2px 6px;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+.pagination span {
+  color: var(--muted);
+  font-size: 14px;
+}
+.empty button {
+  margin: 4px 8px 4px 0;
+}
+.task-cards {
+  display: none;
+}
+dialog#detail {
+  width: min(1060px, calc(100vw - 64px));
+}
+.detail-top {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+}
+.detail-top > *,
+.subquery > header > div {
+  min-width: 0;
+}
+.task-context {
+  padding: 28px;
+  background: var(--blue);
+  color: white;
+}
+.task-context dt {
+  color: #dce6fa;
+}
+.task-context dd {
+  margin-bottom: 16px;
+}
+.task-context .status {
+  background: white;
+  color: var(--blue);
+}
+.task-context a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: white;
+}
+.task-context p {
+  font-size: 13px;
+  color: #e5ecfa;
+  margin-top: 18px;
+}
+.detail-content {
+  padding: 26px 30px;
+  min-width: 0;
+}
+.detail-content > section {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.detail-content h3 {
+  margin-bottom: 14px;
+}
+.subquery {
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.subquery > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.subquery > p {
+  margin: 9px 0;
+}
+.subquery small {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  margin: 5px 0;
+}
+.subquery .missing {
+  color: var(--danger);
+}
+.subquery details {
+  background: #f2f5fa;
+  padding: 8px 14px;
+  margin: 14px 0;
+}
+.detail-content details {
+  margin: 12px 0;
+}
+.history-item {
+  border-left: 2px solid #a7b8d6;
+  padding: 10px 0 10px 18px;
+  margin: 10px 0;
+}
+.history-item p {
+  font-size: 14px;
+  margin-top: 5px;
+  color: var(--muted);
+}
+.recovery {
+  border-left: 4px solid var(--blue);
+  padding: 16px 20px;
+  background: #edf2fb;
+  margin-bottom: 24px;
+}
+.recovery p {
+  margin: 9px 0 14px;
+}
+.recovery a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid var(--blue);
+  background: white;
+  text-decoration: none;
+}
+.replay-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 26px;
+}
+.replay-form label {
+  display: grid;
+  gap: 8px;
+}
+.replay-form small {
+  color: var(--muted);
+}
+.replay-form textarea {
+  resize: vertical;
+  min-height: 112px;
+}
+.replay-form button {
+  justify-self: start;
+}
+.preview-body {
+  padding: 24px 28px;
+}
+.preview-body > .actions {
+  margin: 22px 0;
+}
+#confirm {
+  width: min(600px, calc(100vw - 48px));
+}
+#confirm .dialog-body {
+  display: grid;
+  gap: 18px;
+}
+.confirm-target {
+  padding: 18px;
+  background: #edf2fb;
+}
+.confirm-target p {
+  margin-top: 8px;
+}
+.confirm-target code {
+  display: block;
+}
+.result-message {
+  padding: 16px;
+  background: #faf0ed;
+  border-left: 4px solid var(--danger);
+}
+#preview-reason {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.dialog-header {
+  padding: 20px 26px;
+}
+.detail-loading {
+  padding: 42px 28px;
+}
+.detail-loading p {
+  margin: 14px 0;
+}
+.metric-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  color: var(--muted);
+  margin: 10px 0;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .workspace {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  main {
+    padding: 24px 20px;
+  }
+  .table-wrap {
+    overflow: auto;
+  }
+  .table-wrap table {
+    min-width: 820px;
+  }
+}
+@media (max-width: 760px) {
+  aside nav {
+    display: flex;
+    gap: 4px;
+  }
+  aside nav a {
+    flex: 1;
+    padding: 8px 6px;
+    justify-content: center;
+    font-size: 16px;
+  }
+  aside details {
+    border-top: 1px solid #7992c6;
+  }
+  aside .boundary {
+    display: none;
+  }
+  aside > p {
+    display: none;
+  }
+  aside label {
+    margin-top: 8px;
+  }
+  main {
+    padding-top: 18px;
+  }
+  .table-tools,
+  .table-wrap {
+    display: none;
+  }
+  .task-cards {
+    display: grid;
+    gap: 12px;
+  }
+  .task-card {
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    display: grid;
+    gap: 9px;
+  }
+  .task-card strong {
+    font-size: 18px;
+  }
+  .task-card small {
+    color: var(--muted);
+  }
+  .task-card .status {
+    justify-self: start;
+  }
+  .pagination {
+    flex-wrap: wrap;
+  }
+  .pagination span {
+    order: 3;
+    width: 100%;
+    text-align: center;
+  }
+  dialog#detail,
+  #confirm {
+    width: 100vw;
+    max-width: 100vw;
+  }
+  .detail-top {
+    display: block;
+  }
+  .task-context {
+    padding: 20px;
+  }
+  .task-context dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+    margin: 12px 0 0;
+  }
+  .task-context dd {
+    margin-bottom: 8px;
+  }
+  .task-context p {
+    margin-top: 10px;
+  }
+  .task-context a {
+    display: inline-flex;
+    width: 33.333%;
+    font-size: 14px;
+  }
+  .detail-content {
+    padding: 24px 20px;
+  }
+  .dialog-header {
+    padding: 20px;
+  }
+  .subquery > header {
+    display: block;
+  }
+  .subquery .status {
+    margin-top: 10px;
+  }
+  .detail-content h3 {
+    font-size: 21px;
+  }
+  .preview-body {
+    padding: 20px;
+  }
+  .preview-body > .actions button {
+    width: 100%;
+  }
+  .replay-form button {
+    width: 100%;
+  }
+}

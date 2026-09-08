@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none';script-src 'self';style-src 'self';img-src 'self';connect-src 'none';form-action 'none';base-uri 'none'"
+    />
+    <title>P51 采集任务 · C 风格审核稿</title>
+    <link rel="stylesheet" href="collection.css" />
+    <script defer src="data.js"></script>
+    <script defer src="source-logic.js"></script>
+    <script defer src="collection.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到任务队列</a>
+    <header class="appbar">
+      <strong>SCOUTOPS <span>平台管理</span></strong
+      ><span>P51 / C 风格 · 待审核</span>
+    </header>
+    <div class="workspace">
+      <aside id="context">
+        <h1>采集任务</h1>
+        <p>定位异常，核对来源事实，再选择恢复路径。</p>
+        <nav aria-label="采集控制台">
+          <a href="/platform-admin/collection/overview">采集总览</a
+          ><a href="/platform-admin/collection" aria-current="page">任务队列</a
+          ><a href="/platform-admin/collection/browser-runtime">浏览器运行</a>
+        </nav>
+        <details id="scope" open>
+          <summary>查询范围</summary>
+          <label>任务状态<select id="status"></select></label><small>服务端筛选，50 条一页。</small
+          ><label
+            >筛选当前页<input
+              id="query"
+              type="search"
+              placeholder="任务 / 组织 / 工作区 ID 或错误码" /></label
+          ><small>只过滤已读取的本页，不搜索全库。</small>
+        </details>
+        <details id="summary">
+          <summary>当前页摘要</summary>
+          <dl id="metrics"></dl>
+          <small>摘要不随本页文本过滤改变；不是平台总量。</small>
+        </details>
+        <p class="boundary">此稿仅含合成数据。不创建普通采集任务，不读取凭证，不执行外部重放。</p>
+      </aside>
+      <main id="main" tabindex="-1">
+        <p id="provenance" class="provenance"></p>
+        <header class="pagehead">
+          <div>
+            <h2>任务队列</h2>
+            <p id="range"></p>
+          </div>
+          <button id="refresh">刷新任务</button>
+        </header>
+        <div id="write-notice" role="status"></div>
+        <div id="read-notice" role="status"></div>
+        <div id="content"></div>
+        <nav id="pagination" class="pagination" aria-label="采集任务分页"></nav>
+        <p class="disclaimer">
+          C 风格设计提案 · 记录事实，不绕过登录、验证码或网站规则。<br />交互仅模拟请求，不能证明生产执行结果。
+        </p>
+      </main>
+    </div>
+    <dialog
+      id="detail"
+      aria-labelledby="detail-title"
+      aria-describedby="detail-description"
+    ></dialog>
+    <dialog
+      id="confirm"
+      role="alertdialog"
+      aria-labelledby="confirm-title"
+      aria-describedby="confirm-description"
+    ></dialog>
+    <details id="review-tools" class="review-tools">
+      <summary>审核工具（非业务界面）</summary>
+      <label>场景<select id="scene-picker"></select></label>
+      <div class="actions">
+        <button data-outcome="success">模拟成功</button
+        ><button data-outcome="error">模拟明确失败</button
+        ><button data-outcome="unknown">模拟结果未知</button>
+      </div>
+      <p>不会请求 HTTP、创建真实任务、跳转外部网站或写入存储。</p>
+    </details>
+  </body>
+</html>

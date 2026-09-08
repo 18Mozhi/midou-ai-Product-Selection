@@ -1,0 +1,2064 @@
+{
+  "proposal": "COLLECTION-TASKS-C-r1",
+  "sourceHashes": {
+    "apps/web/src/components/CollectionTaskCenter.vue": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/api/src/collection-task-service.ts": "e2be97bceb32547991fe08c629d5459b686bd1672278366e7e3919321af81684",
+    "apps/api/src/collection-task-routes.ts": "74a9af17287692ed20d99b3f5993ad49b07a43ba967801748025a3640a078fbd",
+    "apps/api/src/mysql-collection-task-repository.ts": "f2941278cff537ad1d6688989a159b8398db759373bc51379c1f8e7302fcfc47",
+    "packages/collection-tasks/src/index.ts": "9e9a5500b479ab2c1da8c5e1de629b5aeb403058cfad35ecf1f6f4fa2ad644fe",
+    "tests/e2e/m03-05-collection-tasks.spec.ts": "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
+    "scripts/lib/ui-phase2-collection-tasks-design-data.mjs": "af10b15b075c98801fce5cf5ed896bd0d90b5f8080903eb34289254cceb53447",
+    "scripts/verify-ui-phase2-collection-tasks-c.mjs": "fd70fd10e7b0f007bf510061ba6a391f7ff48f2d01a8f63587bd44f275cc31f9",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/index.html": "3a7a284f97b13a9d5b2cdbc7668335779f95800305993371329cd258e01e6a3c",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/collection.css": "3a7bd19666826fd8f8c398f5846a5db8c4bc116f057fd1ff9362e0d9539ec066",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/collection.js": "111d0392b1fae8fb93669c10d75043c2096ebbe807aed1fce0170139018de46e",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/data.js": "dd75649c6802260312d92258d4f454a4b0a32a4c917dabd7d1f3b11d6210fd51",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/source-logic.js": "4997dcce83035d2bddfb566ebaa6f91777c6f1709e5750ef4a0dae7ee6e3b0df"
+  },
+  "sourceChecks": [
+    "Actual current-page metrics 1/1/1/38, six full filter ID sequences with no trim, 20 labels versus 19 status options, duration and exact recovery destinations; draft falls back to raw code",
+    "Ten actual first/preserved list failures, 15-second abort callback, single flight and unmount; current snapshots retained only on preserve=true, no actual network timeout or KeepAlive proof",
+    "Actual existing task-query removal sequence protection rejects late detail success and terminal failure via manually invoked watch; not VueRouter integration",
+    "Reproduced source single-flight dropping a changed status read while old all-status response populates rows under the new selector",
+    "Actual nonzero-total out-of-range fallback from page 3 to 2 and preservation of unrelated URL query; pageSize remains 50",
+    "Reproduced old replay success replacing a newly opened task, clearing new draft and changing URL; exact reason body and single POST, no actual replay",
+    "Actual confirmation does not snapshot target/reason; changing detail before confirm changes the POST target and body. Prototype snapshot is a proposal",
+    "Actual single-replay ConfirmDialog uses destructive=false: typed phrase only, no acknowledgement checkbox; corrected stale page specification without changing product",
+    "Actual service accepts auto-replayed status, validates original reason length <=500 and trimmed >=2, and trims payload; inert repository, not transaction/authorization proof"
+  ],
+  "checks": [
+    "1440: 63 scenes, three modal variants including nested confirmation, original metrics/filter/page fixtures, exact reason POST, late response rejection, browser back/forward, preserved read/write outcomes, three recovery routes, columns/freeze/density, six breakpoints and CSS zoom2. Static prototype, not VueRouter/auth/SQL/worker/full theme/lifecycle proof.",
+    "390: 63 scenes, three modal variants including nested confirmation, original metrics/filter/page fixtures, exact reason POST, late response rejection, browser back/forward, preserved read/write outcomes, three recovery routes, columns/freeze/density, six breakpoints and CSS zoom2. Static prototype, not VueRouter/auth/SQL/worker/full theme/lifecycle proof."
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "scene": "default",
+      "label": "原始三任务队列",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6a324b2c1d4de4d504cf623e7b533d3412abab31213cdcacd0b3aa635a4973c5"
+    },
+    {
+      "file": "1440-paged.png",
+      "width": 1440,
+      "scene": "paged",
+      "label": "独立50/1分页夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "76b06d8b5a06a9e42a6cd47eb1cd11970b625179dbc7ce903e9cddb93270a878"
+    },
+    {
+      "file": "1440-page-two.png",
+      "width": 1440,
+      "scene": "page-two",
+      "label": "第二页与服务端总量",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f4ce13470388bb93786833c4390e14bdb391a5d6b5119a2fecd4f1909003daaf"
+    },
+    {
+      "file": "1440-filtered.png",
+      "width": 1440,
+      "scene": "filtered",
+      "label": "当前页匹配",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "7d9b28fe74736a9914eca23199bc6835ed778d7b8f2ae5bdf6b4ab093ac0160a"
+    },
+    {
+      "file": "1440-filter-empty.png",
+      "width": 1440,
+      "scene": "filter-empty",
+      "label": "当前页无匹配",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "4284a1617806f6f42724555f50c838be544cc896e76ccaa8d7c50ab774657384"
+    },
+    {
+      "file": "1440-filter-space.png",
+      "width": 1440,
+      "scene": "filter-space",
+      "label": "空格不作trim",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "1148167602a3f57e8d51b20d3e3282bd541adc7cba5bb27a825bbf0a0fb8085e"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "scene": "loading",
+      "label": "首次读取",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f9af6899681cbb00c93ac7bd476ab859f665d20b0d70e6927691f1f4073b90cf"
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "scene": "empty",
+      "label": "服务端空结果",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "60ed886ea9171bf5ef9332bbf031ba9ebfa7545fc3e3e922f51bf7e84a575901"
+    },
+    {
+      "file": "1440-expired.png",
+      "width": 1440,
+      "scene": "expired",
+      "label": "首次401",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "7f646a58e701941b150074d7e142c93117b2419ea8b3a91633612bfda9eb92fa"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "label": "首次403",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f20314aff4d85e1cc9209045e62ea3895b444ce87e9418812325cb8c2dbf88b9"
+    },
+    {
+      "file": "1440-blocked.png",
+      "width": 1440,
+      "scene": "blocked",
+      "label": "首次依赖受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "3473912b446be0c57868ec408a5e2cc5dbeced2af299bb94742f0118d66f942d"
+    },
+    {
+      "file": "1440-error.png",
+      "width": 1440,
+      "scene": "error",
+      "label": "首次读取失败",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "2db6a856b7fd83a92cddd529f5a9a44eff8ac40ee182061aea32bc901a359841"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "width": 1440,
+      "scene": "refreshing",
+      "label": "保留快照刷新",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "c612e79af0834d547179605e670eed50ec16e5ab53a17eb1a075499f84dc25d2"
+    },
+    {
+      "file": "1440-refresh-error.png",
+      "width": 1440,
+      "scene": "refresh-error",
+      "label": "刷新失败保留快照",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "cf3f11194d188192f553f59fbbc9f98a942f3ec701219461bb54317299b3de91"
+    },
+    {
+      "file": "1440-refresh-timeout.png",
+      "width": 1440,
+      "scene": "refresh-timeout",
+      "label": "15秒超时保留快照",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "fac66cffceaf47cd2b877a5d1290589ab403f425833fe9f91634da262de09cb0"
+    },
+    {
+      "file": "1440-columns.png",
+      "width": 1440,
+      "scene": "columns",
+      "label": "七列设置",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "266569f74ec21132bf65a262b4c9acac3831cf23d350d9c24c083f4e0b7a1504"
+    },
+    {
+      "file": "1440-compact.png",
+      "width": 1440,
+      "scene": "compact",
+      "label": "紧凑密度",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "3f6877067b1bac53e224a9ce8718ee70cee7f3eecb0cd65cbced43f8d989cc6c"
+    },
+    {
+      "file": "1440-preview.png",
+      "width": 1440,
+      "scene": "preview",
+      "label": "移动记录预览",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "a284d7d7e3bcd54af08c4e8393a10dcb4213ae950ddd925ee841e413b73a5c6f"
+    },
+    {
+      "file": "1440-preview-technical.png",
+      "width": 1440,
+      "scene": "preview-technical",
+      "label": "移动记录技术详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "60f1a70b3d0e7027c5936e379bdb84f4bfd2cc94ead89ed74673cc6ea62fa4aa"
+    },
+    {
+      "file": "1440-detail-loading.png",
+      "width": 1440,
+      "scene": "detail-loading",
+      "label": "详情读取中可关闭",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "2bcbe65e7a21e4d21ad1b68c93cb54c85466cac84107f218a8a6a879d6d7f0b0"
+    },
+    {
+      "file": "1440-detail-error.png",
+      "width": 1440,
+      "scene": "detail-error",
+      "label": "详情读取失败留窗",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "4b9a8078e3762be82922d766d4621895bcfb3c3cae066c4d815fe1f6c9257def"
+    },
+    {
+      "file": "1440-detail.png",
+      "width": 1440,
+      "scene": "detail",
+      "label": "原始死信详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "59f8552dbf64e6366e2b949dc8b9729449004da4d262b0a1c47571d2a8ddb90b"
+    },
+    {
+      "file": "1440-detail-part1.png",
+      "width": 1440,
+      "scene": "detail",
+      "label": "原始死信详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "059560505ae01dc364ce0ceb2e35a4647f2dbd40c76e8eb4400ac3cf118be42a"
+    },
+    {
+      "file": "1440-detail-rss.png",
+      "width": 1440,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6291aff64ffc25cec1299baabea1b4a32676cd86d7092f35cc0153e9b3e089ed"
+    },
+    {
+      "file": "1440-detail-rss-part1.png",
+      "width": 1440,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "4a73a4791440f0dc42a8b311ae86f40a39828cfc7d68b23d9e7dfe29dba3cdab"
+    },
+    {
+      "file": "1440-detail-rss-part2.png",
+      "width": 1440,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "a7fe81b67d6266b8eed693e5621a2703b40c8a4613be5dce9095fb0ecc409b80"
+    },
+    {
+      "file": "1440-detail-robots.png",
+      "width": 1440,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "fc20d6b150c67e132cf0317803b9fe2af1cba4398e16eea6d408a17889d4af82"
+    },
+    {
+      "file": "1440-detail-robots-part1.png",
+      "width": 1440,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "3ec786a0c3bb798fe83546be776ad8d47443f2aee74d81280cf8cf122ef2f6e3"
+    },
+    {
+      "file": "1440-detail-robots-part2.png",
+      "width": 1440,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "0b8129eaab8157f8b011f352e1866de9cb84eb9d2ff1be7c1fcde8b24fb67844"
+    },
+    {
+      "file": "1440-detail-history.png",
+      "width": 1440,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d8a5a101f9b5fbbf0c50cd900918a2f7a6eafe5adb3945c1419a74920f5b76aa"
+    },
+    {
+      "file": "1440-detail-history-part1.png",
+      "width": 1440,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "0d9f903f7c630c441bfa748541c0e880b0e38655235c65c992182d29e3a09ae0"
+    },
+    {
+      "file": "1440-detail-history-part2.png",
+      "width": 1440,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "dbd100640bdc5e3b04d9532bd1a3b7c4d37cf9ff68157d73caba7059071b4235"
+    },
+    {
+      "file": "1440-detail-technical.png",
+      "width": 1440,
+      "scene": "detail-technical",
+      "label": "完整技术标识",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "51f4acdfce8f422dd53f7c37cae227e34d03bcb06b3a7fc46bc6cba15eb282b8"
+    },
+    {
+      "file": "1440-detail-technical-part1.png",
+      "width": 1440,
+      "scene": "detail-technical",
+      "label": "完整技术标识",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "3595fc6962837c0a7f3020439579e25faaea72138182ab8c9a30d39e488e990f"
+    },
+    {
+      "file": "1440-reason-empty.png",
+      "width": 1440,
+      "scene": "reason-empty",
+      "label": "重放原因未填写",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "51f4acdfce8f422dd53f7c37cae227e34d03bcb06b3a7fc46bc6cba15eb282b8"
+    },
+    {
+      "file": "1440-reason-empty-part1.png",
+      "width": 1440,
+      "scene": "reason-empty",
+      "label": "重放原因未填写",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "d159dc5bad7b61a627f421da61ef7382b6327205993ace94a8a9b9bda97a690f"
+    },
+    {
+      "file": "1440-reason-one.png",
+      "width": 1440,
+      "scene": "reason-one",
+      "label": "重放原因不足两字",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "51f4acdfce8f422dd53f7c37cae227e34d03bcb06b3a7fc46bc6cba15eb282b8"
+    },
+    {
+      "file": "1440-reason-one-part1.png",
+      "width": 1440,
+      "scene": "reason-one",
+      "label": "重放原因不足两字",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "09ef5d79637a10d8e8469f72930b04a230e47821cd5564edce50efc4cb8fbd5a"
+    },
+    {
+      "file": "1440-reason-filled.png",
+      "width": 1440,
+      "scene": "reason-filled",
+      "label": "重放原因可提交",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "51f4acdfce8f422dd53f7c37cae227e34d03bcb06b3a7fc46bc6cba15eb282b8"
+    },
+    {
+      "file": "1440-reason-filled-part1.png",
+      "width": 1440,
+      "scene": "reason-filled",
+      "label": "重放原因可提交",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "df339b78386ef97610ae3f2404921b7f7ed4844ae6094ff2f10c1989f01c3775"
+    },
+    {
+      "file": "1440-reason-limit.png",
+      "width": 1440,
+      "scene": "reason-limit",
+      "label": "重放原因500字符",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "59f8552dbf64e6366e2b949dc8b9729449004da4d262b0a1c47571d2a8ddb90b"
+    },
+    {
+      "file": "1440-reason-limit-part1.png",
+      "width": 1440,
+      "scene": "reason-limit",
+      "label": "重放原因500字符",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "e3c3c1c84986460330a3b14ede817491a70892750dea57b40e220dbaf7b5b1a5"
+    },
+    {
+      "file": "1440-confirm.png",
+      "width": 1440,
+      "scene": "confirm",
+      "label": "重放确认预览",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "dcd0d73b7cb115d0b880a6ce33995bb87d163afcd33066cd376d07d418a30e21"
+    },
+    {
+      "file": "1440-confirm-typed.png",
+      "width": 1440,
+      "scene": "confirm-typed",
+      "label": "确认短语已满足",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "aa1cd7aa2a14626e428e04e1c372345f77a444f0c653a610e0347e1d90b5ff41"
+    },
+    {
+      "file": "1440-replaying.png",
+      "width": 1440,
+      "scene": "replaying",
+      "label": "正在创建新任务",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "59f8552dbf64e6366e2b949dc8b9729449004da4d262b0a1c47571d2a8ddb90b"
+    },
+    {
+      "file": "1440-replaying-part1.png",
+      "width": 1440,
+      "scene": "replaying",
+      "label": "正在创建新任务",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "28e81c236995cb6e22dcb4cfb44fafbb4fd73628ff585c9a940353ec4ea24e69"
+    },
+    {
+      "file": "1440-replay-error.png",
+      "width": 1440,
+      "scene": "replay-error",
+      "label": "重放明确拒绝",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "a12bec058e28d83b4fec798a70d2cd2d2719476bcbc7c5024991be22e9ecb552"
+    },
+    {
+      "file": "1440-replay-error-part1.png",
+      "width": 1440,
+      "scene": "replay-error",
+      "label": "重放明确拒绝",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "3c774c468d6a492f50f4279914e3985e8f5c386b7505e8c29552ee8f5d4fd5b6"
+    },
+    {
+      "file": "1440-replay-unknown.png",
+      "width": 1440,
+      "scene": "replay-unknown",
+      "label": "重放结果未知",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "4db976d245c7cfcf1a7719f6357a07c70b57c633f4bf90b128617623752155fa"
+    },
+    {
+      "file": "1440-replay-unknown-part1.png",
+      "width": 1440,
+      "scene": "replay-unknown",
+      "label": "重放结果未知",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "042521d953524870994aef068f0939d48c90dfe125c574244e498ef3faa33b72"
+    },
+    {
+      "file": "1440-replay-success.png",
+      "width": 1440,
+      "scene": "replay-success",
+      "label": "新任务已创建（原返回夹具）",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "54e1c1d0ec4bb065829f2a83a8370fb7945433378db2138b3c52651684c0b22b"
+    },
+    {
+      "file": "1440-replay-success-part1.png",
+      "width": 1440,
+      "scene": "replay-success",
+      "label": "新任务已创建（原返回夹具）",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "968a388f9a8c0743c1b14c1ee1bba9dc050e722957693d610eeac851ee616093"
+    },
+    {
+      "file": "1440-replay-refresh-error.png",
+      "width": 1440,
+      "scene": "replay-refresh-error",
+      "label": "创建成功与列表重读失败分开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "ed09451bcc2dd282c34169e1edf8efb6822dba4c8625bacad76be320a491b81c"
+    },
+    {
+      "file": "1440-replay-refresh-error-part1.png",
+      "width": 1440,
+      "scene": "replay-refresh-error",
+      "label": "创建成功与列表重读失败分开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "b6b797319df1a1e0d01048febab4541edaa6ebd512031a350e151388a39527aa"
+    },
+    {
+      "file": "1440-missing-detail.png",
+      "width": 1440,
+      "scene": "missing-detail",
+      "label": "缺少子查询与历史",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "7cf64a0af0767782224a9c9f079aee0096b40ad2a3bd04c456b8b1072efde280"
+    },
+    {
+      "file": "1440-missing-detail-part1.png",
+      "width": 1440,
+      "scene": "missing-detail",
+      "label": "缺少子查询与历史",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "a88111fd7a88c72a471d6be859356f84a94df3a6ee8f0b5b1498a778956381b9"
+    },
+    {
+      "file": "1440-long-content.png",
+      "width": 1440,
+      "scene": "long-content",
+      "label": "长来源和缺失字段",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "acda82e18ed222ec7c83079ee7d113d4b61cf2ba471bfc9b373e69d0a7386a8d"
+    },
+    {
+      "file": "1440-long-content-part1.png",
+      "width": 1440,
+      "scene": "long-content",
+      "label": "长来源和缺失字段",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "9156367cb8214de5721820af49340a30c4925e053e5776b54d358727aad3f747"
+    },
+    {
+      "file": "1440-focus.png",
+      "width": 1440,
+      "scene": "focus",
+      "label": "键盘焦点",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "2e00675935cf5710d77d554742aebbc7f6475d1b58448f8b2c5ec90676a6ae1b"
+    },
+    {
+      "file": "1440-hover.png",
+      "width": 1440,
+      "scene": "hover",
+      "label": "按钮悬停",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "0a7c612fa0d1b3b73ec0b1f9c6e316cd20b59ba416d1bd9e1760e4cbc3036e50"
+    },
+    {
+      "file": "1440-pressed.png",
+      "width": 1440,
+      "scene": "pressed",
+      "label": "按钮按下",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "09fdbcb223a3cfc17be3fddeca7d2db1e41ae8d6a086cbc5238710f18a936098"
+    },
+    {
+      "file": "1440-tools.png",
+      "width": 1440,
+      "scene": "tools",
+      "label": "审核工具面板",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "bbc6ebb2828fbb71fdf0502a9a401ddcc4d6b21041b14d778b8f96184c92fb7a"
+    },
+    {
+      "file": "1440-state-draft.png",
+      "width": 1440,
+      "scene": "state-draft",
+      "label": "独立状态变体 / draft",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "808363c9d106d42d52a2b64785628d138226eabb100a6d5dbe0c2cdfdd14a947"
+    },
+    {
+      "file": "1440-state-scheduled.png",
+      "width": 1440,
+      "scene": "state-scheduled",
+      "label": "独立状态变体 / 待调度",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "2761e1053df5509ba2648b3cff1223a8215be1e285220c1e79b99d4c86e6900a"
+    },
+    {
+      "file": "1440-state-queued.png",
+      "width": 1440,
+      "scene": "state-queued",
+      "label": "独立状态变体 / 已排队",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "eff5d0e565e7f9cc43e2e4546f746f593708276a04de5755b3e361f916722e19"
+    },
+    {
+      "file": "1440-state-leased.png",
+      "width": 1440,
+      "scene": "state-leased",
+      "label": "独立状态变体 / 已租约",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "9504ad3fcffd1dc94326af2a09bfa69e83ac1323637ad68c0cf2dc168d584d83"
+    },
+    {
+      "file": "1440-state-running.png",
+      "width": 1440,
+      "scene": "state-running",
+      "label": "独立状态变体 / 执行中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "3deb20a79e09262e3b9842456bd8bbba8b912daf88b1c58f3434701039c0a0e6"
+    },
+    {
+      "file": "1440-state-parsing.png",
+      "width": 1440,
+      "scene": "state-parsing",
+      "label": "独立状态变体 / 解析中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "450cbae03940917953060389bed2949029fd7162e9e9f2e65289642cfe74d20b"
+    },
+    {
+      "file": "1440-state-validating.png",
+      "width": 1440,
+      "scene": "state-validating",
+      "label": "独立状态变体 / 校验中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "0598368089a5452b92d4b3f84633e43dc5877886041c3c9b255c29cd77cd9ce2"
+    },
+    {
+      "file": "1440-state-persisted.png",
+      "width": 1440,
+      "scene": "state-persisted",
+      "label": "独立状态变体 / 已持久化",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "33cdfcde775dfb4049cf7dc569e18a2b52ce2f334b3e2e22f75f7d32150e4d09"
+    },
+    {
+      "file": "1440-state-retry_scheduled.png",
+      "width": 1440,
+      "scene": "state-retry_scheduled",
+      "label": "独立状态变体 / 等待重试",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d2bb2bdd00ec1c25a83a1955a2d2a35b0106ca03f7282435c7313a8456c761ea"
+    },
+    {
+      "file": "1440-state-blocked_login.png",
+      "width": 1440,
+      "scene": "state-blocked_login",
+      "label": "独立状态变体 / 登录受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "e8c69224484207b0d2761b5aeeb1d24c91cf523811f2e5cf1bb3e784634ebd04"
+    },
+    {
+      "file": "1440-state-blocked_captcha.png",
+      "width": 1440,
+      "scene": "state-blocked_captcha",
+      "label": "独立状态变体 / 验证码受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6db8ae77acdab90f1d2a13c149878d28a21560b2e2c668ab34363c05d4c993f5"
+    },
+    {
+      "file": "1440-state-blocked_robots.png",
+      "width": 1440,
+      "scene": "state-blocked_robots",
+      "label": "独立状态变体 / 网站规则限制",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d51fe614f1d71a9ba0af4e6a47d02873fe4fdf635cccab680da8ffcfdfe9b363"
+    },
+    {
+      "file": "1440-state-rate_limited.png",
+      "width": 1440,
+      "scene": "state-rate_limited",
+      "label": "独立状态变体 / 限流等待",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "991fa63da2344fe22a4221d0ae3edbde5acbd1bbce0b62c2b0e8a147b8f2f3c9"
+    },
+    {
+      "file": "1440-state-succeeded.png",
+      "width": 1440,
+      "scene": "state-succeeded",
+      "label": "独立状态变体 / 成功",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d178864099b14994172267d7eba2d9657f51544e84b92c94b536285e4777b0ca"
+    },
+    {
+      "file": "1440-state-succeeded_empty.png",
+      "width": 1440,
+      "scene": "state-succeeded_empty",
+      "label": "独立状态变体 / 无可用结果",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "0cc4e63189c5f4e4d5e685d2c33085628e21f8281e8ff0db97742e28e478f31d"
+    },
+    {
+      "file": "1440-state-completed_with_warnings.png",
+      "width": 1440,
+      "scene": "state-completed_with_warnings",
+      "label": "独立状态变体 / 部分完成",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "7a45288f9e4b8248745513b1d15aafd4368ffe3d1f960efef94847da05616445"
+    },
+    {
+      "file": "1440-state-failed_terminal.png",
+      "width": 1440,
+      "scene": "state-failed_terminal",
+      "label": "独立状态变体 / 终止失败",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "8bf418eaf78dc57b021bd719c89bbb3c81f4149844f08da92e1ffd49ba4e91c6"
+    },
+    {
+      "file": "1440-state-dead_letter.png",
+      "width": 1440,
+      "scene": "state-dead_letter",
+      "label": "独立状态变体 / 死信",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "8419caa395f955dfa5ee9662846126da5e671db6f8d23ef741ef09f8bb5ac437"
+    },
+    {
+      "file": "1440-state-dead_letter-part1.png",
+      "width": 1440,
+      "scene": "state-dead_letter",
+      "label": "独立状态变体 / 死信",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "059560505ae01dc364ce0ceb2e35a4647f2dbd40c76e8eb4400ac3cf118be42a"
+    },
+    {
+      "file": "1440-state-manually_replayed.png",
+      "width": 1440,
+      "scene": "state-manually_replayed",
+      "label": "独立状态变体 / 已人工重放",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "e0de6b1ea050e4256dc6c59f6ee8f9569a7ec8c9c7b4ddd69502d223a99eceab"
+    },
+    {
+      "file": "1440-state-automatically_replayed.png",
+      "width": 1440,
+      "scene": "state-automatically_replayed",
+      "label": "独立状态变体 / 凭证续期后已自动重放",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "285a92a017b561411d76f274963aa241e7d8fefa4e9e00c28b9aefd2834c36f7"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "scene": "default",
+      "label": "原始三任务队列",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "86bd692c351e7018a07b150c537797d338c5f3657d60bca185fd93e728617c42"
+    },
+    {
+      "file": "390-paged.png",
+      "width": 390,
+      "scene": "paged",
+      "label": "独立50/1分页夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "a7196558394d6a59355fc39a792be2e832e95904ebea5efedf009330d7d05a42"
+    },
+    {
+      "file": "390-page-two.png",
+      "width": 390,
+      "scene": "page-two",
+      "label": "第二页与服务端总量",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f454851be951e20d4818e7645ccf2d4fd1c1ace44dbcf85254707ef537c227a9"
+    },
+    {
+      "file": "390-filtered.png",
+      "width": 390,
+      "scene": "filtered",
+      "label": "当前页匹配",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "be2b8e061c93e0c8a16dc60be489c6e8fb5ba0de37cf929e580d7c058fa5f841"
+    },
+    {
+      "file": "390-filter-empty.png",
+      "width": 390,
+      "scene": "filter-empty",
+      "label": "当前页无匹配",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "11b46fc8490cd1d1481afabdefe59f0dcb98843a652ae99b007faab610cfc3f0"
+    },
+    {
+      "file": "390-filter-space.png",
+      "width": 390,
+      "scene": "filter-space",
+      "label": "空格不作trim",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "11b46fc8490cd1d1481afabdefe59f0dcb98843a652ae99b007faab610cfc3f0"
+    },
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "scene": "loading",
+      "label": "首次读取",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "94a91a7d14fae9a44096d607dafc8917faa18ed34c04bd730cf0422fb723dd14"
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "scene": "empty",
+      "label": "服务端空结果",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f53fb84853e7794b6ec305a8d244db9d682dc156a4502bc7fa2ebec5be39c2c3"
+    },
+    {
+      "file": "390-expired.png",
+      "width": 390,
+      "scene": "expired",
+      "label": "首次401",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "66f2ddc03decd9ee3e61b7b3e45995366c583e7b02edde443b38b2be37396656"
+    },
+    {
+      "file": "390-forbidden.png",
+      "width": 390,
+      "scene": "forbidden",
+      "label": "首次403",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "8b497e5c4989b0339db6710e236c214a75a8abea4582b08020a32d228a43c6d0"
+    },
+    {
+      "file": "390-blocked.png",
+      "width": 390,
+      "scene": "blocked",
+      "label": "首次依赖受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "50382c9ee327e1c16b9c9e4ecea63ba95f448422aad82d96ffcf3e172a76d184"
+    },
+    {
+      "file": "390-error.png",
+      "width": 390,
+      "scene": "error",
+      "label": "首次读取失败",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "e11174bb81c670501eb413c513f5e6043e20cc6abc988ddbed3aee081eb4702e"
+    },
+    {
+      "file": "390-refreshing.png",
+      "width": 390,
+      "scene": "refreshing",
+      "label": "保留快照刷新",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "a3eb78f3f1c8eda5bddc4c6fc29a2f101c7c61a0a31467555896d48e1f51e71e"
+    },
+    {
+      "file": "390-refresh-error.png",
+      "width": 390,
+      "scene": "refresh-error",
+      "label": "刷新失败保留快照",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "1bd9d6a3cdf32155a07e08c944acbfeb0877654e273cd13facc50255c1bf516a"
+    },
+    {
+      "file": "390-refresh-timeout.png",
+      "width": 390,
+      "scene": "refresh-timeout",
+      "label": "15秒超时保留快照",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "1acdd828f0c9e0d540e982461f9829f4542d876b5066af9a89575b39cc8d61df"
+    },
+    {
+      "file": "390-columns.png",
+      "width": 390,
+      "scene": "columns",
+      "label": "七列设置",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "3b88a0b884a4ffbbb58fd91837c854159b12102fe5670a5135112fd75e115bf6"
+    },
+    {
+      "file": "390-compact.png",
+      "width": 390,
+      "scene": "compact",
+      "label": "紧凑密度",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "3b88a0b884a4ffbbb58fd91837c854159b12102fe5670a5135112fd75e115bf6"
+    },
+    {
+      "file": "390-preview.png",
+      "width": 390,
+      "scene": "preview",
+      "label": "移动记录预览",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "36197d825a69f424f1005694de4448eef30749dc2ba5678f3aa1b12f8a942332"
+    },
+    {
+      "file": "390-preview-technical.png",
+      "width": 390,
+      "scene": "preview-technical",
+      "label": "移动记录技术详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "8a7c6d06026448ed27790989832e4bbb33476c726dc15f65d0e9e8ddff3e451a"
+    },
+    {
+      "file": "390-preview-technical-part1.png",
+      "width": 390,
+      "scene": "preview-technical",
+      "label": "移动记录技术详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "ef8d71b1905af108c639b65f52baa4678df4cc738eb0970d4d3a65a17db73d7c"
+    },
+    {
+      "file": "390-detail-loading.png",
+      "width": 390,
+      "scene": "detail-loading",
+      "label": "详情读取中可关闭",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d7a3a4112b51cf0e45502c4da182e5b46907bfdf0a196f7f8ef8a55cdcbb914c"
+    },
+    {
+      "file": "390-detail-error.png",
+      "width": 390,
+      "scene": "detail-error",
+      "label": "详情读取失败留窗",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "ce830cbad04bf9fc39a01d2c23cb7951f792756c127f5d021d18386920237eaf"
+    },
+    {
+      "file": "390-detail.png",
+      "width": 390,
+      "scene": "detail",
+      "label": "原始死信详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-detail-part1.png",
+      "width": 390,
+      "scene": "detail",
+      "label": "原始死信详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "6311c7c807198d316e99ee5b130d92d9f2904cdb042b23d376deba169c9dd85c"
+    },
+    {
+      "file": "390-detail-part2.png",
+      "width": 390,
+      "scene": "detail",
+      "label": "原始死信详情",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "ca24f64645f42a2bfdc983880ba8a1e8df1b5f75bd1665cf4f0790051f2a0e3b"
+    },
+    {
+      "file": "390-detail-rss.png",
+      "width": 390,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "64c94449415165d3c3cc5ee36b4e8b6769e705609d0db75cddeed4d225472581"
+    },
+    {
+      "file": "390-detail-rss-part1.png",
+      "width": 390,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "5bc3417923457a8ac24284f61cf886f88d4ac66b19741fc0d8b0f822a1d8597b"
+    },
+    {
+      "file": "390-detail-rss-part2.png",
+      "width": 390,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "e655c5b29b6a46703ac16c91917cf9dee25b06a258c1bedae94771542aab1a5f"
+    },
+    {
+      "file": "390-detail-rss-part3.png",
+      "width": 390,
+      "scene": "detail-rss",
+      "label": "独立RSS三分类夹具",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 3,
+      "sha256": "fdf0cfbf7a72f5717d15a98a7e99ea7f1c19a862cfa4961ef54743bd8c2509f5"
+    },
+    {
+      "file": "390-detail-robots.png",
+      "width": 390,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "64c94449415165d3c3cc5ee36b4e8b6769e705609d0db75cddeed4d225472581"
+    },
+    {
+      "file": "390-detail-robots-part1.png",
+      "width": 390,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "77dd941c7f28940dd860867e2ec3b140f40ce27d81952a049d02e2bbfbcff0f2"
+    },
+    {
+      "file": "390-detail-robots-part2.png",
+      "width": 390,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "4d6b88c290c7ce29e7532f7cdb267fbb6ecf4152b34ace4a26a266dad4147ec8"
+    },
+    {
+      "file": "390-detail-robots-part3.png",
+      "width": 390,
+      "scene": "detail-robots",
+      "label": "robots判定展开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 3,
+      "sha256": "4daa9fdfe0dc0fdb4df28e8b993b90c849227317555cd207cde34effee95f147"
+    },
+    {
+      "file": "390-detail-history.png",
+      "width": 390,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-detail-history-part1.png",
+      "width": 390,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "3d58215c535cc3a370ad4dae669a5600ba0136873632c0731b6f2e1ae1c85979"
+    },
+    {
+      "file": "390-detail-history-part2.png",
+      "width": 390,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "2c028e810eec66e15b13313db530b26b4dd791dd03dfd0717f6c76b2b849fdc3"
+    },
+    {
+      "file": "390-detail-history-part3.png",
+      "width": 390,
+      "scene": "detail-history",
+      "label": "执行尝试和事件",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 3,
+      "sha256": "bc4e57acec2ed7a357ca1dbeb9c870905db1fdd9285fcf8fdfdbe9549c4c9968"
+    },
+    {
+      "file": "390-detail-technical.png",
+      "width": 390,
+      "scene": "detail-technical",
+      "label": "完整技术标识",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-detail-technical-part1.png",
+      "width": 390,
+      "scene": "detail-technical",
+      "label": "完整技术标识",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "7e6dabdaef3b5810f68b299ff8a89909fa0bb6c813c39889b857c6f7cd589ebb"
+    },
+    {
+      "file": "390-detail-technical-part2.png",
+      "width": 390,
+      "scene": "detail-technical",
+      "label": "完整技术标识",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "d73b9f481d163667b8ffe29664e90ea2302ae88b282197fae7c19cd72c6ba52c"
+    },
+    {
+      "file": "390-detail-technical-part3.png",
+      "width": 390,
+      "scene": "detail-technical",
+      "label": "完整技术标识",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 3,
+      "sha256": "71e68305ad093634033973ed8609be5a8e537d635811c5292d92dbe54089898a"
+    },
+    {
+      "file": "390-reason-empty.png",
+      "width": 390,
+      "scene": "reason-empty",
+      "label": "重放原因未填写",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-reason-empty-part1.png",
+      "width": 390,
+      "scene": "reason-empty",
+      "label": "重放原因未填写",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "6311c7c807198d316e99ee5b130d92d9f2904cdb042b23d376deba169c9dd85c"
+    },
+    {
+      "file": "390-reason-empty-part2.png",
+      "width": 390,
+      "scene": "reason-empty",
+      "label": "重放原因未填写",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "ca24f64645f42a2bfdc983880ba8a1e8df1b5f75bd1665cf4f0790051f2a0e3b"
+    },
+    {
+      "file": "390-reason-one.png",
+      "width": 390,
+      "scene": "reason-one",
+      "label": "重放原因不足两字",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-reason-one-part1.png",
+      "width": 390,
+      "scene": "reason-one",
+      "label": "重放原因不足两字",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "6311c7c807198d316e99ee5b130d92d9f2904cdb042b23d376deba169c9dd85c"
+    },
+    {
+      "file": "390-reason-one-part2.png",
+      "width": 390,
+      "scene": "reason-one",
+      "label": "重放原因不足两字",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "a8bceaf603b2730842c332279f34cc1397f9c81f151b7e5d05d3626d64856a07"
+    },
+    {
+      "file": "390-reason-filled.png",
+      "width": 390,
+      "scene": "reason-filled",
+      "label": "重放原因可提交",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-reason-filled-part1.png",
+      "width": 390,
+      "scene": "reason-filled",
+      "label": "重放原因可提交",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "6311c7c807198d316e99ee5b130d92d9f2904cdb042b23d376deba169c9dd85c"
+    },
+    {
+      "file": "390-reason-filled-part2.png",
+      "width": 390,
+      "scene": "reason-filled",
+      "label": "重放原因可提交",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "a169488b6427de1b59336167d703111088821de59c43cf3ab826cda55a3252a0"
+    },
+    {
+      "file": "390-reason-limit.png",
+      "width": 390,
+      "scene": "reason-limit",
+      "label": "重放原因500字符",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "fd7a5032600cfc9a2ac4665dcb66b8f48068d947bdf59ef57a0bb4aac203c2ae"
+    },
+    {
+      "file": "390-reason-limit-part1.png",
+      "width": 390,
+      "scene": "reason-limit",
+      "label": "重放原因500字符",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "a193d247640dd8435e499d3c58ccd6bb109b31a2e165e60c719c1d37bfd95ff6"
+    },
+    {
+      "file": "390-reason-limit-part2.png",
+      "width": 390,
+      "scene": "reason-limit",
+      "label": "重放原因500字符",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "e73cc489f7f6981b1103cda573dd19d019221ce2a917dd25bbdafa409999bbf1"
+    },
+    {
+      "file": "390-confirm.png",
+      "width": 390,
+      "scene": "confirm",
+      "label": "重放确认预览",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "0172b5d4a7d7b489b93a9a9fc418fa9953be036b509f24ec0f4cacc291f299b4"
+    },
+    {
+      "file": "390-confirm-typed.png",
+      "width": 390,
+      "scene": "confirm-typed",
+      "label": "确认短语已满足",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "48d154d994a46eb00e1f3c4ef015c080391fbe0e12505de1ae6eda0762ce665d"
+    },
+    {
+      "file": "390-replaying.png",
+      "width": 390,
+      "scene": "replaying",
+      "label": "正在创建新任务",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "6b0dc093be31f1361aaac9dfbfbbf7e7f59c5a3eae1896c6981d3cbecf0e79d2"
+    },
+    {
+      "file": "390-replaying-part1.png",
+      "width": 390,
+      "scene": "replaying",
+      "label": "正在创建新任务",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "6311c7c807198d316e99ee5b130d92d9f2904cdb042b23d376deba169c9dd85c"
+    },
+    {
+      "file": "390-replaying-part2.png",
+      "width": 390,
+      "scene": "replaying",
+      "label": "正在创建新任务",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "4f1cdcb4bdf6a1da854244fe9c71681a4b742a1435706facade7a16d55d3105c"
+    },
+    {
+      "file": "390-replay-error.png",
+      "width": 390,
+      "scene": "replay-error",
+      "label": "重放明确拒绝",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "fa56bdffe6edb667c40a1ac7b0af5712dfc7577670c619ae81af5f80a354203c"
+    },
+    {
+      "file": "390-replay-error-part1.png",
+      "width": 390,
+      "scene": "replay-error",
+      "label": "重放明确拒绝",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "adf89457d99f4e244b05af3a447158431bb34612a8c6d5b60c809b928dbb04e6"
+    },
+    {
+      "file": "390-replay-error-part2.png",
+      "width": 390,
+      "scene": "replay-error",
+      "label": "重放明确拒绝",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "a40db38dd4af75874a83769f3e54887e7612f45365fc8f9d947505dc2ff36e8f"
+    },
+    {
+      "file": "390-replay-unknown.png",
+      "width": 390,
+      "scene": "replay-unknown",
+      "label": "重放结果未知",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "3cd1798f7dd66fe0deed22d6c6429f35f534147a4f4f0ad1c77ddb8c3edb6f85"
+    },
+    {
+      "file": "390-replay-unknown-part1.png",
+      "width": 390,
+      "scene": "replay-unknown",
+      "label": "重放结果未知",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "adf89457d99f4e244b05af3a447158431bb34612a8c6d5b60c809b928dbb04e6"
+    },
+    {
+      "file": "390-replay-unknown-part2.png",
+      "width": 390,
+      "scene": "replay-unknown",
+      "label": "重放结果未知",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "213a3bfa72f1fd4675b04e2a3c1774ef0494287e8a3ab91f71701f3f46a5c207"
+    },
+    {
+      "file": "390-replay-success.png",
+      "width": 390,
+      "scene": "replay-success",
+      "label": "新任务已创建（原返回夹具）",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f890f0cdefcd22c92ef4dd30f0eab59766bdc2d88416fbb92961f385d710bf66"
+    },
+    {
+      "file": "390-replay-success-part1.png",
+      "width": 390,
+      "scene": "replay-success",
+      "label": "新任务已创建（原返回夹具）",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "a682fe9043488e67e84642a60262069809f86b15ecdb6597b8cd0d7630c3978e"
+    },
+    {
+      "file": "390-replay-refresh-error.png",
+      "width": 390,
+      "scene": "replay-refresh-error",
+      "label": "创建成功与列表重读失败分开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f890f0cdefcd22c92ef4dd30f0eab59766bdc2d88416fbb92961f385d710bf66"
+    },
+    {
+      "file": "390-replay-refresh-error-part1.png",
+      "width": 390,
+      "scene": "replay-refresh-error",
+      "label": "创建成功与列表重读失败分开",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "a682fe9043488e67e84642a60262069809f86b15ecdb6597b8cd0d7630c3978e"
+    },
+    {
+      "file": "390-missing-detail.png",
+      "width": 390,
+      "scene": "missing-detail",
+      "label": "缺少子查询与历史",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "960e68df97e02d8ceeface5a39b5a7c6f0196804ea2e8bf7816674fe3f6e817b"
+    },
+    {
+      "file": "390-missing-detail-part1.png",
+      "width": 390,
+      "scene": "missing-detail",
+      "label": "缺少子查询与历史",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "db37c139cf775d69eca7212ba4e103381d0ab6dea202e914cc9a7cad2be78f6b"
+    },
+    {
+      "file": "390-missing-detail-part2.png",
+      "width": 390,
+      "scene": "missing-detail",
+      "label": "缺少子查询与历史",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "4ed8f0ded25d613fd13541adc24783ec5a4ea2404ecc935329929823d02dc0aa"
+    },
+    {
+      "file": "390-long-content.png",
+      "width": 390,
+      "scene": "long-content",
+      "label": "长来源和缺失字段",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "b66ba79b1a73d5b66daccb75bedf34ec3ae2b4e851e7cdeffc2eb0354c08ba4c"
+    },
+    {
+      "file": "390-long-content-part1.png",
+      "width": 390,
+      "scene": "long-content",
+      "label": "长来源和缺失字段",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "dcaea5443e1bf44ffb2eeb0767b9d89dfa90531c658cfe450e5ebf4b1e6111fb"
+    },
+    {
+      "file": "390-long-content-part2.png",
+      "width": 390,
+      "scene": "long-content",
+      "label": "长来源和缺失字段",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "c8ac63ce08d4559e552354758915a29a786ac9315b3a9d35daead0b4b87b2db2"
+    },
+    {
+      "file": "390-focus.png",
+      "width": 390,
+      "scene": "focus",
+      "label": "键盘焦点",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "b6d7643eff0c55a1fa14b02df8462f7d7180fe4e5ba642b856a2e6991ef369cb"
+    },
+    {
+      "file": "390-hover.png",
+      "width": 390,
+      "scene": "hover",
+      "label": "按钮悬停",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "8ff2a29f7822e0e74df1e4c73810e86cecac738301c92c92df2d3a2c15de9f2a"
+    },
+    {
+      "file": "390-pressed.png",
+      "width": 390,
+      "scene": "pressed",
+      "label": "按钮按下",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "c68b40f3a580f3f33146eb3da1affdc4bd322f1f1c0c3cd72665630ac35fbbeb"
+    },
+    {
+      "file": "390-tools.png",
+      "width": 390,
+      "scene": "tools",
+      "label": "审核工具面板",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "53c2daa4d19dfa96c79e1879ce436c540fcfe51f0deb55be0770bf77fb57defd"
+    },
+    {
+      "file": "390-state-draft.png",
+      "width": 390,
+      "scene": "state-draft",
+      "label": "独立状态变体 / draft",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "534e161b75bffba2cf20990d75980ee5f335f15248b5af8aeaade287515e53e1"
+    },
+    {
+      "file": "390-state-draft-part1.png",
+      "width": 390,
+      "scene": "state-draft",
+      "label": "独立状态变体 / draft",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "630a5241bf495e5b74bdedf5697363e9eb79819f6ebd38f4484c3a1d6d97fc6b"
+    },
+    {
+      "file": "390-state-scheduled.png",
+      "width": 390,
+      "scene": "state-scheduled",
+      "label": "独立状态变体 / 待调度",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f9a2acd0c43a211dc5a2181c35962b4293225f6837e49de244a5b2bcd146dcf0"
+    },
+    {
+      "file": "390-state-scheduled-part1.png",
+      "width": 390,
+      "scene": "state-scheduled",
+      "label": "独立状态变体 / 待调度",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "936ebfa33e50e0b5b1aa9d1c32c5de077519587a21206d63b2a7c785e5c6cc4b"
+    },
+    {
+      "file": "390-state-queued.png",
+      "width": 390,
+      "scene": "state-queued",
+      "label": "独立状态变体 / 已排队",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "08b3094459666a627e5128f9d3b72314b2036098a3775288a48aff45ecf9c562"
+    },
+    {
+      "file": "390-state-queued-part1.png",
+      "width": 390,
+      "scene": "state-queued",
+      "label": "独立状态变体 / 已排队",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "e98863c7a7417c2cc75032fef89e8b863670faf194edd90fd4dc3932a58d06b1"
+    },
+    {
+      "file": "390-state-leased.png",
+      "width": 390,
+      "scene": "state-leased",
+      "label": "独立状态变体 / 已租约",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "19a53833405e21c9c6b31646a7251f8464c089afb00e3aae40f7998ce1198aa3"
+    },
+    {
+      "file": "390-state-leased-part1.png",
+      "width": 390,
+      "scene": "state-leased",
+      "label": "独立状态变体 / 已租约",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "4f8aa7a87df5b9f6a31d1ff533b86d8f006a7a15e296eb79f5821003491ba25c"
+    },
+    {
+      "file": "390-state-running.png",
+      "width": 390,
+      "scene": "state-running",
+      "label": "独立状态变体 / 执行中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "5851f4a55d38055f80c78b594b05b7dd0a5c6d607978e3cfb77497b63ad1a621"
+    },
+    {
+      "file": "390-state-running-part1.png",
+      "width": 390,
+      "scene": "state-running",
+      "label": "独立状态变体 / 执行中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "91e454cbc116523dc12576169e076146d25824a077be673eabd0cb991a155d0e"
+    },
+    {
+      "file": "390-state-parsing.png",
+      "width": 390,
+      "scene": "state-parsing",
+      "label": "独立状态变体 / 解析中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d97bd33041fd2064cd36a55a3f90e831511abfc7db368a30bdb68af0dc14caf8"
+    },
+    {
+      "file": "390-state-parsing-part1.png",
+      "width": 390,
+      "scene": "state-parsing",
+      "label": "独立状态变体 / 解析中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "a9239345b7a86eb7d697b68fe3278c9cccc652165a7d31a1e41d7d89f30142f8"
+    },
+    {
+      "file": "390-state-validating.png",
+      "width": 390,
+      "scene": "state-validating",
+      "label": "独立状态变体 / 校验中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "920112e212f408b7977c92a538628912f18fa68e3d9985543f952fd5468026eb"
+    },
+    {
+      "file": "390-state-validating-part1.png",
+      "width": 390,
+      "scene": "state-validating",
+      "label": "独立状态变体 / 校验中",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "130d758ec640879cc4606aae06c9f0219119f0e8b5e4a413083a5ad43cd92819"
+    },
+    {
+      "file": "390-state-persisted.png",
+      "width": 390,
+      "scene": "state-persisted",
+      "label": "独立状态变体 / 已持久化",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "d547f2a8954098677c2e239f873b035cf8d3a6225ca203d697c4cfac5b9ad473"
+    },
+    {
+      "file": "390-state-persisted-part1.png",
+      "width": 390,
+      "scene": "state-persisted",
+      "label": "独立状态变体 / 已持久化",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "45014103b91dddc5fe2c8546f881b66e2a6ebad28bd93e400bbfe1ed35146002"
+    },
+    {
+      "file": "390-state-retry_scheduled.png",
+      "width": 390,
+      "scene": "state-retry_scheduled",
+      "label": "独立状态变体 / 等待重试",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "1e926f4b60874d1a118639fe5cb5947f32a9a8832ad80e4a691d7338e2fc26a4"
+    },
+    {
+      "file": "390-state-retry_scheduled-part1.png",
+      "width": 390,
+      "scene": "state-retry_scheduled",
+      "label": "独立状态变体 / 等待重试",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "67efc39d1079c5711f189a4b28be9f528d26e953c6d2410f37552c7cf07cd239"
+    },
+    {
+      "file": "390-state-blocked_login.png",
+      "width": 390,
+      "scene": "state-blocked_login",
+      "label": "独立状态变体 / 登录受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "181bbf8c564fd49d6fd14421d737592b4a9bde174d71f2ca7becb5812282adf2"
+    },
+    {
+      "file": "390-state-blocked_login-part1.png",
+      "width": 390,
+      "scene": "state-blocked_login",
+      "label": "独立状态变体 / 登录受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "059b82b4311f993dfa88c5a27ffe61b79bed63dbfa6be59594c16671e8f218bd"
+    },
+    {
+      "file": "390-state-blocked_captcha.png",
+      "width": 390,
+      "scene": "state-blocked_captcha",
+      "label": "独立状态变体 / 验证码受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "21c6081131d7a757f6b458d414e96a22cc0b7782888630cc1b9f5b164247c290"
+    },
+    {
+      "file": "390-state-blocked_captcha-part1.png",
+      "width": 390,
+      "scene": "state-blocked_captcha",
+      "label": "独立状态变体 / 验证码受阻",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "059b82b4311f993dfa88c5a27ffe61b79bed63dbfa6be59594c16671e8f218bd"
+    },
+    {
+      "file": "390-state-blocked_robots.png",
+      "width": 390,
+      "scene": "state-blocked_robots",
+      "label": "独立状态变体 / 网站规则限制",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "87c3d52aeded1a9eaf58de185984a8eea783232ba60d5a34acbda3858c4f7931"
+    },
+    {
+      "file": "390-state-blocked_robots-part1.png",
+      "width": 390,
+      "scene": "state-blocked_robots",
+      "label": "独立状态变体 / 网站规则限制",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "94af9a49153f6ca87b8cea7a98f25e7745ce9fd91be1fa00b374674ed27ea2b9"
+    },
+    {
+      "file": "390-state-rate_limited.png",
+      "width": 390,
+      "scene": "state-rate_limited",
+      "label": "独立状态变体 / 限流等待",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "1c63be0bc5d72b02477b3cabaa306b2c76f5c7dae318e9de612917781aadc92f"
+    },
+    {
+      "file": "390-state-rate_limited-part1.png",
+      "width": 390,
+      "scene": "state-rate_limited",
+      "label": "独立状态变体 / 限流等待",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "341c1ebc5a9d6bf139d7ee506f7bd950fca04839054bd2eac25b94736f2855e8"
+    },
+    {
+      "file": "390-state-succeeded.png",
+      "width": 390,
+      "scene": "state-succeeded",
+      "label": "独立状态变体 / 成功",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "f654ce918ce7806d74ddf42cefc445ab0d149cb3008d130bd37ac1fba5ba8931"
+    },
+    {
+      "file": "390-state-succeeded-part1.png",
+      "width": 390,
+      "scene": "state-succeeded",
+      "label": "独立状态变体 / 成功",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "bd24797a84fdd46bc9af3cf579421094908b332040760c755e90e837ff4a6113"
+    },
+    {
+      "file": "390-state-succeeded_empty.png",
+      "width": 390,
+      "scene": "state-succeeded_empty",
+      "label": "独立状态变体 / 无可用结果",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "434e02d22b70a0fbb3cd68ec18f6d81ca853afe7a85805779b8113720a6e7546"
+    },
+    {
+      "file": "390-state-succeeded_empty-part1.png",
+      "width": 390,
+      "scene": "state-succeeded_empty",
+      "label": "独立状态变体 / 无可用结果",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "3020de19c2e4055732ffd5e99610af6178f0fb8f8d71902242e2986964434069"
+    },
+    {
+      "file": "390-state-completed_with_warnings.png",
+      "width": 390,
+      "scene": "state-completed_with_warnings",
+      "label": "独立状态变体 / 部分完成",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "1e42a349e7a313978010a9d4025b7965c62430d9ca750193123002313f3403dd"
+    },
+    {
+      "file": "390-state-completed_with_warnings-part1.png",
+      "width": 390,
+      "scene": "state-completed_with_warnings",
+      "label": "独立状态变体 / 部分完成",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "03bcc9493ac282aff8bb7c723c2eb3d7ce878c9d638380e52ef0f6d9690859dc"
+    },
+    {
+      "file": "390-state-failed_terminal.png",
+      "width": 390,
+      "scene": "state-failed_terminal",
+      "label": "独立状态变体 / 终止失败",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "156117aa2b00ed383b2ce07b5d583f556b03448c35ec58de5d91b13271e64cff"
+    },
+    {
+      "file": "390-state-failed_terminal-part1.png",
+      "width": 390,
+      "scene": "state-failed_terminal",
+      "label": "独立状态变体 / 终止失败",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "03bcc9493ac282aff8bb7c723c2eb3d7ce878c9d638380e52ef0f6d9690859dc"
+    },
+    {
+      "file": "390-state-dead_letter.png",
+      "width": 390,
+      "scene": "state-dead_letter",
+      "label": "独立状态变体 / 死信",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "ed325c112a810d6ca2a7fd4fcdb999e0d9ac102fa2637bd36cfba8ae5193dc3d"
+    },
+    {
+      "file": "390-state-dead_letter-part1.png",
+      "width": 390,
+      "scene": "state-dead_letter",
+      "label": "独立状态变体 / 死信",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "6311c7c807198d316e99ee5b130d92d9f2904cdb042b23d376deba169c9dd85c"
+    },
+    {
+      "file": "390-state-dead_letter-part2.png",
+      "width": 390,
+      "scene": "state-dead_letter",
+      "label": "独立状态变体 / 死信",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 2,
+      "sha256": "ca24f64645f42a2bfdc983880ba8a1e8df1b5f75bd1665cf4f0790051f2a0e3b"
+    },
+    {
+      "file": "390-state-manually_replayed.png",
+      "width": 390,
+      "scene": "state-manually_replayed",
+      "label": "独立状态变体 / 已人工重放",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "ef9377294e882eb0f0497ec330534ce1490800e1dded00951795674005f27278"
+    },
+    {
+      "file": "390-state-manually_replayed-part1.png",
+      "width": 390,
+      "scene": "state-manually_replayed",
+      "label": "独立状态变体 / 已人工重放",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "8382d963ee3833d8b3f097444e305f88d4023af9cca7bea7c2fe7f273fa0ca1a"
+    },
+    {
+      "file": "390-state-automatically_replayed.png",
+      "width": 390,
+      "scene": "state-automatically_replayed",
+      "label": "独立状态变体 / 凭证续期后已自动重放",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 0,
+      "sha256": "12146829578d019eb9d3bfc4aa3b073c73823cb5ea6f47c81b0d1d555931b691"
+    },
+    {
+      "file": "390-state-automatically_replayed-part1.png",
+      "width": 390,
+      "scene": "state-automatically_replayed",
+      "label": "独立状态变体 / 凭证续期后已自动重放",
+      "pageId": "P51",
+      "proposal": "COLLECTION-TASKS-C-r1",
+      "part": 1,
+      "sha256": "00ab9408e9f95264d83b13bafa0ac99c77794d3d4fe35a5c44e321e2139e9c9b"
+    }
+  ]
+}
