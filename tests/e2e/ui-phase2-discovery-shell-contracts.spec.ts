@@ -341,3 +341,161 @@ for (const allowed of [true, false]) {
     }
   });
 }
+
+for (const mode of ["search", "create"] as const) {
+  for (const dismissal of ["escape", "close", "backdrop"] as const) {
+    test(`UI2-DI03 ${mode} ${dismissal} restores its opening focus without navigation`, async ({
+      page,
+    }) => {
+      const { writes } = await setup(page);
+      const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+      await trigger.focus();
+      if (mode === "search") await openSearch(page);
+      else await trigger.press("Enter");
+      const dialog = page.getByRole("dialog", {
+        name: mode === "search" ? "全局搜索" : "快捷创建",
+      });
+      await expect(dialog).toBeVisible();
+      if (mode === "create")
+        await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
+      if (dismissal === "escape") await page.keyboard.press("Escape");
+      else if (dismissal === "close")
+        await dialog.getByRole("button", { name: "关闭", exact: true }).click();
+      else await dialog.click({ position: { x: 2, y: 2 } });
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(page).toHaveURL(/\/home$/);
+      expect(writes).toEqual([]);
+    });
+  }
+
+  test(`UI2-DI03 ${mode} initial focus and forward/reverse Tab remain inside the modal`, async ({
+    page,
+  }) => {
+    const { writes } = await setup(page);
+    const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+    await trigger.focus();
+    if (mode === "search") await openSearch(page);
+    else await trigger.press("Enter");
+    const dialog = page.getByRole("dialog", {
+      name: mode === "search" ? "全局搜索" : "快捷创建",
+    });
+    const first = dialog.getByRole("button", { name: "关闭", exact: true });
+    const last = dialog.getByRole("link", { name: "打开通知中心", exact: true });
+    if (mode === "search") await expect(dialog.getByPlaceholder("输入至少 2 个字符")).toBeFocused();
+    else {
+      await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
+      await expect(first).toBeFocused();
+    }
+    await first.focus();
+    await first.press("Shift+Tab");
+    await expect(last).toBeFocused();
+    await last.press("Tab");
+    await expect(first).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+    expect(writes).toEqual([]);
+  });
+
+  test(`UI2-DI03 ${mode} inner pointer interaction keeps the modal and normal focus`, async ({
+    page,
+  }) => {
+    const { writes } = await setup(page);
+    if (mode === "search") await openSearch(page);
+    else await page.getByRole("button", { name: "创建选品", exact: true }).click();
+    const dialog = page.getByRole("dialog", {
+      name: mode === "search" ? "全局搜索" : "快捷创建",
+    });
+    await dialog.getByRole("heading").first().click();
+    await expect(dialog).toBeVisible();
+    if (mode === "search") {
+      const input = dialog.getByPlaceholder("输入至少 2 个字符");
+      await input.click();
+      await expect(input).toBeFocused();
+      await input.fill("未提交的查询");
+      await expect(input).toHaveValue("未提交的查询");
+    } else await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
+    await expect(page).toHaveURL(/\/home$/);
+    expect(writes).toEqual([]);
+  });
+}
+
+test("UI2-DI01 search textbox has a meaningful accessible name", async ({ page }) => {
+  await setup(page);
+  const dialog = await openSearch(page);
+  await expect(dialog.getByPlaceholder("输入至少 2 个字符")).toHaveAccessibleName("搜索关键词");
+});
+
+for (const outcome of ["success", "forbidden"] as const) {
+  for (const transition of ["search", "reopen", "unmount"] as const) {
+    test(`UI2-DI04 quick ${transition} ignores a delivered late ${outcome}`, async ({ page }) => {
+      await ignoreTransportAbort(page, "/me/quick-actions?");
+      const { writes } = await setup(page);
+      let oldRoute: Route | undefined;
+      let oldFinished = false;
+      page.on("requestfinished", (request) => {
+        if (request === oldRoute?.request()) oldFinished = true;
+      });
+      await page.route("**/api/v1/me/quick-actions?**", async (route) => {
+        if (!oldRoute) {
+          oldRoute = route;
+          return;
+        }
+        await route.fulfill({ json: envelope(quickActions) });
+      });
+      const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+      await trigger.click();
+      await expect.poll(() => Boolean(oldRoute)).toBe(true);
+      if (transition === "search") {
+        // Change mode while the same native dialog is open.
+        await page.route("**/api/v1/me/global-search?**", (route) =>
+          route.fulfill({ json: searchResult("当前搜索事实") }),
+        );
+        const dialog = await openSearch(page);
+        await dialog.getByPlaceholder("输入至少 2 个字符").fill("当前搜索");
+        await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
+        await expect(dialog.getByRole("link", { name: /当前搜索事实/ })).toBeVisible();
+      } else if (transition === "reopen") {
+        await page.keyboard.press("Escape");
+        await trigger.click();
+        await expect(
+          page.getByRole("dialog").getByRole("link", { name: /创建任务/ }),
+        ).toBeVisible();
+      } else {
+        await page.keyboard.press("Escape");
+        await page
+          .locator(".role-top-actions")
+          .getByRole("link", { name: "个人中心", exact: true })
+          .click();
+        await expect(page).toHaveURL(/\/me$/);
+        await expect(page.locator(".role-shell")).toHaveCount(0);
+      }
+      await oldRoute!.fulfill(
+        outcome === "success"
+          ? { json: envelope([{ ...quickActions[0], label: "旧快捷入口" }]) }
+          : {
+              status: 403,
+              json: {
+                error: { code: "forbidden", message: "旧快捷拒绝", action_hint: "旧快捷范围拒绝" },
+                request_id: "ui2-old-quick",
+                trace_id: "ui2-old-quick",
+              },
+            },
+      );
+      await expect.poll(() => oldFinished).toBe(true);
+      await paint(page);
+      if (transition !== "unmount") {
+        const dialog = page.getByRole("dialog");
+        await expect(
+          dialog.getByRole("link", { name: transition === "search" ? /当前搜索事实/ : /创建任务/ }),
+        ).toBeVisible();
+        await expect(dialog.getByText("旧快捷入口", { exact: true })).toHaveCount(0);
+        await expect(dialog.getByText("旧快捷范围拒绝", { exact: true })).toHaveCount(0);
+      } else {
+        await expect(page).toHaveURL(/\/me$/);
+        await expect(page.locator("dialog.discovery-backdrop")).toHaveCount(0);
+      }
+      expect(writes).toEqual([]);
+    });
+  }
+}

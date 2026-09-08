@@ -1,13 +1,13 @@
 # F04a 共享壳层、发现、角色与状态入口合同复核
 
-日期：2026-09-08；F04a起点main/fa63241，原始交付b8773d6/498607f。第2/3节现行源绑定已随F04b的两组件修复更新，原表可由git show 498607f:本文路径追溯；当前运行修复与局部证据见第8节。静态绑定不自动冻结G0，也不是正式设计、真实权限、生产或用户审核证明。
+日期：2026-09-08；F04a起点main/fa63241，原始交付b8773d6/498607f。第2/3节现行源绑定已随F04b修复更新；初始表由498607f追溯，读取修复后的表由243941a追溯，当前发现层焦点增量见第9节。第8/9节都是局部运行证据，静态绑定不自动冻结G0，也不是正式设计、真实权限、生产或用户审核证明。
 
 ## 1. 范围与证据分层
 
 - NavigationShell三壳层由App根据route.meta.shell装配；共享入口不是新增Pxx。OrganizationRolePanel属于P31，NotFoundPage属于P73，UiStateShowcase属于P72/DEV query。73路由编号不变。
 - 70=32+9+19+3+6+1。一个事件候选可包含多个监听，一个v-for候选可渲染多个按钮，一个业务动作也可有表单/按钮或桌面/移动多个入口；数量不作为业务分母。
 - P72/P73沿用[state-recovery-contract-review](state-recovery-contract-review.md)中的ST/NF语义ID；新表只是当前稳定源绑定，不替代旧八态表和历史修复证据。P31沿用[页面规格](page-specs/P31.md)与[组织治理合同](organization-governance-contract-review.md)的父级写入语义，不把父子emit各算一次授权写入。
-- 静态表、隔离Vue、真实后端、生产最终执行和用户审批分别记账。下文caseId为完整验收卡；第8节只关闭本批实际覆盖的子场景，其余仍待完成，不把局部回归提升为整卡或全站通过。
+- 静态表、隔离Vue、真实后端、生产最终执行和用户审批分别记账。下文caseId为完整验收卡；第8/9节只关闭各批实际覆盖的子场景，其余仍待完成，不把局部回归提升为整卡或全站通过。
 
 ## 2. 当前源码指纹
 
@@ -15,7 +15,7 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | 文件 | SHA256 |
 | --- | --- |
-| apps/web/src/components/DiscoveryOverlay.vue | 919da075bf5a2ff859c51b86bc3686d9d873c833f713e0d7dfb48e363e3133bf |
+| apps/web/src/components/DiscoveryOverlay.vue | 0c87aed8077f0fc34773a49a6f031c47c382ccf0b83de4d1add972e71b9f8fb2 |
 | apps/web/src/components/NavigationShell.vue | 4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc |
 | apps/web/src/components/NotFoundPage.vue | 2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b |
 | apps/web/src/components/OrganizationRolePanel.vue | 104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11 |
@@ -39,15 +39,15 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/DiscoveryOverlay.vue#ceb391d01220c696.1 | 218 | dialog-definition | discovery.dialog | 原生dialog定义；search/create两个模式，复用同一实例 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#f3760e448f9f16ab.1 | 218 | event-binding | discovery.close.escape/backdrop | cancel经handleCancel.preventDefault；mousedown.self直接emit close，尚无prevent | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#3886e9e1d2205bab.1 | 233 | control | discovery.close.button | 关闭按钮emit close；三种关闭入口分别验证返焦 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#a53c50f6e3c9041c.1 | 235 | form-event | discovery.search | submit.prevent调用search；与Enter入口共用动作 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#96a9bdb48fa13865.1 | 238 | event-binding | discovery.search | input keydown.enter.prevent调用search；不按两个独立搜索动作计数 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#85469c2445124f8e.1 | 280 | event-binding | discovery.retry.{mode} | UiStatePanel primary转search或loadActions；包括错误/过期/无权的现有处理 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#2954096bdfc7268c.1 | 305 | control | discovery.result.navigate.{resourceType} | RouterLink到服务端item.route；普通点击先关闭，修饰键/非左键保留窗口语义 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#eabfc750d1907e5d.1 | 316 | control | discovery.quick.navigate.{actionId} | 记录当前组件最近ID；普通点击关闭并导航item.route，不提前创建对象 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#65142520df6ee647.1 | 335 | control | discovery.notifications | member底部链接去/notifications；普通点击关闭弹窗 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#fc9fbb3a461cfbb6.1 | 239 | dialog-definition | discovery.dialog | 原生dialog定义；search/create两个模式，复用同一实例 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#002b8e0f6dc06a65.1 | 239 | event-binding | discovery.close.escape/backdrop; discovery.focus.cycle | cancel经handleCancel.preventDefault；仅mousedown.self.prevent取消遮罩默认抢焦；keydown Tab在可见可用首末控件循环 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#3886e9e1d2205bab.1 | 255 | control | discovery.close.button | 关闭按钮emit close；三种关闭入口分别验证返焦 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#a53c50f6e3c9041c.1 | 257 | form-event | discovery.search | submit.prevent调用search；与Enter入口共用动作 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#f528731fca76dfda.1 | 260 | event-binding | discovery.search | input keydown.enter.prevent调用search；无障碍名称为搜索关键词，不改变查询规则 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#85469c2445124f8e.1 | 303 | event-binding | discovery.retry.{mode} | UiStatePanel primary转search或loadActions；包括错误/过期/无权的现有处理 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#2954096bdfc7268c.1 | 328 | control | discovery.result.navigate.{resourceType} | RouterLink到服务端item.route；普通点击先关闭，修饰键/非左键保留窗口语义 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#eabfc750d1907e5d.1 | 339 | control | discovery.quick.navigate.{actionId} | 记录当前组件最近ID；普通点击关闭并导航item.route，不提前创建对象 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#65142520df6ee647.1 | 358 | control | discovery.notifications | member底部链接去/notifications；普通点击关闭弹窗 | UI2-DI01–DI06 |
 
 ### apps/web/src/components/NavigationShell.vue
 
@@ -164,7 +164,7 @@ NavigationShell的load在mounted、显式重试及shell变化时GET /me/navigati
 
 Discovery有两业务变体discovery.dialog.search/create；search GET /me/global-search带q/limit=10及适用筛选，不发送组织/工作区ID。真实路由从会话解析范围，先authorize task:read，再向DiscoveryService传scope与capabilities；结果级隔离仍需服务/真实后端证明。quick-actions GET带shell，后端先guardNavigationShell并选择相应capabilities。当前生产壳层只给member展示搜索/快捷创建；组件支持三种shell并不表示三种壳层都有此UI入口。
 
-F04b已确认修复前结果导航不关闭、旧搜索可覆盖新结果。现在结果、快捷动作和通知RouterLink的普通左键/键盘点击经navigateAway发close；修饰键或非左键不强制关闭，快捷项仍先更新当前组件最近ID。父级route.fullPath变化也关闭发现层，覆盖浏览器返回等非链接路径。get在同一个归属检查后同步更新标识、结果与状态；新读取、非法短查询、open/mode/shell变化和卸载均失效旧读取并取消，nextTick开窗延续也检查世代。实际测试子场景见第8节；Ctrl/Meta+K输入目标边界、相反模式迟到结果和跨组织真实权限仍待验。
+F04b已确认修复前结果导航不关闭、旧搜索可覆盖新结果。现在结果、快捷动作和通知RouterLink的普通左键/键盘点击经navigateAway发close；修饰键或非左键不强制关闭，快捷项仍先更新当前组件最近ID。父级route.fullPath变化也关闭发现层，覆盖浏览器返回等非链接路径。get在同一个归属检查后同步更新标识、结果与状态；新读取、非法短查询、open/mode/shell变化和卸载均失效旧读取并取消，nextTick开窗延续也检查世代。第8/9节分别记录旧搜索及旧快捷读取的局部场景；Ctrl/Meta+K全部输入目标边界、跨组织真实权限仍待验。
 
 ### P31授权写入与模态
 
@@ -183,7 +183,7 @@ App仅DEV条件导入UiStateShowcase/VerificationFramework，NavigationShell glo
 
 useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后nextTick返焦；cancel.preventDefault后请求父级关闭；unmount只close，没有显式返焦。原生dialog负责模态机制，但不证明全部消费者的首焦点/Tab循环/遮罩关闭均合格。当前文字引用清单为21个Vue文件：ApprovalWorkspace、AuditedReasonDialog、AutomationRuleCenter、CommercialOperationsCenter、CostRuleConsole、DiscoveryOverlay、NotificationCenter、OpportunityWorkspace、OpportunityWorkspaceDialogs、OrganizationCreationWizard、PlatformAccountDialogs、PlatformGovernanceCenter、PlatformManagementCenter、PlatformMessageEditor、PlatformOrganizationDetailDialog、PlatformUserDetailDialog、ReportCenter、ScoreRuleConsole、TaskBatchActions、TaskDetailPanel、TaskWorkspace。此为候选消费者索引，仍要按实际useModalDialog调用、open表达式和触发源逐项展开；不是21个已验证业务弹窗。
 
-## 6. F04b可执行验收卡（局部结果见第8节）
+## 6. F04b可执行验收卡（局部结果见第8/9节）
 
 所有卡先在真实Vue+隔离响应验证，写入不触碰生产；真实后端与六角色验证另记。默认1440/390串行，其余适用断点、200%缩放/三主题/两密度及读屏分别保留，不由两视口测试自动覆盖。
 
@@ -227,7 +227,7 @@ useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后ne
 
 只修改DiscoveryOverlay与NavigationShell的读取归属、导航关层和shell重读；未改查询参数、搜索范围、快捷动作目录、权限规则、字段、主题持久化、任何业务写入或后端。AbortSignal是已有API客户端支持的浏览器选项，不是新接口字段/环境变量。取消减少失效请求的等待，世代检查保证即使取消未阻止响应到达也不覆盖当前状态。
 
-永久用例tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts共14参数化场景：
+243941a初批永久用例tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts新增14参数化场景（现行扩充见第9节）：
 
 - UI2-DI02四项：搜索结果、快捷项、通知导航关层；同URL结果通过Enter关闭且不新增history条目。这些动作没有产生浏览器观测到的业务非GET请求；不证明目标任务/通知业务详情或真实数据库验收。
 - UI2-DI04六项：新搜索、关窗重开、切快捷创建，分别交付旧成功/403；当前链接仍可见、旧结果/拒绝提示不可见。新搜索两例故意剥离传输AbortSignal，保留真实浏览器fetch与响应拦截，确保旧响应确实到达后仍被忽略，不仅依赖网络取消。
@@ -238,3 +238,17 @@ useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后ne
 验证顺序与结果在PROGRESS记录：red三项→修复定向三项→新增合同→原导航/搜索→移动端→相关单测/构建/文档门。没有接受任何新视觉快照。此次只关闭上述子场景；主题反序保存、完整焦点/遮罩、quick-actions迟到回写、组织壳层/真实跨范围、全部原生模态消费者与正式设计仍保留待验。
 
 本地构建后页面才能带入将来的标准宝塔发布，本批不部署。API/OpenAPI、DB、.env、依赖及服务器运行参数均未变，无当前重启操作；今后发布仍按既有部署器及宝塔重启要求，不另造纯前端上传参数。临时验证根为output/playwright/ui-phase2-discovery-shell-20260908，精确清理结果见PROGRESS，旧26批材料不动。
+
+## 9. F04b发现弹窗焦点与快捷读取增量
+
+起点main/243941a，原五项red真实Vue测试失败：search/create遮罩关闭后打开前控件不再聚焦；两模式首控件Shift+Tab不能落到末控件；搜索框无障碍名称实际为“⌕ Enter”而非可理解的搜索名称。原生dialog的存在不代表这些交互已通过。
+
+仅DiscoveryOverlay修复：mousedown.self.prevent先判断遮罩本身再阻止默认焦点动作，保持mousedown取消时机、内层点击和字段聚焦；handleTab沿项目已有首末循环方式，仅在open的本dialog处理Tab，逐次收集可见、非disabled且tabIndex非负的控件，首项Shift+Tab到末项、末项Tab到首项。Escape继续由原useModalDialog.handleCancel处理；没有改全站模态工具、权限、业务字段或共享其他消费者。查询框新增aria-label“搜索关键词”，输入长度、过滤和提交合同不变。
+
+同一永久E2E新增17项，现共31项：DI03两模式×Escape/关闭按钮/遮罩共6项返焦及无导航/无观测非GET；两模式首焦点和双向首末Tab共2项；内层标题/字段点击保持弹窗和正常输入共2项；DI01搜索框可理解名称1项；DI04快捷读取切search、重开create、SPA去/me卸载×迟到成功/403共6项。快捷六项剥离目标读取的传输AbortSignal并等待原requestfinished，验证真正迟到响应而非仅取消；search转态不先关闭原生dialog，卸载用真实个人中心RouterLink，不用硬刷新销毁旧请求凑通过。旧读取逻辑无需再次修改。
+
+本次只覆盖Chromium 1440/390及文中隔离状态，不代表屏幕阅读器实测、所有浏览器、200%缩放、全主题/密度、所有动态错误控件或其他原生模态调用方。Ctrl+K从create切search已测，Meta组合及全部编辑目标边界、真实组织/工作区切换、六角色权限和生产仍待验。对这些发现入口没有观测到业务写入，不推定/me业务全链通过。
+
+第2/3节按当前AST重绑Discovery9项及完整LF hash，候选总数仍70。243941a中的旧hash为919da075bf5a2ff859c51b86bc3686d9d873c833f713e0d7dfb48e363e3133bf；三签名变化：dialog定义ceb391d01220c696.1→fc9fbb3a461cfbb6.1，事件f3760e448f9f16ab.1→002b8e0f6dc06a65.1，输入96a9bdb48fa13865.1→f528731fca76dfda.1。原取消语义保留，并显式登记新增discovery.focus.cycle；其余六项仅行号变化，不将Tab监听伪装成新增业务写入。历史图和全局清单/审核状态不更新。
+
+五red修复后原五项通过，再跑31项现行合同+25项原模块的桌面/移动回归；原图基线未接受新快照，具体结果和清理见PROGRESS。临时根output/playwright/ui-phase2-discovery-focus-20260908单独跟踪；之前被拒绝清理的材料不重试。无生产、SQL、API/OpenAPI、配置/.env、依赖或部署器变更，无当前重启；全部正式设计与用户审核仍待F00方向。

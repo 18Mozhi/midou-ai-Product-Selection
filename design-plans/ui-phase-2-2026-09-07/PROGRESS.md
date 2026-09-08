@@ -872,3 +872,21 @@ verify:docs通过73路由/60受保护/6角色/153文件，verify:runtime-docs通
 本批清理未完成：已解析并核实精确根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-discovery-shell-20260908及其子项均在范围内且无ReparsePoint，但原生PowerShell Remove-Item递归操作在启动前被执行策略拒绝（blocked by policy）。未重试、未改用其他工具绕过；目录仍保留且不纳入Git提交，需用户在允许的环境中处理后才能关闭清理项。包含red、targeted、contracts-desktop、contracts-desktop1440、modules-desktop、modules-mobile和contracts-mobile390，临时失败图/trace不是正式设计交付图。先前26批历史材料也未动，不宣称已清理；正常dist/依赖缓存/浏览器辅助运行包保留。接管单测69507与本轮浏览器97352均取得exit 0终态，4101/5173/5181最终无监听，无本批遗留测试服务。
 
 下一步F04b继续DI03两模式键盘/遮罩/返焦、反向quick-actions迟到及其余角色/共享模态消费者；本批仅关闭已列子场景，未注销完整DI/SH卡。F00-1.18-r1仍待用户具体方向，未自动选A/B/C；获审后优先F05正式图→Vue。全73路由全新结构、全部按钮/弹窗/状态图、真实后端/生产、宝塔发布及用户签收仍未完成，完整目标保持进行中。
+
+## 2026-09-08 · F04b发现弹窗焦点与快捷读取验证
+
+上一轮243941a交付读取生命周期修复，属于实际进展。本轮从main/243941a干净起点领取DI03及反向DI04；读取AGENTS、Feature Map、蓝图导航/发现合同、Discovery/useModalDialog、既有ConfirmDialog/ResponsiveFilterDrawer首末焦点方式及永久E2E。UI技能路由选择无障碍技能，用于可理解名称、焦点约束/归还和内层点击；按实施计划的永久测试要求复用仓库Playwright与既有依赖，没有代理或新服务能力。已异步请用户给出F00具体方向意见，未自动批准。
+
+先新增真实Vue回归再改源码。五项red全部失败：两模式遮罩关闭后打开前控件inactive、两模式首控件Shift+Tab未聚焦末项、搜索框名称实际为“⌕ Enter”。仅DiscoveryOverlay增加mousedown.self.prevent避免遮罩默认动作抢走已归还焦点，局部handleTab实现当前可见/可用/tabIndex非负首末循环，搜索框aria-label为“搜索关键词”；不改全局useModalDialog、CSS、其他模态消费者或Escape处理。搜索筛选/输入长度/提交、权限和API不变。原五项修复后5/5通过（19.4s），未改期望或接受新截图。
+
+永久ui-phase2-discovery-shell-contracts.spec.ts新增17项，现31项：DI03两模式三取消路径返焦6、首焦点/双向首末Tab2、内层点击/字段焦点2；DI01输入名称1；DI04快捷旧成功/403分别在同dialog切search、关闭重开create、真实RouterLink去/me卸载后到达6。快捷六例保留真实fetch、只剥离目标读取AbortSignal并等待原requestfinished，不用硬刷新或请求取消凑通过；所有这些发现入口无观测业务非GET。前批读取归属代码无需再改；/me只是卸载边界，不声称其业务全链通过。
+
+验证按最小→完整执行：typecheck:web通过；五项定向通过后，现31项合同+原m02-03-navigation-shell22项+m02-05-discovery3项桌面56/56（1.2m）、移动56/56（1.1m），失败/跳过0，未更新任何截图基线。新合同桌面1440×1000、移动390×844；原模块部分用例主动调整断点，不宣称56项全部固定视口。red/定向重复执行不叠加成覆盖率。源映射两项定向通过，再运行检查器/清单31项及API/组件边界门通过；build:web含辅助运行包、vue-tsc和Vite通过（12.04s），verify:frontend-budget通过251资产，verify:static-analysis通过390文件；没有重新安装依赖。
+
+共享合同第9节记录当前事实及限制，第2/3节重绑Discovery九项及LF hash（0c87aed8077f0fc34773a49a6f031c47c382ccf0b83de4d1add972e71b9f8fb2），其中三签名变化、六项行移动；原取消语义保留并登记focus.cycle，旧表由243941a追溯。报告新增第9节、Feature Map同步局部焦点和31项用例边界，PLAN/EXECUTION只调整下一领取点。实跑源对账164文件/28合同/1478候选全部有稳定引用、1641引用含125历史/26重复、73路由规格issues=0，Web指纹4cd7ea35c482fbd76c3efe83bfd6f7635ff07dfe3f228f6a0bcdbed3a2502bc2。全局baseline/actions/dialogs/coverage、旧图及审批记录未改，G0未冻结、用户通过0。
+
+最终门通过：verify:docs为73路由/60受保护/6角色/153文件，verify:runtime-docs、显式Prettier及format:check通过，git diff --check通过。上述仅为本地代码/文档门，不证明真实权限或生产。
+
+清理未完成：临时根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-discovery-focus-20260908（创建前不存在），包含red/targeted/desktop/mobile。只读核实19文件、9子目录、无ReparsePoint、所有后代在精确范围内；原生PowerShell递归删除在启动前被执行策略拒绝（blocked by policy），未重试或改用其他工具绕过。目录仍保留且不纳入Git，需要用户在允许的环境中处理后关闭清理项。此前27批（原26批及243941a读取批）不重试清理。正常dist、依赖缓存及浏览器辅助运行包保留，临时失败图/trace不算正式设计图。red、定向、桌面、移动及单测/构建句柄均已终态；最终4101/5173无监听，无本批遗留服务。
+
+本批未改API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、业务写入、查询范围、主题持久化、.env/配置、端口、依赖或部署器；没有新环境变量/调节参数，相关配套同步不适用。生产未操作，无当前重启；发布仍在计划W09经既有宝塔流程及当次迁移/停启预检。剩余DI01/DI05参数/状态重试、DI06近期入口/所有快捷键目标、其他共享模态调用方、跨组织真实权限、读屏/其他浏览器/全主题缩放等仍未关闭。正式F00方向、73路由新结构和全套图、真实Vue/业务/生产、宝塔发布及用户签收目标保持进行中。
