@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P32 工作区 / C方向审核稿</title>
+    <link rel="stylesheet" href="workspaces.css" />
+    <script defer src="data.js"></script>
+    <script defer src="workspaces.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>P32 设计审核稿 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">审核状态</label
+      ><select id="scene-picker"></select>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="shell">
+      <aside class="blue-directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>工作区</h1>
+        <nav aria-label="本页目录">
+          <a href="#catalog" aria-current="true">工作区目录</a><a href="#detail">治理详情</a>
+        </nav>
+        <p class="note">明确数据边界<br />历史业务事实保留</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <h2 id="reason-title"></h2>
+          <button type="button" id="reason-close" aria-label="关闭原因填写">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少2个字）</label
+        ><textarea
+          id="reason-input"
+          required
+          minlength="2"
+          maxlength="500"
+          aria-describedby="reason-help"
+        ></textarea>
+        <p id="reason-help">最多500个字符。随操作者、时间和目标一同记录。</p>
+        <footer>
+          <button type="button" id="reason-cancel">取消</button
+          ><button type="submit" id="reason-confirm" class="primary">确认提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04工作区 / WORKSPACES-C-r1
+
+收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过46场景双端92图、两原因变体，HTTP/console/pageerror/存储均0。README93本地链接存在，98根目录永久文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过；4101/5173无监听。仅106本批文件精确提交，不含生产源码/旧材料/临时产物，browser/context已关闭，无临时文件待清理。
+
+从干净main/b72725f接续，上一P30批有已提交进展。按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P32/组织治理合同→实际父子Vue、原因窗/路由/服务/仓库/原m06-01夹具定位。ui-skills-root选择frontend-design，Playwright复用既有依赖/永久脚本，无子代理。
+
+新增[92图](design/workspaces-direction-c/README.md)，46场景双端含2非业务审核工具图；蓝目录/白目录与治理详情、新建三字段内联表单、归档/恢复两原因窗。五张统计卡压成摘要，移动按目录→详情，选中可直接聚焦；目检后压缩行距并去手机重复说明。原始1条/十条夹具分别保留，摘要8/列表1及缺失时间不补造。筛选空保留选择、范围合计非去重人数、默认不可归档直接解释。
+
+永久助手执行真实子Vue函数/computed，显式触发watch回调核对8条分页/筛选/缩页夹紧/移除选中回退/空列表自动创建、创建trim/焦点/busy/失败留草稿/成功取消清空；不称实际Vue响应性测试。父函数三body/取消与实际服务slug/原因/动作验证有证据；UI拒绝大写而服务转小写差异保留。源码工作区归档事务/默认保护仅阅读，未执行SQL/幂等/权限/审计。首轮测试目标在排序后不在当前页，修正测试定位再通过，不改分页规则；原型空态取消不被render自动重开、HTML pattern转义及原始slug空格检查已核对。46场景首轮通过，目检修订后重采，最终收尾门另记。
+
+无生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署变更，无重启要求。92PNG、原型/data/README/evidence和两脚本永久交付，无临时脚本/文件/下载/日志/服务，browser/context finally关闭，历史材料不动。具体图审、OG-G01–G06、真实生命周期/范围切换/主题密度/角色/200%/软键盘及全73页实现部署仍待办，下一P33团队。
+
 ## 2026-09-08 · W04成员与邀请 / MEMBERS-C-r1
 
 收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过47场景双端94图，四原因变体；HTTP/console/pageerror/存储均0。README95本地链接存在，100份根目录永久文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过；4101/5173无监听，浏览器已关闭。仅108本批文件精确提交，不含生产源码/旧材料/临时文件，无临时产物待清理。

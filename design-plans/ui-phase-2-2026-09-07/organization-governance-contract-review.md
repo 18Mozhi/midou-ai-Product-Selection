@@ -1,5 +1,7 @@
 # F04 组织治理八页事实与交互合同
 
+2026-09-08 P32设计增量：[WORKSPACES-C-r1](design/workspaces-direction-c/README.md)46场景双端92图、2原因变体。源子Vue函数/computed及手动watch回调、父3body和服务验证器离线核对过滤/8条分页/保留选择/创建忙碌和草稿；不是挂载Vue或SQL/权限/审计证明。源列表按钮覆role=listitem在提案改原生button置于li，原因max500、缺失计数不当零、创建错误就近与未知结果禁重复只在提案。默认归档后端保护/真实事务未改未验，OG-G01–G06及具体稿/全站门保持待办；下一P33团队。
+
 2026-09-08 P30设计增量：[MEMBERS-C-r1](design/members-direction-c/README.md)47场景双端94PNG、四原因窗。源函数/computed在惰性绑定核对四版本body、邀请规范化/部分失败、有效状态及10条分页；服务校验不是API/数据库/权限证据。OG-G02权限中断遗漏未处理邮箱与notice覆盖已复现；保留尾部只在提案，真实403页面归属仍待办。原因max500和键盘循环仅独立稿验证，自身/最后管理员规则不改，不声称事务/幂等或邮件验收通过。具体稿、OG-G01–G06及全站门待办；下一P32工作区，P31已有稿待审。
 
 2026-09-08 P29设计增量：[ORG-PROFILE-C-r1](design/organization-profile-direction-c/README.md)74PNG，37场景双端含2非业务工具图，零弹窗。源父Vue函数在惰性ref/api中验证精确PATCH与读取/反馈，并复现OG-G02：写后load失败被消化、submit仍写success、form可能仅剩reason。提案区分写入和重读结果、保留输入与核验提示；没有修复生产。实际字段验证器和摘要方法惰性SQL检查保留组织归属、零计数、audit_logs七日口径、非枚举时区及原工作区选项规则；不是实际Vue/API/MySQL/审计。原夹具摘要工作区8/选项1差异保留。OG-G01–G06、具体图审与全站门保持待办，下一P30成员与邀请；下文未出正式方向是历史状态，C已选择但各具体稿未批准。
