@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P58 配额管理 · C方向审核稿</title>
+    <link rel="stylesheet" href="commercial.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">ScoutOps<small class="small">平台运营</small></div>
+        <p class="nav-caption">组织与资源</p>
+        <div class="active">配额管理</div>
+        <div class="side-note">
+          <p>方案是基础值<br />组织是使用范围</p>
+          <p class="draft-note">C方向已选择<br />本页具体稿待审</p>
+        </div>
+      </aside>
+      <main>
+        <header class="header">
+          <div>
+            <h1>配额管理</h1>
+            <p class="muted">核对方案，再处理组织的周期与额度。</p>
+          </div>
+          <span class="review">P58 · 商业配额审核稿</span>
+        </header>
+        <div id="app"></div>
+        <section class="scene-review" aria-label="审核工具">
+          <label for="scene">审核场景（仅本地模拟）</label
+          ><select id="scene"></select>
+          <p class="draft-note">
+            原型不连接任何接口；样例、分页及错误均非真实运营结果。深色/高对比/密度是审核工具，不是新增业务配置。
+          </p>
+        </section>
+      </main>
+    </div>
+    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-desc"></dialog>
+    <script src="data.js"></script>
+    <script src="source-logic.js"></script>
+    <script src="commercial.js"></script>
+  </body>
+</html>
