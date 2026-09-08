@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>审批中心 · C方向待审稿</title>
+    <link rel="stylesheet" href="approval.css" />
+    <script src="data.js" defer></script>
+    <script src="approval.js" defer></script>
+  </head>
+  <body>
+    <header class="identity">
+      <b>ScoutOps <span>人工审批</span></b
+      ><span>当前工作区</span>
+    </header>
+    <section class="review" aria-label="独立审稿工具">
+      <label for="scene-picker">P25 · 待审核</label
+      ><select id="scene-picker"></select
+      ><a href="README.md">全图与证据说明</a>
+    </section>
+    <div id="app"></div>
+    <dialog id="detail-dialog" aria-labelledby="detail-title"></dialog>
+    <dialog id="form-dialog" aria-labelledby="form-title"></dialog>
+    <dialog id="publish-dialog" aria-labelledby="publish-title"></dialog>
+  </body>
+</html>
