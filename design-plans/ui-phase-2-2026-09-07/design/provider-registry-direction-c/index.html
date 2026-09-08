@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>P46 来源设置 · C方向待审稿</title>
+    <link rel="stylesheet" href="registry.css" />
+    <script defer src="data.js"></script>
+    <script defer src="source-logic.js"></script>
+    <script defer src="registry.js"></script>
+  </head>
+  <body>
+    <header class="brand"><strong>ScoutOps</strong><span>来源管理 · 离线设计稿</span></header>
+    <main id="app"></main>
+    <dialog id="preview" aria-labelledby="preview-title"></dialog>
+    <dialog id="editor" aria-labelledby="editor-title"></dialog>
+    <aside class="review" aria-label="非业务审核工具">
+      <label for="scene">审核场景（非产品功能）<select id="scene"></select></label>
+      <p>
+        PROVIDER-REGISTRY-C-r1 ·
+        所有网络读写只记录离线意图。选择对应场景查看模拟结果；没有生产启用。
+      </p>
+      <p><a href="README.md">完整图册与未验边界</a></p>
+    </aside>
+  </body>
+</html>

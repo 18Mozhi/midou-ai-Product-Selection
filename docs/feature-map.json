@@ -608,6 +608,7 @@
       "statusDetail": "module_verified"
     },
     "providerRegistry": {
+      "uiPhase2CProposal": "PROVIDER-REGISTRY-C-r1 at design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/README.md: P46 63 scenes, 126 dual-viewport main and 50 continuous dialog-part PNG, 176 total including two review-tool shots. Blue source directory/step identity with white seven-column list and four-step 23-field editor; five filters/templates, 20/5 pagination and mobile preview preserved. Actual source-derived inert functions/service and exact POST/PUT checks; read-only field residual, local date shift, stale save closing new editor and misleading reload message reproduced. Ownership/unknown-result/focus/accurate status handling are proposals only; no production API/env/dependency/DB changes. PR-G01 admission discrepancy, concrete review, full lifecycle/theme/density/RBAC/SQL/collection and all 73-page Vue/BaoTa acceptance pending; next P47.",
       "module": "M03-01",
       "entrypoints": [
         "../apps/api/src/provider-registry-service.ts",
