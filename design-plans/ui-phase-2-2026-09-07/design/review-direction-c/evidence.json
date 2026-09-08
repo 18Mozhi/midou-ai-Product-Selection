@@ -1,0 +1,759 @@
+{
+  "version": "REVIEW-C-r1",
+  "approval": "pending",
+  "capturedAt": "2026-09-08T10:40:13.400Z",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/index.html": "15f90ea562fa58660478d2ecf0b1fcbab1762867a60ef1d78499013190308a66",
+    "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/data.js": "b0a453f03ab492d27e6b30c02eab7f675a105ffd4e7c8b0859afe46f4c74afa1",
+    "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/review.js": "8b46ddd9d4c10377a09dd74bd809a3f81b88e98420d3e90398b293cbc09db9ed",
+    "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/review.css": "68244eff85000fadde6437f4e144a5e7fd9b57db66f9550fc7c31f0b1aba6bc5",
+    "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/insights.css": "247ac4a1390cac8338fe2097d1e906255cf8ad66977f646df7a8fe5b5158dff9",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+    "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+    "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+    "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
+    "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
+    "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/api/src/opportunity-service.ts": "a43b52911778c4e85a84dd0d25607fab481a358441ad1b5254f770f19cca820e",
+    "apps/api/src/mysql-opportunity-repository.ts": "43929fd67d85b38b6e882d9221e0a657dfc7e99a54b405ffae6d35627037793f",
+    "apps/api/src/opportunity-routes.ts": "d65b60404750432d0290c0e71f22c0d4c09756fed95914063b78ac03a41e5546",
+    "apps/api/src/ai-analysis-service.ts": "14e6508b948dd4750e1cdbd7a8edaabe4b30cff95c8f669b2ba9376add747d83",
+    "apps/api/src/ai-analysis-routes.ts": "3be83fa5cac4cd8e79ead49e8a7bb416be38d34537559f65fd9afc3b2e775b5e",
+    "apps/api/src/mysql-ai-analysis-repository.ts": "57fb8645d4adada444ea550f805b55efdff730d83e42df36ff46a5be6e5afccb",
+    "apps/worker/src/ai-analysis-worker.ts": "fff857f45d5e82c3370814e886fbcbbea27dcdf2e2db5bff78d76a9f443e8633",
+    "tests/e2e/m04-07-ai-analysis.spec.ts": "ef3ad47882958fbb9e336a608feec62252aadb05b26d2fdbf373ee6a9b8d50f6",
+    "tests/m04-02/business-lineage.test.mjs": "4399eaadabb31d526b83a6376dcf5b0a1edad7da39e4f95ffea9f2b220ba621c",
+    "tests/m04-02/operating-feedback.test.mjs": "f9b8806c0f6b69c36b7a52a2766879f37f72939325cd8f1a6d7768d25106e3ae",
+    "scripts/lib/ui-phase2-review-design-data.mjs": "a0517a4c32557951d74c2147cd0fb0a243d2563bdc45672de15056cc595811b9",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891"
+  },
+  "knownGaps": {
+    "aiReadFailureKeepsOldResults": true,
+    "malformedAiResponseBecomesEmpty": true,
+    "reviewClosesBeforeWriteAndFailure": true,
+    "frontendReviewMin2BackendMin1Max1000": true,
+    "lineageNullAgeRenderedAsZero": true,
+    "sourceFixed": false
+  },
+  "boundary": "Historical isolated AI/lineage/operating-feedback fixtures; source functions and inert repository read adapters, no real Vue/API/DB/RBAC/worker/production. Lineage fixture retains opportunity-1 and its routes separately from the AI fixture; no cross-object causal graph. Scenario mutations are explicitly synthetic. Calibration is calculated by extracted repository code offline, never by the browser or from AI output.",
+  "screenshots": [
+    {
+      "file": "1440-ai.png",
+      "scene": "ai",
+      "width": 1440,
+      "modal": false,
+      "sha256": "3687e027790f632eef9c3b4076c0df4c924f1663ac96dbef7c9b2040aa52bfee"
+    },
+    {
+      "file": "1440-ai-details.png",
+      "scene": "ai-details",
+      "width": 1440,
+      "modal": false,
+      "sha256": "dbeb8ff84ba5c81bc76573ee956c27ef6f5a792f4673d0c9a5f54893b25979e3"
+    },
+    {
+      "file": "1440-ai-empty.png",
+      "scene": "ai-empty",
+      "width": 1440,
+      "modal": false,
+      "sha256": "5d327f689185fc70644899a6d69fbad4644ed95f6da4ebd492cfbb31e53dba3c"
+    },
+    {
+      "file": "1440-ai-loading.png",
+      "scene": "ai-loading",
+      "width": 1440,
+      "modal": false,
+      "sha256": "97a1cc5d50da92524ebca90bed7d1b3ed008e62aadf322f51bc5dc45f2736284"
+    },
+    {
+      "file": "1440-ai-error.png",
+      "scene": "ai-error",
+      "width": 1440,
+      "modal": false,
+      "sha256": "1f3c0ab8b10b2420a7c879ab5f8223df8b6789a8d70016f0256635e0f4f424cb"
+    },
+    {
+      "file": "1440-ai-stale-error.png",
+      "scene": "ai-stale-error",
+      "width": 1440,
+      "modal": false,
+      "sha256": "1b275165dc48899f4f2796769794819a077fa92cba1fb801343172e769a645b7"
+    },
+    {
+      "file": "1440-ai-malformed.png",
+      "scene": "ai-malformed",
+      "width": 1440,
+      "modal": false,
+      "sha256": "f565cdd2ebf97c0aeea103e69c6c67214ef64e6f626ae8ee68a0dd89fa40c1c5"
+    },
+    {
+      "file": "1440-ai-readonly.png",
+      "scene": "ai-readonly",
+      "width": 1440,
+      "modal": false,
+      "sha256": "20e234b4c5a352630dcc9f40c66579ba8c180f4a116d70cc3d98536bb1b468e3"
+    },
+    {
+      "file": "1440-ai-queued.png",
+      "scene": "ai-queued",
+      "width": 1440,
+      "modal": false,
+      "sha256": "cbe5a53af4940a23c8ef9327690ab92ebbbf6e59d8e8fcef9bdaea548dc028f7"
+    },
+    {
+      "file": "1440-ai-leased.png",
+      "scene": "ai-leased",
+      "width": 1440,
+      "modal": false,
+      "sha256": "444e62b2cb2b053609dd7de99c024c20c02b5c9ecae21e0eae05b2daba6c7502"
+    },
+    {
+      "file": "1440-ai-retry.png",
+      "scene": "ai-retry",
+      "width": 1440,
+      "modal": false,
+      "sha256": "e6eeabbcf7c8d43eadce2120e98072c31fa800f5320b7069b4bc798a2e4e8eff"
+    },
+    {
+      "file": "1440-ai-terminal.png",
+      "scene": "ai-terminal",
+      "width": 1440,
+      "modal": false,
+      "sha256": "7a630e20f4f48b4708d08264bb10ba694bdd0f8de0a780e41b44c3f25f39ab02"
+    },
+    {
+      "file": "1440-ai-dead-letter.png",
+      "scene": "ai-dead-letter",
+      "width": 1440,
+      "modal": false,
+      "sha256": "c44e7df81e1b248eccc97d8b3c1dd6a8801a500840413e497961ed907ab03f68"
+    },
+    {
+      "file": "1440-ai-approved.png",
+      "scene": "ai-approved",
+      "width": 1440,
+      "modal": false,
+      "sha256": "9e5a36ac49e96111ccd27d8fcba9e7af98eacbd5e28e858a50352997e62c08c7"
+    },
+    {
+      "file": "1440-ai-rejected.png",
+      "scene": "ai-rejected",
+      "width": 1440,
+      "modal": false,
+      "sha256": "2acdf2a5cea7037c516b01b411276674613a98cdc1d79543b7b36b78a614486c"
+    },
+    {
+      "file": "1440-ai-multiple.png",
+      "scene": "ai-multiple",
+      "width": 1440,
+      "modal": false,
+      "sha256": "e7577820b592272c987551d9ec6506be53140eb116d5d9c6e4a830727afd3ee4"
+    },
+    {
+      "file": "1440-ai-queue-busy.png",
+      "scene": "ai-queue-busy",
+      "width": 1440,
+      "modal": false,
+      "sha256": "feb48f05ff1e95ac8812de1c254f94ed6077d4a41257616f2fe5c5ced10bd951"
+    },
+    {
+      "file": "1440-ai-queue-success.png",
+      "scene": "ai-queue-success",
+      "width": 1440,
+      "modal": false,
+      "sha256": "6daea9e96e8ebd0c553e407efbbdeccb0ad56beecd976a5afed17f8dade4982d"
+    },
+    {
+      "file": "1440-ai-queue-failed.png",
+      "scene": "ai-queue-failed",
+      "width": 1440,
+      "modal": false,
+      "sha256": "18bf33842967d75c896f89efb15e7fb6c3b593d8bfceed4f38fa13abae035b61"
+    },
+    {
+      "file": "1440-ai-reload-error.png",
+      "scene": "ai-reload-error",
+      "width": 1440,
+      "modal": false,
+      "sha256": "b80ffe7df0d3fff2393dcfdf8b63dc7a2282a31ccce0eb3d5c13d02ba351015f"
+    },
+    {
+      "file": "1440-approved-empty.png",
+      "scene": "approved-empty",
+      "width": 1440,
+      "modal": true,
+      "sha256": "a2584a9fdc319e67db2b69d3fdd672ce3026a9e65014ce0dc08c5072de952b27"
+    },
+    {
+      "file": "1440-approved-filled.png",
+      "scene": "approved-filled",
+      "width": 1440,
+      "modal": true,
+      "sha256": "3bcf1b4d23f8cd4e1dca343be64ab4919497772182ce4bd7dae2f05ed5c351d2"
+    },
+    {
+      "file": "1440-approved-busy.png",
+      "scene": "approved-busy",
+      "width": 1440,
+      "modal": true,
+      "sha256": "cf76124c07445fe164a9543253231467585909350d42139c46a855e434bd2be4"
+    },
+    {
+      "file": "1440-approved-failed.png",
+      "scene": "approved-failed",
+      "width": 1440,
+      "modal": true,
+      "sha256": "64b8cd5b42a778144c8f41597a550184709d4a63ac310f74de70d96e34a91bf4"
+    },
+    {
+      "file": "1440-rejected-empty.png",
+      "scene": "rejected-empty",
+      "width": 1440,
+      "modal": true,
+      "sha256": "408058a23f12937eb22b311335a4ad66cfd5283d3ff82110b0be995759f6434f"
+    },
+    {
+      "file": "1440-rejected-filled.png",
+      "scene": "rejected-filled",
+      "width": 1440,
+      "modal": true,
+      "sha256": "b8f84f3d8e2b67d1804da616e452fe6031754c5ada7609bca5b3bcc29890701f"
+    },
+    {
+      "file": "1440-rejected-busy.png",
+      "scene": "rejected-busy",
+      "width": 1440,
+      "modal": true,
+      "sha256": "fbe90aca6b90aa285d2faa1b66aedcec5f4603601ffcafec3627fc7ee8ecc3df"
+    },
+    {
+      "file": "1440-rejected-failed.png",
+      "scene": "rejected-failed",
+      "width": 1440,
+      "modal": true,
+      "sha256": "3e909aac5d20938bf8dde5d73aad7c5c06367edf06073568440b6e013e9b95e9"
+    },
+    {
+      "file": "1440-review-unknown.png",
+      "scene": "review-unknown",
+      "width": 1440,
+      "modal": true,
+      "sha256": "4701aa9b91db886956efade8b84f2ef8c9e2c88e1ae1f77dff9518fb99964e4c"
+    },
+    {
+      "file": "1440-lineage.png",
+      "scene": "lineage",
+      "width": 1440,
+      "modal": false,
+      "sha256": "41c6d47e4e2a2f463ceda94694d98adf3b71b2feab3c8b7ae52c5a32588455ac"
+    },
+    {
+      "file": "1440-lineage-details.png",
+      "scene": "lineage-details",
+      "width": 1440,
+      "modal": false,
+      "sha256": "1d94e9416b61bf9635e259782af65206164cf88ffafa1d1072dbe797dcbde7d8"
+    },
+    {
+      "file": "1440-lineage-empty.png",
+      "scene": "lineage-empty",
+      "width": 1440,
+      "modal": false,
+      "sha256": "887277cbd44ed96156efd9e728fd78caa64e8859919fd0720bfe7c18a9a6f25c"
+    },
+    {
+      "file": "1440-lineage-age-unknown.png",
+      "scene": "lineage-age-unknown",
+      "width": 1440,
+      "modal": false,
+      "sha256": "1a1e3ad889aae3dafe73fa85561149a482f59e6040fc3fce1d3cd2f86ed7354a"
+    },
+    {
+      "file": "1440-lineage-no-correlation.png",
+      "scene": "lineage-no-correlation",
+      "width": 1440,
+      "modal": false,
+      "sha256": "d309395dc76beec1d979ac9fe4cd5796ba71538f2ee9d27e8df8db823ac1a4f6"
+    },
+    {
+      "file": "1440-lineage-degraded.png",
+      "scene": "lineage-degraded",
+      "width": 1440,
+      "modal": false,
+      "sha256": "d8d4387c6972db11638e46f5968eb1e24b7585f5a45b7f09a3fdf8e14bec8cf1"
+    },
+    {
+      "file": "1440-lineage-none.png",
+      "scene": "lineage-none",
+      "width": 1440,
+      "modal": false,
+      "sha256": "16d7fbee32c5203ab26af013e9d5a158587756d0d535cd94aad6dfae7e8c4871"
+    },
+    {
+      "file": "1440-feedback.png",
+      "scene": "feedback",
+      "width": 1440,
+      "modal": false,
+      "sha256": "b45542b377a7b2c9260819bae6daf09e0d7603c73c02690b1f9c61e5e44c08a7"
+    },
+    {
+      "file": "1440-feedback-details.png",
+      "scene": "feedback-details",
+      "width": 1440,
+      "modal": false,
+      "sha256": "bedf5d0345bbcfab9e67d9b780170166d9a3b2c34ea922be98ec3dc0b139a134"
+    },
+    {
+      "file": "1440-feedback-empty.png",
+      "scene": "feedback-empty",
+      "width": 1440,
+      "modal": false,
+      "sha256": "86fc5babe5c0d48e2a4fa02bc2ee66eda9781d53d1225c0ab6feb988a637f4fb"
+    },
+    {
+      "file": "1440-feedback-incomparable.png",
+      "scene": "feedback-incomparable",
+      "width": 1440,
+      "modal": false,
+      "sha256": "1f2392b96637b72899cee31d9677f9e701f6dc8c81bc3c2284d0e2c244492a48"
+    },
+    {
+      "file": "1440-feedback-zero.png",
+      "scene": "feedback-zero",
+      "width": 1440,
+      "modal": false,
+      "sha256": "656507da16a7c5bd9771b42efb7a191d6768678b290fde69f7d43a94dfb71177"
+    },
+    {
+      "file": "1440-feedback-loss.png",
+      "scene": "feedback-loss",
+      "width": 1440,
+      "modal": false,
+      "sha256": "f2f14877ef95f9438f1c145bfdf1ed7fb73948f854b5b5d29afd59b79d53e7aa"
+    },
+    {
+      "file": "1440-feedback-readonly.png",
+      "scene": "feedback-readonly",
+      "width": 1440,
+      "modal": false,
+      "sha256": "0c4ba22b3dac42ecdf45472afbd8b460a404cc370d670e3c200b17abe76fc5df"
+    },
+    {
+      "file": "1440-form.png",
+      "scene": "form",
+      "width": 1440,
+      "modal": false,
+      "sha256": "393af1e485206e38e047f053823d029b4ee2a1d05b1dafd84e88254c7a414677"
+    },
+    {
+      "file": "1440-form-filled.png",
+      "scene": "form-filled",
+      "width": 1440,
+      "modal": false,
+      "sha256": "1f6a183fd76dc86c2b10a3cb43bd9e7654c23fe95b6bf8dc3efd9c784deeb8f4"
+    },
+    {
+      "file": "1440-form-busy.png",
+      "scene": "form-busy",
+      "width": 1440,
+      "modal": false,
+      "sha256": "702049e17be2befeadf2860c1377891b4095b089416003f9d530f419554e1daf"
+    },
+    {
+      "file": "1440-form-failed.png",
+      "scene": "form-failed",
+      "width": 1440,
+      "modal": false,
+      "sha256": "a000dc21da8b2dd3570853c0b6a840e53472331522b7b8a4e69c52aa36cfe42a"
+    },
+    {
+      "file": "1440-form-period.png",
+      "scene": "form-period",
+      "width": 1440,
+      "modal": false,
+      "sha256": "f360fcdd0ce41bb0037f539a6c88e5fa016bf06d8bb190bcdab0647568ec2f37"
+    },
+    {
+      "file": "1440-form-returns.png",
+      "scene": "form-returns",
+      "width": 1440,
+      "modal": false,
+      "sha256": "97ad951ce39cc16461c3db59eff436b7866a6df1c6a965e8b119a4f0adf9b4ba"
+    },
+    {
+      "file": "1440-form-success.png",
+      "scene": "form-success",
+      "width": 1440,
+      "modal": false,
+      "sha256": "18144eba9b96be4a56c1ecf0cf5232fefeeb63bc5deb6add7c8e3c9859680328"
+    },
+    {
+      "file": "1440-form-unknown.png",
+      "scene": "form-unknown",
+      "width": 1440,
+      "modal": false,
+      "sha256": "6cde7ed1bbb40b128f7044865f108b5cef52e350d31ad1afe0dd560ce299d18c"
+    },
+    {
+      "file": "390-ai.png",
+      "scene": "ai",
+      "width": 390,
+      "modal": false,
+      "sha256": "8b815337461d59e7ab06136d9a01f4da4f28523fc235df0ce74b13dbda8c7e7c"
+    },
+    {
+      "file": "390-ai-details.png",
+      "scene": "ai-details",
+      "width": 390,
+      "modal": false,
+      "sha256": "f718020d7fdfd6d7660bda8c0c635f8b04bc4728b43f5e7a268cc06b7d379ff3"
+    },
+    {
+      "file": "390-ai-empty.png",
+      "scene": "ai-empty",
+      "width": 390,
+      "modal": false,
+      "sha256": "c2f0fb840d2f35d5e0ba8da39aff31f54ba48b2685c3461dc0d3b0e58e225e8c"
+    },
+    {
+      "file": "390-ai-loading.png",
+      "scene": "ai-loading",
+      "width": 390,
+      "modal": false,
+      "sha256": "7496ffd4a68d853b14294ec43c29aecb765161ae2a212237753ec0d718ac2d57"
+    },
+    {
+      "file": "390-ai-error.png",
+      "scene": "ai-error",
+      "width": 390,
+      "modal": false,
+      "sha256": "06f3aa083a55b5d60beb960443c6013faa39ae8507ae1ff2f242bfa3a6d50ae9"
+    },
+    {
+      "file": "390-ai-stale-error.png",
+      "scene": "ai-stale-error",
+      "width": 390,
+      "modal": false,
+      "sha256": "cc6f6fe1112e2664a11a33588027c5d2f5762c98a3e588c5346a2310852773ad"
+    },
+    {
+      "file": "390-ai-malformed.png",
+      "scene": "ai-malformed",
+      "width": 390,
+      "modal": false,
+      "sha256": "d82258fdf7a06abb6a8fe1ed06af518b780f23b7554f8dc762225693c82bdc7c"
+    },
+    {
+      "file": "390-ai-readonly.png",
+      "scene": "ai-readonly",
+      "width": 390,
+      "modal": false,
+      "sha256": "4c4bcac7a224e333aa93d66e1406b56abbfb5fccb97b5c8fba83e9bb6507af4e"
+    },
+    {
+      "file": "390-ai-queued.png",
+      "scene": "ai-queued",
+      "width": 390,
+      "modal": false,
+      "sha256": "6016064c56ade8cc5b7875bfea820a5efa626b94aaade7bc32683e099842690b"
+    },
+    {
+      "file": "390-ai-leased.png",
+      "scene": "ai-leased",
+      "width": 390,
+      "modal": false,
+      "sha256": "4a09b5a0e195d15a82e04321755eb6ddb8d166939692d2a63263f2c23058af0c"
+    },
+    {
+      "file": "390-ai-retry.png",
+      "scene": "ai-retry",
+      "width": 390,
+      "modal": false,
+      "sha256": "fa2f9dea9818f9be44d9bdebaf4054e8b6bc91c41d6ae9714a7f1115be8c7f0e"
+    },
+    {
+      "file": "390-ai-terminal.png",
+      "scene": "ai-terminal",
+      "width": 390,
+      "modal": false,
+      "sha256": "be588f2c3aac3917869bb9b6d96bcfd14a3096e8d16985b53187982a1f8e6449"
+    },
+    {
+      "file": "390-ai-dead-letter.png",
+      "scene": "ai-dead-letter",
+      "width": 390,
+      "modal": false,
+      "sha256": "9d078c707f03f68b09242610a3b477a621caa7ab49c6c6ba0c562a66930195b5"
+    },
+    {
+      "file": "390-ai-approved.png",
+      "scene": "ai-approved",
+      "width": 390,
+      "modal": false,
+      "sha256": "026d9c83668bc7d301f4054157940cfa3c8ba02684f76f103e0ccb650d77c732"
+    },
+    {
+      "file": "390-ai-rejected.png",
+      "scene": "ai-rejected",
+      "width": 390,
+      "modal": false,
+      "sha256": "c6acb8e9c2c1a480ec0a68538c434fd9ad3936ee4a5eb848e23ce840d626907b"
+    },
+    {
+      "file": "390-ai-multiple.png",
+      "scene": "ai-multiple",
+      "width": 390,
+      "modal": false,
+      "sha256": "e283276935d5f3c874dc6e147f65675e120551a3cb418cef01190dded83b2d9f"
+    },
+    {
+      "file": "390-ai-queue-busy.png",
+      "scene": "ai-queue-busy",
+      "width": 390,
+      "modal": false,
+      "sha256": "40f2122bd89172fe695df9b4b2ad158ab8fc2e371bfbc97089e741be359b8b41"
+    },
+    {
+      "file": "390-ai-queue-success.png",
+      "scene": "ai-queue-success",
+      "width": 390,
+      "modal": false,
+      "sha256": "6bf4d2222df479b0ca7b75dd0618fe57fbfd9ef19af4cb197a7b41cb78603290"
+    },
+    {
+      "file": "390-ai-queue-failed.png",
+      "scene": "ai-queue-failed",
+      "width": 390,
+      "modal": false,
+      "sha256": "c1878b4fc3cf44bf0162b66c1afd23427ae6342c06ba5e65286bdb6fc7f70b7d"
+    },
+    {
+      "file": "390-ai-reload-error.png",
+      "scene": "ai-reload-error",
+      "width": 390,
+      "modal": false,
+      "sha256": "7f3ff84467682bc9576b19d007f0aedd33a359579d21323187635e46642e9199"
+    },
+    {
+      "file": "390-approved-empty.png",
+      "scene": "approved-empty",
+      "width": 390,
+      "modal": true,
+      "sha256": "5111cc540ea764567e5e30c8ccb3317b4b25ff1bbcb5236ecd954601f3ae3f4e"
+    },
+    {
+      "file": "390-approved-filled.png",
+      "scene": "approved-filled",
+      "width": 390,
+      "modal": true,
+      "sha256": "0d93bfb93854df06be09ece819cfc7201a33275ca736733109befad0b26592fb"
+    },
+    {
+      "file": "390-approved-busy.png",
+      "scene": "approved-busy",
+      "width": 390,
+      "modal": true,
+      "sha256": "903ddd42f436e850bc48de43de2b50b5926fb1bbe8cf161c988840c8f9536754"
+    },
+    {
+      "file": "390-approved-failed.png",
+      "scene": "approved-failed",
+      "width": 390,
+      "modal": true,
+      "sha256": "41eebd4c46468762bd1ce5601e56709e5bcb8808e8657645d8caaf7195837a44"
+    },
+    {
+      "file": "390-rejected-empty.png",
+      "scene": "rejected-empty",
+      "width": 390,
+      "modal": true,
+      "sha256": "7f7615ff1a4475f2097071d42d71036c8034443d7c87e69fb3b8e96512bde4e9"
+    },
+    {
+      "file": "390-rejected-filled.png",
+      "scene": "rejected-filled",
+      "width": 390,
+      "modal": true,
+      "sha256": "79187e9f9260c2d6b5bb9baee12a5664b34db2704ccf6a1455a1592f09978b56"
+    },
+    {
+      "file": "390-rejected-busy.png",
+      "scene": "rejected-busy",
+      "width": 390,
+      "modal": true,
+      "sha256": "a6dc9a9f5f1d06fef7b4a9867acbaed7ffdc8b01de6862504a692c254c24e471"
+    },
+    {
+      "file": "390-rejected-failed.png",
+      "scene": "rejected-failed",
+      "width": 390,
+      "modal": true,
+      "sha256": "dc06a07bd39a00a42b610377c2a1fe4dbdd85c7d8957f158bd4e890a99127e33"
+    },
+    {
+      "file": "390-review-unknown.png",
+      "scene": "review-unknown",
+      "width": 390,
+      "modal": true,
+      "sha256": "9733f8d795d428abb1e4ec046fb9d8f20a1a6a5d298dc8e3cd9c603651702fcf"
+    },
+    {
+      "file": "390-lineage.png",
+      "scene": "lineage",
+      "width": 390,
+      "modal": false,
+      "sha256": "9da4e970df2e26444257c5b5b3fd30232599375ecba44db9dd4ba215588600e6"
+    },
+    {
+      "file": "390-lineage-details.png",
+      "scene": "lineage-details",
+      "width": 390,
+      "modal": false,
+      "sha256": "627a56c09a7e6f78a022cf6025d19c7a176601eaa83967cb1e28f41cb3f66dff"
+    },
+    {
+      "file": "390-lineage-empty.png",
+      "scene": "lineage-empty",
+      "width": 390,
+      "modal": false,
+      "sha256": "7b9f3204e682eed69f2588e9ed5a823befe84a2e1be6d8339864ead1387d9e9c"
+    },
+    {
+      "file": "390-lineage-age-unknown.png",
+      "scene": "lineage-age-unknown",
+      "width": 390,
+      "modal": false,
+      "sha256": "fc7de69ea34a27b551002fcdf2b91ee3da4f0acc5420b2d77ecf31a5550f7315"
+    },
+    {
+      "file": "390-lineage-no-correlation.png",
+      "scene": "lineage-no-correlation",
+      "width": 390,
+      "modal": false,
+      "sha256": "5f41a7920d758cef4429630b83fba16210f8d37106cdfc881211b9d6ec49522f"
+    },
+    {
+      "file": "390-lineage-degraded.png",
+      "scene": "lineage-degraded",
+      "width": 390,
+      "modal": false,
+      "sha256": "3ac6485ed7d46ea9a86202558a74d4fe2df2b6db8b2ec05cc1ddfb84a7326928"
+    },
+    {
+      "file": "390-lineage-none.png",
+      "scene": "lineage-none",
+      "width": 390,
+      "modal": false,
+      "sha256": "40f5a97c0c9f440c78d52615636fb4559a1c4e3c39abbe7c1d70d7f296503ae1"
+    },
+    {
+      "file": "390-feedback.png",
+      "scene": "feedback",
+      "width": 390,
+      "modal": false,
+      "sha256": "a8e7f3147b3b0b7a546b092d7d282e8896c317dc6d12b3cbd5fe956d63863f37"
+    },
+    {
+      "file": "390-feedback-details.png",
+      "scene": "feedback-details",
+      "width": 390,
+      "modal": false,
+      "sha256": "da8821bdf4d6ee61805a61ce3e65adf1a694854d35b9bd47f28dd6303c279d52"
+    },
+    {
+      "file": "390-feedback-empty.png",
+      "scene": "feedback-empty",
+      "width": 390,
+      "modal": false,
+      "sha256": "55e499d25079925b8cbc4c5ee78d4181a8b3826caf61c7c5b0887822342598bb"
+    },
+    {
+      "file": "390-feedback-incomparable.png",
+      "scene": "feedback-incomparable",
+      "width": 390,
+      "modal": false,
+      "sha256": "6bf766de95154f1b8b465ae1706879916382e2743b6a5faaee77d31452f7a0fc"
+    },
+    {
+      "file": "390-feedback-zero.png",
+      "scene": "feedback-zero",
+      "width": 390,
+      "modal": false,
+      "sha256": "310b8d0e946ee5f6edcc2c5b10c7605aeb879b58316fd7ae3cec56b7eb1805a3"
+    },
+    {
+      "file": "390-feedback-loss.png",
+      "scene": "feedback-loss",
+      "width": 390,
+      "modal": false,
+      "sha256": "f2f8088dc57a4896379d2590c3ad09b98fa8328fcde7dde12f8cee6f54a8c3b8"
+    },
+    {
+      "file": "390-feedback-readonly.png",
+      "scene": "feedback-readonly",
+      "width": 390,
+      "modal": false,
+      "sha256": "4d462f44a72e7d15660a7ae75a5e96d70703b7592b3d66121ef3e545cea25de8"
+    },
+    {
+      "file": "390-form.png",
+      "scene": "form",
+      "width": 390,
+      "modal": false,
+      "sha256": "18bcc31417f3f9ea87e91291ec1e31f9145ab17a5a2530019f56b0cc36911cae"
+    },
+    {
+      "file": "390-form-filled.png",
+      "scene": "form-filled",
+      "width": 390,
+      "modal": false,
+      "sha256": "3638662a26dcd41eafdbac8d82d07a0bb769b67eb7c22c665a53b5012cbd8815"
+    },
+    {
+      "file": "390-form-busy.png",
+      "scene": "form-busy",
+      "width": 390,
+      "modal": false,
+      "sha256": "2b9818d27283de229ba96a84969f59e9f448fc13b0ec3a93fb2bd86460caaadb"
+    },
+    {
+      "file": "390-form-failed.png",
+      "scene": "form-failed",
+      "width": 390,
+      "modal": false,
+      "sha256": "72a12dd54d3d705c5b44f1a936d322f475d27c22738fc5fac98a760b902c1e37"
+    },
+    {
+      "file": "390-form-period.png",
+      "scene": "form-period",
+      "width": 390,
+      "modal": false,
+      "sha256": "e26aa5d90ad8aa40cc38b21195be7b3cb9c0400d0e3477895ace6e1e95c239e2"
+    },
+    {
+      "file": "390-form-returns.png",
+      "scene": "form-returns",
+      "width": 390,
+      "modal": false,
+      "sha256": "01f6fcfce7f3bf260c858ed2df4cbdfe5a8a093f66509d56c14c6148a0b7097d"
+    },
+    {
+      "file": "390-form-success.png",
+      "scene": "form-success",
+      "width": 390,
+      "modal": false,
+      "sha256": "65321223b2b2aa0e5bc7f9a0041e9cea933d34494a6c5328cd0325d1e860a07d"
+    },
+    {
+      "file": "390-form-unknown.png",
+      "scene": "form-unknown",
+      "width": 390,
+      "modal": false,
+      "sha256": "9c80ceeac1c270706ae2cea8cc1efe223281b4caecba74a257503ee64639382b"
+    }
+  ]
+}

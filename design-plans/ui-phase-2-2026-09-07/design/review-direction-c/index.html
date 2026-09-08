@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P18 · AI、血缘与复盘 / C 方向待审图稿</title>
+    <link rel="stylesheet" href="review.css" />
+    <script defer src="data.js"></script>
+    <script defer src="review.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <strong>C / 待审核</strong><label for="scene">场景</label
+      ><select id="scene"></select
+      ><a href="README.md">查看全部图稿</a>
+    </div>
+    <div id="app"></div>
+    <dialog id="review-dialog" aria-labelledby="review-title"></dialog>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => window.REVIEW_C.start());
+    </script>
+  </body>
+</html>

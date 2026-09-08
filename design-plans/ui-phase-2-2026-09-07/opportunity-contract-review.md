@@ -122,3 +122,11 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 永久助手执行实际loadDownstream，验证4种能力组合、当前机会严格关联与供应input_type过滤、搜索候选累计非去重；供应Promise.all失败会隐藏本轮竞品成功并保留旧数组，已复现未改Vue。执行3种POST并验证：竞品空body，供应input_type/input_ref，评分expected_version；前二成功不load，评分成功load一次，任何排队不等于新事实。后台GET能力与前端manage推导不在本批认证真实RBAC。
 
 未知结果先核对、成功后重读失败保留排队事实且先禁重复提交、目录/来源展开与busy保护均为待审提案；有准确证据的拒绝才提供明确重试，模拟错误不绑定未核实的API错误码。本批零HTTP/存储，无真实服务、数据库或幂等写入，不注销OP07–OP10、G0–G5。AI/血缘/复盘及两种AI原因继续，整合和审核/实现/部署仍待办。
+
+## 10. P18辅助与复盘C方向接续（2026-09-08）
+
+[REVIEW-C-r1](design/review-direction-c/README.md)51场景双端102PNG，补AI/血缘/复盘首轮业务稿，2抽检原因弹窗与11字段表单。源函数验证生成expected_version、抽检outcome/trim notes、复盘11字段/大写币种/提交时observed_at/当前version；抽检取消不写，队列/抽检成功load并切AI，复盘成功仅替换反馈/清来源说明而保留数值日期。
+
+执行实际useAuditedReason+dialog submit+reviewAi复现先关窗再write且失败仍关闭；loadAi失败保留旧数组、非数组变[]已复现，模板旧列表在状态条件外。图稿标旧数据、异常不退空、失败原因可恢复、取消后重开清空和未知结果保护均未改Vue。前端原因≥2，后端≥1且≤1000，保留前端最小值并补上限，不改变业务。血缘null age coalesce0为静态模板证据，未宣称正常源仓库会产生该组合。
+
+实际仓库lineage/operatingFeedback经惰性读适配器执行，生成11类节点与历史/不同币种/零/亏损四快照；验证9次查询scope参数但不等于SQL隔离认证。分组节点无因果边，完整失败码、相关ID和URL保留；复盘最多20条不称完整周期，calibration仅由源仓库离线生成，浏览器不重算。任意表单变更无预置返回只记录意图不伪造成功。P18四批仍待组合和完整状态/主题/密度/竞态验证，具体审核、真实Vue及全73页部署签收未完成。
