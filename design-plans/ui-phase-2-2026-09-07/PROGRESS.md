@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P14趋势 / TREND-C-r1
+
+收尾实测：最终capture及无参数源/数据/图哈希复验均通过68场景双端和请求/模态/治理/只读刷新检查；146PNG、150个README链接齐全。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本）及diff检查通过。生产源码、旧P12/P43稿、coverage diff为空。浏览器finally关闭，4101/5173无监听，无新增临时遗留；精确暂存本批交付，不把隔离图稿检查计为真实Vue或生产验收。
+
+从干净main/a488716继续；上批P12提交属于具体进展。依AGENTS/Feature Map/总纲读取P14合同、六组件/共享筛选/就绪函数、趋势/异常/刷新后端和UI2-TR夹具。ui-skills-root选frontend-design，改为蓝色三模式与白色单焦点列表/详情；四业务弹窗和治理内联表单保持职责。新增[146图](design/trend-direction-c/README.md)：68场景双端136主图+10长弹窗下部，具体稿待审。
+
+永久助手抽取历史夹具和规则默认/选项，执行实际规则提交/治理提议函数及后端重复词拒绝；合成第二主题/来源点/长文/分页与状态显式标注。执行实际applyFilters→syncFromRoute复现全部变active，markIrrelevant的write=null仍关窗清原因，两缺口未修复。新稿保留失败草稿、空status URL、启用且缺时间不标暂停，模态焦点与busy均属待审改进。首先修正新renderer模板闭合语法，再运行首轮双端通过；目检后长弹窗增加固定标题，截图仅保留实际模态视口而不展示视口外背景，整批复测。
+
+未修改Vue/API/OpenAPI、权限/数据库、配置、依赖、旧图、coverage和审批；不调用真实原文/剪贴板/采集/治理，不部署或重启。图/证据/脚本为永久交付，无新临时服务或目录，不处理历史受限材料。P14真实实现、具体审稿及全73页闭环继续，下一业务面P15机会列表/工作台。
+
 ## 2026-09-08 · P12首页 / HOME-C-r1
 
 收尾：最终capture及无参数源/数据/图哈希复验均通过32场景双端、十市场POST与首条PATCH；64PNG、68个README链接齐全。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、最终format:check（2脚本）通过；diff检查通过，生产/旧稿/coverage未改。浏览器finally关闭，4101/5173无监听，无新增临时遗留，精确暂存本批交付。

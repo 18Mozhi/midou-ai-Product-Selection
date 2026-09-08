@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P14 趋势 · C方向审核稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="trend.css" />
+    <script defer src="data.js"></script>
+    <script defer src="view.js"></script>
+    <script defer src="trend.js"></script>
+  </head>
+  <body>
+    <div class="review-tools">
+      <label>审核场景<select id="scene"></select></label
+      ><small>隔离图稿 · 不访问网络，不执行采集或治理</small>
+    </div>
+    <div class="trend-frame">
+      <aside class="mode-rail">
+        <b class="wordmark">SCOUTOPS</b>
+        <div>
+          <small>MARKET / P14</small>
+          <h1>热点趋势</h1>
+          <p>先读信号，再核对证据。</p>
+        </div>
+        <nav id="modes" aria-label="热点趋势视图"></nav>
+        <p class="rail-note">C方向 / 本页三个工作模式<br />不是全站导航替代物</p>
+      </aside>
+      <main id="content"></main>
+    </div>
+    <footer class="review-foot">
+      UI2-TR隔离样例及明确合成变体，非实时市场数据。状态、焦点、忙碌和失败保留改进仅为待审提案，当前Vue未修复。共享壳层另行整合。
+    </footer>
+    <dialog id="modal" aria-labelledby="modal-title"></dialog>
+  </body>
+</html>

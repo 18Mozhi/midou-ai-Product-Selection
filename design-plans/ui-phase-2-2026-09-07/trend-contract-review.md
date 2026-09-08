@@ -1,5 +1,7 @@
 # P14 趋势页动作、弹窗与验收合同
 
+2026-09-08 C提案：[TREND-C-r1](design/trend-direction-c/README.md)146图：68场景双端+10长弹窗下部。助手直接执行现有applyFilters/syncFromRoute和markIrrelevant确认全部状态回active与失败关窗清原因；本稿对应保护未修改真实Vue。TrendRuleDialog.submit/TrendChangeQueue.submitProposal请求与真实validateMonitoringRuleInput重复词400从源码导出；已启用规则无next_collection_at的新稿显示尚未设置，不用旧模板已暂停标签覆盖状态。所有交互只隔离模拟，不注销UI2-TR08–12及真实治理/生产待办。
+
 2026-09-07；N01源码复核；main/bc4ca78。本文件不更改全站生成物和分母。产品指纹c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183。候选来源actions/dialogs.json，源码为唯一语义依据；测试均为真实Vue加隔离响应，不代表生产、DB、审计事务、真实RBAC或用户设计通过。
 
 ## 1. 源码与真实边界
