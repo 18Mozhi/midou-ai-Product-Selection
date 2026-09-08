@@ -499,3 +499,357 @@ for (const outcome of ["success", "forbidden"] as const) {
     });
   }
 }
+
+for (const value of ["", "字", "   "]) {
+  test(`UI2-DI01 short query ${JSON.stringify(value)} has a linked local error and sends no request`, async ({
+    page,
+  }) => {
+    const { writes } = await setup(page);
+    let requests = 0;
+    await page.route("**/api/v1/me/global-search?**", (route) => {
+      requests += 1;
+      return route.fulfill({ json: searchResult("不应请求") });
+    });
+    const dialog = await openSearch(page);
+    const input = dialog.getByRole("textbox", { name: "搜索关键词" });
+    await input.fill(value);
+    await input.press("Enter");
+    await expect(input).toHaveAttribute("aria-invalid", "true");
+    const description = await input.getAttribute("aria-describedby");
+    expect(description).toBeTruthy();
+    await expect(dialog.locator(`[id="${description}"]`)).toHaveText("请输入至少 2 个字符后搜索。");
+    await expect(dialog.locator(".ui-state-panel")).toHaveCount(0);
+    await expect(input).toBeFocused();
+    expect(requests).toBe(0);
+    expect(writes).toEqual([]);
+  });
+}
+
+test("UI2-DI01 valid resubmission clears the linked error and earlier request identifiers", async ({
+  page,
+}) => {
+  const { writes } = await setup(page);
+  let requests = 0;
+  await page.route("**/api/v1/me/global-search?**", (route) => {
+    requests += 1;
+    if (requests === 1)
+      return route.fulfill({
+        status: 403,
+        json: {
+          error: { code: "forbidden", message: "拒绝", action_hint: "旧请求提示" },
+          request_id: "ui2-old-invalid",
+          trace_id: "ui2-old-trace",
+        },
+      });
+    return route.fulfill({ json: searchResult("修正后的结果") });
+  });
+  const dialog = await openSearch(page);
+  const input = dialog.getByRole("textbox", { name: "搜索关键词" });
+  await input.fill("旧请求");
+  await input.press("Enter");
+  await expect(dialog.getByText("ui2-old-invalid", { exact: true })).toBeVisible();
+  await input.fill("字");
+  await input.press("Enter");
+  await expect(input).toHaveAttribute("aria-invalid", "true");
+  await expect(dialog.getByText("ui2-old-invalid", { exact: true })).toHaveCount(0);
+  await expect(dialog.getByText("旧请求提示", { exact: true })).toHaveCount(0);
+  expect(requests).toBe(1);
+  await input.fill("修正查询");
+  await input.press("Enter");
+  await expect(dialog.getByRole("link", { name: /修正后的结果/ })).toBeVisible();
+  await expect(input).not.toHaveAttribute("aria-invalid", "true");
+  await expect(input).not.toHaveAttribute("aria-describedby", "discovery-query-error");
+  await expect(dialog.locator("#discovery-query-error")).toHaveCount(0);
+  expect(requests).toBe(2);
+  expect(writes).toEqual([]);
+});
+
+test("UI2-DI06 recent entries reorder without duplication and reset on shell unmount", async ({
+  page,
+}) => {
+  const { writes } = await setup(page, (route, shell) =>
+    route.fulfill({
+      json: envelope(
+        shell === "platform_admin"
+          ? platform
+          : { ...member, capabilities: [...member.capabilities, "sourcing:read"] },
+      ),
+    }),
+  );
+  const entries = [
+    ...quickActions,
+    {
+      id: "sourcing",
+      label: "发起找货",
+      description: "进入供应链搜索",
+      route: "/sourcing?create=1",
+      required_capability: "sourcing:read",
+    },
+  ];
+  await page.route("**/api/v1/me/quick-actions?**", (route) =>
+    route.fulfill({ json: envelope(entries) }),
+  );
+  const dialog = page.getByRole("dialog", { name: "快捷创建" });
+  const labels = dialog.locator(".discovery-results a strong");
+  const reopen = async () => {
+    await page.getByRole("button", { name: "创建选品", exact: true }).click();
+    await expect(labels).toHaveCount(2);
+  };
+  await reopen();
+  await expect(labels).toHaveText(["创建任务", "发起找货"]);
+  for (const label of ["发起找货", "创建任务", "创建任务"]) {
+    await dialog.getByRole("link", { name: new RegExp(label) }).click();
+    await expect(page).toHaveURL(
+      label === "发起找货" ? /\/sourcing\?create=1$/ : /\/tasks\?create=1$/,
+    );
+    await expect(dialog).toBeHidden();
+    await page.goBack();
+    await expect(page).toHaveURL(/\/home$/);
+    await reopen();
+    await expect(labels.first()).toHaveText(label);
+    await expect(dialog.getByRole("link", { name: new RegExp(label) })).toContainText("最近使用");
+  }
+  await expect(labels).toHaveText(["创建任务", "发起找货"]);
+  await page.keyboard.press("Escape");
+  await page
+    .locator(".role-top-actions")
+    .getByRole("link", { name: "个人中心", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/me$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/home$/);
+  await reopen();
+  await expect(labels).toHaveText(["创建任务", "发起找货"]);
+  await expect(dialog.getByText(/最近使用/)).toHaveCount(0);
+  expect(writes).toEqual([]);
+});
+
+for (const shortcut of ["Control+K", "Meta+K"]) {
+  test(`UI2-DI06 ${shortcut} reuses member search and is inactive in the platform shell`, async ({
+    page,
+  }) => {
+    await setup(page);
+    const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+    await trigger.focus();
+    await page.keyboard.press(shortcut);
+    const dialog = page.getByRole("dialog", { name: "全局搜索" });
+    const input = dialog.getByRole("textbox", { name: "搜索关键词" });
+    await expect(input).toBeFocused();
+    await input.fill("保留输入");
+    await page.keyboard.press(shortcut);
+    await expect(input).toHaveValue("保留输入");
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+    await enterPlatform(page);
+    await expect(page.locator('.role-shell[data-shell="platform_admin"]')).toHaveAttribute(
+      "data-state",
+      "ready",
+    );
+    await page.keyboard.press(shortcut);
+    await paint(page);
+    await expect(dialog).toBeHidden();
+  });
+}
+
+test("UI2-DI01 invalid replacement cannot inherit an older search response or failure identifiers", async ({
+  page,
+}) => {
+  await ignoreTransportAbort(page, "/me/global-search?");
+  await setup(page);
+  let delayed: Route | undefined;
+  let finished = false;
+  page.on("requestfinished", (request) => {
+    if (request === delayed?.request()) finished = true;
+  });
+  await page.route("**/api/v1/me/global-search?**", (route) => {
+    delayed = route;
+  });
+  const dialog = await openSearch(page);
+  const input = dialog.getByRole("textbox", { name: "搜索关键词" });
+  await input.fill("旧搜索");
+  await input.press("Enter");
+  await expect.poll(() => Boolean(delayed)).toBe(true);
+  await input.fill("字");
+  await input.press("Enter");
+  await expect(input).toHaveAttribute("aria-invalid", "true");
+  await delayed!.fulfill({ json: searchResult("不应回填的结果") });
+  await expect.poll(() => finished).toBe(true);
+  await paint(page);
+  await expect(dialog.getByText("不应回填的结果", { exact: true })).toHaveCount(0);
+  await expect(input).toHaveAttribute("aria-invalid", "true");
+  await page.keyboard.press("Escape");
+  await openSearch(page);
+  await expect(input).not.toHaveAttribute("aria-invalid", "true");
+});
+
+test("UI2-DI01 exact search parameters follow type and trim rules without sending scope IDs", async ({
+  page,
+}) => {
+  const { writes } = await setup(page);
+  const queries: Record<string, string>[] = [];
+  await page.route("**/api/v1/me/global-search?**", (route) => {
+    queries.push(Object.fromEntries(new URL(route.request().url()).searchParams));
+    return route.fulfill({ json: searchResult("参数验证结果") });
+  });
+  const dialog = await openSearch(page);
+  const input = dialog.getByRole("textbox", { name: "搜索关键词" });
+  await input.fill("  合同查询  ");
+  const types = ["task", "opportunity", "evidence", "collection_task", ""];
+  const states = ["todo", "ready", "active", "queued", ""];
+  for (let index = 0; index < types.length; index += 1) {
+    const type = types[index];
+    await dialog.getByLabel("对象类型").selectOption(type);
+    await expect(dialog.getByLabel("状态")).toHaveValue("");
+    if (type) await dialog.getByLabel("状态").selectOption(states[index]);
+    if (["task", "opportunity"].includes(type))
+      await dialog.getByLabel("负责人").fill("  负责人甲  ");
+    else {
+      await expect(dialog.getByLabel("负责人")).toBeDisabled();
+      await expect(dialog.getByLabel("负责人")).toHaveValue("");
+    }
+    await input.press("Enter");
+    await expect.poll(() => queries.length).toBe(index + 1);
+    expect(queries[index]).toEqual({
+      q: "合同查询",
+      limit: "10",
+      ...(type ? { resource_type: type, status: states[index] } : {}),
+      ...(["task", "opportunity"].includes(type) ? { assignee: "负责人甲" } : {}),
+    });
+    await expect(dialog.getByRole("link", { name: /参数验证结果/ })).toBeVisible();
+  }
+  await expect(input).toHaveAttribute("maxlength", "100");
+  expect(writes).toEqual([]);
+});
+
+for (const mode of ["search", "create"] as const) {
+  for (const [statusCode, kind] of [
+    [401, "expired"],
+    [403, "forbidden"],
+    [409, "error"],
+    [429, "blocked"],
+    [500, "error"],
+    [503, "blocked"],
+  ] as const) {
+    test(`UI2-DI05 ${mode} ${statusCode} retry owns loading identifiers and stays in its mode`, async ({
+      page,
+    }) => {
+      const { writes } = await setup(page);
+      const pattern =
+        mode === "search" ? "**/api/v1/me/global-search?**" : "**/api/v1/me/quick-actions?**";
+      const requests: string[] = [];
+      let retrying = false;
+      let pending: Route | undefined;
+      await page.route(pattern, (route) => {
+        requests.push(route.request().url());
+        if (retrying) {
+          pending = route;
+          return;
+        }
+        return route.fulfill({
+          status: statusCode,
+          json: {
+            error: {
+              code: "isolated_failure",
+              message: "隔离读取失败",
+              action_hint: "当前请求受阻",
+            },
+            request_id: "ui2-previous-read",
+            trace_id: "ui2-previous-trace",
+          },
+        });
+      });
+      if (mode === "search") {
+        const dialog = await openSearch(page);
+        await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("隔离查询");
+        await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
+      } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
+      const dialog = page.getByRole("dialog");
+      const panel = dialog.locator(".ui-state-panel");
+      await expect(panel).toHaveAttribute("data-kind", kind);
+      await expect(panel.getByText("ui2-previous-read", { exact: true })).toBeVisible();
+      const before = requests.length;
+      retrying = true;
+      await panel.getByRole("button", { name: "重新加载", exact: true }).click();
+      await expect.poll(() => Boolean(pending)).toBe(true);
+      await expect(panel).toHaveAttribute("data-kind", "loading");
+      await expect(panel.getByText("ui2-previous-read", { exact: true })).toHaveCount(0);
+      await expect(panel.getByText("ui2-previous-trace", { exact: true })).toHaveCount(0);
+      await expect(panel.getByRole("button")).toHaveCount(0);
+      expect(requests).toHaveLength(before + 1);
+      expect(new Set(requests).size).toBe(1);
+      await pending!.fulfill({
+        json: mode === "search" ? searchResult("本次重试结果") : envelope(quickActions),
+      });
+      await expect(
+        dialog.getByRole("link", { name: mode === "search" ? /本次重试结果/ : /创建任务/ }),
+      ).toBeVisible();
+      await expect(panel).toHaveCount(0);
+      expect(writes).toEqual([]);
+    });
+  }
+}
+
+test("UI2-DI05 forbidden secondary action closes the overlay instead of a dead permission claim", async ({
+  page,
+}) => {
+  const { writes } = await setup(page);
+  await page.route("**/api/v1/me/global-search?**", (route) =>
+    route.fulfill({
+      status: 403,
+      json: {
+        error: { code: "forbidden", message: "拒绝", action_hint: "无权读取" },
+        request_id: "ui2-denied",
+        trace_id: "ui2-denied",
+      },
+    }),
+  );
+  const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+  await trigger.focus();
+  const dialog = await openSearch(page);
+  const input = dialog.getByRole("textbox", { name: "搜索关键词" });
+  await input.fill("权限检查");
+  await input.press("Enter");
+  const secondary = dialog.locator(".ui-state-panel").getByRole("button").nth(1);
+  const label = await secondary.textContent();
+  await secondary.click();
+  await expect(dialog).toBeHidden();
+  expect(label?.trim()).toBe("关闭");
+  await expect(trigger).toBeFocused();
+  expect(writes).toEqual([]);
+});
+
+for (const mode of ["search", "create"] as const) {
+  test(`UI2-DI05 ${mode} empty state offers a real retry and explicit dismissal`, async ({
+    page,
+  }) => {
+    const { writes } = await setup(page);
+    await page.route(
+      mode === "search" ? "**/api/v1/me/global-search?**" : "**/api/v1/me/quick-actions?**",
+      (route) =>
+        route.fulfill({
+          json: envelope(
+            mode === "search"
+              ? {
+                  items: [],
+                  next_cursor: null,
+                  scope: { organization_id: org, workspace_id: workspace },
+                }
+              : [],
+          ),
+        }),
+    );
+    if (mode === "search") {
+      const dialog = await openSearch(page);
+      await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("没有结果");
+      await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
+    } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
+    const dialog = page.getByRole("dialog");
+    const panel = dialog.locator(".ui-state-panel");
+    await expect(panel).toHaveAttribute("data-kind", "empty");
+    await expect(panel.getByRole("button", { name: "重新加载", exact: true })).toBeEnabled();
+    await panel.getByRole("button", { name: "关闭", exact: true }).click();
+    await expect(dialog).toBeHidden();
+    expect(writes).toEqual([]);
+  });
+}

@@ -91,6 +91,7 @@ const props = defineProps<{
   emit = defineEmits<{ close: [] }>(),
   request = createApiClient(props.apiBaseUrl);
 const query = ref(""),
+  queryError = ref(""),
   resourceType = ref(""),
   status = ref(""),
   assignee = ref(""),
@@ -125,6 +126,7 @@ watch(
     requestId.value = "";
     traceId.value = "";
     actionHint.value = "";
+    queryError.value = "";
     results.value = [];
     actions.value = [];
     await nextTick();
@@ -148,6 +150,8 @@ async function get<T>(path: string, apply: (data: T) => void): Promise<void> {
   activeRead = controller;
   state.value = "loading";
   actionHint.value = "";
+  requestId.value = "";
+  traceId.value = "";
   try {
     const response = await request<T>(path, { signal: controller.signal });
     if (current !== readSequence || controller.signal.aborted || !props.open) return;
@@ -173,9 +177,15 @@ async function search() {
   const value = query.value.trim();
   if (value.length < 2) {
     invalidateRead();
-    state.value = "error";
+    state.value = "idle";
+    requestId.value = "";
+    traceId.value = "";
+    actionHint.value = "";
+    queryError.value = "请输入至少 2 个字符后搜索。";
+    input.value?.focus();
     return;
   }
+  queryError.value = "";
   const params = new URLSearchParams({ q: value, limit: "10" });
   if (resourceType.value) params.set("resource_type", resourceType.value);
   if (status.value) params.set("status", status.value);
@@ -264,10 +274,13 @@ watch(resourceType, () => {
               maxlength="100"
               autocomplete="off"
               aria-label="搜索关键词"
+              :aria-invalid="queryError ? 'true' : undefined"
+              :aria-describedby="queryError ? 'discovery-query-error' : undefined"
               placeholder="输入至少 2 个字符"
               @keydown.enter.prevent="search"
             /><kbd>Enter</kbd></label
           >
+          <p v-if="queryError" id="discovery-query-error" role="alert">{{ queryError }}</p>
           <div class="discovery-filters" aria-label="搜索筛选">
             <label
               >对象类型<select v-model="resourceType" aria-label="对象类型">
@@ -322,7 +335,9 @@ watch(resourceType, () => {
           :trace-id="traceId"
           :action-hint="actionHint"
           primary-label="重新加载"
+          secondary-label="关闭"
           @primary="mode === 'search' ? search() : loadActions()"
+          @secondary="emit('close')"
         />
         <div v-else class="discovery-results">
           <RouterLink v-for="item in results" :key="item.id" :to="item.route" @click="navigateAway"

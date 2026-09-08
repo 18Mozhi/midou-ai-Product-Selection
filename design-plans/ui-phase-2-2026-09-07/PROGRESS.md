@@ -890,3 +890,26 @@ verify:docs通过73路由/60受保护/6角色/153文件，verify:runtime-docs通
 清理未完成：临时根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-discovery-focus-20260908（创建前不存在），包含red/targeted/desktop/mobile。只读核实19文件、9子目录、无ReparsePoint、所有后代在精确范围内；原生PowerShell递归删除在启动前被执行策略拒绝（blocked by policy），未重试或改用其他工具绕过。目录仍保留且不纳入Git，需要用户在允许的环境中处理后关闭清理项。此前27批（原26批及243941a读取批）不重试清理。正常dist、依赖缓存及浏览器辅助运行包保留，临时失败图/trace不算正式设计图。red、定向、桌面、移动及单测/构建句柄均已终态；最终4101/5173无监听，无本批遗留服务。
 
 本批未改API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、业务写入、查询范围、主题持久化、.env/配置、端口、依赖或部署器；没有新环境变量/调节参数，相关配套同步不适用。生产未操作，无当前重启；发布仍在计划W09经既有宝塔流程及当次迁移/停启预检。剩余DI01/DI05参数/状态重试、DI06近期入口/所有快捷键目标、其他共享模态调用方、跨组织真实权限、读屏/其他浏览器/全主题缩放等仍未关闭。正式F00方向、73路由新结构和全套图、真实Vue/业务/生产、宝塔发布及用户签收目标保持进行中。
+
+## 2026-09-08 · F04b搜索字段校验与状态恢复
+
+上一目标轮7a7feac提交1.27计划是实际进展；本轮从main/7a7feac接管原E2E未提交227行和三个red失败终态，执行3.18第一批，不重写计划。UI技能路由选择无障碍技能，具体用于字段错误关联/提示和真实状态操作；按实施计划永久测试要求复用Playwright与现有依赖，无代理。
+
+只改DiscoveryOverlay三个问题：短查询保持trim后至少2字符的规则，使用queryError、aria-invalid、aria-describedby及alert表达本地错误，聚焦输入、清旧标识/提示并失效旧读；合法提交和重开清本地错误。每次GET开始清request/trace，避免把上次失败编号显示成当前加载编号。状态面板显式关闭按钮响应secondary，不再继承没有处理函数的申请权限/返回/筛选文案。未改共享UiStatePanel、最近入口算法、快捷键规则或API客户端。
+
+永久E2E相对3c1ebae新增24项，当前55项。DI01三类非法输入、失败到非法再到合法、真正迟到旧响应、准确四类型/全部及trim/筛选参数；DI05两模式六种HTTP状态恢复、无权次按钮返焦、两种空态关闭；DI06使用真实task/sourcing两入口验证近期顺序、去重、返回和卸载重进，Ctrl/Meta搜索重复打开保留输入以及平台壳层不打开。原先31项及模块25项保持；没有编造第六种动作、没有把组件内存称持久偏好，也不宣称全部五项排序、六角色或所有编辑目标已经验证。
+
+验证终态：
+
+- typecheck:web通过；原三个red对应场景加空串/空格扩为五项，5/5通过（27.0s）。DI01/DI05/DI06定向25/25（53.7s），包含原名称用例，不与新24项重复计数。
+- 当前55项合同加m02-03-navigation-shell/m02-05-discovery原25项，desktop-chromium 80/80后mobile-390 80/80（移动1.5m），失败/跳过0；命令使用现有playwright test、三个明确文件、workers=1和独立output，两个项目串行。合同桌面1440×1000/移动390×844；原模块部分用例自行调整断点，不声称80项都固定视口。
+- 源绑定两项定向通过；检查器20+清单11+组件边界1共32/32通过。首次命令误写api-client-boundary文件名，未计为已覆盖；定位到真实frontend-api-client-boundary后单独四项4/4通过，相关门合计36项。
+- build:web通过，含辅助运行包、vue-tsc和Vite（408模块，11.63s）；verify:frontend-budget通过251资产，verify:static-analysis通过390文件。未安装或升级依赖，未接受新视觉快照。
+
+共享合同第10节记录本批事实与限制，第2/3节按当前AST重绑Discovery九项及LF hash 6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27，三签名变更/六项行移；搜索与重试语义保留，新增discovery.close.state。Feature Map同步字段/恢复合同，报告第10节记录Web指纹f06a14ffebead7206630e36dba8f69cee836fc747fa65a6976cc91e522f41c87。只读对账仍164源/28合同/1478候选全部稳定引用，1641引用含125历史、26重复，73路由/73规格无结构问题。旧baseline/actions/dialogs/coverage、图hash及用户审批未改；G0不冻结。
+
+临时材料清理受阻：本批沿用并增加targeted/states-desktop/desktop/mobile到精确根D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-discovery-states-20260908，另有接管red。只读校验14文件、8子目录、零ReparsePoint、全部后代在已解析根内；首次只读检查的数组写法报错后已更正并重新验证，未在检查失败时删除。随后唯一一次原生PowerShell Remove-Item在启动前被策略拒绝，未重试或换工具绕过。该根仍保留、不暂存，需允许环境中处理后关闭清理项；之前28批材料不动、不宣称清理。正常dist/依赖缓存/辅助运行包保留，临时失败图不是正式图。测试/构建/单测会话均终态，4101/5173无监听，无遗留测试服务。
+
+最终文档门通过：verify:docs为73路由/60受保护/6角色/153文件，verify:runtime-docs通过，显式Prettier及format:check通过（changed=2/production=496/repositories=51）；文档补齐后的共享源绑定两项再次通过，git diff --check通过。未更改截图基线，也未把失败测试材料纳入提交。
+
+本批无API/OpenAPI、后端/Worker/Python、查询字段/范围、SQL/迁移、权限、主题持久化、.env/配置、端口、依赖或部署器变更。没有新使用参数；用户在搜索中输入至少2字符，字段错误修正后按Enter，失败面板可重试或关闭。无需当前重启，未部署；W09仍经既有宝塔发布及当次迁移/停启预检。本地隔离Vue不证明真实鉴权、MySQL或生产，剩余共享模态消费者、组织壳层/全部输入目标、辅助技术、正式风格、73路由全套新图、真实验收、部署和用户签收继续保持待办。F00未获明确意见，不自动选A/B/C。

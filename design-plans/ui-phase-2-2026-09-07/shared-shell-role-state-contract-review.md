@@ -1,6 +1,6 @@
 # F04a 共享壳层、发现、角色与状态入口合同复核
 
-日期：2026-09-08；F04a起点main/fa63241，原始交付b8773d6/498607f。第2/3节现行源绑定已随F04b修复更新；初始表由498607f追溯，读取修复后的表由243941a追溯，当前发现层焦点增量见第9节。第8/9节都是局部运行证据，静态绑定不自动冻结G0，也不是正式设计、真实权限、生产或用户审核证明。
+日期：2026-09-08；F04a起点main/fa63241，原始交付b8773d6/498607f。第2/3节现行源绑定已随F04b修复更新；初始、读取修复、焦点修复表分别由498607f、243941a、3c1ebae追溯，当前搜索与恢复增量见第10节。第8–10节都是局部运行证据，静态绑定不自动冻结G0，也不是正式设计、真实权限、生产或用户审核证明。
 
 ## 1. 范围与证据分层
 
@@ -15,7 +15,7 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | 文件 | SHA256 |
 | --- | --- |
-| apps/web/src/components/DiscoveryOverlay.vue | 0c87aed8077f0fc34773a49a6f031c47c382ccf0b83de4d1add972e71b9f8fb2 |
+| apps/web/src/components/DiscoveryOverlay.vue | 6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27 |
 | apps/web/src/components/NavigationShell.vue | 4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc |
 | apps/web/src/components/NotFoundPage.vue | 2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b |
 | apps/web/src/components/OrganizationRolePanel.vue | 104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11 |
@@ -39,15 +39,15 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/DiscoveryOverlay.vue#fc9fbb3a461cfbb6.1 | 239 | dialog-definition | discovery.dialog | 原生dialog定义；search/create两个模式，复用同一实例 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#002b8e0f6dc06a65.1 | 239 | event-binding | discovery.close.escape/backdrop; discovery.focus.cycle | cancel经handleCancel.preventDefault；仅mousedown.self.prevent取消遮罩默认抢焦；keydown Tab在可见可用首末控件循环 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#3886e9e1d2205bab.1 | 255 | control | discovery.close.button | 关闭按钮emit close；三种关闭入口分别验证返焦 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#a53c50f6e3c9041c.1 | 257 | form-event | discovery.search | submit.prevent调用search；与Enter入口共用动作 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#f528731fca76dfda.1 | 260 | event-binding | discovery.search | input keydown.enter.prevent调用search；无障碍名称为搜索关键词，不改变查询规则 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#85469c2445124f8e.1 | 303 | event-binding | discovery.retry.{mode} | UiStatePanel primary转search或loadActions；包括错误/过期/无权的现有处理 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#2954096bdfc7268c.1 | 328 | control | discovery.result.navigate.{resourceType} | RouterLink到服务端item.route；普通点击先关闭，修饰键/非左键保留窗口语义 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#eabfc750d1907e5d.1 | 339 | control | discovery.quick.navigate.{actionId} | 记录当前组件最近ID；普通点击关闭并导航item.route，不提前创建对象 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#65142520df6ee647.1 | 358 | control | discovery.notifications | member底部链接去/notifications；普通点击关闭弹窗 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#fc9fbb3a461cfbb6.1 | 249 | dialog-definition | discovery.dialog | 原生dialog定义；search/create两个模式，复用同一实例 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#002b8e0f6dc06a65.1 | 249 | event-binding | discovery.close.escape/backdrop; discovery.focus.cycle | cancel经handleCancel.preventDefault；仅mousedown.self.prevent取消遮罩默认抢焦；keydown Tab在可见可用首末控件循环 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#3886e9e1d2205bab.1 | 265 | control | discovery.close.button | 关闭按钮emit close；三种关闭入口分别验证返焦 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#6e4c847155323708.1 | 267 | form-event | discovery.search | submit.prevent调用search；与Enter入口共用动作，短查询给本地字段提示 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#422ce833775d95d6.1 | 270 | event-binding | discovery.search | input keydown.enter.prevent调用search；搜索关键词关联queryError和aria-invalid，合法重试清除错误 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#372af47cc630ef33.1 | 316 | event-binding | discovery.retry.{mode}; discovery.close.state | UiStatePanel primary转search或loadActions，新读清旧关联标识；secondary显式关闭，不假称申请权限 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#2954096bdfc7268c.1 | 343 | control | discovery.result.navigate.{resourceType} | RouterLink到服务端item.route；普通点击先关闭，修饰键/非左键保留窗口语义 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#eabfc750d1907e5d.1 | 354 | control | discovery.quick.navigate.{actionId} | 记录当前组件最近ID；普通点击关闭并导航item.route，不提前创建对象 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#65142520df6ee647.1 | 373 | control | discovery.notifications | member底部链接去/notifications；普通点击关闭弹窗 | UI2-DI01–DI06 |
 
 ### apps/web/src/components/NavigationShell.vue
 
@@ -252,3 +252,13 @@ useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后ne
 第2/3节按当前AST重绑Discovery9项及完整LF hash，候选总数仍70。243941a中的旧hash为919da075bf5a2ff859c51b86bc3686d9d873c833f713e0d7dfb48e363e3133bf；三签名变化：dialog定义ceb391d01220c696.1→fc9fbb3a461cfbb6.1，事件f3760e448f9f16ab.1→002b8e0f6dc06a65.1，输入96a9bdb48fa13865.1→f528731fca76dfda.1。原取消语义保留，并显式登记新增discovery.focus.cycle；其余六项仅行号变化，不将Tab监听伪装成新增业务写入。历史图和全局清单/审核状态不更新。
 
 五red修复后原五项通过，再跑31项现行合同+25项原模块的桌面/移动回归；原图基线未接受新快照，具体结果和清理见PROGRESS。临时根output/playwright/ui-phase2-discovery-focus-20260908单独跟踪；之前被拒绝清理的材料不重试。无生产、SQL、API/OpenAPI、配置/.env、依赖或部署器变更，无当前重启；全部正式设计与用户审核仍待F00方向。
+
+## 10. F04b搜索校验、状态恢复与近期入口
+
+产品起点3c1ebae，计划提交7a7feac保留原在途E2E；原三个red已取得失败终态。DiscoveryOverlay只修三处：短查询继续沿用trim后至少2字符规则，但改用关联输入的queryError/aria-invalid/aria-describedby和alert，清除旧标识与提示、失效旧读取并聚焦输入；合法再提交或重开时清本地错误。每次GET开始清旧request/trace标识。UiStatePanel调用方明确secondary-label为关闭并响应secondary；不再显示无handler的申请权限、返回上一页或调整筛选，不改变共享状态组件或添加业务能力。
+
+本批永久E2E新增24项，使本文件共55项：短输入三类3；旧请求失败→非法输入→合法修正1；非法输入失效真实迟到成功1；四类型/全部类型及trim/状态/负责人准确参数1；两模式×401/403/409/429/500/503重试12；无权次按钮真实关闭返焦1；两模式空态关闭2；两条真实快捷入口重排、去重、路由返回与卸载重进1；Ctrl/Meta+K保留搜索输入及平台壳层不打开2。服务端权限、SQL和范围隔离没有由这些fixture证明。
+
+DI06使用真实目录task/sourcing两条，不编第六条；最近五项上限仍是源码边界，测试不声称已证明所有五条的跨角色排序。两种快捷键覆盖成员触发按钮、搜索编辑框和平台壳层；组织壳层、所有输入目标、读屏、其他浏览器和生产仍待验。历史单入口、空入口场景与本次两入口是分别记录的局部证据，不注销整张DI06卡。
+
+第2/3节按AST重绑九项；旧LF hash为0c87aed8077f0fc34773a49a6f031c47c382ccf0b83de4d1add972e71b9f8fb2，旧表在3c1ebae。三签名变更：form a53c50f6e3c9041c.1→6e4c847155323708.1；input f528731fca76dfda.1→422ce833775d95d6.1；状态监听85469c2445124f8e.1→372af47cc630ef33.1。搜索与重试语义保留，显式新增discovery.close.state，其余六项仅行号变化；共享候选总数仍70。具体测试终态、全站只读对账及清理见PROGRESS，不更新旧图、生成清单或审批值。
