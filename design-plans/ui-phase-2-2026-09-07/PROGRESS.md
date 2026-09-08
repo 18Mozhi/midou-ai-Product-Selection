@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04组织令牌 / ORG-TOKEN-C-r1
+
+收尾：最终capture/无参数源-数据-图hash和交互复验112图通过；README113本地链接存在，118原型根文件与manifest一致，126本批路径不含生产或临时文件。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）通过；四原型Prettier首次CSS未通过，格式化后重采/复验和全部四文件Prettier通过，三JS语法与git diff --check通过。自有浏览器/CLI/验证进程已结束，无临时服务；Codex审核README打开请求返回queued，不据此认定用户已看到或批准。
+
+从干净main/8e5563b接续，按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P36/组织治理合同→真实父子Vue、共享原因窗、路由/服务/仓库及原m06-01/UI2-OG01/OG04定位。ui-skills-root CLI选择完整frontend-design，Playwright复用已有依赖和永久脚本；无安装、子代理或开发服务。
+
+新增[112图](design/org-token-direction-c/README.md)：54场景双端108主图＋创建/明文4局部图，含2非业务工具图；生命周期目录、内联最小权限创建、独立明文反馈，轮换/撤销两原因变体。桌面目录及手机长表单、长原因和明文已目检，追加局部图解决整页手机图缩小后的阅读困难。原8条夹具与固定2026-08-26 18:00上海审核时钟明确，不使用当前时钟冒充原始临期事实；全部secret为无效合成串。
+
+真实子Vue函数/computed/显式watch回调验证6条分页、5排序完整ID序列、四scope无默认、精确创建body、失败保留/成功恢复90天。实际父create/tokenAction/submit/dismiss惰性验证三body、空白原因、busy及三明文代次场景；不是挂载Vue或API/SQL。源copySecret复现OG-G05旧复制Promise完成将新明文标为copied；过期一小时的ceil负零仍临期也已复现，首轮helper正零断言纠正为源负零而非修改产品。前端归属保护、已到期提示、原因max500、忙碌草稿锁定及未知结果保护均仅提案。GET tokens会更新到期status/version；轮换新ID期限来自后端配置，不沿用创建表单，真实事务/幂等/审计本轮未执行。
+
+capture及无参数源/数据/PNG哈希和双端交互复验通过112图、两原因窗、5种排序、6/2分页、创建必填与TTL、三精确body、失败草稿、成功重置、未知禁重复、三取消返焦/Tab双边界、合成复制成功/拒绝及替换/清除/离开归属、迟到写响应和写后读失败。768/1024五边界场景通过，HTTP/console/pageerror/存储均0，不写系统剪贴板。首次验证器误指composables/use-audited-reason，定位真实src/use-audited-reason后纠正；无未解决的定向失败。
+
+112PNG、四原型文件、README/evidence及两脚本均为永久交付；没有本轮临时文件/日志/下载/服务器。所有浏览器finally关闭，技能CLI与验证会话结束，4101/5173无监听；历史临时材料不动。生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署未改，不需重启。具体稿、OG-G与完整主题/密度/角色/原生200%/软键盘/范围/异步生命周期待办，下一P37组织审计；全73页实际实现、部署及签收未完成。
+
 ## 2026-09-08 · W04组织数据 / ORG-DATA-C-r1
 
 收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过47场景双端94图、零弹窗，双端各11排序与源全序列一致；HTTP/console/pageerror/存储均0。README95本地链接存在，100根目录文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）通过；单独原型CSS格式检查曾失败，格式化后重采/复验与四原型文件Prettier、git diff --check通过。4101/5173无监听，所有自有浏览器/CLI已结束；108本批文件精确纳入提交，不含生产源码/旧材料/临时产物。
