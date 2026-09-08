@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · W04组织审计 / ORG-AUDIT-C-r1
+
+收尾：最终capture与无参数源/数据/PNG哈希及交互复验104图通过，双端50场景、零弹窗、六搜索源ID、50→55游标和复制/旧页归属均通过，HTTP/console/pageerror/存储为0。README105链接存在、110原型根文件及118任务路径与manifest一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型Prettier、git diff --check通过。4101/5173无监听，全部自有浏览器/CLI/验证进程结束，无本轮临时产物。审核README打开返回queued，不当作用户已见或批准。
+
+从干净main/56689d9接续，上一P36已提交进展。本轮跨上海日期09-08至09-09，以实际当前日期记录交付。按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P37/组织治理合同→真实父子Vue、audit路由/查询服务/MySQL仓库与m06-01用例定位。ui-skills-root CLI选择完整frontend-design，Playwright复用已有依赖和永久脚本；无安装、子代理或开发服务。
+
+新增[104图](design/org-audit-direction-c/README.md)：50场景双端100主图＋详情/高级条件4局部，含2非业务工具图，零业务弹窗。蓝色精确条件区与白色已加载时间线/详情分工，移动折叠和选中定位；原55条50/5与40连接＋10业务独立夹具不拼接。首次双端验证通过后目检修复蓝侧通用p颜色覆盖范围错误文字，增加深红计算样式断言；null上下文按源{}呈现的限制明确。首次/终态失败不露筛选、旧详情或占位数字，后台失败保留事实，分别验证。
+
+源函数/computed/显式watch核对六搜索ID序列、三结果计数、系统展开/精确动作例外、选择回退、七条件trim/ISO/范围拒绝、URL160/36初始截断与单向同步。实际copy等待中choose另一记录后仍写copied，OG-G05复现；实际loadAuditPage等待中用惰性夹具替换共享data，旧页追加到新列表，未执行完整Vue刷新并发。图稿区分读取代次和复制归属，选择变化不使正常在途读取失效；新查询失败显示旧事实范围并暂停旧游标。均只提案，生产未改。
+
+真实sanitizeMetadata验证敏感键、嵌套、数组100和depth>8，普通键下无效合成值仍可见，不称通用秘密检测。真实父auditPath/readView验证50/cursor/精确参数且审计分支无summary；父load跳过摘要来自代码核查，非挂载审计员权限证明。真实仓库list以惰性query检验两表组织参数、UNION ALL、日志恒succeeded与failed排除、排序、limit+1、nextCursor及缺失cursor拒绝；不运行SQL。旧E2E mock忽略日期，原型合成日期范围验证不冒充旧SQL覆盖。helper初次跨VM数组原型导致严格比较失败，归一化测试值后通过；一次命令括号误写已纠正，无产品改动。
+
+104PNG、四原型文件、README/evidence及两脚本均永久审核交付，无本轮临时文件/日志/下载/开发服务；既有旧轮材料不动。生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署未改，无重启要求。具体P37稿、OG-G和完整主题密度/角色/原生200%/软键盘/URL历史/异步生命周期待办；下一W05 P38平台运行概览，全73页真实实现、部署和用户签收未完成。
+
 ## 2026-09-08 · W04组织令牌 / ORG-TOKEN-C-r1
 
 收尾：最终capture/无参数源-数据-图hash和交互复验112图通过；README113本地链接存在，118原型根文件与manifest一致，126本批路径不含生产或临时文件。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）通过；四原型Prettier首次CSS未通过，格式化后重采/复验和全部四文件Prettier通过，三JS语法与git diff --check通过。自有浏览器/CLI/验证进程已结束，无临时服务；Codex审核README打开请求返回queued，不据此认定用户已看到或批准。
