@@ -1,0 +1,1530 @@
+{
+  "proposal": "CREDENTIAL-ASSETS-C-r1",
+  "sourceHashes": {
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/api/src/credential-asset-service.ts": "27c3aa04144be0cc9ffaec7aa8d3dbd39b3adf1128ba98c6abc94c04bbbc4a7d",
+    "apps/api/src/credential-asset-routes.ts": "7a860b7279ae3700719f51707762cdb6bc53b82f96dc9a50c1d3f3112be671d3",
+    "apps/api/src/mysql-credential-asset-repository.ts": "adba8e4d902e6c411633070cd607b86fb50f2a00f8445641cba9990fc64466ed",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929",
+    "scripts/lib/ui-phase2-credential-assets-design-data.mjs": "6eb1f34b79fc6227b6a2131d7793063f123eae0c0162f8dde7f2f412842066bf",
+    "scripts/verify-ui-phase2-credential-assets-c.mjs": "c53c2803496f370fa72092054d390de448fb20fef2478070e4c97e5b1d2da454",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/index.html": "e248b2490d2c37aff3060f25ec1340ca1bbc6b846925cdc13dcbfd03beb315a9",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.js": "0322e69fd04e9647ee69758826f6ac126d7fa5e4d69db37d0b7a603810fc82dc",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/data.js": "94962362bfaa449ba192533ab020bd421097c57741873348ceb1cbc6344ce022"
+  },
+  "sourceChecks": [
+    "Actual compatibility at exact expiry, active/revoked candidates and disabled manual profile defaults; ready is metadata only",
+    "Ten actual initial/preserved three-read failure paths; atomic snapshots, single flight, 12-second timer callback and unmount abort, not real elapsed timeout/KeepAlive",
+    "Actual create/rotate/manual-profile/revoke exact bodies and duplicate guards; errors retain editor and clear asset secret, no real writes",
+    "All three actual login modes: exact independent asset then active zh-CN/Asia-Shanghai profile bodies; partial success clears payload, stays open, no automatic refresh or second asset",
+    "Reproduced actual first login write failure retaining material and old failed write clearing a newly opened asset secret; no protection inferred",
+    "Reproduced actual delayed in-memory file completion repopulating closed editor and source switch retaining old payload; no OS file read",
+    "Actual file extension/byte boundaries and inert same-window helper reply: 15-second timer and delayed closed-editor repopulation; no extension called",
+    "Actual mounted exact source deep link and invalid-ID fallback to first authenticated provider; not router history lifecycle proof",
+    "Source review: asset/rotate message exists; profile message absent. UTC rotation initial value/local save and service null fallback remain unresolved contracts, not fixed"
+  ],
+  "checks": [
+    "1440: 58 scenes with continuous dialog parts; exact redacted intents, three login partial-save/recovery modes, stale material/write rejection, busy/unknown guards, keyboard/focus, columns/freeze/density, six extra breakpoints and CSS zoom2. No production Vue/auth/encryption/SQL/extension or full theme/lifecycle proof.",
+    "390: 58 scenes with continuous dialog parts; exact redacted intents, three login partial-save/recovery modes, stale material/write rejection, busy/unknown guards, keyboard/focus, columns/freeze/density, six extra breakpoints and CSS zoom2. No production Vue/auth/encryption/SQL/extension or full theme/lifecycle proof."
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "scene": "default",
+      "label": "原始夹具 · 凭证台账",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "0bea3f20c98548bbd4bb6deb49f485dc88a2e7de96c23553a1a34d70b76ae10e"
+    },
+    {
+      "file": "1440-mixed.png",
+      "width": 1440,
+      "scene": "mixed",
+      "label": "独立合成 · 到期与撤销",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "8d86550cfcfa4fae16a7707ef8b931234f4135a74a49f0e104b6a2dcb084dec8"
+    },
+    {
+      "file": "1440-profiles.png",
+      "width": 1440,
+      "scene": "profiles",
+      "label": "只读运行档案",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "205461d2a1c3d03dab2197f5c1c5450f740d5f36144857360da57c869004cc69"
+    },
+    {
+      "file": "1440-compatibility.png",
+      "width": 1440,
+      "scene": "compatibility",
+      "label": "关联检查 · 尚缺档案",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "108d0bcbe9c65cf400bb83def2c795302c8fe69d844610a168a62b500a6c80ae"
+    },
+    {
+      "file": "1440-compat-ready.png",
+      "width": 1440,
+      "scene": "compat-ready",
+      "label": "关联满足 · 不等于登录有效",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "86cdbb1a14a6c703603baf9ecf1ef66d8d3386ca3f194d6ac075ad6d05798aa5"
+    },
+    {
+      "file": "1440-columns.png",
+      "width": 1440,
+      "scene": "columns",
+      "label": "桌面列设置",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2e9dff4604de726bc83d3aedb1f95bceedd1dd2e59047e55299199dc11d605c8"
+    },
+    {
+      "file": "1440-compact.png",
+      "width": 1440,
+      "scene": "compact",
+      "label": "桌面紧凑表格",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2ab4324f753a5325c96875ae75b3f165e630d35ca0ea4aba0d2f8c9455760f99"
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "scene": "empty",
+      "label": "首次空数据",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "bd31494a8255ad4c1529016c9b12be35698d45c43a9ed45db88ed700c7b191a4"
+    },
+    {
+      "file": "1440-no-assets.png",
+      "width": 1440,
+      "scene": "no-assets",
+      "label": "仅有档案",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "f9341366a36b837e769b5529265a699cda6dcda57338e4ff6f1f5400e6d87279"
+    },
+    {
+      "file": "1440-no-profiles.png",
+      "width": 1440,
+      "scene": "no-profiles",
+      "label": "仅有资产",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2e082edde7e0611dd7cedade78a917ddd6182db61b9731d50c5f073b907a5b37"
+    },
+    {
+      "file": "1440-no-providers.png",
+      "width": 1440,
+      "scene": "no-providers",
+      "label": "无来源选项",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "4f8b7dac7705bb9eee6aefc4de34abbb2988c6a208579e24905771e37546461b"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "scene": "loading",
+      "label": "首次加载",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "cf8538d53d4046598b9a9e9c5079aa246ce53a3034028af40baafddeed395f86"
+    },
+    {
+      "file": "1440-expired.png",
+      "width": 1440,
+      "scene": "expired",
+      "label": "首次401",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "be0bc3e7ed6fd2d7ec9e114d9c9d7576b42d7ed0aa749b8ffd86b362bfe2c05c"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "label": "首次403",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "45a49df77f86bea2ee90836c5fc3a9383f2625d3f6b34c6f0b4bc60185ac88c2"
+    },
+    {
+      "file": "1440-blocked.png",
+      "width": 1440,
+      "scene": "blocked",
+      "label": "首次依赖受阻",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "1aae7768add9febcd9304f40a8f89559e8450b029318180f67b9ddba39fc12ac"
+    },
+    {
+      "file": "1440-error.png",
+      "width": 1440,
+      "scene": "error",
+      "label": "首次错误",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "8fcb72c51d72c39352deb13ba6da496255f743688f2ac2d70b8260a265533bf6"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "width": 1440,
+      "scene": "refreshing",
+      "label": "刷新进行中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d21b80e29504e31be10824980e7b91d028693ab35bed13631b7354acdc9d72bd"
+    },
+    {
+      "file": "1440-refresh-error.png",
+      "width": 1440,
+      "scene": "refresh-error",
+      "label": "刷新失败保留整组快照",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "dce69f3d45e733b9c9032250bc5db4cced5f47b6077ddb6685daf50d41695349"
+    },
+    {
+      "file": "1440-asset-empty.png",
+      "width": 1440,
+      "scene": "asset-empty",
+      "label": "新建凭证 · 必填",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "3869f1f384ca880aaf799fb9781f92e70f2989eb806cfaa1e54f0e64ecd9bc1e"
+    },
+    {
+      "file": "1440-asset-filled.png",
+      "width": 1440,
+      "scene": "asset-filled",
+      "label": "新建凭证 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "46c3f54b0e5322805154b56096f3620a0fde13ffb300a3b41e4978f516456b3c"
+    },
+    {
+      "file": "1440-asset-error.png",
+      "width": 1440,
+      "scene": "asset-error",
+      "label": "新建凭证 · 明确拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "4c2ac18de4552abe45ddd5f07bdd97d8d4b9334eeac85322cfcbb9324e7cec36"
+    },
+    {
+      "file": "1440-asset-busy.png",
+      "width": 1440,
+      "scene": "asset-busy",
+      "label": "新建凭证 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ba95380c4664852116e741116e848a6af6e5e0389b5e68e54cc92f223e961467"
+    },
+    {
+      "file": "1440-asset-unknown.png",
+      "width": 1440,
+      "scene": "asset-unknown",
+      "label": "新建凭证 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ee57015492f30e9e9d0ee6a652c8e8d76335a0a2ef20702b03cf858c55d9d534"
+    },
+    {
+      "file": "1440-rotate.png",
+      "width": 1440,
+      "scene": "rotate",
+      "label": "轮换 · 指定资产",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "f4fb055b40808efb633ab1ac5c51da52444bb85f746c3f5b6f07fe9e177c9e21"
+    },
+    {
+      "file": "1440-rotate-conflict.png",
+      "width": 1440,
+      "scene": "rotate-conflict",
+      "label": "轮换 · 版本冲突",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "4b23920e5b771bf83ccd68a56db376aeecddf3b92b2598a707828ee6b54afa30"
+    },
+    {
+      "file": "1440-rotate-expiry.png",
+      "width": 1440,
+      "scene": "rotate-expiry",
+      "label": "轮换 · 到期语义说明",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "c21bfd631d4eab7a52115486766ba634e00efa0dfcaf7e5735568de8d17ed27a"
+    },
+    {
+      "file": "1440-rotate-revoked.png",
+      "width": 1440,
+      "scene": "rotate-revoked",
+      "label": "已撤销资产 · 禁用维护",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "315a9669ba122d7f90d77229ff342eacf1b3740998e4228c975ca6e52f2b5c6b"
+    },
+    {
+      "file": "1440-profile.png",
+      "width": 1440,
+      "scene": "profile",
+      "label": "关联运行档案 · 默认停用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "0412c924d7544e1c27d5ec0ae2edc39e3ed925894ac160aec0a1dd53cafb7ea9"
+    },
+    {
+      "file": "1440-profile-filled.png",
+      "width": 1440,
+      "scene": "profile-filled",
+      "label": "关联运行档案 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "23355f14759cdc2aff7990a7fa36c3efddb57f94cc13e4ce4d1bc4bb9791b442"
+    },
+    {
+      "file": "1440-profile-noasset.png",
+      "width": 1440,
+      "scene": "profile-noasset",
+      "label": "关联运行档案 · 无候选",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ad9ec50aaa6e2e3af8fea6a9d2335d36ac14d7712e76d6b5b70104a6f21c5908"
+    },
+    {
+      "file": "1440-profile-error.png",
+      "width": 1440,
+      "scene": "profile-error",
+      "label": "关联运行档案 · 窗内失败",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "e128c61fb2e9b4c22b42df6289a98e5a703689221eaed4b2c7c98835cfc07b34"
+    },
+    {
+      "file": "1440-profile-busy.png",
+      "width": 1440,
+      "scene": "profile-busy",
+      "label": "关联运行档案 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "cacc1bf02a9855689c074cf2a064e98aa95ea3a625df98aa46b6685d1c365413"
+    },
+    {
+      "file": "1440-login.png",
+      "width": 1440,
+      "scene": "login",
+      "label": "登录导入 · Cookie文件",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "79f02ab8c0d5b9dafeb351404a785de26cb5f8125c7d43f199458b9ed1015295"
+    },
+    {
+      "file": "1440-login-browser.png",
+      "width": 1440,
+      "scene": "login-browser",
+      "label": "登录导入 · 浏览器助手",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "64c01434d564bc65b29a9bd180aac0cb1f0592c90deb4c748ce7013872085dab"
+    },
+    {
+      "file": "1440-login-archive.png",
+      "width": 1440,
+      "scene": "login-archive",
+      "label": "登录导入 · tar.gz",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "4c4089372eef9a1abeb52e82a0d1893409643f1dc789bdd8918859fe980679dd"
+    },
+    {
+      "file": "1440-login-material.png",
+      "width": 1440,
+      "scene": "login-material",
+      "label": "登录导入 · 材料待提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "6ca9c8edfa70a1eb896b4ed1ef769ed0334a7eadb7f42c2f8700d4c2f3a5ff12"
+    },
+    {
+      "file": "1440-login-fileerror.png",
+      "width": 1440,
+      "scene": "login-fileerror",
+      "label": "登录导入 · 格式或大小错误",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d0c9ed12d13078add3d2ecd3d4e52e32ae05e3b5a1e6b5359dd4f5fc94b2de84"
+    },
+    {
+      "file": "1440-login-fileerror-part1.png",
+      "width": 1440,
+      "scene": "login-fileerror",
+      "label": "登录导入 · 格式或大小错误",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "d933773c643efa24ef250e58eeefdcb972164e681fa59b3636126f01610b2f7e"
+    },
+    {
+      "file": "1440-login-domainerror.png",
+      "width": 1440,
+      "scene": "login-domainerror",
+      "label": "登录导入 · 域校验拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2a8e2b4ea2e4e662f7c6f58e5f06f64a42ff361483882933b912bcf76d28c3dd"
+    },
+    {
+      "file": "1440-login-domainerror-part1.png",
+      "width": 1440,
+      "scene": "login-domainerror",
+      "label": "登录导入 · 域校验拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "7872f843cc3feb3165f8539d3e429ad1a8ce8eadbb8f1910e22983dd6f1c6844"
+    },
+    {
+      "file": "1440-login-reading.png",
+      "width": 1440,
+      "scene": "login-reading",
+      "label": "登录导入 · 助手读取中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "84aac50bdad3c7a331b4052aea620f2901f5ad5cef801cef3fcc3dae4dc8da5a"
+    },
+    {
+      "file": "1440-login-helpererror.png",
+      "width": 1440,
+      "scene": "login-helpererror",
+      "label": "登录导入 · 助手不可用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "a31ba3b74c3f04659c5175afb34cae0f18464f384bd7bd67265fabbf131d487f"
+    },
+    {
+      "file": "1440-login-helpererror-part1.png",
+      "width": 1440,
+      "scene": "login-helpererror",
+      "label": "登录导入 · 助手不可用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "6b512116b49e6bfb926a600a6588f0efd29064d456eb0e9a15a618546fcbc5f3"
+    },
+    {
+      "file": "1440-login-savingasset.png",
+      "width": 1440,
+      "scene": "login-savingasset",
+      "label": "登录导入 · 保存资产中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d7fc82aa0ba5b44e7e7c8b170315223503cca8d8d2bd2d6e0329865d3c52a6ca"
+    },
+    {
+      "file": "1440-login-savingasset-part1.png",
+      "width": 1440,
+      "scene": "login-savingasset",
+      "label": "登录导入 · 保存资产中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "f0dade83d49661109327de75879a680478d8438ab73cd3967baf747afbc1ec33"
+    },
+    {
+      "file": "1440-login-savingprofile.png",
+      "width": 1440,
+      "scene": "login-savingprofile",
+      "label": "登录导入 · 资产已存关联中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "4d4e384035447da6ac1bf5285aef023971ec9fca5435ece4559ec3e1ead59df8"
+    },
+    {
+      "file": "1440-login-savingprofile-part1.png",
+      "width": 1440,
+      "scene": "login-savingprofile",
+      "label": "登录导入 · 资产已存关联中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "919650c74075c4b5721fceea919fe14714a6cf806c0076ecb3ab77dfd4fb0099"
+    },
+    {
+      "file": "1440-login-partial.png",
+      "width": 1440,
+      "scene": "login-partial",
+      "label": "登录导入 · 部分成功恢复",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "da6f0c1e6a07de030269d8c3b10238f078b88bf5e378d50330c61de81ff9813c"
+    },
+    {
+      "file": "1440-login-partial-part1.png",
+      "width": 1440,
+      "scene": "login-partial",
+      "label": "登录导入 · 部分成功恢复",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "2c8c34961c215dad9a6369e0cf134360963ea9cb22b2d5b1905302d467e5de6c"
+    },
+    {
+      "file": "1440-login-unknown.png",
+      "width": 1440,
+      "scene": "login-unknown",
+      "label": "登录导入 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "60af3c93680a3ee317006391bd8216f7b3ef27b61f70b870c2eb49dfea69ae84"
+    },
+    {
+      "file": "1440-login-unknown-part1.png",
+      "width": 1440,
+      "scene": "login-unknown",
+      "label": "登录导入 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "efbcd3982d2372dd0d9b704231e3c34a1bddeab2d53fb4678d7af9cf707c5d8e"
+    },
+    {
+      "file": "1440-login-success-refresherror.png",
+      "width": 1440,
+      "scene": "login-success-refresherror",
+      "label": "登录已保存 · 重读单独失败",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "886c9174140db4830f4543abb17acccc207af6925f3249ddad39ccf6860b5ee0"
+    },
+    {
+      "file": "1440-revoke.png",
+      "width": 1440,
+      "scene": "revoke",
+      "label": "撤销 · 双重确认",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "6280b43c7aa49170331feb216743ba511a6fd87fb6ee8bc9c9a5b46c4a036348"
+    },
+    {
+      "file": "1440-revoke-ack.png",
+      "width": 1440,
+      "scene": "revoke-ack",
+      "label": "撤销 · 已签认",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "140fc00c98a30f1030512f0b34a9b6fe11dfdfe4f1898b615c200b9012bd8531"
+    },
+    {
+      "file": "1440-revoke-ready.png",
+      "width": 1440,
+      "scene": "revoke-ready",
+      "label": "撤销 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "7e87dd55436bfbd4ce5be329d74c508fc612acfe280223bf875269795d3030f3"
+    },
+    {
+      "file": "1440-revoke-busy.png",
+      "width": 1440,
+      "scene": "revoke-busy",
+      "label": "撤销 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "651e76073679e14d267e5fec39d7ee60961d86ad6e0e1b52a48839695787f821"
+    },
+    {
+      "file": "1440-revoke-conflict.png",
+      "width": 1440,
+      "scene": "revoke-conflict",
+      "label": "撤销 · 版本冲突",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "07fe5bd29f8d13cedd3cc0e1e3b24775e99df8c3fa9cd95f20caf48a7b48bf99"
+    },
+    {
+      "file": "1440-compat-detail.png",
+      "width": 1440,
+      "scene": "compat-detail",
+      "label": "关联检查 · 移动详情",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ca182c2751f34ed1adba9fe5d3edfdf9fb09074194de332e7bed43e93f092872"
+    },
+    {
+      "file": "1440-compat-technical.png",
+      "width": 1440,
+      "scene": "compat-technical",
+      "label": "关联检查 · 来源技术详情",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "7d86d3e20e5e471616b392612d5830e2a4d34f5b85731a2babda43c9989f5fb5"
+    },
+    {
+      "file": "1440-login-no-provider.png",
+      "width": 1440,
+      "scene": "login-no-provider",
+      "label": "登录导入 · 无登录型来源",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ff8e0bf1c5521aef04c0b45a1ce48467e50ac1778c33e4584726e00e81f58a1d"
+    },
+    {
+      "file": "1440-long.png",
+      "width": 1440,
+      "scene": "long",
+      "label": "长名称与技术元数据",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2170b072cffdb3dc931c83c3cb143822ce941d70187e32053f4fae576134aca5"
+    },
+    {
+      "file": "1440-focus.png",
+      "width": 1440,
+      "scene": "focus",
+      "label": "键盘焦点",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "b0540916f04354f9899d5aed9a0e7726a5c790385c7566da12cb248be2b123f3"
+    },
+    {
+      "file": "1440-hover.png",
+      "width": 1440,
+      "scene": "hover",
+      "label": "按钮悬停",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "3eed26c7960c198dcf7b1a89872059a9a983163ec17d08cf9df15075376053e3"
+    },
+    {
+      "file": "1440-pressed.png",
+      "width": 1440,
+      "scene": "pressed",
+      "label": "按钮按下",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "75444540875d1ffbbf03d2a148fcf4584f96d7058ef02abc0b5e47b2c57a6c92"
+    },
+    {
+      "file": "1440-tools.png",
+      "width": 1440,
+      "scene": "tools",
+      "label": "审核工具面板",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "14c5e4fca5c661a3baaacf5fec0564e936b484f95aa3b0edc020bd331c664530"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "scene": "default",
+      "label": "原始夹具 · 凭证台账",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "5f17f7c48b81652bb361e9e027736567bea79037f569f3041bfc77fc93498194"
+    },
+    {
+      "file": "390-mixed.png",
+      "width": 390,
+      "scene": "mixed",
+      "label": "独立合成 · 到期与撤销",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "585512cff002507c4aed1f1db9934632358dace3ef23ad6fc28e05f93430f0c4"
+    },
+    {
+      "file": "390-profiles.png",
+      "width": 390,
+      "scene": "profiles",
+      "label": "只读运行档案",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "707ca127cd02a26daa2f93a83ad276e261a2e790e9e0432ed83bed5dcf8d6445"
+    },
+    {
+      "file": "390-compatibility.png",
+      "width": 390,
+      "scene": "compatibility",
+      "label": "关联检查 · 尚缺档案",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2044b24eec930d583edf21883d5e5658f081879c3e302134d0aa2ec5a3a311ec"
+    },
+    {
+      "file": "390-compat-ready.png",
+      "width": 390,
+      "scene": "compat-ready",
+      "label": "关联满足 · 不等于登录有效",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "104aac71eb5df062a99f9fac58634deba6d5af99234ef819a61086c9dcc4a60e"
+    },
+    {
+      "file": "390-columns.png",
+      "width": 390,
+      "scene": "columns",
+      "label": "桌面列设置",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "e848bf38e4c2a6046e44263ecc81fcaeb25e86a09dc9562c67f0f1f8f4c7ee41"
+    },
+    {
+      "file": "390-compact.png",
+      "width": 390,
+      "scene": "compact",
+      "label": "桌面紧凑表格",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "e848bf38e4c2a6046e44263ecc81fcaeb25e86a09dc9562c67f0f1f8f4c7ee41"
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "scene": "empty",
+      "label": "首次空数据",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "0654bc826e6dea593692e95442d4e2693d1795851bd332380c9a243cf1e53660"
+    },
+    {
+      "file": "390-no-assets.png",
+      "width": 390,
+      "scene": "no-assets",
+      "label": "仅有档案",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "0002b3c4ccc6277360e34a638e60c3581373fbc1645a7d3e5269a2942df21d2b"
+    },
+    {
+      "file": "390-no-profiles.png",
+      "width": 390,
+      "scene": "no-profiles",
+      "label": "仅有资产",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "50db31bb90b920165f22cec5c2f5ddce877894f64d50f5a2d1f1eadb66be224b"
+    },
+    {
+      "file": "390-no-providers.png",
+      "width": 390,
+      "scene": "no-providers",
+      "label": "无来源选项",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d830eb60a363bf31cd813375d14df05fde236aeb5c9cfded962397d559bca2ab"
+    },
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "scene": "loading",
+      "label": "首次加载",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ce8944496e3a738e2388bc0a14887ba4e5e2ac4b29f82ac7f7eae899dd7c1e27"
+    },
+    {
+      "file": "390-expired.png",
+      "width": 390,
+      "scene": "expired",
+      "label": "首次401",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "60593b9aeab95d1db8c8f6cfcdb8adefbf54340d8f20d1b9b6385e49f51e480e"
+    },
+    {
+      "file": "390-forbidden.png",
+      "width": 390,
+      "scene": "forbidden",
+      "label": "首次403",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "3cd58d7dc033a1b791a662321245d73aa258f23c4227bd53d165fb88bc6eea04"
+    },
+    {
+      "file": "390-blocked.png",
+      "width": 390,
+      "scene": "blocked",
+      "label": "首次依赖受阻",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2357885d5a573493f02fcc5a5f5a8c0f1dcc9ea6f4fa3e8313bb242f2eaff02f"
+    },
+    {
+      "file": "390-error.png",
+      "width": 390,
+      "scene": "error",
+      "label": "首次错误",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ef00ea46d94908526ea7d4c5e97767260828954c96ecb2d06dc394ccf0509783"
+    },
+    {
+      "file": "390-refreshing.png",
+      "width": 390,
+      "scene": "refreshing",
+      "label": "刷新进行中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d080a4eb1ad00e46959691bd04497dfb86cf1f7dafdc0c0e901bcd782088f158"
+    },
+    {
+      "file": "390-refresh-error.png",
+      "width": 390,
+      "scene": "refresh-error",
+      "label": "刷新失败保留整组快照",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d0423249e7e2ff2c7816e83ac9747468ef5c93be1f82164d7eb80b936fd03456"
+    },
+    {
+      "file": "390-asset-empty.png",
+      "width": 390,
+      "scene": "asset-empty",
+      "label": "新建凭证 · 必填",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "1e60ec3af90b6e1eb0b01682f946e214e88e387c39b23b90c404b5e6adb25b61"
+    },
+    {
+      "file": "390-asset-empty-part1.png",
+      "width": 390,
+      "scene": "asset-empty",
+      "label": "新建凭证 · 必填",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "4956d9a3d351c2657c9c2564e4d5d41053464cd8d01cf1f0711b74b09a9fc9a9"
+    },
+    {
+      "file": "390-asset-filled.png",
+      "width": 390,
+      "scene": "asset-filled",
+      "label": "新建凭证 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "f9da2251dba34cac61e5053da413797976d1e3a6b77fb8cc91c81bb32de080f9"
+    },
+    {
+      "file": "390-asset-filled-part1.png",
+      "width": 390,
+      "scene": "asset-filled",
+      "label": "新建凭证 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "7bd10af78e6d471adaa0b70753d7e0466751ae60719242477dbd296ca5b7c369"
+    },
+    {
+      "file": "390-asset-error.png",
+      "width": 390,
+      "scene": "asset-error",
+      "label": "新建凭证 · 明确拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d89d5a81ccf8511d9b533180e1cb55bff834f9ced69d1061ceb96b80915b0fc4"
+    },
+    {
+      "file": "390-asset-error-part1.png",
+      "width": 390,
+      "scene": "asset-error",
+      "label": "新建凭证 · 明确拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "b2582951d8213e6ab6a16fd96dccab892573d8497f9575b0a7a237e950849751"
+    },
+    {
+      "file": "390-asset-busy.png",
+      "width": 390,
+      "scene": "asset-busy",
+      "label": "新建凭证 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "43bec968cfcbf0fb3ae7f0c96f489b0f0591624a878a139f0715c4d96aee49ac"
+    },
+    {
+      "file": "390-asset-busy-part1.png",
+      "width": 390,
+      "scene": "asset-busy",
+      "label": "新建凭证 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "3b75d20e8b628bd6d9d909a43be0b8792c6660eedab556316478e65cb91461ab"
+    },
+    {
+      "file": "390-asset-unknown.png",
+      "width": 390,
+      "scene": "asset-unknown",
+      "label": "新建凭证 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "366cfd4248acc0217339bc6969530ad93a1be2bfa6b05f73327a3606c2da51b1"
+    },
+    {
+      "file": "390-asset-unknown-part1.png",
+      "width": 390,
+      "scene": "asset-unknown",
+      "label": "新建凭证 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "60c3809b20382c7882812e2308769164e42a56314c34f108190dce59b224e1fa"
+    },
+    {
+      "file": "390-rotate.png",
+      "width": 390,
+      "scene": "rotate",
+      "label": "轮换 · 指定资产",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "a5aef41fd2e8bae7fb40b878ccbc1476eabd9da9b275bef5953b8944cc408e24"
+    },
+    {
+      "file": "390-rotate-part1.png",
+      "width": 390,
+      "scene": "rotate",
+      "label": "轮换 · 指定资产",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "76c62ce2f4cf4eb854aa1c73cf8eb302aaa7e4e753826bf4b5023cd0cf728534"
+    },
+    {
+      "file": "390-rotate-conflict.png",
+      "width": 390,
+      "scene": "rotate-conflict",
+      "label": "轮换 · 版本冲突",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "7e49c4cf72109414a4bd0b37594eb65b7d8f891d8d964a528771d83718daa768"
+    },
+    {
+      "file": "390-rotate-conflict-part1.png",
+      "width": 390,
+      "scene": "rotate-conflict",
+      "label": "轮换 · 版本冲突",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "62a56b4ea72070c8a0dde6dede6204af7989db4d5200e64b3b0913aa41b77232"
+    },
+    {
+      "file": "390-rotate-expiry.png",
+      "width": 390,
+      "scene": "rotate-expiry",
+      "label": "轮换 · 到期语义说明",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d9491d0a1fa9328cbbc6a79d2ed45c3a844b7d4219afb19e31adf06dbb81a924"
+    },
+    {
+      "file": "390-rotate-expiry-part1.png",
+      "width": 390,
+      "scene": "rotate-expiry",
+      "label": "轮换 · 到期语义说明",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "95e8e7454b21910082f55ad344b3ac75ff7e319480340a947a866152823d0cd0"
+    },
+    {
+      "file": "390-rotate-revoked.png",
+      "width": 390,
+      "scene": "rotate-revoked",
+      "label": "已撤销资产 · 禁用维护",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "b6bbffcfb8450ab3e24014538130f0ca0dabd68c783778c8c74b082400847c5a"
+    },
+    {
+      "file": "390-profile.png",
+      "width": 390,
+      "scene": "profile",
+      "label": "关联运行档案 · 默认停用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "c6963568d72f3f998cb39cbf14ba194de5ef127a9e1449c7d7c743745c772526"
+    },
+    {
+      "file": "390-profile-part1.png",
+      "width": 390,
+      "scene": "profile",
+      "label": "关联运行档案 · 默认停用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "ad6747c43adcc17dadbba67c34cb3af4c38d7b509ab4f265f02842431d4361d2"
+    },
+    {
+      "file": "390-profile-filled.png",
+      "width": 390,
+      "scene": "profile-filled",
+      "label": "关联运行档案 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "6cfdd9ce9a92e5b990aa24974e3db9545e2c6eb68e4eac3cbbe3874b672445a9"
+    },
+    {
+      "file": "390-profile-filled-part1.png",
+      "width": 390,
+      "scene": "profile-filled",
+      "label": "关联运行档案 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "50c4cd06ca7999bd275a5065214e39425ee024408056831fabaef1e5c53b906b"
+    },
+    {
+      "file": "390-profile-noasset.png",
+      "width": 390,
+      "scene": "profile-noasset",
+      "label": "关联运行档案 · 无候选",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "b30275d597d003078355aa6c56c893d102eae2358fcf6f8ce1894188e54cdc81"
+    },
+    {
+      "file": "390-profile-noasset-part1.png",
+      "width": 390,
+      "scene": "profile-noasset",
+      "label": "关联运行档案 · 无候选",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "cf0c132a842401eff96ab98669ebcb225bccb141be72fd2a268d4c7fc9733543"
+    },
+    {
+      "file": "390-profile-error.png",
+      "width": 390,
+      "scene": "profile-error",
+      "label": "关联运行档案 · 窗内失败",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "694b30e6c8ff791951bc55255b694af484b8507125b7379b4155ba67eb1ae335"
+    },
+    {
+      "file": "390-profile-error-part1.png",
+      "width": 390,
+      "scene": "profile-error",
+      "label": "关联运行档案 · 窗内失败",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "a8d0436ddb20bda9e5734d94af90d3aa63be21d50452cd57ba3bfd5428573693"
+    },
+    {
+      "file": "390-profile-busy.png",
+      "width": 390,
+      "scene": "profile-busy",
+      "label": "关联运行档案 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2e58c29d2e19cf02593c3cf86f9d0ef029acc03b4c5d9581dc3ab1a6f3045424"
+    },
+    {
+      "file": "390-profile-busy-part1.png",
+      "width": 390,
+      "scene": "profile-busy",
+      "label": "关联运行档案 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "f564c341d9de4a69d1a5c9accb808e1d788752b1a3e90a84f70657740a976c08"
+    },
+    {
+      "file": "390-login.png",
+      "width": 390,
+      "scene": "login",
+      "label": "登录导入 · Cookie文件",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "fa6259f917c6a5d781d13cecc3ac2011c6e73ae5b0d02e235f2d2672e6f4510e"
+    },
+    {
+      "file": "390-login-part1.png",
+      "width": 390,
+      "scene": "login",
+      "label": "登录导入 · Cookie文件",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "951e9bc4d05ac6c6ce1a5df89720a4bc8157601dffc58fcc07107070ff1994b9"
+    },
+    {
+      "file": "390-login-browser.png",
+      "width": 390,
+      "scene": "login-browser",
+      "label": "登录导入 · 浏览器助手",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "865acd201adf912cab01b78d6af91f36c9f65a11b43030ee2f38efacb9f30b70"
+    },
+    {
+      "file": "390-login-browser-part1.png",
+      "width": 390,
+      "scene": "login-browser",
+      "label": "登录导入 · 浏览器助手",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "1f1f5f2c12fc8a2e520edf42470f75a9dc731766d5d859c0255dc0d203ebf65d"
+    },
+    {
+      "file": "390-login-archive.png",
+      "width": 390,
+      "scene": "login-archive",
+      "label": "登录导入 · tar.gz",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "277f7c94e470e861c62eb95dc8f9c040250d35a4fc413f9c2477352f6420d447"
+    },
+    {
+      "file": "390-login-archive-part1.png",
+      "width": 390,
+      "scene": "login-archive",
+      "label": "登录导入 · tar.gz",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "580565e14e39e436aa8e2b60e92a1fc4a4ebb4374a06c34afb6f57082d1bf2ed"
+    },
+    {
+      "file": "390-login-material.png",
+      "width": 390,
+      "scene": "login-material",
+      "label": "登录导入 · 材料待提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "fa6259f917c6a5d781d13cecc3ac2011c6e73ae5b0d02e235f2d2672e6f4510e"
+    },
+    {
+      "file": "390-login-material-part1.png",
+      "width": 390,
+      "scene": "login-material",
+      "label": "登录导入 · 材料待提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "da918aba77182abc47562ed52a3f5e87b8b489c9c3227c8099fdab88ba50a6a6"
+    },
+    {
+      "file": "390-login-fileerror.png",
+      "width": 390,
+      "scene": "login-fileerror",
+      "label": "登录导入 · 格式或大小错误",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "b9f265b3efe8d0a1882c5982a74c63578984e38b0d4ad62839063edfc568755a"
+    },
+    {
+      "file": "390-login-fileerror-part1.png",
+      "width": 390,
+      "scene": "login-fileerror",
+      "label": "登录导入 · 格式或大小错误",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "9a66ec7ccef9449eec7ef5085e0b3242ea72b6cce503d8aedf7e3a731df294a0"
+    },
+    {
+      "file": "390-login-domainerror.png",
+      "width": 390,
+      "scene": "login-domainerror",
+      "label": "登录导入 · 域校验拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "af9c04ec197f0e0d866626be29fe21d58f337b935ac61f1367d1debb52d65369"
+    },
+    {
+      "file": "390-login-domainerror-part1.png",
+      "width": 390,
+      "scene": "login-domainerror",
+      "label": "登录导入 · 域校验拒绝",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "9a66ec7ccef9449eec7ef5085e0b3242ea72b6cce503d8aedf7e3a731df294a0"
+    },
+    {
+      "file": "390-login-reading.png",
+      "width": 390,
+      "scene": "login-reading",
+      "label": "登录导入 · 助手读取中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "d61506a9bec5bad9008e2828fa55310572357108d41903e6ab51884be6d68a7c"
+    },
+    {
+      "file": "390-login-reading-part1.png",
+      "width": 390,
+      "scene": "login-reading",
+      "label": "登录导入 · 助手读取中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "3768b1f8f4a250532078e72ec3ddb708f066f901c6408d36c8a426558990af47"
+    },
+    {
+      "file": "390-login-helpererror.png",
+      "width": 390,
+      "scene": "login-helpererror",
+      "label": "登录导入 · 助手不可用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "834f6dbd0a7f3e6ebfa05ca67c8762ee21b926b745afb782edd39c95dac3780d"
+    },
+    {
+      "file": "390-login-helpererror-part1.png",
+      "width": 390,
+      "scene": "login-helpererror",
+      "label": "登录导入 · 助手不可用",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "4404e6b6ded1bf183b553937e7207b36b60d627dfa0fdddb21d96912c32b81ee"
+    },
+    {
+      "file": "390-login-savingasset.png",
+      "width": 390,
+      "scene": "login-savingasset",
+      "label": "登录导入 · 保存资产中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "2e48e5b2c0bd912e12278250971e1715a3bd58da88b8be109dd3b16f28eab5ca"
+    },
+    {
+      "file": "390-login-savingasset-part1.png",
+      "width": 390,
+      "scene": "login-savingasset",
+      "label": "登录导入 · 保存资产中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "33a4112fdd68991cf7d1da12ff3b68738e6687a31c5c0c6316f600d03761d92b"
+    },
+    {
+      "file": "390-login-savingprofile.png",
+      "width": 390,
+      "scene": "login-savingprofile",
+      "label": "登录导入 · 资产已存关联中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "efa53dec37968e59b596438f6f8d0ed18874d25e629d8692362e722b34f7d7a3"
+    },
+    {
+      "file": "390-login-savingprofile-part1.png",
+      "width": 390,
+      "scene": "login-savingprofile",
+      "label": "登录导入 · 资产已存关联中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "e801861de3a231a275518f0d828c88faa8f211c9be4a2265fb388437cb6e1da0"
+    },
+    {
+      "file": "390-login-partial.png",
+      "width": 390,
+      "scene": "login-partial",
+      "label": "登录导入 · 部分成功恢复",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "94e4c6a34000b48495ac05e5e482f7505e6239da728d823a8d32aeaabc08f8e0"
+    },
+    {
+      "file": "390-login-partial-part1.png",
+      "width": 390,
+      "scene": "login-partial",
+      "label": "登录导入 · 部分成功恢复",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "d839f5b33704f3b3bcee660189c7ef63a2ba461f3f8a000da7f83d29dcb6ff12"
+    },
+    {
+      "file": "390-login-unknown.png",
+      "width": 390,
+      "scene": "login-unknown",
+      "label": "登录导入 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "3f61f875ad8b15914cc719faa6aeb7dc34a8e29b8def3da6f8289b8cc59f1874"
+    },
+    {
+      "file": "390-login-unknown-part1.png",
+      "width": 390,
+      "scene": "login-unknown",
+      "label": "登录导入 · 结果未知",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "9a66ec7ccef9449eec7ef5085e0b3242ea72b6cce503d8aedf7e3a731df294a0"
+    },
+    {
+      "file": "390-login-success-refresherror.png",
+      "width": 390,
+      "scene": "login-success-refresherror",
+      "label": "登录已保存 · 重读单独失败",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "96b6fcd98780424cb674bbb47900fe841a04d2edf3c8b60dd8ece3674cf6257e"
+    },
+    {
+      "file": "390-revoke.png",
+      "width": 390,
+      "scene": "revoke",
+      "label": "撤销 · 双重确认",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "6e6c94e4da1f0eb93e80571c166dc5b09b4f4e9ac903985bfc36ea3efd02867c"
+    },
+    {
+      "file": "390-revoke-ack.png",
+      "width": 390,
+      "scene": "revoke-ack",
+      "label": "撤销 · 已签认",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "314c112a6aa4e95476f2c31e2f814c7e43ccb6475f00ef24c0920c8ce9fd113f"
+    },
+    {
+      "file": "390-revoke-ready.png",
+      "width": 390,
+      "scene": "revoke-ready",
+      "label": "撤销 · 可提交",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "adcd7222b4acfa84ad3cf76ddffa85cfcdf8e53bb3f4ec4e3478ccbc8cd3c48e"
+    },
+    {
+      "file": "390-revoke-busy.png",
+      "width": 390,
+      "scene": "revoke-busy",
+      "label": "撤销 · 提交中",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "cfe2e69e4edbd54c5738e294f8e3a20d06596a4e3251d9c585e13a9e1a018f46"
+    },
+    {
+      "file": "390-revoke-conflict.png",
+      "width": 390,
+      "scene": "revoke-conflict",
+      "label": "撤销 · 版本冲突",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "bdc5924400f7128de071f0eb6069325c44fa856c0ef6122d6b43745235c54097"
+    },
+    {
+      "file": "390-compat-detail.png",
+      "width": 390,
+      "scene": "compat-detail",
+      "label": "关联检查 · 移动详情",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "ff16916bbfc36cfe95a21d0e8d9a21afe31a070ffa3ceeb43bb193a9d483e099"
+    },
+    {
+      "file": "390-compat-technical.png",
+      "width": 390,
+      "scene": "compat-technical",
+      "label": "关联检查 · 来源技术详情",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "df5a51436ac19dfedfa70de19d00cbe22f861d3d34d59aa5205fd66d9cba231c"
+    },
+    {
+      "file": "390-login-no-provider.png",
+      "width": 390,
+      "scene": "login-no-provider",
+      "label": "登录导入 · 无登录型来源",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "57962dcaebcf8ba858232d0af0a74201a414d7992a4d5189c5043ec26701ad29"
+    },
+    {
+      "file": "390-login-no-provider-part1.png",
+      "width": 390,
+      "scene": "login-no-provider",
+      "label": "登录导入 · 无登录型来源",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 1,
+      "sha256": "dd52334473bb6f255612a5557d07a811d05587810213577351da77e775c7bc79"
+    },
+    {
+      "file": "390-long.png",
+      "width": 390,
+      "scene": "long",
+      "label": "长名称与技术元数据",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "e59095dd2cf2139f8303ddd25c8a23d5ec009102173c4b9989b0128c16c1cc1e"
+    },
+    {
+      "file": "390-focus.png",
+      "width": 390,
+      "scene": "focus",
+      "label": "键盘焦点",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "a2b6c63b6a3083ff41d831fda43d9ae2c0725171ef6c02d0334b320f6cb6f49a"
+    },
+    {
+      "file": "390-hover.png",
+      "width": 390,
+      "scene": "hover",
+      "label": "按钮悬停",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "679f9d11f51635be0577dae9f0039f7fa91d893d12cf11b318044af8f19cde07"
+    },
+    {
+      "file": "390-pressed.png",
+      "width": 390,
+      "scene": "pressed",
+      "label": "按钮按下",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "8fac6a24e2ff58e8a5e566563e5db98924bdfdafa9ddeb37c57a8889848f5de8"
+    },
+    {
+      "file": "390-tools.png",
+      "width": 390,
+      "scene": "tools",
+      "label": "审核工具面板",
+      "pageId": "P50",
+      "proposal": "CREDENTIAL-ASSETS-C-r1",
+      "part": 0,
+      "sha256": "3408638002ff7aa89c939092023567fb4a8b4ef243a709623133b10c80770baf"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'"
+    />
+    <title>P50 · 凭证资产 · C 风格审核稿</title>
+    <link rel="stylesheet" href="credentials.css" />
+    <script defer src="data.js"></script>
+    <script defer src="credentials.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到资产工作面</a>
+    <header class="appbar">
+      <strong>SCOUTOPS <span>平台管理</span></strong
+      ><span>C / 凭证与档案 · 审核稿</span>
+    </header>
+    <div class="workspace">
+      <aside id="context">
+        <p class="eyebrow">安全资料 / PLATFORM</p>
+        <h1>凭证资产</h1>
+        <p>保存资料，建立引用。<br />来源能否运行，另行验收。</p>
+        <nav aria-label="页内工作区">
+          <button data-view="assets" aria-current="page"><span>01</span> 凭证台账</button>
+          <button data-view="profiles"><span>02</span> 运行档案</button>
+          <button data-view="compat"><span>03</span> 关联检查</button>
+        </nav>
+        <details id="boundary">
+          <summary>数据与安全边界</summary>
+          <p>平台全局资产，不按组织授权展示。此稿仅含合成元数据，无明文读取、导出或解密操作。</p>
+          <p>active 不等于未到期；兼容不等于登录有效；运行档案启用不等于来源启用。</p>
+        </details>
+        <a href="/platform-admin/providers/sources" data-intent="NAVIGATE">返回来源频道 ↗</a>
+      </aside>
+      <main id="main" tabindex="-1">
+        <div class="provenance" id="provenance"></div>
+        <header class="pagehead">
+          <div>
+            <p class="eyebrow">CREDENTIAL REGISTER</p>
+            <h2 id="page-title">凭证台账</h2>
+            <p id="page-description"></p>
+          </div>
+          <button id="refresh">刷新数据</button>
+        </header>
+        <div id="notice" role="status" aria-live="polite"></div>
+        <div id="content"></div>
+        <footer class="disclaimer">
+          P50 / CREDENTIAL-ASSETS-C-r1 · 待审核，未接入生产<br />不读取 Cookie、Token
+          或本机档案；所有写入、助手和跳转仅记录脱敏意图。
+        </footer>
+      </main>
+    </div>
+    <dialog
+      id="editor"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    ></dialog>
+    <details id="review-tools" class="review-tools">
+      <summary>审核场景工具（非业务界面）</summary>
+      <label>选择状态<select id="scene-picker"></select></label>
+      <div class="actions">
+        <button data-outcome="success">模拟成功</button
+        ><button data-outcome="error">模拟明确失败</button
+        ><button data-outcome="unknown">模拟结果未知</button>
+      </div>
+      <p>工具不访问真实接口。模拟成功不能作为加密、鉴权、登录或部署证据。</p>
+    </details>
+  </body>
+</html>
