@@ -1,0 +1,482 @@
+{
+  "version": "PERSONAL-C-profile-r1",
+  "approval": "pending",
+  "kind": "account-shell-profile-proposal",
+  "capturedAt": "2026-09-08T06:06:15.932Z",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/index.html": "0b94afaa15c8260395e1da25a5b2ac82b911115c3d662b5b3670b13a43d33720",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/data.js": "98a8bee03bbcda28a250f282fb488ade864fd6336fac1506f00c333aad422ef5",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/personal.css": "14243cf2a0f636064e560001da98eb91816d783884be6d8c4d407bf649376773",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/personal.js": "6fd7f98e181284b7b5bf33d6f2a5fdc55b5b3e29ac13fa7d92ea3052a6d10d6d",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/api/src/personal-center-routes.ts": "f134d4f607a6eaabaf89d32466068f20733d886d7574ec25f55ada282cb17ca1",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "tests/e2e/ui-phase2-account-contracts.spec.ts": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+    "scripts/lib/ui-phase2-personal-design-data.mjs": "6d293c57073db2ac536462a8944c2e9cc2e0fafb565efd6988889762c7e54178",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456"
+  },
+  "boundary": "24 images; four non-profile sections are navigation-only explicitly deferred, not complete P11. Serial local form simulation does not prove real API, save races, 12s timeout, authorization or persistence.",
+  "screenshots": [
+    {
+      "file": "1440-profile.png",
+      "scene": "profile",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "eaeb7044ca9ddf11b6feba3ab935ae754ea3d0c67f0a4a8d22d8c5a8c6f32c5e"
+    },
+    {
+      "file": "1440-permissions.png",
+      "scene": "permissions",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "942360073b73dc87948e6163679310c18b7fabaaea5aa6afe1c1651edac1ffb4"
+    },
+    {
+      "file": "1440-security.png",
+      "scene": "security",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0b44829cd0a33b5a04bddb2f1bf9e70304fa2ca72c00c69bccd1a5474f8031eb"
+    },
+    {
+      "file": "1440-notifications.png",
+      "scene": "notifications",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "229e6928a8ba0e81dfa5d8756a46c24556c688557efca79dc628b86571487af0"
+    },
+    {
+      "file": "1440-assets.png",
+      "scene": "assets",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 30,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "76fabfe241043bdcfdd0a015a3a8271c50f7987dfcafdf8784c242e1ddef50fa"
+    },
+    {
+      "file": "1440-profile-loading.png",
+      "scene": "profile-loading",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "576391e9a32463ed93f25b28d76174403a5b45e8ec42c833b435de1e7d3d42be"
+    },
+    {
+      "file": "1440-profile-error.png",
+      "scene": "profile-error",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 29,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "40e57a6f1c44b318da9c016185a0d2a2b0d144955d9d05298aae8bd42fcbbe64"
+    },
+    {
+      "file": "1440-profile-partial.png",
+      "scene": "profile-partial",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "159f0109ebee9f1300cd2b037d55b4982febe938a1a8b75b5399440ba8b41ccf"
+    },
+    {
+      "file": "1440-profile-edited.png",
+      "scene": "profile-edited",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "044b6bdc29accc291de40224aead8365adaca11d8bac58cded1a84498ea9b668"
+    },
+    {
+      "file": "1440-profile-save-failed.png",
+      "scene": "profile-save-failed",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c624dca0c807ef42460fccd6d2dd7c0c5ea3b0c293e1e70a746c8c818d3dac97"
+    },
+    {
+      "file": "1440-profile-saved.png",
+      "scene": "profile-saved",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a278bc5b30f6854b0d0a4c306b30a40109cac5c14b6858edf4c24fb1d3bcf128"
+    },
+    {
+      "file": "1440-invalid-section.png",
+      "scene": "invalid-section",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "672c9e78f0c6678a3ea83d7847e22c4d5d3ace4116a625fa94275b4283df4e97"
+    },
+    {
+      "file": "390-profile.png",
+      "scene": "profile",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b22f237f2a7ec6edd62fad2507ac2552f36d2a72613acd2ad37fc8a8e456419e"
+    },
+    {
+      "file": "390-permissions.png",
+      "scene": "permissions",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2af21b7da25a743606f4f1d33509ed9f09cee128a1629c54c15012f14c8ca0d2"
+    },
+    {
+      "file": "390-security.png",
+      "scene": "security",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "67f2f32eed8e27a34ec8acb0c5e044ac4ff2298d5c89cd5e1ef404ca8fc4b668"
+    },
+    {
+      "file": "390-notifications.png",
+      "scene": "notifications",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "af21697df1fa4a47f1263812c7da930ea694e661467b1d36695947d4536f0053"
+    },
+    {
+      "file": "390-assets.png",
+      "scene": "assets",
+      "scope": "navigation-only-not-business-section",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0bcb04d6e7859ba3b35f958420f1b008244b053dab391195c08f3568638e9455"
+    },
+    {
+      "file": "390-profile-loading.png",
+      "scene": "profile-loading",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 26,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ece16decca929c4fad893687589ceb8de5696eaea16d7451f838b7d080e56241"
+    },
+    {
+      "file": "390-profile-error.png",
+      "scene": "profile-error",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 27,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8a97934e1c61f8496c8dd811f328e420ce29234d63eb65f9451f2c12f30a46bf"
+    },
+    {
+      "file": "390-profile-partial.png",
+      "scene": "profile-partial",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 47,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "79bd555de9ad92f39c2f4bdb6d279d048a07e96e8fa04af1825bebda0a1b46f2"
+    },
+    {
+      "file": "390-profile-edited.png",
+      "scene": "profile-edited",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "482fe5c91107fbf075c00342276c4d69e17e8f68851fdd76b184bf2264bf9e2a"
+    },
+    {
+      "file": "390-profile-save-failed.png",
+      "scene": "profile-save-failed",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 47,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "52d595bb5e463e5549396f960bb67bf83bed3c090ffd56ac4399594b8805826a"
+    },
+    {
+      "file": "390-profile-saved.png",
+      "scene": "profile-saved",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 47,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "048f55f8e777ca51aee84fa6124f94ff1fcab8ad6c7849568d87d46ed81b5662"
+    },
+    {
+      "file": "390-invalid-section.png",
+      "scene": "invalid-section",
+      "scope": "profile-and-shell-proposal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d0b8943a36591509b9f6772d2b6d5e98a171a6d377fdbbf4bf86447877877d7d"
+    }
+  ]
+}

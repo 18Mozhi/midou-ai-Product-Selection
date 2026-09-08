@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · AccountShell与P11资料 / PERSONAL-C-profile-r1
+
+收尾：capture及无参数源/数据/图哈希复验双端12场景通过，24PNG与27个README链接齐全；verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）和diff检查通过。生产/旧图/coverage diff为空；不运行产品构建伪称Vue重构完成。浏览器finally关闭，4101/5173无监听，无新增临时遗留；只精确暂存本批。
+
+从干净main/6b664a5继续，读取AGENTS/Feature Map/产品总纲、AccountShell/PersonalCenter/App/router、个人资料API与UI2-A04夹具。ui-skills-root选择frontend-design，重新设计蓝色账号目录与白色分组表单，手机六个可读入口两列三行，不复用P43账号管理语义，也不混入成员业务导航。
+
+新增[24图](design/personal-direction-c/README.md)，12场景双端，资料七字段/邮箱验证事实、读取/部分失败/编辑/成功/失败/非法分区回退。其余权限、安全、通知和资产共8图仅导航位置，正文明确待实现，不计业务图或完整P11。初次目检后将外观入口并入同一手机网格减少占高；全部交付图重新生成。
+
+永久助手AST读取实际sections、PersonalCenter form与UI2-A04 profile，校验/me会话要求；本地浏览器核对字段、原样PATCH+版本、必填拦截、失败输入保留、跨分区保留/刷新回填、根/范围/外观href及当前分区。没有HTTP或storage写入；不冒充真实后端、版本竞态、12秒超时、会话守卫或幂等审计验证。
+
+生产Vue、API/OpenAPI、权限、数据库、配置、依赖、coverage、旧图与审批不改，无需重启。图/脚本为永久交付，没有新临时服务或目录，不操作历史受限材料；后续补四分区全部业务面与状态、获审后真实Vue/全站部署，73页目标不变。
+
 ## 2026-09-08 · 主题浮层 / THEME-C-r1
 
 收尾实测：capture及无参数源/文案/图哈希复验通过双端18场景，36PNG与40个README链接齐全；真实控制器knownGap重复复现且仍标记未修复。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）及diff检查通过。生产、旧图与coverage diff为空，不以产品build替代缺失的真实Vue验收。浏览器finally关闭，4101/5173无监听，无新增临时遗留；精确提交本批文件。
