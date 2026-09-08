@@ -1,0 +1,275 @@
+window.DETAIL_ASSEMBLY_C_DATA = {
+  version: "DETAIL-ASSEMBLY-C-r1",
+  fixedNow: "2026-08-23T03:00:00.000Z",
+  facts: {
+    detail: {
+      id: "00000000-0000-4000-8000-000000000701",
+      name: "便携净水杯机会",
+      market: "US",
+      category: "outdoor",
+      source_type: "manual",
+      source_ref_id: null,
+      owner_id: null,
+      lifecycle_status: "ready",
+      recommendation_status: "insufficient_data",
+      overall_score: null,
+      trend_score: null,
+      competition_score: null,
+      profit_status: "insufficient_data",
+      risk_level: "unknown",
+      confidence: {
+        status: "insufficient_data",
+        score: null,
+      },
+      evidence_count: 1,
+      source_count: 1,
+      coverage_status: "partial",
+      decision_status: "pending",
+      version: 1,
+      updated_at: "2026-08-08T12:00:00.000Z",
+      score_rule_version: null,
+      scored_at: null,
+      latest_score_run: null,
+      score_components: [],
+      evidence: [],
+      decisions: [],
+      section_status: {
+        market: "covered",
+        competition: "insufficient_data",
+        profit: "insufficient_data",
+        risk: "insufficient_data",
+        execution: "not_available",
+      },
+    },
+    analyses: [
+      {
+        id: "00000000-0000-4000-8000-000000000705",
+        status: "succeeded",
+        attempt_count: 1,
+        last_error_code: null,
+        input_sha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        prompt_contract_version: "opportunity-assist-v1",
+        created_at: "2026-08-08T12:01:00.000Z",
+        result: {
+          id: "00000000-0000-4000-8000-000000000702",
+          content: {
+            summary: "当前机会已有市场方向，但评分、利润和风险证据仍不足。",
+            classifications: [
+              {
+                label: "需要人工补充",
+                rationale: "现有事实不足以支持可靠结论。",
+                source_refs: ["opportunity:00000000-0000-4000-8000-000000000701"],
+              },
+            ],
+            missing_fields: [
+              {
+                field: "profit",
+                reason: "尚无确定性利润运行。",
+                source_refs: ["opportunity:00000000-0000-4000-8000-000000000701"],
+              },
+            ],
+          },
+          ai_generated: true,
+          model_name: "Qwen3.5-9B-AWQ-4bit",
+          provider_request_id: "provider-test",
+          review_status: "pending",
+          review: null,
+        },
+      },
+    ],
+  },
+  profit: {
+    latest_run: null,
+    current_inputs: [],
+  },
+  tabs: [
+    ["overview", "结论"],
+    ["evidence", "证据"],
+    ["profit", "利润与成本"],
+    ["risk", "风险"],
+    ["market", "市场"],
+    ["competition", "竞争"],
+    ["ai", "AI 辅助"],
+    ["lineage", "业务血缘"],
+    ["feedback", "经营复盘"],
+    ["decisions", "决策历史"],
+  ],
+  routeCases: [
+    {
+      tab: "overview",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+      },
+    },
+    {
+      tab: "evidence",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "evidence",
+      },
+    },
+    {
+      tab: "profit",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "profit",
+      },
+    },
+    {
+      tab: "risk",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "risk",
+      },
+    },
+    {
+      tab: "market",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "market",
+      },
+    },
+    {
+      tab: "competition",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "competition",
+      },
+    },
+    {
+      tab: "ai",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "ai",
+      },
+    },
+    {
+      tab: "lineage",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "lineage",
+      },
+    },
+    {
+      tab: "feedback",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "feedback",
+      },
+    },
+    {
+      tab: "decisions",
+      query: {
+        from: "/tasks?view=mine",
+        retained: "yes",
+        tab: "decisions",
+      },
+    },
+  ],
+  decisions: {
+    observe: {
+      method: "POST",
+      path: "/opportunities/00000000-0000-4000-8000-000000000701/decisions",
+      body: {
+        action: "observe",
+        reason: "  已核对当前样例，保留人工判断依据  ",
+        expected_version: 1,
+      },
+    },
+    reject: {
+      method: "POST",
+      path: "/opportunities/00000000-0000-4000-8000-000000000701/decisions",
+      body: {
+        action: "reject",
+        reason: "  已核对当前样例，保留人工判断依据  ",
+        expected_version: 1,
+      },
+    },
+  },
+  reason: "  已核对当前样例，保留人工判断依据  ",
+  reviewIntents: {
+    approved: {
+      method: "POST",
+      path: "/ai-analyses/00000000-0000-4000-8000-000000000702/reviews",
+      body: {
+        outcome: "approved",
+        notes: "已核对原始证据范围",
+      },
+    },
+    rejected: {
+      method: "POST",
+      path: "/ai-analyses/00000000-0000-4000-8000-000000000702/reviews",
+      body: {
+        outcome: "rejected",
+        notes: "已核对原始证据范围",
+      },
+    },
+    queue: {
+      method: "POST",
+      path: "/opportunities/00000000-0000-4000-8000-000000000701/ai-analyses",
+      body: {
+        expected_version: 1,
+      },
+    },
+  },
+  reviewReason: "  已核对原始证据范围  ",
+  defaults: {
+    period_start: "2026-08-23",
+    period_end: "2026-08-23",
+    sales_units: 0,
+    revenue_amount: 0,
+    ad_spend_amount: 0,
+    returned_units: 0,
+    purchase_lead_time_days: 0,
+    actual_profit_amount: 0,
+    currency: "USD",
+    source_ref: "",
+    notes: "",
+    observed_at: "2026-08-23T03:00:00.000Z",
+  },
+  feedbackExample: {
+    period_start: "2026-08-01",
+    period_end: "2026-08-22",
+    sales_units: 100,
+    revenue_amount: 1000,
+    ad_spend_amount: 100,
+    returned_units: 5,
+    purchase_lead_time_days: 12,
+    actual_profit_amount: 280,
+    currency: "usd",
+    source_ref: "ERP-SALES-202608",
+    notes: "财务与采购已核对",
+    observed_at: "2026-08-23T02:00:00.000Z",
+  },
+  feedbackIntent: {
+    method: "POST",
+    path: "/opportunities/00000000-0000-4000-8000-000000000701/operating-feedback",
+    body: {
+      period_start: "2026-08-01",
+      period_end: "2026-08-22",
+      sales_units: 100,
+      revenue_amount: 1000,
+      ad_spend_amount: 100,
+      returned_units: 5,
+      purchase_lead_time_days: 12,
+      actual_profit_amount: 280,
+      currency: "USD",
+      source_ref: "ERP-SALES-202608",
+      notes: "财务与采购已核对",
+      observed_at: "2026-08-23T03:00:00.000Z",
+      expected_version: 1,
+    },
+  },
+  capabilities: ["task:read", "opportunity:read", "opportunity:decide"],
+  boundary:
+    "One unchanged M04-07 historical opportunity and its own AI/profit responses. No data borrowed from the other three P18 fixtures. Missing lineage/feedback is not an empty response; evidence summary 1 and returned rows 0 remain distinct. Drafts, delays and failure states are isolated proposals, not real Vue/HTTP/RBAC or production acceptance.",
+};

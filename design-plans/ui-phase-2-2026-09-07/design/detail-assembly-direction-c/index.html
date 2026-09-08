@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>机会详情 · C方向十分区连续审稿</title>
+    <link rel="stylesheet" href="assembly.css" />
+    <script defer src="data.js"></script>
+    <script defer src="assembly.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#section-title">跳到当前分区</a>
+    <div class="review-tools">
+      <span>离线审稿 · 同一机会 · 非生产数据</span>
+      <label for="scene">查看场景</label
+      ><select id="scene"></select>
+      <a href="README.md">范围与图册</a>
+    </div>
+    <header class="identity">
+      <div>
+        <p>智能选品 / 机会详情</p>
+        <h1 id="identity-title"></h1>
+      </div>
+      <button id="return">返回来源</button>
+    </header>
+    <div class="workspace">
+      <aside>
+        <details id="directory">
+          <summary>当前分区：<span id="current-tab"></span></summary>
+          <nav id="navigation" aria-label="机会详情分区"></nav>
+        </details>
+        <p class="directory-note">先核对事实，再留下判断。切换分区不会清空本次录入草稿。</p>
+      </aside>
+      <div class="surface">
+        <div class="context">
+          <span id="context-status"></span><span>US / outdoor</span><span>历史样例 v1</span>
+        </div>
+        <div id="operation" aria-live="polite" aria-atomic="true"></div>
+        <main id="work"></main>
+      </div>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title" aria-describedby="reason-help">
+      <form id="reason-form">
+        <div class="dialog-head">
+          <h2 id="reason-title"></h2>
+          <button type="button" id="close-reason" aria-label="关闭原因弹窗">关闭</button>
+        </div>
+        <p id="reason-target"></p>
+        <p id="reason-help"></p>
+        <label for="reason">原因（必填）</label
+        ><textarea
+          id="reason"
+          rows="5"
+          required
+          maxlength="1000"
+          aria-describedby="reason-hint reason-error"
+        ></textarea>
+        <p class="muted" id="reason-hint"></p>
+        <p id="reason-error" role="alert"></p>
+        <div class="actions">
+          <button type="button" id="cancel-reason">取消</button
+          ><button class="primary" id="submit-reason">演示提交</button>
+        </div>
+        <p class="muted">这里只验证交互，不会发送请求或改写业务记录。</p>
+      </form>
+    </dialog>
+  </body>
+</html>
