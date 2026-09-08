@@ -1,5 +1,7 @@
 # P43 用户管理设计事实与局部动作合同
 
+2026-09-09增量：[USER-ADMIN-C-r1](design/user-admin-direction-c/README.md)补P43/P44联合111场景/256图；下文18图为早期研究。当前保留移动预览与内联组织授权，不把早期提议当批准。真实服务/composable/成员候选/比较函数惰性验证，resetPassword原因确认读当前selected和passwordForm的漂移已复现；原型快照/清空/迟到保护非生产修复。改密后status恢复active的仓库事实写入图稿影响说明。业务请求字段、角色及权限规则不改，完整真实验收和具体图审待办。
+
 依据：main/1ad9db7；产品源码与H02提交5192de2相同。本批只交P43规格与独立C研究，不宣称W05八页或全站语义分母完成。API均使用既有客户端的/api/v1前缀，角色平台:superadmin以实际代码字符串platform:superadmin为准。
 
 ## 1. 候选归属（33个直接候选，不是业务动作分母）

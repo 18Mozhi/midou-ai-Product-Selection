@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · W05用户/管理员 / USER-ADMIN-C-r1
+
+收尾：最终capture及无参数源/数据/PNG指纹、精确清单和双端交互复验256图通过。W05合同8页/128候选/24绑定/32源/29链接，docs 73路由/60保护/6角色/153文件，runtime-docs、static-analysis 390文件、format 2脚本/496生产/51仓库和四原型Prettier、diff检查通过。图根262文件、README259有效链接，本批272路径；所有自有浏览器/CLI退出，4101/5173无监听。无临时测试产物或服务；引用上一批CSS未改其内容，作为指纹依赖保留。无生产合同变化，OpenAPI/env/迁移/重启不适用；具体稿与真实实现部署仍待办。
+
+从干净main/a9cfd22接续。P43 52/P44 59场景，双端222主图＋34长弹窗下部，共256PNG：[完整图册](design/user-admin-direction-c/README.md)。遵循AGENTS→Feature Map→蓝图→两页规格/用户合同→真实组件/详情composable/服务/仓库与E2E夹具。frontend-design安排蓝色身份及三工作区，保留手机预览/内联授权；复用已安装Playwright与上一包基础CSS，不安装依赖或启动服务。
+
+原overview/角色目录与Chrome用户详情/空管理员详情独立AST提取；用户关系缺organization_id不偷偷补齐。真实membership computed、服务、详情composable和比较computed惰性执行；源resetPassword回调目标与密码漂移复现。密码重置同时恢复active的实际仓库影响已在稿中说明；快照/明文清空/迟到归属仅提案。双端两页11原因body/path、五组织角色、改密校验与目标、原因失效零写入、迟到创建、比较6/0/3和不写URL通过。视觉复核调整邮箱字号并对齐六角色原因的前态，重新capture通过256图、HTTP/console/pageerror/存储0。
+
+真实Vue/API/MySQL/RBAC/邮件/MFA/审计及完整读写/历史/主题密度/移动辅助技术未验证；具体稿未批准，下一P45，全73页实现部署持续待办，不将图稿通过计作生产验收。
+
 ## 2026-09-09 · W05组织管理连贯稿 / PLATFORM-ORGANIZATIONS-C-r1
 
 收尾：最终capture及无参数源/数据/PNG指纹与交互复验102图通过；W05合同8页/128候选/24绑定/32源/25链接，docs 73路由/60保护/6角色/153文件，runtime-docs、static-analysis 390文件、format 2脚本/496生产/51仓库与四原型Prettier通过。图根108文件、README104有效链接，共118本批路径；未产生临时文件或开发服务，自有浏览器均关闭，4101/5173无监听。没有业务代码变更，OpenAPI/env/数据库迁移和重启不适用。具体稿审核与真实实现部署仍未完成。

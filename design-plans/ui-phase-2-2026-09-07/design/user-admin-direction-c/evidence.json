@@ -1,0 +1,1583 @@
+{
+  "proposal": "USER-ADMIN-C-r1",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/api/src/platform-account-routes.ts": "79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226",
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+    "scripts/lib/ui-phase2-user-admin-design-data.mjs": "6c0a0a2bde7e8b5b6ac7a7dd54641c536b9272bf016d9673168ffa36fd64a6f5",
+    "scripts/verify-ui-phase2-user-admin-c.mjs": "522867dcefb508baeb76608dc407a2fd4bd7ee2f1c1b57fac5e841bcfc871438",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-organizations-direction-c/organizations.css": "b74d330c555085363c03f0744fc8e071cc3b3bb55c519ad62e183b071e57e857",
+    "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/index.html": "94e56fad7a09ba366553fd5b1dab6c11521060c4fbd48d4434a89e90ba152ef8",
+    "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/accounts.css": "5c16171c13163a47877dd90e1715904cbab37565b3eebdd38a37dc18f7209685",
+    "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/accounts.js": "76e4a54eb94514234d59c7fd2df838c3b697b8e4cd7fcb7c6cf80eae97b7e757",
+    "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/data.js": "79cf7fdcb44df178b0f93f093317bd15f80ad930b48c4e1db59ce592eb26cd26"
+  },
+  "sourceChecks": [
+    "Original overview and Chrome detail fixture extracted unchanged; original membership lacks organization_id",
+    "Actual membership computed excludes active organizations with any existing relationship, including disabled; five role choices",
+    "Actual service: six grant/revoke combinations, self-disable/self-super-revoke rejection, five membership roles, null/single session, password 12..128, reason 2..300",
+    "Actual detail composable: old GET cannot overwrite new account; close/route change invalidates detail and action guard",
+    "Actual resetPassword callback: target and password drift reproduced with inert refs; production not changed",
+    "Actual role comparison: 6 differences, identical roles 0 differences/3 all; persistSelection=false emits no router writes",
+    "No mounted Vue, real API, MySQL, permission grant, MFA, credential or audit execution"
+  ],
+  "checks": [
+    "1440/users: list-preview-detail sections; exact creation defaults and five fields; 11 reason bodies/paths; 5 membership roles; password validation/snapshot; disabled/ended controls; old action 0 writes; late creation ownership; password clearing; Escape/Tab; email URL filtering",
+    "1440/admins: list-preview-detail sections; exact creation defaults and five fields; 11 reason bodies/paths; 5 membership roles; password validation/snapshot; disabled/ended controls; old action 0 writes; late creation ownership; password clearing; Escape/Tab; email URL filtering",
+    "1440: embedded role comparison 6/0/3, exact search and group, reset, no URL persistence; 759/760/768/1024 partial checks; no storage",
+    "390/users: list-preview-detail sections; exact creation defaults and five fields; 11 reason bodies/paths; 5 membership roles; password validation/snapshot; disabled/ended controls; old action 0 writes; late creation ownership; password clearing; Escape/Tab; email URL filtering",
+    "390/admins: list-preview-detail sections; exact creation defaults and five fields; 11 reason bodies/paths; 5 membership roles; password validation/snapshot; disabled/ended controls; old action 0 writes; late creation ownership; password clearing; Escape/Tab; email URL filtering",
+    "390: embedded role comparison 6/0/3, exact search and group, reset, no URL persistence; 759/760/768/1024 partial checks; no storage"
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "file": "1440-users--list.png",
+      "width": 1440,
+      "scene": "users--list",
+      "sha256": "bd9e3979f7f83c663dd9bf502d7ae3f7fa4d5c1622ced0a5143a28fa9db324b1"
+    },
+    {
+      "file": "1440-users--many.png",
+      "width": 1440,
+      "scene": "users--many",
+      "sha256": "5ac6fc04868deec90e38895dbd9e2b4eb8212a2af5cc05c260f32121ca20119f"
+    },
+    {
+      "file": "1440-users--long.png",
+      "width": 1440,
+      "scene": "users--long",
+      "sha256": "96ebc577492308b944b572f4d32bba54523cf6cdf11654a653385f30963a1077"
+    },
+    {
+      "file": "1440-users--empty.png",
+      "width": 1440,
+      "scene": "users--empty",
+      "sha256": "9c8457433d2e7b24ea686f9f623863b240dfc91f68f733a1f17ecdc637e25a6a"
+    },
+    {
+      "file": "1440-users--filtered_empty.png",
+      "width": 1440,
+      "scene": "users--filtered_empty",
+      "sha256": "a25b16a31989a29983cf1c6aced53d56df7e0b200cbe6490812a38d45d7b91aa"
+    },
+    {
+      "file": "1440-users--disabled.png",
+      "width": 1440,
+      "scene": "users--disabled",
+      "sha256": "ffac8a89ff4c4370ef23b8c1afd191a262b4d2a4bfb16082d7798c39a617a048"
+    },
+    {
+      "file": "1440-users--loading.png",
+      "width": 1440,
+      "scene": "users--loading",
+      "sha256": "95b8bbed77aa6d9a571ebea155fb3c5210a86a0cd0c23882eeb5c471c2168386"
+    },
+    {
+      "file": "1440-users--error.png",
+      "width": 1440,
+      "scene": "users--error",
+      "sha256": "a99a1c1d0cf273c0cd7caf552bbe99eac43c6275c388357ce59d3b1a169d029e"
+    },
+    {
+      "file": "1440-users--timeout.png",
+      "width": 1440,
+      "scene": "users--timeout",
+      "sha256": "55a533f992503419691656c74e4a5e2dfb5417e090e2151d5365c7cefae84e83"
+    },
+    {
+      "file": "1440-users--refresh_error.png",
+      "width": 1440,
+      "scene": "users--refresh_error",
+      "sha256": "9e36dbf3f13497f302f8425dc8d7f9776efa20d8b6c6fafd1761d7cba95d468e"
+    },
+    {
+      "file": "1440-users--filter.png",
+      "width": 1440,
+      "scene": "users--filter",
+      "sha256": "204189eafb7db961d3290c9d308c603490132aa72b7e2994dce2bc125fd8b953"
+    },
+    {
+      "file": "1440-users--columns.png",
+      "width": 1440,
+      "scene": "users--columns",
+      "sha256": "a641e7e2cfb759a93a9f9fd9473f610d053fc62173f06a0b9c9578b9c27c6cab"
+    },
+    {
+      "file": "1440-users--compact.png",
+      "width": 1440,
+      "scene": "users--compact",
+      "sha256": "8ab097102f912dfc60b234930dd5052ed5f8867db14d498c5bc9d7230ba63c96"
+    },
+    {
+      "file": "1440-users--preview.png",
+      "width": 1440,
+      "scene": "users--preview",
+      "sha256": "eed0ea2c8861131b4c60fcefafaa218e720839a2d5e52cd237e2218e4426d137"
+    },
+    {
+      "file": "1440-users--technical.png",
+      "width": 1440,
+      "scene": "users--technical",
+      "sha256": "232fc3301244d3c3b0203f908d8126dd6b0f0fc76559bbff868e515c86d972fd"
+    },
+    {
+      "file": "1440-users--detail.png",
+      "width": 1440,
+      "scene": "users--detail",
+      "sha256": "99c619a3710eb14ce4e0fe60f08d797b4dcb0e31ed3e1255713d5ba27df77aaf"
+    },
+    {
+      "file": "1440-users--detail-bottom.png",
+      "width": 1440,
+      "scene": "users--detail",
+      "sha256": "feaa4b2628febb0ce8ffdf0c391c7ecd34e43228bec98a63c9ff0b38786ae31b"
+    },
+    {
+      "file": "1440-users--detail_loading.png",
+      "width": 1440,
+      "scene": "users--detail_loading",
+      "sha256": "8000b4d6bc9440a255a4535f24bd206b1436c6ac0fe436b9ed7bafad5845676e"
+    },
+    {
+      "file": "1440-users--detail_error.png",
+      "width": 1440,
+      "scene": "users--detail_error",
+      "sha256": "5a2d5de91ccaf33c2440b0cba9d09641324579aed9c3054f65e856f457921749"
+    },
+    {
+      "file": "1440-users--memberships.png",
+      "width": 1440,
+      "scene": "users--memberships",
+      "sha256": "7326f9ab6dcd650a8086ac7012fa02b0028bd26df8be186a788d326e8c56ebcf"
+    },
+    {
+      "file": "1440-users--memberships-bottom.png",
+      "width": 1440,
+      "scene": "users--memberships",
+      "sha256": "eedd5c2792b1cba2762d78cb02c75fc4ddea15f12615989d40fcc8cdf8efe949"
+    },
+    {
+      "file": "1440-users--no_memberships.png",
+      "width": 1440,
+      "scene": "users--no_memberships",
+      "sha256": "f95fa0ea3c6fda42afb13c7acc4aaf0687c31aaaad98d67262ab4ee79b648ff3"
+    },
+    {
+      "file": "1440-users--no_memberships-bottom.png",
+      "width": 1440,
+      "scene": "users--no_memberships",
+      "sha256": "e6fa4b5ca3138e9be330a9637f986993add6afedde6f9b59994a20cedb928146"
+    },
+    {
+      "file": "1440-users--membership_error.png",
+      "width": 1440,
+      "scene": "users--membership_error",
+      "sha256": "304272b9c1210d506b49ea9dc7829dbbb81d09542920f52a75a2036bdb1786cf"
+    },
+    {
+      "file": "1440-users--membership_error-bottom.png",
+      "width": 1440,
+      "scene": "users--membership_error",
+      "sha256": "5de856d909541fa607385b2d73969c440de457da587c6cc3c55ab7f1c7e6d7e9"
+    },
+    {
+      "file": "1440-users--roles.png",
+      "width": 1440,
+      "scene": "users--roles",
+      "sha256": "b0afdd3d8d9ca67818cb4f9fa126aeb40fae6a034c26f64810ea11a5b1f95148"
+    },
+    {
+      "file": "1440-users--disabled_roles.png",
+      "width": 1440,
+      "scene": "users--disabled_roles",
+      "sha256": "e69c7f97acf5c6a9e57dfb6b460b27a7bfeef26bb519a1de270753c0b6eafbd5"
+    },
+    {
+      "file": "1440-users--security.png",
+      "width": 1440,
+      "scene": "users--security",
+      "sha256": "5269c7e76fb00634306afe9d9a2a0e3544424fe7a06efbc5416f7b240e50f92e"
+    },
+    {
+      "file": "1440-users--no_sessions.png",
+      "width": 1440,
+      "scene": "users--no_sessions",
+      "sha256": "fb16251876e9a2cad57484976025e028b1178f002a9403d7b73e0563824fe6cc"
+    },
+    {
+      "file": "1440-users--expired_session.png",
+      "width": 1440,
+      "scene": "users--expired_session",
+      "sha256": "fa5b65aa07dcfff49fe838ad268ec09a6db2b977d27ad59a02a09c3e2b079293"
+    },
+    {
+      "file": "1440-users--password.png",
+      "width": 1440,
+      "scene": "users--password",
+      "sha256": "e4a16fa0668ebd6a3bda0378654d2939a765f420b687f24cfedd29ec82808ce0"
+    },
+    {
+      "file": "1440-users--password_error.png",
+      "width": 1440,
+      "scene": "users--password_error",
+      "sha256": "5fe1944008486d319d97eff31e80bcee2765b746c0a265ae07c1dc999ba02bca"
+    },
+    {
+      "file": "1440-users--password_invalid.png",
+      "width": 1440,
+      "scene": "users--password_invalid",
+      "sha256": "3476b16d49edd35a05fadd7fcea20d7960a559a6a3f59e4bef06b29cd5d8e6b1"
+    },
+    {
+      "file": "1440-users--create.png",
+      "width": 1440,
+      "scene": "users--create",
+      "sha256": "e2ef15d09fc55685d01730b953275013d5b49f1f1ab655e0e39245dfaeb70522"
+    },
+    {
+      "file": "1440-users--create_org.png",
+      "width": 1440,
+      "scene": "users--create_org",
+      "sha256": "32279e0d232b6d078c215f0f8b640a67be10752dbe78953dd8601f2fd2d0726c"
+    },
+    {
+      "file": "1440-users--create_error.png",
+      "width": 1440,
+      "scene": "users--create_error",
+      "sha256": "1b4c6b9998e9751104b91adf9fb9fdf51bed9aefa1b224d472e9a4212d101d96"
+    },
+    {
+      "file": "1440-users--create_busy.png",
+      "width": 1440,
+      "scene": "users--create_busy",
+      "sha256": "10556029d7ae65b876fb2598cf8c7b4d64ed303b669aad66355465a04075fa32"
+    },
+    {
+      "file": "1440-users--write_busy.png",
+      "width": 1440,
+      "scene": "users--write_busy",
+      "sha256": "126245872554255e16ee365a17f3a17df155c3f57d4280f648183e6b0186e92b"
+    },
+    {
+      "file": "1440-users--write_error.png",
+      "width": 1440,
+      "scene": "users--write_error",
+      "sha256": "7010fb3ed6b4e796f71f73419a6bce998f20bcfbdd05ba44179590c46715d1ec"
+    },
+    {
+      "file": "1440-users--write_read_error.png",
+      "width": 1440,
+      "scene": "users--write_read_error",
+      "sha256": "5e8ca8caf64be8682c1c50890490ee77d69d8964f1bfc39aeaf5128519d52126"
+    },
+    {
+      "file": "1440-users--reason_invalid.png",
+      "width": 1440,
+      "scene": "users--reason_invalid",
+      "sha256": "8d682a18f25f67930e0c7a7f7485f58c86b615af5020488ac9c8926f01e82c96"
+    },
+    {
+      "file": "1440-users--self_refusal.png",
+      "width": 1440,
+      "scene": "users--self_refusal",
+      "sha256": "71260c239b3349def45a15159dda6950c80daa0f5ac06a4b2c41b9baca492046"
+    },
+    {
+      "file": "1440-users--focus.png",
+      "width": 1440,
+      "scene": "users--focus",
+      "sha256": "adfac7597fc30bd6b57b3c3ed6961f723983ffebb0e3e7075c78f09bc4185ec6"
+    },
+    {
+      "file": "1440-users--hover.png",
+      "width": 1440,
+      "scene": "users--hover",
+      "sha256": "ca8ce5bb99eced0a9f1608ebf4efe4a10a188ce9d8b7d20accc8bc6fe07bf5e8"
+    },
+    {
+      "file": "1440-users--pressed.png",
+      "width": 1440,
+      "scene": "users--pressed",
+      "sha256": "ab13ae123fa54e8ac91a4f111f3e87c499afc179f984e7ac29688a9f9dac4a8a"
+    },
+    {
+      "file": "1440-users--reason_disable.png",
+      "width": 1440,
+      "scene": "users--reason_disable",
+      "sha256": "d04f8f59c03a223416874b34b154210519e812deac42b9dab892bf818a952aa3"
+    },
+    {
+      "file": "1440-users--reason_restore.png",
+      "width": 1440,
+      "scene": "users--reason_restore",
+      "sha256": "cd30162ebbb03cd77494e40680b8a2812e8ba2f363251bd5bb30ae051b00d064"
+    },
+    {
+      "file": "1440-users--reason_grant_operations.png",
+      "width": 1440,
+      "scene": "users--reason_grant_operations",
+      "sha256": "a9cc09694a7808c58034f19e20558a5f4122cc995cc262e7594abca6d2b9d80f"
+    },
+    {
+      "file": "1440-users--reason_revoke_operations.png",
+      "width": 1440,
+      "scene": "users--reason_revoke_operations",
+      "sha256": "1ce56e883c8eb1941baac99ad28a3ef00007fc070cbcc6d05d7cf93cf3c2fed4"
+    },
+    {
+      "file": "1440-users--reason_grant_security.png",
+      "width": 1440,
+      "scene": "users--reason_grant_security",
+      "sha256": "20815a447d578cd8b6751bfc3953db2b7b7d0cb1f31cc1256377ec3123682257"
+    },
+    {
+      "file": "1440-users--reason_revoke_security.png",
+      "width": 1440,
+      "scene": "users--reason_revoke_security",
+      "sha256": "916e02680da83316367ec4268e9f9cd5a215fbfa479e289ef6918c9bbeb5ad06"
+    },
+    {
+      "file": "1440-users--reason_grant_super.png",
+      "width": 1440,
+      "scene": "users--reason_grant_super",
+      "sha256": "cd82df1eb06f6b8f6d1bde8dbcaa31a672ec6fc641397fad3a9f4b92a523edd7"
+    },
+    {
+      "file": "1440-users--reason_revoke_super.png",
+      "width": 1440,
+      "scene": "users--reason_revoke_super",
+      "sha256": "5f62cee564fad803acff9e79e5042eaf9eb6fb0137e288541ce650ec81002879"
+    },
+    {
+      "file": "1440-users--reason_session.png",
+      "width": 1440,
+      "scene": "users--reason_session",
+      "sha256": "6a4e9faa6c5f8a5291f183d5146b9297048f20d43333f7195ef72757638b4fb1"
+    },
+    {
+      "file": "1440-users--reason_sessions.png",
+      "width": 1440,
+      "scene": "users--reason_sessions",
+      "sha256": "acd7fce9ace50c0b5a1efd27f16dbc0c3cdff5cfc4976637aeebc1729c465fe2"
+    },
+    {
+      "file": "1440-users--reason_reset_password.png",
+      "width": 1440,
+      "scene": "users--reason_reset_password",
+      "sha256": "a24e2653961461071c7ef6647a8fb022d126a3d8f593ff94e70d3c728390548c"
+    },
+    {
+      "file": "1440-admins--list.png",
+      "width": 1440,
+      "scene": "admins--list",
+      "sha256": "50c544815f1da8c8bec1d7a0ea326d188546fffc7e2e8cb450f2b63a1399ea35"
+    },
+    {
+      "file": "1440-admins--many.png",
+      "width": 1440,
+      "scene": "admins--many",
+      "sha256": "6726a4b1a36d5a7111386ddfe2628ea5109c339d14ca486d189dd742e257d69a"
+    },
+    {
+      "file": "1440-admins--long.png",
+      "width": 1440,
+      "scene": "admins--long",
+      "sha256": "6d7cf5562752e65f1ae8a63622b70804101afa6e4d8b200065f191528d32ef6f"
+    },
+    {
+      "file": "1440-admins--empty.png",
+      "width": 1440,
+      "scene": "admins--empty",
+      "sha256": "2a99da10ef8dbbb805735a997b79db8b322a06bbbbe526d0666f6c2a2a8caa99"
+    },
+    {
+      "file": "1440-admins--filtered_empty.png",
+      "width": 1440,
+      "scene": "admins--filtered_empty",
+      "sha256": "d9f1081b9b191ac2e00ea527e5f4703c19fa11c30b2ddf1a85e455b7fa872dad"
+    },
+    {
+      "file": "1440-admins--disabled.png",
+      "width": 1440,
+      "scene": "admins--disabled",
+      "sha256": "9c0f99f3db7027250258d1ee4992065ef56e0fa45bfeefb206ef48c46de544f4"
+    },
+    {
+      "file": "1440-admins--loading.png",
+      "width": 1440,
+      "scene": "admins--loading",
+      "sha256": "23d41b356fc8d5efa3d2c9f653196347ad096fe63a52b4dd755126e0bf1352ef"
+    },
+    {
+      "file": "1440-admins--error.png",
+      "width": 1440,
+      "scene": "admins--error",
+      "sha256": "d2e6a38f9ba7fdc76ee6d7e44bf8694b75929f3e2ab59349fd3087616ccedaca"
+    },
+    {
+      "file": "1440-admins--timeout.png",
+      "width": 1440,
+      "scene": "admins--timeout",
+      "sha256": "6fc01d7dc89ae135203fb12a78dcb87818855b412205907d6dcfd89e177e37f3"
+    },
+    {
+      "file": "1440-admins--refresh_error.png",
+      "width": 1440,
+      "scene": "admins--refresh_error",
+      "sha256": "88d758949c25cf47146450c53ecf1dd1325ae71eef3d06baf85dfea50d96faa0"
+    },
+    {
+      "file": "1440-admins--filter.png",
+      "width": 1440,
+      "scene": "admins--filter",
+      "sha256": "8702a05bf2d060d9af5649cc50057fa5f28dab41f3d5ae587584ddb11722f280"
+    },
+    {
+      "file": "1440-admins--columns.png",
+      "width": 1440,
+      "scene": "admins--columns",
+      "sha256": "65deaee7df760dc9c35157f7bb858a37988b4cd06176b530491011b32592cc2f"
+    },
+    {
+      "file": "1440-admins--compact.png",
+      "width": 1440,
+      "scene": "admins--compact",
+      "sha256": "94b61dd837a360eef7f10f56b057708f98bae7b89cc446fdcf1bccea9443d834"
+    },
+    {
+      "file": "1440-admins--preview.png",
+      "width": 1440,
+      "scene": "admins--preview",
+      "sha256": "7c6174e5aee197d6c2c2e5fea7adee4e8fcb8f722234ce57edd8adeb6b443540"
+    },
+    {
+      "file": "1440-admins--technical.png",
+      "width": 1440,
+      "scene": "admins--technical",
+      "sha256": "4ed718208b9d87199b3c22ccb13c5d7182f7b4da9d38341c58c9f8b50c5b7db2"
+    },
+    {
+      "file": "1440-admins--detail.png",
+      "width": 1440,
+      "scene": "admins--detail",
+      "sha256": "cdd30b7707d68270825f2d71a7e30bdcdb990ca61d6dfe023515a1d678eff513"
+    },
+    {
+      "file": "1440-admins--detail-bottom.png",
+      "width": 1440,
+      "scene": "admins--detail",
+      "sha256": "141042ded0a69a57390b909e33e65345cbb2ace40725f337464749249fbbae76"
+    },
+    {
+      "file": "1440-admins--detail_loading.png",
+      "width": 1440,
+      "scene": "admins--detail_loading",
+      "sha256": "3e222e01704c07c4f6de18d4e2266d5930406dda6d705b710a938f3962118694"
+    },
+    {
+      "file": "1440-admins--detail_error.png",
+      "width": 1440,
+      "scene": "admins--detail_error",
+      "sha256": "82ed2061f3ab93ef5a1529a64ec7172414b86156f52849f1676e5c1721382901"
+    },
+    {
+      "file": "1440-admins--memberships.png",
+      "width": 1440,
+      "scene": "admins--memberships",
+      "sha256": "28f1e9dfba9a8dcdacdf86d3b49e7077da8afd5319bec5bbc46adcb6cc093fcd"
+    },
+    {
+      "file": "1440-admins--memberships-bottom.png",
+      "width": 1440,
+      "scene": "admins--memberships",
+      "sha256": "d762cab872b192953cbfffe781ee2365648f10d59f6209dc8d7bec3bab19dd51"
+    },
+    {
+      "file": "1440-admins--no_memberships.png",
+      "width": 1440,
+      "scene": "admins--no_memberships",
+      "sha256": "cdd30b7707d68270825f2d71a7e30bdcdb990ca61d6dfe023515a1d678eff513"
+    },
+    {
+      "file": "1440-admins--no_memberships-bottom.png",
+      "width": 1440,
+      "scene": "admins--no_memberships",
+      "sha256": "141042ded0a69a57390b909e33e65345cbb2ace40725f337464749249fbbae76"
+    },
+    {
+      "file": "1440-admins--membership_error.png",
+      "width": 1440,
+      "scene": "admins--membership_error",
+      "sha256": "73333ad4009a5f793ba3c3495b8253398b4f902851bdc738adf03911d4292481"
+    },
+    {
+      "file": "1440-admins--membership_error-bottom.png",
+      "width": 1440,
+      "scene": "admins--membership_error",
+      "sha256": "2581031b2eb6935db7bf6c058b24b30f31b97c7f52aebbe08134c687df07fd0f"
+    },
+    {
+      "file": "1440-admins--roles.png",
+      "width": 1440,
+      "scene": "admins--roles",
+      "sha256": "dc3944eace08ec5754c87f7f95e832e3addd41fd7bb568647925ff1d15569785"
+    },
+    {
+      "file": "1440-admins--disabled_roles.png",
+      "width": 1440,
+      "scene": "admins--disabled_roles",
+      "sha256": "a5749dede79be96848d13875f18fe0a6450f8f3896f42c50ea91104e2ab6dafb"
+    },
+    {
+      "file": "1440-admins--security.png",
+      "width": 1440,
+      "scene": "admins--security",
+      "sha256": "23193a935eb6eca4753e0100add520db8760600420713ac05ad6195851fd9cd8"
+    },
+    {
+      "file": "1440-admins--no_sessions.png",
+      "width": 1440,
+      "scene": "admins--no_sessions",
+      "sha256": "23193a935eb6eca4753e0100add520db8760600420713ac05ad6195851fd9cd8"
+    },
+    {
+      "file": "1440-admins--expired_session.png",
+      "width": 1440,
+      "scene": "admins--expired_session",
+      "sha256": "cd9becfced72502f278dc880fdad4648cc3ba197559bdf2659883b134e682ab9"
+    },
+    {
+      "file": "1440-admins--password.png",
+      "width": 1440,
+      "scene": "admins--password",
+      "sha256": "6f411c1f6e60eec60ae253481dc391fe9ff86706ab28bb46240686c99514ebb5"
+    },
+    {
+      "file": "1440-admins--password_error.png",
+      "width": 1440,
+      "scene": "admins--password_error",
+      "sha256": "2c82aac23f21b863a195ca8733ff922c45fc10a5af2420f536b8bad12159137f"
+    },
+    {
+      "file": "1440-admins--password_invalid.png",
+      "width": 1440,
+      "scene": "admins--password_invalid",
+      "sha256": "a10649816559a4153a5fd9416bbebf45ef7bcc741c6ff079e794488a3df1453c"
+    },
+    {
+      "file": "1440-admins--create.png",
+      "width": 1440,
+      "scene": "admins--create",
+      "sha256": "ec2a249dd219b4892a5cd8564b489f6b9e737356644b80299adaa8435e8e8717"
+    },
+    {
+      "file": "1440-admins--create_org.png",
+      "width": 1440,
+      "scene": "admins--create_org",
+      "sha256": "b54bc72eb93653efce918437265be1554d02b5ef61fa9ed3b89b4bfa09566ded"
+    },
+    {
+      "file": "1440-admins--create_error.png",
+      "width": 1440,
+      "scene": "admins--create_error",
+      "sha256": "f9a0ccafc28b081c504c057275aff241716e85e8a62313f1253afa2a18390bcf"
+    },
+    {
+      "file": "1440-admins--create_busy.png",
+      "width": 1440,
+      "scene": "admins--create_busy",
+      "sha256": "79c673503ee75dd3d9635b2e3eb10bba1376893f50597bf92244ba9c4d52253f"
+    },
+    {
+      "file": "1440-admins--write_busy.png",
+      "width": 1440,
+      "scene": "admins--write_busy",
+      "sha256": "44f396db5cc62b7fdd4d1b6c4aa8af423d0c74ce29d35e71cfe78d4daf26d605"
+    },
+    {
+      "file": "1440-admins--write_error.png",
+      "width": 1440,
+      "scene": "admins--write_error",
+      "sha256": "6db9a2801f1a6e0c8f82ec6f06fe4c660d04d20d05a4f5029d3cf34c904dd878"
+    },
+    {
+      "file": "1440-admins--write_read_error.png",
+      "width": 1440,
+      "scene": "admins--write_read_error",
+      "sha256": "9ad320e5c5e8cda0a067312fdc8e82947d170bd1d279ac346784b1d41bbb27c2"
+    },
+    {
+      "file": "1440-admins--reason_invalid.png",
+      "width": 1440,
+      "scene": "admins--reason_invalid",
+      "sha256": "53f17d7febffe0ed4f25b7e19dd5a757055eb0c7f0a9773623adc0bf88855e50"
+    },
+    {
+      "file": "1440-admins--self_refusal.png",
+      "width": 1440,
+      "scene": "admins--self_refusal",
+      "sha256": "aa68c8981309a96306d0111658ca9b7511386532955b9392840b6eaa4cdf4af0"
+    },
+    {
+      "file": "1440-admins--focus.png",
+      "width": 1440,
+      "scene": "admins--focus",
+      "sha256": "50c544815f1da8c8bec1d7a0ea326d188546fffc7e2e8cb450f2b63a1399ea35"
+    },
+    {
+      "file": "1440-admins--hover.png",
+      "width": 1440,
+      "scene": "admins--hover",
+      "sha256": "cbe70c5407e0d07e9714ad28d475ce3e02d3e656f16bf321596eff18158e634f"
+    },
+    {
+      "file": "1440-admins--pressed.png",
+      "width": 1440,
+      "scene": "admins--pressed",
+      "sha256": "5383693ed6c0787bb26e7c14d0b4f18a3369acb12bacb1bd7822fdae95c43e04"
+    },
+    {
+      "file": "1440-admins--reason_disable.png",
+      "width": 1440,
+      "scene": "admins--reason_disable",
+      "sha256": "c0bfa51e9d40995021fc0eea8fa0ca556ee48779a6786512c2593a70e5602530"
+    },
+    {
+      "file": "1440-admins--reason_restore.png",
+      "width": 1440,
+      "scene": "admins--reason_restore",
+      "sha256": "9ce6ba173099ab022f4f5f3881e17e23da1436a5c5649055bfbddd9186a37afe"
+    },
+    {
+      "file": "1440-admins--reason_grant_operations.png",
+      "width": 1440,
+      "scene": "admins--reason_grant_operations",
+      "sha256": "c2ba13198322913772caa70df3949ef7c5478325cd7a67c3e2c7c6857ea96db3"
+    },
+    {
+      "file": "1440-admins--reason_revoke_operations.png",
+      "width": 1440,
+      "scene": "admins--reason_revoke_operations",
+      "sha256": "3c31ba1fd9e615370ec371a91147878538f38547e41998a88364cfeb94e2101f"
+    },
+    {
+      "file": "1440-admins--reason_grant_security.png",
+      "width": 1440,
+      "scene": "admins--reason_grant_security",
+      "sha256": "166295102c68eb8c2bab1b400a497296e5ea89ad6577cacb446e7cae4ce25cfc"
+    },
+    {
+      "file": "1440-admins--reason_revoke_security.png",
+      "width": 1440,
+      "scene": "admins--reason_revoke_security",
+      "sha256": "8eccfc0c921b522ab1f79c87ae8c944532665259ee956f3f6d91f7f16f05141a"
+    },
+    {
+      "file": "1440-admins--reason_grant_super.png",
+      "width": 1440,
+      "scene": "admins--reason_grant_super",
+      "sha256": "9c7d9ab9cc56843b87e36be87c220a9f1bb16f8479be7a3d4f9d3062255a510d"
+    },
+    {
+      "file": "1440-admins--reason_revoke_super.png",
+      "width": 1440,
+      "scene": "admins--reason_revoke_super",
+      "sha256": "413f9b15ffd2713428e864a638714dd625fb5eaa8b92be404f85d7fe4a3bc49a"
+    },
+    {
+      "file": "1440-admins--reason_session.png",
+      "width": 1440,
+      "scene": "admins--reason_session",
+      "sha256": "6003de662ff1bbfa07f6a8d7c5857fa57588998ddd182bbb59a997e2ed822ac5"
+    },
+    {
+      "file": "1440-admins--reason_sessions.png",
+      "width": 1440,
+      "scene": "admins--reason_sessions",
+      "sha256": "c8602bb329799938eee07c55754606f3e34adb49ac8f22401e6036e7638378d1"
+    },
+    {
+      "file": "1440-admins--reason_reset_password.png",
+      "width": 1440,
+      "scene": "admins--reason_reset_password",
+      "sha256": "196a867eeec0a68f5babc4b169a4a0daf93100fdc0b2f7f38664e909af0a149c"
+    },
+    {
+      "file": "1440-admins--comparison.png",
+      "width": 1440,
+      "scene": "admins--comparison",
+      "sha256": "50c544815f1da8c8bec1d7a0ea326d188546fffc7e2e8cb450f2b63a1399ea35"
+    },
+    {
+      "file": "1440-admins--compare_all.png",
+      "width": 1440,
+      "scene": "admins--compare_all",
+      "sha256": "06838b904157e296b341501edfddd38d1e8f6d0528abac262078010f1b636e2e"
+    },
+    {
+      "file": "1440-admins--compare_search.png",
+      "width": 1440,
+      "scene": "admins--compare_search",
+      "sha256": "9bfb809131a5e636d11567c3d8e41f64ad115984fb9e106e9496e31bacf22727"
+    },
+    {
+      "file": "1440-admins--compare_group.png",
+      "width": 1440,
+      "scene": "admins--compare_group",
+      "sha256": "f5dc6c18dbc07f3ff25ce1d49e3256ce69055c6b979985b6441f6dd312beac0e"
+    },
+    {
+      "file": "1440-admins--compare_empty.png",
+      "width": 1440,
+      "scene": "admins--compare_empty",
+      "sha256": "93248cb8a66f38b039dc74832c1a9b0f2d4e2569c96e550faf102571ab5a48e7"
+    },
+    {
+      "file": "1440-admins--roles_error.png",
+      "width": 1440,
+      "scene": "admins--roles_error",
+      "sha256": "1fa637f4a7d5d262314b450a7f8a51e372731ac0ce54e5aa183795af57dee897"
+    },
+    {
+      "file": "1440-admins--roles_empty.png",
+      "width": 1440,
+      "scene": "admins--roles_empty",
+      "sha256": "f9bef3f33fff0345b5134bf550deb5913a02eaa22093c676117471f37074feb8"
+    },
+    {
+      "file": "390-users--list.png",
+      "width": 390,
+      "scene": "users--list",
+      "sha256": "3ebf5bd0be7d721bda7812580a374982d058eb8a83c475e8ff5b168852c5bc86"
+    },
+    {
+      "file": "390-users--many.png",
+      "width": 390,
+      "scene": "users--many",
+      "sha256": "1fe343ac5b9cdac1720bfb181966bc85dd5421466f44e9f39ccf96245426126d"
+    },
+    {
+      "file": "390-users--long.png",
+      "width": 390,
+      "scene": "users--long",
+      "sha256": "2969b33eb7cf4a20def264798eb6ecd77a858211a65902f3f844dea680c75e07"
+    },
+    {
+      "file": "390-users--empty.png",
+      "width": 390,
+      "scene": "users--empty",
+      "sha256": "21860424b3be0c86af7dcd5adf1e5eb6d9e894d97043459ff17816ba1f408f0d"
+    },
+    {
+      "file": "390-users--filtered_empty.png",
+      "width": 390,
+      "scene": "users--filtered_empty",
+      "sha256": "b7c84cfbaf2749e6b77f9380c28d6250ffe7e543cf8d30e77d1b52d545222545"
+    },
+    {
+      "file": "390-users--disabled.png",
+      "width": 390,
+      "scene": "users--disabled",
+      "sha256": "3c12a44b213cdf11bd96daf5c02ff081dce41fa38d8370d06356f6013be6c0d4"
+    },
+    {
+      "file": "390-users--loading.png",
+      "width": 390,
+      "scene": "users--loading",
+      "sha256": "b11ff188651dc62cbdef739ca98ee42ba69975af85bbd4d2b0b41117b0ee8c02"
+    },
+    {
+      "file": "390-users--error.png",
+      "width": 390,
+      "scene": "users--error",
+      "sha256": "103e6d40eca405ed31a27e27625e840d26c71164afd3a35c8a7f9a0f0a0f1d7d"
+    },
+    {
+      "file": "390-users--timeout.png",
+      "width": 390,
+      "scene": "users--timeout",
+      "sha256": "33d92021fabdf3a77b441b7910f844e1dfc00860a6033345e296429a6fa5a650"
+    },
+    {
+      "file": "390-users--refresh_error.png",
+      "width": 390,
+      "scene": "users--refresh_error",
+      "sha256": "40229c30a53e3fb0a1f9368c9c22256f5813682ded4fc87211d203a1b4c7399b"
+    },
+    {
+      "file": "390-users--filter.png",
+      "width": 390,
+      "scene": "users--filter",
+      "sha256": "fb1bd05647948b69c66b791a890c0ed98ea473703156c32af017245edcf16199"
+    },
+    {
+      "file": "390-users--columns.png",
+      "width": 390,
+      "scene": "users--columns",
+      "sha256": "687b3b7611a08115c199a74c877f33e8a13bc0ee52121c4cca42f95d56bddfe9"
+    },
+    {
+      "file": "390-users--compact.png",
+      "width": 390,
+      "scene": "users--compact",
+      "sha256": "3ebf5bd0be7d721bda7812580a374982d058eb8a83c475e8ff5b168852c5bc86"
+    },
+    {
+      "file": "390-users--preview.png",
+      "width": 390,
+      "scene": "users--preview",
+      "sha256": "bf2d7a239e2ae430276cab4594e580616065935ed020d9ffc651e48b7b6af36c"
+    },
+    {
+      "file": "390-users--technical.png",
+      "width": 390,
+      "scene": "users--technical",
+      "sha256": "404aa382e8ce1a1f38440d47278f402ded353ca0c29092de8a9549b6b1039f1a"
+    },
+    {
+      "file": "390-users--detail.png",
+      "width": 390,
+      "scene": "users--detail",
+      "sha256": "dfc6985765f5ec13f5d4225ee9ffe7b6a9b9146f4862c63e8a5688908469ed20"
+    },
+    {
+      "file": "390-users--detail-bottom.png",
+      "width": 390,
+      "scene": "users--detail",
+      "sha256": "8f091c6750e999d84393028a082737e738a75f3ef21ba411ed10d9391e2e8328"
+    },
+    {
+      "file": "390-users--detail_loading.png",
+      "width": 390,
+      "scene": "users--detail_loading",
+      "sha256": "586ef98d5374f4a4defeb6d58d9a6eb685ba4b75eaa6d14e626bdae7af7e3110"
+    },
+    {
+      "file": "390-users--detail_error.png",
+      "width": 390,
+      "scene": "users--detail_error",
+      "sha256": "3f1e7a9627aea275369159a0e40c6ab58f2c773967927e755740a01dd86d8c54"
+    },
+    {
+      "file": "390-users--memberships.png",
+      "width": 390,
+      "scene": "users--memberships",
+      "sha256": "7fc15c0d4871d346ab3ed9ba213324c5cb103748b5248e5f3757c97800245bad"
+    },
+    {
+      "file": "390-users--memberships-bottom.png",
+      "width": 390,
+      "scene": "users--memberships",
+      "sha256": "43e017d1abba524fbd46272327e6c77de54cd19100b74ca25f88c43b20b383c8"
+    },
+    {
+      "file": "390-users--no_memberships.png",
+      "width": 390,
+      "scene": "users--no_memberships",
+      "sha256": "4b7f8c130a35fd37eda2882b4114bd4566d7bee11c5e5ae58f63702ba1aabe36"
+    },
+    {
+      "file": "390-users--no_memberships-bottom.png",
+      "width": 390,
+      "scene": "users--no_memberships",
+      "sha256": "41835ae0c76c9cc01cf6b76b82e6b69373dfb9bd2f2a20d85013085086cf2cb4"
+    },
+    {
+      "file": "390-users--membership_error.png",
+      "width": 390,
+      "scene": "users--membership_error",
+      "sha256": "c929d4d0fd97ba480b03740c2e828cb14332722aed4cd4845daf39051eeed775"
+    },
+    {
+      "file": "390-users--membership_error-bottom.png",
+      "width": 390,
+      "scene": "users--membership_error",
+      "sha256": "edfc30de1f26181b3ec0cc27ea73dd7ae78a2e5d502cbe0e4ed8591f43b8c6e2"
+    },
+    {
+      "file": "390-users--roles.png",
+      "width": 390,
+      "scene": "users--roles",
+      "sha256": "6cc7659dab311806e6ad4241e6fa02bc8c17b378bb84b41dd17a5a0b1d023ccd"
+    },
+    {
+      "file": "390-users--roles-bottom.png",
+      "width": 390,
+      "scene": "users--roles",
+      "sha256": "53d988a6ceeab5906151203a62b96371962486e806a84e5e64d45e3e1f43b0bf"
+    },
+    {
+      "file": "390-users--disabled_roles.png",
+      "width": 390,
+      "scene": "users--disabled_roles",
+      "sha256": "cca9df52bfbc54e04ca59882e97a8b04c25256cc4e5c0d7a80793ab5b13c3c9c"
+    },
+    {
+      "file": "390-users--disabled_roles-bottom.png",
+      "width": 390,
+      "scene": "users--disabled_roles",
+      "sha256": "219fb5449181bf1eb8be7deabe086ef86444411ad543526d45c18bfb69c71da1"
+    },
+    {
+      "file": "390-users--security.png",
+      "width": 390,
+      "scene": "users--security",
+      "sha256": "45beab6f9b6c8ebb35c3ab4384c49c24641212d05f5f2cb59e5ac2a78f723abf"
+    },
+    {
+      "file": "390-users--security-bottom.png",
+      "width": 390,
+      "scene": "users--security",
+      "sha256": "006fbfc84fdc949a88a96938b001b0e12fc9a2708593d16757fb17840a793e82"
+    },
+    {
+      "file": "390-users--no_sessions.png",
+      "width": 390,
+      "scene": "users--no_sessions",
+      "sha256": "3346ad3c7928092d659dfe8f0b71e3dba0c7696a4b0d1d0bc7e2f97d1aeab5f4"
+    },
+    {
+      "file": "390-users--no_sessions-bottom.png",
+      "width": 390,
+      "scene": "users--no_sessions",
+      "sha256": "e4b4fa59ca0ab8df4113e9c2440e9c37fe879aa8c1959b94ced5d1614f9018a2"
+    },
+    {
+      "file": "390-users--expired_session.png",
+      "width": 390,
+      "scene": "users--expired_session",
+      "sha256": "61f2a302cd92bc1f73327490bf29da5d5e77b3f9ab58f7209befdc17093ba727"
+    },
+    {
+      "file": "390-users--expired_session-bottom.png",
+      "width": 390,
+      "scene": "users--expired_session",
+      "sha256": "a7be17fa0903c22d6bec2ebc878efab0c44270202409d595eef2e064a935cff4"
+    },
+    {
+      "file": "390-users--password.png",
+      "width": 390,
+      "scene": "users--password",
+      "sha256": "8f721a180c60859f9312b9e43a6def428a45c3a793d67a6d738476fa403b5702"
+    },
+    {
+      "file": "390-users--password_error.png",
+      "width": 390,
+      "scene": "users--password_error",
+      "sha256": "02a2c49da86ce98ae7e29a889f6173493fc1ae2ae186110e21203e3cb916a65e"
+    },
+    {
+      "file": "390-users--password_invalid.png",
+      "width": 390,
+      "scene": "users--password_invalid",
+      "sha256": "d13bab8d705a40e53c8dc9b1e5a98eda91ed3d63434c2bb01e81c9e3ae1fda1c"
+    },
+    {
+      "file": "390-users--create.png",
+      "width": 390,
+      "scene": "users--create",
+      "sha256": "392fd85a94664efc7db2ad628edda59b39215e91cb4ced3f9bf98875481a8ab0"
+    },
+    {
+      "file": "390-users--create_org.png",
+      "width": 390,
+      "scene": "users--create_org",
+      "sha256": "c867ea90c62af0872ddb3c812db1dd1245c7811b8d066125656848fab241a245"
+    },
+    {
+      "file": "390-users--create_error.png",
+      "width": 390,
+      "scene": "users--create_error",
+      "sha256": "2474823199c33677b4a43415c5073da3f3c9119b7979b53a73ff524ea56eb33d"
+    },
+    {
+      "file": "390-users--create_busy.png",
+      "width": 390,
+      "scene": "users--create_busy",
+      "sha256": "9c2bb4c7636dbf19b39ed25349090af3b52822610c5a4cce7f23dec1561e68ac"
+    },
+    {
+      "file": "390-users--write_busy.png",
+      "width": 390,
+      "scene": "users--write_busy",
+      "sha256": "0d1d7b3bd852545d4a035b7130b8d91a12cf49dd11b868c33f981749749cef59"
+    },
+    {
+      "file": "390-users--write_busy-bottom.png",
+      "width": 390,
+      "scene": "users--write_busy",
+      "sha256": "e29674b66e8613107faa022d7a2d5885377b00db9f767fbdc2dd9639121e32b2"
+    },
+    {
+      "file": "390-users--write_error.png",
+      "width": 390,
+      "scene": "users--write_error",
+      "sha256": "e9e2f9efd263cfa9223d14f877a6a1e041f2203c613dc436268dd90c2eb269e5"
+    },
+    {
+      "file": "390-users--write_error-bottom.png",
+      "width": 390,
+      "scene": "users--write_error",
+      "sha256": "d37c52eb490ad987c21df6e986473534ca2d0ff807133f50f13c291b3456744a"
+    },
+    {
+      "file": "390-users--write_read_error.png",
+      "width": 390,
+      "scene": "users--write_read_error",
+      "sha256": "ecc506b0d8aa1cb9766f2c32b824972bc72506260a02144c9a1ed4b1e7462021"
+    },
+    {
+      "file": "390-users--write_read_error-bottom.png",
+      "width": 390,
+      "scene": "users--write_read_error",
+      "sha256": "821b82a2a9900c6b7c721bd54654801eace784119ff9cb5f8e9d140160fd3607"
+    },
+    {
+      "file": "390-users--reason_invalid.png",
+      "width": 390,
+      "scene": "users--reason_invalid",
+      "sha256": "72fc7fb3172762178a1d49a20c6daad00f845246f0eb5e4036374a027420731b"
+    },
+    {
+      "file": "390-users--self_refusal.png",
+      "width": 390,
+      "scene": "users--self_refusal",
+      "sha256": "c38d26ed58503d816f413c6630147018776d0eb9cb8e3006bf580269a870dfca"
+    },
+    {
+      "file": "390-users--self_refusal-bottom.png",
+      "width": 390,
+      "scene": "users--self_refusal",
+      "sha256": "a23da434c0b88700d16c84410e1281237bca78fadfbdbb73385a112c5a90bf6e"
+    },
+    {
+      "file": "390-users--focus.png",
+      "width": 390,
+      "scene": "users--focus",
+      "sha256": "2356481fd20864624a77b993cde1a15d19b7c1cc69a6f8d24b3afdd80ab78b47"
+    },
+    {
+      "file": "390-users--hover.png",
+      "width": 390,
+      "scene": "users--hover",
+      "sha256": "2b61ab5ec6cab08504a1de933b75f6920fa58695b962de0832dde38c9b0befe4"
+    },
+    {
+      "file": "390-users--pressed.png",
+      "width": 390,
+      "scene": "users--pressed",
+      "sha256": "259952224a686adc734e483695f88ba246faabfb0511dfccfd9e51c275b245e3"
+    },
+    {
+      "file": "390-users--reason_disable.png",
+      "width": 390,
+      "scene": "users--reason_disable",
+      "sha256": "34514b33df1e8ddffb964851a9195b469c8fa7af9b7c1a32cb80d83535baa1df"
+    },
+    {
+      "file": "390-users--reason_restore.png",
+      "width": 390,
+      "scene": "users--reason_restore",
+      "sha256": "d659904e5cc1a2718430840dd91d4e567299a15fc5849c44bea2b27f2934cb5e"
+    },
+    {
+      "file": "390-users--reason_grant_operations.png",
+      "width": 390,
+      "scene": "users--reason_grant_operations",
+      "sha256": "17098541ad1ac8adae0767b15cdfefa290d3ab296bf2712f36ac7edd5cca76f5"
+    },
+    {
+      "file": "390-users--reason_revoke_operations.png",
+      "width": 390,
+      "scene": "users--reason_revoke_operations",
+      "sha256": "4f79ad0f829e45be13652453e1a8a96d51897a2b957796b8b2f6c9d6d8d76640"
+    },
+    {
+      "file": "390-users--reason_grant_security.png",
+      "width": 390,
+      "scene": "users--reason_grant_security",
+      "sha256": "e42556ec8aebc204f5eefd3adeacc6a7ee18e3644fadb21a307e148fcf5b5516"
+    },
+    {
+      "file": "390-users--reason_revoke_security.png",
+      "width": 390,
+      "scene": "users--reason_revoke_security",
+      "sha256": "4e81a2f359d8a9c48ef82445440fa0870948f995a9df98a4d4d0404974f5d24b"
+    },
+    {
+      "file": "390-users--reason_grant_super.png",
+      "width": 390,
+      "scene": "users--reason_grant_super",
+      "sha256": "46261ad5630a0052c410a68fb9a14320e8c6e6935d5791116ce98b7cf060898c"
+    },
+    {
+      "file": "390-users--reason_revoke_super.png",
+      "width": 390,
+      "scene": "users--reason_revoke_super",
+      "sha256": "fa6aeac56a5180f44f7eaa2f0aba85cbb1f9ef0fcbabe68ffb484d9a05cec093"
+    },
+    {
+      "file": "390-users--reason_session.png",
+      "width": 390,
+      "scene": "users--reason_session",
+      "sha256": "40134888331e0f146583f38e356d1f788f50317f1658e12c00c2f56c4ec57e5b"
+    },
+    {
+      "file": "390-users--reason_sessions.png",
+      "width": 390,
+      "scene": "users--reason_sessions",
+      "sha256": "620187d5132c838716f69f2dc361a3eeced1c4f017b21025528a0304aa2c372b"
+    },
+    {
+      "file": "390-users--reason_reset_password.png",
+      "width": 390,
+      "scene": "users--reason_reset_password",
+      "sha256": "b1c7c39e27351d9fc70ff005d60b56b767c7e4c78068735ccdb402b3a8e6c7db"
+    },
+    {
+      "file": "390-admins--list.png",
+      "width": 390,
+      "scene": "admins--list",
+      "sha256": "300db9613d8df3888a24f5fa0ce66ff15d7212ca4b6636c071fe722ba4d2b1a3"
+    },
+    {
+      "file": "390-admins--many.png",
+      "width": 390,
+      "scene": "admins--many",
+      "sha256": "d79b92e7ed257deea1e7388df8b1a0013895bd46d77969c6380a01c41060ca14"
+    },
+    {
+      "file": "390-admins--long.png",
+      "width": 390,
+      "scene": "admins--long",
+      "sha256": "ce0d549d2b71528daf5b974440852fcade8caa8144c24f9cdbaabcc8db0c0cd7"
+    },
+    {
+      "file": "390-admins--empty.png",
+      "width": 390,
+      "scene": "admins--empty",
+      "sha256": "2524bc1f6a3f17449c2a2d28c4aadf09dff439f2916ddb8b5da860acf077cf0c"
+    },
+    {
+      "file": "390-admins--filtered_empty.png",
+      "width": 390,
+      "scene": "admins--filtered_empty",
+      "sha256": "9df67f4a2141a16d57f4554a7cb0a27ee021d07c3a8217d20b52495c80f3a08c"
+    },
+    {
+      "file": "390-admins--disabled.png",
+      "width": 390,
+      "scene": "admins--disabled",
+      "sha256": "7066c7613abed31fa9e2aede9785edfa5aa756c3dc6b03203512213f0d6f0442"
+    },
+    {
+      "file": "390-admins--loading.png",
+      "width": 390,
+      "scene": "admins--loading",
+      "sha256": "d1eb35d57795b2e43f88d2a8fe447f7aef99a2a612abde9bdaac6b12b660564f"
+    },
+    {
+      "file": "390-admins--error.png",
+      "width": 390,
+      "scene": "admins--error",
+      "sha256": "02833f045b2000386485835df58a6c80cdf3c542a966e3c681c569ac44628b83"
+    },
+    {
+      "file": "390-admins--timeout.png",
+      "width": 390,
+      "scene": "admins--timeout",
+      "sha256": "1ca6430e74bfe8d8ae08a11bcf99a9d25551f20d9696090536c7701e94a2e4e1"
+    },
+    {
+      "file": "390-admins--refresh_error.png",
+      "width": 390,
+      "scene": "admins--refresh_error",
+      "sha256": "3d81c6b6f798b1b3dd29a94495ff142a0cc2ebc41a521e8ffca7786e2024cf53"
+    },
+    {
+      "file": "390-admins--filter.png",
+      "width": 390,
+      "scene": "admins--filter",
+      "sha256": "0ccb852d5dcb96e9c838c01034eb50a1fa4ecad70ee6fcbd53a2132fe76f8200"
+    },
+    {
+      "file": "390-admins--columns.png",
+      "width": 390,
+      "scene": "admins--columns",
+      "sha256": "61161ea06eac3deffb507082aecbc74658d1d3799342037c39fef0e6cc99bf3f"
+    },
+    {
+      "file": "390-admins--compact.png",
+      "width": 390,
+      "scene": "admins--compact",
+      "sha256": "300db9613d8df3888a24f5fa0ce66ff15d7212ca4b6636c071fe722ba4d2b1a3"
+    },
+    {
+      "file": "390-admins--preview.png",
+      "width": 390,
+      "scene": "admins--preview",
+      "sha256": "effd8bc5142b98d074df675b511c7c4b7789677fcce5ddde5f34f829770ff4c2"
+    },
+    {
+      "file": "390-admins--technical.png",
+      "width": 390,
+      "scene": "admins--technical",
+      "sha256": "2dcc32e9a871051dfe3c3037ef86d99a012b0c7f365302fc99ca1921896f842c"
+    },
+    {
+      "file": "390-admins--detail.png",
+      "width": 390,
+      "scene": "admins--detail",
+      "sha256": "f6084ef2eb6db4c2e89c6916385c46428bf25a959b71879bf38bb0695c435b61"
+    },
+    {
+      "file": "390-admins--detail-bottom.png",
+      "width": 390,
+      "scene": "admins--detail",
+      "sha256": "a8efbf35a2dc32831d067a9aad8dc5ad73bf61d3e7e09aa2519fcb99a2fc4d7b"
+    },
+    {
+      "file": "390-admins--detail_loading.png",
+      "width": 390,
+      "scene": "admins--detail_loading",
+      "sha256": "3c2d845f2faa2907fcc310e13b7d898041300877ad6f730cf2cde221bb800904"
+    },
+    {
+      "file": "390-admins--detail_error.png",
+      "width": 390,
+      "scene": "admins--detail_error",
+      "sha256": "429bb8aaeb82501df67eb148f697eba4d44ec7e0d164e97a50d4e2aadd86d127"
+    },
+    {
+      "file": "390-admins--memberships.png",
+      "width": 390,
+      "scene": "admins--memberships",
+      "sha256": "cfcb03c6bdfaf812e57b1871249cc8c06ebd244fe07ccc92c7919ea47ce027ea"
+    },
+    {
+      "file": "390-admins--memberships-bottom.png",
+      "width": 390,
+      "scene": "admins--memberships",
+      "sha256": "43e017d1abba524fbd46272327e6c77de54cd19100b74ca25f88c43b20b383c8"
+    },
+    {
+      "file": "390-admins--no_memberships.png",
+      "width": 390,
+      "scene": "admins--no_memberships",
+      "sha256": "f6084ef2eb6db4c2e89c6916385c46428bf25a959b71879bf38bb0695c435b61"
+    },
+    {
+      "file": "390-admins--no_memberships-bottom.png",
+      "width": 390,
+      "scene": "admins--no_memberships",
+      "sha256": "a8efbf35a2dc32831d067a9aad8dc5ad73bf61d3e7e09aa2519fcb99a2fc4d7b"
+    },
+    {
+      "file": "390-admins--membership_error.png",
+      "width": 390,
+      "scene": "admins--membership_error",
+      "sha256": "50956f93ca3ad39e73d8abb3a23c75c827b69544cb25b9c1f973a2ac29beea2f"
+    },
+    {
+      "file": "390-admins--membership_error-bottom.png",
+      "width": 390,
+      "scene": "admins--membership_error",
+      "sha256": "edfc30de1f26181b3ec0cc27ea73dd7ae78a2e5d502cbe0e4ed8591f43b8c6e2"
+    },
+    {
+      "file": "390-admins--roles.png",
+      "width": 390,
+      "scene": "admins--roles",
+      "sha256": "3ddad73d5633e910cd8da16c15dccc297dbada2a30daa5bdfc66ac0ad94bc4d0"
+    },
+    {
+      "file": "390-admins--roles-bottom.png",
+      "width": 390,
+      "scene": "admins--roles",
+      "sha256": "5927b04ea95622fbbb0cca4efcad8936bebfcf2fcf6e0b0b8700a850956d1865"
+    },
+    {
+      "file": "390-admins--disabled_roles.png",
+      "width": 390,
+      "scene": "admins--disabled_roles",
+      "sha256": "b3469fe99657a672ef86ed3d6765f288179d6795c37a0ff3517f0c829464848f"
+    },
+    {
+      "file": "390-admins--disabled_roles-bottom.png",
+      "width": 390,
+      "scene": "admins--disabled_roles",
+      "sha256": "a300bc308ec3f18c0cbb5669d1b7cb4f052ebf446b983868e255de6da256b064"
+    },
+    {
+      "file": "390-admins--security.png",
+      "width": 390,
+      "scene": "admins--security",
+      "sha256": "9c37185961f23c9c237ba854f4b679a0ed6dbd5bf58155cd9564679bd2c412d3"
+    },
+    {
+      "file": "390-admins--security-bottom.png",
+      "width": 390,
+      "scene": "admins--security",
+      "sha256": "501c8af191b32f5efbbff3bfab243d32d28b952108937963d02b109e616dc48a"
+    },
+    {
+      "file": "390-admins--no_sessions.png",
+      "width": 390,
+      "scene": "admins--no_sessions",
+      "sha256": "9c37185961f23c9c237ba854f4b679a0ed6dbd5bf58155cd9564679bd2c412d3"
+    },
+    {
+      "file": "390-admins--no_sessions-bottom.png",
+      "width": 390,
+      "scene": "admins--no_sessions",
+      "sha256": "501c8af191b32f5efbbff3bfab243d32d28b952108937963d02b109e616dc48a"
+    },
+    {
+      "file": "390-admins--expired_session.png",
+      "width": 390,
+      "scene": "admins--expired_session",
+      "sha256": "69800b223d7cea11f7ce88848862196d077e6d013f6948d4728ab7f53d474310"
+    },
+    {
+      "file": "390-admins--expired_session-bottom.png",
+      "width": 390,
+      "scene": "admins--expired_session",
+      "sha256": "a7be17fa0903c22d6bec2ebc878efab0c44270202409d595eef2e064a935cff4"
+    },
+    {
+      "file": "390-admins--password.png",
+      "width": 390,
+      "scene": "admins--password",
+      "sha256": "5527c593dee94e3156838c81bf348ff257294c556a7b43fd7ded4af103427d88"
+    },
+    {
+      "file": "390-admins--password_error.png",
+      "width": 390,
+      "scene": "admins--password_error",
+      "sha256": "d85a62ccba36c7e5cb09ba7fbbe2b57d3a4393d81dd5c0b4483fad159b771d4b"
+    },
+    {
+      "file": "390-admins--password_invalid.png",
+      "width": 390,
+      "scene": "admins--password_invalid",
+      "sha256": "71a69fe2cf11cb6a500b5d8fabf5410e0281a361bf9c757015acd581969150b9"
+    },
+    {
+      "file": "390-admins--create.png",
+      "width": 390,
+      "scene": "admins--create",
+      "sha256": "a0a47d277cff425bb4eb0ae0fd1b461e505a8e87706ee361d4dd797be3292eec"
+    },
+    {
+      "file": "390-admins--create_org.png",
+      "width": 390,
+      "scene": "admins--create_org",
+      "sha256": "23d4bbc5e24b9ad593375d6c4ad942988fd99fc6f6f7c687ffb542097737b929"
+    },
+    {
+      "file": "390-admins--create_error.png",
+      "width": 390,
+      "scene": "admins--create_error",
+      "sha256": "5c12c1e3e02444c40a83e8bea4773924aaebaca739fd7df91d73e4599498192c"
+    },
+    {
+      "file": "390-admins--create_busy.png",
+      "width": 390,
+      "scene": "admins--create_busy",
+      "sha256": "43cb28dd3af0148be0d837017f8480ac9885db106bb0f4603cdd8ebc6b084553"
+    },
+    {
+      "file": "390-admins--write_busy.png",
+      "width": 390,
+      "scene": "admins--write_busy",
+      "sha256": "98798d5061a9da0eae6c45c8802a5f764b8e515ad032339a9c81b0b261585cb7"
+    },
+    {
+      "file": "390-admins--write_busy-bottom.png",
+      "width": 390,
+      "scene": "admins--write_busy",
+      "sha256": "179610d3fdf169cc8e07efad1d47084fbe69609fc975d011349d108bdf3fe11e"
+    },
+    {
+      "file": "390-admins--write_error.png",
+      "width": 390,
+      "scene": "admins--write_error",
+      "sha256": "ec0528ac4a24d5fcf2dd02f25cc29c2e50cdb20ed95a1cfb76fbd1ff39db5f54"
+    },
+    {
+      "file": "390-admins--write_error-bottom.png",
+      "width": 390,
+      "scene": "admins--write_error",
+      "sha256": "8c11222e0866db450d7290c9030ce1c66f69d888063eaddd6d2ea4c1dde50a0d"
+    },
+    {
+      "file": "390-admins--write_read_error.png",
+      "width": 390,
+      "scene": "admins--write_read_error",
+      "sha256": "d606b94e6ed994f4af5253d2439394824b9756d1d2309440713b4255bb3d309b"
+    },
+    {
+      "file": "390-admins--write_read_error-bottom.png",
+      "width": 390,
+      "scene": "admins--write_read_error",
+      "sha256": "091e62497b771a43b6486fd698d82c04907b918aeec40e058811af75ee8fb34d"
+    },
+    {
+      "file": "390-admins--reason_invalid.png",
+      "width": 390,
+      "scene": "admins--reason_invalid",
+      "sha256": "c1b10684cd20addcb614646f32f04ccb6d4dad1f7220ff214996d63949da2cf3"
+    },
+    {
+      "file": "390-admins--self_refusal.png",
+      "width": 390,
+      "scene": "admins--self_refusal",
+      "sha256": "1c2795160413e8540a520064778320bb4bb6c6ef8d1f583019cd2b31de2c5c74"
+    },
+    {
+      "file": "390-admins--self_refusal-bottom.png",
+      "width": 390,
+      "scene": "admins--self_refusal",
+      "sha256": "399c3d7127e9169c1b22a6e6a643560c55dcddc5573307ad41014eb4fc95c607"
+    },
+    {
+      "file": "390-admins--focus.png",
+      "width": 390,
+      "scene": "admins--focus",
+      "sha256": "300db9613d8df3888a24f5fa0ce66ff15d7212ca4b6636c071fe722ba4d2b1a3"
+    },
+    {
+      "file": "390-admins--hover.png",
+      "width": 390,
+      "scene": "admins--hover",
+      "sha256": "d19feb0824c88466ac4509bdd0935de8f1294a8d896a5dc7063cf73f2fd85d11"
+    },
+    {
+      "file": "390-admins--pressed.png",
+      "width": 390,
+      "scene": "admins--pressed",
+      "sha256": "55dd5e587fca850e2158b5e9143ab21abe3ce612aaef60ac21755263426cfd10"
+    },
+    {
+      "file": "390-admins--reason_disable.png",
+      "width": 390,
+      "scene": "admins--reason_disable",
+      "sha256": "8732ce9bc1a09a8b4134d86e9948e05e273bbf75c6404188c9f2292a3757293f"
+    },
+    {
+      "file": "390-admins--reason_restore.png",
+      "width": 390,
+      "scene": "admins--reason_restore",
+      "sha256": "bc49c64210aae9ff1591d781726085ac02fd3626c1c79fe4e84de7b646f76a84"
+    },
+    {
+      "file": "390-admins--reason_grant_operations.png",
+      "width": 390,
+      "scene": "admins--reason_grant_operations",
+      "sha256": "e121f8036dc892543ebe162edf76e67f3cccc3a1802d4eb033667672aa6bf284"
+    },
+    {
+      "file": "390-admins--reason_revoke_operations.png",
+      "width": 390,
+      "scene": "admins--reason_revoke_operations",
+      "sha256": "c862c4789a0ec6bbf91b0764ce77d4e125dfa6174d8d1eab0def7d69abaceed3"
+    },
+    {
+      "file": "390-admins--reason_grant_security.png",
+      "width": 390,
+      "scene": "admins--reason_grant_security",
+      "sha256": "085c60d1f60ff14128d9091d3c81ab42e1a48ae49e92d5c585e3b727c0fb1731"
+    },
+    {
+      "file": "390-admins--reason_revoke_security.png",
+      "width": 390,
+      "scene": "admins--reason_revoke_security",
+      "sha256": "dc5df6dd7baa90551cd898e49ae44841460740ae6557f6dfa98319e042b61c51"
+    },
+    {
+      "file": "390-admins--reason_grant_super.png",
+      "width": 390,
+      "scene": "admins--reason_grant_super",
+      "sha256": "9176867428604ee22aab8783b3ad8ed59387c14dc2a056c807675a9a8f024dd8"
+    },
+    {
+      "file": "390-admins--reason_revoke_super.png",
+      "width": 390,
+      "scene": "admins--reason_revoke_super",
+      "sha256": "12d31e3ca7c589158fb985eb5f34d37ec650e1311a82b195ad909b171662036c"
+    },
+    {
+      "file": "390-admins--reason_session.png",
+      "width": 390,
+      "scene": "admins--reason_session",
+      "sha256": "097899f7134160f4e57cd054d93f84a4200cfe98c4e4e6c72ca7c56fc42983ef"
+    },
+    {
+      "file": "390-admins--reason_sessions.png",
+      "width": 390,
+      "scene": "admins--reason_sessions",
+      "sha256": "bf2daf30903e3a41601681fb69078c82fcb25e8a9d318d33a943b52afa72f30b"
+    },
+    {
+      "file": "390-admins--reason_reset_password.png",
+      "width": 390,
+      "scene": "admins--reason_reset_password",
+      "sha256": "908b310b30f6f93d571ee2d04455c174228efc1fb7423937ff4faf2e6ee68b38"
+    },
+    {
+      "file": "390-admins--comparison.png",
+      "width": 390,
+      "scene": "admins--comparison",
+      "sha256": "300db9613d8df3888a24f5fa0ce66ff15d7212ca4b6636c071fe722ba4d2b1a3"
+    },
+    {
+      "file": "390-admins--compare_all.png",
+      "width": 390,
+      "scene": "admins--compare_all",
+      "sha256": "e34120cd3e54c397017bfe3cad118f3e3f8964befe66c12e88a802d689557ad5"
+    },
+    {
+      "file": "390-admins--compare_search.png",
+      "width": 390,
+      "scene": "admins--compare_search",
+      "sha256": "c053fb93815c20cad9297c33bb8d28489b219c9641ec2ce8d1e200d321718312"
+    },
+    {
+      "file": "390-admins--compare_group.png",
+      "width": 390,
+      "scene": "admins--compare_group",
+      "sha256": "3d3e8b91d316c3de9c2ff0cf1262c7b0bb190299b17ba9954d14dd91620f6afc"
+    },
+    {
+      "file": "390-admins--compare_empty.png",
+      "width": 390,
+      "scene": "admins--compare_empty",
+      "sha256": "234350ab5c935465eb2ad000fd9717c06df9643fc99e8e2f92be3f54b1b35d49"
+    },
+    {
+      "file": "390-admins--roles_error.png",
+      "width": 390,
+      "scene": "admins--roles_error",
+      "sha256": "55d45808ff8917ead70c8a157c77b9b942fd355a273e83c804ad1c8d52d66164"
+    },
+    {
+      "file": "390-admins--roles_empty.png",
+      "width": 390,
+      "scene": "admins--roles_empty",
+      "sha256": "eda0a96def405d08fd920fc6bc99ee1aaa4a0a97887834b485dc4d157513edff"
+    }
+  ]
+}
