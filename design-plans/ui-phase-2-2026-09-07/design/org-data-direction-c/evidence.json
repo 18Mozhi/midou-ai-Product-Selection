@@ -1,0 +1,613 @@
+{
+  "proposal": "ORG-DATA-C-r1",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/index.html": "be6e4cd2ec8ebde671536a83fe7b9706c5986d7ec50514e28655ef9acb1f5b2b",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/org-data.css": "7ead6fcb39ad27280462658b13458ba1cc58cb5a8add8263fc3dc818c3fe114c",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/org-data.js": "35c836788e06285f41715bbd6a78dd7bd3ac93f83a39329314a8348a04222da2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/data.js": "6946d6f85afb11e6526649ccd4fa9af6b7a592d8811cd22bdb54b4e5590491f9",
+    "scripts/lib/ui-phase2-org-data-design-data.mjs": "4c6db4f4924384c2bf1361533798e829299d54a10b0cbc730633161afeac51cb",
+    "scripts/verify-ui-phase2-org-data-c.mjs": "c53fb6abcf8393880b22bc9207cabbfcb0cdbefad077223ded5710044a2fdc56",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "apps/web/src/components/OrganizationDataPanel.vue": "575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "screenshots": [
+    {
+      "file": "1440-normal.png",
+      "width": 1440,
+      "scene": "normal",
+      "sha256": "1bb6b9687d367123115e22a3d7a841ef0e985f9467685349131ddd475a8facf4"
+    },
+    {
+      "file": "1440-exports.png",
+      "width": 1440,
+      "scene": "exports",
+      "sha256": "2403da17117a51c3d60ae4c2bc2b374a6bd762db67c314b2c134c609614eaec3"
+    },
+    {
+      "file": "1440-workspace_page_two.png",
+      "width": 1440,
+      "scene": "workspace_page_two",
+      "sha256": "f94a0b9822ee28bb5df7ad4592605dc53f4f869250455cbbc6d6170871e7850c"
+    },
+    {
+      "file": "1440-workspace_search.png",
+      "width": 1440,
+      "scene": "workspace_search",
+      "sha256": "6b75a117c9533d0b5c249af6ab7e5a2705bca976a550bc84e0ef78bea8416ca4"
+    },
+    {
+      "file": "1440-workspace_active.png",
+      "width": 1440,
+      "scene": "workspace_active",
+      "sha256": "edd8b9a9163fa09b5d4dfe85689e40b728274713b4732d57567bb36a2eec3ead"
+    },
+    {
+      "file": "1440-workspace_archived.png",
+      "width": 1440,
+      "scene": "workspace_archived",
+      "sha256": "823a2438ed1e6d71b0eea5bda2ed74181ae089f5629a55de14217f90307b47f7"
+    },
+    {
+      "file": "1440-workspace_empty.png",
+      "width": 1440,
+      "scene": "workspace_empty",
+      "sha256": "0985abc290aa17bd29ba037bf1ef757ec8065d4c0ce848efdcf7e0af9d4aa9cb"
+    },
+    {
+      "file": "1440-workspace_filter_empty.png",
+      "width": 1440,
+      "scene": "workspace_filter_empty",
+      "sha256": "0cdcb2ea5972e373aa9130ca6c50414cf0f8ccda9c200458579182057bd02932"
+    },
+    {
+      "file": "1440-workspace_name_sort.png",
+      "width": 1440,
+      "scene": "workspace_name_sort",
+      "sha256": "c493f9af8a787fea92ae633eb0b388698d2778883e37864f636e97083e736292"
+    },
+    {
+      "file": "1440-workspace_trends_sort.png",
+      "width": 1440,
+      "scene": "workspace_trends_sort",
+      "sha256": "c0744a2905c445fe641ad378d39bb92e5d13b1c73a066b5a08fc88d9fe3f423d"
+    },
+    {
+      "file": "1440-workspace_opportunities_sort.png",
+      "width": 1440,
+      "scene": "workspace_opportunities_sort",
+      "sha256": "07d569820d5516becc3391d696b1d39a376e413078e7264598771c99fcc1cc1d"
+    },
+    {
+      "file": "1440-workspace_tasks_sort.png",
+      "width": 1440,
+      "scene": "workspace_tasks_sort",
+      "sha256": "ef023c8685ea7126a5774c2c6afa1c4da4f2e048420606404c15252164974e71"
+    },
+    {
+      "file": "1440-workspace_exports_sort.png",
+      "width": 1440,
+      "scene": "workspace_exports_sort",
+      "sha256": "aefde40c312192decabf9499ec197124bf833d27d25b1f26b10f619e08a05997"
+    },
+    {
+      "file": "1440-workspace_zero.png",
+      "width": 1440,
+      "scene": "workspace_zero",
+      "sha256": "3ba8666cd12bd7b0973e28a3343d24b370e4d0d5c60a007e61aaed31f63aa01a"
+    },
+    {
+      "file": "1440-workspace_missing.png",
+      "width": 1440,
+      "scene": "workspace_missing",
+      "sha256": "30dfb92869e8392f6bce31e61789e618cf99f18e0b7efb1ea5b5b36e18075e4a"
+    },
+    {
+      "file": "1440-workspace_unknown.png",
+      "width": 1440,
+      "scene": "workspace_unknown",
+      "sha256": "3040f2af042bc08e2b4454789f36d447fe959982eded6c59e182fc447ea68ab1"
+    },
+    {
+      "file": "1440-export_page_two.png",
+      "width": 1440,
+      "scene": "export_page_two",
+      "sha256": "a5bf406603b456e7f7e0592d66ba1f82226b7152d4d6e74227d8ffda6c039cbf"
+    },
+    {
+      "file": "1440-export_page_three.png",
+      "width": 1440,
+      "scene": "export_page_three",
+      "sha256": "97586cd56bdc9434dc8a41fbdef1ee81f2ce41f9b2baf183365897697cdd7754"
+    },
+    {
+      "file": "1440-export_search.png",
+      "width": 1440,
+      "scene": "export_search",
+      "sha256": "e8b6428614de219729e1cb4433144250fef6549daa402e24237f29ba5e52ae45"
+    },
+    {
+      "file": "1440-export_workspace.png",
+      "width": 1440,
+      "scene": "export_workspace",
+      "sha256": "9986433af179a24cee198e078474924014145aa02d712a80efe3e9fceaa792cc"
+    },
+    {
+      "file": "1440-export_type.png",
+      "width": 1440,
+      "scene": "export_type",
+      "sha256": "5d526151b0277a9fa4ce040bf67cb30b6998fdc229734e8ca6ea0097ca783a3b"
+    },
+    {
+      "file": "1440-export_queued.png",
+      "width": 1440,
+      "scene": "export_queued",
+      "sha256": "c14979cbcd04059809d4b248145dd657a43f7c3118e39c4bf5d82806ee3e1667"
+    },
+    {
+      "file": "1440-export_leased.png",
+      "width": 1440,
+      "scene": "export_leased",
+      "sha256": "288eabfc388cd01e83c26f5d9360edf9aea2a35fdea268a68b3f256f110b3a7b"
+    },
+    {
+      "file": "1440-export_retry_scheduled.png",
+      "width": 1440,
+      "scene": "export_retry_scheduled",
+      "sha256": "821831515e7ba5e835e54c6d5f3e764540c7db98936679f784f13792ea1436c2"
+    },
+    {
+      "file": "1440-export_succeeded.png",
+      "width": 1440,
+      "scene": "export_succeeded",
+      "sha256": "c750cdbae0880fdf68f7944e8e3f1a6d2ec1d6de1d6782e1ce57d436167532d9"
+    },
+    {
+      "file": "1440-export_dead_letter.png",
+      "width": 1440,
+      "scene": "export_dead_letter",
+      "sha256": "b84d3dc43e98073ec6944bb11a02469c5d901357c77298fde711c9d4fe78cb38"
+    },
+    {
+      "file": "1440-export_expired.png",
+      "width": 1440,
+      "scene": "export_expired",
+      "sha256": "5d9935e68311a4f4c38a57285556cad56e3855db0f62e55390e3f3cf8818d4f4"
+    },
+    {
+      "file": "1440-export_empty.png",
+      "width": 1440,
+      "scene": "export_empty",
+      "sha256": "de0bdfd16f172e9b0661a7288f80170030d032948861d94b4a35278474edb1ce"
+    },
+    {
+      "file": "1440-export_filter_empty.png",
+      "width": 1440,
+      "scene": "export_filter_empty",
+      "sha256": "acf4842a752f81b833c54c27a5d071c2e8c1c472818a9d15ff0e880ef836ac74"
+    },
+    {
+      "file": "1440-export_zero_null.png",
+      "width": 1440,
+      "scene": "export_zero_null",
+      "sha256": "2a4200e0f1ce789d7a000d615e0ec0b95bae67ea6ee3d3a985fff1260998ba28"
+    },
+    {
+      "file": "1440-export_rows_sort.png",
+      "width": 1440,
+      "scene": "export_rows_sort",
+      "sha256": "2f509900cbc48276a796487a84c6e15adaba66488daa3c0841912cc6d9f96957"
+    },
+    {
+      "file": "1440-export_unknown.png",
+      "width": 1440,
+      "scene": "export_unknown",
+      "sha256": "a6612818d5cb4c367041489e72e277e2398935fb5a8a3b0f5d70ac5ce0f8e4e9"
+    },
+    {
+      "file": "1440-technical.png",
+      "width": 1440,
+      "scene": "technical",
+      "sha256": "09d5662b18662ffa2de57a1d4a501ba02751e930e58e8d1895a286c5c754c96e"
+    },
+    {
+      "file": "1440-long_workspace.png",
+      "width": 1440,
+      "scene": "long_workspace",
+      "sha256": "fe47fc7030d75f0fd9cfbe0716ad6aecacf8dbef07b0df7872581b6c188b2990"
+    },
+    {
+      "file": "1440-long_export.png",
+      "width": 1440,
+      "scene": "long_export",
+      "sha256": "ee33503e85efc8a1b2b0634ee097b4738bb1bbcc218f0065a2977cfb96490cef"
+    },
+    {
+      "file": "1440-missing_time.png",
+      "width": 1440,
+      "scene": "missing_time",
+      "sha256": "87676001328a7de731ed271652a7623dd7eebdde5fed525655233ec251fefc49"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "scene": "loading",
+      "sha256": "27cef2cf3d64f0a0a89f8212f3d7598633136153bddc989a3758f48ee826fcd0"
+    },
+    {
+      "file": "1440-error.png",
+      "width": 1440,
+      "scene": "error",
+      "sha256": "851a7c4f7390ea8449317a119e81c0c5e455b955214ac7bc75151c33a619cea6"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "sha256": "b6ebbbb412fa4a1aa70d99a18b9a8d27ea1c2d7ef0b254627dd9a46b58fab893"
+    },
+    {
+      "file": "1440-expired.png",
+      "width": 1440,
+      "scene": "expired",
+      "sha256": "685e66674a86db344ff97faad5e88d9e5038207a84694bbd1a699b647624b273"
+    },
+    {
+      "file": "1440-rate_limited.png",
+      "width": 1440,
+      "scene": "rate_limited",
+      "sha256": "faeba61cf4b193a8cbced2327948925d6de793d443d8728586b3a35e4b1b4371"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "width": 1440,
+      "scene": "refreshing",
+      "sha256": "cd31e639cb5df63e0f19fa4863ab66eb0abd403a54cc4c3f7bb4731f64ce897e"
+    },
+    {
+      "file": "1440-refresh_error.png",
+      "width": 1440,
+      "scene": "refresh_error",
+      "sha256": "9db2f60d000fc97581bafb9e099b08b8b13201a1254f492b3b022d210033170b"
+    },
+    {
+      "file": "1440-hover.png",
+      "width": 1440,
+      "scene": "hover",
+      "sha256": "0b484a990b89c5018ef02e2dd47ccf7b62e97ada0a9f2552a028e0a157f326e1"
+    },
+    {
+      "file": "1440-pressed.png",
+      "width": 1440,
+      "scene": "pressed",
+      "sha256": "15e2009def66cb1c4830a010d667b0ca849e876392372fdfa1077da9b37adba7"
+    },
+    {
+      "file": "1440-focus.png",
+      "width": 1440,
+      "scene": "focus",
+      "sha256": "1da3279243ca60b5ed3cb013085079da503c51dc52fe7c0632fb56f65446ed1f"
+    },
+    {
+      "file": "1440-controls.png",
+      "width": 1440,
+      "scene": "controls",
+      "sha256": "bd4a5cde650ec3e1712b88eeead081aa6e6851e46187bafc71370b437eabb605"
+    },
+    {
+      "file": "390-normal.png",
+      "width": 390,
+      "scene": "normal",
+      "sha256": "461819c44427bb767eb89a7417cf2990e774f99e3007fb8b0c597ac379f24058"
+    },
+    {
+      "file": "390-exports.png",
+      "width": 390,
+      "scene": "exports",
+      "sha256": "5cc2c2b35deac7fe3b9297aa658951f213343d3955b6fc5835ce06a11b24b465"
+    },
+    {
+      "file": "390-workspace_page_two.png",
+      "width": 390,
+      "scene": "workspace_page_two",
+      "sha256": "f79bb86642448fb7e9c2d6ddcaa43a45ca35e548269cefa8002c7f2670638461"
+    },
+    {
+      "file": "390-workspace_search.png",
+      "width": 390,
+      "scene": "workspace_search",
+      "sha256": "16d80f57943c5ed3e1769087e29a39df2f4c8b098f0791ebdc8603eabe1c4cc6"
+    },
+    {
+      "file": "390-workspace_active.png",
+      "width": 390,
+      "scene": "workspace_active",
+      "sha256": "fcc4fdb8204b8edc3dc85818b6f049de555f113ad312564522baf10be071bcf8"
+    },
+    {
+      "file": "390-workspace_archived.png",
+      "width": 390,
+      "scene": "workspace_archived",
+      "sha256": "dd3f366201479d31ceb904531eff380ab2ee74238584954e2993051d26838bba"
+    },
+    {
+      "file": "390-workspace_empty.png",
+      "width": 390,
+      "scene": "workspace_empty",
+      "sha256": "f1f6e84e6efba196b949fb4bef10391836bfa3b94bb364e1ac69575cf4cd54e8"
+    },
+    {
+      "file": "390-workspace_filter_empty.png",
+      "width": 390,
+      "scene": "workspace_filter_empty",
+      "sha256": "b564795f78b4206efe315c4569ec20d1262fd05cd655de2fbc5f7d14f31e30ea"
+    },
+    {
+      "file": "390-workspace_name_sort.png",
+      "width": 390,
+      "scene": "workspace_name_sort",
+      "sha256": "6282843b041441197f589a523df04fc8fa3e9d9485526902c964fcc994e114c6"
+    },
+    {
+      "file": "390-workspace_trends_sort.png",
+      "width": 390,
+      "scene": "workspace_trends_sort",
+      "sha256": "95cf8183d49c5aac790e9d57c474bff0a3fcace00d542d113229fa180b06fc72"
+    },
+    {
+      "file": "390-workspace_opportunities_sort.png",
+      "width": 390,
+      "scene": "workspace_opportunities_sort",
+      "sha256": "2387944c8d3dcb5697eb092a9a4b5552822152e74fb556853120d838d31d92c8"
+    },
+    {
+      "file": "390-workspace_tasks_sort.png",
+      "width": 390,
+      "scene": "workspace_tasks_sort",
+      "sha256": "2387944c8d3dcb5697eb092a9a4b5552822152e74fb556853120d838d31d92c8"
+    },
+    {
+      "file": "390-workspace_exports_sort.png",
+      "width": 390,
+      "scene": "workspace_exports_sort",
+      "sha256": "762f3d7e75397eac5dda125701a38391e70b908ce955ee610bf8d0736ac0a9ce"
+    },
+    {
+      "file": "390-workspace_zero.png",
+      "width": 390,
+      "scene": "workspace_zero",
+      "sha256": "b4f8c56640915e378c39bce56d0988cdb949db9dce1814c979eae0cf0d6c7ac0"
+    },
+    {
+      "file": "390-workspace_missing.png",
+      "width": 390,
+      "scene": "workspace_missing",
+      "sha256": "56bed5dcf888537164491bd13b6735ee460132f2aea59d0336630620da2bb8bd"
+    },
+    {
+      "file": "390-workspace_unknown.png",
+      "width": 390,
+      "scene": "workspace_unknown",
+      "sha256": "fc3009c19057caa7d4c58b7ce2ab7022ccca19b1e2662e0e93d094f182bc58db"
+    },
+    {
+      "file": "390-export_page_two.png",
+      "width": 390,
+      "scene": "export_page_two",
+      "sha256": "95304e1c9df2e93f4029fc56da0c4f2632de9de2651060bf7a71cfb41ef6ec5a"
+    },
+    {
+      "file": "390-export_page_three.png",
+      "width": 390,
+      "scene": "export_page_three",
+      "sha256": "70e13e95f74f9ae7cbf7e427027d1d7617db3cacf6ca53549ce15d3d93a317fc"
+    },
+    {
+      "file": "390-export_search.png",
+      "width": 390,
+      "scene": "export_search",
+      "sha256": "a987bf3c04d90ece181ba339439c73274fb4a951dfef46bc7a300006adfca1d7"
+    },
+    {
+      "file": "390-export_workspace.png",
+      "width": 390,
+      "scene": "export_workspace",
+      "sha256": "9fef16e8a0fcb46e45b73d59b0a1247dcce9fe386fc6891f52f4f2e6152f639b"
+    },
+    {
+      "file": "390-export_type.png",
+      "width": 390,
+      "scene": "export_type",
+      "sha256": "1139b62bd0643807d1c2df4113df5cfed6e151e2dcaa0308b07b4ea6ca7218af"
+    },
+    {
+      "file": "390-export_queued.png",
+      "width": 390,
+      "scene": "export_queued",
+      "sha256": "4b2b6f083dab0ecb77c837ef642df3fa5d763bf01b23709c3f72044470c88701"
+    },
+    {
+      "file": "390-export_leased.png",
+      "width": 390,
+      "scene": "export_leased",
+      "sha256": "f9a1a241ceba2cd7714f4a5f5c40e53e5e53135be1eb363e246ec1ee31687fb4"
+    },
+    {
+      "file": "390-export_retry_scheduled.png",
+      "width": 390,
+      "scene": "export_retry_scheduled",
+      "sha256": "a987bf3c04d90ece181ba339439c73274fb4a951dfef46bc7a300006adfca1d7"
+    },
+    {
+      "file": "390-export_succeeded.png",
+      "width": 390,
+      "scene": "export_succeeded",
+      "sha256": "cb5435c49cfb4ca96153f8c7858e34df484c2cbdb49ee3e08f5e7ff334e4cd72"
+    },
+    {
+      "file": "390-export_dead_letter.png",
+      "width": 390,
+      "scene": "export_dead_letter",
+      "sha256": "c8ef7ab08072cc6411161561bdfa242fd09ce9e5965bcc3e141e2832834902e0"
+    },
+    {
+      "file": "390-export_expired.png",
+      "width": 390,
+      "scene": "export_expired",
+      "sha256": "0078f8bb6822006753d66e21b2c7f52c2df3bb82bca00c6f46a8055f1f078ca8"
+    },
+    {
+      "file": "390-export_empty.png",
+      "width": 390,
+      "scene": "export_empty",
+      "sha256": "88471e50defa563894e67ffd093381c26f19a0de18a9decdd0337c4c0ccf0a40"
+    },
+    {
+      "file": "390-export_filter_empty.png",
+      "width": 390,
+      "scene": "export_filter_empty",
+      "sha256": "2cdc7b5522ca28a583e369f65b4a07dff6c1245aae51a9a813909735666c7f14"
+    },
+    {
+      "file": "390-export_zero_null.png",
+      "width": 390,
+      "scene": "export_zero_null",
+      "sha256": "0efc130c682b0385ebc15e38abc408194463f624733e8a5f994c37c4871c56ad"
+    },
+    {
+      "file": "390-export_rows_sort.png",
+      "width": 390,
+      "scene": "export_rows_sort",
+      "sha256": "0e249c736b908310f656f642990e2a2259df6d627266b61a893c6bf601bcde79"
+    },
+    {
+      "file": "390-export_unknown.png",
+      "width": 390,
+      "scene": "export_unknown",
+      "sha256": "d6e91c04aa525dba2ca6a9c280534252808b52caef75d7cf927f74a835b9ec1e"
+    },
+    {
+      "file": "390-technical.png",
+      "width": 390,
+      "scene": "technical",
+      "sha256": "5b0a0646d1069547f07ca0fe722e9b4e09758adddbc3a5f0c61de2c937264a94"
+    },
+    {
+      "file": "390-long_workspace.png",
+      "width": 390,
+      "scene": "long_workspace",
+      "sha256": "2788f5ac83e71974eea23164cf13c98eeddeff33ba0f6d54d449ff190611f57c"
+    },
+    {
+      "file": "390-long_export.png",
+      "width": 390,
+      "scene": "long_export",
+      "sha256": "a83bcf3bb128ef193478745aa009ff67d221b9a68b540f2a5610ad6438ab54a4"
+    },
+    {
+      "file": "390-missing_time.png",
+      "width": 390,
+      "scene": "missing_time",
+      "sha256": "58d11b3030eb5dced77f99bb4ea4d03c93d7d1a9839eac96faed0e3e6c64534a"
+    },
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "scene": "loading",
+      "sha256": "0eb3df13761145f89574dc9b1803b797efc449b8487f1b5100ad3c94ec1f0e9c"
+    },
+    {
+      "file": "390-error.png",
+      "width": 390,
+      "scene": "error",
+      "sha256": "f09f2430a03dd5bef5524a44f9bc6747041076dbc0c25c2479c12fa497d8d528"
+    },
+    {
+      "file": "390-forbidden.png",
+      "width": 390,
+      "scene": "forbidden",
+      "sha256": "7228fd5f9acf296eaa78727fce79967c3a47f9a47d5e1a702b4442d673ae8f34"
+    },
+    {
+      "file": "390-expired.png",
+      "width": 390,
+      "scene": "expired",
+      "sha256": "b642f8863369b68e646563085cd3a226ca2bc596a1141c24072c26c00b347a63"
+    },
+    {
+      "file": "390-rate_limited.png",
+      "width": 390,
+      "scene": "rate_limited",
+      "sha256": "42755735eb6e46c6f5036c87b90b1f1b772715c7225607d4de1a88f4e8826afe"
+    },
+    {
+      "file": "390-refreshing.png",
+      "width": 390,
+      "scene": "refreshing",
+      "sha256": "e08324ca4bc8409fe1f9e70be5e7e13d2801e6138860f2cf89a3d7071c6fb70a"
+    },
+    {
+      "file": "390-refresh_error.png",
+      "width": 390,
+      "scene": "refresh_error",
+      "sha256": "29b3456b89e443737d7f961a26dd6b9d1676207a5dee01b7550e1bc7d08892ab"
+    },
+    {
+      "file": "390-hover.png",
+      "width": 390,
+      "scene": "hover",
+      "sha256": "2108788b4ffc5ad074a877447366a6ab2b14ca56a3a5ec2cc835647d5b8b315a"
+    },
+    {
+      "file": "390-pressed.png",
+      "width": 390,
+      "scene": "pressed",
+      "sha256": "339c22acbd7e8965e02e22a2971faac1d2e32a238787c3dbfc76a5e62797d019"
+    },
+    {
+      "file": "390-focus.png",
+      "width": 390,
+      "scene": "focus",
+      "sha256": "c06de333a133d552006e973cd85b085d0d55af2ea4cbd13719aefd5fe5e6f839"
+    },
+    {
+      "file": "390-controls.png",
+      "width": 390,
+      "scene": "controls",
+      "sha256": "92dc71811294a6195873b07c865d031d19332cdbf5e29d342c093cc238214ff4"
+    }
+  ],
+  "checks": [
+    {
+      "width": 1440,
+      "scenes": 47,
+      "dialogVariants": 0,
+      "interactions": "passed",
+      "sortsComparedWithSource": 11,
+      "httpRequests": 0,
+      "browserErrors": 0,
+      "storageEntries": 0
+    },
+    {
+      "width": 390,
+      "scenes": 47,
+      "dialogVariants": 0,
+      "interactions": "passed",
+      "sortsComparedWithSource": 11,
+      "httpRequests": 0,
+      "browserErrors": 0,
+      "storageEntries": 0
+    }
+  ],
+  "sourceChecks": [
+    "Actual child computed and explicit watch callbacks: 8/10 pagination, all eleven sort ID sequences, filters, totals and page clamping",
+    "Actual query readers/serializer: 200-character initial text, positive integer page, default elision and unrelated query; no reverse route restoration",
+    "Actual count/time functions retain existing zero fallbacks; original UI2 null/zero fixture retained",
+    "Actual repository data method with inert query responses: current organization query arguments, undeleted task predicate, latest 100 exports, numeric/null mapping and observed time; no SQL execution"
+  ],
+  "scope": "Standalone read-only prototype. No mounted Vue, SQL execution, API, permissions, production or approval proof. All browser contexts closed."
+}

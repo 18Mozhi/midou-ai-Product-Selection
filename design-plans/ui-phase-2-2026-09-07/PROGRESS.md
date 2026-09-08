@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · W04组织数据 / ORG-DATA-C-r1
+
+收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过47场景双端94图、零弹窗，双端各11排序与源全序列一致；HTTP/console/pageerror/存储均0。README95本地链接存在，100根目录文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）通过；单独原型CSS格式检查曾失败，格式化后重采/复验与四原型文件Prettier、git diff --check通过。4101/5173无监听，所有自有浏览器/CLI已结束；108本批文件精确纳入提交，不含生产源码/旧材料/临时产物。
+
+从干净main/af791db接续，上一P34有提交进展。按AGENTS→Feature Map organizationAdmin→蓝图M06-01→P35/组织治理合同→真实父子Vue、路由/服务/仓库、原m06-01及UI2-OG03定位。ui-skills-root CLI选择完整frontend-design，Playwright复用已有依赖和永久脚本；无安装、子代理或开发服务。
+
+新增[94图](design/org-data-direction-c/README.md)，47场景双端含2非业务工具图，零业务弹窗。蓝色双视图导航、白色事实表与独立履历；手机表格按工作区带字段标签，数量/质量、全量导出54/最近23、行数null/0分开。原观测时间早于部分履历差异保留，独立UI2零/null夹具不拼接。首次capture及交互通过，目检后缩小桌面行距并保留手机正常/归档计数，最终重采复验。
+
+真实子Vue函数/computed/手动watch离线检查8/10分页、筛选、合计、11排序ID全序列、URL初读200/正整数/默认移除/无关query；route.query改动不回填ref，完整历史恢复未证明。真实仓库data方法在惰性query响应中核对组织参数、任务未删除、最近100条、数字/null和观测时间映射，未执行SQL。缺失计数说明仅提案，源合计与排序回退0不冒充已验证事实。
+
+94PNG、原型四文件、README/evidence及两脚本为永久交付，无临时文件/日志/下载/开发服务。未改生产apps/API/OpenAPI/env/依赖/权限/数据库/迁移/部署，无重启要求；浏览器finally关闭，技能CLI已结束。具体稿、OG-G与完整主题密度/角色/原生200%/软键盘/范围和异步生命周期仍待办，下一P36组织令牌，全73页实施部署继续。
+
 ## 2026-09-08 · W04审批模板 / ORG-APPROVALS-C-r1
 
 收尾：最终capture及无参数源/数据/PNG哈希与交互复验通过45场景双端90图，零业务弹窗；HTTP/console/pageerror/存储均0。README91本地链接存在，96根目录文件与manifest精确一致。verify:docs（73路由/60保护/6角色/153文件）、runtime-docs、static-analysis（390文件）、format:check（2脚本/496生产/51仓库）、四原型文件Prettier及git diff --check通过。4101/5173无监听，浏览器及技能CLI会话已结束；104本批文件精确纳入提交，无生产源码/旧材料/临时产物混入。
