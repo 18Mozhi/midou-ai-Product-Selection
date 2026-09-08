@@ -568,6 +568,7 @@
     },
     "homeAndMobileShell": {
       "module": "M02-06",
+      "uiPhase2HomeCProposal": "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/README.md provides HOME-C-r1, 32 scenes at 1440/390 (64 images), separate decision/work/automation zones, inline seven-field setup and first paused-rule resume. Synthetic rows pass through actual HomeDashboardService; extracted Vue create/resume functions supply ten-market POST and first PATCH comparison data. Actual load/selection execution reproduces swallowed rule-read failure and missing automatic_selection zero fallback, recorded as known-gap-not-fixed. Unknown-data/busy/focus/recovery guards are proposals, not Vue fixes or UI2-A10-A12 acceptance. node scripts/verify-ui-phase2-home-c.mjs checks source/data/image drift and isolated interactions; --capture refreshes permanent images. No HTTP/storage/crawler, production API/OpenAPI/schema/config/dependency/coverage/approval changes; shared-shell integration, real Vue and full deployment pending.",
       "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md and page-specs/P12.md map HomeDashboard and HomeAutomationOverview controls, inline setup, exact create/resume payloads, conditional links and source-level gaps. Home-specific new cases UI2-A10-A12 remain planned, not executed. No final redesign, source-fingerprint refresh, runtime contract or production change is implied.",
       "entrypoints": [
         "../apps/api/src/home-dashboard-service.ts",

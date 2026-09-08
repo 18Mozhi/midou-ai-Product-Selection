@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-08 · P12首页 / HOME-C-r1
+
+收尾：最终capture及无参数源/数据/图哈希复验均通过32场景双端、十市场POST与首条PATCH；64PNG、68个README链接齐全。verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、最终format:check（2脚本）通过；diff检查通过，生产/旧稿/coverage未改。浏览器finally关闭，4101/5173无监听，无新增临时遗留，精确暂存本批交付。
+
+从干净main/ff8f411继续；上批62图及提交为具体进展。读取AGENTS/Feature Map/总纲、P12合同与真实HomeDashboard/Overview、home服务/仓库/路由、规则路由/校验和旧M02-06夹具。ui-skills-root选择frontend-design，重新构图为蓝色范围侧区与白色人工决策/本人事项/下置自动进度；不伪装共享NavigationShell已经整合。新增[64图](design/home-direction-c/README.md)，32场景双端，具体稿仍待审。
+
+永久助手执行真实createRule/resumeRule核对10市场语言和精确POST、首条暂停PATCH，不去重关键词，不改变周期/门槛；合成记录交实际HomeDashboardService排序分组，非SQL授权证明。隔离执行load和selection，复现规则读失败误当首次设置、缺自动字段误零的两缺口；图稿未知值/busy/关联焦点和错误恢复均是待审保护，源码未修复。创建成功后重读失败保留成功事实，演示不触发真实采集。首次检查发现手机审核选择器继承13px，修至16px后整批复测。
+
+目检桌面首页、手机首页和完整七字段表单；收尾发现合成候选12小于阶段4+5+8，改为17并增加样例一致性检查、整批重出图，不将该断言推广为真实业务恒等式。
+
+未改Vue/API/OpenAPI、权限/数据库、配置、依赖、旧图、coverage及审批；不部署，无生产重启。图/证据/验证脚本为永久交付，无新临时服务或目录，历史受限材料不操作。P12真实实现、共享壳层整合、用户审稿和全73页验收继续；下一业务面P14趋势。
+
 ## 2026-09-08 · P11四分区 / PERSONAL-C-sections-r2
 
 收尾实测：capture及无参数源/数据/图哈希复验双端31场景通过，62PNG与66个README链接齐全；verify:docs（73路由/153文件）、runtime-docs、static-analysis（390文件）、format:check（2个永久脚本）和diff检查通过。生产源码、旧资料/账号图与coverage diff为空；浏览器finally关闭，4101/5173无监听，无新增临时遗留，只精确暂存本批交付。

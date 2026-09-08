@@ -1,5 +1,7 @@
 # P10–P12 外观、个人中心与首页合同复核
 
+2026-09-08 P12首页C提案：[HOME-C-r1](design/home-direction-c/README.md)32场景/64图。真实HomeDashboardService对明确合成行排序；真实Vue createRule/resumeRule在内存替身上生成十市场POST/首条PATCH。执行当前load确认规则读取失败会清空并自动展开首次设置、缺automatic_selection会回退未配置/零，两者仍为known-gap-not-fixed。图稿的未知值保护、busy/焦点、过期/无权限恢复均未迁入Vue，不算UI2-A10–A12或生产通过。
+
 2026-09-08 P11四分区C提案：[PERSONAL-C-sections-r2](design/personal-sections-direction-c/README.md)31场景/62图覆盖权限、安全、通知、资产，旧资料批24图不变。当前notification-service.validatePreferences拒绝email_enabled=true（503 mail_provider_pending），与UI2-A05模拟邮件保存成功不同；本稿从真实函数提取拒绝结果，不以夹具覆盖后端。mysql-auth-repository仅active会话撤销affectedRows=1，已撤销/过期按钮虽被当前Vue呈现，点击应失败而非删除。新分区错误/未知值禁用、busy与密码错误焦点仅为待审行为改进，未更新真实Vue源或UI2-A07–09验收状态。
 
 2026-09-08 P11首批C提案：[PERSONAL-C-profile-r1](design/personal-direction-c/README.md)新增12场景/24图，账号壳层与基本资料表单先行。四非资料分区8图仅导航审阅，业务内容明确未实现；不计完整P11。源码AST与UI2-A04夹具深比较，七字段+expected_version及邮箱不提交、本地失败保留/刷新回填已覆盖；未改变实际源合同、矩阵、审批或写入竞态待验项。

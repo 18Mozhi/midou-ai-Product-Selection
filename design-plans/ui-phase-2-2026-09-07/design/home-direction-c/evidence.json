@@ -1,0 +1,1219 @@
+{
+  "version": "HOME-C-r1",
+  "approval": "pending",
+  "capturedAt": "2026-09-08T06:46:29.573Z",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/index.html": "feaa6a23998b58184ff5a94de857ef3a3eeecdd8601ad0077d3dc19a1dcbfaca",
+    "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/data.js": "9cd403ec96e3b52e2448763199e7c2bb6ce0a113dff82a311e49d9e7668b3006",
+    "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/home.js": "605deff52b72cd3cc3336e864c2c209268875a2ff893e4c4308d7cce031af5da",
+    "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/home.css": "4ddea817b3e3fa5e1f96671fd8c1b886ae0c6dadc4a658ed2b71a5475625c46d",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+    "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/api/src/home-dashboard-service.ts": "8deeecd55e35696c8f871f9307c6c292f4e6d6493768d4ad56f3d92f319e0fb6",
+    "apps/api/src/home-dashboard-routes.ts": "671992db7f3d762d37f31b6a12544967ca7a01bd233570313f61f1671a95ddf3",
+    "apps/api/src/mysql-home-dashboard-repository.ts": "173b3b2963311b4d2b62f5c02da1ce2adefd1919f10f81a981254225bc8b3c4d",
+    "apps/api/src/trend-routes.ts": "94c382e93d59979a66ca74603a98feeff8692d9c9aac3a87c5560cd1934cc6c5",
+    "apps/api/src/trend-service.ts": "334fbfea3d40830006c4cb543f182ca4236bfda7d68b4da3e4003b0b1ca52434",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e"
+  },
+  "sourceKnownGaps": [
+    {
+      "hasSelection": true,
+      "state": "empty",
+      "rules": [],
+      "setupOpen": true,
+      "displayedSelection": {
+        "state": "not_configured",
+        "enabled_rule_count": 0,
+        "candidate_count": 0,
+        "rule_candidate_count": 0,
+        "recommended_count": 0,
+        "awaiting_evidence_count": 0,
+        "adopted_count": 0,
+        "recommended_items": [],
+        "last_collection_at": null,
+        "next_collection_at": null
+      },
+      "status": "known-gap-not-fixed"
+    },
+    {
+      "hasSelection": false,
+      "state": "empty",
+      "rules": [],
+      "setupOpen": false,
+      "displayedSelection": {
+        "state": "not_configured",
+        "enabled_rule_count": 0,
+        "candidate_count": 0,
+        "rule_candidate_count": 0,
+        "recommended_count": 0,
+        "awaiting_evidence_count": 0,
+        "adopted_count": 0,
+        "recommended_items": [],
+        "last_collection_at": null,
+        "next_collection_at": null
+      },
+      "status": "known-gap-not-fixed"
+    }
+  ],
+  "boundary": "64 permanent proposal images. Synthetic rows ordered by actual HomeDashboardService; actual extracted Vue create/resume payloads and read gaps evaluated without HTTP. Not actual Vue rendering, SQL/RBAC, crawler execution, cache/concurrency, full shared shell or production acceptance.",
+  "screenshots": [
+    {
+      "file": "1440-running.png",
+      "scene": "running",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 69,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e2f1eb218ce7e5d6ee24f8140ef082f11181b8558307aec1fc75be6f2ca13935"
+    },
+    {
+      "file": "1440-attention.png",
+      "scene": "attention",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 69,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7a701ae0f5ed8436038e4025e64f4f458d1324fda1f03620fd86bd6a0c6dffba"
+    },
+    {
+      "file": "1440-runtime-open.png",
+      "scene": "runtime-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 69,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4e558578561488f4657d29e942fa1b2b647b0e453b70edcab924903d641ce2e1"
+    },
+    {
+      "file": "1440-truth-open.png",
+      "scene": "truth-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 69,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c6c26219522a08c7778390018e2c32a055e8f3743900f6f8263531948bbced89"
+    },
+    {
+      "file": "1440-long-items.png",
+      "scene": "long-items",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 69,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e4702ccb282cd69d2b0deca9a3d3f7e345c997920ba6cfe8363742dc2148a730"
+    },
+    {
+      "file": "1440-candidates.png",
+      "scene": "candidates",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "62d5b4d5ef57baa08f1fd0d38326b7a078c178ddd1030ae1adbaa16ca3763d0b"
+    },
+    {
+      "file": "1440-collecting.png",
+      "scene": "collecting",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e7757b69cc1a65702ba71ee317f26c16cb3806761b295e23362e6223cb27f955"
+    },
+    {
+      "file": "1440-quiet.png",
+      "scene": "quiet",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3518404f7e13577ec68fe4c9d0f80717a2e5fb6963c3ec6190fa85cd108a2536"
+    },
+    {
+      "file": "1440-no-score.png",
+      "scene": "no-score",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8074843669ee63b09d7788c7226e3844bb85144e10c15a489502ab0d578cfc9c"
+    },
+    {
+      "file": "1440-unknown-selection.png",
+      "scene": "unknown-selection",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "839f792d04f265f02d6708e9a04db237cc99b1f285f8fd2fb9adcd8b631ea235"
+    },
+    {
+      "file": "1440-rules-failed.png",
+      "scene": "rules-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 69,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "59c1e9262ea22aa297d497e970baa06660f5ce6e39026fbdff825513c054afff"
+    },
+    {
+      "file": "1440-rules-loading.png",
+      "scene": "rules-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 68,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e266f8f5e74502cd3ce52340ba495bbe568432fb1d23e95454f3591d408b3785"
+    },
+    {
+      "file": "1440-not-configured.png",
+      "scene": "not-configured",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "80414dfb816aaeffb8bd3aeaccb195cca36203923e5bc1903920bd650c79717d"
+    },
+    {
+      "file": "1440-setup-closed.png",
+      "scene": "setup-closed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "878489a25d3bd8071fb6893c02003d7989dda39e4adf8e72048980d49df296cd"
+    },
+    {
+      "file": "1440-setup-edited.png",
+      "scene": "setup-edited",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9e34eb44920ae1ee0b071aafb86a4c99c424039c35db11fa9712bc1de87fae86"
+    },
+    {
+      "file": "1440-setup-invalid.png",
+      "scene": "setup-invalid",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 68,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e4c1564b9fa17ad84ccd9c5f54f29850fe09d9d17f22098a5ece3578add48e48"
+    },
+    {
+      "file": "1440-setup-busy.png",
+      "scene": "setup-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f25b36554bfc49f1da3b3a5b4de50d28c86c371c2f9080d46ca60105bc47a336"
+    },
+    {
+      "file": "1440-setup-failed.png",
+      "scene": "setup-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 68,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a68634749b6454a18a43cccda520bcb67d8fa069422641b7d08fd6424e8743ec"
+    },
+    {
+      "file": "1440-setup-saved.png",
+      "scene": "setup-saved",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 67,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "339b55ebeffbef9eeedb246f3fe3b8afc20af84aa5e90d196e1b81c664c93b6a"
+    },
+    {
+      "file": "1440-setup-saved-read-failed.png",
+      "scene": "setup-saved-read-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d2ec8e5eaef3550e871a8c2d982b2d1b8b8a45fd126a6d28f85c532a5f0d8d73"
+    },
+    {
+      "file": "1440-paused.png",
+      "scene": "paused",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ec7aa7cf6dea6b4453d03790a9d583158b5b976ab00fec93ec37f6164e626054"
+    },
+    {
+      "file": "1440-resume-busy.png",
+      "scene": "resume-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c95ce910b8a74e80070d4832573e566170ed57dde382fbd6fec571b04ee36cb6"
+    },
+    {
+      "file": "1440-resume-failed.png",
+      "scene": "resume-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 56,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f7fb637fdb755d04cf22ea5910778967f3da20ad714a2ee76dcdd23ab2a2f73f"
+    },
+    {
+      "file": "1440-resumed.png",
+      "scene": "resumed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 70,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "df4c475934904d17aa6373f9d44d6d1c59b055fff944d4c2cd4f245568aaa69f"
+    },
+    {
+      "file": "1440-readonly.png",
+      "scene": "readonly",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6a9196e903c6386624717cd39300752f442ca96555cee78be34163b0011f0217"
+    },
+    {
+      "file": "1440-readonly-paused.png",
+      "scene": "readonly-paused",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8b978d0d18b52e02fda2c26572b9ab69dd163edb0598219a678f82f7e0806e87"
+    },
+    {
+      "file": "1440-loading.png",
+      "scene": "loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 13,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "668a04476111c59a8b6410e6f559ffbf131b519d199a1e98eed4ce0e8a5ad348"
+    },
+    {
+      "file": "1440-error.png",
+      "scene": "error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 16,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "97e0b7dd51bfca9da24412b28a4e5f969151b175c5e7395a5190f1d539c87204"
+    },
+    {
+      "file": "1440-expired.png",
+      "scene": "expired",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7446d4b4b0c13131ed2b6f9df269154bbd1b8815777baae648012f6b340daead"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "scene": "forbidden",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 17,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "81fbc20776039a6f3a90c8f8cc01d4ade5cec3d3647828bcb2e76b671f5cf8a2"
+    },
+    {
+      "file": "1440-rate-limited.png",
+      "scene": "rate-limited",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 16,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e56d394b43f339808ecaa1e04d37898105f049e4e97de52f87f1ca834af390ec"
+    },
+    {
+      "file": "1440-blocked.png",
+      "scene": "blocked",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 16,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "09d9b383f17a427558c9671fc109c29c529a530bd7cd98031642bbe8203c13bb"
+    },
+    {
+      "file": "390-running.png",
+      "scene": "running",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ecbd6d5e72f5c1b1a880bd1e428aa48f1ec7f70cbf6238c378f9b34981671142"
+    },
+    {
+      "file": "390-attention.png",
+      "scene": "attention",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b29950f0f3f78e5e87e83a8a4b936456ea641fd55f58e57cbe0a24efbb695889"
+    },
+    {
+      "file": "390-runtime-open.png",
+      "scene": "runtime-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "56a495c02b04696e2da309077d8e368103d13fa9d90d4b033b066ad513e85bfd"
+    },
+    {
+      "file": "390-truth-open.png",
+      "scene": "truth-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5ae878500d9c60af4d2a254c5c9f54a12e2b38b4c8a405cd91ce4ffe7b911cc9"
+    },
+    {
+      "file": "390-long-items.png",
+      "scene": "long-items",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0670a33aa72cb0e8d43764032f7ca87dee5ef2d71893976c82d384d8f5f79d74"
+    },
+    {
+      "file": "390-candidates.png",
+      "scene": "candidates",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "82f7d6f50941d08a5dd050301c9e54b6a72c9f3176b35e37a815e8a751046b6e"
+    },
+    {
+      "file": "390-collecting.png",
+      "scene": "collecting",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "52ef6bd895d44854f931170965ad6f1171a4fa2c0bf1b17c0771d331b9ce2d3b"
+    },
+    {
+      "file": "390-quiet.png",
+      "scene": "quiet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ab9f4ef122a11b0f171e1a1668231c9e95eec4fb71afc08d0a3aabbcafc3989a"
+    },
+    {
+      "file": "390-no-score.png",
+      "scene": "no-score",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e6e3f1781426439068ae2871c099d8479dc1f307b9f67735b04c0c07cf39b996"
+    },
+    {
+      "file": "390-unknown-selection.png",
+      "scene": "unknown-selection",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4bf7410bf75ab66c9abccfd989ecea5e42e1d421167d33816773555de462af2d"
+    },
+    {
+      "file": "390-rules-failed.png",
+      "scene": "rules-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 65,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "cbbe3045b1fbb61697eb20dee9a8971761f30bc675399f8a8524e8bccc3fcf2a"
+    },
+    {
+      "file": "390-rules-loading.png",
+      "scene": "rules-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 64,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "799a94500028e88cbd7dcb256ca3f8bbdb1730130820248c01308ab2a421761e"
+    },
+    {
+      "file": "390-not-configured.png",
+      "scene": "not-configured",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "91289d8dd3d83062d4a3f1fe87b06d11e29a78c26743f69051c3b568e22434e0"
+    },
+    {
+      "file": "390-setup-closed.png",
+      "scene": "setup-closed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b70443ee2f3d95bd3a5cb453381b13814bb666fee5f4eddf842fccfbbd6c55a8"
+    },
+    {
+      "file": "390-setup-edited.png",
+      "scene": "setup-edited",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f10064902c1876e76e3a47f69e9020d43bb9d0734ef598485f9bfcdaff052476"
+    },
+    {
+      "file": "390-setup-invalid.png",
+      "scene": "setup-invalid",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 64,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ba7a4dca0d8ef18364a52e0948909811dbcc4c9b48309958eff6d3f3b626e7ad"
+    },
+    {
+      "file": "390-setup-busy.png",
+      "scene": "setup-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6134707ff7ba735b0a4db3bc24dd64c83290b512765d43c4d85d4d302f989c32"
+    },
+    {
+      "file": "390-setup-failed.png",
+      "scene": "setup-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 64,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fffdee63a6be040ba694073a057defd7b01fba3ed805e2ccb2048de53ce6e29e"
+    },
+    {
+      "file": "390-setup-saved.png",
+      "scene": "setup-saved",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 63,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7e8e04f7752bd5b3b26b9b50dd2087a267c169ddfa18e7fab2462f3e420d3b7e"
+    },
+    {
+      "file": "390-setup-saved-read-failed.png",
+      "scene": "setup-saved-read-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 13,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0d35243436a36829cd60067032c4abc7f70039e4a055b66d5f8dbef1d4bc784e"
+    },
+    {
+      "file": "390-paused.png",
+      "scene": "paused",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0d3dbd79250fb711d3cf20e66a06c10b468f2cb98b5fb1d1cbbdaddcedf94ef0"
+    },
+    {
+      "file": "390-resume-busy.png",
+      "scene": "resume-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a232ae45784c9f6097659f35d2d08e237ce99e6f065c38a97232a5237248e900"
+    },
+    {
+      "file": "390-resume-failed.png",
+      "scene": "resume-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5b8049741e38333a73ebaf08ffa7b5d40b6d1fae5a56df53c71de4f87c3bbccb"
+    },
+    {
+      "file": "390-resumed.png",
+      "scene": "resumed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 66,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "095fdd61e4d174792639d9d4d4f32a05cf857cc3ae3f3d62d4bd7a5163469be2"
+    },
+    {
+      "file": "390-readonly.png",
+      "scene": "readonly",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "52ce955ccc01a4bbb71de7aba27e58cbafc9ffc70a0465e37c7e3cb0802612b3"
+    },
+    {
+      "file": "390-readonly-paused.png",
+      "scene": "readonly-paused",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 51,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e0c834637d6f487db8d3bf9b3b73554ba503eb4ee8e8b171a2e27ae9a960dc75"
+    },
+    {
+      "file": "390-loading.png",
+      "scene": "loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 1,
+        "textNodesChecked": 9,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "50e8429a3fed0008a4525e8434cefce009212d1c7a6e80586255071acf579735"
+    },
+    {
+      "file": "390-error.png",
+      "scene": "error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "edb0bae0e2547303188897857c9640b9e84e7edae21d5cf3524b252430364d68"
+    },
+    {
+      "file": "390-expired.png",
+      "scene": "expired",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 13,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f3b25b5b520d05495e0bb75748f31a1e15850d1d2c80e85651f5c13c165af0f8"
+    },
+    {
+      "file": "390-forbidden.png",
+      "scene": "forbidden",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 13,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "24c89d955b4341909fdcb7a2b7fb3751d4fd7f903b25aa04e6518390a74acdf1"
+    },
+    {
+      "file": "390-rate-limited.png",
+      "scene": "rate-limited",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b63f4bcfd648f1c04b697ef87c7bdc99945cf5a60c8fd667e01b11ffa30a53f7"
+    },
+    {
+      "file": "390-blocked.png",
+      "scene": "blocked",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 12,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "bd27d666281760130318502af08b667905d0a70d9b67a12742e9488e11e0c881"
+    }
+  ]
+}
