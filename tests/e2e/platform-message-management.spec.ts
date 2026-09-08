@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { verifyAuditedReasonFocus } from "./helpers/audited-reason-focus";
 
 const messageId = "00000000-0000-4000-8000-000000000801";
 const envelope = (data: unknown) => ({
@@ -182,6 +183,7 @@ test("platform administrator can create and publish a Chinese notification", asy
 
   await page.getByRole("button", { name: "发布", exact: true }).click();
   const reasonDialog = page.getByRole("dialog", { name: "填写发布原因" });
+  await verifyAuditedReasonFocus(page, reasonDialog);
   await reasonDialog.getByRole("textbox", { name: "原因（至少 2 个字）" }).fill("发布维护通知");
   await reasonDialog.getByRole("button", { name: "确认提交" }).click();
   await expect

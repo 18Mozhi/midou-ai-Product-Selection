@@ -405,6 +405,34 @@ test("shared shell role and state contract binds every current source site witho
   assert.equal(report.denominatorFrozen, false, "Source completeness must not approve runtime");
 });
 
+test("audited reason source bindings retain every current site and all consumer hash claims", () => {
+  const file = "apps/web/src/components/AuditedReasonDialog.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const records = report.records.filter(
+    (record) => record.sourceFile === file && record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 6);
+  assert.deepEqual(
+    records.map((r) => r.candidateId).sort(),
+    candidates.map((c) => c.candidateId).sort(),
+  );
+  for (const record of records) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine);
+    assert.match(record.claim, /LG62-REASON/);
+  }
+  const claims = report.sourceClaims.filter((claim) => claim.file === file);
+  assert.equal(claims.length, 4);
+  for (const claim of claims) assert.equal(claim.hash, digest(source), claim.document);
+  assert.equal(report.unreferenced.length, 0);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

@@ -1,5 +1,7 @@
 # B3a · 链路日志、备份恢复与发布事实合同
 
+F04b后续：AuditedReasonDialog增加局部可用控件Tab循环，下面六项源绑定及该文件hash已按当前源码刷新；旧表可由e414e0e追溯。仅日志导出原因窗增加首焦点和启用/禁用末项双向边界实测，不抵扣其他日志/恢复/发布待验；详见共享入口合同第11节。
+
 2026-09-08，起点main/5695ae7。覆盖[P62](page-specs/P62.md)、[P64](page-specs/P64.md)、[P65](page-specs/P65.md)。本批仅事实规格及备份有效期标题修复，不是正式新设计或生产签收；F00-1.18-r1仍待用户意见。
 
 ## 1. 真实操作与计划纠偏
@@ -111,16 +113,16 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号 | 行 | 类型 | 语义/消费者 |
 | --- | --- | --- | --- |
-| f5d988e572723a07.1 | 38 | dialog-definition | LG62-REASON 原生dialog定义 |
-| a3b55671f26dcb41.1 | 38 | event-binding | LG62-REASON Escape转发 |
-| 86c4d6d0ad7b5fb8.1 | 44 | form-event | LG62-REASON 表单提交 |
-| f850a4abcc7ccc3a.1 | 50 | control | LG62-REASON 顶部取消 |
-| 8724bc1f65aaf63a.1 | 66 | control | LG62-REASON 底部取消 |
-| e7e63c4215a43738.1 | 67 | control | LG62-REASON 同form确认 |
+| b4d0faa980ae141b.1 | 56 | dialog-definition | LG62-REASON 原生dialog定义 |
+| feaf794106e5776d.1 | 56 | event-binding | LG62-REASON Escape转发及可用控件首末Tab循环 |
+| 86c4d6d0ad7b5fb8.1 | 63 | form-event | LG62-REASON 表单提交 |
+| f850a4abcc7ccc3a.1 | 69 | control | LG62-REASON 顶部取消 |
+| 8724bc1f65aaf63a.1 | 85 | control | LG62-REASON 底部取消 |
+| e7e63c4215a43738.1 | 86 | control | LG62-REASON 同form确认 |
 
 | v-model | 属性行 | 元素 |
 | --- | --- | --- |
-| reason | 57 | textarea |
+| reason | 76 | textarea |
 
 ### apps/web/src/components/ResponsiveFilterDrawer.vue
 
@@ -171,7 +173,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/PlatformLogCenter.vue | 4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d |
 | apps/web/src/components/BackupRecoveryCenter.vue | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
 | apps/web/src/components/ReleaseRolloutCenter.vue | 0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1 |
-| apps/web/src/components/AuditedReasonDialog.vue | 10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee |
+| apps/web/src/components/AuditedReasonDialog.vue | 270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |

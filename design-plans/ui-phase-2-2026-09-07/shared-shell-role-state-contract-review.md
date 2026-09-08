@@ -183,7 +183,7 @@ App仅DEV条件导入UiStateShowcase/VerificationFramework，NavigationShell glo
 
 useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后nextTick返焦；cancel.preventDefault后请求父级关闭；unmount只close，没有显式返焦。原生dialog负责模态机制，但不证明全部消费者的首焦点/Tab循环/遮罩关闭均合格。当前文字引用清单为21个Vue文件：ApprovalWorkspace、AuditedReasonDialog、AutomationRuleCenter、CommercialOperationsCenter、CostRuleConsole、DiscoveryOverlay、NotificationCenter、OpportunityWorkspace、OpportunityWorkspaceDialogs、OrganizationCreationWizard、PlatformAccountDialogs、PlatformGovernanceCenter、PlatformManagementCenter、PlatformMessageEditor、PlatformOrganizationDetailDialog、PlatformUserDetailDialog、ReportCenter、ScoreRuleConsole、TaskBatchActions、TaskDetailPanel、TaskWorkspace。此为候选消费者索引，仍要按实际useModalDialog调用、open表达式和触发源逐项展开；不是21个已验证业务弹窗。
 
-## 6. F04b可执行验收卡（局部结果见第8/9节）
+## 6. F04b可执行验收卡（局部结果见第8–11节）
 
 所有卡先在真实Vue+隔离响应验证，写入不触碰生产；真实后端与六角色验证另记。默认1440/390串行，其余适用断点、200%缩放/三主题/两密度及读屏分别保留，不由两视口测试自动覆盖。
 
@@ -262,3 +262,23 @@ useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后ne
 DI06使用真实目录task/sourcing两条，不编第六条；最近五项上限仍是源码边界，测试不声称已证明所有五条的跨角色排序。两种快捷键覆盖成员触发按钮、搜索编辑框和平台壳层；组织壳层、所有输入目标、读屏、其他浏览器和生产仍待验。历史单入口、空入口场景与本次两入口是分别记录的局部证据，不注销整张DI06卡。
 
 第2/3节按AST重绑九项；旧LF hash为0c87aed8077f0fc34773a49a6f031c47c382ccf0b83de4d1add972e71b9f8fb2，旧表在3c1ebae。三签名变更：form a53c50f6e3c9041c.1→6e4c847155323708.1；input f528731fca76dfda.1→422ce833775d95d6.1；状态监听85469c2445124f8e.1→372af47cc630ef33.1。搜索与重试语义保留，显式新增discovery.close.state，其余六项仅行号变化；共享候选总数仍70。具体测试终态、全站只读对账及清理见PROGRESS，不更新旧图、生成清单或审批值。
+
+## 11. F04b共享审计原因窗的实际调用方
+
+从main/e414e0e干净起点，只改AuditedReasonDialog局部键盘行为，不改useModalDialog或五个父级业务逻辑。两个真实组织入口在修复前都复现首控件Shift+Tab没有回到取消按钮。新增handleTab仅在当前打开的dialog处理Tab；逐次选择可见、非disabled且tabIndex非负的button/textarea，在首项反向/末项正向时阻止默认行为并切换焦点。保持原生cancel和父级关闭、初始草稿、最短原因、提交emit以及遮罩不关闭的既有语义，没有新增持久化、API或安全规则。
+
+当前五个模板消费者为OrganizationAdminCenter、OpportunityWorkspace、PlatformDataCenter、PlatformLogCenter、PlatformManagementCenter，已分别沿ask→useAuditedReason→共享窗→finish→父级handler核对。最后一个父级不是单独的通知子组件；这五个父级不等同五个业务变体，更不等同全部21个原生模态候选文件。实际运行覆盖如下：
+
+| 父级 / 业务变体 | 本批永久浏览器证据 | 仍未证明 |
+| --- | --- | --- |
+| OrganizationAdminCenter / 撤销邀请、撤销指定资源授权 | m06-01新增10项：各自Escape/顶部/底部取消、返焦/重开初值3，禁用/启用末项双向Tab1，空白不可提交、trim准确版本体、持有响应时父级busy阻止再触发1 | 其他成员/团队/工作区原因变体、409/403恢复、跨组织和真实撤销 |
+| OpportunityWorkspace / AI抽检通过、驳回 | m04-07新增2项，空初值恢复、两种提交可用态首末边界、Escape返焦且无观测非GET | 真正复核POST、人工复核权限及分析结果写后读 |
+| PlatformDataCenter / 受控数据导出 | m06-02现有数据导航用例增加打开、首焦点/首末边界、保留默认草稿、取消返焦 | 本批未执行导出POST，不证明文件/筛选异步归属 |
+| PlatformLogCenter / 日志导出 | m06-02原日志用例补焦点边界，再继续原导出body和download验证 | 真实服务器导出、重试key、离开后下载归属 |
+| PlatformManagementCenter / 发布通知 | platform-message-management原用例补焦点边界，随后继续原发布body与返回反馈 | 取消发布、所有受众、真实投递及实际授权 |
+
+新helper audited-reason-focus只操作实际页面中的dialog，并在原draft恢复后返回；记录自身期间无非GET，不能冒充后续取消/提交/后端全链断言。取消及版本化写入由具体业务测试承担。组织用例Control+Enter无提交的检查仅说明该键不触发写入，不声称新增快捷提交功能。
+
+源绑定：六个AuditedReason候选仍全部在日志合同表归属LG62-REASON；定义f5d988e572723a07.1→b4d0faa980ae141b.1、事件a3b55671f26dcb41.1→feaf794106e5776d.1，其余四项只行移动。旧LF hash为10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee，现270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00；原表和四份合同hash由e414e0e追溯。本批不是给第2/3节额外添加六项以重复计数。新增单测要求当前六项集合/行/hash/原语义及四份当前源hash一致；旧全局清单与审批不更新。
+
+定向组织10项、其他父级5项已通过；完整四模块桌面/移动、构建、对账与清理终态见PROGRESS。临时根output/playwright/ui-phase2-audited-modal-20260908与过去29批分开登记。全主题、读屏、200%缩放、多个/叠加弹窗、生命周期竞态、所有业务变体及其他原生消费者仍待验；正式风格与全73路由设计/实现/生产/用户审核未完成。

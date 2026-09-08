@@ -29,6 +29,122 @@ const activeGrant = {
   updated_at: "2026-08-20T10:00:00.000Z",
   actions: ["opportunity:read", "opportunity:decide"],
 };
+
+for (const variant of ["invitation", "grant"] as const) {
+  const title = variant === "grant" ? "撤销指定资源授权原因" : "撤销邀请原因";
+  const initial = variant === "grant" ? "撤销指定资源授权" : "撤销邀请";
+  const endpoint =
+    variant === "grant"
+      ? `**/api/v1/org/${org}/resource-grants/${activeGrant.id}/revoke`
+      : "**/api/v1/org/admin/invitations/*/actions";
+  const openReason = async (page: Page) => {
+    await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
+    await setup(page);
+    await page.goto(variant === "grant" ? "/org-admin/roles" : "/org-admin/members");
+    if (variant === "grant") await page.getByRole("button", { name: /指定资源授权 1/ }).click();
+    const trigger =
+      variant === "grant"
+        ? page.getByRole("button", { name: "撤销授权", exact: true })
+        : page
+            .locator(".org-admin-line")
+            .filter({ hasText: "new@example.test" })
+            .getByRole("button", { name: "撤销邀请", exact: true });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: title });
+    await expect(dialog.getByRole("textbox")).toBeFocused();
+    await expect(dialog.getByRole("textbox")).toHaveValue(initial);
+    return { dialog, trigger };
+  };
+
+  for (const close of ["escape", "header", "cancel"] as const) {
+    test(`UI2-SM01 ${variant} reason ${close} cancels without a write and restores focus`, async ({
+      page,
+    }) => {
+      const writes: string[] = [];
+      page.on("request", (request) => {
+        if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+          writes.push(request.method());
+      });
+      const { dialog, trigger } = await openReason(page);
+      await dialog.getByRole("textbox").fill("取消后不提交此草稿");
+      if (close === "escape") await page.keyboard.press("Escape");
+      else
+        await dialog
+          .getByRole("button", { name: close === "header" ? "关闭原因填写" : "取消", exact: true })
+          .click();
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+      expect(writes).toEqual([]);
+      await trigger.click();
+      await expect(dialog.getByRole("textbox")).toHaveValue(initial);
+      await page.keyboard.press("Escape");
+    });
+  }
+
+  test(`UI2-SM01 ${variant} reason contains both Tab boundaries with disabled and enabled submit`, async ({
+    page,
+  }) => {
+    const { dialog } = await openReason(page);
+    const first = dialog.getByRole("button", { name: "关闭原因填写" });
+    const input = dialog.getByRole("textbox");
+    const submit = dialog.getByRole("button", { name: "确认提交" });
+    for (const value of [" ", "有效原因"]) {
+      await input.fill(value);
+      const last = value.trim()
+        ? submit
+        : dialog.getByRole("button", { name: "取消", exact: true });
+      if (value.trim()) await expect(submit).toBeEnabled();
+      else await expect(submit).toBeDisabled();
+      await first.focus();
+      await page.keyboard.press("Shift+Tab");
+      await expect(last).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(first).toBeFocused();
+    }
+  });
+
+  test(`UI2-SM01 ${variant} reason emits one trimmed versioned write before waiting for completion`, async ({
+    page,
+  }) => {
+    const { dialog, trigger } = await openReason(page);
+    const writes: unknown[] = [];
+    let pending: Route | undefined;
+    await page.route(endpoint, (route) => {
+      writes.push(route.request().postDataJSON());
+      pending = route;
+    });
+    const input = dialog.getByRole("textbox");
+    const submit = dialog.getByRole("button", { name: "确认提交" });
+    await input.fill(" ");
+    await expect(submit).toBeDisabled();
+    await input.press("Control+Enter");
+    expect(writes).toEqual([]);
+    await input.fill("  隔离撤销原因  ");
+    await submit.click();
+    await expect.poll(() => writes.length).toBe(1);
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeDisabled();
+    await page.keyboard.press("Enter");
+    expect(writes).toEqual([
+      {
+        ...(variant === "invitation" ? { action: "revoke" } : {}),
+        expected_version: 1,
+        reason: "隔离撤销原因",
+      },
+    ]);
+    await pending!.fulfill({
+      json: env(
+        variant === "grant"
+          ? { ...activeGrant, version: 2, status: "revoked", effective_status: "revoked" }
+          : { id: "00000000-0000-4000-8000-000000000613", status: "revoked", version: 2 },
+      ),
+    });
+    await expect(page.getByRole("status")).toContainText(
+      variant === "grant" ? "指定资源授权已撤销" : "操作已完成",
+    );
+    expect(writes).toHaveLength(1);
+  });
+}
 const env = (data: unknown, meta?: unknown) => ({
   data,
   ...(meta ? { meta } : {}),

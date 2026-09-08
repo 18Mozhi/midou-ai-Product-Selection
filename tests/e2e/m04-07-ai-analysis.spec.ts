@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { verifyAuditedReasonFocus } from "./helpers/audited-reason-focus";
 const opportunityId = "00000000-0000-4000-8000-000000000701",
   resultId = "00000000-0000-4000-8000-000000000702",
   envelope = (data: unknown) => ({
@@ -118,3 +119,32 @@ test("M04-07.A07/A08/A15 shows AI boundary evidence references and human samplin
   await expect(page.getByText("输出不能替代事实、评分、利润或人工决策。")).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
+
+for (const outcome of ["approved", "rejected"] as const) {
+  test(`UI2-SM01 AI ${outcome} reason keeps keyboard focus and cancels without a review`, async ({
+    page,
+  }) => {
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+        writes.push(request.method());
+    });
+    await setup(page);
+    await page.goto(`/opportunities/${opportunityId}`);
+    await page.locator(".opportunity-tabs details > summary").click();
+    await page.getByRole("button", { name: "AI 辅助" }).click();
+    const trigger = page.getByRole("button", {
+      name: outcome === "approved" ? "抽检通过" : "抽检驳回",
+      exact: true,
+    });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", {
+      name: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
+    });
+    await verifyAuditedReasonFocus(page, dialog);
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+    expect(writes).toEqual([]);
+  });
+}

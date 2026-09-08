@@ -32,6 +32,24 @@ function submit() {
   if (value.length < (props.minimumLength ?? 2)) return;
   emit("submit", value);
 }
+
+function handleTab(event: KeyboardEvent) {
+  if (event.key !== "Tab" || !props.open || !dialogElement.value) return;
+  const controls = [...dialogElement.value.querySelectorAll<HTMLElement>("button,textarea")].filter(
+    (element) =>
+      !element.matches(":disabled") && element.tabIndex >= 0 && element.getClientRects().length > 0,
+  );
+  const first = controls[0],
+    last = controls.at(-1);
+  if (!first || !last) return;
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
 </script>
 
 <template>
@@ -40,6 +58,7 @@ function submit() {
     class="audited-reason-dialog"
     :aria-label="title"
     @cancel="handleCancel"
+    @keydown="handleTab"
   >
     <form @submit.prevent="submit">
       <header>

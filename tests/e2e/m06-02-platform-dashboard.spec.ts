@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import type { Page, Route } from "@playwright/test";
+import { verifyAuditedReasonFocus } from "./helpers/audited-reason-focus";
 import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
 test.afterEach(async ({}, testInfo) => finalizePhase2Evidence(testInfo));
 const env = (data: any) => ({ data, request_id: "m06-02-e2e", trace_id: "m06-02-e2e" }),
@@ -870,6 +871,18 @@ test("platform completion exposes data governance notifications and user-panel s
 
   await page.goto("/platform-admin/data");
   await expect(page.getByRole("heading", { name: "跨组织业务数据", level: 2 })).toBeVisible();
+  const exportTrigger = page.getByRole("button", { name: "导出表格文件", exact: true });
+  const exportFilter = page.getByRole("dialog", { name: "筛选近期数据" });
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await page.getByRole("button", { name: "筛选近期数据", exact: true }).click();
+  await exportTrigger.click();
+  const exportReason = page.getByRole("dialog", { name: "填写受控导出原因" });
+  await verifyAuditedReasonFocus(page, exportReason);
+  await exportReason.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(exportReason).toBeHidden();
+  await expect(exportTrigger).toBeFocused();
+  if (await exportFilter.isVisible())
+    await exportFilter.getByRole("button", { name: "关闭筛选条件" }).click();
   if ((page.viewportSize()?.width ?? 1000) <= 760)
     await expect(page.getByRole("button", { name: /^便携照明趋势 · 展示中/ })).toBeVisible();
   else await expect(page.getByText("便携照明趋势", { exact: true })).toBeVisible();
@@ -1232,6 +1245,7 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   await page.getByRole("button", { name: "导出当前筛选" }).click();
   const dialog = page.getByRole("dialog", { name: "填写日志导出原因" });
   await expect(dialog).toBeVisible();
+  await verifyAuditedReasonFocus(page, dialog);
   const download = page.waitForEvent("download");
   await dialog.getByRole("button", { name: "确认提交" }).click();
   await download;

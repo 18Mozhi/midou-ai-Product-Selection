@@ -1,5 +1,7 @@
 # F04 组织治理八页事实与交互合同
 
+F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文件hash，旧hash在e414e0e。m06-01新增UI2-SM01撤销邀请/资源授权两变体各五项，覆盖三取消路径返焦、草稿重开、两种提交可用态边界和单次版本化提交；不改组织规则或注销其他OG/RP缺口。范围及终态见共享入口合同第11节和PROGRESS。
+
 日期2026-09-08；起点main/9828743，产品源fa09f39；计划修订33fe9c2后继续本批收尾。P29/P30/P32–P37八份规格；P31权限页继续复用原规格与合同，不重写为新成果。状态：规格及局部测试交付，正式方向、完整动作分母、全新图、真实后端/生产和用户签收仍待完成。规格累计40/73不是40页已重设计。
 
 依据AGENTS→Feature Map organizationAdmin→蓝图4.1→route-catalog/NavigationShell的路由和reset_on_scope缓存→真实组件→organization-admin-routes/service/MySQL仓储及audit链。计划矩阵描述不覆盖真实合同。数据库/权限/接口/业务规则不在本次修改范围。
@@ -150,7 +152,7 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 | `apps/web/src/components/OrganizationDataPanel.vue` | `575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2` |
 | `apps/web/src/components/OrganizationTokenPanel.vue` | `cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725` |
 | `apps/web/src/components/OrganizationAuditPanel.vue` | `b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a` |
-| `apps/web/src/components/AuditedReasonDialog.vue` | `10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee` |
+| `apps/web/src/components/AuditedReasonDialog.vue` | `270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00` |
 | `apps/web/src/use-audited-reason.ts` | `113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8` |
 | `apps/web/src/use-modal-dialog.ts` | `08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f` |
 | `apps/web/src/api-client.ts` | `953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff` |

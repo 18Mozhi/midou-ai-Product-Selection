@@ -1,5 +1,7 @@
 # B2b · 内容、通知与接口证据合同
 
+F04b后续：共享AuditedReasonDialog仅补局部Tab循环并更新该文件当前hash，旧值在e414e0e。platform-message-management现有发布用例补实际原因窗首焦点和禁用/启用提交下的双向边界，之后继续原准确发布请求验证；不等于取消发布、全部受众/角色或真实投递已验。详见共享入口合同第11节。
+
 2026-09-08；起点main/b4bdcf1。覆盖[P56](page-specs/P56.md)、[P57](page-specs/P57.md)、[P63](page-specs/P63.md)，共用父入口与[P61](page-specs/P61.md)交叉复核。本批事实合同及正文阅读修复不是正式风格、全部行为、生产或用户签收；无新正式图，未代选A/B/C。
 
 ## 1. 生产者、范围与实际含义
@@ -216,7 +218,7 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
-| apps/web/src/components/AuditedReasonDialog.vue | 10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee |
+| apps/web/src/components/AuditedReasonDialog.vue | 270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00 |
 | apps/web/src/components/use-platform-content-list.ts | 48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9 |
 | apps/web/src/components/use-platform-content-review.ts | e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2 |
 | apps/web/src/components/use-platform-notification-list.ts | 2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b |

@@ -1,5 +1,7 @@
 # B2a · 数据中心与治理目录事实合同
 
+F04b后续：仅AuditedReasonDialog的当前hash因局部Tab循环修复更新，旧值可由e414e0e追溯。m06-02现有数据入口用例补受控导出原因窗首焦点、两种提交可用态首末循环和取消返焦；没有执行此数据导出的POST，不证明导出数据/文件归属。其余待验保持，详见共享入口合同第11节。
+
 2026-09-08；起点main/63a1ef0。覆盖[P54](page-specs/P54.md)、[P55](page-specs/P55.md)，独立于旧全局清单的历史指纹。事实规格与局部正确性验证不等于正式新风格、全行为、生产或用户审核通过；本批没有新正式图，也不选择A/B/C。
 
 ## 1. 入口、读取与事实边界
@@ -190,7 +192,7 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
-| apps/web/src/components/AuditedReasonDialog.vue | 10f0be448391f280f1d5f4164a9426f0f7c928d00c92128b15c8fdcd275843ee |
+| apps/web/src/components/AuditedReasonDialog.vue | 270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00 |
 | apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
 | apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
