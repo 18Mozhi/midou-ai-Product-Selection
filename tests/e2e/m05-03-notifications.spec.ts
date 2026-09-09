@@ -243,6 +243,135 @@ async function setup(page: Page) {
   });
   return { actionBodies, listRequests };
 }
+test("P26 pending preference edits survive refresh and acknowledge only the submitted snapshot", async ({
+  page,
+}) => {
+  const { listRequests } = await setup(page);
+  let release!: () => void;
+  const pending = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const bodies: Record<string, unknown>[] = [];
+  let saved = {
+    in_app_enabled: true,
+    email_enabled: false,
+    task_enabled: true,
+    approval_enabled: true,
+    competitor_enabled: true,
+    version: 1,
+  };
+  await page.route("**/api/v1/me/notification-preferences", async (route) => {
+    if (route.request().method() === "PUT") {
+      const body = route.request().postDataJSON();
+      bodies.push(body);
+      if (bodies.length === 1) await pending;
+      saved = {
+        ...saved,
+        task_enabled: body.task_enabled,
+        version: Number(body.expected_version) + 1,
+      };
+    }
+    await route.fulfill({ json: env(saved) });
+  });
+  try {
+    await page.goto("/notifications");
+    await expect(page.getByText(item.title, { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "通知偏好", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "通知偏好", exact: true });
+    await dialog.getByRole("button", { name: "保存", exact: true }).click();
+    await expect.poll(() => bodies.length).toBe(1);
+    await dialog.getByRole("checkbox", { name: "任务事件", exact: true }).uncheck();
+    const count = listRequests.length;
+    // Exercise the real router's shared reload while the native modal is open.
+    const refresh = page.waitForResponse(
+      (r) =>
+        r.url().includes("/notifications?category=") ||
+        (r.url().includes("/notifications?") && r.url().includes("category=task")),
+    );
+    await page.evaluate(() => {
+      history.pushState({ ...history.state }, "", "/notifications?category=task");
+      dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+    });
+    await (await refresh).finished();
+    await expect.poll(() => listRequests.length).toBeGreaterThan(count);
+    await expect(dialog.getByRole("checkbox", { name: "任务事件", exact: true })).not.toBeChecked();
+    release();
+    await expect(dialog.getByRole("button", { name: "保存", exact: true })).toBeEnabled();
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("checkbox", { name: "任务事件", exact: true })).not.toBeChecked();
+    await expect(page.locator(".notification-center")).toContainText("后续修改尚未保存");
+    await dialog.getByRole("button", { name: "保存", exact: true }).click();
+    await expect(dialog).not.toBeVisible();
+    expect(
+      bodies.map(({ task_enabled, expected_version, email_enabled }) => ({
+        task_enabled,
+        expected_version,
+        email_enabled,
+      })),
+    ).toEqual([
+      { task_enabled: true, expected_version: 1, email_enabled: false },
+      { task_enabled: false, expected_version: 2, email_enabled: false },
+    ]);
+  } finally {
+    release();
+  }
+});
+
+for (const outcome of ["success", "failure"] as const) {
+  test(`P26 cancelled preference ${outcome} receipt leaves the retained draft alone`, async ({
+    page,
+  }) => {
+    const { listRequests } = await setup(page);
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let submitted = false;
+    await page.route("**/api/v1/me/notification-preferences", async (route) => {
+      if (route.request().method() !== "PUT") return route.fallback();
+      submitted = true;
+      await pending;
+      await route.fulfill(
+        outcome === "success"
+          ? { json: env({ ...route.request().postDataJSON(), version: 2 }) }
+          : {
+              status: 409,
+              json: {
+                request_id: "cancelled-preference",
+                error: { code: "notification_version_conflict", action_hint: "旧偏好窗口错误" },
+              },
+            },
+      );
+    });
+    try {
+      await page.goto("/notifications");
+      await expect(page.getByText(item.title, { exact: true })).toBeVisible();
+      const opener = page.getByRole("button", { name: "通知偏好", exact: true });
+      await opener.click();
+      const dialog = page.getByRole("dialog", { name: "通知偏好", exact: true });
+      await dialog.getByRole("checkbox", { name: "任务事件", exact: true }).uncheck();
+      await dialog.getByRole("button", { name: "保存", exact: true }).click();
+      await expect.poll(() => submitted).toBe(true);
+      await dialog.getByRole("button", { name: "取消", exact: true }).click();
+      await expect(dialog).not.toBeVisible();
+      await expect(opener).toBeDisabled();
+      const count = listRequests.length;
+      release();
+      await expect(opener).toBeEnabled();
+      expect(listRequests.length).toBe(count);
+      await expect(page.getByText("旧偏好窗口错误", { exact: true })).toHaveCount(0);
+      await expect(
+        page.getByText("通知偏好已保存；邮件服务接通前仅使用站内通知。", { exact: true }),
+      ).toHaveCount(0);
+      await opener.click();
+      await expect(
+        dialog.getByRole("checkbox", { name: "任务事件", exact: true }),
+      ).not.toBeChecked();
+    } finally {
+      release();
+    }
+  });
+}
 test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on desktop and 390", async ({
   page,
 }) => {

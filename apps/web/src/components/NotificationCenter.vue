@@ -91,7 +91,23 @@ const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } =
 let stream: EventSource | null = null;
 let loadGeneration = 0;
 let detailGeneration = 0;
+let preferenceGeneration = 0;
+let preferenceRevision = 0;
 let disposed = false;
+watch(
+  showPreferences,
+  () => {
+    preferenceGeneration += 1;
+  },
+  { flush: "sync" },
+);
+watch(
+  preferences,
+  () => {
+    preferenceRevision += 1;
+  },
+  { deep: true, flush: "sync" },
+);
 const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   hasSourceRoute = computed(() => {
@@ -171,6 +187,7 @@ async function api<T>(
 async function load() {
   if (disposed) return;
   const generation = ++loadGeneration;
+  const preferenceWindow = preferenceGeneration;
   let active = true;
   const owner = {
     current: () => !disposed && active && generation === loadGeneration,
@@ -200,7 +217,8 @@ async function load() {
     if (!owner.current()) return;
     items.value = list;
     summary.value = sum;
-    preferences.value = { ...pref, email_enabled: false };
+    if (!showPreferences.value && preferenceWindow === preferenceGeneration)
+      preferences.value = { ...pref, email_enabled: false };
     state.value = list.length ? "ready" : "empty";
     const notificationId =
       typeof route.query.notification === "string"
@@ -342,10 +360,15 @@ async function updateWorkflow(action: "start" | "close" | "reopen") {
   }
 }
 async function savePreferences() {
-  if (busy.value) return;
+  if (disposed || busy.value) return;
+  const generation = preferenceGeneration;
+  const revision = preferenceRevision;
+  const owner = {
+    current: () => !disposed && generation === preferenceGeneration && showPreferences.value,
+  };
   busy.value = true;
   try {
-    await api(
+    const saved = await api<any>(
       "/me/notification-preferences",
       {
         method: "PUT",
@@ -356,14 +379,22 @@ async function savePreferences() {
         },
       },
       false,
+      undefined,
+      owner,
     );
+    if (!owner.current()) return;
+    if (revision !== preferenceRevision) {
+      preferences.value.version = saved.version;
+      notice.value = "已保存提交时的偏好；后续修改尚未保存。";
+      return;
+    }
     notice.value = "通知偏好已保存；邮件服务接通前仅使用站内通知。";
     showPreferences.value = false;
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 function connectRealtime() {

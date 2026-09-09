@@ -84,6 +84,8 @@ export async function buildNotificationDesignData(repo) {
     const bindings = {
       disposed: false,
       detailGeneration: 0,
+      preferenceGeneration: 0,
+      preferenceRevision: 0,
       busy,
       selected,
       items,

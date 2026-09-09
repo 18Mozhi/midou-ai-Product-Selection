@@ -6,14 +6,14 @@
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.js": "7ef47d3b8fe9cf548b7a3d29c146b876f0f4a4b6e14dd34f38215c448b106450",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.css": "6015dd3ce39cef6c84cde0b3af29b415ca2bd3ee6364d98ba5028e8cc49cf60d",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/data.js": "3883bf3cb21d95d1c9f77b74a6fd8583de399d26c6f350bab78e825949bcd30a",
-    "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b",
+    "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/web/src/realtime-client-metrics.ts": "2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93",
     "apps/api/src/notification-service.ts": "dedf65d09fd3572256f264a72c122d6ca6f87efe5b80858050ee09c353f8ed2b",
     "apps/api/src/notification-routes.ts": "1a0fe7ff28d325be35eefe9c92ad19790f480bbf42ef03b38eee96cf5fd417d1",
     "apps/api/src/mysql-notification-repository.ts": "ef99efb787f4730467e9e071e1681ebb096658409b5815f6f003c27f3ccced1a",
-    "tests/e2e/m05-03-notifications.spec.ts": "5cb7d090fc698728e6d7020a7a59146420673bc96a98c44a78b8edaabdb2b393",
-    "scripts/lib/ui-phase2-notification-design-data.mjs": "95b19574e6260125889e034219e62f446e00c5ed62abec946344f138111748dc",
+    "tests/e2e/m05-03-notifications.spec.ts": "cdd6018ddbc138c6b76cd1a5df5e8c878fbdf296c9c2428e3e9b51b268df4fef",
+    "scripts/lib/ui-phase2-notification-design-data.mjs": "1c9a21dbb85d5bea130a4554336c6c33075334c51874159d37c44833f7f435d0",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-notification-c.mjs": "e3fe50eb64edcc1b7aa10864b41ef8f451c8334c38c7838e624fa51f80d7fcfa",
     "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/index.html": "54a3684a381f8c4c9e567a08cbcc17f5a84d15513a65ada4d2fe8ee1148cc24d",
@@ -1070,14 +1070,14 @@
       "scene": "field-task_enabled-focus",
       "width": 1440,
       "file": "field-task_enabled-focus-1440.png",
-      "sha256": "3885295e4798a4c72aa7f645eb3ed657b24cc83723d040a799ed9b8567ef21c2",
+      "sha256": "03816cce4f949a6ac068a3dfaf42475791d9256712fee60db9518467ea73e232",
       "field": "preferences.task_enabled"
     },
     {
       "scene": "field-task_enabled-off",
       "width": 1440,
       "file": "field-task_enabled-off-1440.png",
-      "sha256": "c483493269d7f83fc8ab7be6e1133aaeebaff176a7747e1bae50f3f56e8eb583",
+      "sha256": "1a13e0a63e8aff00c8138171e000b95496162e563deeaf38457865206aba3ff5",
       "field": "preferences.task_enabled"
     },
     {
@@ -1360,7 +1360,7 @@
       "scene": "field-competitor_enabled-off",
       "width": 390,
       "file": "field-competitor_enabled-off-390.png",
-      "sha256": "e0397a2ed50a97b9e7602c8bd20988181c770b222ef1759a544e35acb720eeb7",
+      "sha256": "18def3ecca75f3abd5947248385fe75611667348b49a31d1acfa54c9deeae2a1",
       "field": "preferences.competitor_enabled"
     },
     {

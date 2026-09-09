@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 import ts from "typescript";
-import { ref, computed } from "vue";
+import { ref, computed, watch as vueWatch } from "vue";
 import { buildNotificationDesignData } from "../../scripts/lib/ui-phase2-notification-design-data.mjs";
 
 // Read-batch regressions plus remaining write/draft characterization, not server acceptance.
@@ -59,7 +59,12 @@ function harness(request) {
     useRouter: () => ({ replace: async () => {} }),
     onMounted: (fn) => hooks.mounted.push(fn),
     onUnmounted: (fn) => hooks.unmounted.push(fn),
-    watch: (getter, fn) => hooks.watches.push({ getter, fn }),
+    watch: (getter, fn, options) => {
+      hooks.watches.push({ getter, fn });
+      const stop = vueWatch(getter, fn, options);
+      hooks.unmounted.push(stop);
+      return stop;
+    },
     useModalDialog: (_get, close) => {
       modal.push(close);
       return { dialogElement: ref(null), handleCancel: close };
@@ -393,17 +398,18 @@ test("P26 reopening the same ID invalidates an earlier workflow window", async (
   assert.equal(ui.notice.value, "");
 });
 
-test("P26 reload replaces open preference draft, including SSE-triggered reload path", async () => {
+test("P26 reload preserves open preference draft and its original version", async () => {
   const { ui } = harness((url) => Promise.resolve(defaults(url)));
   ui.showPreferences.value = true;
   ui.preferences.value.task_enabled = false;
   await ui.load();
   assert.equal(ui.showPreferences.value, true);
-  assert.equal(ui.preferences.value.task_enabled, data.preferences.task_enabled);
+  assert.equal(ui.preferences.value.task_enabled, false);
+  assert.equal(ui.preferences.value.version, 1);
   assert.equal(ui.preferences.value.email_enabled, false);
 });
 
-test("P26 saved old preferences close a later reopened dialog; emitted body stays original", async () => {
+test("P26 saved old preferences cannot close a later reopened dialog; body stays original", async () => {
   const old = deferred();
   const { ui, calls, modal } = harness((url, options) =>
     options.method === "PUT" ? old.promise : Promise.resolve(defaults(url)),
@@ -416,9 +422,114 @@ test("P26 saved old preferences close a later reopened dialog; emitted body stay
   ui.preferences.value.task_enabled = false;
   old.resolve(env({ ...data.preferences, version: 2 }));
   await first;
-  assert.equal(ui.showPreferences.value, false);
+  assert.equal(ui.showPreferences.value, true);
+  assert.equal(ui.preferences.value.task_enabled, false);
+  assert.equal(ui.preferences.value.version, 1);
   assert.equal(calls.find((call) => call.method === "PUT").body.task_enabled, true);
   assert.equal(calls.find((call) => call.method === "PUT").body.email_enabled, false);
+});
+
+test("P26 read started before opening and cancelling cannot erase that window's draft", async () => {
+  const pending = deferred();
+  const { ui } = harness((url) =>
+    url === "/me/notification-preferences" ? pending.promise : Promise.resolve(defaults(url)),
+  );
+  const run = ui.load();
+  ui.showPreferences.value = true;
+  ui.preferences.value.task_enabled = false;
+  ui.showPreferences.value = false;
+  pending.resolve(env({ ...data.preferences, version: 9 }));
+  await run;
+  assert.equal(ui.preferences.value.task_enabled, false);
+  assert.equal(ui.preferences.value.version, 1);
+});
+
+test("P26 old preference error cannot overwrite a reopened window's diagnostic", async () => {
+  const pending = deferred();
+  const { ui } = harness(() => pending.promise);
+  ui.showPreferences.value = true;
+  const run = ui.savePreferences();
+  ui.showPreferences.value = false;
+  ui.showPreferences.value = true;
+  ui.notice.value = "新窗口提示";
+  ui.requestId.value = "new-window";
+  pending.reject(new ApiClientError());
+  await run;
+  assert.equal(ui.notice.value, "新窗口提示");
+  assert.equal(ui.requestId.value, "new-window");
+  assert.equal(ui.showPreferences.value, true);
+  assert.equal(ui.busy.value, false);
+});
+
+test("P26 edits made after submit remain open and can use the acknowledged version", async () => {
+  const pending = deferred();
+  const { ui, calls } = harness((url, options) =>
+    options.method === "PUT" ? pending.promise : Promise.resolve(defaults(url)),
+  );
+  ui.showPreferences.value = true;
+  const run = ui.savePreferences();
+  ui.preferences.value.task_enabled = false;
+  pending.resolve(env({ ...data.preferences, version: 2 }));
+  await run;
+  assert.equal(ui.showPreferences.value, true);
+  assert.equal(ui.preferences.value.task_enabled, false);
+  assert.equal(ui.preferences.value.version, 2);
+  assert.equal(calls[0].body.task_enabled, true);
+  assert.equal(calls[0].body.expected_version, 1);
+  assert.match(ui.notice.value, /后续修改尚未保存/);
+  await ui.savePreferences();
+  assert.equal(calls.findLast((call) => call.method === "PUT").body.expected_version, 2);
+});
+
+test("P26 unchanged preference submission still closes and reloads", async () => {
+  const { ui, calls } = harness((url, options) =>
+    options.method === "PUT"
+      ? Promise.resolve(env({ ...data.preferences, version: 2 }))
+      : Promise.resolve(defaults(url)),
+  );
+  ui.showPreferences.value = true;
+  await ui.savePreferences();
+  assert.equal(ui.showPreferences.value, false);
+  assert.equal(ui.busy.value, false);
+  assert.equal(calls.filter((call) => call.method === "PUT").length, 1);
+  assert.ok(calls.some((call) => call.url.startsWith("/notifications?")));
+});
+
+test("P26 preference failure retains edits and the version for explicit retry", async () => {
+  const { ui } = harness(() => Promise.reject(new ApiClientError()));
+  ui.showPreferences.value = true;
+  ui.preferences.value.task_enabled = false;
+  await ui.savePreferences();
+  assert.equal(ui.showPreferences.value, true);
+  assert.equal(ui.preferences.value.task_enabled, false);
+  assert.equal(ui.preferences.value.version, 1);
+  assert.equal(ui.notice.value, "旧请求失败");
+});
+
+test("P26 destroyed preference save cannot update refs or launch reload", async () => {
+  const pending = deferred();
+  const { ui, hooks, calls } = harness(() => pending.promise);
+  ui.showPreferences.value = true;
+  const run = ui.savePreferences();
+  hooks.unmounted.forEach((fn) => fn());
+  const before = plain({
+    show: ui.showPreferences.value,
+    notice: ui.notice.value,
+    busy: ui.busy.value,
+    requestId: ui.requestId.value,
+  });
+  pending.resolve(env({ ...data.preferences, version: 2 }));
+  await run;
+  assert.deepEqual(
+    plain({
+      show: ui.showPreferences.value,
+      notice: ui.notice.value,
+      busy: ui.busy.value,
+      requestId: ui.requestId.value,
+    }),
+    before,
+  );
+  assert.equal(calls.length, 1);
 });
 
 test("P26 normal row-open blocks busy, direct deep-link open bypasses it, detail close preserves busy window", async () => {

@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "785d342b3caebf2e9e02eded8276b873469ef5b183f51ad2d53bcaa3bfb60afe",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "24004ee598dbde7a3ffa0b8747788a3b2bc4317200f02f6366f12d083cc4631e",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -44,10 +44,10 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "07c6c2e5f6d7e30b6c6dd0c7619f6cb63ddb19d3d78566b327d1fa25aa7ce7d1",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "5895fa07866125807c8e6925c916db49fc4da80d30d5bdd13575b95140175650",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "9006949b5062d2ffd61920bfadcaf14266e9b3496d414e83fb3030a07cef176c",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "f1aacbd25fd6531cbf2772145f0d17aeeb9279ae420b2a7d00bd65735a0b0388",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "fe6a2e7df297fa4d285b11c1af15cfd6470547546ec648846b558a0b01937868",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "53b7112cd02e8a2f714eb1b8ce0a88ef9d00ea7ab0110667de0ac57275acc751",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "e73fd6d68a387c68ca8c64980b11b49c9b0bce90a0a8c5bea0b644026243f139",
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
@@ -116,7 +116,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "951e7817102349f8b50496b2403a6b69aa8bcd96461bff34227268c4fef792ca",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "d9e25a2ba90ddf9a632735a09765cec957af3b359a45001e536f0e1613767ca2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "f0a25e68f8096db8f1536fd1a8f5c535ce6025d9f0403bf173e3fa8b69a61505",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {

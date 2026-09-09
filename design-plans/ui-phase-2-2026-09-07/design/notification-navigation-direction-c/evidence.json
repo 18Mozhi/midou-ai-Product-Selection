@@ -6,14 +6,14 @@
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.js": "7ef47d3b8fe9cf548b7a3d29c146b876f0f4a4b6e14dd34f38215c448b106450",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.css": "6015dd3ce39cef6c84cde0b3af29b415ca2bd3ee6364d98ba5028e8cc49cf60d",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/data.js": "3883bf3cb21d95d1c9f77b74a6fd8583de399d26c6f350bab78e825949bcd30a",
-    "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b",
+    "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/web/src/realtime-client-metrics.ts": "2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93",
     "apps/api/src/notification-service.ts": "dedf65d09fd3572256f264a72c122d6ca6f87efe5b80858050ee09c353f8ed2b",
     "apps/api/src/notification-routes.ts": "1a0fe7ff28d325be35eefe9c92ad19790f480bbf42ef03b38eee96cf5fd417d1",
     "apps/api/src/mysql-notification-repository.ts": "ef99efb787f4730467e9e071e1681ebb096658409b5815f6f003c27f3ccced1a",
-    "tests/e2e/m05-03-notifications.spec.ts": "5cb7d090fc698728e6d7020a7a59146420673bc96a98c44a78b8edaabdb2b393",
-    "scripts/lib/ui-phase2-notification-design-data.mjs": "95b19574e6260125889e034219e62f446e00c5ed62abec946344f138111748dc",
+    "tests/e2e/m05-03-notifications.spec.ts": "cdd6018ddbc138c6b76cd1a5df5e8c878fbdf296c9c2428e3e9b51b268df4fef",
+    "scripts/lib/ui-phase2-notification-design-data.mjs": "1c9a21dbb85d5bea130a4554336c6c33075334c51874159d37c44833f7f435d0",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-notification-c.mjs": "e3fe50eb64edcc1b7aa10864b41ef8f451c8334c38c7838e624fa51f80d7fcfa",
     "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/index.html": "093832201d48e018f3d7634abb33263e3e513092ce01afda373d070226774341",
@@ -4799,7 +4799,7 @@
       "scene": "category-all-focus",
       "width": 1440,
       "file": "category-all-focus-1440.png",
-      "sha256": "6d92d2b19f499b11a44e99da1a63b31013d17ed1472c6019fcaad3c9306323ba",
+      "sha256": "c710e3a293623379cc6f95461ce051f292b9612e482933e8c2e50d8c6c26df6d",
       "control": {
         "key": "category-all",
         "actionId": "AN-N-FILTER-CATEGORY",
@@ -5219,7 +5219,7 @@
       "scene": "status-in_progress-focus",
       "width": 1440,
       "file": "status-in_progress-focus-1440.png",
-      "sha256": "a468c43c9e8c61c0bca961d01965ce141a1e768c30a02cae7d5b812a1c35e3f9",
+      "sha256": "32decc1e0c1259a3b26976acc92acdc163d2e13b588ad7acb5ed82e204f7b23f",
       "control": {
         "key": "status-in_progress",
         "actionId": "AN-N-FILTER-STATUS",
@@ -5699,7 +5699,7 @@
       "scene": "row-read-focus",
       "width": 1440,
       "file": "row-read-focus-1440.png",
-      "sha256": "51ef75d8b85b92b02a1335ca95821285ad07bb6b5c6cf17f9b540046f4675917",
+      "sha256": "b368c97aaf43e0dce6eb6aa2b5191126117bf70c7b1a7c23bea6377d16805fec",
       "control": {
         "key": "row-read",
         "actionId": "AN-N-DETAIL",
@@ -5759,7 +5759,7 @@
       "scene": "row-unread-focus",
       "width": 1440,
       "file": "row-unread-focus-1440.png",
-      "sha256": "fa394663692acc443e06df941946f76750016256ec0adc465f612fb89fc99c32",
+      "sha256": "3a288bbec100f7e2a29a3d50d68be62c37e7d3960bb962fd2a65b3bd2ae2bd1f",
       "control": {
         "key": "row-unread",
         "actionId": "AN-N-DETAIL",
@@ -5807,7 +5807,7 @@
       "scene": "previous-focus",
       "width": 1440,
       "file": "previous-focus-1440.png",
-      "sha256": "a75f356681592ee62e86cca067443ee816556afd6cd83881d016c3b5cf1dc8ea",
+      "sha256": "8687c18ada4d0bc6e049c4df9005ea5e21a87e8d416b32f0e35607f5c10d5905",
       "control": {
         "key": "previous",
         "actionId": "AN-N-PAGE",
@@ -6071,7 +6071,7 @@
       "scene": "preferences-cancel-hover",
       "width": 1440,
       "file": "preferences-cancel-hover-1440.png",
-      "sha256": "628f4fcb3a59ea1f34978bac258f2a570183e23340616a33d8c4649cd5b3f6a1",
+      "sha256": "d5885d40a3fb430a88f24d1146cf4a5ba2191d3e53d40da1a1835b96701be444",
       "control": {
         "key": "preferences-cancel",
         "actionId": "AN-N-PREF-CLOSE",
@@ -6539,7 +6539,7 @@
       "scene": "status-all-focus",
       "width": 390,
       "file": "status-all-focus-390.png",
-      "sha256": "fd67cfa7b0db641ab57a97146bc409005cd96437b7e6361b6444e141651996f4",
+      "sha256": "254a13f4b6848af09e4710f03fe92ab32b91acc9a80eb0934c42043d166e7c50",
       "control": {
         "key": "status-all",
         "actionId": "AN-N-FILTER-STATUS",
@@ -6599,7 +6599,7 @@
       "scene": "status-open-focus",
       "width": 390,
       "file": "status-open-focus-390.png",
-      "sha256": "f967f966f93886bb268cb01bd1a53830545394d7d1f41af5ede2d1e23d03eec3",
+      "sha256": "b72edb919f1b8cd6d6a07095564d46e51a32431c7b995e3136cce9148498aa6e",
       "control": {
         "key": "status-open",
         "actionId": "AN-N-FILTER-STATUS",
@@ -6659,7 +6659,7 @@
       "scene": "status-in_progress-focus",
       "width": 390,
       "file": "status-in_progress-focus-390.png",
-      "sha256": "3a82461442aec8dbe10e3a68ede8d7b21fc1d705116a8f7a8729190895c53458",
+      "sha256": "a8583cef5694e96fa43fc5931876f21ab978aef3fd6580357154465c85f5682d",
       "control": {
         "key": "status-in_progress",
         "actionId": "AN-N-FILTER-STATUS",
@@ -7091,7 +7091,7 @@
       "scene": "retry-version_conflict-focus",
       "width": 390,
       "file": "retry-version_conflict-focus-390.png",
-      "sha256": "2cc1ed679dd218c5cfeb78815d9311d492e3498f7f78cd6f9411b5f98d12fdc4",
+      "sha256": "0a54577f12ee5c827f41906422ad56b9293c7f1b87b9256f7dc829838cad0070",
       "control": {
         "key": "retry-version_conflict",
         "actionId": "AN-N-LOAD",
@@ -7367,7 +7367,7 @@
       "scene": "detail-close-focus",
       "width": 390,
       "file": "detail-close-focus-390.png",
-      "sha256": "2a8041c4c9ce95107a8df07e83988828792e00710ec066cf1064c9485bbd7932",
+      "sha256": "5b14677caa7295b1879f2681bc22455403831a439be2277d6d81047b6a803ea4",
       "control": {
         "key": "detail-close",
         "actionId": "AN-N-CLOSE-DETAIL",
@@ -7559,7 +7559,7 @@
       "scene": "preferences-close-hover",
       "width": 390,
       "file": "preferences-close-hover-390.png",
-      "sha256": "c6fecd15d5a882c298097c15ff77e773752c7af1091ea0d90647a1456149b1c1",
+      "sha256": "51ce81be7ad8fb67761547faa79af2fd8ab2e8182724ac40ac413007f9cebd5a",
       "control": {
         "key": "preferences-close",
         "actionId": "AN-N-PREF-CLOSE",
@@ -7571,7 +7571,7 @@
       "scene": "preferences-close-focus",
       "width": 390,
       "file": "preferences-close-focus-390.png",
-      "sha256": "8bc68b71aabb1f2f62a570e56f5de75348a195782aa5446bcb951bff64550dd7",
+      "sha256": "cdf124665cbb8106585c69133e01835d0d1e4346be95df7bbcdb63225ac5d0e3",
       "control": {
         "key": "preferences-close",
         "actionId": "AN-N-PREF-CLOSE",

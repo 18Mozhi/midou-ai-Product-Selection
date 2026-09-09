@@ -279,6 +279,9 @@
 .notification-center dialog.notification-preferences[open] {
   position: fixed;
   inset: 18vh auto auto 50%;
+  box-sizing: border-box;
+  max-height: calc(100dvh - 18vh - 16px);
+  overflow: auto;
   transform: translateX(-50%);
   z-index: 40;
   width: min(470px, 88vw);
