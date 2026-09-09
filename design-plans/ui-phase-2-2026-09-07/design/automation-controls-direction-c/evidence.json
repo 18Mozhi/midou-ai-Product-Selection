@@ -1,0 +1,3296 @@
+{
+  "version": "AUTOMATION-CONTROLS-C-r1",
+  "scope": "offline-proposal-not-runtime-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/index.html": "f28de36fb15b9ef4b636312398e6b39d228507c4c743e946289de02fd5ad5015",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.css": "ca86b91076416ef1d3999e6843ac77c7f3346dbc02ea141a9ac54f7149213859",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.js": "699aefa49bbb853149ca41b8ffbf766a5f80eba20f4771bebaa0637ee4aeda84",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/data.js": "743c138d7b853ebb34a26a6ce558c5d5a735dd6640bf6b0f3708561d6a0613e4",
+    "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/api/src/automation-service.ts": "44bc9a30971af6a7eb3cc8f4a14830c5b699bc58d0d75ea34e2fd38f6f837ce0",
+    "apps/api/src/automation-routes.ts": "d1dafd3ff2fa9a565aa774cdd377ad79574326d3a3c69693a43bf7eddacf1f15",
+    "apps/api/src/mysql-automation-repository.ts": "42878b0a5550fba0678b023e67d34b8d99f2ed08b77d3897d7228a44f4047500",
+    "apps/worker/src/automation-worker.ts": "bfcc31317696e536d32eeaf297768f2f78fceff535a3508f4cd04964535774ac",
+    "tests/e2e/m05-05-automation-rules.spec.ts": "f800da394b90038be016595ecc718b78a9d0faf6000e9fcd2442d77b9969cea6",
+    "scripts/lib/ui-phase2-automation-design-data.mjs": "10e0437f7cc7740f3de259c998e4eae70cb5074faa01ba95231ac05bfcb8955e",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-automation-c.mjs": "17747ad0d99c6fad3b5a306eed966fd3e3214e6560b4f1f3a61eb0087ad9a732",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/index.html": "53454211a2663a8c5371029e43c4602dcba003ef6c0fff93bffa8367364746df",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.js": "6f15d6175a1688d996313a07046dae271c5e41db2c67bf3558680fd7867989f4",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.css": "9a49ca04ebad70f72cea27770c24d23ce87b6d57e202dbb3eefbf2a0d1df9ac8",
+    "scripts/verify-ui-phase2-automation-controls-c.mjs": "30bba4a25628315f41a3eb239f7796b1ea90efa7e151aab01b70d0d01aaebf77"
+  },
+  "actionVisualReferences": {
+    "AR-CREATE": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#create-rule",
+      "states": {
+        "default": "create-default",
+        "hover": "create-hover",
+        "focus": "create-focus",
+        "pressed": "create-pressed",
+        "disabled": "create-pending",
+        "busy": "create-pending"
+      }
+    },
+    "AR-LOAD": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#retry",
+      "states": {
+        "default": "reload-default",
+        "hover": "reload-hover",
+        "focus": "reload-focus",
+        "pressed": "reload-pressed"
+      }
+    },
+    "AR-DETAIL": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-detail]",
+      "states": {
+        "default": "detail-default",
+        "hover": "detail-hover",
+        "focus": "detail-focus",
+        "pressed": "detail-pressed",
+        "disabled": "detail-pending",
+        "busy": "detail-pending"
+      }
+    },
+    "AR-EDIT": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-edit]",
+      "states": {
+        "default": "edit-default",
+        "hover": "edit-hover",
+        "focus": "edit-focus",
+        "pressed": "edit-pressed",
+        "disabled": "edit-pending",
+        "busy": "edit-pending"
+      }
+    },
+    "AR-STATUS": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-status]",
+      "states": {
+        "default": "status-default",
+        "hover": "status-hover",
+        "focus": "status-focus",
+        "pressed": "status-pressed",
+        "disabled": "status-pending",
+        "busy": "status-pending"
+      }
+    },
+    "AR-DETAIL-CLOSE": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#execution-close",
+      "states": {
+        "default": "detail-close-default",
+        "hover": "detail-close-hover",
+        "focus": "detail-close-focus",
+        "pressed": "detail-close-pressed"
+      }
+    },
+    "AR-TASK": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-detail-link][href^='/tasks/']",
+      "states": {
+        "default": "task-default",
+        "hover": "task-hover",
+        "focus": "task-focus",
+        "pressed": "task-pressed"
+      }
+    },
+    "AR-NOTIFICATION": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-detail-link][href^='/notifications']",
+      "states": {
+        "default": "notification-default",
+        "hover": "notification-hover",
+        "focus": "notification-focus",
+        "pressed": "notification-pressed"
+      }
+    },
+    "AR-TECH": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#execution-tech-0 summary",
+      "states": {
+        "default": "technical-default",
+        "hover": "technical-hover",
+        "focus": "technical-focus",
+        "pressed": "technical-pressed"
+      }
+    },
+    "AR-TEMPLATE": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-template='0']",
+      "states": {
+        "default": "template-default",
+        "hover": "template-hover",
+        "focus": "template-focus",
+        "pressed": "template-pressed"
+      }
+    },
+    "AR-SAMPLE": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-preview-link]",
+      "states": {
+        "default": "sample-default",
+        "hover": "sample-hover",
+        "focus": "sample-focus",
+        "pressed": "sample-pressed"
+      }
+    },
+    "AR-EDITOR-CLOSE": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#cancel",
+      "states": {
+        "default": "cancel-default",
+        "hover": "cancel-hover",
+        "focus": "cancel-focus",
+        "pressed": "cancel-pressed"
+      }
+    },
+    "AR-PREVIEW": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#preview",
+      "states": {
+        "default": "preview-default",
+        "hover": "preview-hover",
+        "focus": "preview-focus",
+        "pressed": "preview-pressed",
+        "disabled": "preview-pending",
+        "busy": "preview-pending"
+      }
+    },
+    "AR-SAVE": {
+      "pageId": "P27",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#save",
+      "states": {
+        "default": "save-default",
+        "hover": "save-hover",
+        "focus": "save-focus",
+        "pressed": "save-pressed",
+        "disabled": "save-pending",
+        "busy": "save-pending"
+      }
+    }
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "actionId": "AR-CREATE",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-CREATE",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-CREATE",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-CREATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-CREATE",
+      "state": "pending",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL",
+      "state": "default",
+      "metrics": {
+        "width": 128,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL",
+      "state": "hover",
+      "metrics": {
+        "width": 128,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL",
+      "state": "focus",
+      "metrics": {
+        "width": 128,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL",
+      "state": "pressed",
+      "metrics": {
+        "width": 128,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL",
+      "state": "pending",
+      "metrics": {
+        "width": 128,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDIT",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDIT",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDIT",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDIT",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDIT",
+      "state": "pending",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "state": "pending",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "default",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "hover",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "focus",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "pressed",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TASK",
+      "state": "default",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TASK",
+      "state": "hover",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TASK",
+      "state": "focus",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TASK",
+      "state": "pressed",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-NOTIFICATION",
+      "state": "default",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-NOTIFICATION",
+      "state": "hover",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-NOTIFICATION",
+      "state": "focus",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-NOTIFICATION",
+      "state": "pressed",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TECH",
+      "state": "default",
+      "metrics": {
+        "width": 873,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TECH",
+      "state": "hover",
+      "metrics": {
+        "width": 873,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TECH",
+      "state": "focus",
+      "metrics": {
+        "width": 873,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TECH",
+      "state": "pressed",
+      "metrics": {
+        "width": 873,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "state": "default",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "state": "hover",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "state": "focus",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAMPLE",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAMPLE",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAMPLE",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAMPLE",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-PREVIEW",
+      "state": "default",
+      "metrics": {
+        "width": 160,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-PREVIEW",
+      "state": "hover",
+      "metrics": {
+        "width": 160,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-PREVIEW",
+      "state": "focus",
+      "metrics": {
+        "width": 160,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-PREVIEW",
+      "state": "pressed",
+      "metrics": {
+        "width": 160,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-PREVIEW",
+      "state": "pending",
+      "metrics": {
+        "width": 125.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "state": "default",
+      "metrics": {
+        "width": 112,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "state": "hover",
+      "metrics": {
+        "width": 112,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "state": "focus",
+      "metrics": {
+        "width": 112,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "state": "pressed",
+      "metrics": {
+        "width": 112,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "state": "pending",
+      "metrics": {
+        "width": 93.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-CREATE",
+      "state": "default",
+      "metrics": {
+        "width": 362,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-CREATE",
+      "state": "hover",
+      "metrics": {
+        "width": 362,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-CREATE",
+      "state": "focus",
+      "metrics": {
+        "width": 362,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-CREATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 362,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-CREATE",
+      "state": "pending",
+      "metrics": {
+        "width": 362,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL",
+      "state": "default",
+      "metrics": {
+        "width": 120,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL",
+      "state": "hover",
+      "metrics": {
+        "width": 120,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL",
+      "state": "focus",
+      "metrics": {
+        "width": 120,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL",
+      "state": "pressed",
+      "metrics": {
+        "width": 120,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL",
+      "state": "pending",
+      "metrics": {
+        "width": 120,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDIT",
+      "state": "default",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDIT",
+      "state": "hover",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDIT",
+      "state": "focus",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDIT",
+      "state": "pressed",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDIT",
+      "state": "pending",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "state": "default",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "state": "hover",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "state": "focus",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "state": "pressed",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "state": "pending",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "default",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "hover",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "focus",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-DETAIL-CLOSE",
+      "state": "pressed",
+      "metrics": {
+        "width": 44,
+        "height": 46.296875,
+        "font": 22,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TASK",
+      "state": "default",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TASK",
+      "state": "hover",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TASK",
+      "state": "focus",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TASK",
+      "state": "pressed",
+      "metrics": {
+        "width": 128,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-NOTIFICATION",
+      "state": "default",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-NOTIFICATION",
+      "state": "hover",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-NOTIFICATION",
+      "state": "focus",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-NOTIFICATION",
+      "state": "pressed",
+      "metrics": {
+        "width": 144,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TECH",
+      "state": "default",
+      "metrics": {
+        "width": 310,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TECH",
+      "state": "hover",
+      "metrics": {
+        "width": 310,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TECH",
+      "state": "focus",
+      "metrics": {
+        "width": 310,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TECH",
+      "state": "pressed",
+      "metrics": {
+        "width": 310,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "state": "default",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "state": "hover",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "state": "focus",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAMPLE",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAMPLE",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAMPLE",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAMPLE",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "default",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "hover",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "focus",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "state": "pressed",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-PREVIEW",
+      "state": "default",
+      "metrics": {
+        "width": 335.984375,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-PREVIEW",
+      "state": "hover",
+      "metrics": {
+        "width": 335.984375,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-PREVIEW",
+      "state": "focus",
+      "metrics": {
+        "width": 335.984375,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-PREVIEW",
+      "state": "pressed",
+      "metrics": {
+        "width": 335.984375,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-PREVIEW",
+      "state": "pending",
+      "metrics": {
+        "width": 335.984375,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "state": "default",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "state": "hover",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "state": "focus",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "state": "pressed",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "state": "pending",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    }
+  ],
+  "screenshots": [
+    {
+      "scene": "create-default",
+      "width": 1440,
+      "file": "create-default-1440.png",
+      "sha256": "d763a8cc71cd23e7986e2a4c1236e96d813c3909f4a623b57de0241172a460a1",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "create-hover",
+      "width": 1440,
+      "file": "create-hover-1440.png",
+      "sha256": "bd15eae9a046c5b77aa8ba9c26154570532c41c2fa93fb0c31e3e81b1715e9ce",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "create-focus",
+      "width": 1440,
+      "file": "create-focus-1440.png",
+      "sha256": "187312e9671702b5583a13a069a2c78b7f417c75bb630587a48b9b3d9df868aa",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "create-pressed",
+      "width": 1440,
+      "file": "create-pressed-1440.png",
+      "sha256": "4d0d17e6c5c928bcbe912d1451d451fb5f92d12076c51e64dc9afc6c922a72a0",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "create-pending",
+      "width": 1440,
+      "file": "create-pending-1440.png",
+      "sha256": "a1a34d58b4a218da48b38654393d566b21fbdfab790df57fcbcc35616e24751b",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "reload-default",
+      "width": 1440,
+      "file": "reload-default-1440.png",
+      "sha256": "e9c425edf2b421433ca1e549c40de87ef8015883f94783394c7b339ea340c57b",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "reload-hover",
+      "width": 1440,
+      "file": "reload-hover-1440.png",
+      "sha256": "fdaf22c9cfc19d392a8b0a07534811942e02f16ebc7d7a8e27d34c9290a49efd",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "reload-focus",
+      "width": 1440,
+      "file": "reload-focus-1440.png",
+      "sha256": "d930a7776c758a756fc5654392b72278b40ac727a3223bed7a962a713f9e8c88",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "reload-pressed",
+      "width": 1440,
+      "file": "reload-pressed-1440.png",
+      "sha256": "71773513a0c26115442f4a353ae3a871539cc58fee03bb47c498e28509475a22",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "detail-default",
+      "width": 1440,
+      "file": "detail-default-1440.png",
+      "sha256": "eefab25c3182334732c161daa37b2a980c000e6c9ffa3b2035078d7635b84265",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "detail-hover",
+      "width": 1440,
+      "file": "detail-hover-1440.png",
+      "sha256": "de0ecd2973b4f701a1627d2ad29187970b7e13aaa68c52aab0582758f3a8d485",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "detail-focus",
+      "width": 1440,
+      "file": "detail-focus-1440.png",
+      "sha256": "ca046b76280a833f6834d5ec40d108569e2a26c000cd65fa678c85ca646e5c00",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "detail-pressed",
+      "width": 1440,
+      "file": "detail-pressed-1440.png",
+      "sha256": "99ab11886623eaa8a967280654b0dc757b7698a638b4c93159f3eb3efec48078",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "detail-pending",
+      "width": 1440,
+      "file": "detail-pending-1440.png",
+      "sha256": "a16b6dd2a6f41594b72496fdfe27a156136bad394e12e0aeee1ab8b5aed0a760",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "edit-default",
+      "width": 1440,
+      "file": "edit-default-1440.png",
+      "sha256": "eefab25c3182334732c161daa37b2a980c000e6c9ffa3b2035078d7635b84265",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "edit-hover",
+      "width": 1440,
+      "file": "edit-hover-1440.png",
+      "sha256": "278c45ec087fdeff5ec28a6a7c63dd12736a54938ab60c8a0bdef74612100453",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "edit-focus",
+      "width": 1440,
+      "file": "edit-focus-1440.png",
+      "sha256": "d91ad9a9a7fb7f01f9dac1b535503d373dccac3a2cfb1f23c0e6fc86e584b506",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "edit-pressed",
+      "width": 1440,
+      "file": "edit-pressed-1440.png",
+      "sha256": "a695be1219e561a86659d4eb865a6aebec917f944347ff878f5d5837e4c815de",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "edit-pending",
+      "width": 1440,
+      "file": "edit-pending-1440.png",
+      "sha256": "0ed4f1bfe23140ba683894f3324e8d51a2a31c50b7de969ce591b1cfec2a82e6",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "status-default",
+      "width": 1440,
+      "file": "status-default-1440.png",
+      "sha256": "eefab25c3182334732c161daa37b2a980c000e6c9ffa3b2035078d7635b84265",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "status-hover",
+      "width": 1440,
+      "file": "status-hover-1440.png",
+      "sha256": "5cadabd4c93c00e9c9250255cd57ebd2e900445ee1e604083da54ac515f24a8c",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "status-focus",
+      "width": 1440,
+      "file": "status-focus-1440.png",
+      "sha256": "b57f9cdf7cf5a4d41bc626ac5467727cd8243d39843534eb7c83adaf28415322",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "status-pressed",
+      "width": 1440,
+      "file": "status-pressed-1440.png",
+      "sha256": "f2d43c2da02d0aadc69795a550b8e8a604b3dbc5804ad55c85d68db16e570063",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "status-pending",
+      "width": 1440,
+      "file": "status-pending-1440.png",
+      "sha256": "0ac0a328db6ae18ea65a7a3f88045cf5662471e55362b0d4e4ac19acc8c3802b",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "detail-close-default",
+      "width": 1440,
+      "file": "detail-close-default-1440.png",
+      "sha256": "07f67670d558e49035500cf4c16917084ef845aa765e5fd7f1451fcfbdc6da90",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "detail-close-hover",
+      "width": 1440,
+      "file": "detail-close-hover-1440.png",
+      "sha256": "5cfa400f83794f83587d11197c9af5c55421b968edcbef2b124c57fa2711a95c",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "detail-close-focus",
+      "width": 1440,
+      "file": "detail-close-focus-1440.png",
+      "sha256": "f229819e062689794db433e8703ba7be03c9fad8387cbe0f29579ac18f717374",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "detail-close-pressed",
+      "width": 1440,
+      "file": "detail-close-pressed-1440.png",
+      "sha256": "400e6ad7eb716019b0e872fcd4fd5b60ae01b0467682cf74dc88370bbbc068e5",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "task-default",
+      "width": 1440,
+      "file": "task-default-1440.png",
+      "sha256": "d7e76c25afe449346e9729e7abd910ddcc52915fe40718a9b2032db649fb9258",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "task-hover",
+      "width": 1440,
+      "file": "task-hover-1440.png",
+      "sha256": "d7e76c25afe449346e9729e7abd910ddcc52915fe40718a9b2032db649fb9258",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "task-focus",
+      "width": 1440,
+      "file": "task-focus-1440.png",
+      "sha256": "87d39837384fe42a9f2c83d06d5101118d03b6bfcc6180786dfb1496358f40b7",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "task-pressed",
+      "width": 1440,
+      "file": "task-pressed-1440.png",
+      "sha256": "d7e76c25afe449346e9729e7abd910ddcc52915fe40718a9b2032db649fb9258",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "notification-default",
+      "width": 1440,
+      "file": "notification-default-1440.png",
+      "sha256": "07f67670d558e49035500cf4c16917084ef845aa765e5fd7f1451fcfbdc6da90",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "notification-hover",
+      "width": 1440,
+      "file": "notification-hover-1440.png",
+      "sha256": "07f67670d558e49035500cf4c16917084ef845aa765e5fd7f1451fcfbdc6da90",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "notification-focus",
+      "width": 1440,
+      "file": "notification-focus-1440.png",
+      "sha256": "3a7562d9374af7b59beeef73c0f654692b70432c81f015a7dedd7b5d60ce7e21",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "notification-pressed",
+      "width": 1440,
+      "file": "notification-pressed-1440.png",
+      "sha256": "07f67670d558e49035500cf4c16917084ef845aa765e5fd7f1451fcfbdc6da90",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-default",
+      "width": 1440,
+      "file": "technical-default-1440.png",
+      "sha256": "d7e76c25afe449346e9729e7abd910ddcc52915fe40718a9b2032db649fb9258",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-hover",
+      "width": 1440,
+      "file": "technical-hover-1440.png",
+      "sha256": "d7e76c25afe449346e9729e7abd910ddcc52915fe40718a9b2032db649fb9258",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-focus",
+      "width": 1440,
+      "file": "technical-focus-1440.png",
+      "sha256": "0f05ccc228cc9317d3f17b6fd62b596c6b6234d670025c780b1d75638d0aaf45",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-pressed",
+      "width": 1440,
+      "file": "technical-pressed-1440.png",
+      "sha256": "d7e76c25afe449346e9729e7abd910ddcc52915fe40718a9b2032db649fb9258",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "template-default",
+      "width": 1440,
+      "file": "template-default-1440.png",
+      "sha256": "89e96a7f00d0f8db6b1dc53566edcde5e213d4105bda8c8c92ba434fed9676c9",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "template-hover",
+      "width": 1440,
+      "file": "template-hover-1440.png",
+      "sha256": "964ebd5650051523c7c36eeddfef1061949f1f98b4b141d7dac20e5288a46a57",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "template-focus",
+      "width": 1440,
+      "file": "template-focus-1440.png",
+      "sha256": "48d9fef1b1ba8bec8d0846beb6a5dec9a5e685b00ed9d8fce4feb0a0263033f4",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "template-pressed",
+      "width": 1440,
+      "file": "template-pressed-1440.png",
+      "sha256": "59a855ecd69657e258863b2b6bab42bef05e8b25f8025dfd676bbdb2959787e8",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "sample-default",
+      "width": 1440,
+      "file": "sample-default-1440.png",
+      "sha256": "d428dd43aada476348d03f92f41592fbcac11f30a8220166fa0a0b0edb28efe5",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "sample-hover",
+      "width": 1440,
+      "file": "sample-hover-1440.png",
+      "sha256": "d428dd43aada476348d03f92f41592fbcac11f30a8220166fa0a0b0edb28efe5",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "sample-focus",
+      "width": 1440,
+      "file": "sample-focus-1440.png",
+      "sha256": "88a03e0ed2d4c2d515d5454693320ecbc1213b92edb7ed1a17e0d325c772600e",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "sample-pressed",
+      "width": 1440,
+      "file": "sample-pressed-1440.png",
+      "sha256": "d428dd43aada476348d03f92f41592fbcac11f30a8220166fa0a0b0edb28efe5",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "cancel-default",
+      "width": 1440,
+      "file": "cancel-default-1440.png",
+      "sha256": "eacb9e2b0c89bbbf69e1f3e88377838350f63ec1177c532bdf253d76f6e53a6e",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "cancel-hover",
+      "width": 1440,
+      "file": "cancel-hover-1440.png",
+      "sha256": "b3cf74e4a3e2ae4f806bc8a3c8aedfe801ef35326771fc5924af0d44dd44b55b",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "cancel-focus",
+      "width": 1440,
+      "file": "cancel-focus-1440.png",
+      "sha256": "d6193841e0e912f7d8752837d7fbec16be86e788535ba848fef70dad6336ce33",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "cancel-pressed",
+      "width": 1440,
+      "file": "cancel-pressed-1440.png",
+      "sha256": "b7512d34137f160ad15537aa0991005d72f067bfda0e474fb6c95934f5ebd98c",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "preview-default",
+      "width": 1440,
+      "file": "preview-default-1440.png",
+      "sha256": "8b176eb54700e3a2318620289922bb5e48164d39e22018479ab969bed0e574a1",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "preview-hover",
+      "width": 1440,
+      "file": "preview-hover-1440.png",
+      "sha256": "2a712cc7d81fd794ebd9102d9b80bdc68ed2501b3bec06e45dcffd22dd6d855b",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "preview-focus",
+      "width": 1440,
+      "file": "preview-focus-1440.png",
+      "sha256": "514cf8e203ad20d6a2ea210ce6c11310f969d76825d90f539d9e163dc187f511",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "preview-pressed",
+      "width": 1440,
+      "file": "preview-pressed-1440.png",
+      "sha256": "109b478c7553da38ea61e075849e65052ea5687f39f2c12da8b4926cc6b07128",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "preview-pending",
+      "width": 1440,
+      "file": "preview-pending-1440.png",
+      "sha256": "5b89aba99b18818faa7de44f3932df9a19856bf6680dafc6c2d9335b4898b474",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "save-default",
+      "width": 1440,
+      "file": "save-default-1440.png",
+      "sha256": "641c49607c6bf6f63e9696ff1379f43bdf8a612967df9033f6c995207a3fb68e",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save-hover",
+      "width": 1440,
+      "file": "save-hover-1440.png",
+      "sha256": "ca6aea04f0d6ae36ebc1c729db258e22b98801bb9831e48a3bc1a47d11d11ba4",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save-focus",
+      "width": 1440,
+      "file": "save-focus-1440.png",
+      "sha256": "644533278ce57a61ce30c5b2806cc8b507aa0af1c644e980e8c055ff1e36f67e",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save-pressed",
+      "width": 1440,
+      "file": "save-pressed-1440.png",
+      "sha256": "c03f547b728d18e3752e6d4c76564f8b34bb3a3c0445903374d85cecbb5e4a2d",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save-pending",
+      "width": 1440,
+      "file": "save-pending-1440.png",
+      "sha256": "d03b7b40518ad518413ec907948ce77adef562a13e4bcf476455f19a573dafd1",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "create-default",
+      "width": 390,
+      "file": "create-default-390.png",
+      "sha256": "1230e912fe441961010577073451dc94e1642578b34cb59bbe0b39c552683e66",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "create-hover",
+      "width": 390,
+      "file": "create-hover-390.png",
+      "sha256": "91def044adfc62c199cb2c1cb7038db998e15a66f522048eb728882530d3575e",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "create-focus",
+      "width": 390,
+      "file": "create-focus-390.png",
+      "sha256": "b5c49c1e2acd3386237cd4fa6ba47b177feb9e9e360664cf665ddc3a4d8dbf0a",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "create-pressed",
+      "width": 390,
+      "file": "create-pressed-390.png",
+      "sha256": "f405ef97690393f06d6bf94374a5a9f92042bc8a4f0df5bc6f0d4cacbfb9688a",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "create-pending",
+      "width": 390,
+      "file": "create-pending-390.png",
+      "sha256": "f4c4d3550fde7349da10856066de6530e9cfb40411208a3622819bfb8383c026",
+      "control": {
+        "selector": "#create-rule",
+        "actionId": "AR-CREATE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "reload-default",
+      "width": 390,
+      "file": "reload-default-390.png",
+      "sha256": "5784a52d4c4c1dc3590202545bbb8e13067c9ee667c57a27a7262305d7fb726b",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "reload-hover",
+      "width": 390,
+      "file": "reload-hover-390.png",
+      "sha256": "42f11c88ebfb03f86173c49f373f4e9d92bd443d81eefef4b0f865b52fca7f3b",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "reload-focus",
+      "width": 390,
+      "file": "reload-focus-390.png",
+      "sha256": "3393ebf672c2298bfef6962ee3c469ca52116aad49b13270094213985bd81eb3",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "reload-pressed",
+      "width": 390,
+      "file": "reload-pressed-390.png",
+      "sha256": "62fd9fa843c57942eecdd4a11f9295fa6623b0e609a649d2b684c5c327be8d72",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "detail-default",
+      "width": 390,
+      "file": "detail-default-390.png",
+      "sha256": "3ed1ef2b89310120a9eebd843be7fc1acb23fb8c6323ce1ebfe0b7cdbcf40db0",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "detail-hover",
+      "width": 390,
+      "file": "detail-hover-390.png",
+      "sha256": "d5fd54c29e5c9bce66f54e49e508b6a7e0639edafdd316d364ece611192635ee",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "detail-focus",
+      "width": 390,
+      "file": "detail-focus-390.png",
+      "sha256": "5f2c4713330d41eb7339e99e84fe7997bc531df89749c81fef007a9d783cff45",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "detail-pressed",
+      "width": 390,
+      "file": "detail-pressed-390.png",
+      "sha256": "c16ab116052e2f7a4102077f8637dd3c1acf755f8a057319a15944086fd4dfa9",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "detail-pending",
+      "width": 390,
+      "file": "detail-pending-390.png",
+      "sha256": "14c05e35458381dc09b47e660ef35b9e42011fdef532fc563921e18f52edbf67",
+      "control": {
+        "selector": "[data-detail]",
+        "actionId": "AR-DETAIL",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "edit-default",
+      "width": 390,
+      "file": "edit-default-390.png",
+      "sha256": "3ed1ef2b89310120a9eebd843be7fc1acb23fb8c6323ce1ebfe0b7cdbcf40db0",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "edit-hover",
+      "width": 390,
+      "file": "edit-hover-390.png",
+      "sha256": "6166956cb7f81b243375f5406ced45291c577eac53881362693ab4ba35e0c3ec",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "edit-focus",
+      "width": 390,
+      "file": "edit-focus-390.png",
+      "sha256": "223e3e8055db9b43963b071fdeed3d1750b71b7da1d18c618c005b361529d681",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "edit-pressed",
+      "width": 390,
+      "file": "edit-pressed-390.png",
+      "sha256": "4ec6fe9bcc7cebb7c7de3536184fb3e9e593f0b8c5b7855c4abc6c83e4b3beff",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "edit-pending",
+      "width": 390,
+      "file": "edit-pending-390.png",
+      "sha256": "14c05e35458381dc09b47e660ef35b9e42011fdef532fc563921e18f52edbf67",
+      "control": {
+        "selector": "[data-edit]",
+        "actionId": "AR-EDIT",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "status-default",
+      "width": 390,
+      "file": "status-default-390.png",
+      "sha256": "3ed1ef2b89310120a9eebd843be7fc1acb23fb8c6323ce1ebfe0b7cdbcf40db0",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "status-hover",
+      "width": 390,
+      "file": "status-hover-390.png",
+      "sha256": "ad55c33d8e7a6c30a035db131f785f261f65f01f6115c28c00c39bdb0b366dee",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "status-focus",
+      "width": 390,
+      "file": "status-focus-390.png",
+      "sha256": "9fcc4a9be52555fc485e6b8e49cfe480a678d9a4b52042cb976b78c594d2b929",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "status-pressed",
+      "width": 390,
+      "file": "status-pressed-390.png",
+      "sha256": "40d9b8c29b64c361ef25a242d97ed6e868e1e6f31807d7ee92840243d6a51f46",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "status-pending",
+      "width": 390,
+      "file": "status-pending-390.png",
+      "sha256": "14c05e35458381dc09b47e660ef35b9e42011fdef532fc563921e18f52edbf67",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "detail-close-default",
+      "width": 390,
+      "file": "detail-close-default-390.png",
+      "sha256": "0d4fe30e35f5e7838f77e4e8eed867d0872e528ac5ba33d1d1cc93930a007ce4",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "detail-close-hover",
+      "width": 390,
+      "file": "detail-close-hover-390.png",
+      "sha256": "f7b9983de947db759b90fc0a9348b6b9ed0b53abaf4fdb9d3027b1c3fe8a95f9",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "detail-close-focus",
+      "width": 390,
+      "file": "detail-close-focus-390.png",
+      "sha256": "f4f5caa67807c12052fb04b9562c69a60e1fab5d2207bc6cd700f504b594fb51",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "detail-close-pressed",
+      "width": 390,
+      "file": "detail-close-pressed-390.png",
+      "sha256": "5bfbd9b435f4bb185374ac2548c0a69f6c63eeb45008ad4f339b132c89d4d87e",
+      "control": {
+        "selector": "#execution-close",
+        "actionId": "AR-DETAIL-CLOSE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "task-default",
+      "width": 390,
+      "file": "task-default-390.png",
+      "sha256": "225e039528088523ca37ed9b8f9fbb137257c96e5e9f66e507a8dc14defe1b75",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "task-hover",
+      "width": 390,
+      "file": "task-hover-390.png",
+      "sha256": "225e039528088523ca37ed9b8f9fbb137257c96e5e9f66e507a8dc14defe1b75",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "task-focus",
+      "width": 390,
+      "file": "task-focus-390.png",
+      "sha256": "2a6514c3f4ed95f5ab62f5faa1cd6d03f39a9cdbcfd173b62750f2deeb71ce2f",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "task-pressed",
+      "width": 390,
+      "file": "task-pressed-390.png",
+      "sha256": "225e039528088523ca37ed9b8f9fbb137257c96e5e9f66e507a8dc14defe1b75",
+      "control": {
+        "selector": "[data-detail-link][href^='/tasks/']",
+        "actionId": "AR-TASK",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "notification-default",
+      "width": 390,
+      "file": "notification-default-390.png",
+      "sha256": "0d4fe30e35f5e7838f77e4e8eed867d0872e528ac5ba33d1d1cc93930a007ce4",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "notification-hover",
+      "width": 390,
+      "file": "notification-hover-390.png",
+      "sha256": "0d4fe30e35f5e7838f77e4e8eed867d0872e528ac5ba33d1d1cc93930a007ce4",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "notification-focus",
+      "width": 390,
+      "file": "notification-focus-390.png",
+      "sha256": "fc6a835f88137d487e547e8dc2feeb396c3580187e3b88ef1f3c547ffc7dab8e",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "notification-pressed",
+      "width": 390,
+      "file": "notification-pressed-390.png",
+      "sha256": "0d4fe30e35f5e7838f77e4e8eed867d0872e528ac5ba33d1d1cc93930a007ce4",
+      "control": {
+        "selector": "[data-detail-link][href^='/notifications']",
+        "actionId": "AR-NOTIFICATION",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-default",
+      "width": 390,
+      "file": "technical-default-390.png",
+      "sha256": "225e039528088523ca37ed9b8f9fbb137257c96e5e9f66e507a8dc14defe1b75",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-hover",
+      "width": 390,
+      "file": "technical-hover-390.png",
+      "sha256": "225e039528088523ca37ed9b8f9fbb137257c96e5e9f66e507a8dc14defe1b75",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-focus",
+      "width": 390,
+      "file": "technical-focus-390.png",
+      "sha256": "c21ba5ca2ef8dce1ea89e8f82518aa3ec0411fa2300aacff9b027a08a3f1f8c3",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-pressed",
+      "width": 390,
+      "file": "technical-pressed-390.png",
+      "sha256": "225e039528088523ca37ed9b8f9fbb137257c96e5e9f66e507a8dc14defe1b75",
+      "control": {
+        "selector": "#execution-tech-0 summary",
+        "actionId": "AR-TECH",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "template-default",
+      "width": 390,
+      "file": "template-default-390.png",
+      "sha256": "728f8b86acd037387252b6bb77566591166b4df5939e7c39f3746d04dfeee77d",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "template-hover",
+      "width": 390,
+      "file": "template-hover-390.png",
+      "sha256": "b5d0bae08fc281f34348658e3c9feeaa90576051484fe46e89694d492d470551",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "template-focus",
+      "width": 390,
+      "file": "template-focus-390.png",
+      "sha256": "271427ea76820e5bb7c8b83474fcd70e14d7717166ea5c26a80681e327d7a221",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "template-pressed",
+      "width": 390,
+      "file": "template-pressed-390.png",
+      "sha256": "fac4ddad83528e5847c7c9ae479fc433b0c6d071acfdec3ad41adfca86f7fa8f",
+      "control": {
+        "selector": "[data-template='0']",
+        "actionId": "AR-TEMPLATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "sample-default",
+      "width": 390,
+      "file": "sample-default-390.png",
+      "sha256": "102bbe10b49b23d22227e750a3a1eae3f1cfc5b5066bebd9bd7b3f0eb96881cd",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "sample-hover",
+      "width": 390,
+      "file": "sample-hover-390.png",
+      "sha256": "102bbe10b49b23d22227e750a3a1eae3f1cfc5b5066bebd9bd7b3f0eb96881cd",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "sample-focus",
+      "width": 390,
+      "file": "sample-focus-390.png",
+      "sha256": "a5ff3049a542c7ee3ee5ad301ee3b3f34990c5b9afa655a4ebf2b6202eea17c1",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "sample-pressed",
+      "width": 390,
+      "file": "sample-pressed-390.png",
+      "sha256": "102bbe10b49b23d22227e750a3a1eae3f1cfc5b5066bebd9bd7b3f0eb96881cd",
+      "control": {
+        "selector": "[data-preview-link]",
+        "actionId": "AR-SAMPLE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "cancel-default",
+      "width": 390,
+      "file": "cancel-default-390.png",
+      "sha256": "a0788a32a9cebdce719b139bd5a42d4828f4e1d18283ab56766675653ba2f5bc",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "cancel-hover",
+      "width": 390,
+      "file": "cancel-hover-390.png",
+      "sha256": "a117cc56f42a9b89bff46914f05a46ba3520bef75c1de728155c62bcdca7e691",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "cancel-focus",
+      "width": 390,
+      "file": "cancel-focus-390.png",
+      "sha256": "9f68bdefff7ea4ca8f5b0f906e682cf93f8ac684bb63cec0fa17d4f567b15a03",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "cancel-pressed",
+      "width": 390,
+      "file": "cancel-pressed-390.png",
+      "sha256": "9d9d6e3d9916b2932f94886fd4a1a36937cbc921b760b71088ef067a2480d77a",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "preview-default",
+      "width": 390,
+      "file": "preview-default-390.png",
+      "sha256": "09ac2f6005e9996773091127c20dc275712de6082280b26d7d4efd86873f71f1",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "preview-hover",
+      "width": 390,
+      "file": "preview-hover-390.png",
+      "sha256": "68a7beccaa3f1722636bc7c312522899dfb271e94481fd0e813949f06a66a96c",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "preview-focus",
+      "width": 390,
+      "file": "preview-focus-390.png",
+      "sha256": "383bed2b699513e4f58ee928b3b22c14170892f61b10cd7dd551f8ebb93556cb",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "preview-pressed",
+      "width": 390,
+      "file": "preview-pressed-390.png",
+      "sha256": "f15ada41e6c73b685ac7e3c9f8c823f4474a998f5c33a3561ee8ac224397fb7e",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "preview-pending",
+      "width": 390,
+      "file": "preview-pending-390.png",
+      "sha256": "4e93068dbe0efceacf8c4b02fcbdebea3182273e0f6f14fe6994518e28223e56",
+      "control": {
+        "selector": "#preview",
+        "actionId": "AR-PREVIEW",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "save-default",
+      "width": 390,
+      "file": "save-default-390.png",
+      "sha256": "4ebe49ca48df9b290abb3b66f68d0e5dcbbad1163e6fc9646c804586e39a17c4",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save-hover",
+      "width": 390,
+      "file": "save-hover-390.png",
+      "sha256": "28bd7c55fc86cf98b8d7b0df8b03055d68a3865f2ca70d422f79f92979d29902",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save-focus",
+      "width": 390,
+      "file": "save-focus-390.png",
+      "sha256": "94ad7c705960da10542bd615cd263053b1cd2c953e18d321084ff1b62525e289",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save-pressed",
+      "width": 390,
+      "file": "save-pressed-390.png",
+      "sha256": "6d6be4b64a48c6a4a511551980327c2c8c71185ce8283481483a3cdd10474d14",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save-pending",
+      "width": 390,
+      "file": "save-pending-390.png",
+      "sha256": "df9173e7fae28a923a1d9d89734ba45fc2caf91c73f817caa0c006a0e2dc4e6a",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "pending"
+      }
+    }
+  ]
+}

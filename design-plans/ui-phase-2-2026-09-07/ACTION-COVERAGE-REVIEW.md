@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应27页/602源位置/568组；其中路由动作484组，转发/容器关联60组，其余明确排除。其余46页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应28页/621源位置/584组；其中路由动作498组，转发/容器关联62组，其余明确排除。其余45页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -38,7 +38,7 @@
 | [P24 任务详情](page-specs/P24.md) | 111 | [33组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P27 自动化规则](page-specs/P27.md) | 55 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P29 治理概览](page-specs/P29.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P30 成员与邀请](page-specs/P30.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2286,6 +2286,102 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 余3槽为分页busy及偏好关闭disabled/busy，需完整调用边界登记，不用假禁用图填数。
 - useModalDialog提供原生开关/焦点返回；本轮VM测试替身不证明DOM焦点，完整组合仍需真实Vue验收。
 - 读取meta/error、详情GET、自动已读/workflow和偏好草稿/保存归属已局部修复；全局上下文、markAll及模态内错误可达性仍非本轮完整验收。
+
+## P27 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P27.json)：19个局部源位置 → 16组；2类写入，14组路由动作，2组转发/容器关联不重复计动作。10个本地v-model，3处调用/内嵌容器，32个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+另有10个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| AR-CREATE 创建规则 / local | 1处；create | [normal · 1440](design/automation-direction-c/1440-normal.png) / [normal · 390](design/automation-direction-c/390-normal.png)、[create · 1440](design/automation-direction-c/1440-create.png) / [create · 390](design/automation-direction-c/390-create.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-LOAD 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited、version_conflict | [error · 1440](design/automation-direction-c/1440-error.png) / [error · 390](design/automation-direction-c/390-error.png)、[blocked · 1440](design/automation-direction-c/1440-blocked.png) / [blocked · 390](design/automation-direction-c/390-blocked.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-DETAIL 查看执行记录 / read | 1处；detail、empty、history | [normal · 1440](design/automation-direction-c/1440-normal.png) / [normal · 390](design/automation-direction-c/390-normal.png)、[detail · 1440](design/automation-direction-c/1440-detail.png) / [detail · 390](design/automation-direction-c/390-detail.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-EDIT 编辑规则 / local | 1处；edit、active、paused | [normal · 1440](design/automation-direction-c/1440-normal.png) / [normal · 390](design/automation-direction-c/390-normal.png)、[paused · 1440](design/automation-direction-c/1440-paused.png) / [paused · 390](design/automation-direction-c/390-paused.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-STATUS 暂停或恢复 / write | 1处；pause、resume | [normal · 1440](design/automation-direction-c/1440-normal.png) / [normal · 390](design/automation-direction-c/390-normal.png)、[paused · 1440](design/automation-direction-c/1440-paused.png) / [paused · 390](design/automation-direction-c/390-paused.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-DETAIL-CLOSE 关闭执行记录 / local | 1处；close-button、escape-via-wiring | [detail · 1440](design/automation-direction-c/1440-detail.png) / [detail · 390](design/automation-direction-c/390-detail.png)、[long_history · 1440](design/automation-direction-c/1440-long_history.png) / [long_history · 390](design/automation-direction-c/390-long_history.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-TASK 查看关联人工任务 / navigation | 1处；task-link | [execution_task · 1440](design/automation-direction-c/1440-execution_task.png) / [execution_task · 390](design/automation-direction-c/390-execution_task.png)、[task-default · 1440](design/automation-controls-direction-c/task-default-1440.png) / [task-default · 390](design/automation-controls-direction-c/task-default-390.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-NOTIFICATION 查看触发通知与来源 / navigation | 1处；notification-link | [detail · 1440](design/automation-direction-c/1440-detail.png) / [detail · 390](design/automation-direction-c/390-detail.png)、[notification-default · 1440](design/automation-controls-direction-c/notification-default-1440.png) / [notification-default · 390](design/automation-controls-direction-c/notification-default-390.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-TECH 执行技术详情 / local | 1处；collapsed、expanded | [execution_task · 1440](design/automation-direction-c/1440-execution_task.png) / [execution_task · 390](design/automation-direction-c/390-execution_task.png)、[technical · 1440](design/automation-direction-c/1440-technical.png) / [technical · 390](design/automation-direction-c/390-technical.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-TEMPLATE 应用业务模板 / local | 1处；overdue、competitor、rejected | [template_overdue · 1440](design/automation-direction-c/1440-template_overdue.png) / [template_overdue · 390](design/automation-direction-c/390-template_overdue.png)、[template_competitor · 1440](design/automation-direction-c/1440-template_competitor.png) / [template_competitor · 390](design/automation-direction-c/390-template_competitor.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-SAMPLE 查看预览样本 / navigation | 1处；sample-link | [preview_samples · 1440](design/automation-direction-c/1440-preview_samples.png) / [preview_samples · 390](design/automation-direction-c/390-preview_samples.png)、[sample-default · 1440](design/automation-controls-direction-c/sample-default-1440.png) / [sample-default · 390](design/automation-controls-direction-c/sample-default-390.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-EDITOR-CLOSE 取消创建或编辑 / local | 1处；create-cancel、edit-cancel、escape-via-wiring、pending-cancel | [create · 1440](design/automation-direction-c/1440-create.png) / [create · 390](design/automation-direction-c/390-create.png)、[edit · 1440](design/automation-direction-c/1440-edit.png) / [edit · 390](design/automation-direction-c/390-edit.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-PREVIEW 只读试运行 / read | 1处；preview、pending、failed、empty、samples、changed | [preview · 1440](design/automation-direction-c/1440-preview.png) / [preview · 390](design/automation-direction-c/390-preview.png)、[preview_task · 1440](design/automation-direction-c/1440-preview_task.png) / [preview_task · 390](design/automation-direction-c/390-preview_task.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| AR-SAVE 创建并启用或保存修改 / write | 2处；create、edit、validation、pending、conflict | [create · 1440](design/automation-direction-c/1440-create.png) / [create · 390](design/automation-direction-c/390-create.png)、[edit · 1440](design/automation-direction-c/1440-edit.png) / [edit · 390](design/automation-direction-c/390-edit.png)；其余见JSON | 新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。 |
+| D-AR-EXECUTIONS 执行记录原生模态接线 / wiring | 2处；detail | [detail · 1440](design/automation-direction-c/1440-detail.png) / [detail · 390](design/automation-direction-c/390-detail.png)；其余见JSON | 独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。 |
+| D-AR-EDITOR 新建/编辑原生模态接线 / wiring | 2处；create、edit | [create · 1440](design/automation-direction-c/1440-create.png) / [create · 390](design/automation-direction-c/390-create.png)、[edit · 1440](design/automation-direction-c/1440-edit.png) / [edit · 390](design/automation-direction-c/390-edit.png)；其余见JSON | 独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| D-AR-EXECUTIONS | @cancel / handleDetailCancel | AR-DETAIL-CLOSE |
+| D-AR-EDITOR | @cancel / handleCreateCancel | AR-EDITOR-CLOSE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| AutomationRuleCenter.vue / form.name | 名称required/max200 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.trigger_event_type | 触发器四项；task.created循环保护 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.condition_severity | 严重程度any/info/warning/critical | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.action_type | notify_owner/create_task；任务触发仅前者 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.owner_id | 当前范围成员required | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.action_assignee_id | create_task条件下成员required | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.action_title | 动作标题required/max200 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / editReason | 仅编辑required；UI500，服务1000不擅自统一 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.rate_limit_count | number required/min1/max1000；默认20 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.rate_limit_window_minutes | number required/min1/max1440；默认60 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| AutomationRuleCenter.vue / dialog.1 / detail | native-dialog / matching-dialog-scene | [detail · 1440](design/automation-direction-c/1440-detail.png) / [detail · 390](design/automation-direction-c/390-detail.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / executions_empty | native-dialog / matching-dialog-scene | [executions_empty · 1440](design/automation-direction-c/1440-executions_empty.png) / [executions_empty · 390](design/automation-direction-c/390-executions_empty.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_queued | native-dialog / matching-dialog-scene | [execution_queued · 1440](design/automation-direction-c/1440-execution_queued.png) / [execution_queued · 390](design/automation-direction-c/390-execution_queued.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_leased | native-dialog / matching-dialog-scene | [execution_leased · 1440](design/automation-direction-c/1440-execution_leased.png) / [execution_leased · 390](design/automation-direction-c/390-execution_leased.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_retry | native-dialog / matching-dialog-scene | [execution_retry · 1440](design/automation-direction-c/1440-execution_retry.png) / [execution_retry · 390](design/automation-direction-c/390-execution_retry.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_succeeded | native-dialog / matching-dialog-scene | [execution_succeeded · 1440](design/automation-direction-c/1440-execution_succeeded.png) / [execution_succeeded · 390](design/automation-direction-c/390-execution_succeeded.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_rate | native-dialog / matching-dialog-scene | [execution_rate · 1440](design/automation-direction-c/1440-execution_rate.png) / [execution_rate · 390](design/automation-direction-c/390-execution_rate.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_failed | native-dialog / matching-dialog-scene | [execution_failed · 1440](design/automation-direction-c/1440-execution_failed.png) / [execution_failed · 390](design/automation-direction-c/390-execution_failed.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_dead | native-dialog / matching-dialog-scene | [execution_dead · 1440](design/automation-direction-c/1440-execution_dead.png) / [execution_dead · 390](design/automation-direction-c/390-execution_dead.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_unknown | native-dialog / matching-dialog-scene | [execution_unknown · 1440](design/automation-direction-c/1440-execution_unknown.png) / [execution_unknown · 390](design/automation-direction-c/390-execution_unknown.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_suppressed | native-dialog / matching-dialog-scene | [execution_suppressed · 1440](design/automation-direction-c/1440-execution_suppressed.png) / [execution_suppressed · 390](design/automation-direction-c/390-execution_suppressed.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / execution_task | native-dialog / matching-dialog-scene | [execution_task · 1440](design/automation-direction-c/1440-execution_task.png) / [execution_task · 390](design/automation-direction-c/390-execution_task.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / technical | native-dialog / matching-dialog-scene | [technical · 1440](design/automation-direction-c/1440-technical.png) / [technical · 390](design/automation-direction-c/390-technical.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.1 / long_history | native-dialog / matching-dialog-scene | [long_history · 1440](design/automation-direction-c/1440-long_history.png) / [long_history · 390](design/automation-direction-c/390-long_history.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / create | native-dialog / matching-dialog-scene | [create · 1440](design/automation-direction-c/1440-create.png) / [create · 390](design/automation-direction-c/390-create.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / edit | native-dialog / matching-dialog-scene | [edit · 1440](design/automation-direction-c/1440-edit.png) / [edit · 390](design/automation-direction-c/390-edit.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / create_busy | native-dialog / matching-dialog-scene | [create_busy · 1440](design/automation-direction-c/1440-create_busy.png) / [create_busy · 390](design/automation-direction-c/390-create_busy.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / edit_busy | native-dialog / matching-dialog-scene | [edit_busy · 1440](design/automation-direction-c/1440-edit_busy.png) / [edit_busy · 390](design/automation-direction-c/390-edit_busy.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / create_error | native-dialog / matching-dialog-scene | [create_error · 1440](design/automation-direction-c/1440-create_error.png) / [create_error · 390](design/automation-direction-c/390-create_error.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / edit_conflict | native-dialog / matching-dialog-scene | [edit_conflict · 1440](design/automation-direction-c/1440-edit_conflict.png) / [edit_conflict · 390](design/automation-direction-c/390-edit_conflict.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview | native-dialog / matching-dialog-scene | [preview · 1440](design/automation-direction-c/1440-preview.png) / [preview · 390](design/automation-direction-c/390-preview.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview_task | native-dialog / matching-dialog-scene | [preview_task · 1440](design/automation-direction-c/1440-preview_task.png) / [preview_task · 390](design/automation-direction-c/390-preview_task.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview_empty | native-dialog / matching-dialog-scene | [preview_empty · 1440](design/automation-direction-c/1440-preview_empty.png) / [preview_empty · 390](design/automation-direction-c/390-preview_empty.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview_samples | native-dialog / matching-dialog-scene | [preview_samples · 1440](design/automation-direction-c/1440-preview_samples.png) / [preview_samples · 390](design/automation-direction-c/390-preview_samples.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview_busy | native-dialog / matching-dialog-scene | [preview_busy · 1440](design/automation-direction-c/1440-preview_busy.png) / [preview_busy · 390](design/automation-direction-c/390-preview_busy.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview_error | native-dialog / matching-dialog-scene | [preview_error · 1440](design/automation-direction-c/1440-preview_error.png) / [preview_error · 390](design/automation-direction-c/390-preview_error.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / preview_changed | native-dialog / matching-dialog-scene | [preview_changed · 1440](design/automation-direction-c/1440-preview_changed.png) / [preview_changed · 390](design/automation-direction-c/390-preview_changed.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / members_empty | native-dialog / matching-dialog-scene | [members_empty · 1440](design/automation-direction-c/1440-members_empty.png) / [members_empty · 390](design/automation-direction-c/390-members_empty.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / members_error | native-dialog / matching-dialog-scene | [members_error · 1440](design/automation-direction-c/1440-members_error.png) / [members_error · 390](design/automation-direction-c/390-members_error.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / dialog.2 / validation | native-dialog / matching-dialog-scene | [validation · 1440](design/automation-direction-c/1440-validation.png) / [validation · 390](design/automation-direction-c/390-validation.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / form.1 / create | form-container / matching-dialog-scene | [create · 1440](design/automation-direction-c/1440-create.png) / [create · 390](design/automation-direction-c/390-create.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+| AutomationRuleCenter.vue / form.1 / edit | form-container / matching-dialog-scene | [edit · 1440](design/automation-direction-c/1440-edit.png) / [edit · 390](design/automation-direction-c/390-edit.png) | 当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。 |
+
+### 明确保留的边界
+
+- 19源位置归16语义组，14路由动作含2写入组，另2模态接线；预览POST为只读。
+- 124新增双端图为14动作提供68条精确selector/状态引用；10源码无禁用/忙碌呈现槽与6导航不禁用槽分列。0代表槽未映射不等于所有业务变体、字段、主题或全页已验收。
+- 编辑/暂停源函数缺少重复提交早退，preview与保存忙碌条件独立；仅记录原语义，不用提案的按钮效果冒充防重入已修。
+- 真实source action_failed仍一律承诺重试；C图稿终态解释已区分，真实Vue文字未改。
+- 本批代表AR-STATUS暂停、AR-SAVE创建、AR-TEMPLATE审批超时、AR-LOAD通用错误；恢复/编辑/另两模板/其他错误的逐态图，以及目录/分区/额外关闭按钮等提案新增控件仍须单独细化。
+- useModalDialog开关/焦点仅此调用方接线核对，不是所有消费方生命周期或无障碍验收。
+- AR-G01–G03仍待：窗内错误、读取/详情/写后刷新归属、跨范围缓存、成员/版本/所有规则组合；本次不修改业务。
 
 ## P54 局部动作与共享消费者
 

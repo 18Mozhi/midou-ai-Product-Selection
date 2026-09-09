@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "24004ee598dbde7a3ffa0b8747788a3b2bc4317200f02f6366f12d083cc4631e",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "3b37ea48e2faed899f4dcbb150324157d5a4a2a450422f8b4a14d285f0dd3f7e",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -15,6 +15,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/approval-forms-direction-c/evidence.json": "1dd2fc9e01f32bfecfe2e91e2b53b7504821968f051cc9115e728bcea4ae6b5c",
     "design-plans/ui-phase-2-2026-09-07/design/approval-lifecycle-direction-c/evidence.json": "843c88b51ebfa016112217f93e4f7ac569f0a84e8c5ddc78b39652a437d33531",
     "design-plans/ui-phase-2-2026-09-07/design/approval-navigation-direction-c/evidence.json": "fb71732f2130662eb9a5f6b19b48f3e137024ea380a83ca6116c70f3b2e7a17d",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "d396395d9a40993d8de47d9cf240d309ecbb9dd62903c279f2e61ac1bbd4d5ef",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "662c58080dd8a5189f315ee7dfcf3b419f88e7d4c982266c8baf285ea6962d65",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json": "aeb78fc5f72cedbb944eb6871b0b06b2a56c773d121086861e78459ecea10595",
     "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json": "d28b7a421dcd2d12d66a21444097b8e6c4da2c47d1b51ecc49241d647202a502",
@@ -117,6 +118,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "f0a25e68f8096db8f1536fd1a8f5c535ce6025d9f0403bf173e3fa8b69a61505",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "3782b7ee1835e481ca8b4aeaeb8903b5d14515772c517ba7f2ba77579bf227ab",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -125,16 +127,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 85,
+    "packages": 86,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 890,
-    "sourceBindings": 1650,
+    "uniqueBoundFiles": 894,
+    "sourceBindings": 1668,
     "sourceDrift": 0,
-    "pngs": 11725,
+    "pngs": 11849,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 8991,
+    "readmeLinksChecked": 9120,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -399,6 +401,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P27",
       "spec": "page-specs/P27.md",
       "packages": [
+        "automation-controls-direction-c",
         "automation-direction-c"
       ],
       "actualVue": []
@@ -875,6 +878,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/approval-navigation-direction-c/evidence.json",
       "prototype": "design/approval-navigation-direction-c/index.html",
       "gallery": "design/approval-navigation-direction-c/gallery.html"
+    },
+    "automation-controls-direction-c": {
+      "id": "automation-controls-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 124,
+      "readme": "design/automation-controls-direction-c/README.md",
+      "evidence": "design/automation-controls-direction-c/evidence.json",
+      "prototype": "design/automation-controls-direction-c/index.html",
+      "gallery": "design/automation-controls-direction-c/gallery.html"
     },
     "automation-direction-c": {
       "id": "automation-direction-c",

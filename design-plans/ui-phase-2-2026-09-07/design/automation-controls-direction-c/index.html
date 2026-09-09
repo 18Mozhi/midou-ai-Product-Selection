@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P27 自动化规则 · 逐按钮状态待审</title>
+    <link rel="stylesheet" href="../automation-direction-c/automation.css" />
+    <link rel="stylesheet" href="controls.css" />
+    <script defer src="../automation-direction-c/data.js"></script>
+    <script defer src="../automation-direction-c/automation.js"></script>
+    <script defer src="controls.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <dialog id="editor" aria-labelledby="editor-title"></dialog>
+    <dialog id="execution" aria-labelledby="execution-title"></dialog>
+    <section class="workspace" aria-label="逐按钮审核工具">
+      <h2>逐按钮状态 · 独立待审图稿</h2>
+      <p>沿用 P27 C r1 的蓝色规则目录与分区编辑器。下列工具只选择图稿，不是产品功能。焦点、悬停和按下请直接操作实际按钮。</p>
+      <label>目标控件<select id="control-select"></select></label>
+      <label>场景<select id="control-mode"><option value="default">可用场景</option><option value="busy">在途场景（仅源码声明的六个控件）</option></select></label>
+      <button id="show-control" type="button">显示控件所在场景</button>
+      <p id="control-note" role="status"></p>
+      <a href="gallery.html">打开双端逐态图册</a>
+    </section>
+  </body>
+</html>

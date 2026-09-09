@@ -1,0 +1,1950 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P27",
+  "route": "/automations",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "2原生dialog；执行记录、新建、编辑3业务变体；内嵌form不额外计窗。"
+  },
+  "inputs": {
+    "AutomationRuleCenter.vue": [
+      "form.name",
+      "form.trigger_event_type",
+      "form.condition_severity",
+      "form.action_type",
+      "form.owner_id",
+      "form.action_assignee_id",
+      "form.action_title",
+      "editReason",
+      "form.rate_limit_count",
+      "form.rate_limit_window_minutes"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "AR-CREATE",
+      "label": "创建规则",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#d27de6387d58944c.1"],
+      "sourceContractKeys": ["AR-CREATE；打开空表单"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "入口busy禁用；打开新建",
+      "handler": "openCreator先清rule/action，再清selected/editing/原因并重置emptyForm和preview",
+      "variants": ["create"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "create"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "members_empty"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "members_error"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "create-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "create-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "create-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "create-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "create-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "create-default",
+          "selector": "#create-rule"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "create-hover",
+          "selector": "#create-rule"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "create-focus",
+          "selector": "#create-rule"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "create-pressed",
+          "selector": "#create-rule"
+        },
+        "disabled": {
+          "package": "automation-controls-direction-c",
+          "scene": "create-pending",
+          "selector": "#create-rule"
+        },
+        "busy": {
+          "package": "automation-controls-direction-c",
+          "scene": "create-pending",
+          "selector": "#create-rule"
+        }
+      }
+    },
+    {
+      "actionId": "AR-LOAD",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1"],
+      "sourceContractKeys": ["AR-LOAD；错误重读"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "错误类页状态；按钮没有disabled/busy属性",
+      "handler": "load并发GET规则和成员，成功后按rule/action恢复；不能当作登录跳转或特定恢复动作",
+      "variants": ["error", "blocked", "expired", "forbidden", "rate_limited", "version_conflict"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "rate_limited"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "version_conflict"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列真实控件没有disabled/aria-disabled/aria-busy或busy呈现；不补造禁用图。",
+        "handlerBoundary": "load并发GET规则和成员，成功后按rule/action恢复；不能当作登录跳转或特定恢复动作",
+        "sourceCandidateIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+        }
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-default",
+          "selector": "#retry"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-hover",
+          "selector": "#retry"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-focus",
+          "selector": "#retry"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-pressed",
+          "selector": "#retry"
+        }
+      }
+    },
+    {
+      "actionId": "AR-DETAIL",
+      "label": "查看执行记录",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#5b19eec3cd4a60d0.1"],
+      "sourceContractKeys": ["AR-DETAIL；rule深链→GET"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "列表rule；busy禁用",
+      "handler": "open先router.push rule；applyRouteState匹配本次列表后GET /automations/:id，最多100执行",
+      "variants": ["detail", "empty", "history"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "executions_empty"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "long_history"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-default",
+          "selector": "[data-detail]"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-hover",
+          "selector": "[data-detail]"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-focus",
+          "selector": "[data-detail]"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-pressed",
+          "selector": "[data-detail]"
+        },
+        "disabled": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-pending",
+          "selector": "[data-detail]"
+        },
+        "busy": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-pending",
+          "selector": "[data-detail]"
+        }
+      }
+    },
+    {
+      "actionId": "AR-EDIT",
+      "label": "编辑规则",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#110dd4ce491d067b.1"],
+      "sourceContractKeys": ["AR-EDIT；rule/action编辑"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "列表rule；busy禁用",
+      "handler": "edit经rule/action=edit，使用列表原version及字段预填，原因置空；不是另取详情或启停",
+      "variants": ["edit", "active", "paused"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "paused"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit_conflict"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-default",
+          "selector": "[data-edit]"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-hover",
+          "selector": "[data-edit]"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-focus",
+          "selector": "[data-edit]"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-pressed",
+          "selector": "[data-edit]"
+        },
+        "disabled": {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-pending",
+          "selector": "[data-edit]"
+        },
+        "busy": {
+          "package": "automation-controls-direction-c",
+          "scene": "edit-pending",
+          "selector": "[data-edit]"
+        }
+      }
+    },
+    {
+      "actionId": "AR-STATUS",
+      "label": "暂停或恢复",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#7d3171303da98576.1"],
+      "sourceContractKeys": ["AR-STATUS；暂停/恢复"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "列表；busy禁用；active暂停，其他源码值均走恢复",
+      "handler": "POST原rule.id/actions，pause/resume、expected_version和原固定人工原因；成功清selected再load，无新确认窗",
+      "variants": ["pause", "resume"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "paused"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "pause_busy"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "pause_error"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "resume_error"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "status-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "status-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "status-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "status-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "status-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "status-default",
+          "selector": "[data-status]"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "status-hover",
+          "selector": "[data-status]"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "status-focus",
+          "selector": "[data-status]"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "status-pressed",
+          "selector": "[data-status]"
+        },
+        "disabled": {
+          "package": "automation-controls-direction-c",
+          "scene": "status-pending",
+          "selector": "[data-status]"
+        },
+        "busy": {
+          "package": "automation-controls-direction-c",
+          "scene": "status-pending",
+          "selector": "[data-status]"
+        }
+      }
+    },
+    {
+      "actionId": "AR-DETAIL-CLOSE",
+      "label": "关闭执行记录",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1"],
+      "sourceContractKeys": ["AR-DETAIL-CLOSE；关闭按钮"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "selected存在；按钮无busy禁用",
+      "handler": "closeDetail清selected；有rule时router.push清rule/action，保留其他query；不取消已发GET",
+      "variants": ["close-button", "escape-via-wiring"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "long_history"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列真实控件没有disabled/aria-disabled/aria-busy或busy呈现；不补造禁用图。",
+        "handlerBoundary": "closeDetail清selected；有rule时router.push清rule/action，保留其他query；不取消已发GET",
+        "sourceCandidateIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+        }
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-default",
+          "selector": "#execution-close"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-hover",
+          "selector": "#execution-close"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-focus",
+          "selector": "#execution-close"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "detail-close-pressed",
+          "selector": "#execution-close"
+        }
+      }
+    },
+    {
+      "actionId": "AR-TASK",
+      "label": "查看关联人工任务",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#573d41c8d777efee.1"],
+      "sourceContractKeys": ["AR-TASK；真实人工任务链接"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "执行action_resource_type=task且resource_id存在",
+      "handler": "RouterLink /tasks/:真实id?from=/automations；目标页继续鉴权",
+      "variants": ["task-link"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "execution_task"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "task-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "task-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "task-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "task-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-not-disabled-in-source"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "task-default",
+          "selector": "[data-detail-link][href^='/tasks/']"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "task-hover",
+          "selector": "[data-detail-link][href^='/tasks/']"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "task-focus",
+          "selector": "[data-detail-link][href^='/tasks/']"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "task-pressed",
+          "selector": "[data-detail-link][href^='/tasks/']"
+        }
+      }
+    },
+    {
+      "actionId": "AR-NOTIFICATION",
+      "label": "查看触发通知与来源",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#eb58830acad203db.1"],
+      "sourceContractKeys": ["AR-NOTIFICATION；触发通知"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "执行notification_id存在",
+      "handler": "RouterLink /notifications?notification=:真实id&from=/automations",
+      "variants": ["notification-link"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-not-disabled-in-source"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-default",
+          "selector": "[data-detail-link][href^='/notifications']"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-hover",
+          "selector": "[data-detail-link][href^='/notifications']"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-focus",
+          "selector": "[data-detail-link][href^='/notifications']"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "notification-pressed",
+          "selector": "[data-detail-link][href^='/notifications']"
+        }
+      }
+    },
+    {
+      "actionId": "AR-TECH",
+      "label": "执行技术详情",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#1c008f867673db60.1"],
+      "sourceContractKeys": ["AR-TECH；执行错误/资源标识"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "执行last_error_code或action_resource_id存在",
+      "handler": "原生details/summary；只展示last_error_code || action_resource_id，不是新的API动作",
+      "variants": ["collapsed", "expanded"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "execution_task"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "technical"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列真实控件没有disabled/aria-disabled/aria-busy或busy呈现；不补造禁用图。",
+        "handlerBoundary": "原生details/summary；只展示last_error_code || action_resource_id，不是新的API动作",
+        "sourceCandidateIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#1c008f867673db60.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#1c008f867673db60.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+        }
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-default",
+          "selector": "#execution-tech-0 summary"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-hover",
+          "selector": "#execution-tech-0 summary"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-focus",
+          "selector": "#execution-tech-0 summary"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "technical-pressed",
+          "selector": "#execution-tech-0 summary"
+        }
+      }
+    },
+    {
+      "actionId": "AR-TEMPLATE",
+      "label": "应用业务模板",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#742531071607ff73.1"],
+      "sourceContractKeys": ["AR-TEMPLATE；三模板草稿"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "仅!editing；三个template；无busy禁用",
+      "handler": "applyTemplate合并当前form和模板，清preview；保留未覆盖的成员/次数；description随对象但服务不消费",
+      "variants": ["overdue", "competitor", "rejected"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "template_overdue"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "template_competitor"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "template_rejected"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列真实控件没有disabled/aria-disabled/aria-busy或busy呈现；不补造禁用图。",
+        "handlerBoundary": "applyTemplate合并当前form和模板，清preview；保留未覆盖的成员/次数；description随对象但服务不消费",
+        "sourceCandidateIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#742531071607ff73.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#742531071607ff73.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+        }
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "template-default",
+          "selector": "[data-template='0']"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "template-hover",
+          "selector": "[data-template='0']"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "template-focus",
+          "selector": "[data-template='0']"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "template-pressed",
+          "selector": "[data-template='0']"
+        }
+      }
+    },
+    {
+      "actionId": "AR-SAMPLE",
+      "label": "查看预览样本",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#3e0160425e8092a0.1"],
+      "sourceContractKeys": ["AR-SAMPLE；预览来源链接"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "preview且samples非空",
+      "handler": "RouterLink /notifications?notification=:sample.notification_id&from=/automations；样本SQL无30天过滤",
+      "variants": ["sample-link"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_samples"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-not-disabled-in-source"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-default",
+          "selector": "[data-preview-link]"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-hover",
+          "selector": "[data-preview-link]"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-focus",
+          "selector": "[data-preview-link]"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "sample-pressed",
+          "selector": "[data-preview-link]"
+        }
+      }
+    },
+    {
+      "actionId": "AR-EDITOR-CLOSE",
+      "label": "取消创建或编辑",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#2354c8e95ace6cd1.1"],
+      "sourceContractKeys": ["AR-EDITOR-CLOSE；取消"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "编辑器；busy/previewing均不禁用取消",
+      "handler": "closeEditor清showCreate/editing/editReason/preview并清rule/action；form不持久化；关闭不取消在途写入",
+      "variants": ["create-cancel", "edit-cancel", "escape-via-wiring", "pending-cancel"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "create"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "create_busy"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit_busy"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_busy"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列真实控件没有disabled/aria-disabled/aria-busy或busy呈现；不补造禁用图。",
+        "handlerBoundary": "closeEditor清showCreate/editing/editReason/preview并清rule/action；form不持久化；关闭不取消在途写入",
+        "sourceCandidateIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#2354c8e95ace6cd1.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/AutomationRuleCenter.vue#2354c8e95ace6cd1.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+        }
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-default",
+          "selector": "#cancel"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-hover",
+          "selector": "#cancel"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-focus",
+          "selector": "#cancel"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-pressed",
+          "selector": "#cancel"
+        }
+      }
+    },
+    {
+      "actionId": "AR-PREVIEW",
+      "label": "只读试运行",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/AutomationRuleCenter.vue#180c3b124eda84e8.1"],
+      "sourceContractKeys": ["AR-PREVIEW；只读POST"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "按钮仅previewing禁用，不随busy禁用；函数另reportValidity",
+      "handler": "runPreview POST /automations/preview，原form及notify_owner时assignee=null；序号/form/打开状态/路由防过期，非业务写入",
+      "variants": ["preview", "pending", "failed", "empty", "samples", "changed"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "preview"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_task"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_empty"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_samples"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_busy"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_error"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "preview_changed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-default",
+          "selector": "#preview"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-hover",
+          "selector": "#preview"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-focus",
+          "selector": "#preview"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-pressed",
+          "selector": "#preview"
+        },
+        "disabled": {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-pending",
+          "selector": "#preview"
+        },
+        "busy": {
+          "package": "automation-controls-direction-c",
+          "scene": "preview-pending",
+          "selector": "#preview"
+        }
+      }
+    },
+    {
+      "actionId": "AR-SAVE",
+      "label": "创建并启用或保存修改",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomationRuleCenter.vue#926c2e079c31814f.1",
+        "apps/web/src/components/AutomationRuleCenter.vue#ea72a6477a8776b1.1"
+      ],
+      "sourceContractKeys": ["AR-SAVE；表单submit", "AR-SAVE；新建/编辑提交按钮"],
+      "contractAliasReason": "采用既有合同完整末列，保留语义别名；submit与提交按钮归同一动作，原生dialog接线不增加业务动作。",
+      "condition": "原生form required；提交按钮busy禁用但函数无busy早退；不随previewing禁用",
+      "handler": "create按editing分POST /automations或PATCH /automations/:id；编辑含原version/reason；notify_owner时assignee=null；成功清query关窗reload，版本冲突保留草稿",
+      "variants": ["create", "edit", "validation", "pending", "conflict"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "create"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "validation"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "create_busy"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "create_error"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit_busy"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit_conflict"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "create_intent"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit_intent"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-automation-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "automation-controls-direction-c",
+          "scene": "save-default",
+          "selector": "#save"
+        },
+        "hover": {
+          "package": "automation-controls-direction-c",
+          "scene": "save-hover",
+          "selector": "#save"
+        },
+        "focus": {
+          "package": "automation-controls-direction-c",
+          "scene": "save-focus",
+          "selector": "#save"
+        },
+        "pressed": {
+          "package": "automation-controls-direction-c",
+          "scene": "save-pressed",
+          "selector": "#save"
+        },
+        "disabled": {
+          "package": "automation-controls-direction-c",
+          "scene": "save-pending",
+          "selector": "#save"
+        },
+        "busy": {
+          "package": "automation-controls-direction-c",
+          "scene": "save-pending",
+          "selector": "#save"
+        }
+      }
+    },
+    {
+      "actionId": "D-AR-EXECUTIONS",
+      "label": "执行记录原生模态接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomationRuleCenter.vue#08d127ded2ba2429.1",
+        "apps/web/src/components/AutomationRuleCenter.vue#ae7f95f10a94c968.1"
+      ],
+      "sourceContractKeys": ["D-AR-EXECUTIONS；原生模态", "AR-DETAIL-CLOSE；Escape"],
+      "contractAliasReason": "原生定义与cancel转发单列，避免将同一业务关闭重复计数。",
+      "condition": "对应模态打开",
+      "handler": "useModalDialog cancel preventDefault后调用业务关闭；原生焦点由共享helper管理",
+      "variants": ["detail"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。",
+      "forwardsTo": ["AR-DETAIL-CLOSE"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#ae7f95f10a94c968.1",
+          "event": "@cancel",
+          "handler": "handleDetailCancel",
+          "targets": ["AR-DETAIL-CLOSE"]
+        }
+      ]
+    },
+    {
+      "actionId": "D-AR-EDITOR",
+      "label": "新建/编辑原生模态接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomationRuleCenter.vue#a6561f91cc94ec7b.1",
+        "apps/web/src/components/AutomationRuleCenter.vue#35756ebc6c836998.1"
+      ],
+      "sourceContractKeys": ["D-AR-EDITOR；新建/编辑两变体", "AR-EDITOR-CLOSE；Escape"],
+      "contractAliasReason": "原生定义与cancel转发单列，避免将同一业务关闭重复计数。",
+      "condition": "对应模态打开",
+      "handler": "useModalDialog cancel preventDefault后调用业务关闭；原生焦点由共享helper管理",
+      "variants": ["create", "edit"],
+      "scenes": [
+        {
+          "package": "automation-direction-c",
+          "scene": "create"
+        },
+        {
+          "package": "automation-direction-c",
+          "scene": "edit"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-automation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。",
+      "forwardsTo": ["AR-EDITOR-CLOSE"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#35756ebc6c836998.1",
+          "event": "@cancel",
+          "handler": "handleCreateCancel",
+          "targets": ["AR-EDITOR-CLOSE"]
+        }
+      ]
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/AutomationRuleCenter.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.name",
+        "meaning": "名称required/max200",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.trigger_event_type",
+        "meaning": "触发器四项；task.created循环保护",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.condition_severity",
+        "meaning": "严重程度any/info/warning/critical",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.action_type",
+        "meaning": "notify_owner/create_task；任务触发仅前者",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.owner_id",
+        "meaning": "当前范围成员required",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.action_assignee_id",
+        "meaning": "create_task条件下成员required",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.action_title",
+        "meaning": "动作标题required/max200",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "editReason",
+        "meaning": "仅编辑required；UI500，服务1000不擅自统一",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.rate_limit_count",
+        "meaning": "number required/min1/max1000；默认20",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "binding": "form.rate_limit_window_minutes",
+        "meaning": "number required/min1/max1440；默认60",
+        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "selected的执行记录，最多100条，链接与技术折叠按真实字段显示",
+        "remaining": "独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。",
+        "variants": [
+          {
+            "name": "detail",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "detail"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "executions_empty",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "executions_empty"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_queued",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_queued"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_leased",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_leased"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_retry",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_retry"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_succeeded",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_succeeded"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_rate",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_rate"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_failed",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_failed"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_dead",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_dead"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_unknown",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_unknown"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_suppressed",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_suppressed"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "execution_task",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "execution_task"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "technical",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "technical"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "long_history",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "long_history"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "showCreate打开，共用新建/编辑，busy不拦取消；没有额外确认窗",
+        "remaining": "独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。",
+        "variants": [
+          {
+            "name": "create",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "create"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "edit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "edit"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "create_busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "create_busy"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "edit_busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "edit_busy"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "create_error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "create_error"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "edit_conflict",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "edit_conflict"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview_task",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview_task"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview_empty",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview_empty"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview_samples",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview_samples"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview_busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview_busy"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview_error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview_error"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "preview_changed",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "preview_changed"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "members_empty",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "members_empty"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "members_error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "members_error"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "validation",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "validation"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/AutomationRuleCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "编辑器内form，submit与按钮共用create；预览只读且先检查原生validity",
+        "remaining": "独立C场景只证明已有图稿关联；尚未建立该控件逐状态selector证据，不代表真实Vue、全变体、角色/主题或生产通过。",
+        "variants": [
+          {
+            "name": "create",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "create"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          },
+          {
+            "name": "edit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "automation-direction-c",
+                "scene": "edit"
+              }
+            ],
+            "remaining": "当前C提案形态关联，不证明真实模态全组合、全部焦点/失败/生命周期或用户批准。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "useModalDialog开关/焦点仅此调用方接线核对，不是所有消费方生命周期或无障碍验收。",
+      "AR-G01–G03仍待：窗内错误、读取/详情/写后刷新归属、跨范围缓存、成员/版本/所有规则组合；本次不修改业务。"
+    ]
+  },
+  "compositionGaps": [
+    "19源位置归16语义组，14路由动作含2写入组，另2模态接线；预览POST为只读。",
+    "124新增双端图为14动作提供68条精确selector/状态引用；10源码无禁用/忙碌呈现槽与6导航不禁用槽分列。0代表槽未映射不等于所有业务变体、字段、主题或全页已验收。",
+    "编辑/暂停源函数缺少重复提交早退，preview与保存忙碌条件独立；仅记录原语义，不用提案的按钮效果冒充防重入已修。",
+    "真实source action_failed仍一律承诺重试；C图稿终态解释已区分，真实Vue文字未改。",
+    "本批代表AR-STATUS暂停、AR-SAVE创建、AR-TEMPLATE审批超时、AR-LOAD通用错误；恢复/编辑/另两模板/其他错误的逐态图，以及目录/分区/额外关闭按钮等提案新增控件仍须单独细化。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "保持C方向，不将P16独立布局批准扩展到P27。",
+    "本次只补显式源码/图稿映射，不改Vue/API/DB/Worker/权限/部署；全站分母不冻结。"
+  ]
+}

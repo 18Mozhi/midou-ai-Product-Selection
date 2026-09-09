@@ -210,6 +210,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/approval-forms-direction-c/evidence.json": "1dd2fc9e01f32bfecfe2e91e2b53b7504821968f051cc9115e728bcea4ae6b5c",
     "design-plans/ui-phase-2-2026-09-07/design/approval-lifecycle-direction-c/evidence.json": "843c88b51ebfa016112217f93e4f7ac569f0a84e8c5ddc78b39652a437d33531",
     "design-plans/ui-phase-2-2026-09-07/design/approval-navigation-direction-c/evidence.json": "fb71732f2130662eb9a5f6b19b48f3e137024ea380a83ca6116c70f3b2e7a17d",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "d396395d9a40993d8de47d9cf240d309ecbb9dd62903c279f2e61ac1bbd4d5ef",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "662c58080dd8a5189f315ee7dfcf3b419f88e7d4c982266c8baf285ea6962d65",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json": "aeb78fc5f72cedbb944eb6871b0b06b2a56c773d121086861e78459ecea10595",
     "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json": "d28b7a421dcd2d12d66a21444097b8e6c4da2c47d1b51ecc49241d647202a502",
@@ -351,6 +352,9 @@
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
     "scripts/verify-ui-phase2-notification-navigation-c.mjs": "34eb1fc201f8faf92a88ad80713512358cf1e9fb4d7f375c265b3145a164290b",
     "scripts/verify-ui-phase2-notification-forms-c.mjs": "b7953605372e1d185be413e5b43f20b5e92bba04febe82825fd57afb0d41dc71",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "3782b7ee1835e481ca8b4aeaeb8903b5d14515772c517ba7f2ba77579bf227ab",
+    "scripts/verify-ui-phase2-automation-c.mjs": "17747ad0d99c6fad3b5a306eed966fd3e3214e6560b4f1f3a61eb0087ad9a732",
+    "scripts/verify-ui-phase2-automation-controls-c.mjs": "30bba4a25628315f41a3eb239f7796b1ea90efa7e151aab01b70d0d01aaebf77",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -382,7 +386,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "0b277cd2bdd62208be739abdf8b40ab64b5459396e160bb598dc4df57369332e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "d93c743efbdf2bf78c739ce9ccd338cec0a9e0800907ab146be6f8c1d61b386b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "273c67843540265c6205717e4e14b340a29c730cfc8f4cb063e6976dc9aabd28",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "4c1c0e0e04256cb6c0c3af1377fc223f6c672d80f11eb520bd83259d26c67877",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "64f9b9c5c04048ea80854199269424363bda36e62abaf97450dad88662023715",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "b8751b41f0c2178c1a14e80656c8e2af8bb89ad1e102c3c05acb89e55620840f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "de61b5675bef2700f82fe82c4390fa5d08fe1312677cb6928571d7eb9dcc6620",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8bb99072f3db70e0687adb08c5596ac3bae9129d975d2f1fe472224956734247",
@@ -442,13 +446,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 19,
     "oldOnlyIdentities": 17,
-    "reviewedPages": 27,
-    "explicitlyGroupedSourceSites": 602,
-    "semanticGroups": 568,
-    "routeActions": 484,
-    "wiringGroups": 60,
+    "reviewedPages": 28,
+    "explicitlyGroupedSourceSites": 621,
+    "semanticGroups": 584,
+    "routeActions": 498,
+    "wiringGroups": 62,
     "pagesWithoutExplicitSemanticReview": [
-      "P27",
       "P28",
       "P29",
       "P30",
@@ -1438,13 +1441,37 @@
       "path": "/automations",
       "title": "自动化规则",
       "oldStaticAssociatedCandidates": 55,
-      "review": null,
+      "review": {
+        "pageId": "P27",
+        "sourceSites": 19,
+        "semanticGroups": 16,
+        "routeActions": 14,
+        "wiringGroups": 2,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "sourceInapplicableVisualSlots": 10,
+        "unmappedVisualSlots": 0,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 10,
+          "callerContainers": 3,
+          "consumerVariants": 32,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
+        "automation-controls-direction-c",
         "automation-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "19源位置归16语义组，14路由动作含2写入组，另2模态接线；预览POST为只读。",
+        "124新增双端图为14动作提供68条精确selector/状态引用；10源码无禁用/忙碌呈现槽与6导航不禁用槽分列。0代表槽未映射不等于所有业务变体、字段、主题或全页已验收。",
+        "编辑/暂停源函数缺少重复提交早退，preview与保存忙碌条件独立；仅记录原语义，不用提案的按钮效果冒充防重入已修。",
+        "真实source action_failed仍一律承诺重试；C图稿终态解释已区分，真实Vue文字未改。",
+        "本批代表AR-STATUS暂停、AR-SAVE创建、AR-TEMPLATE审批超时、AR-LOAD通用错误；恢复/编辑/另两模板/其他错误的逐态图，以及目录/分区/额外关闭按钮等提案新增控件仍须单独细化。"
+      ]
     },
     {
       "id": "P28",
@@ -2531,6 +2558,24 @@
         "localModelBindings": 6,
         "callerContainers": 3,
         "consumerVariants": 16,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P27",
+      "sourceSites": 19,
+      "semanticGroups": 16,
+      "routeActions": 14,
+      "wiringGroups": 2,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "sourceInapplicableVisualSlots": 10,
+      "unmappedVisualSlots": 0,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 10,
+        "callerContainers": 3,
+        "consumerVariants": 32,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -5213,7 +5258,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-CREATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1",
@@ -5239,7 +5290,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#5b19eec3cd4a60d0.1",
@@ -5269,7 +5326,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#110dd4ce491d067b.1",
@@ -5299,7 +5362,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-EDIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#7d3171303da98576.1",
@@ -5329,7 +5398,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-STATUS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#08d127ded2ba2429.1",
@@ -5355,7 +5430,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "D-AR-EXECUTIONS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#ae7f95f10a94c968.1",
@@ -5381,7 +5462,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "D-AR-EXECUTIONS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1",
@@ -5407,7 +5494,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-DETAIL-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#573d41c8d777efee.1",
@@ -5445,7 +5538,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#eb58830acad203db.1",
@@ -5483,7 +5582,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-NOTIFICATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#1c008f867673db60.1",
@@ -5521,7 +5626,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#a6561f91cc94ec7b.1",
@@ -5542,7 +5653,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "D-AR-EDITOR",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#35756ebc6c836998.1",
@@ -5563,7 +5680,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "D-AR-EDITOR",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#926c2e079c31814f.1",
@@ -5584,7 +5707,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#742531071607ff73.1",
@@ -5614,7 +5743,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-TEMPLATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#3e0160425e8092a0.1",
@@ -5648,7 +5783,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-SAMPLE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#2354c8e95ace6cd1.1",
@@ -5669,7 +5810,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-EDITOR-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#180c3b124eda84e8.1",
@@ -5690,7 +5837,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-PREVIEW",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#ea72a6477a8776b1.1",
@@ -5711,7 +5864,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "AR-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/BackupRecoveryCenter.vue#de2ebca33ff1e487.1",
