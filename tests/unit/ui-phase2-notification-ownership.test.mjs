@@ -6,7 +6,8 @@ import ts from "typescript";
 import { ref, computed } from "vue";
 import { buildNotificationDesignData } from "../../scripts/lib/ui-phase2-notification-design-data.mjs";
 
-// Characterization, not a fix or mounted-Vue/server acceptance. Real setup and Vue refs;
+// Read-batch regressions plus remaining write/draft characterization, not server acceptance.
+// Real setup and Vue refs;
 // router/lifecycle/SSE/request/error adapters are inert and explicitly controlled.
 const source = (await readFile("apps/web/src/components/NotificationCenter.vue", "utf8"))
   .split('<script setup lang="ts">')[1]
@@ -83,7 +84,7 @@ function defaults(url) {
   throw new Error(`Unexpected request ${url}`);
 }
 
-test("P26 generation protects rows but late list meta and request ID remain unowned", async () => {
+test("P26 newer read owns rows, pagination and request ID", async () => {
   const old = deferred();
   let lists = 0;
   const { ui } = harness((url) =>
@@ -95,14 +96,15 @@ test("P26 generation protects rows but late list meta and request ID remain unow
   await ui.load();
   assert.equal(ui.items.value[0].id, b.id);
   assert.equal(ui.total.value, 1);
+  const currentRequest = ui.requestId.value;
   old.resolve(env([a], "old-list", { total: 99 }));
   await first;
   assert.equal(ui.items.value[0].id, b.id);
-  assert.equal(ui.total.value, 99);
-  assert.equal(ui.requestId.value, "old-list");
+  assert.equal(ui.total.value, 1);
+  assert.equal(ui.requestId.value, currentRequest);
 });
 
-test("P26 late failed list can change a newer ready page to error", async () => {
+test("P26 late failed list cannot replace a newer ready page", async () => {
   const old = deferred();
   let lists = 0;
   const { ui } = harness((url) =>
@@ -113,11 +115,82 @@ test("P26 late failed list can change a newer ready page to error", async () => 
   const first = ui.load();
   await ui.load();
   assert.equal(ui.state.value, "ready");
+  const currentRequest = ui.requestId.value;
   old.reject(new ApiClientError());
   await first;
-  assert.equal(ui.state.value, "error");
+  assert.equal(ui.state.value, "ready");
   assert.equal(ui.items.value[0].id, b.id);
+  assert.equal(ui.requestId.value, currentRequest);
+  assert.equal(ui.notice.value, "");
+});
+
+test("P26 siblings arriving after a failed batch cannot replace its diagnostic", async () => {
+  const lateSummary = deferred(),
+    latePreferences = deferred();
+  const { ui } = harness((url) => {
+    if (url.startsWith("/notifications?")) return Promise.reject(new ApiClientError());
+    if (url === "/notifications/summary") return lateSummary.promise;
+    return latePreferences.promise;
+  });
+  await ui.load();
   assert.equal(ui.requestId.value, "old-failure");
+  lateSummary.resolve(env(data.summary, "late-summary"));
+  latePreferences.resolve(env(data.preferences, "late-preferences"));
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(ui.requestId.value, "old-failure");
+  assert.equal(ui.notice.value, "旧请求失败");
+});
+
+test("P26 unmounted read cannot apply late data or meta", async () => {
+  const pending = deferred();
+  const { ui, hooks } = harness((url) =>
+    url.startsWith("/notifications?") ? pending.promise : Promise.resolve(defaults(url)),
+  );
+  const run = ui.load();
+  for (const unmount of hooks.unmounted) unmount();
+  const state = ui.state.value,
+    requestId = ui.requestId.value;
+  pending.resolve(env([a], "destroyed-list", { total: 99 }));
+  await run;
+  assert.equal(ui.items.value.length, 0);
+  assert.equal(ui.total.value, 0);
+  assert.equal(ui.state.value, state);
+  assert.equal(ui.requestId.value, requestId);
+});
+
+test("P26 current read still applies data, totals and forces email off", async () => {
+  const { ui, calls } = harness((url) => Promise.resolve(defaults(url)));
+  await ui.load();
+  assert.equal(ui.items.value[0].id, b.id);
+  assert.equal(ui.total.value, 1);
+  assert.equal(ui.state.value, "ready");
+  assert.equal(ui.preferences.value.email_enabled, false);
+  assert.deepEqual(
+    calls.map((c) => c.url),
+    [
+      "/notifications?page=1&page_size=20",
+      "/notifications/summary",
+      "/me/notification-preferences",
+    ],
+  );
+});
+
+test("P26 immediate sibling completions cannot overwrite the first batch failure", async () => {
+  const { ui } = harness((url) =>
+    url.startsWith("/notifications?")
+      ? Promise.reject(new ApiClientError())
+      : Promise.resolve(defaults(url)),
+  );
+  await ui.load();
+  assert.equal(ui.requestId.value, "old-failure");
+  assert.equal(ui.state.value, "error");
+});
+
+test("P26 load invoked after unmount does not issue a new read batch", async () => {
+  const { ui, hooks, calls } = harness((url) => Promise.resolve(defaults(url)));
+  for (const unmount of hooks.unmounted) unmount();
+  await ui.load();
+  assert.equal(calls.length, 0);
 });
 
 test("P26 late automatic-read receipt replaces subsequently opened B with A", async () => {

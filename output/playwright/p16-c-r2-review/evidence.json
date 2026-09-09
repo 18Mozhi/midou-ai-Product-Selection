@@ -1,11 +1,12 @@
 {
   "version": "P16-C-r2-mounted-controls-2",
-  "capturedAt": "2026-09-09T19:53:42.548Z",
+  "capturedAt": "2026-09-09T21:41:05.315Z",
   "approval": "pending-controls-review",
   "boundary": "Real Vue route under existing shell; intercepted fixture HTTP, not real API/database/production. Only P16 overall layout approved. Buttons, themes and full page remain pending.",
   "sourceHashes": {
     "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-    "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
+    "apps/web/src/selection-journey.css": "b07eaf04d8dffe9cc987d9ea16ec0e701a082ba2fabd8f42aab84c8530a0b62d",
+    "apps/web/src/design/selection-tokens.css": "e3b001839a45970bb0c39ae89a0d7f32ac104e4c9c5c43443f83f38f80a78c74",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
@@ -22,7 +23,7 @@
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
     "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
     "scripts/lib/ui-phase2-journey-vue-controls.mjs": "915d14f16e5c44c9db40d96a02a60c88eea1930a8052a74133a91c1016fa06de",
-    "scripts/verify-ui-phase2-journey-vue.mjs": "dcd3c5ab7c32a6d1adbc1d9e4c9cbc1203b843df1e0b6304487bfb0441cb9041"
+    "scripts/verify-ui-phase2-journey-vue.mjs": "319ba49ba654ee07bfb6f54030d2ff707a82568b1256b7bb4565cc4e6cd3ba81"
   },
   "checks": [
     {
@@ -1342,8 +1343,8 @@
       "controlWidth": 106,
       "controlHeight": 44,
       "fontSize": "16px",
-      "color": "rgb(140, 146, 155)",
-      "background": "rgb(144, 160, 194)",
+      "color": "rgb(174, 179, 185)",
+      "background": "rgb(108, 130, 174)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -1932,7 +1933,7 @@
       "controlHeight": 44,
       "fontSize": "16px",
       "color": "rgb(255, 255, 255)",
-      "background": "rgb(31, 67, 143)",
+      "background": "rgb(29, 64, 138)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -2614,7 +2615,7 @@
       "controlHeight": 44,
       "fontSize": "16px",
       "color": "rgb(255, 255, 255)",
-      "background": "rgb(29, 64, 138)",
+      "background": "rgb(31, 67, 143)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -3629,7 +3630,7 @@
       "scene": "create-busy",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "5a87c23435da86e4241c52573465fa23b8d265fbd3f443b5ef3cb641e4be335d"
+      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
     },
     {
       "file": "1440-control-create-disabled.png",
@@ -3642,7 +3643,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "disabled"
       },
-      "sha256": "5a87c23435da86e4241c52573465fa23b8d265fbd3f443b5ef3cb641e4be335d"
+      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
     },
     {
       "file": "1440-control-create-busy.png",
@@ -3655,7 +3656,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "busy"
       },
-      "sha256": "5a87c23435da86e4241c52573465fa23b8d265fbd3f443b5ef3cb641e4be335d"
+      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
     },
     {
       "file": "1440-create-failed.png",
@@ -3871,7 +3872,7 @@
         "selector": ".selection-timeline-disclosure > summary",
         "state": "focus"
       },
-      "sha256": "9d92d7a84ada8444a8c804594ffca45ee4cb8c310b149438eaa760f8535e55e4"
+      "sha256": "3428ca7a1be83c9c958503a3fe5112ff2473785ea66e9da7e5699024178f5e74"
     },
     {
       "file": "1440-control-timeline-pressed.png",
@@ -4264,7 +4265,7 @@
         "selector": ".selection-workspace > header a",
         "state": "focus"
       },
-      "sha256": "573fc034da50a0506971471d958dde1a50c7fd4ab1e4a571480db8f1a2c8e361"
+      "sha256": "7bc1f4fad238f3f31740693a6c896fbf0130971847cd67fb1306d9b8d3d4c5cf"
     },
     {
       "file": "390-control-list-pressed.png",
@@ -4277,14 +4278,14 @@
         "selector": ".selection-workspace > header a",
         "state": "pressed"
       },
-      "sha256": "343d4205618a0d979969d33c1b1f8b584e5db10733c80dbd98c79b31087a2bf8"
+      "sha256": "24835f2692c7fbd402432d8265aa8fe00daf408a1f40e05755927fadb7db3129"
     },
     {
       "file": "390-create-hover.png",
       "scene": "create-hover",
       "width": 390,
       "captureType": "hover-viewport",
-      "sha256": "099b5bdc89ecd4bc0d6c199e5ce2df77d5206dd14465435183ef15dc4abd4cd6"
+      "sha256": "39061b2e8675159dee7a2631fcc0985915495be8751f72e95ca5037913b28611"
     },
     {
       "file": "390-create-focus.png",
@@ -4436,7 +4437,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "23f1f99b83819eaf31cda3367409e9337ac35c716c9a2b170978214dfccb96b2"
+      "sha256": "ea662d0e6ab733067fa8920b6ef9524aae1a1c41978a3d5d072a3173a5cca70f"
     },
     {
       "file": "390-control-save-pressed.png",
@@ -4822,7 +4823,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "focus"
       },
-      "sha256": "152a333c29a8981e57a56ac9b60afa7bd6a01af5669b6da33e2b9d9320dde8f8"
+      "sha256": "5f6250d84234c41ae94531ccaa95ad4bc93a7b829e8a45b4e4a9c992642e385e"
     },
     {
       "file": "390-control-secondary-pressed.png",

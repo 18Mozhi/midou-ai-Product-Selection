@@ -24,6 +24,7 @@ const capture = process.argv.includes("--capture"),
 const sources = [
   "apps/web/src/components/SelectionJourney.vue",
   "apps/web/src/selection-journey.css",
+  "apps/web/src/design/selection-tokens.css",
   "apps/web/src/components/NavigationShell.vue",
   "apps/web/src/components/UiStatePanel.vue",
   "apps/web/src/ui/state-contract.ts",

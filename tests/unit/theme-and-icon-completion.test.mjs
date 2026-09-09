@@ -86,6 +86,14 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
+    if (paths[index] === "apps/web/src/design/selection-tokens.css") {
+      // Page-lazy token source: only scoped custom properties, never ordinary CSS rules.
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html #app \.selection-journey\s*\{(?:\s*--so-selection-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
     assert.doesNotMatch(source, /#(?:[0-9a-f]{3,8})\b/i, paths[index]);
     assert.doesNotMatch(source, /(?:rgb|hsl)a?\(/i, paths[index]);
   }

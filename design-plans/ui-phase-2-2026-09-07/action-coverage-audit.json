@@ -49,7 +49,7 @@
     "apps/web/src/components/MySqlResilienceCenter.vue": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/NotFoundPage.vue": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
-    "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
+    "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092",
     "apps/web/src/components/OnboardingGuide.vue": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
     "apps/web/src/components/OpenPlatformCenter.vue": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
     "apps/web/src/components/opportunity-decision-presentation.ts": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d",
@@ -239,10 +239,10 @@
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "a0db54d8d4ea4a6d4c021f52f1eb37b354138bd47ba51517c33ac6ea0de0b4a4",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "327d6edd6cdc5b93b0eb38d94ea19af971d380d1159232ba081fa6f29a19f342",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "1ea0434130612dc9a9f1ad5dfa9a74fbcdecfeda3a42c3ea1fe8b52a22480c1b",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "0fcad2d2861227e19b5bc60c2d3eabc531e285444a78b5887435dc35daaa60dc",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "5b65983e78ca68397ff34e90c900e3f9eb188e3c1cf45b95fad1796c9a623a47",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "ccb911202bb82155d50706c721a6283ae3ae55037de51b2b87164f19c7e36648",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "e05c8af530b9c21678228f8917189950c0c235e24890f8a261cdfcb03823c2e0",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "400bc773ddf83e7fbfa81f030b48b22bc27dbf55336d0b4ba6a9cb72bd7b1943",
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
@@ -271,7 +271,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/evidence.json": "998193f09224c3d87029ede4094856bc00c8407ea7d1374d275c23a3d986aa2d",
     "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json": "5f401727b28f442e07177f471b5450b41d9dc360e42f4dfd3cb401374972ee22",
     "design-plans/ui-phase-2-2026-09-07/design/shell-direction-c/evidence.json": "dedbecc6794dd51e17a14056467cfa22ecb0791556f27d217b8e22a32a0763e6",
-    "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/evidence.json": "f410bd9011156cf5949553d5450be8c7b165dd7b11f1bb430c28f01ffc57bbb6",
+    "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/evidence.json": "b3016e1079dc30187aba41b0761ef6ad83c6fbc132cf6f323ddb8e43a8dc9cba",
     "design-plans/ui-phase-2-2026-09-07/design/source-channels-direction-c/evidence.json": "357333e977b967fc29364aae6d722f6be28c025b23b9b3e0e4070e5ecd4d00b4",
     "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/evidence.json": "f92aca17cba561cd36d79e97e2eae77ed821c004f2cfc1a5402e13d0f194f682",
     "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/evidence.json": "e55c94edb2bc36a9b53661ba6f1ba423fd20cb98c55c10893318426febaf327c",
@@ -346,8 +346,8 @@
     "scripts/verify-ui-phase2-approval-lifecycle-c.mjs": "59bfecbccdd956a2031d80e1b92b77430bb3728cfade05441b22eb3e405dbfb3",
     "scripts/verify-ui-phase2-approval-forms-c.mjs": "1aba43d70ecd0d52490c6922c3e681c38b004d8c5d98175bafad956b9333c1c3",
     "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "4d8347c278906df4ce4bef9e90e1643b06a3b85a2a5548d8fd70764a38ffdecb",
-    "tests/unit/ui-phase2-notification-ownership.test.mjs": "16c3b762d64a8dbdcba978d47c7ecab3a1b93d6d0aa0d35c9079d9778f2461a2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "86a465b1eecdac8b76bd74ba4b829e652e99c4e487990d97c38ed8290493f9c8",
+    "tests/unit/ui-phase2-notification-ownership.test.mjs": "0716cabc8716d45359daa1adc578aa000a3c10420b2149e689314fe1a541aa12",
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
     "scripts/verify-ui-phase2-notification-navigation-c.mjs": "34eb1fc201f8faf92a88ad80713512358cf1e9fb4d7f375c265b3145a164290b",
     "scripts/verify-ui-phase2-notification-forms-c.mjs": "b7953605372e1d185be413e5b43f20b5e92bba04febe82825fd57afb0d41dc71",
@@ -371,7 +371,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "98d47be158ab5585230b81ce52df2757d4d7c357ecb9b72edc086a282257dc18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "c4aaec40cdb4abec3364d92898ca22b3f239323d4e0ccc7392d793c18bc08994",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "ba79f016c5e8cfa7fe205d4f0f66c683ef7e84593e84adef0831df63b9cd8ee0",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "2b1c084ff6603c1c597637dc42c9fe6f93e8bea1d3405a059986bb30e304e114",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "e012300f64510ffb02432530a74ef4d708b3b4345974cc69d240cdec9e34120e",
@@ -381,7 +381,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "358cfe6df07413897bc1dfca66c0ad5c1950a7f191ea094fae6a38b4af2f96d5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "0b277cd2bdd62208be739abdf8b40ab64b5459396e160bb598dc4df57369332e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "d93c743efbdf2bf78c739ce9ccd338cec0a9e0800907ab146be6f8c1d61b386b",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "4d59d5b18dbdd2d8020812a4c40fe95c9ad835b63cb519344845b9f142afe2c2",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "a4f3833c9592c5157aa7b96e427eb34dcd7b56de424c0f4f78bd13143144a369",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "4c1c0e0e04256cb6c0c3af1377fc223f6c672d80f11eb520bd83259d26c67877",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "b8751b41f0c2178c1a14e80656c8e2af8bb89ad1e102c3c05acb89e55620840f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "de61b5675bef2700f82fe82c4390fa5d08fe1312677cb6928571d7eb9dcc6620",
@@ -1427,7 +1427,7 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "7项源码特征测试记录现状缺口与busy边界，不是修复证明。",
+        "12项源码测试含7项读取回归/正常检查与5项仍复现的写入/草稿边界；只有读取批次保护已修，非完整归属修复。",
         "导航240图及本批字段/诊断70图后，代表槽85有图、12按当前源码无呈现单列、3仍待适用性核对；不是完整字段/所有组合或整页批准。原98+60+240图不改。",
         "SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。",
         "余3槽为分页busy及偏好关闭disabled/busy，需完整调用边界登记，不用假禁用图填数。"
@@ -19960,7 +19960,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 401,
+      "line": 428,
       "kind": "control",
       "label": "通知偏好",
       "conditions": [],
@@ -19987,7 +19987,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#fd5620d41b8a74b5.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 402,
+      "line": 429,
       "kind": "control",
       "label": "全部已读",
       "conditions": [],
@@ -20014,7 +20014,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 408,
+      "line": 435,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -20050,7 +20050,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 427,
+      "line": 454,
       "kind": "control",
       "label": "{{ x.t }}",
       "conditions": [
@@ -20082,7 +20082,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 441,
+      "line": 468,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -20109,7 +20109,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 445,
+      "line": 472,
       "kind": "control",
       "label": "{{ item.t }}",
       "conditions": [
@@ -20141,7 +20141,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 480,
+      "line": 507,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -20173,7 +20173,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#d953dfdf4cb40b85.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 487,
+      "line": 514,
       "kind": "control",
       "label": "{{ label(item.category).slice(0, 1) }} {{ item.title }} {{ displayBody(item) }} {{ time(item.created_at) }} {{ item.read",
       "conditions": [
@@ -20209,7 +20209,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#01c7bba15fa9f7ce.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 509,
+      "line": 536,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -20241,7 +20241,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bd5dbf08f126da53.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 511,
+      "line": 538,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -20273,7 +20273,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 513,
+      "line": 540,
       "kind": "dialog-definition",
       "label": "消息详情",
       "conditions": [
@@ -20305,7 +20305,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#a81227b33b62c0a9.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 513,
+      "line": 540,
       "kind": "event-binding",
       "label": "消息详情",
       "conditions": [
@@ -20337,7 +20337,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#24417e6753ed4eb7.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 520,
+      "line": 547,
       "kind": "control",
       "label": "关闭消息详情",
       "conditions": [
@@ -20369,7 +20369,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9c8237833082965f.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 547,
+      "line": 574,
       "kind": "control",
       "label": "返回来源： {{ resourceLabel(selected.resource_type) }}",
       "conditions": [
@@ -20405,7 +20405,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#d0ef81cb0803db4e.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 550,
+      "line": 577,
       "kind": "control",
       "label": "开始处理",
       "conditions": [
@@ -20441,7 +20441,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#7490571390181453.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 558,
+      "line": 585,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -20477,7 +20477,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#696dcabbd8c2d73e.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 566,
+      "line": 593,
       "kind": "control",
       "label": "重新打开",
       "conditions": [
@@ -20513,7 +20513,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 574,
+      "line": 601,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -20549,7 +20549,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#b332799077351299.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 591,
+      "line": 618,
       "kind": "dialog-definition",
       "label": "通知偏好",
       "conditions": [],
@@ -20576,7 +20576,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 591,
+      "line": 618,
       "kind": "event-binding",
       "label": "通知偏好",
       "conditions": [],
@@ -20603,7 +20603,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 597,
+      "line": 624,
       "kind": "form-event",
       "label": "通知偏好 站内通知 邮件通知（服务未接入，暂不可用） 任务事件 审批事件 竞品事件 邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。 取消 保存",
       "conditions": [],
@@ -20630,7 +20630,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#25755513ca77e550.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 608,
+      "line": 635,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -20657,7 +20657,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#0285caea2e8607bf.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 609,
+      "line": 636,
       "kind": "control",
       "label": "保存",
       "conditions": [],

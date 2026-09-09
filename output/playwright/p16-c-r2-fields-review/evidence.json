@@ -3,7 +3,8 @@
   "boundary": "Mounted Vue; three existing theme IDs compatibility, not three redesigned palettes; two densities; intercepted HTTP, no writes; pending detailed visual review",
   "sourceHashes": {
     "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-    "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
+    "apps/web/src/selection-journey.css": "b07eaf04d8dffe9cc987d9ea16ec0e701a082ba2fabd8f42aab84c8530a0b62d",
+    "apps/web/src/design/selection-tokens.css": "e3b001839a45970bb0c39ae89a0d7f32ac104e4c9c5c43443f83f38f80a78c74",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
@@ -20,7 +21,7 @@
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
     "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
     "scripts/lib/ui-phase2-journey-vue-controls.mjs": "915d14f16e5c44c9db40d96a02a60c88eea1930a8052a74133a91c1016fa06de",
-    "scripts/verify-ui-phase2-journey-vue.mjs": "dcd3c5ab7c32a6d1adbc1d9e4c9cbc1203b843df1e0b6304487bfb0441cb9041",
+    "scripts/verify-ui-phase2-journey-vue.mjs": "319ba49ba654ee07bfb6f54030d2ff707a82568b1256b7bb4565cc4e6cd3ba81",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
     "scripts/verify-ui-phase2-journey-fields.mjs": "643722d56a0857d070d13a8a7d4426e795e21ff1f2497f9d5652266bad594ab3"
@@ -2554,7 +2555,7 @@
       "density": "compact",
       "scene": "reason-focus",
       "file": "390-deep-ocean-compact-reason-focus.png",
-      "sha256": "fc3074bafcdbababf3413e3b823cfbe5ae7fdef53c79fa54744291dfa775d535"
+      "sha256": "1a3d2f78b27c6df43e2b9d6382f2ff4dd734acc658d353c7b6415b3e431a933c"
     },
     {
       "width": 390,
@@ -2594,7 +2595,7 @@
       "density": "standard",
       "scene": "input-focus",
       "file": "390-cloud-white-standard-input-focus.png",
-      "sha256": "f3bd7724522931b9671de1c8d6b6213530e6d3adacf8ce1f67b7158acbf766c0"
+      "sha256": "10338d3cb4db63a7ec9684e59b4487b1eb8ee0c2c2b46c1e973d57de8aa5aa0a"
     },
     {
       "width": 390,

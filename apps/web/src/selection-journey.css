@@ -1,15 +1,17 @@
+@import "./design/selection-tokens.css";
+
 /* P16 C boundary: outranks legacy html/#app rules without restyling other routes. */
 html #app .selection-journey {
-  --journey-blue: #254a9c;
-  --journey-ink: #202c3d;
-  --journey-muted: #58677b;
-  --journey-border: #dbe1e9;
-  --journey-field-border: #7a8ba8;
+  --journey-blue: var(--so-selection-primary);
+  --journey-ink: var(--so-selection-text);
+  --journey-muted: var(--so-selection-text-muted);
+  --journey-border: var(--so-selection-border);
+  --journey-field-border: var(--so-selection-field-border);
   display: grid;
   grid-template-columns: 208px minmax(0, 1fr);
   min-width: 0;
   color: var(--journey-ink);
-  background: #edf1f6;
+  background: var(--so-selection-canvas);
   font:
     16px/1.6 "Microsoft YaHei",
     "PingFang SC",
@@ -26,16 +28,16 @@ html #app .selection-journey *::after {
 html #app .selection-stage-rail {
   padding: 28px 22px;
   background: var(--journey-blue);
-  color: #fff;
+  color: var(--so-selection-surface);
 }
 html #app .selection-stage-rail p,
 html #app .selection-stage-rail small {
-  color: #e1eafb;
+  color: var(--so-selection-on-primary-muted);
   font-size: 13px;
 }
 html #app .selection-stage-rail h2 {
   margin: 4px 0 28px;
-  color: #fff;
+  color: var(--so-selection-surface);
   font:
     700 25px/1.4 "Microsoft YaHei",
     sans-serif;
@@ -51,14 +53,14 @@ html #app .selection-stage-rail li {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #e1eafb;
+  color: var(--so-selection-on-primary-muted);
 }
 html #app .selection-stage-rail li > span {
   display: grid;
   place-items: center;
   flex: 0 0 34px;
   height: 34px;
-  border: 1px solid #9bb1db;
+  border: 1px solid var(--so-selection-stage-border);
   border-radius: 50%;
 }
 html #app .selection-stage-rail li > b {
@@ -66,10 +68,10 @@ html #app .selection-stage-rail li > b {
   font-weight: 400;
 }
 html #app .selection-stage-rail li[aria-current="step"] {
-  color: #fff;
+  color: var(--so-selection-surface);
 }
 html #app .selection-stage-rail li[aria-current="step"] > span {
-  background: #fff;
+  background: var(--so-selection-surface);
   color: var(--journey-blue);
 }
 html #app .selection-stage-rail li[aria-current="step"] > b {
@@ -79,7 +81,7 @@ html #app .selection-stage-rail > small {
   display: block;
   margin-top: 32px;
   padding-top: 20px;
-  border-top: 1px solid #6886bd;
+  border-top: 1px solid var(--so-selection-stage-divider);
 }
 html #app .selection-workspace {
   min-width: 0;
@@ -153,27 +155,27 @@ html #app .selection-journey button {
   justify-content: center;
   border: 1px solid var(--journey-blue);
   border-radius: 8px;
-  color: #fff;
+  color: var(--so-selection-surface);
   background: var(--journey-blue);
   cursor: pointer;
 }
 html #app .selection-journey button:disabled {
-  background: #e9edf3;
-  color: #46566d;
-  border-color: #b8c4d4;
+  background: var(--so-selection-disabled-bg);
+  color: var(--so-selection-disabled-text);
+  border-color: var(--so-selection-disabled-border);
   cursor: not-allowed;
   opacity: 1;
 }
 html #app .selection-journey button:hover:not(:disabled) {
-  background: #193b80;
-  color: #fff;
+  background: var(--so-selection-primary-hover);
+  color: var(--so-selection-surface);
 }
 html #app .selection-journey button:active:not(:disabled) {
-  background: #142e64;
-  color: #fff;
+  background: var(--so-selection-primary-pressed);
+  color: var(--so-selection-surface);
 }
 html #app .selection-journey :is(button, a, summary, input, textarea):focus-visible {
-  outline: 3px solid #193b80;
+  outline: 3px solid var(--so-selection-primary-hover);
   outline-offset: 3px;
 }
 html #app .selection-start,
@@ -186,7 +188,7 @@ html #app .selection-complete {
   border: 1px solid var(--journey-border);
   border-radius: 20px;
   padding: 26px;
-  background: #fff;
+  background: var(--so-selection-surface);
   box-shadow: none;
 }
 html #app .selection-start {
@@ -205,7 +207,7 @@ html #app .selection-actions label {
   gap: 12px;
   min-height: 52px;
   padding: 12px 16px;
-  border: 1px solid #b7c6df;
+  border: 1px solid var(--so-selection-choice-border);
   border-radius: 10px;
   cursor: pointer;
 }
@@ -213,7 +215,7 @@ html #app .selection-kind label:has(:checked),
 html #app .selection-actions label:has(:checked) {
   color: var(--journey-blue);
   border-color: var(--journey-blue);
-  background: #edf2fc;
+  background: var(--so-selection-choice-selected);
 }
 html #app .selection-kind label:has(:focus-visible),
 html #app .selection-actions label:has(:focus-visible),
@@ -248,7 +250,7 @@ html #app .selection-decision textarea {
   padding: 12px;
   border: 1px solid var(--journey-field-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--so-selection-surface);
   color: var(--journey-ink);
   font: inherit;
 }
@@ -261,7 +263,7 @@ html #app .selection-decision textarea {
 }
 html #app .selection-start > aside {
   padding: 16px;
-  background: #f5f7fb;
+  background: var(--so-selection-help-bg);
   border-left: 3px solid var(--journey-blue);
 }
 html #app .selection-start > aside > span {
@@ -318,13 +320,13 @@ html #app .selection-timeline li {
   padding-top: 12px;
 }
 html #app .selection-timeline li[data-status="completed"] {
-  border-color: #257162;
+  border-color: var(--so-selection-timeline-success);
 }
 html #app .selection-timeline li[data-status="active"] {
   border-color: var(--journey-blue);
 }
 html #app .selection-timeline li[data-status="blocked"] {
-  border-color: #9c5d11;
+  border-color: var(--so-selection-timeline-warning);
 }
 html #app .selection-timeline b,
 html #app .selection-timeline small,
@@ -358,12 +360,12 @@ html #app .selection-candidate-grid > label {
   align-items: start;
   gap: 12px;
   padding: 16px;
-  border: 1px solid #b7c6df;
+  border: 1px solid var(--so-selection-choice-border);
   border-radius: 12px;
   cursor: pointer;
 }
 html #app .selection-candidate-grid > label[data-selected="true"] {
-  background: #edf2fc;
+  background: var(--so-selection-choice-selected);
   border-color: var(--journey-blue);
 }
 html #app .selection-candidate-grid :is(strong, small, em, i) {
@@ -391,7 +393,7 @@ html #app .selection-quality-gates {
   padding: 16px;
   border: 1px solid var(--journey-border);
   border-radius: 12px;
-  background: #f6f8fc;
+  background: var(--so-selection-inset-bg);
 }
 html #app .selection-quality-gates header strong {
   color: var(--journey-blue);
@@ -414,10 +416,10 @@ html #app .selection-quality-gates dt {
 html #app .selection-quality-gates dd {
   margin: 0;
   font-size: 13px;
-  color: #8c550e;
+  color: var(--so-selection-warning-text);
 }
 html #app .selection-quality-gates dd[data-passed="true"] {
-  color: #176452;
+  color: var(--so-selection-success-text);
 }
 html #app .selection-quality-gates p {
   font-size: 13px;
@@ -428,8 +430,8 @@ html #app .selection-actions {
   gap: 10px;
 }
 html #app .selection-actions .disabled {
-  color: #46566d;
-  background: #f1f3f6;
+  color: var(--so-selection-disabled-text);
+  background: var(--so-selection-choice-disabled);
   cursor: not-allowed;
 }
 html #app .selection-block-owner {
@@ -438,11 +440,11 @@ html #app .selection-block-owner {
 }
 html #app .selection-block-owner > div {
   padding: 12px;
-  background: #f6f8fc;
+  background: var(--so-selection-inset-bg);
   border-radius: 8px;
 }
 html #app .selection-complete p {
-  color: #176452;
+  color: var(--so-selection-success-text);
 }
 html #app .selection-complete h3 {
   overflow-wrap: anywhere;
@@ -466,12 +468,12 @@ html #app .selection-footer code {
 }
 html #app .selection-footer > span {
   flex: 1 1 100%;
-  color: #8c550e;
+  color: var(--so-selection-warning-text);
 }
 html #app .selection-footer button {
-  background: #fff;
+  background: var(--so-selection-surface);
   color: var(--journey-ink);
-  border-color: #b7c6df;
+  border-color: var(--so-selection-choice-border);
 }
 @container (max-width: 1100px) {
   html #app .selection-workspace {

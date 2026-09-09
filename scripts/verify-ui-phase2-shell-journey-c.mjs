@@ -54,6 +54,7 @@ const files = [
   `${relative}/composition.css`,
   "apps/web/src/components/SelectionJourney.vue",
   "apps/web/src/selection-journey.css",
+  "apps/web/src/design/selection-tokens.css",
   "apps/web/src/components/UiStatePanel.vue",
   "apps/web/src/ui/state-contract.ts",
   "apps/web/src/ui/status-labels.ts",

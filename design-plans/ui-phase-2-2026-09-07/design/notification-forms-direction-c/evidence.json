@@ -6,13 +6,13 @@
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.js": "7ef47d3b8fe9cf548b7a3d29c146b876f0f4a4b6e14dd34f38215c448b106450",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.css": "6015dd3ce39cef6c84cde0b3af29b415ca2bd3ee6364d98ba5028e8cc49cf60d",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/data.js": "3883bf3cb21d95d1c9f77b74a6fd8583de399d26c6f350bab78e825949bcd30a",
-    "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
+    "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/web/src/realtime-client-metrics.ts": "2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93",
     "apps/api/src/notification-service.ts": "dedf65d09fd3572256f264a72c122d6ca6f87efe5b80858050ee09c353f8ed2b",
     "apps/api/src/notification-routes.ts": "1a0fe7ff28d325be35eefe9c92ad19790f480bbf42ef03b38eee96cf5fd417d1",
     "apps/api/src/mysql-notification-repository.ts": "ef99efb787f4730467e9e071e1681ebb096658409b5815f6f003c27f3ccced1a",
-    "tests/e2e/m05-03-notifications.spec.ts": "aa1dc4edeb6bc3abb1885946643eee1f8b68ac8ec13f44487692fc0c118317f6",
+    "tests/e2e/m05-03-notifications.spec.ts": "0545dd9b54f0192c0a8360e7ac1c74e8aa6e01b9f8b2de336a275b8034c21911",
     "scripts/lib/ui-phase2-notification-design-data.mjs": "2b73b1a8153a3c6e6f9a3dcadbb61e729a630c8cdcbf57bb7b841aa161964084",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-notification-c.mjs": "e3fe50eb64edcc1b7aa10864b41ef8f451c8334c38c7838e624fa51f80d7fcfa",
@@ -1035,14 +1035,14 @@
       "scene": "field-in_app_enabled-focus",
       "width": 1440,
       "file": "field-in_app_enabled-focus-1440.png",
-      "sha256": "50cfd827a166fa2e3b935be3e9b8da9035605f6b4efaf6bcd640a678d3f91b9e",
+      "sha256": "d8e48aeb261005daa8de9177e5ec0fbeb4d2fe53d54c159479a1b4ad746e5896",
       "field": "preferences.in_app_enabled"
     },
     {
       "scene": "field-in_app_enabled-off",
       "width": 1440,
       "file": "field-in_app_enabled-off-1440.png",
-      "sha256": "889f15240dedc0f1dc703fbbdc90061c732cc72cb41b2583e739745a7a41e5d0",
+      "sha256": "976599904f50357995370d35b9b40998ab9f2171ff2884e86c8dd21a5c5074c4",
       "field": "preferences.in_app_enabled"
     },
     {
@@ -1105,7 +1105,7 @@
       "scene": "field-approval_enabled-off",
       "width": 1440,
       "file": "field-approval_enabled-off-1440.png",
-      "sha256": "a1e62ea4587a74ca91877ab2b6e58648f6c4c787d59b980d09a04a803c21c3c3",
+      "sha256": "95429b14159d5b36890c4db40ca3a17da613213a7f9f412e290a87a5fd64c7ea",
       "field": "preferences.approval_enabled"
     },
     {
@@ -1410,7 +1410,7 @@
       "scene": "diagnostic-error-expanded",
       "width": 390,
       "file": "diagnostic-error-expanded-390.png",
-      "sha256": "b5b38111e2b8c7b9cd5ff0a7e67b6d9e4d86a54e2dae098f8253d1fbc838e350"
+      "sha256": "fbd82a000f63afa1942cb424d4acc5f81d3a1321e05b0b94d4a6dbba361f0440"
     },
     {
       "scene": "diagnostic-error-hover",

@@ -5,7 +5,8 @@
     "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/Preview.vue": "782b19831ba5f0d6d81503380d0397c24390f497d9e33fca2f47610a110dfedd",
     "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/composition.css": "5e4599d7ce2fe8d0818a784c1917c4a79268331fa238d6736db1742abcafaf75",
     "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-    "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
+    "apps/web/src/selection-journey.css": "b07eaf04d8dffe9cc987d9ea16ec0e701a082ba2fabd8f42aab84c8530a0b62d",
+    "apps/web/src/design/selection-tokens.css": "e3b001839a45970bb0c39ae89a0d7f32ac104e4c9c5c43443f83f38f80a78c74",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/web/src/ui/status-labels.ts": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a",
@@ -18,7 +19,7 @@
     "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
     "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
-    "scripts/verify-ui-phase2-shell-journey-c.mjs": "ccc6e4d7bc6110d460c7f28884354d2aab754519cbced424fab2ecb384d4e419"
+    "scripts/verify-ui-phase2-shell-journey-c.mjs": "a93bb65606db5878809942652929d6c565d14f70bdc55bf40f9ef10ba9761aa7"
   },
   "screenshots": [
     {

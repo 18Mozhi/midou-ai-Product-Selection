@@ -90,6 +90,7 @@ const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } =
 );
 let stream: EventSource | null = null;
 let loadGeneration = 0;
+let disposed = false;
 const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   hasSourceRoute = computed(() => {
@@ -140,28 +141,42 @@ async function api<T>(
   options: { method?: string; body?: unknown } = {},
   affectPageState = true,
   captureMeta?: (meta: unknown) => void,
+  owner?: { current: () => boolean; failed: () => void },
 ) {
   try {
     const response = await request<T>(path, options);
-    requestId.value = response.request_id;
-    captureMeta?.(response.meta);
+    if (!owner || owner.current()) {
+      requestId.value = response.request_id;
+      captureMeta?.(response.meta);
+    }
     return response.data;
   } catch (error) {
-    const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    if (affectPageState)
-      state.value =
-        failure?.kind === "conflict"
-          ? "version_conflict"
-          : failure?.kind === "blocked"
-            ? "error"
-            : (failure?.kind ?? "error");
-    notice.value = failure?.actionHint ?? "稍后重试。";
+    if (!owner || owner.current()) {
+      const failure = error instanceof ApiClientError ? error : null;
+      requestId.value = failure?.requestId ?? "";
+      if (affectPageState)
+        state.value =
+          failure?.kind === "conflict"
+            ? "version_conflict"
+            : failure?.kind === "blocked"
+              ? "error"
+              : (failure?.kind ?? "error");
+      notice.value = failure?.actionHint ?? "稍后重试。";
+      owner?.failed();
+    }
     throw error;
   }
 }
 async function load() {
+  if (disposed) return;
   const generation = ++loadGeneration;
+  let active = true;
+  const owner = {
+    current: () => !disposed && active && generation === loadGeneration,
+    failed: () => {
+      active = false;
+    },
+  };
   state.value = "loading";
   try {
     const q = new URLSearchParams({ page: String(page.value), page_size: String(pageSize) });
@@ -169,13 +184,19 @@ async function load() {
     if (unread.value) q.set("unread", "true");
     if (workflowStatus.value) q.set("workflow_status", workflowStatus.value);
     const [list, sum, pref] = await Promise.all([
-      api<Item[]>(`/notifications?${q}`, {}, true, (meta) => {
-        total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
-      }),
-      api<any>("/notifications/summary"),
-      api<any>("/me/notification-preferences"),
+      api<Item[]>(
+        `/notifications?${q}`,
+        {},
+        true,
+        (meta) => {
+          total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
+        },
+        owner,
+      ),
+      api<any>("/notifications/summary", {}, true, undefined, owner),
+      api<any>("/me/notification-preferences", {}, true, undefined, owner),
     ]);
-    if (generation !== loadGeneration) return;
+    if (!owner.current()) return;
     items.value = list;
     summary.value = sum;
     preferences.value = { ...pref, email_enabled: false };
@@ -190,6 +211,8 @@ async function load() {
       await openById(notificationId, typeof route.query.notification !== "string");
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    active = false;
   }
 }
 async function openById(id: string, syncUrl = true) {
@@ -350,7 +373,11 @@ onMounted(() => {
   void load();
   connectRealtime();
 });
-onUnmounted(() => stream?.close());
+onUnmounted(() => {
+  disposed = true;
+  loadGeneration += 1;
+  stream?.close();
+});
 watch(
   () => [route.query.category, route.query.status, route.query.unread, route.query.page],
   ([nextCategory, nextStatus, nextUnread, nextPage], previous) => {

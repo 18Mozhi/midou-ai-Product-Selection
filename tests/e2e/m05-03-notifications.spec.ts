@@ -1,4 +1,70 @@
 import { test, expect, type Page } from "@playwright/test";
+
+for (const outcome of ["success", "failure"] as const) {
+  test(`P26 old ${outcome} read cannot replace the latest filter result`, async ({ page }) => {
+    await setup(page);
+    let releaseOld!: () => void;
+    const delayed = new Promise<void>((resolve) => {
+      releaseOld = resolve;
+    });
+    await page.route("**/api/v1/notifications?*", async (route) => {
+      const query = new URL(route.request().url()).searchParams;
+      if (query.get("category") === "task") {
+        await route.fulfill({
+          json: {
+            ...env([{ ...item, category: "task", title: "最新筛选消息" }]),
+            meta: { total: 1 },
+          },
+        });
+        return;
+      }
+      await delayed;
+      await route.fulfill(
+        outcome === "failure"
+          ? {
+              status: 500,
+              json: {
+                request_id: "p26-old-failure",
+                error: { code: "review_old_read", action_hint: "过期读取失败" },
+              },
+            }
+          : {
+              json: {
+                ...env([{ ...item, title: "过期列表" }]),
+                request_id: "p26-old-success",
+                meta: { total: 99 },
+              },
+            },
+      );
+    });
+    try {
+      await page.goto("/notifications");
+      const center = page.locator(".notification-center");
+      await center.getByRole("button", { name: "任务", exact: true }).click();
+      await expect(center.getByRole("button", { name: /最新筛选消息/ })).toBeVisible();
+      const oldResponse = page.waitForResponse(
+        (response) =>
+          response.url().includes("/api/v1/notifications?") &&
+          !new URL(response.url()).searchParams.has("category"),
+      );
+      releaseOld();
+      await (await oldResponse).finished();
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          ),
+      );
+      await expect(center.getByRole("button", { name: /最新筛选消息/ })).toBeVisible();
+      await expect(center.locator(".notification-pagination")).toHaveCount(0);
+      await expect(center.getByText("过期读取失败", { exact: true })).toHaveCount(0);
+      await expect(page).toHaveURL(/category=task/);
+    } finally {
+      releaseOld();
+    }
+  });
+}
+
 const id = "00000000-0000-4000-8000-000000000931",
   env = (data: unknown) => ({
     data,
