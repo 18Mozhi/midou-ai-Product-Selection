@@ -257,7 +257,9 @@
   }
   function openModal(kind, scene = false) {
     opener =
-      document.activeElement?.closest("[data-action]")?.dataset.action ||
+      (!scene &&
+        document.activeElement?.closest("#app") &&
+        document.activeElement.closest("[data-action]")?.dataset.action) ||
       (kind === "rule" ? "CP-RULE-OPEN" : kind === "delete" ? "CP-DELETE-OPEN" : "CP-CREATE-OPEN");
     modalKind = kind;
     busy = scene && current.id.endsWith("busy");

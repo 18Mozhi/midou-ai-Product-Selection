@@ -114,6 +114,22 @@
         {
           "package": "competitor-direction-c",
           "scene": "rules-readonly"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-pressed"
         }
       ],
       "testReferences": [
@@ -124,14 +140,36 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-not-disabled-in-source",
         "busy": "not-applicable-not-disabled-in-source"
       },
-      "remaining": "不承诺返回恢复某对象；浏览器history/缓存另验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确代表控件双端状态图，用户尚未批准，不代表全变体/真实Vue/主题完成。导航仅有默认/hover/focus/pressed四态；源码没有disabled或请求busy，不造状态。未覆盖所有来源、权限、长文本/主题及真实页面跳转后的运行。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-default",
+          "selector": "[data-action=\"CP-RULE-BACK\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-hover",
+          "selector": "[data-action=\"CP-RULE-BACK\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-focus",
+          "selector": "[data-action=\"CP-RULE-BACK\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-back-pressed",
+          "selector": "[data-action=\"CP-RULE-BACK\"]"
+        }
+      }
     },
     {
       "actionId": "CP-STATE-RECOVERY",
@@ -668,6 +706,54 @@
         {
           "package": "competitor-direction-c",
           "scene": "rule-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-cancel-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-cancel-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-cancel-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-cancel-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-cancel-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-cancel-busy"
         }
       ],
       "testReferences": [
@@ -678,14 +764,62 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "与创建窗保留草稿不同；关闭不取消在途POST；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确代表控件双端状态图，用户尚未批准，不代表全变体/真实Vue/主题完成。disabled与busy展示已有离线稿的提交期间锁定，真实Vue当前仍可关闭或上一步；不据图宣称已中止请求。P20异常create=1背景仍缺，创建其他步骤/关闭来源组合和实际异步归属需继续验证。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-default",
+          "selector": "#modal header [data-action=\"CP-RULE-CLOSE\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-hover",
+          "selector": "#modal header [data-action=\"CP-RULE-CLOSE\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-focus",
+          "selector": "#modal header [data-action=\"CP-RULE-CLOSE\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-pressed",
+          "selector": "#modal header [data-action=\"CP-RULE-CLOSE\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-disabled",
+          "selector": "#modal header [data-action=\"CP-RULE-CLOSE\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-close-busy",
+          "selector": "#modal header [data-action=\"CP-RULE-CLOSE\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "rule-cancel",
+          "package": "competitor-direction-c",
+          "selector": "#modal footer [data-action=\"CP-RULE-CLOSE\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-rule-cancel-default",
+            "hover": "control-rule-cancel-hover",
+            "focus": "control-rule-cancel-focus",
+            "pressed": "control-rule-cancel-pressed",
+            "disabled": "control-rule-cancel-disabled",
+            "busy": "control-rule-cancel-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-DELETE-DIALOG-EXCLUDED",

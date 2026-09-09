@@ -1,5 +1,21 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P19/P20次级操作与导航细化
+
+从干净main/1fa3104d继续，前轮50新图及提交为实质进展。使用ui-skills-root/frontend-design及Playwright，复用已有依赖和永久验证器；读取AGENTS、Feature Map、蓝图3.5、C方向与实际Vue关闭/取消/上一步/规则路由条件。没有重建服务或安装包。
+
+新增七个次级控件变体40状态和四个导航变体16状态，双端112张正式图。本包现48全页场景、15代表控件变体80状态/160双端实例、270PNG。范围区导航补深蓝悬停/下划线，链接与来源补按下反馈；导航只四态，不能伪造disabled/busy。创建第一步取消只四态，三步的取消/上一步显隐分开。关闭/上一步在表单busy时灰化仍是原离线提案，真实Vue未被锁定，不宣称取消能撤回在途写入。
+
+最小smoke首次失败于create-cancel的焦点返回body；补具体控件诊断再次复现，核对openModal发现预置场景也读取旧活动控件。改为场景固定对应默认入口，正常打开只从app读取当前入口，复测160双端实例通过。完整--capture生成270图，原有场景/12屏宽×5代表场景/触控字号检查通过，HTTP/页面错误0。新增Enter导航精确href及新窗口/rel、取消零写入/回焦、创建草稿保留、删除重开清空；最低文字对比5.33419。仅目检390创建取消focus和1440规则导航hover，不声称全部图人工审核。
+
+P19新增26代表槽/P20新增10，剩58/30共88；四个额外变体（创建取消/规则取消/删除取消/当前对象规则）不增业务组数。机器清单additionalControlVariants与evidence.controlVariantReferences精确绑定；审计库增加key、动作/页面、selector、状态及双端截图control元数据校验。新增12个正确/损坏变体单元案例，全部48例通过；全站动作审计仍21页/435独立源位置/388语义组。
+
+新增COMPETITOR-SECONDARY-STATE-REVIEW及116有效链接，PLAN/两页规格/主按钮与语义报告/Feature Map/README同步。此前等待用户审核的390-control-collect-busy.png和1440-control-delete-focus.png与1fa3104d字节哈希相同，不替换审核对象或再次提问。未收到用户批准，完整页面通过仍0。
+
+本轮只改永久图稿/验证工具/单元测试与交付文档；生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、安全、env、依赖及部署不变，无参数/重启要求。不重复未受影响的生产Vue构建/46例E2E。无新临时产物/服务，浏览器finally关闭且无headless-shell残留；前轮被拒清理目录output/playwright/ui-phase2-competitor-races-20260909仍不绕过。完整控件/字段/主题、其他52页同级细化、实际实施和宝塔签收继续。
+
+收口：verify:docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check及git diff --check通过。设计审计仍76包，图片增至9812PNG、842独立来源/1447绑定、8383 README链接；来源/PNG漂移及未登记图均0，分母未冻结，G0进行中/G1–G5待验。
+
 ## 2026-09-09 · P19/P20四个关键提交按钮六态图
 
 从干净main/ce1adebc继续；前轮动作映射为实质进展。使用ui-skills-root/frontend-design沿用户C方向，Playwright复用既有本地脚本/依赖，未新建测试框架或安装依赖。读取AGENTS、Feature Map、蓝图3.5、C方向决策、实际CompetitorMonitor忙碌/采集/表单条件与两个动作清单。

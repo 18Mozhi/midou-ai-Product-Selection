@@ -10,7 +10,8 @@ export function validateActionReview(
   assert.equal(review.approval, "pending-user-review", "This registry cannot grant approval");
   assert.ok(review.actions.length > 0);
   const seen = new Set(),
-    actionIds = new Set();
+    actionIds = new Set(),
+    variantKeys = new Set();
   const scope = candidates.filter((c) => Object.hasOwn(review.sourceHashes, c.file));
   for (const [file, hash] of Object.entries(review.sourceHashes))
     assert.equal(hash, sourceHashes[file], file + " reviewed source drift");
@@ -148,6 +149,43 @@ export function validateActionReview(
       for (const [state, value] of Object.entries(action.visualStates))
         if (value === "scene-reference-not-acceptance")
           assert.ok(action.visualStateReferences[state], "missing explicit state reference");
+    }
+    for (const variant of action.additionalControlVariants ?? []) {
+      assert.ok(!["excluded", "wiring"].includes(action.kind), "variant needs a reachable action");
+      assert.ok(variant.key && !variantKeys.has(variant.key), "duplicate/empty variant key");
+      variantKeys.add(variant.key);
+      assert.equal(variant.scope, "additional-control-variant-not-new-action");
+      const evidence = packages.get(variant.package);
+      const target = evidence?.controlVariantReferences?.[variant.key];
+      assert.ok(target, "missing variant evidence");
+      assert.equal(target.scope, variant.scope);
+      assert.equal(target.actionId, action.actionId, "variant belongs to another action");
+      assert.equal(target.pageId, review.pageId, "variant belongs to another page");
+      assert.ok(variant.selector, "variant selector missing");
+      assert.equal(target.selector, variant.selector, "variant selector differs from evidence");
+      assert.ok(Object.keys(variant.states ?? {}).length, "variant states empty");
+      assert.deepEqual(target.states, variant.states, "variant states differ from evidence");
+      for (const [state, scene] of Object.entries(variant.states)) {
+        assert.ok(["default", "hover", "focus", "pressed", "disabled", "busy"].includes(state));
+        assert.ok(
+          action.scenes.some((ref) => ref.package === variant.package && ref.scene === scene),
+          "variant scene not linked to action",
+        );
+        for (const width of [1440, 390]) {
+          assert.ok(
+            evidence.screenshots.some(
+              (shot) =>
+                shot.scene === scene &&
+                (shot.width ?? shot.viewport?.width) === width &&
+                shot.control?.key === variant.key &&
+                shot.control?.state === state &&
+                shot.control?.selector === variant.selector &&
+                shot.control?.actionId === action.actionId,
+            ),
+            "missing exact variant screenshot/viewport",
+          );
+        }
+      }
     }
   }
   for (const action of review.actions.filter((a) => a.kind === "wiring"))

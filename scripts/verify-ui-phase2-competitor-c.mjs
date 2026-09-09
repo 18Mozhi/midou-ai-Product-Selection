@@ -48,6 +48,122 @@ const controls = [
     busy: "delete-busy",
   },
 ].map((control) => ({ ...control, selector: `[data-action="${control.actionId}"]` }));
+const pointerStates = states.slice(0, 4);
+const secondaryControls = [
+  {
+    key: "create-close",
+    actionId: "CP-CREATE-CLOSE",
+    pageId: "P19",
+    ready: "create-link",
+    disabled: "create-busy",
+    busy: "create-busy",
+    region: "header",
+    kind: "close",
+  },
+  {
+    key: "create-cancel",
+    actionId: "CP-CREATE-CLOSE",
+    pageId: "P19",
+    ready: "create-link",
+    region: "footer",
+    states: pointerStates,
+    kind: "close",
+    variantOnly: true,
+  },
+  {
+    key: "create-previous",
+    actionId: "CP-CREATE-PREVIOUS",
+    pageId: "P19",
+    ready: "create-market",
+    disabled: "create-busy",
+    busy: "create-busy",
+    region: "footer",
+    kind: "previous",
+  },
+  {
+    key: "rule-close",
+    actionId: "CP-RULE-CLOSE",
+    pageId: "P20",
+    ready: "rule-global",
+    disabled: "rule-busy",
+    busy: "rule-busy",
+    region: "header",
+    kind: "close",
+  },
+  {
+    key: "rule-cancel",
+    actionId: "CP-RULE-CLOSE",
+    pageId: "P20",
+    ready: "rule-global",
+    disabled: "rule-busy",
+    busy: "rule-busy",
+    region: "footer",
+    kind: "close",
+    variantOnly: true,
+  },
+  {
+    key: "delete-close",
+    actionId: "CP-DELETE-CLOSE",
+    pageId: "P19",
+    ready: "delete",
+    disabled: "delete-busy",
+    busy: "delete-busy",
+    region: "header",
+    kind: "close",
+  },
+  {
+    key: "delete-cancel",
+    actionId: "CP-DELETE-CLOSE",
+    pageId: "P19",
+    ready: "delete",
+    disabled: "delete-busy",
+    busy: "delete-busy",
+    region: "footer",
+    kind: "close",
+    variantOnly: true,
+  },
+].map((control) => ({
+  ...control,
+  selector: `#modal ${control.region} [data-action="${control.actionId}"]`,
+}));
+const navigationControls = [
+  {
+    key: "rule-nav",
+    actionId: "CP-RULE-NAV",
+    pageId: "P19",
+    ready: "directory",
+    href: "/competitors/monitoring-rules",
+  },
+  {
+    key: "rule-current",
+    actionId: "CP-RULE-NAV",
+    pageId: "P19",
+    ready: "directory",
+    href: "/competitors/monitoring-rules?competitor=00000000-0000-4000-8000-000000000019",
+    selector: '[data-action="CP-RULE-NAV-CURRENT"]',
+    variantOnly: true,
+  },
+  {
+    key: "rule-back",
+    actionId: "CP-RULE-BACK",
+    pageId: "P20",
+    ready: "rules",
+    href: "/competitors",
+  },
+  {
+    key: "source",
+    actionId: "CP-SOURCE",
+    pageId: "P19",
+    ready: "directory",
+    href: "https://www.amazon.com/dp/B000000019",
+  },
+].map((control) => ({
+  selector: `[data-action="${control.actionId}"]`,
+  ...control,
+  kind: "navigation",
+  states: pointerStates,
+}));
+const allControls = [...controls, ...secondaryControls, ...navigationControls];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const files = [
   "apps/web/src/components/CompetitorMonitor.vue",
@@ -162,8 +278,8 @@ async function verifyControls(page, width) {
       window.competitorReview.outcome = "success";
       window.competitorReview.choose(scene);
     }, id);
-  for (const control of controls) {
-    for (const state of states) {
+  for (const control of allControls) {
+    for (const state of control.states || states) {
       const baseScene = control[state] || control.ready;
       await page.mouse.move(0, 0);
       await choose(baseScene);
@@ -189,8 +305,17 @@ async function verifyControls(page, width) {
         assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
       }
       if (state === "busy") {
-        assert.equal(await target.getAttribute("aria-busy"), "true");
-        assert.match(await target.innerText(), /正在/);
+        if (control.kind) {
+          assert.equal(await page.locator("#modal form").getAttribute("aria-busy"), "true");
+          assert.equal(
+            await target.getAttribute("aria-busy"),
+            null,
+            "cancel is not a submitting command",
+          );
+        } else {
+          assert.equal(await target.getAttribute("aria-busy"), "true");
+          assert.match(await target.innerText(), /正在/);
+        }
         assert.equal(
           await target.evaluate((el) => getComputedStyle(el, "::before").animationName),
           "none",
@@ -204,7 +329,13 @@ async function verifyControls(page, width) {
       }
       const colors = await target.evaluate((el) => {
         const s = getComputedStyle(el);
-        return { foreground: s.color, background: s.backgroundColor };
+        let ancestor = el,
+          background = s.backgroundColor;
+        while (/^rgba\([^)]*,\s*0\)$/.test(background) && ancestor.parentElement) {
+          ancestor = ancestor.parentElement;
+          background = getComputedStyle(ancestor).backgroundColor;
+        }
+        return { foreground: s.color, background };
       });
       const ratio = contrast(colors.foreground, colors.background);
       assert.ok(ratio >= 4.5, control.key + "/" + state + " text contrast " + ratio);
@@ -230,6 +361,75 @@ async function verifyControls(page, width) {
         await page.mouse.click(rect.x + rect.width / 2, rect.y + rect.height / 2);
       }
       assert.equal(await count(), before, "preview must not submit " + control.key + "/" + state);
+    }
+    if (control.kind) {
+      await choose(control.ready);
+      const before = await count();
+      const target = page.locator(control.selector);
+      if (control.kind === "navigation") {
+        assert.equal(await target.getAttribute("href"), control.href);
+        if (control.key === "source") {
+          assert.equal(await target.getAttribute("target"), "_blank");
+          assert.equal(await target.getAttribute("rel"), "noopener noreferrer");
+        }
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await count(), before + 1);
+        assert.deepEqual(await page.evaluate(() => window.competitorReview.intents.at(-1)), {
+          path: control.href,
+          method: "NAVIGATE",
+        });
+        assert.equal(
+          await page.locator("dialog[open]").count(),
+          control.key === "rule-current" ? 1 : 0,
+        );
+      } else {
+        if (control.key.startsWith("create")) {
+          await page
+            .locator(control.ready === "create-link" ? '[name="product_url"]' : '[name="title"]')
+            .fill(
+              control.ready === "create-link"
+                ? "https://www.amazon.com/dp/B000000020"
+                : "保留的竞品标题",
+            );
+        }
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await count(), before, "secondary action must not write");
+        if (control.kind === "previous") {
+          assert.equal(await page.locator("dialog[open]").count(), 1);
+          assert.equal(await page.locator('[name="product_url"]').count(), 1);
+          await page.locator('[data-action="CP-CREATE-SUBMIT"]').click();
+          assert.equal(await page.locator('[name="title"]').inputValue(), "保留的竞品标题");
+          assert.equal(await count(), before, "step navigation is local");
+        } else {
+          assert.equal(await page.locator("dialog[open]").count(), 0);
+          const openerId = control.key.startsWith("create")
+            ? "CP-CREATE-OPEN"
+            : control.key.startsWith("rule")
+              ? "CP-RULE-OPEN"
+              : "CP-DELETE-OPEN";
+          assert.equal(
+            await page
+              .locator(`[data-action="${openerId}"]`)
+              .evaluate((el) => el === document.activeElement),
+            true,
+            control.key +
+              ": focus return active=" +
+              (await page.evaluate(() => document.activeElement?.outerHTML.slice(0, 220))),
+          );
+          await page.locator(`[data-action="${openerId}"]`).click();
+          if (control.key.startsWith("create"))
+            assert.equal(
+              await page.locator('[name="product_url"]').inputValue(),
+              "https://www.amazon.com/dp/B000000020",
+            );
+          if (control.key.startsWith("delete"))
+            assert.equal(await page.locator('[name="reason"]').inputValue(), "");
+          assert.equal(await count(), before, "reopen must not write");
+        }
+      }
+      continue;
     }
     // Exercise the real offline click/submit path, not just a forced busy CSS class.
     await choose(control.ready);
@@ -258,6 +458,9 @@ async function verifyControls(page, width) {
   assert.match(await page.locator('[data-action="CP-COLLECT"]').innerText(), /采集中/);
   checks.push(
     `${width}: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue`,
+  );
+  checks.push(
+    `${width}: seven secondary variants (40 states) and four navigation variants (16 states), Enter activation, exact href, external-link safety, secondary zero writes/focus return/create draft retention/delete reopen reset; disabled secondary controls only model proposed form-busy lock, not existing Vue or abort semantics`,
   );
 }
 try {
@@ -501,21 +704,49 @@ try {
       screenshots,
       controlStates,
       actionVisualReferences: Object.fromEntries(
-        controls.map((control) => [
-          control.actionId,
-          {
-            selector: control.selector,
-            scope: "representative-control-only-not-all-variants-or-Vue",
-            pageId: control.pageId,
-            states: Object.fromEntries(
-              states.map((state) => [state, `control-${control.key}-${state}`]),
-            ),
-            limitation:
-              control.key === "collect"
-                ? "paused represents disabled; POST in-flight differs from accepted queued/running task"
-                : "disabled and busy use the same source busy condition; no invented independent business blocker; create is final step, rule is global price, delete is populated reason",
-          },
-        ]),
+        allControls
+          .filter((control) => !control.variantOnly)
+          .map((control) => [
+            control.actionId,
+            {
+              selector: control.selector,
+              scope: "representative-control-only-not-all-variants-or-Vue",
+              pageId: control.pageId,
+              states: Object.fromEntries(
+                (control.states || states).map((state) => [
+                  state,
+                  `control-${control.key}-${state}`,
+                ]),
+              ),
+              limitation:
+                control.kind === "navigation"
+                  ? "four pointer/keyboard states only; no source disabled or request-busy state"
+                  : control.kind
+                    ? "secondary disabled/busy represent existing offline proposal lock while form submits; source Vue still permits closing/back; cancellation never aborts an already sent request"
+                    : control.key === "collect"
+                      ? "paused represents disabled; POST in-flight differs from accepted queued/running task"
+                      : "disabled and busy use the same source busy condition; no invented independent business blocker; create is final step, rule is global price, delete is populated reason",
+            },
+          ]),
+      ),
+      controlVariantReferences: Object.fromEntries(
+        allControls
+          .filter((control) => control.variantOnly)
+          .map((control) => [
+            control.key,
+            {
+              actionId: control.actionId,
+              pageId: control.pageId,
+              selector: control.selector,
+              scope: "additional-control-variant-not-new-action",
+              states: Object.fromEntries(
+                (control.states || states).map((state) => [
+                  state,
+                  `control-${control.key}-${state}`,
+                ]),
+              ),
+            },
+          ]),
       ),
       actionIds: [...actions].sort(),
       checks,
@@ -527,6 +758,7 @@ try {
         "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
         "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",
         "Four primary controls have 24 representative states at two widths; dialog disabled and busy share one real busy condition. Not all control variants/fields/themes or P20 create-query background.",
+        "Seven secondary variants add40 states and four navigation variants add16; cancel/back locking is proposed and does not change Vue or abort in-flight writes. P20 abnormal create query and all themes/fields remain outside these representative screenshots.",
       ],
     };
     await writeFile(root + "/evidence.json", JSON.stringify(evidence, null, 2) + "\n");

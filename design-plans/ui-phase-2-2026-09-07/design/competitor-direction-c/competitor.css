@@ -52,7 +52,9 @@ button:not(:disabled):hover,
   background: var(--pale);
   border-color: var(--blue);
 }
-button:not(:disabled):active {
+button:not(:disabled):active,
+.link:active,
+.source:active {
   transform: translateY(1px);
   box-shadow: inset 0 2px 4px #162a4a40;
 }
@@ -247,6 +249,15 @@ header.identity {
   background: #fff;
   color: var(--deep);
 }
+.scope .link:not([aria-current="page"]):hover {
+  background: var(--deep);
+  border-color: #a8bee8;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.scope .link:not([aria-current="page"]):active {
+  background: #102b64;
+}
 .scope-foot {
   border-top: 1px solid #ffffff45;
   padding-top: 20px;
@@ -358,6 +369,11 @@ header.identity {
   align-items: center;
   min-height: 44px;
   text-decoration: underline;
+}
+.source:hover {
+  background: var(--pale);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 .actions {
   display: flex;

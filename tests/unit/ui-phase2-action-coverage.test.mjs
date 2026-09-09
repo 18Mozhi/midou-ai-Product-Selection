@@ -81,6 +81,80 @@ test("local presentation is not counted as a server write", () => {
   review.actions[0].visualStates.busy = "not-applicable-navigation-only";
   assert.throws(() => validateActionReview(review, context));
 });
+for (const fault of [
+  "none",
+  "selector",
+  "action",
+  "page",
+  "missing-evidence",
+  "empty-states",
+  "missing-scene",
+  "mobile-selector",
+  "mobile-missing",
+  "duplicate",
+  "wrong-scope",
+  "unsupported-state",
+]) {
+  test("additional control variant exact binding " + fault, () => {
+    const { review, context } = fixture();
+    const action = review.actions[0];
+    const variant = {
+      key: "footer-cancel",
+      package: "sample",
+      selector: "footer #cancel",
+      scope: "additional-control-variant-not-new-action",
+      states: { default: "ready" },
+    };
+    action.additionalControlVariants = [variant];
+    const evidence = context.packages.get("sample");
+    evidence.controlVariantReferences = {
+      [variant.key]: {
+        actionId: action.actionId,
+        pageId: review.pageId,
+        selector: variant.selector,
+        scope: variant.scope,
+        states: { ...variant.states },
+      },
+    };
+    for (const shot of evidence.screenshots)
+      shot.control = {
+        key: variant.key,
+        selector: variant.selector,
+        state: "default",
+        actionId: action.actionId,
+      };
+    const target = evidence.controlVariantReferences[variant.key];
+    if (fault === "selector") variant.selector = "header #cancel";
+    if (fault === "action") target.actionId = "OTHER-ACTION";
+    if (fault === "page") target.pageId = "P20";
+    if (fault === "missing-evidence") evidence.controlVariantReferences = {};
+    if (fault === "empty-states") {
+      variant.states = {};
+      target.states = {};
+    }
+    if (fault === "missing-scene") {
+      variant.states.default = "not-linked";
+      target.states.default = "not-linked";
+    }
+    if (fault === "mobile-selector") evidence.screenshots[1].control.selector = "#wrong";
+    if (fault === "mobile-missing") delete evidence.screenshots[1].control;
+    if (fault === "duplicate") action.additionalControlVariants.push(structuredClone(variant));
+    if (fault === "wrong-scope") variant.scope = "approved";
+    if (fault === "unsupported-state") {
+      variant.states = { accepted: "ready" };
+      target.states = { ...variant.states };
+    }
+    if (fault === "none") {
+      const result = validateActionReview(review, context);
+      assert.equal(result.routeActions, 1);
+      assert.equal(
+        result.unmappedVisualSlots,
+        6,
+        "extra variant does not inflate representative coverage",
+      );
+    } else assert.throws(() => validateActionReview(review, context));
+  });
+}
 test("explicit contract ID accepts a middle-dot description, never substring matching", () => {
   const { review, context } = fixture();
   context.contracts[0].claim = "| source | EXISTING-SAVE · confirmed handler |";
