@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P19/P20异步与弹窗边界复现
+
+从干净main/8aca14b5继续；P16布局已通过，具体按钮/字段/外观仍待审核。ui-skills-root用于路由技能；读取improve-ui后发现保留旧身份的约束不适合彻底重构，明确不采用，改用requirement-to-implementation追实际业务与测试。读取AGENTS、Feature Map、蓝图3.5、真实route装配、CompetitorMonitor、UiStatePanel、MonitoringReadinessStrip及既有合同/两页规格/验证器。
+
+新增永久verify-ui-phase2-competitor-boundaries.mjs，实际setup转译执行，仅路由/传输/计时器/生命周期依赖惰性化。五组CP-B01–05复现：P20管理者双query同时打开创建/规则标记（P19及只读对照、Escape顺序）；A详情晚回覆盖B选择/URL；A采集POST结果挂B并安排惰性轮询；函数级A删除完成清B新窗草稿且刷新清成功提示；规则提交函数busy时仍可重入两次。所有输出明确UNFIXED-reproduced，不把失败产品行为当验收成功；尤其后两项不声称真实DOM必然可重入、服务端错误删除或重复入库。延迟Promise全部显式完成，effectScope停止，计时器为内存Map，无真实HTTP/进程。
+
+定向格式化后新五组及原九组源检查通过。本轮不因特殊query假设擅自决定弹窗优先级；补COMPETITOR-BOUNDARY-REVIEW.md的精确入口归属、五组证据和可实施退出条件，P19/P20规格、PLAN、Feature Map同步。不改原competitor-contract-review或原108图/来源证据，不造新的逐控件视觉验收。P19/P20完整语义清单尚未完成，全局仍19页，完整73页目标/G0–G5继续进行。
+
+收口：verify:docs通过73路由/60保护/6角色/153文档，runtime-docs、390文件静态检查、format:check和git diff --check通过。动作审计19页/396源位置/354组保持；设计交付审计76包9650PNG，840独立来源/1445绑定，来源及PNG漂移/未登记图均0。两个审计JSON仅更新P19/P20规格指纹，旧图片/合同指纹不变；报告正文无变化，不重复提交无差异文件。产品源码未改，不重复原Vue构建/全量E2E，真实页面复现及修复仍未完成。
+
+未改生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、权限/安全、env/配置/依赖或宝塔；没有运行参数或重启要求。新增脚本/报告为永久交付，没有新建临时文件/图片/日志、开发服务或浏览器；不删除既有用户材料。
+
 ## 2026-09-09 · P16主题密度与自适应
 
 从干净main/d4ce12c3继续，前轮字段状态为实质进展。ui-skills-root/frontend-design沿已批准C布局；读取实际design/theme.ts及P10 C配色，保留deep-ocean/aurora-purple/cloud-white和standard/compact，全部浅色，不因旧名字引入深色模式。新增图稿页尾外观审核选择，只改变dataset，逐次验证业务草稿/决定完全保留，HTTP/storage均0；不写个人偏好。紧凑仅减少内距/候选间隔，不缩16px正文/控件及44px触区。最初错误文件路径按rg真实文件表纠正，未创建同名文件。
