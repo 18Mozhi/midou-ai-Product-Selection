@@ -7,8 +7,8 @@
 - 真实路由与规格：73/73。
 - 有明确整页或分段稿关联：73条；这不是73页全部完成。
 - 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
-- C稿包75个：含1个方向研究包、3个共享表面包；正式清单内PNG共9000张。
-- 1388条来源绑定 / 836个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8075个本地链接已核对。
+- C稿包76个：含1个方向研究包、3个共享表面包；正式清单内PNG共9364张。
+- 1439条来源绑定 / 840个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8080个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
@@ -76,7 +76,7 @@
 | P51 | 采集任务 · `/platform-admin/collection` | [规格](page-specs/P51.md) | [collection-tasks](design/collection-tasks-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P52 | 采集总览 · `/platform-admin/collection/overview` | [规格](page-specs/P52.md) | [collection-overview](design/collection-overview-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P53 | 网页登录采集 · `/platform-admin/collection/browser-runtime` | [规格](page-specs/P53.md) | [browser-runtime](design/browser-runtime-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P54 | 数据中心 · `/platform-admin/data` | [规格](page-specs/P54.md) | [data-record-detail](design/data-record-detail-direction-c/README.md) · [data-composed](design/data-composed-direction-c/README.md) · [data-records](design/data-records-direction-c/README.md) · [data-quality](design/data-quality-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P54 | 数据中心 · `/platform-admin/data` | [规格](page-specs/P54.md) | [data-controls](design/data-controls-direction-c/README.md) · [data-record-detail](design/data-record-detail-direction-c/README.md) · [data-composed](design/data-composed-direction-c/README.md) · [data-records](design/data-records-direction-c/README.md) · [data-quality](design/data-quality-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P55 | 质量与规则 · `/platform-admin/governance` | [规格](page-specs/P55.md) | [governance](design/governance-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P56 | 内容管理 · `/platform-admin/content` | [规格](page-specs/P56.md) | [content](design/content-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P57 | 通知管理 · `/platform-admin/notifications` | [规格](page-specs/P57.md) | [platform-notifications](design/platform-notifications-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑75个包的浏览器测试，也没有重新人工审核9000张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑76个包的浏览器测试，也没有重新人工审核9364张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。

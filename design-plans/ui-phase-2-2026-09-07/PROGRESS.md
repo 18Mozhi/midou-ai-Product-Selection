@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P54逐控件状态 / DATA-CONTROLS-C-r1
+
+最终无参数双端40控件复验通过；动作/交付报告生成及只读复核通过：76包9364PNG、1439来源绑定/840独立文件，来源/图片漂移和未登记PNG均0，8080 README链接有效。具体批准仍0、全页完成未证。verify:docs（73路由/60保护/6角色/153文档）、runtime-docs、static-analysis（390文件）、format:check、新文件定向Prettier及git diff --check通过。生产/shared测试工具未改，不重复运行旧Vue构建/SQL或旧工具单元。最终无chrome-headless-shell残留、临时文件或服务；正式材料独立暂存提交。
+
+从干净main/967b4f47继续，采用requirement-to-implementation核真实范围、ui-skills-root与frontend-design处理本补稿状态/44px命中区，复用现有Playwright检查链。源类型/质量tab是handler刷新早退并非button禁用；reset准确条件为refreshing或两个草稿均空。修正P54清单文字，不修改源行为。原下载直接授权跳转、质量aside非模态、移动checkbox新增等提案边界保持。
+
+新增独立data-controls-direction-c入口，复用未改同页原型控制器/数据/样式，40个列明控件182状态双端共364永久PNG。真实hover、Tab焦点与mouse-down截取，禁用读取DOM、busy读取pending；质量分页busy按钮仍可按的差异如实呈现。可见目标唯一/命中/44px、无横向溢出、无业务意图变化/HTTP/存储写入检查；smoke六控件双端和全40采集均通过，目检四张桌面/手机代表画面。17主控件81状态槽有selector/scene关联，21仍未映射；不增加语义分母或宣称全部共享/动态行已验。
+
+HTML/JS/CSS、图册/364PNG/evidence和新验证器是永久审核交付，无临时文件/服务，浏览器finally关闭。旧包及生产apps/API/OpenAPI/数据库/权限/env/依赖未改，无部署或重启。具体页面批准/G0–G5/全站分母不提升；下一其余70页语义、共享消费者及P18完整采纳链，源/原型差异待用户具体审核。最终复验及报告闭环记录见本节后续。
+
 ## 2026-09-09 · P18有利润的观察机会连续稿
 
 起点main/1da0c81a，工作树干净；前轮P18语义提交为实质进展。requirement-to-implementation核真实范围，ui-skills-root选frontend-design落实同一对象身份、蓝目录/白工作面与手机折叠目录。M04-04机会444虽有69.4 USD净利润和40 CNY待复核提交，但recommendation=observe、risk=unknown，缺selection_stage/quality_gates，导航无opportunity:decide。因此不拼入424质量门或701 AI，不声称可采纳全链已补齐。

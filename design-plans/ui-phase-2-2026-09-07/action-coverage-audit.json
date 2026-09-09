@@ -217,6 +217,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/evidence.json": "61d0c73a4e8c8bc1e7d6e4a4d50029db73cd2a351befa0b076bcf455748444f2",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json": "5130e8b205448f830a2ef0ba82cd8bee02b3dd2ea6d16f35fbca353139dcb982",
     "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/evidence.json": "31977684528e63fd0f13c9651a9c64190285675b300abc8f035839325bba707d",
+    "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/evidence.json": "d68411501e29c1541024e87b7252c631f252a010c7676f1214728f0d0f18053e",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json": "afb5b2e1cfb4fb838ced20a00729790c9d5d9dd9582b211944f5e98c623c48bf",
     "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/evidence.json": "a1a9b45b36306b3dd045dbbe13602229a365bc3dde83bd77284a5dbcbcbc1e13",
     "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json": "f788c244f691fdfd4dbecad616933e689cf85cd7a78fdf85e77df05de0314a0a",
@@ -286,9 +287,10 @@
     "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5",
     "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "634f2b9d1f6f7463f9f73399d6fc452cb8550a5a680abd26f907babeba847313",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
+    "scripts/verify-ui-phase2-data-controls-c.mjs": "789526ced8ddf184e6fd21ae12e00d17f8f0b58675c269d6abfa154011388a06",
     "scripts/verify-ui-phase2-data-quality-c.mjs": "34b233ff77fc83e61fe1aa3ad8223e5459bdc134ac756d33d8436ff299d80f82",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "1c71dd1cba2e8086f9cd6cdbe493f095cb75c1abc8740ecf1655e48ce799aa8b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "81520123898660bf979d0a199d86664553ba972c07506bacf3575a1d22a4b998",
@@ -343,7 +345,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "bcfa6bd4dd8c5d831769fa14fd991b00c9e3f7a08daec274631ec154328895bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "e98b7eb614a5532f3ac79699ad26778dfb7ea508a6b66203d4bf8b6dc49f68bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "20e7fe16fa7c42c34649a66c02ec978177a28985a365e96c5e5b3f38c96a5932",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "d29921db62f53f14ac53cc82721c6cbfa97cb6ce2bfe6caf8eb208f383033243",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "158e15d5722906ee92f4d156eadc7b4b6c6242267cc39912139d97df3fa6bf8e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "800b95f470b6952af3216f865ab21aa98a28cb1f9b3e9622eeafdda05072065c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "1cc811fdf1816743e04201ef863e020d02fa9e353cc892ab171c237fdc6c280c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "39a00a2556456cabad8cfad9ca70709c6340925523417b387fec792da25e029c",
@@ -1205,7 +1207,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 4,
-        "unmappedVisualSlots": 102,
+        "unmappedVisualSlots": 21,
         "surfaces": {
           "callerFiles": 2,
           "localModelBindings": 7,
@@ -1215,6 +1217,7 @@
         }
       },
       "proposalPackages": [
+        "data-controls-direction-c",
         "data-record-detail-direction-c",
         "data-composed-direction-c",
         "data-records-direction-c",
@@ -1224,7 +1227,7 @@
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
-        "17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。",
+        "40个明确控件变体已有364张双端原生状态图；17组主控件81个槽有selector/scene关联，21个槽仍未映射。主控件证据不是全动态行、全部共享消费者或真实Vue验收。",
         "三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
         "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
       ]
@@ -1513,7 +1516,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 4,
-      "unmappedVisualSlots": 102,
+      "unmappedVisualSlots": 21,
       "surfaces": {
         "callerFiles": 2,
         "localModelBindings": 7,

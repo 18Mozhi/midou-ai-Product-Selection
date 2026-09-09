@@ -41,6 +41,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "continuity-record-draft"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-pressed"
         }
       ],
       "testReferences": [
@@ -53,17 +69,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "原质量区卸载；常驻提案改变切区状态策略。初始深链、history、KeepAlive未验证。"
+      "remaining": "原质量区卸载；常驻提案改变切区状态策略。初始深链、history、KeepAlive未验证。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-default",
+          "selector": "#quality-view"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-hover",
+          "selector": "#quality-view"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-focus",
+          "selector": "#quality-view"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "workspace-quality-pressed",
+          "selector": "#quality-view"
+        }
+      }
     },
     {
       "actionId": "DG54-ENTITY",
@@ -71,7 +114,7 @@
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#c2f291caa419e5a2.1"],
-      "condition": "records且循环entities；刷新中禁用，同类型不读",
+      "condition": "records且循环entities；selectEntity在refreshing或同类型时早退，源按钮无disabled；提案可见禁用待审",
       "handler": "selectEntity -> 清status/page -> load",
       "variants": ["trends", "opportunities", "competitors", "suppliers"],
       "scenes": [
@@ -98,6 +141,26 @@
         {
           "package": "data-composed-direction-c",
           "scene": "records:scope-error"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-disabled"
         }
       ],
       "testReferences": [
@@ -110,17 +173,49 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
-      "remaining": "查询草稿保留与状态清空需跨四类逐项验证；旧快照不改变业务范围，导出等待仍可能漂移。"
+      "remaining": "查询草稿保留与状态清空需跨四类逐项验证；旧快照不改变业务范围，导出等待仍可能漂移。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-default",
+          "selector": "#records-pane [data-entity=\"opportunities\"]"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-hover",
+          "selector": "#records-pane [data-entity=\"opportunities\"]"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-focus",
+          "selector": "#records-pane [data-entity=\"opportunities\"]"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-pressed",
+          "selector": "#records-pane [data-entity=\"opportunities\"]"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "entity-opportunities-disabled",
+          "selector": "#records-pane [data-entity=\"opportunities\"]"
+        }
+      }
     },
     {
       "actionId": "DG54-FILTER",
@@ -134,7 +229,7 @@
         "apps/web/src/components/PlatformDataCenter.vue#fde295a3afc6fed6.1",
         "apps/web/src/components/PlatformDataCenter.vue#644ca45b53f7ea6b.1"
       ],
-      "condition": "records；refreshing锁，reset在无已应用筛选且无草稿时禁用",
+      "condition": "records；refreshing锁；源reset禁用为refreshing || (!queryDraft && !statusDraft)，不另检查已应用筛选",
       "handler": "ResponsiveFilterDrawer；applyFilters/resetFilters -> load",
       "variants": ["drawer-open", "drawer-close", "form-submit", "enter", "apply", "reset"],
       "scenes": [
@@ -157,6 +252,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "records:empty"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-pressed"
         }
       ],
       "testReferences": [
@@ -169,17 +280,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "原生提交与Enter、抽屉submit.capture顺序、SQL LIKE和供应商字段范围尚非实际链验收。"
+      "remaining": "原生提交与Enter、抽屉submit.capture顺序、SQL LIKE和供应商字段范围尚非实际链验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-default",
+          "selector": "#records-pane #apply"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-hover",
+          "selector": "#records-pane #apply"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-focus",
+          "selector": "#records-pane #apply"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "filter-apply-pressed",
+          "selector": "#records-pane #apply"
+        }
+      }
     },
     {
       "actionId": "DG54-EXPORT",
@@ -231,6 +369,30 @@
         {
           "package": "data-composed-direction-c",
           "scene": "records:export-unknown"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-disabled"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-busy"
         }
       ],
       "testReferences": [
@@ -243,17 +405,54 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。"
+      "remaining": "真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-default",
+          "selector": "#records-pane #export-open"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-hover",
+          "selector": "#records-pane #export-open"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-focus",
+          "selector": "#records-pane #export-open"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-pressed",
+          "selector": "#records-pane #export-open"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-disabled",
+          "selector": "#records-pane #export-open"
+        },
+        "busy": {
+          "package": "data-controls-direction-c",
+          "scene": "export-open-busy",
+          "selector": "#records-pane #export-open"
+        }
+      }
     },
     {
       "actionId": "DG54-LOAD",
@@ -305,6 +504,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "records:refresh-timeout"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-pressed"
         }
       ],
       "testReferences": [
@@ -317,17 +532,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "15秒abort非完整生命周期代次保护；失败保留仅有旧行时，不把空数据旧状态一概称快照保留。"
+      "remaining": "15秒abort非完整生命周期代次保护；失败保留仅有旧行时，不把空数据旧状态一概称快照保留。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-default",
+          "selector": "#records-pane #retry"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-hover",
+          "selector": "#records-pane #retry"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-focus",
+          "selector": "#records-pane #retry"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "record-retry-pressed",
+          "selector": "#records-pane #retry"
+        }
+      }
     },
     {
       "actionId": "DG54-TECH",
@@ -349,6 +591,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "records:long-detail"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-pressed"
         }
       ],
       "testReferences": [
@@ -361,17 +619,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "这是行ID展开，不是页尾TechnicalDetails复制；所有类型/长ID状态与共享复制消费者另验。"
+      "remaining": "这是行ID展开，不是页尾TechnicalDetails复制；所有类型/长ID状态与共享复制消费者另验。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-default",
+          "selector": "#records-pane #record-tech summary"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-hover",
+          "selector": "#records-pane #record-tech summary"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-focus",
+          "selector": "#records-pane #record-tech summary"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "record-technical-pressed",
+          "selector": "#records-pane #record-tech summary"
+        }
+      }
     },
     {
       "actionId": "DG54-PAGE",
@@ -401,6 +686,26 @@
         {
           "package": "data-composed-direction-c",
           "scene": "records:export-page-two"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-disabled"
         }
       ],
       "testReferences": [
@@ -413,17 +718,49 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
-      "remaining": "同一原型场景图不证明真实浏览器history/滚动/每种实体分页。"
+      "remaining": "同一原型场景图不证明真实浏览器history/滚动/每种实体分页。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-default",
+          "selector": "#records-pane #next"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-hover",
+          "selector": "#records-pane #next"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-focus",
+          "selector": "#records-pane #next"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-pressed",
+          "selector": "#records-pane #next"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "record-next-disabled",
+          "selector": "#records-pane #next"
+        }
+      }
     },
     {
       "actionId": "Q54-LOAD",
@@ -458,6 +795,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:blocked"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-pressed"
         }
       ],
       "testReferences": [
@@ -470,17 +823,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "原ready模板没有独立刷新按钮；稿中刷新/清搜索按钮属于待审新增呈现。实际状态组件primary可达性与权限未验。"
+      "remaining": "原ready模板没有独立刷新按钮；稿中刷新/清搜索按钮属于待审新增呈现。实际状态组件primary可达性与权限未验。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-default",
+          "selector": "#quality-pane #retry"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-hover",
+          "selector": "#quality-pane #retry"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-focus",
+          "selector": "#quality-pane #retry"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-retry-pressed",
+          "selector": "#quality-pane #retry"
+        }
+      }
     },
     {
       "actionId": "Q54-TAB",
@@ -507,6 +887,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:runs"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-pressed"
         }
       ],
       "testReferences": [
@@ -519,17 +915,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实switchTab不清query/selectedRunId；离线稿会清，需审核差异，不当作同语义实现。"
+      "remaining": "真实switchTab不清query/selectedRunId；离线稿会清，需审核差异，不当作同语义实现。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-default",
+          "selector": "#quality-pane [data-tab=\"issues\"]"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-hover",
+          "selector": "#quality-pane [data-tab=\"issues\"]"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-focus",
+          "selector": "#quality-pane [data-tab=\"issues\"]"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-issues-pressed",
+          "selector": "#quality-pane [data-tab=\"issues\"]"
+        }
+      }
     },
     {
       "actionId": "Q54-EVIDENCE",
@@ -566,6 +989,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:issue-null"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-pressed"
         }
       ],
       "testReferences": [
@@ -578,17 +1017,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实结果落aside无代次；稿改为模态并展示quality_issues，不证明真实迟到详情隔离/授权。"
+      "remaining": "真实结果落aside无代次；稿改为模态并展示quality_issues，不证明真实迟到详情隔离/授权。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-default",
+          "selector": "#quality-pane #full-lineage"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-hover",
+          "selector": "#quality-pane #full-lineage"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-focus",
+          "selector": "#quality-pane #full-lineage"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "evidence-lineage-pressed",
+          "selector": "#quality-pane #full-lineage"
+        }
+      }
     },
     {
       "actionId": "Q54-DOWNLOAD",
@@ -638,6 +1104,30 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:download-no-key"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-disabled"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-busy"
         }
       ],
       "testReferences": [
@@ -650,17 +1140,54 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "原入口无确认窗；稿新增说明/签发窗。签发与实际下载错误不能混为同回执，未验证真实字节、SHA、授权或访问审计。"
+      "remaining": "原入口无确认窗；稿新增说明/签发窗。签发与实际下载错误不能混为同回执，未验证真实字节、SHA、授权或访问审计。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-default",
+          "selector": "#quality-pane #grant-submit"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-hover",
+          "selector": "#quality-pane #grant-submit"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-focus",
+          "selector": "#quality-pane #grant-submit"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-pressed",
+          "selector": "#quality-pane #grant-submit"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-disabled",
+          "selector": "#quality-pane #grant-submit"
+        },
+        "busy": {
+          "package": "data-controls-direction-c",
+          "scene": "download-submit-busy",
+          "selector": "#quality-pane #grant-submit"
+        }
+      }
     },
     {
       "actionId": "Q54-TECH",
@@ -682,6 +1209,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:issue-technical"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-pressed"
         }
       ],
       "testReferences": [
@@ -694,17 +1237,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "新完整溯源技术区不是两个原移动详情展开消费者的逐项证据；不能以复制按钮替代summary验收。"
+      "remaining": "新完整溯源技术区不是两个原移动详情展开消费者的逐项证据；不能以复制按钮替代summary验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-default",
+          "selector": "#quality-pane .technical summary"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-hover",
+          "selector": "#quality-pane .technical summary"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-focus",
+          "selector": "#quality-pane .technical summary"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-technical-pressed",
+          "selector": "#quality-pane .technical summary"
+        }
+      }
     },
     {
       "actionId": "Q54-RUN",
@@ -730,6 +1300,22 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:runs"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-pressed"
         }
       ],
       "testReferences": [
@@ -742,17 +1328,44 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "不查全库异常，跨页缺问题不能伪称没有异常；切内部tab后原runId仍保留。"
+      "remaining": "不查全库异常，跨页缺问题不能伪称没有异常；切内部tab后原runId仍保留。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-default",
+          "selector": "#quality-pane #drill-0"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-hover",
+          "selector": "#quality-pane #drill-0"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-focus",
+          "selector": "#quality-pane #drill-0"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "run-drill-pressed",
+          "selector": "#quality-pane #drill-0"
+        }
+      }
     },
     {
       "actionId": "Q54-BATCH",
@@ -819,6 +1432,30 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:batch-success"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-disabled"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-busy"
         }
       ],
       "testReferences": [
@@ -831,17 +1468,54 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "源预检没校验50上限；提交读可变选择/动作/成员/原因，无冻结快照。原ConfirmDialog不接busy；整批SQL/版本/幂等和原型锁定不可混同。"
+      "remaining": "源预检没校验50上限；提交读可变选择/动作/成员/原因，无冻结快照。原ConfirmDialog不接busy；整批SQL/版本/幂等和原型锁定不可混同。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-default",
+          "selector": "#quality-pane #submit"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-hover",
+          "selector": "#quality-pane #submit"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-focus",
+          "selector": "#quality-pane #submit"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-pressed",
+          "selector": "#quality-pane #submit"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-disabled",
+          "selector": "#quality-pane #submit"
+        },
+        "busy": {
+          "package": "data-controls-direction-c",
+          "scene": "batch-submit-busy",
+          "selector": "#quality-pane #submit"
+        }
+      }
     },
     {
       "actionId": "Q54-SELECT",
@@ -864,6 +1538,26 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:issue-resolved"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-disabled"
         }
       ],
       "testReferences": [
@@ -876,17 +1570,49 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
-      "remaining": "真实手机无checkbox；原型新增手机选择/清选择。checkbox在源可重复push，同组ID与批量后端去重不是一回事。"
+      "remaining": "真实手机无checkbox；原型新增手机选择/清选择。checkbox在源可重复push，同组ID与批量后端去重不是一回事。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-default",
+          "selector": "#quality-pane [data-select=\"00000000-0000-4000-8000-000000000a62\"]"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-hover",
+          "selector": "#quality-pane [data-select=\"00000000-0000-4000-8000-000000000a62\"]"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-focus",
+          "selector": "#quality-pane [data-select=\"00000000-0000-4000-8000-000000000a62\"]"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-pressed",
+          "selector": "#quality-pane [data-select=\"00000000-0000-4000-8000-000000000a62\"]"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "issue-select-disabled",
+          "selector": "#quality-pane [data-select=\"00000000-0000-4000-8000-000000000a62\"]"
+        }
+      }
     },
     {
       "actionId": "Q54-RESOLVE",
@@ -948,6 +1674,30 @@
         {
           "package": "data-composed-direction-c",
           "scene": "quality:resolve-success"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-disabled"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-busy"
         }
       ],
       "testReferences": [
@@ -960,17 +1710,54 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "写成功后load吞错再覆盖notice；原confirm短语trim比较，稿用严格全等。取消返回/重复提交/闭窗归属与真实审计仍待验。"
+      "remaining": "写成功后load吞错再覆盖notice；原confirm短语trim比较，稿用严格全等。取消返回/重复提交/闭窗归属与真实审计仍待验。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-default",
+          "selector": "#quality-pane #submit"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-hover",
+          "selector": "#quality-pane #submit"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-focus",
+          "selector": "#quality-pane #submit"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-pressed",
+          "selector": "#quality-pane #submit"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-disabled",
+          "selector": "#quality-pane #submit"
+        },
+        "busy": {
+          "package": "data-controls-direction-c",
+          "scene": "resolve-submit-busy",
+          "selector": "#quality-pane #submit"
+        }
+      }
     },
     {
       "actionId": "Q54-PAGE",
@@ -1004,6 +1791,30 @@
         {
           "package": "data-composed-direction-c",
           "scene": "continuity-quality-page-return"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-default"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-hover"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-focus"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-pressed"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-disabled"
+        },
+        {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-busy"
         }
       ],
       "testReferences": [
@@ -1016,17 +1827,54 @@
           "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "原翻页失败保留数据但page已变；提案保留已成功页，不能当作源实现已修复。"
+      "remaining": "原翻页失败保留数据但page已变；提案保留已成功页，不能当作源实现已修复。 本补稿busy截图如实保留原型按钮可用与handler防重；源refreshing禁用不同，尚未统一。",
+      "visualStateReferences": {
+        "default": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-default",
+          "selector": "#quality-pane #next"
+        },
+        "hover": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-hover",
+          "selector": "#quality-pane #next"
+        },
+        "focus": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-focus",
+          "selector": "#quality-pane #next"
+        },
+        "pressed": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-pressed",
+          "selector": "#quality-pane #next"
+        },
+        "disabled": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-disabled",
+          "selector": "#quality-pane #next"
+        },
+        "busy": {
+          "package": "data-controls-direction-c",
+          "scene": "quality-next-busy",
+          "selector": "#quality-pane #next"
+        }
+      }
     }
   ],
   "surfaceReview": {
@@ -1363,7 +2211,7 @@
   },
   "compositionGaps": [
     "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
-    "17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。",
+    "40个明确控件变体已有364张双端原生状态图；17组主控件81个槽有selector/scene关联，21个槽仍未映射。主控件证据不是全动态行、全部共享消费者或真实Vue验收。",
     "三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
     "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
   ],

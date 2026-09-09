@@ -1,0 +1,22 @@
+/* New proposal only: native disclosure controls receive the same clear states as buttons. */
+summary {
+  font-size: 16px;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+summary:hover {
+  background: #edf2fb;
+}
+summary:active {
+  background: #d9e4f9;
+}
+summary:focus-visible {
+  outline: 3px solid #ce7c24;
+  outline-offset: 3px;
+}
+input[type="checkbox"]:focus-visible {
+  outline: 3px solid #ce7c24;
+  outline-offset: 3px;
+}

@@ -63,7 +63,7 @@
 | [P51 采集任务](page-specs/P51.md) | 123 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P52 采集总览](page-specs/P52.md) | 123 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P53 网页登录采集](page-specs/P53.md) | 123 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P54 数据中心](page-specs/P54.md) | 104 | [17组](action-reviews/P54.json) | 102个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P54 数据中心](page-specs/P54.md) | 104 | [17组](action-reviews/P54.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P55 质量与规则](page-specs/P55.md) | 71 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P56 内容管理](page-specs/P56.md) | 116 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P57 通知管理](page-specs/P57.md) | 116 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -310,7 +310,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | Q54-BATCH 开放问题批处理预检与提交 / write | 3处；attribute、assign、close、preview、cancel、confirm | [quality:batch-attribute · 1440](design/data-composed-direction-c/1440-quality-batch-attribute.png) / [quality:batch-attribute · 390](design/data-composed-direction-c/390-quality-batch-attribute.png)、[quality:batch-assign · 1440](design/data-composed-direction-c/1440-quality-batch-assign.png) / [quality:batch-assign · 390](design/data-composed-direction-c/390-quality-batch-assign.png)；其余见JSON | 源预检没校验50上限；提交读可变选择/动作/成员/原因，无冻结快照。原ConfirmDialog不接busy；整批SQL/版本/幂等和原型锁定不可混同。 |
 | Q54-SELECT 切换开放问题选择 / local | 1处；select、deselect、disabled-closed、hidden-selected | [quality:issues · 1440](design/data-composed-direction-c/1440-quality-issues.png) / [quality:issues · 390](design/data-composed-direction-c/390-quality-issues.png)、[quality:selection-hidden · 1440](design/data-composed-direction-c/1440-quality-selection-hidden.png) / [quality:selection-hidden · 390](design/data-composed-direction-c/390-quality-selection-hidden.png)；其余见JSON | 真实手机无checkbox；原型新增手机选择/清选择。checkbox在源可重复push，同组ID与批量后端去重不是一回事。 |
 | Q54-RESOLVE 单问题原因与解决确认 / write | 6处；desktop-open、mobile-open、aside-close、preview、cancel、confirm | [quality:resolve-empty · 1440](design/data-composed-direction-c/1440-quality-resolve-empty.png) / [quality:resolve-empty · 390](design/data-composed-direction-c/390-quality-resolve-empty.png)、[quality:resolve-short · 1440](design/data-composed-direction-c/1440-quality-resolve-short.png) / [quality:resolve-short · 390](design/data-composed-direction-c/390-quality-resolve-short.png)；其余见JSON | 写成功后load吞错再覆盖notice；原confirm短语trim比较，稿用严格全等。取消返回/重复提交/闭窗归属与真实审计仍待验。 |
-| Q54-PAGE 证据与问题共享服务端页码 / read | 2处；previous、next、first、last、waiting、failed | [quality:page-first · 1440](design/data-composed-direction-c/1440-quality-page-first.png) / [quality:page-first · 390](design/data-composed-direction-c/390-quality-page-first.png)、[quality:page-last · 1440](design/data-composed-direction-c/1440-quality-page-last.png) / [quality:page-last · 390](design/data-composed-direction-c/390-quality-page-last.png)；其余见JSON | 原翻页失败保留数据但page已变；提案保留已成功页，不能当作源实现已修复。 |
+| Q54-PAGE 证据与问题共享服务端页码 / read | 2处；previous、next、first、last、waiting、failed | [quality:page-first · 1440](design/data-composed-direction-c/1440-quality-page-first.png) / [quality:page-first · 390](design/data-composed-direction-c/390-quality-page-first.png)、[quality:page-last · 1440](design/data-composed-direction-c/1440-quality-page-last.png) / [quality:page-last · 390](design/data-composed-direction-c/390-quality-page-last.png)；其余见JSON | 原翻页失败保留数据但page已变；提案保留已成功页，不能当作源实现已修复。 本补稿busy截图如实保留原型按钮可用与handler防重；源refreshing禁用不同，尚未统一。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -346,7 +346,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 ### 明确保留的边界
 
 - 同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。
-- 17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。
+- 40个明确控件变体已有364张双端原生状态图；17组主控件81个槽有selector/scene关联，21个槽仍未映射。主控件证据不是全动态行、全部共享消费者或真实Vue验收。
 - 三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。
 - 原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。
 - PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。
