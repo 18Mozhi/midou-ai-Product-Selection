@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P64 · 备份与恢复 · C 方向待审</title>
+    <link rel="stylesheet" href="backup.css" />
+    <script defer src="data.js"></script>
+    <script defer src="backup.js"></script>
+  </head>
+  <body>
+    <div class="review">
+      <span>C / P64 · 离线审核稿 · 非生产数据</span>
+      <details id="review-tools">
+        <summary>审核场景</summary>
+        <label>选择场景<select id="scene"></select></label>
+        <p>场景与返回均为离线模拟，不产生真实读取审计或恢复操作。</p>
+      </details>
+    </div>
+    <div id="app"></div>
+    <dialog
+      id="detail"
+      aria-labelledby="detail-title"
+      aria-describedby="detail-description"
+    ></dialog>
+  </body>
+</html>
