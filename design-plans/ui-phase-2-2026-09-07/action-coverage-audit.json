@@ -297,6 +297,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "209f590e918b0771f7bca10d6152785dc671d52883747e2dbf8c1738aed5f537",
     "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
     "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "ae595d43ae0be5e3aaf08acedb1b665178d9b12ca629863e2517b2ef35224f6f",
+    "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
+    "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "82e3dc5aef8c8e581cce8780636f5608d6ca49eb01b45fcbe9cfcae75b72cc80",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -322,7 +325,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "20d7c35c5047ffb70db9950a47a16665e3dae977859a2c464c096fd59cf9330e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "28c5fcb131ace956979a774af03de2e61ada72d993fd15d802adac225fec7e2d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "bfeaa27c4b97948ac0697be486a6a3b1fa360617bde87372e70f1fe5185573d7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "597d144c8a50fd94ea658670fb4d4de8782c2da1d071dd941800e2b92512402b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "fa30731bf75806768234c07a3faaa61ac378984388ddda5d9bae3efbc367e713",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "132b908d07d186c1e93ae0328a98277c807ebfe7591062e1d37ed0d53726af77",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "695797bc21f08b233461852d3a2156c8caa13358c127a27819f4015672cbd984",
@@ -396,13 +399,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 16,
     "oldOnlyIdentities": 15,
-    "reviewedPages": 14,
-    "explicitlyGroupedSourceSites": 228,
-    "semanticGroups": 205,
-    "routeActions": 183,
-    "wiringGroups": 8,
+    "reviewedPages": 15,
+    "explicitlyGroupedSourceSites": 276,
+    "semanticGroups": 241,
+    "routeActions": 212,
+    "wiringGroups": 13,
     "pagesWithoutExplicitSemanticReview": [
-      "P13",
       "P14",
       "P15",
       "P16",
@@ -868,13 +870,34 @@
       "path": "/work",
       "title": "今日工作",
       "oldStaticAssociatedCandidates": 111,
-      "review": null,
+      "review": {
+        "pageId": "P13",
+        "sourceSites": 48,
+        "semanticGroups": 36,
+        "routeActions": 29,
+        "wiringGroups": 5,
+        "excludedGroups": 2,
+        "writeActions": 3,
+        "unmappedVisualSlots": 174,
+        "surfaces": {
+          "callerFiles": 3,
+          "localModelBindings": 6,
+          "callerContainers": 7,
+          "consumerVariants": 15,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "work-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "WORK-C-r1保留66PNG/33双端场景，其中2图是非业务审稿控件板；七弹窗有常态，失败/处理中只部分独立图，全部结果和主题/密度仍待补。",
+        "当前29个非转发/排除组的174视觉槽均未按action selector映射；scene存在不等于按钮六态/所有动态行/真实Vue验收。",
+        "本轮实际confirmBatch函数在惰性VM确认：首项pause等待中改action=cancel及原因，第二项发送cancel/新原因；busy=true再次调用仍生成请求。非DOM物理双击或服务端重复写证明；修复需明确冻结执行快照、锁定及结果恢复设计，未迁入源码。",
+        "源读取生命周期已有active/route/read key/AbortController保护；不得把写入竞态误报为所有GET无隔离。真实跨scope与离开后写入结果归属仍待验。"
+      ]
     },
     {
       "id": "P14",
@@ -1909,6 +1932,23 @@
         "localModelBindings": 7,
         "callerContainers": 1,
         "consumerVariants": 1,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P13",
+      "sourceSites": 48,
+      "semanticGroups": 36,
+      "routeActions": 29,
+      "wiringGroups": 5,
+      "excludedGroups": 2,
+      "writeActions": 3,
+      "unmappedVisualSlots": 174,
+      "surfaces": {
+        "callerFiles": 3,
+        "localModelBindings": 6,
+        "callerContainers": 7,
+        "consumerVariants": 15,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -44338,7 +44378,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.pause.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1",
@@ -44366,7 +44412,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.resume.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1",
@@ -44394,7 +44446,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.delay.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1",
@@ -44426,7 +44484,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.transfer.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1",
@@ -44454,7 +44518,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.cancel.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1",
@@ -44477,7 +44547,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.batch.definition",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#446106c89d9d1204.1",
@@ -44500,7 +44576,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#e81628577b69db40.1",
@@ -44523,7 +44605,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#d4003ff11f44d9cc.1",
@@ -44551,7 +44639,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.reason.change",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#0fc52b5608263ef6.1",
@@ -44579,7 +44673,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.delay.due.change",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#f7f3da8b759864b6.1",
@@ -44607,7 +44707,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.transfer.assignee.change",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#99031a2db9919db6.1",
@@ -44630,7 +44736,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskBatchActions.vue#83d4d6c6f2015e2f.1",
@@ -44653,7 +44765,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.batch.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0513954362e80472.1",
@@ -45470,7 +45588,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.status",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#ac860f86ea23bb4c.1",
@@ -45493,7 +45617,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.search.disclose",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#d344bde9e31f9f8c.1",
@@ -45516,7 +45646,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.search.apply",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#faf2a52b6a6f528b.1",
@@ -45539,7 +45675,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.sort",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#b79994ab2dc7702d.1",
@@ -45562,7 +45704,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.search.apply",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#1b36eaf01847b9f2.1",
@@ -45585,7 +45733,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.reset",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#9960c69204257423.1",
@@ -45613,7 +45767,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.select.page",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#2cb28f705efccf29.1",
@@ -45645,7 +45805,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.select.clear",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#86b8060a633774c0.1",
@@ -45677,7 +45843,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.reset",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#c92b78a436786dc5.1",
@@ -45709,7 +45881,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.create.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#fe99684a58d4750c.1",
@@ -45745,7 +45923,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.select.row",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#a32f374b623fc146.1",
@@ -45777,7 +45961,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.detail.open",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#a52d2fd8d2453f5a.1",
@@ -45813,7 +46003,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.row-menu",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskListPanel.vue#b4c8f55424911113.1",
@@ -45849,7 +46045,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.delete.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
@@ -45877,7 +46079,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.create.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1",
@@ -45905,7 +46113,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.excluded.exports",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1",
@@ -45937,7 +46151,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.excluded.exports",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1",
@@ -45965,7 +46185,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.read.retry",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
@@ -45997,7 +46223,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.batch.forward",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
@@ -46025,7 +46257,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.list.forward",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1",
@@ -46053,7 +46291,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.excluded.exports",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1",
@@ -46089,7 +46333,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.excluded.exports",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1",
@@ -46117,7 +46367,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.page.previous",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1",
@@ -46145,7 +46401,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.list.page.next",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1",
@@ -46168,7 +46430,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.editor.definition",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1",
@@ -46191,7 +46459,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.editor.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#e394f71c3c789c95.1",
@@ -46214,7 +46488,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.editor.create.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1",
@@ -46237,7 +46517,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.editor.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1",
@@ -46260,7 +46546,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.editor.create.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
@@ -46288,7 +46580,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.excluded.detail",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1",
@@ -46311,7 +46609,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "work.delete.definition",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#184beea2f6fd5456.1",
@@ -46334,7 +46638,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.delete.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#a7d1ecc8ced537b9.1",
@@ -46357,7 +46667,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.delete.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1",
@@ -46380,7 +46696,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.delete.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1",
@@ -46403,7 +46725,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P13",
+          "actionId": "task.delete.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1",

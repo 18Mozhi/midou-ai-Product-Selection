@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P13今日工作逐项语义
+
+从干净main/8d9351b2继续；前轮P10/P12清单为实质进展。使用requirement-to-implementation和ui-skills-root，先map/蓝图及任务合同，再读TaskWorkspace/TaskListPanel/TaskBatchActions、父mode传参和useModalDialog。新增P13清单与人读审核入口，48局部源候选/36组、6模型与7结构容器；3原生dialog展开7业务变体。保留174逐控件视觉槽未映射、正常路由排除导出/详情编辑，复用66旧图，没有新增重复图片。
+
+最小验证：buildWorkDesignData成功，5路由变更、7写入body及五类批量资格、惰性SQL scope/转义/分页/summary均通过；原列表2/summary7差异不改。另直接提取confirmBatch到惰性VM：首项pause等待时改action/reason，次项变cancel/新原因；busy=true再次直接调用仍发请求。仅隔离函数输出，不证明DOM双击或真实API幂等失败；源未修，具体冻结/忙碌/结果归属验收列入本页。GET已有active/路由/读代次保护，不混称全链无隔离。
+
+新清单源hash/合同/转发/输入/容器/场景验证通过，首轮只读报告因新增P13尚未生成而报stale，非源码或清单验证失败；重新生成及只读复核均通过。目检桌面normal与手机pause两张既有图，不宣称全图目检。未改生产apps/API/OpenAPI/数据库/迁移/权限/env/配置/依赖，无部署/重启；没有创建临时文件/浏览器/服务。下一P14趋势及后续业务页。
+
+最终动作报告：15页/276唯一源位置/241按页累计组，212路由动作、13转发/定义组，58页待同级核对；全站分母未冻结，具体批准0。设计交付报告生成及只读复验通过，76包/9364PNG不变、840独立来源文件/1439绑定、来源漂移/PNG漂移/未登记PNG均0，8080 README链接有效。verify:docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件静态检查、format:check、新JSON定向Prettier及git diff --check通过。本轮没有改测试工具或产品代码，不重复旧单元/Vue构建/E2E，也不执行生产HTTP或SQL；不把文档通过作为全页运行验收。
+
 ## 2026-09-09 · P10外观与P12首页逐项语义
 
 从干净main/8f0d5554继续，前轮九页清单为实质进展。使用requirement-to-implementation与ui-skills-root，按feature-map/蓝图、现有合同和实际三组件/theme.ts/父壳层定位，新增两页清单及合并审核入口。31局部源位置/25组，7字段、2aside/1form和2details不混作弹窗。复用86+64旧图，无追加同类截图或生产代码；66/84状态槽不冒充完整逐控件映射。
