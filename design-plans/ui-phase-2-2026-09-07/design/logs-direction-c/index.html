@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P62 链路日志 · C方向审核</title>
+    <link rel="stylesheet" href="logs.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside>
+        <div class="brand">ScoutOps<span>系统运维 · 链路日志</span></div>
+        <h2>本次返回的链</h2>
+        <p class="side-help">选择一条链，阅读其当前返回事件。不是完整链追踪。</p>
+        <nav id="chains" aria-label="日志链目录"></nav>
+        <p class="side-help">C方向已选 · P62具体稿待审<br />离线示例，不访问原始日志</p>
+      </aside>
+      <main>
+        <header class="page-head">
+          <div>
+            <h1>链路日志</h1>
+            <p>从有限的事件窗口，追到有依据的处理入口。</p>
+          </div>
+          <span class="review">离线审核稿</span>
+        </header>
+        <div id="app"></div>
+        <footer class="review-tools">
+          <label for="scene">审核场景（原E2E与合成事件）</label
+          ><select id="scene"></select>
+          <p>本原型不连接服务、写审计或下载文件；关联入口只显示跳转意图。</p>
+        </footer>
+      </main>
+    </div>
+    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-desc"></dialog>
+    <script src="data.js"></script>
+    <script src="source-logic.js"></script>
+    <script src="logs.js"></script>
+  </body>
+</html>
