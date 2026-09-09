@@ -66,4 +66,3 @@ node scripts/audit-ui-phase2-action-coverage.mjs
 ```
 
 smoke不出图、不验收旧图片哈希；默认命令核对来源/图片并重跑离线交互；--capture重渲染本包永久图稿与证据。没有运行服务或配置变化，无需重启。参见[提交按钮图](SOURCING-CONTROL-STATE-REVIEW.md)、[全部图册](design/sourcing-direction-c/gallery.html)、[机器清单](action-reviews/P21.json)。
-
