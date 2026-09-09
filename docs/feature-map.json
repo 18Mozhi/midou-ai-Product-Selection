@@ -5,7 +5,7 @@
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
-  "uiPhase2DesignDeliveryAudit": "design-plans/ui-phase-2-2026-09-07/DESIGN-REVIEW-INDEX.md and design-delivery-audit.json, audited by node scripts/audit-ui-phase2-design-delivery.mjs (read-only; --write updates only these two reports). After IDENTITY-C-r1:73 canonical routes/specs,68 with explicit page-or-section C links and5 without corresponding whole-page proposal links (P10,P19-P22); shared theme is not P10.66 packages include research/shared surfaces,7521 PNGs and1151 source bindings show no drift, not full button/dialog/theme/runtime acceptance. Existing coverage and approvals remain unchanged. Next P10,then P19-P22; concrete review, Vue, global gates and deployment/signoff remain pending.",
+  "uiPhase2DesignDeliveryAudit": "design-plans/ui-phase-2-2026-09-07/DESIGN-REVIEW-INDEX.md and design-delivery-audit.json, audited by node scripts/audit-ui-phase2-design-delivery.mjs (read-only; --write updates only these two reports). After APPEARANCE-C-r1:73 canonical routes/specs,69 with explicit page-or-section C links and4 without corresponding whole-page proposal links (P19-P22). P10 has a standalone appearance proposal, not the shared theme panel. Existing coverage and approvals remain unchanged; artifact integrity is not full button/dialog/theme/runtime acceptance. Next P19-P22; concrete review, Vue, global gates and deployment/signoff remain pending.",
   "implementation": {
     "currentPhase": "P08",
     "completedModules": [
@@ -392,6 +392,7 @@
     },
     "designTokensThemes": {
       "module": "M02-01",
+      "uiPhase2AppearanceC": "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/README.md: APPEARANCE-C-r1 P10 whole-page proposal,22 scenes86 PNGs,three themes/two densities,11 semantic actions,nine actual ThemeStudio/theme.ts isolated groups. node scripts/verify-ui-phase2-appearance-c.mjs checks source/image hashes and local DOM; --capture regenerates only this package; source-only via verify-ui-phase2-appearance-source.mjs. Restore-during-save saved+dirty race is reproduced and UNFIXED in Vue. Proposed busy locking, radio navigation and honest error/snapshot messages are pending review. No API/OpenAPI/config/dependency/database/production changes or restart; real lifecycle/storage/permissions/SQL and full-site implementation/deployment remain pending.",
       "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md and page-specs/P10.md separate server-versioned theme writes, local preview cache and in-memory density. tests/e2e/ui-phase2-account-contracts.spec.ts adds preview/restore, exact versioned PUTs and conflict refresh assertions; radio keyboard completion and save/restore races remain pending. Existing theme IDs and runtime contracts are unchanged.",
       "entrypoints": [
         "../packages/preferences/src/index.ts",

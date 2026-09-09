@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · W02 P10外观设置整页 / APPEARANCE-C-r1
+
+提交前复验：最终capture与只读verify均通过22场景86PNG、九源分组及11语义动作，HTTP/浏览器错误/Cookie和存储写入均0。全站只读审计通过73路由/67包/7607PNG/1162来源绑定（774唯一文件）/7773图册链接，漂移0，原门禁与用户批准不提升。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（496生产文件/51仓储模块/最长640）、五交付代码文件Prettier及git diff --check通过。进程复核无本验证器/Playwright临时浏览器残留；86正式图保留，无一次性临时产物。
+
+从干净main/b83b71f3接续。ui-skills-root定位后使用frontend-design：白身份栏、主题化个人范围、选择与双记录核对、桌面效果/密度并列，窄屏顺流。沿共享C的目录蓝/冷雾蓝/净页白提议配色，保留三个兼容ID；不更新旧浮层包。交[图册](design/appearance-direction-c/README.md)22场景86PNG，三主题×两密度主图、错误/冲突/保存结果与七控件hover/focus/pressed。九组真实ThemeStudio setup/theme.ts隔离运行核对本地预览与缓存适配器、密度零PUT、撤销不重置密度、版本精确PUT、七错误映射、非法主题、saved+dirty和保存中撤销竞态、行政密度覆盖。knownGap明确unfixed，不把函数替身当Vue/SQL/后端幂等审计或实际缓存证明。
+
+双端DOM检查radio方向键/循环/Home/End与roving焦点、会话密度、撤销、保存忙碌锁/精确模拟body、冲突刷新再选/新版本保存、六真实导航目标；限流/网络失败不冒充未选择范围，明确scope码来自实际服务端。八宽度及200%缩放抽样、16px控件/44px热区/无横向溢出/无原生弹窗。人工审看桌面目录蓝、手机净页白紧凑和冲突；压缩重复说明、并排桌面下区，并给中等宽度保留顺流以免内容过窄。三主题检查仅本页，不等于全站主题通过。
+
+只新增P10图稿/两个永久验证器及关联规格/计划/Feature Map/审核索引；API/OpenAPI、生产Vue、环境、依赖、数据库、权限、旧图/证据/coverage与用户批准不改。正式86PNG保留，无一次性临时文件或服务，验证浏览器finally关闭；无需生产重启。全站69相关路由、4缺整页稿，下一P19/P20再P21/P22；具体审核、全状态、真实实现及部署签收未完成。最终复验门禁提交前补记。
+
 ## 2026-09-09 · W02 P01–P09身份与入驻 / IDENTITY-C-r1
 
 提交前门禁：最终capture及只读verify均通过82场景188PNG/16源分组/26图稿语义动作；全站审计通过73路由、66包、7521PNG、1151来源绑定/767唯一文件、7684图册链接且无漂移。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（496生产文件/51仓储模块/最长640）、六交付代码文件Prettier及git diff --check通过。进程复核无本验证器/Playwright临时浏览器残留；188正式图为交付物保留，无一次性临时产物。

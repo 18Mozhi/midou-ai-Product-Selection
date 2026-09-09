@@ -201,8 +201,8 @@ const summary = {
 };
 const audit = {
   schemaVersion: 1,
-  audit: "UI2-C-DELIVERY-AUDIT-r2",
-  baselineRevision: "ab22201caa6b13b4726915d44d8e4f603726c95e",
+  audit: "UI2-C-DELIVERY-AUDIT-r3",
+  baselineRevision: "b83b71f3f0e483161e9e290f2648a71a988d11e4",
   scope:
     "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   inputHashes,
@@ -226,7 +226,7 @@ const audit = {
 const rel = (file) => path.posix.relative(relative, file);
 let report = `# C方向逐页审核索引与交付缺口
 
-本轮起始基线：ab22201c；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
+本轮起始基线：b83b71f3；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
 
 ## 核对结果
 
