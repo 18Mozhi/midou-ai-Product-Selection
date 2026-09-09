@@ -40,15 +40,35 @@
         {
           "package": "notification-direction-c",
           "scene": "preferences"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
@@ -58,9 +78,46 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-default",
+          "selector": "#preferences-open"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-hover",
+          "selector": "#preferences-open"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-focus",
+          "selector": "#preferences-open"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-pressed",
+          "selector": "#preferences-open"
+        },
+        "disabled": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-disabled",
+          "selector": "#preferences-open"
+        },
+        "busy": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-open-disabled",
+          "selector": "#preferences-open"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "AN-N-ALL-READ",
@@ -234,13 +291,113 @@
         {
           "package": "notification-direction-c",
           "scene": "category_system"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-task-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-task-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-task-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-task-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-task-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-approval-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-approval-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-approval-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-approval-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-approval-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-competitor-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-competitor-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-competitor-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-competitor-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-competitor-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-system-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-system-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-system-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-system-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-system-selected"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -252,9 +409,85 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-default",
+          "selector": "#category-all"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-hover",
+          "selector": "#category-all"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-focus",
+          "selector": "#category-all"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "category-all-pressed",
+          "selector": "#category-all"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "category-task",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#category-task",
+          "states": {
+            "default": "category-task-default",
+            "hover": "category-task-hover",
+            "focus": "category-task-focus",
+            "pressed": "category-task-pressed"
+          }
+        },
+        {
+          "key": "category-approval",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#category-approval",
+          "states": {
+            "default": "category-approval-default",
+            "hover": "category-approval-hover",
+            "focus": "category-approval-focus",
+            "pressed": "category-approval-pressed"
+          }
+        },
+        {
+          "key": "category-competitor",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#category-competitor",
+          "states": {
+            "default": "category-competitor-default",
+            "hover": "category-competitor-hover",
+            "focus": "category-competitor-focus",
+            "pressed": "category-competitor-pressed"
+          }
+        },
+        {
+          "key": "category-system",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#category-system",
+          "states": {
+            "default": "category-system-default",
+            "hover": "category-system-hover",
+            "focus": "category-system-focus",
+            "pressed": "category-system-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-N-UNREAD",
@@ -270,13 +503,53 @@
         {
           "package": "notification-direction-c",
           "scene": "unread"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-on-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-on-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-on-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-on-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-on-selected"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -288,9 +561,49 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-default",
+          "selector": "#unread-filter"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-hover",
+          "selector": "#unread-filter"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-focus",
+          "selector": "#unread-filter"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "unread-off-pressed",
+          "selector": "#unread-filter"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "unread-on",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#unread-filter",
+          "states": {
+            "default": "unread-on-default",
+            "hover": "unread-on-hover",
+            "focus": "unread-on-focus",
+            "pressed": "unread-on-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-N-FILTER-STATUS",
@@ -318,13 +631,93 @@
         {
           "package": "notification-direction-c",
           "scene": "workflow_closed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-open-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-open-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-open-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-open-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-open-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-in_progress-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-in_progress-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-in_progress-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-in_progress-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-in_progress-selected"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-closed-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-closed-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-closed-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-closed-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-closed-selected"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -336,9 +729,73 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-default",
+          "selector": "#status-all"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-hover",
+          "selector": "#status-all"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-focus",
+          "selector": "#status-all"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "status-all-pressed",
+          "selector": "#status-all"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "status-open",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#status-open",
+          "states": {
+            "default": "status-open-default",
+            "hover": "status-open-hover",
+            "focus": "status-open-focus",
+            "pressed": "status-open-pressed"
+          }
+        },
+        {
+          "key": "status-in_progress",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#status-in_progress",
+          "states": {
+            "default": "status-in_progress-default",
+            "hover": "status-in_progress-hover",
+            "focus": "status-in_progress-focus",
+            "pressed": "status-in_progress-pressed"
+          }
+        },
+        {
+          "key": "status-closed",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#status-closed",
+          "states": {
+            "default": "status-closed-default",
+            "hover": "status-closed-hover",
+            "focus": "status-closed-focus",
+            "pressed": "status-closed-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-N-LOAD",
@@ -374,13 +831,93 @@
         {
           "package": "notification-direction-c",
           "scene": "version_conflict"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-forbidden-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-forbidden-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-forbidden-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-forbidden-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-expired-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-expired-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-expired-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-expired-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-rate_limited-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-rate_limited-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-rate_limited-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-rate_limited-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-version_conflict-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-version_conflict-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-version_conflict-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-version_conflict-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -392,9 +929,85 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-default",
+          "selector": "#retry-read"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-hover",
+          "selector": "#retry-read"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-focus",
+          "selector": "#retry-read"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "retry-error-pressed",
+          "selector": "#retry-read"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "retry-forbidden",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#retry-read",
+          "states": {
+            "default": "retry-forbidden-default",
+            "hover": "retry-forbidden-hover",
+            "focus": "retry-forbidden-focus",
+            "pressed": "retry-forbidden-pressed"
+          }
+        },
+        {
+          "key": "retry-expired",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#retry-read",
+          "states": {
+            "default": "retry-expired-default",
+            "hover": "retry-expired-hover",
+            "focus": "retry-expired-focus",
+            "pressed": "retry-expired-pressed"
+          }
+        },
+        {
+          "key": "retry-rate_limited",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#retry-read",
+          "states": {
+            "default": "retry-rate_limited-default",
+            "hover": "retry-rate_limited-hover",
+            "focus": "retry-rate_limited-focus",
+            "pressed": "retry-rate_limited-pressed"
+          }
+        },
+        {
+          "key": "retry-version_conflict",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#retry-read",
+          "states": {
+            "default": "retry-version_conflict-default",
+            "hover": "retry-version_conflict-hover",
+            "focus": "retry-version_conflict-focus",
+            "pressed": "retry-version_conflict-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-N-DETAIL",
@@ -426,15 +1039,51 @@
         {
           "package": "notification-direction-c",
           "scene": "read_ack"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-disabled"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-unread-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-unread-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-unread-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-unread-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
@@ -444,9 +1093,59 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-default",
+          "selector": "[data-open]"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-hover",
+          "selector": "[data-open]"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-focus",
+          "selector": "[data-open]"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-pressed",
+          "selector": "[data-open]"
+        },
+        "disabled": {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-disabled",
+          "selector": "[data-open]"
+        },
+        "busy": {
+          "package": "notification-navigation-direction-c",
+          "scene": "row-read-disabled",
+          "selector": "[data-open]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "row-unread",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "[data-open]",
+          "states": {
+            "default": "row-unread-default",
+            "hover": "row-unread-hover",
+            "focus": "row-unread-focus",
+            "pressed": "row-unread-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-N-PAGE",
@@ -465,14 +1164,54 @@
         {
           "package": "notification-direction-c",
           "scene": "pagination"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-disabled"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "next-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "next-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "next-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "next-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "next-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
@@ -483,9 +1222,55 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-default",
+          "selector": "#previous"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-hover",
+          "selector": "#previous"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-focus",
+          "selector": "#previous"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-pressed",
+          "selector": "#previous"
+        },
+        "disabled": {
+          "package": "notification-navigation-direction-c",
+          "scene": "previous-disabled",
+          "selector": "#previous"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "next",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "notification-navigation-direction-c",
+          "selector": "#next",
+          "states": {
+            "default": "next-default",
+            "hover": "next-hover",
+            "focus": "next-focus",
+            "pressed": "next-pressed",
+            "disabled": "next-disabled"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-N-DETAIL-WIRING",
@@ -549,15 +1334,35 @@
         {
           "package": "notification-direction-c",
           "scene": "read_busy"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
@@ -567,9 +1372,46 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-default",
+          "selector": "#detail-close"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-hover",
+          "selector": "#detail-close"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-focus",
+          "selector": "#detail-close"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-pressed",
+          "selector": "#detail-close"
+        },
+        "disabled": {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-disabled",
+          "selector": "#detail-close"
+        },
+        "busy": {
+          "package": "notification-navigation-direction-c",
+          "scene": "detail-close-disabled",
+          "selector": "#detail-close"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "AN-N-SOURCE",
@@ -589,13 +1431,29 @@
         {
           "package": "notification-direction-c",
           "scene": "detail_missing"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
@@ -607,9 +1465,36 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-default",
+          "selector": "#source-link"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-hover",
+          "selector": "#source-link"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-focus",
+          "selector": "#source-link"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "source-pressed",
+          "selector": "#source-link"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "AN-N-START",
@@ -917,13 +1802,29 @@
         {
           "package": "notification-direction-c",
           "scene": "detail_technical"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -935,9 +1836,36 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-default",
+          "selector": "#technical summary"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-hover",
+          "selector": "#technical summary"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-focus",
+          "selector": "#technical summary"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "technical-pressed",
+          "selector": "#technical summary"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "AN-N-PREF-WIRING",
@@ -998,13 +1926,45 @@
         {
           "package": "notification-direction-c",
           "scene": "preferences_busy"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-pressed"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-close-default"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-close-hover"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-close-focus"
+        },
+        {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-close-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1016,9 +1976,36 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-default",
+          "selector": "#preferences-cancel"
+        },
+        "hover": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-hover",
+          "selector": "#preferences-cancel"
+        },
+        "focus": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-focus",
+          "selector": "#preferences-cancel"
+        },
+        "pressed": {
+          "package": "notification-navigation-direction-c",
+          "scene": "preferences-cancel-pressed",
+          "selector": "#preferences-cancel"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "AN-N-PREF-SAVE",
@@ -1372,12 +2359,12 @@
   },
   "compositionGaps": [
     "7项源码特征测试记录现状缺口与busy边界，不是修复证明。",
-    "70个代表控件状态槽未映射，不等于缺70张图；98基础图及60控件图数量未增加。",
+    "本批导航240PNG补51代表状态槽；连同旧提交30槽共81映射、19槽未映射，不等于缺19张图。原98+60图未改。",
     "SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。"
   ],
   "approval": "pending-user-review",
   "limits": [
     "不改变生产Vue/API/数据库/部署；不把P16布局批准扩展到P26。",
-    "30代表状态引用只覆盖5个写按钮，不包含所有入口和变体。"
+    "81个代表状态引用及14个额外源控件变体不等于所有字段/组合或真实Vue验收；偏好关闭图标仅额外提案。"
   ]
 }

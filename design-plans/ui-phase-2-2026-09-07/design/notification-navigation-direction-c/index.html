@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P26 通知导航与关闭 · C方向待审</title>
+    <link rel="stylesheet" href="../notification-direction-c/notification.css" />
+    <link rel="stylesheet" href="navigation.css" />
+    <script src="../notification-direction-c/data.js" defer></script>
+    <script src="../notification-direction-c/notification.js" defer></script>
+    <script src="navigation.js" defer></script>
+  </head>
+  <body>
+    <header class="navigation-review" aria-label="独立审稿工具">
+      <strong>P26 / 导航与关闭 · 待审</strong>
+      <label for="navigation-picker">查看控件</label
+      ><select id="navigation-picker"></select>
+      <button id="navigation-prepare" type="button">查看</button>
+      <a href="gallery.html">状态图册</a><a href="README.md">范围与差异</a>
+      <p>独立提案，不发送API。已选中≠鼠标按下；自动已读≠只读导航。</p>
+    </header>
+    <div id="app"></div>
+    <dialog id="detail" aria-labelledby="detail-title"></dialog>
+    <dialog id="preferences" aria-labelledby="preferences-title"></dialog>
+  </body>
+</html>
