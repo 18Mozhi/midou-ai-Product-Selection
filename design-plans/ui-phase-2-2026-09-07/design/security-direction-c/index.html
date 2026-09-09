@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P59 安全中心 · C方向审核稿</title>
+    <link rel="stylesheet" href="security.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">ScoutOps<small class="small">平台安全运营</small></div>
+        <p class="nav-caption">调查工作区</p>
+        <nav id="views" aria-label="安全中心分类"></nav>
+        <div class="side-note">
+          <p>只读事实<br />不展示密钥</p>
+          <p class="draft-note">C方向已选<br />P59具体稿待审</p>
+        </div>
+      </aside>
+      <main>
+        <header class="header">
+          <div>
+            <h1>安全中心</h1>
+            <p class="muted">核对身份、访问与平台操作的已有记录。</p>
+          </div>
+          <span class="review">P59 · 安全事实审核稿</span>
+        </header>
+        <div id="app"></div>
+        <section class="scene-review" aria-label="审核工具">
+          <label for="scene">审核场景（本地模拟，无网络）</label
+          ><select id="scene"></select>
+          <p class="draft-note">
+            所有身份、指纹、令牌前缀均为测试或合成值；不会读取生产安全数据。三主题和密度示例不是新增业务配置。
+          </p>
+        </section>
+      </main>
+    </div>
+    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-desc"></dialog>
+    <script src="data.js"></script>
+    <script src="source-logic.js"></script>
+    <script src="security.js"></script>
+  </body>
+</html>
