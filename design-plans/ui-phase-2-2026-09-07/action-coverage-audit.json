@@ -276,6 +276,10 @@
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
     "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "9455cc2c641e8e982f6989fd8a2ed99473d9e3f6ea2cfaafaf1d92986e2259bb",
+    "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
+    "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
+    "scripts/verify-ui-phase2-data-quality-c.mjs": "34b233ff77fc83e61fe1aa3ad8223e5459bdc134ac756d33d8436ff299d80f82",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "1c71dd1cba2e8086f9cd6cdbe493f095cb75c1abc8740ecf1655e48ce799aa8b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "81520123898660bf979d0a199d86664553ba972c07506bacf3575a1d22a4b998",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "0237923cad81c02784b79fc7af4e9f87b4a60b6ba3ff305f62562494d4b22989",
@@ -329,7 +333,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "bcfa6bd4dd8c5d831769fa14fd991b00c9e3f7a08daec274631ec154328895bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "e98b7eb614a5532f3ac79699ad26778dfb7ea508a6b66203d4bf8b6dc49f68bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "20e7fe16fa7c42c34649a66c02ec978177a28985a365e96c5e5b3f38c96a5932",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "397e32cd4c736058c778946befbf41fc75b31be90388f7fab30c08e33de303ee",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "d02f0300c3555adb86aff2787303d1e1fdd5f39e2639c0420f3a9c8432b98540",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "800b95f470b6952af3216f865ab21aa98a28cb1f9b3e9622eeafdda05072065c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "1cc811fdf1816743e04201ef863e020d02fa9e353cc892ab171c237fdc6c280c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "39a00a2556456cabad8cfad9ca70709c6340925523417b387fec792da25e029c",
@@ -349,8 +353,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "521bb40c9e3166139972537a100486243e73bba1639ac1c2cca8a03fc970a9af",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "9d5945eea5629968885c098c8e477bd7e0bda5b25cbd2ada860304f7a1721e69",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "73d491925cd4090181fd04df614eea603c40885573777c7250057f67c6f5245b",
-    "scripts/audit-ui-phase2-action-coverage.mjs": "1d5cfb81413fca34c9d278ab99080d70c960f563a87778bfe6ebbea8b52271ef",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "8f04d511306633ac26b83d710be083e174cf563424de3a14e5541c4c44832a52",
+    "scripts/audit-ui-phase2-action-coverage.mjs": "22cf5f07f3c6b4c0b6b381a7342c49bd795c2762fa451da760dc0cee81bd6e89",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "6885affaed19007c9abf73313079a0de1eb8244528958e78b8f503757af1dcfe",
+    "scripts/lib/ui-phase2-review-surfaces.mjs": "466682f928d8fcd17e441ffe0557a4ed20ccf6df29ce5f063fc22137858074d4",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
     "scripts/audit-ui-phase2-contracts.mjs": "dea579eba9fffb14ca370b23467f7ce822b1e25112196be9ae93f73df3cacbf5",
     "scripts/lib/ui-phase2-contract-audit.mjs": "92007530e6463dae89d24e669347a9d5fb5482e839e7999dff602f1011817a3d"
@@ -361,10 +366,10 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 16,
     "oldOnlyIdentities": 15,
-    "reviewedPages": 1,
-    "explicitlyGroupedSourceSites": 20,
-    "semanticGroups": 15,
-    "routeActions": 14,
+    "reviewedPages": 2,
+    "explicitlyGroupedSourceSites": 64,
+    "semanticGroups": 32,
+    "routeActions": 31,
     "pagesWithoutExplicitSemanticReview": [
       "P01",
       "P02",
@@ -418,7 +423,6 @@
       "P51",
       "P52",
       "P53",
-      "P54",
       "P55",
       "P56",
       "P57",
@@ -1160,7 +1164,22 @@
       "path": "/platform-admin/data",
       "title": "数据中心",
       "oldStaticAssociatedCandidates": 104,
-      "review": null,
+      "review": {
+        "pageId": "P54",
+        "sourceSites": 44,
+        "semanticGroups": 17,
+        "routeActions": 17,
+        "excludedGroups": 0,
+        "writeActions": 4,
+        "unmappedVisualSlots": 102,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 7,
+          "callerContainers": 9,
+          "consumerVariants": 14,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "data-composed-direction-c",
         "data-records-direction-c",
@@ -1169,7 +1188,10 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "multiple section proposals require explicit composition review"
+        "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
+        "17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。",
+        "实体完整详情三变体仅关联列表；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
+        "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
       ]
     },
     {
@@ -1429,6 +1451,22 @@
       "excludedGroups": 1,
       "writeActions": 4,
       "unmappedVisualSlots": 0
+    },
+    {
+      "pageId": "P54",
+      "sourceSites": 44,
+      "semanticGroups": 17,
+      "routeActions": 17,
+      "excludedGroups": 0,
+      "writeActions": 4,
+      "unmappedVisualSlots": 102,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 7,
+        "callerContainers": 9,
+        "consumerVariants": 14,
+        "runtimeAcceptance": "unproven"
+      }
     }
   ],
   "candidates": [
@@ -11663,7 +11701,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#962cb06e44ff9bc9.1",
@@ -11689,7 +11733,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-TAB",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#30e8ea79455855f2.1",
@@ -11715,7 +11765,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-TAB",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#65223b82b82a6bdf.1",
@@ -11741,7 +11797,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-TAB",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#7bd92702b23c9693.1",
@@ -11775,7 +11837,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-EVIDENCE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#ae9bd960542d86e4.1",
@@ -11809,7 +11877,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-DOWNLOAD",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#57c01717dbdca94f.1",
@@ -11839,7 +11913,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-EVIDENCE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1314e818824ce060.1",
@@ -11869,7 +11949,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-DOWNLOAD",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.1",
@@ -11899,7 +11985,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#f2fe7b9e26309877.1",
@@ -11929,7 +12021,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RUN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#e1512e639fd3f6dc.1",
@@ -11959,7 +12057,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-BATCH",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#72968bdd17422980.1",
@@ -11993,7 +12097,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#232fadd70e14fb44.1",
@@ -12031,7 +12141,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-EVIDENCE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#4feb3476c1a70841.1",
@@ -12069,7 +12185,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RESOLVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#b4391f4667c57834.1",
@@ -12103,7 +12225,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-EVIDENCE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#eaff8a0f18b4cd6c.1",
@@ -12137,7 +12265,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RESOLVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.2",
@@ -12167,7 +12301,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#6b65e8ff40f32c66.1",
@@ -12201,7 +12341,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RUN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#6318a60e090bab69.1",
@@ -12231,7 +12377,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#36fa4dddd2d51dd7.1",
@@ -12261,7 +12413,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1052dd42c6994868.1",
@@ -12291,7 +12449,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-EVIDENCE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#87db0311c644aa85.1",
@@ -12321,7 +12485,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RESOLVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#e4b44826587c4dcd.1",
@@ -12351,7 +12521,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RESOLVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#d9a4caa16a647610.1",
@@ -12372,7 +12548,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RESOLVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#a2e5b3b777187bdd.1",
@@ -12393,7 +12575,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-RESOLVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#80aac8ff27852b4d.1",
@@ -12414,7 +12602,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-BATCH",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#d8aabe3a13b05163.1",
@@ -12435,7 +12629,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "Q54-BATCH",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DeploymentFoundation.vue#c62cb1e0fba48ed8.1",
@@ -29594,7 +29794,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-VIEW",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#d095b93e387de70c.1",
@@ -29615,7 +29821,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-VIEW",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#c2f291caa419e5a2.1",
@@ -29645,7 +29857,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-ENTITY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#55e6e39c4bfea115.1",
@@ -29671,7 +29889,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#b51452b1fe0fa6e5.1",
@@ -29697,7 +29921,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#4a2d0a520fef9388.1",
@@ -29723,7 +29953,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#fde295a3afc6fed6.1",
@@ -29749,7 +29985,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#644ca45b53f7ea6b.1",
@@ -29775,7 +30017,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#7394eb6490013cf3.1",
@@ -29799,7 +30047,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#fa3fbd7bf13eae52.1",
@@ -29833,7 +30087,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#1c008f867673db60.1",
@@ -29867,7 +30127,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#1c008f867673db60.2",
@@ -29897,7 +30163,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#053cd828dd3324d8.1",
@@ -29931,7 +30203,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#b7a08810a69e9930.1",
@@ -29965,7 +30243,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#470980c1afaf475e.1",
@@ -29986,7 +30270,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#3e7c31e734a056fa.1",
@@ -30007,7 +30297,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformDataCenter.vue#f65c3340e428d8ed.1",
@@ -30028,7 +30324,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P54",
+          "actionId": "DG54-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformGovernanceCenter.vue#08baa16283bd4f61.1",

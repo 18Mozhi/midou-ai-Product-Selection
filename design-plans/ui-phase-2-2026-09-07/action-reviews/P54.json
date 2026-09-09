@@ -1,0 +1,1359 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P54",
+  "route": "/platform-admin/data",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "9处调用/aside、14个明确消费者变体；其中aside不是modal，3种近期记录仅有关联列表图。共享导航/组件内部所有动作未据此冻结。"
+  },
+  "inputs": {
+    "records": ["queryDraft", "statusDraft"],
+    "quality": ["query", "batchAction", "batchAssignee", "batchReason", "reason"]
+  },
+  "actions": [
+    {
+      "actionId": "DG54-VIEW",
+      "label": "切换近期记录与证据质量",
+      "kind": "navigation",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#a30c90fe071a03aa.1",
+        "apps/web/src/components/PlatformDataCenter.vue#d095b93e387de70c.1"
+      ],
+      "condition": "父页两个固定入口，无刷新锁；quality为v-if子组件",
+      "handler": "selectTab -> router.replace；records无行时load",
+      "variants": ["records", "quality"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:default"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:default"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "continuity-record-draft"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原质量区卸载；常驻提案改变切区状态策略。初始深链、history、KeepAlive未验证。"
+    },
+    {
+      "actionId": "DG54-ENTITY",
+      "label": "选择四类近期数据",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#c2f291caa419e5a2.1"],
+      "condition": "records且循环entities；刷新中禁用，同类型不读",
+      "handler": "selectEntity -> 清status/page -> load",
+      "variants": ["trends", "opportunities", "competitors", "suppliers"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:trends"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:opportunities"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:competitors"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:suppliers"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:scope-pending"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:scope-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "查询草稿保留与状态清空需跨四类逐项验证；旧快照不改变业务范围，导出等待仍可能漂移。"
+    },
+    {
+      "actionId": "DG54-FILTER",
+      "label": "应用或重置近期筛选",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#55e6e39c4bfea115.1",
+        "apps/web/src/components/PlatformDataCenter.vue#b51452b1fe0fa6e5.1",
+        "apps/web/src/components/PlatformDataCenter.vue#4a2d0a520fef9388.1",
+        "apps/web/src/components/PlatformDataCenter.vue#fde295a3afc6fed6.1",
+        "apps/web/src/components/PlatformDataCenter.vue#644ca45b53f7ea6b.1"
+      ],
+      "condition": "records；refreshing锁，reset在无已应用筛选且无草稿时禁用",
+      "handler": "ResponsiveFilterDrawer；applyFilters/resetFilters -> load",
+      "variants": ["drawer-open", "drawer-close", "form-submit", "enter", "apply", "reset"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:filter"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:query-draft"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:query-max"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:filtered"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原生提交与Enter、抽屉submit.capture顺序、SQL LIKE和供应商字段范围尚非实际链验收。"
+    },
+    {
+      "actionId": "DG54-EXPORT",
+      "label": "受控CSV导出",
+      "kind": "write",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#7394eb6490013cf3.1",
+        "apps/web/src/components/PlatformDataCenter.vue#470980c1afaf475e.1",
+        "apps/web/src/components/PlatformDataCenter.vue#3e7c31e734a056fa.1",
+        "apps/web/src/components/PlatformDataCenter.vue#f65c3340e428d8ed.1"
+      ],
+      "condition": "exporting/exportReasonOpen/refreshing/scopeMismatch阻止入口；原因await后没有重核范围",
+      "handler": "exportCsv -> askExportReason -> POST -> blob/link.download；submit/cancel解promise",
+      "variants": ["open", "ask", "submit", "cancel", "download"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-empty"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-short"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-max"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-over"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-running"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-success"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-error"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-unknown"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。"
+    },
+    {
+      "actionId": "DG54-LOAD",
+      "label": "读取与状态重试",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#fa3fbd7bf13eae52.1"],
+      "condition": "records且state非ready/loading；onMounted及过滤/类型切换也读但不另数按钮",
+      "handler": "load GET /platform/management?domain=data&entity=...",
+      "variants": [
+        "first",
+        "empty",
+        "error",
+        "expired",
+        "forbidden",
+        "blocked",
+        "retry",
+        "timeout"
+      ],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:loading"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:empty"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:error"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:expired"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:forbidden"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:blocked"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:refresh-error"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:refresh-timeout"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "15秒abort非完整生命周期代次保护；失败保留仅有旧行时，不把空数据旧状态一概称快照保留。"
+    },
+    {
+      "actionId": "DG54-TECH",
+      "label": "展开记录技术标识",
+      "kind": "local",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/PlatformDataCenter.vue#1c008f867673db60.2"
+      ],
+      "condition": "records ready；desktop行与mobile详情两个summary",
+      "handler": "native details/summary；只呈现记录id",
+      "variants": ["desktop-row", "mobile-detail"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:detail"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:long-detail"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "这是行ID展开，不是页尾TechnicalDetails复制；所有类型/长ID状态与共享复制消费者另验。"
+    },
+    {
+      "actionId": "DG54-PAGE",
+      "label": "近期记录本地分页",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#053cd828dd3324d8.1",
+        "apps/web/src/components/PlatformDataCenter.vue#b7a08810a69e9930.1"
+      ],
+      "condition": "ready且total_pages>1；刷新或边界禁用",
+      "handler": "goToPage -> 切20行本地slice + syncRecordsUrl；不发GET",
+      "variants": ["previous", "next", "first", "last"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:page-21"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:page-two"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:limit-100"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "records:export-page-two"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "同一原型场景图不证明真实浏览器history/滚动/每种实体分页。"
+    },
+    {
+      "actionId": "Q54-LOAD",
+      "label": "质量状态恢复读取",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/DataQualityCenter.vue#25af292333a00121.1"],
+      "condition": "state非ready时UiStatePanel primary；是否可按由共享状态组件决定",
+      "handler": "load GET /platform/data-quality?page=&page_size=20&status=all",
+      "variants": ["loading", "empty", "error", "forbidden", "expired", "blocked", "primary"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:loading"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:empty"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:error"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:forbidden"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:expired"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:blocked"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原ready模板没有独立刷新按钮；稿中刷新/清搜索按钮属于待审新增呈现。实际状态组件primary可达性与权限未验。"
+    },
+    {
+      "actionId": "Q54-TAB",
+      "label": "切换证据问题核对",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#962cb06e44ff9bc9.1",
+        "apps/web/src/components/DataQualityCenter.vue#30e8ea79455855f2.1",
+        "apps/web/src/components/DataQualityCenter.vue#65223b82b82a6bdf.1"
+      ],
+      "condition": "ready；同tab或refreshing时早退",
+      "handler": "switchTab -> page1/清selected；evidence/issues load，runs仅syncUrl",
+      "variants": ["evidence", "issues", "runs"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:default"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:issues"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:runs"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实switchTab不清query/selectedRunId；离线稿会清，需审核差异，不当作同语义实现。"
+    },
+    {
+      "actionId": "Q54-EVIDENCE",
+      "label": "读取或关闭完整证据溯源",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#7bd92702b23c9693.1",
+        "apps/web/src/components/DataQualityCenter.vue#57c01717dbdca94f.1",
+        "apps/web/src/components/DataQualityCenter.vue#232fadd70e14fb44.1",
+        "apps/web/src/components/DataQualityCenter.vue#b4391f4667c57834.1",
+        "apps/web/src/components/DataQualityCenter.vue#1052dd42c6994868.1"
+      ],
+      "condition": "证据桌面/移动，或问题有raw_evidence_id；detail存在可关闭",
+      "handler": "openEvidence(id) GET详情；移动先close抽屉；关闭detail=null无网络",
+      "variants": ["evidence-desktop", "evidence-mobile", "issue-desktop", "issue-mobile", "close"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:lineage"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:lineage-loading"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:lineage-error"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:long-lineage"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:issue-null"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实结果落aside无代次；稿改为模态并展示quality_issues，不证明真实迟到详情隔离/授权。"
+    },
+    {
+      "actionId": "Q54-DOWNLOAD",
+      "label": "签发并访问原文下载",
+      "kind": "write",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#ae9bd960542d86e4.1",
+        "apps/web/src/components/DataQualityCenter.vue#1314e818824ce060.1"
+      ],
+      "condition": "证据表格/移动详情；原函数无saving或单飞锁",
+      "handler": "grantDownload -> POST download-grant {} -> window.location.assign download?grant",
+      "variants": ["desktop", "mobile", "grant", "access"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-ready"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-busy"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-success"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-unknown"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-error"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-expired"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-missing"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-integrity"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:download-no-key"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原入口无确认窗；稿新增说明/签发窗。签发与实际下载错误不能混为同回执，未验证真实字节、SHA、授权或访问审计。"
+    },
+    {
+      "actionId": "Q54-TECH",
+      "label": "展开证据或问题技术标识",
+      "kind": "local",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.2"
+      ],
+      "condition": "证据或问题mobile detail slot内summary",
+      "handler": "native details/summary；只读ID与trace",
+      "variants": ["evidence-mobile", "issue-mobile"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:lineage-technical"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:issue-technical"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "新完整溯源技术区不是两个原移动详情展开消费者的逐项证据；不能以复制按钮替代summary验收。"
+    },
+    {
+      "actionId": "Q54-RUN",
+      "label": "当前加载问题的核对下钻",
+      "kind": "local",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#f2fe7b9e26309877.1",
+        "apps/web/src/components/DataQualityCenter.vue#6b65e8ff40f32c66.1"
+      ],
+      "condition": "runs每条下钻；issues且selectedRunId时返回",
+      "handler": "drillIntoRun清query设runId/tab；clearRunDrilldown清runId；均无GET",
+      "variants": ["drill", "clear", "matched", "empty"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:run-match"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:run-empty"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:runs"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不查全库异常，跨页缺问题不能伪称没有异常；切内部tab后原runId仍保留。"
+    },
+    {
+      "actionId": "Q54-BATCH",
+      "label": "开放问题批处理预检与提交",
+      "kind": "write",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#e1512e639fd3f6dc.1",
+        "apps/web/src/components/DataQualityCenter.vue#80aac8ff27852b4d.1",
+        "apps/web/src/components/DataQualityCenter.vue#d8aabe3a13b05163.1"
+      ],
+      "condition": "issues；预检按钮saving或无selected禁用，executeBatch本身无saving早退",
+      "handler": "previewBatch -> ConfirmDialog；executeBatch POST items/action/reason/assignee_membership_id",
+      "variants": ["attribute", "assign", "close", "preview", "cancel", "confirm"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-attribute"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-assign"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-close"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-no-member"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-assign-confirm"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-close-confirm"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-confirm"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-ready"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-busy"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-conflict"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-unknown"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-read-failed"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:batch-success"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源预检没校验50上限；提交读可变选择/动作/成员/原因，无冻结快照。原ConfirmDialog不接busy；整批SQL/版本/幂等和原型锁定不可混同。"
+    },
+    {
+      "actionId": "Q54-SELECT",
+      "label": "切换开放问题选择",
+      "kind": "local",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/DataQualityCenter.vue#72968bdd17422980.1"],
+      "condition": "只在desktop slot；非open禁用",
+      "handler": "toggleIssue(id,checked) -> selectedIssueIds；selectedIssues按loaded open行计算",
+      "variants": ["select", "deselect", "disabled-closed", "hidden-selected"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:issues"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:selection-hidden"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:issue-resolved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实手机无checkbox；原型新增手机选择/清选择。checkbox在源可重复push，同组ID与批量后端去重不是一回事。"
+    },
+    {
+      "actionId": "Q54-RESOLVE",
+      "label": "单问题原因与解决确认",
+      "kind": "write",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#4feb3476c1a70841.1",
+        "apps/web/src/components/DataQualityCenter.vue#eaff8a0f18b4cd6c.1",
+        "apps/web/src/components/DataQualityCenter.vue#87db0311c644aa85.1",
+        "apps/web/src/components/DataQualityCenter.vue#e4b44826587c4dcd.1",
+        "apps/web/src/components/DataQualityCenter.vue#d9a4caa16a647610.1",
+        "apps/web/src/components/DataQualityCenter.vue#a2e5b3b777187bdd.1"
+      ],
+      "condition": "只对open行提供入口；reason<2或saving预检禁用；close aside不写入",
+      "handler": "beginResolve清reason；confirming；resolveIssue POST reason/expected_version；取消仅清confirming",
+      "variants": ["desktop-open", "mobile-open", "aside-close", "preview", "cancel", "confirm"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-empty"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-short"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-valid"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-limit"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-confirm"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-ready"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-busy"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-conflict"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-unknown"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-read-failed"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:resolve-success"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "写成功后load吞错再覆盖notice；原confirm短语trim比较，稿用严格全等。取消返回/重复提交/闭窗归属与真实审计仍待验。"
+    },
+    {
+      "actionId": "Q54-PAGE",
+      "label": "证据与问题共享服务端页码",
+      "kind": "read",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#6318a60e090bab69.1",
+        "apps/web/src/components/DataQualityCenter.vue#36fa4dddd2d51dd7.1"
+      ],
+      "condition": "ready且tab非runs并pageTotal非0；刷新/页界禁用",
+      "handler": "goToPage先改page再load；两集合用同page，runs固定最近20",
+      "variants": ["previous", "next", "first", "last", "waiting", "failed"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:page-first"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:page-last"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:page-wait"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:page-failed"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "continuity-quality-page-return"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源隔离与原型验证器引用；不代表本轮重跑或真实服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页原型已有双端证据；不代表源每入口/状态逐项验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原翻页失败保留数据但page已变；提案保留已成功页，不能当作源实现已修复。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/PlatformDataCenter.vue",
+      "apps/web/src/components/DataQualityCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+      "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+      "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+      "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+      "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+      "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+      "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/PlatformDataCenter.vue",
+        "binding": "queryDraft",
+        "meaning": "近期查询草稿；apply时trim后才成为query",
+        "remaining": "120字符边界/Enter/提交与SQL LIKE、供应商字段差异需真实链验证。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformDataCenter.vue",
+        "binding": "statusDraft",
+        "meaning": "随entity状态集选择；apply提交，类型切换清空",
+        "remaining": "四类型13状态组合与失败旧快照要分开，不按新类型解释旧行。"
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "binding": "query",
+        "meaning": "质量当前已加载集合本地检索，不trim，不提交GET",
+        "remaining": "原内部切tab不清query；原型会清，存在行为差异。"
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "binding": "batchAction",
+        "meaning": "attribute/assign/close；不同动作决定成员字段适用性",
+        "remaining": "预览后改变动作可漂移；源未冻结，三个操作不以一个确认图全验。"
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "binding": "batchAssignee",
+        "meaning": "仅assign显示，候选来自所选问题组织活动成员",
+        "remaining": "原预览到提交仍可变，不能编造实际组织成员。"
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "binding": "batchReason",
+        "meaning": "批量原因，maxlength500，预检trim>=2",
+        "remaining": "原型模态改版，0/1/2/500/超限和长内容/软键盘仍需完整状态映射。"
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "binding": "reason",
+        "meaning": "单问题原因，maxlength500；每次beginResolve清空",
+        "remaining": "字段与共享AuditedReasonDialog同名但范围不同，不能混用2–300限制。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/PlatformDataCenter.vue",
+        "tag": "ResponsiveFilterDrawer",
+        "ordinal": 1,
+        "shape": "responsive-filter",
+        "sourceBehavior": "记录筛选：桌面内联、760以下ResponsiveFilterDrawer；submit.capture会关闭。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "records-filter",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:filter"
+              }
+            ],
+            "remaining": "原生submit/Enter关闭与返焦、所有错误/主题需每消费者验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformDataCenter.vue",
+        "tag": "ResponsiveDataView",
+        "ordinal": 1,
+        "shape": "responsive-row-detail",
+        "sourceBehavior": "近期四类型共用ResponsiveDataView；mobile summary由shared.show选行，非每行GET。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "trends",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:detail"
+              }
+            ],
+            "remaining": "仅原始热点示例详情，不代表所有状态行。"
+          },
+          {
+            "name": "opportunities",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:opportunities"
+              }
+            ],
+            "remaining": "有列表图，但该实体完整详情/全部字段打开图尚未显式关联。"
+          },
+          {
+            "name": "competitors",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:competitors"
+              }
+            ],
+            "remaining": "有列表图，非打开竞品记录详情证明。"
+          },
+          {
+            "name": "suppliers",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:original-supplier"
+              }
+            ],
+            "remaining": "有原供应记录列表，供应商/地点完整详情需单独出图映射。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformDataCenter.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "askExportReason对应一处AuditedReasonDialog；本地textarea最短2，无maxlength；服务限制2–300。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "export-reason",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:export"
+              }
+            ],
+            "remaining": "原型是新固定范围表单，真实源请求/文件名竞态未修。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "ResponsiveDataView",
+        "ordinal": 1,
+        "shape": "responsive-row-detail",
+        "sourceBehavior": "证据ResponsiveDataView提供mobile摘要详情；内部完整溯源按钮先关详情再GET。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "evidence-row",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:evidence-detail"
+              }
+            ],
+            "remaining": "完整记录稿已存在；真实shared.show/close及完整溯源交接待Vue验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "ResponsiveDataView",
+        "ordinal": 2,
+        "shape": "responsive-row-detail",
+        "sourceBehavior": "问题ResponsiveDataView提供mobile详情；原始选择checkbox仅desktop，mobile未选择。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "issue-row",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:issue-detail"
+              }
+            ],
+            "remaining": "新稿移动选择为新增，原组件及所有已解决/缺证据组合仍待验。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "detail存在时渲染质量证据aside；不是模态，不调用showModal。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "evidence-lineage",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:lineage"
+              }
+            ],
+            "remaining": "提案改为模态且展示关联问题；原aside无代次/初焦点，不能等价接受。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "resolving存在时渲染原因aside；close清resolving，beginResolve重置reason。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "single-reason",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:resolve-valid"
+              }
+            ],
+            "remaining": "提案改为独立原因模态；源aside关闭、原因保留规则与并发需确认。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "ConfirmDialog",
+        "ordinal": 1,
+        "shape": "confirmation-dialog",
+        "sourceBehavior": "confirming控制ConfirmDialog；confirmation-text确认解决；默认destructive=false，无影响勾选、无busy字段。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "single-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:resolve-confirm"
+              }
+            ],
+            "remaining": "源canConfirm会trim，原型严格等于；原组件取消/重复确认与源POST待验。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "ConfirmDialog",
+        "ordinal": 2,
+        "shape": "confirmation-dialog",
+        "sourceBehavior": "batchConfirming共用一个ConfirmDialog；动态batchImpact，确认处理短语，无destructive/busy。",
+        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
+        "variants": [
+          {
+            "name": "attribute-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:batch-confirm"
+              }
+            ],
+            "remaining": "源使用可变选择/原因；后端全有或全无需真实SQL证据。"
+          },
+          {
+            "name": "assign-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:batch-assign-confirm"
+              }
+            ],
+            "remaining": "成员为合成示例；真实组织/活动状态/版本并发未验。"
+          },
+          {
+            "name": "close-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:batch-close-confirm"
+              }
+            ],
+            "remaining": "只变问题不删原文；原POST/审计/短语trim与并发未验。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。",
+      "ConfirmDialog共享typedText适用，acknowledged因本页destructive=false不显示；AuditedReasonDialog内部reason与质量reason分域；TableViewControls密度字段未冒充本页7个v-model。",
+      "ResponsiveDataView的三个调用/六种内容变体不能拿一个shared测试全验；同类动态行、空字段与主题密度交叉场景还未穷尽。"
+    ]
+  },
+  "compositionGaps": [
+    "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
+    "17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。",
+    "实体完整详情三变体仅关联列表；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
+    "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "44位置/17组为两个局部Vue明示作用域，不替代旧静态104关联候选或全站语义分母。",
+    "所有source/scene引用是审阅依据，不授予审批，不宣称真实API/SQL/审计/下载/部署完成。"
+  ]
+}

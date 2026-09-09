@@ -72,6 +72,24 @@ test("explicit mapping accepted but runtime/approval not promoted", () => {
   assert.equal(result.unmappedVisualSlots, 6);
   assert.equal(result.writeActions, 1);
 });
+test("local presentation is not counted as a server write", () => {
+  const { review, context } = fixture();
+  review.actions[0].kind = "local";
+  const result = validateActionReview(review, context);
+  assert.equal(result.writeActions, 0);
+  assert.equal(result.routeActions, 1);
+  review.actions[0].visualStates.busy = "not-applicable-navigation-only";
+  assert.throws(() => validateActionReview(review, context));
+});
+test("explicit contract ID accepts a middle-dot description, never substring matching", () => {
+  const { review, context } = fixture();
+  context.contracts[0].claim = "| source | EXISTING-SAVE · confirmed handler |";
+  assert.equal(validateActionReview(review, context).routeActions, 1);
+  context.contracts[0].claim = "| source | prefix EXISTING-SAVE · confirmed handler |";
+  assert.throws(() => validateActionReview(review, context));
+  context.contracts[0].claim = "| source | OTHER · EXISTING-SAVE |";
+  assert.throws(() => validateActionReview(review, context));
+});
 for (const fault of ["none", "selector", "scene", "missing-state", "missing-evidence"]) {
   test("action-specific visual binding " + fault, () => {
     const { review, context } = fixture();
@@ -119,6 +137,8 @@ for (const [name, change] of [
     (r) => (r.actions[0].visualStates.busy = "not-applicable-navigation-only"),
   ],
   ["omitted dialog", (r, c) => (c.candidates[0].kind = "dialog-definition")],
+  ["unknown dialog review", (r) => (r.dialogs.kind = "accepted")],
+  ["unlisted dialog consumers", (r) => (r.dialogs.kind = "local-callers-and-listed-shared-only")],
 ])
   test("rejects " + name, () => {
     const { review, context } = fixture();

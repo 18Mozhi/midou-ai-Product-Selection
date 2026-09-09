@@ -3,6 +3,7 @@ import { readFileSync, readdirSync, writeFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { scanSource } from "./lib/ui-phase2-inventory.mjs";
 import { runContractAudit } from "./audit-ui-phase2-contracts.mjs";
+import { validateReviewSurfaces } from "./lib/ui-phase2-review-surfaces.mjs";
 import {
   validateActionReview,
   reconcileActionCandidates,
@@ -84,6 +85,17 @@ for (const name of readdirSync(base + "/action-reviews")
       files,
     }),
   );
+  if (review.surfaceReview) {
+    assert.deepEqual(
+      [...review.surfaceReview.files].sort(),
+      Object.keys(review.sourceHashes).sort(),
+      "surface review must cover the same local callers",
+    );
+    reviewSummaries.at(-1).surfaces = validateReviewSurfaces(review.surfaceReview, {
+      sources,
+      packages,
+    });
+  }
   reviews.push(review);
 }
 assert.equal(new Set(reviews.map((r) => r.pageId)).size, reviews.length);
@@ -121,6 +133,7 @@ const pages = coverage.pages.map((p) => {
 for (const f of [
   "scripts/audit-ui-phase2-action-coverage.mjs",
   "scripts/lib/ui-phase2-action-coverage.mjs",
+  "scripts/lib/ui-phase2-review-surfaces.mjs",
   "scripts/lib/ui-phase2-inventory.mjs",
   "scripts/audit-ui-phase2-contracts.mjs",
   "scripts/lib/ui-phase2-contract-audit.mjs",
@@ -162,14 +175,14 @@ const output = {
 };
 let md = `# 全站动作与弹窗覆盖对账\n\n基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。\n\n- 当前源候选${summary.currentSourceCandidates}；旧登记${summary.historicalCandidates}；新身份${summary.newSourceIdentities}，旧表独有身份${summary.oldOnlyIdentities}。签名变化不等于增删业务能力。\n- 已具体语义对应${summary.reviewedPages}页/${summary.explicitlyGroupedSourceSites}源位置/${summary.semanticGroups}组；其中路由动作${summary.routeActions}组，其余明确排除。其余${summary.pagesWithoutExplicitSemanticReview.length}页未完成此级映射，不称没有图或没有测试。\n- 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。\n\n## 逐页缺口\n\n| 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |\n| --- | --- | --- | --- |\n`;
 for (const p of pages)
-  md += `| [${p.id} ${p.title}](page-specs/${p.id}.md) | ${p.oldStaticAssociatedCandidates} | ${p.review ? `[${p.review.semanticGroups}组](action-reviews/${p.id}.json)` : "未逐项映射"} | ${p.review ? `${p.review.unmappedVisualSlots}个适用视觉状态槽未映射；组合/真实Vue待验` : p.compositionGaps.length ? "优先核对分段组合及每个动作/弹窗" : "对齐合同动作、动态变体、场景与测试"} |\n`;
+  md += `| [${p.id} ${p.title}](page-specs/${p.id}.md) | ${p.oldStaticAssociatedCandidates} | ${p.review ? `[${p.review.semanticGroups}组](action-reviews/${p.id}.json)` : "未逐项映射"} | ${p.review ? `${p.review.unmappedVisualSlots}个视觉状态槽待判断/映射；完整组合/真实Vue待验` : p.compositionGaps.length ? "优先核对分段组合及每个动作/弹窗" : "对齐合同动作、动态变体、场景与测试"} |\n`;
 md += [
   "",
   "## P11具体结论",
   "",
   "AccountShell与PersonalCenter的20个源位置对应15组已有合同ID：14组P11可用语义动作，1组旧局部Tab由accountShell=true排除；含4类写入，表单/按钮不重复计数。五个分区链接保留独立变体，不改路由数。两源没有弹窗，不能为填数量增加确认框。",
   "",
-  "P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌稿及204张双端图。14组代表控件适用六态均与具体selector/scene绑定；通用样本板不抵扣业务验收。0个未映射代表槽不等于全变体/输入/真实history或写入通过；下一核P18/P54组合及其余逐页语义，未获具体稿批准前不替换生产Vue。",
+  "P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌稿及204张双端图。14组代表控件适用六态均与具体selector/scene绑定；通用样本板不抵扣业务验收。0个未映射代表槽不等于全变体/输入/真实history或写入通过；P18/P54连续稿已交但不等于全语义完成，下一核P18源语义与P54下列缺口，未获具体稿批准前不替换生产Vue。",
   "",
   "## 使用与证据",
   "",
@@ -180,6 +193,31 @@ md += [
   "- 不改变API/OpenAPI/配置/依赖/数据库/生产，无重启要求；两个报告和验证器为永久交付物，无一次性临时产物。",
   "",
 ].join("\n");
+const sceneLink = (ref) => `[${ref.scene}](design/${ref.package}/gallery.html)`;
+for (const review of reviews.filter((r) => r.surfaceReview)) {
+  const surface = review.surfaceReview,
+    summary = reviewSummaries.find((r) => r.pageId === review.pageId);
+  md += `\n## ${review.pageId} 局部动作与共享消费者\n\n[逐项机器清单](action-reviews/${review.pageId}.json)：${summary.sourceSites}个局部源位置 → ${summary.semanticGroups}组；${summary.writeActions}类写入，其余含读取、导航、本地展示/选择。${summary.surfaces.localModelBindings}个本地v-model，${summary.surfaces.callerContainers}处调用/内嵌容器，${summary.surfaces.consumerVariants}个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。\n\n`;
+  md +=
+    "原六态仍保守未映射，须判断适用性并绑定逐动作selector/state；有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。\n\n";
+  md +=
+    "| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |\n| --- | --- | --- | --- |\n";
+  for (const a of review.actions)
+    md += `| ${a.actionId} ${a.label} / ${a.kind} | ${a.sourceCandidateIds.length}处；${a.variants.join("、")} | ${a.scenes.slice(0, 2).map(sceneLink).join("、")}；其余见JSON | ${a.remaining} |\n`;
+  md +=
+    "\n### 字段绑定（不重复计算为提交动作）\n\n| 本地字段 | 含义 | 未验事项 |\n| --- | --- | --- |\n";
+  for (const input of surface.inputs)
+    md += `| ${input.file.split("/").at(-1)} / ${input.binding} | ${input.meaning} | ${input.remaining} |\n`;
+  md +=
+    "\n### 弹窗与详情消费者（有图不自动等价）\n\n| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |\n| --- | --- | --- | --- |\n";
+  for (const c of surface.containers)
+    for (const v of c.variants)
+      md += `| ${c.file.split("/").at(-1)} / ${c.tag}.${c.ordinal} / ${v.name} | ${c.shape} / ${v.evidenceScope} | ${v.scenes.map(sceneLink).join("、")} | ${v.remaining} |\n`;
+  md +=
+    "\n### 明确保留的边界\n\n" +
+    [...review.compositionGaps, ...surface.sharedRemaining].map((s) => `- ${s}`).join("\n") +
+    "\n";
+}
 for (const [file, value] of [
   [base + "/action-coverage-audit.json", JSON.stringify(output, null, 2) + "\n"],
   [base + "/ACTION-COVERAGE-REVIEW.md", md],

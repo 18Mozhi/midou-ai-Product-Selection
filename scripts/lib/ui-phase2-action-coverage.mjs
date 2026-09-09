@@ -17,7 +17,7 @@ export function validateActionReview(
   for (const action of review.actions) {
     assert.ok(!actionIds.has(action.actionId), "duplicate actionId");
     actionIds.add(action.actionId);
-    assert.ok(["navigation", "read", "write", "excluded"].includes(action.kind));
+    assert.ok(["navigation", "read", "write", "local", "excluded"].includes(action.kind));
     assert.ok(action.condition && action.handler && action.remaining);
     assert.ok(action.sourceCandidateIds.length);
     assert.ok(action.variants.length);
@@ -37,7 +37,7 @@ export function validateActionReview(
             ["identity-current", "line-moved"].includes(r.status) &&
             r.claim
               .split("|")
-              .map((v) => v.replaceAll("`", "").trim())
+              .map((v) => v.replaceAll("`", "").trim().split(" · ")[0])
               .includes(action.actionId),
         ),
         "actionId not in current explicit contract " + action.actionId,
@@ -98,6 +98,14 @@ export function validateActionReview(
   );
   if (review.dialogs.kind === "none-in-current-source")
     assert.equal(scope.filter((c) => c.kind.startsWith("dialog-")).length, 0, "dialog omitted");
+  else {
+    assert.equal(
+      review.dialogs.kind,
+      "local-callers-and-listed-shared-only",
+      "unknown dialog review kind",
+    );
+    assert.ok(review.surfaceReview, "positive dialog review requires explicit caller surfaces");
+  }
   return {
     pageId: review.pageId,
     sourceSites: seen.size,
