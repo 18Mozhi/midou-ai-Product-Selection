@@ -287,10 +287,16 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "45eb0bdab898fc4c3db327a75bb179629dd631599a5c71f536bdb51d10ad680b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "2ba15a0769164848fecfa36e63e2671a5c21ffde99bf78bff628e74fde500a5e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P09.json": "4ec8ff4a5276d6edb8d41e1f9ef446f62969debea33dfa356ba0cb9dfe1a2099",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P10.json": "c2c91786ab686d18ac67599e6c70a23a0aa857e7c178b42f5ddaafa5d607cfe7",
+    "scripts/verify-ui-phase2-appearance-source.mjs": "dabf55240d99ee17aa39d757450db54856bf95eac75f23b637fbf1077eac7825",
+    "scripts/verify-ui-phase2-appearance-c.mjs": "78973df5491553a39e0cab7d53e1d651a501881b2f46cbc8f31fdd34e4c36e09",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P11.json": "d44285703c4c7307f461a219df93f81ea978d60b479fcdcd2d3aaf7fcbd293eb",
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
     "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "209f590e918b0771f7bca10d6152785dc671d52883747e2dbf8c1738aed5f537",
+    "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
+    "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "82e3dc5aef8c8e581cce8780636f5608d6ca49eb01b45fcbe9cfcae75b72cc80",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -313,9 +319,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "1066eed49f1885c187e7c100e7c1efd0977eb5d92011c6506aa48e51be7a8ee1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "59bf8610cc623a2fccfd91e47307a1aeb4bfebfa12682e562dd4dadd542bbb14",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "c7f620d9df0f48e7bf8e31434884559abb78efd6017215a090e56d223503af94",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "3c6042bd68d860853fbac505171cb8e974e5081143e71e89ae4c55f63e23be49",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "20d7c35c5047ffb70db9950a47a16665e3dae977859a2c464c096fd59cf9330e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "28c5fcb131ace956979a774af03de2e61ada72d993fd15d802adac225fec7e2d",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "d302d8629c147f63c4dd241a01b05d3069fe4b54ddab47bd6ef731e6046d5b19",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "bfeaa27c4b97948ac0697be486a6a3b1fa360617bde87372e70f1fe5185573d7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "597d144c8a50fd94ea658670fb4d4de8782c2da1d071dd941800e2b92512402b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "fa30731bf75806768234c07a3faaa61ac378984388ddda5d9bae3efbc367e713",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "132b908d07d186c1e93ae0328a98277c807ebfe7591062e1d37ed0d53726af77",
@@ -390,14 +396,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 16,
     "oldOnlyIdentities": 15,
-    "reviewedPages": 12,
-    "explicitlyGroupedSourceSites": 197,
-    "semanticGroups": 180,
-    "routeActions": 158,
+    "reviewedPages": 14,
+    "explicitlyGroupedSourceSites": 228,
+    "semanticGroups": 205,
+    "routeActions": 183,
     "wiringGroups": 8,
     "pagesWithoutExplicitSemanticReview": [
-      "P10",
-      "P12",
       "P13",
       "P14",
       "P15",
@@ -770,13 +774,33 @@
       "path": "/settings/theme",
       "title": "外观偏好",
       "oldStaticAssociatedCandidates": 11,
-      "review": null,
+      "review": {
+        "pageId": "P10",
+        "sourceSites": 11,
+        "semanticGroups": 11,
+        "routeActions": 11,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "unmappedVisualSlots": 66,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "callerContainers": 2,
+          "consumerVariants": 2,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "appearance-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "11组/11源位置；3主题+2密度实例不按v-model计数，两个aside不是弹窗。",
+        "既有86PNG中七类控件图未提供通用逐action selector/state证明，66槽保守未映射，不等于缺66图。",
+        "源预览缓存/会话密度与服务器版本分域，保存中restore导致saved+dirty已复现未修；新统一busy与错误分类待审。"
+      ]
     },
     {
       "id": "P11",
@@ -810,13 +834,34 @@
       "path": "/home",
       "title": "今日行动",
       "oldStaticAssociatedCandidates": 56,
-      "review": null,
+      "review": {
+        "pageId": "P12",
+        "sourceSites": 20,
+        "semanticGroups": 14,
+        "routeActions": 14,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "unmappedVisualSlots": 84,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 7,
+          "callerContainers": 1,
+          "consumerVariants": 1,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "home-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "20源位置/14组；顶部/全部无view链接、计数view链接、item.route和首条恢复分开，不将同中文字当相同目标。",
+        "七字段内联form，无原生弹窗；rules失败不等于无规则。缺automatic_selection显示fallback未配置/0，但load不会因此自动展开；明确not_configured加rules失败才自动展开。",
+        "既有64图为独立工作面，未组合真实顶/底导航，不能证明实际首条推荐仍在手机首屏；84槽保守未映射。",
+        "/home声明reset_on_scope，父key结合组织/工作区。返回旧缓存key、写入后重读失败和全生命周期仍未真实验收，不把缺watcher直接定性为跨范围泄露。"
+      ]
     },
     {
       "id": "P13",
@@ -1824,6 +1869,23 @@
       }
     },
     {
+      "pageId": "P10",
+      "sourceSites": 11,
+      "semanticGroups": 11,
+      "routeActions": 11,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "unmappedVisualSlots": 66,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "callerContainers": 2,
+        "consumerVariants": 2,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
       "pageId": "P11",
       "sourceSites": 20,
       "semanticGroups": 15,
@@ -1832,6 +1894,23 @@
       "excludedGroups": 1,
       "writeActions": 4,
       "unmappedVisualSlots": 0
+    },
+    {
+      "pageId": "P12",
+      "sourceSites": 20,
+      "semanticGroups": 14,
+      "routeActions": 14,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "unmappedVisualSlots": 84,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 7,
+        "callerContainers": 1,
+        "consumerVariants": 1,
+        "runtimeAcceptance": "unproven"
+      }
     },
     {
       "pageId": "P18",
@@ -13541,7 +13620,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RECOMMENDED-VIEW",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeAutomationOverview.vue#94e724cc55ab8a3c.1",
@@ -13562,7 +13647,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-CANDIDATES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeAutomationOverview.vue#490c957ac97ec485.1",
@@ -13583,7 +13674,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-EVIDENCE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeAutomationOverview.vue#df3fb85e49a879f8.1",
@@ -13604,7 +13701,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeAutomationOverview.vue#07fccd037ce99d72.1",
@@ -13625,7 +13728,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RUNTIME",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1",
@@ -13651,7 +13760,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#5d17be0355b745f2.1",
@@ -13677,7 +13792,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#2fdb8b56f02fb5d4.1",
@@ -13703,7 +13824,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-OPPORTUNITIES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#169dd3f4eac94585.1",
@@ -13729,7 +13856,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-START",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#6baee2bd21cfaaf6.1",
@@ -13763,7 +13896,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RESUME",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#d396a13adfe5024b.1",
@@ -13797,7 +13936,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-SETUP",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#eb4229f8bc621174.1",
@@ -13831,7 +13976,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#10318724b151ee94.1",
@@ -13861,7 +14012,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-CREATE-RULE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#a3f78d5afc916240.1",
@@ -13891,7 +14048,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-CREATE-RULE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#76f38bef42464794.1",
@@ -13917,7 +14080,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-OPPORTUNITIES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#9a0707498a265485.1",
@@ -13947,7 +14116,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-RECOMMENDATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#8ff687f70195e1ba.1",
@@ -13981,7 +14156,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-CANDIDATES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#ebc903bac2284608.1",
@@ -14015,7 +14196,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-EVIDENCE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#7a7b103459397eaa.1",
@@ -14049,7 +14236,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-WORK-HEALTH",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#d033e930df518c8e.1",
@@ -14075,7 +14268,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P12",
+          "actionId": "HD-TRUTH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/LandingRedirect.vue#0c5f729c6e5f1db6.1",
@@ -46795,7 +46994,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "AC-ROOT",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#4a092ea79d6c2f5a.1",
@@ -46816,7 +47021,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "AC-PROFILE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#ad505ab637ba2e57.1",
@@ -46837,7 +47048,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "AC-MFA",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#826731794907a876.1",
@@ -46858,7 +47075,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "TH-ROUTE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#5587941412d5210f.1",
@@ -46888,7 +47111,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "AC-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#78d551a8e1f6be17.1",
@@ -46918,7 +47147,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "AC-CONTEXT",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#615525e93bd0aa8d.1",
@@ -46948,7 +47183,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "TH-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#b5fc72dd64e3a6e6.1",
@@ -46978,7 +47219,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "TH-PREVIEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#e717723479d58780.1",
@@ -47008,7 +47255,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "TH-DENSITY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#b13c528391353263.1",
@@ -47034,7 +47287,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "TH-RESTORE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ThemeStudio.vue#38740096ebfd6c5f.1",
@@ -47060,7 +47319,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P10",
+          "actionId": "TH-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#bcbaae66b685ebbe.1",

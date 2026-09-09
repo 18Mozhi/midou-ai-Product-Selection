@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1478；旧登记1477；新身份16，旧表独有身份15。签名变化不等于增删业务能力。
-- 已具体语义对应12页/197源位置/180组；其中路由动作158组，转发/容器关联8组，其余明确排除。其余61页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应14页/228源位置/205组；其中路由动作183组，转发/容器关联8组，其余明确排除。其余59页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -21,9 +21,9 @@
 | [P07 安全设置](page-specs/P07.md) | 18 | [13组](action-reviews/P07.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P08 选择组织与工作区](page-specs/P08.md) | 13 | [11组](action-reviews/P08.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P09 快速引导](page-specs/P09.md) | 6 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P10 外观偏好](page-specs/P10.md) | 11 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P10 外观偏好](page-specs/P10.md) | 11 | [11组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P11 个人中心](page-specs/P11.md) | 20 | [15组](action-reviews/P11.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P12 今日行动](page-specs/P12.md) | 56 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P12 今日行动](page-specs/P12.md) | 56 | [14组](action-reviews/P12.json) | 84个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P14 热点趋势](page-specs/P14.md) | 107 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P15 选品机会](page-specs/P15.md) | 158 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -596,6 +596,97 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。
 - App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
 - 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P10 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P10.json)：11个局部源位置 → 11组；1类写入，11组路由动作，0组转发/容器关联不重复计动作。0个本地v-model，2处调用/内嵌容器，2个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| AC-ROOT 品牌返回应用入口 / navigation | 1处；all-states | [default · 1440](design/appearance-direction-c/1440-default.png) / [default · 390](design/appearance-direction-c/390-default.png)；其余见JSON | 最终根落点、登录和最近成员路径另验，不由主题页面图证明。 |
+| AC-PROFILE 个人资料入口 / navigation | 1处；all-states | [default · 1440](design/appearance-direction-c/1440-default.png) / [default · 390](design/appearance-direction-c/390-default.png)；其余见JSON | P11账号壳层、未保存预览离开/返回生命周期待验。 |
+| AC-MFA 安全设置入口 / navigation | 1处；all-states | [default · 1440](design/appearance-direction-c/1440-default.png) / [default · 390](design/appearance-direction-c/390-default.png)；其余见JSON | P07准入与MFA操作另审，不改身份权限。 |
+| TH-ROUTE 当前外观页链接 / navigation | 1处；self-link | [default · 1440](design/appearance-direction-c/1440-default.png) / [default · 390](design/appearance-direction-c/390-default.png)；其余见JSON | 同路径导航不等于重新load；本地预览保持/路由复用待验。 |
+| AC-LOGIN 过期重新登录 / navigation | 1处；expired | [expired · 1440](design/appearance-direction-c/1440-expired.png) / [expired · 390](design/appearance-direction-c/390-expired.png)；其余见JSON | 没有本页自动重放PUT或返回参数保证；真实会话与返回状态另验。 |
+| AC-CONTEXT 选择偏好工作区 / navigation | 1处；scope、rate-limited、service-blocked、other-conflict | [scope · 1440](design/appearance-direction-c/1440-scope.png) / [scope · 390](design/appearance-direction-c/390-scope.png)、[rate-limited · 1440](design/appearance-direction-c/1440-rate-limited.png) / [rate-limited · 390](design/appearance-direction-c/390-rate-limited.png)；其余见JSON | 图稿只在明确scope错误显示此入口；源误合并不是已修复，不能因429推断没有工作区。 |
+| TH-LOAD 读取最新偏好 / read | 1处；mounted、read-error、conflict-refresh、invalid-theme | [loading · 1440](design/appearance-direction-c/1440-loading.png) / [loading · 390](design/appearance-direction-c/390-loading.png)、[read-error · 1440](design/appearance-direction-c/1440-read-error.png) / [read-error · 390](design/appearance-direction-c/390-read-error.png)；其余见JSON | 无scope/代次保护；GET覆盖预览且applyTheme写缓存，不把本次图稿零storage当生产行为。 |
+| TH-PREVIEW 预览三种主题 / local | 1处；deep-ocean、aurora-purple、cloud-white | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[aurora-purple-standard · 1440](design/appearance-direction-c/1440-aurora-purple-standard.png) / [aurora-purple-standard · 390](design/appearance-direction-c/390-aurora-purple-standard.png)；其余见JSON | 旧按钮无roving/方向键，图稿新增键盘与busy锁只是提案；三套全站主题消费者/真实缓存未验。 |
+| TH-DENSITY 切换当前会话密度 / local | 1处；standard、compact | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png)；其余见JSON | 没有v-model或density持久化字段。行政壳层compact覆盖和会话返回、主题×密度全控件未验。 |
+| TH-RESTORE 撤销主题预览 / local | 1处；dirty、default-fallback、restore-during-save | [dirty · 1440](design/appearance-direction-c/1440-dirty.png) / [dirty · 390](design/appearance-direction-c/390-dirty.png)、[density-only · 1440](design/appearance-direction-c/1440-density-only.png) / [density-only · 390](design/appearance-direction-c/390-density-only.png)；其余见JSON | 保存中撤销竞态源码隔离复现；新稿锁定不同，不以saving图声称源可安全撤销。 |
+| TH-SAVE 保存主题偏好 / write | 1处；dirty-save、no-snapshot-version-zero、saving、saved、response-different、conflict、failed | [dirty · 1440](design/appearance-direction-c/1440-dirty.png) / [dirty · 390](design/appearance-direction-c/390-dirty.png)、[saving · 1440](design/appearance-direction-c/1440-saving.png) / [saving · 390](design/appearance-direction-c/390-saving.png)；其余见JSON | 请求不含density；GET验证theme而PUT结果直接赋saved。saved状态不等于预览已同步；真实版本竞争/幂等/审计/SQL与生命周期未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| ThemeStudio.vue / aside.1 / appearance-navigation | inline-aside / proposal-shape-differs | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png) | C提案重新构图，静态样例不证明三套真实壳层已一起换肤 |
+| ThemeStudio.vue / aside.2 / static-three-shell-preview | inline-aside / proposal-shape-differs | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png) | C提案重新构图，静态样例不证明三套真实壳层已一起换肤 |
+
+### 明确保留的边界
+
+- 11组/11源位置；3主题+2密度实例不按v-model计数，两个aside不是弹窗。
+- 既有86PNG中七类控件图未提供通用逐action selector/state证明，66槽保守未映射，不等于缺66图。
+- 源预览缓存/会话密度与服务器版本分域，保存中restore导致saved+dirty已复现未修；新统一busy与错误分类待审。
+- role=radio的3主题/2密度是受控按钮而非v-model；全部实例键盘/六态/主题密度组合与真实缓存未验。
+- 本页独立ThemeStudio，不拿共享主题浮层的回滚行为、签收或壳层图抵扣整页；无新持久化字段。
+
+## P12 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P12.json)：20个局部源位置 → 14组；2类写入，14组路由动作，0组转发/容器关联不重复计动作。7个本地v-model，1处调用/内嵌容器，1个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有84个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| HD-LOAD 读取首页与规则 / read | 1处；mounted、error、expired、forbidden、blocked、rule-read-failed、missing-selection | [loading · 1440](design/home-direction-c/1440-loading.png) / [loading · 390](design/home-direction-c/390-loading.png)、[error · 1440](design/home-direction-c/1440-error.png) / [error · 390](design/home-direction-c/390-error.png)；其余见JSON | 所有源primary仍重读、secondary无监听。新稿登录/选择范围等恢复链接和独立规则失败是提案，不按图升格实际链。 |
+| HD-RULES 管理或查看规则 / navigation | 3处；header、no-manage、runtime-count | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[readonly · 1440](design/home-direction-c/1440-readonly.png) / [readonly · 390](design/home-direction-c/390-readonly.png)；其余见JSON | 三入口标签/权限分支分别保留；链接本身不要求trend:manage，不代表实际规则API授权。 |
+| HD-OPPORTUNITIES 查看推荐清单与全部计数 / navigation | 2处；header-list、queue-all-count | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[quiet · 1440](design/home-direction-c/1440-quiet.png) / [quiet · 390](design/home-direction-c/390-quiet.png)；其余见JSON | 不能与子区view=recommended合并目标；recommended_count不由当前返回一条样例反推。 |
+| HD-START 创建选品入口 / navigation | 1处；header-primary | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[not-configured · 1440](design/home-direction-c/1440-not-configured.png) / [not-configured · 390](design/home-direction-c/390-not-configured.png)；其余见JSON | 只导航，不在首页创建机会；后续P16权限/表单/完整壳层首屏另验。 |
+| HD-RESUME 恢复第一条暂停规则 / write | 1处；first-paused、busy、failed、success-reload | [paused · 1440](design/home-direction-c/1440-paused.png) / [paused · 390](design/home-direction-c/390-paused.png)、[resume-busy · 1440](design/home-direction-c/1440-resume-busy.png) / [resume-busy · 390](design/home-direction-c/390-resume-busy.png)；其余见JSON | 仅第一条、不是批量恢复。handler无setupBusy早退；成功文案不证明采集已运行，写成功后读失败/真实调度另验。 |
+| HD-SETUP 展开或收起首次设置 / local | 1处；open、close、reopen | [not-configured · 1440](design/home-direction-c/1440-not-configured.png) / [not-configured · 390](design/home-direction-c/390-not-configured.png)、[setup-closed · 1440](design/home-direction-c/1440-setup-closed.png) / [setup-closed · 390](design/home-direction-c/390-setup-closed.png)；其余见JSON | 原型busy锁是提案。load只在明确not_configured且rules空时自动展开，缺字段仅fallback并不满足该自动展开条件。 |
+| HD-CREATE-RULE 提交七字段规则表单 / write | 2处；form-submit、submit-button、ten-markets、empty-keywords、success-read-failure | [setup-edited · 1440](design/home-direction-c/1440-setup-edited.png) / [setup-edited · 390](design/home-direction-c/390-setup-edited.png)、[setup-invalid · 1440](design/home-direction-c/1440-setup-invalid.png) / [setup-invalid · 390](design/home-direction-c/390-setup-invalid.png)；其余见JSON | 关键词保留重复；语言按现有市场映射，渠道in_app、空分类null、默认名称首关键词。不清七输入；读失败不能抹掉写成功事实，真实权限/SQL/调度待验。 |
+| HD-RECOMMENDATION 进入推荐条目 / navigation | 1处；each-recommendation、null-score、long-title-reason | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[no-score · 1440](design/home-direction-c/1440-no-score.png) / [no-score · 390](design/home-direction-c/390-no-score.png)；其余见JSON | 按服务返回顺序，前端不重新排序；动态目标和全记录字段/长值/真实对象可达未穷尽。 |
+| HD-CANDIDATES 查看规则命中候选 / navigation | 2处；empty-queue-priority、runtime-count | [candidates · 1440](design/home-direction-c/1440-candidates.png) / [candidates · 390](design/home-direction-c/390-candidates.png)、[running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)；其余见JSON | 源按truthy分支不是严格>0校验；空推荐提示与采集入口互斥，计数区域链接不互斥。 |
+| HD-EVIDENCE 查看采集中商品 / navigation | 2处；empty-queue-fallback、runtime-count | [collecting · 1440](design/home-direction-c/1440-collecting.png) / [collecting · 390](design/home-direction-c/390-collecting.png)、[running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)；其余见JSON | 不把候选和采集提示同时显示；不把候选总量candidate_count当采集中。真实列表筛选链待验。 |
+| HD-WORK-HEALTH 打开本人其他待办和异常 / navigation | 1处；task、approval、health、dynamic-row | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[long-items · 1440](design/home-direction-c/1440-long-items.png) / [long-items · 390](design/home-direction-c/390-long-items.png)；其余见JSON | changes/follows只参与total未逐项显示；不把数据说明total当当前列表行数，也不跨两个数组自行重排优先级。 |
+| HD-TRUTH 展开数据说明 / local | 1处；collapsed、expanded | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[truth-open · 1440](design/home-direction-c/1440-truth-open.png) / [truth-open · 390](design/home-direction-c/390-truth-open.png)；其余见JSON | 不是TechnicalDetails复制；真实可见行与总投影不等同，所有主题/长文本/键盘状态待验。 |
+| HD-RECOMMENDED-VIEW 按推荐view查看机会 / navigation | 1处；recommended-count | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[quiet · 1440](design/home-direction-c/1440-quiet.png) / [quiet · 390](design/home-direction-c/390-quiet.png)；其余见JSON | 与顶部无view入口保留不同语义；计数是运行摘要不代表已采纳或当前返回行数。 |
+| HD-RUNTIME 展开自动运行详情 / local | 1处；collapsed、expanded、null-timestamps | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[runtime-open · 1440](design/home-direction-c/1440-runtime-open.png) / [runtime-open · 390](design/home-direction-c/390-runtime-open.png)；其余见JSON | 四步骤标记依据不同计数>0，不是每个商品已通过流程的证明；candidate_count与rule_candidate_count字段不能互换。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| HomeDashboard.vue / setupForm.include_keywords | 关键词；required/maxlength500；英文逗号/中文逗号/换行分割，trim去空但保留重复 | 空白关键词、输入长值、Enter与写中改动/离开未全验 |
+| HomeDashboard.vue / setupForm.market | 市场10项US/GB/DE/FR/JP/KR/AU/CA/SG/GLOBAL；四特定语言，其余en-US | 非选项运行输入与服务端校验另验，不增市场或语言 |
+| HomeDashboard.vue / setupForm.collection_interval_minutes | number修饰；15/60/360/720/1440分钟 | 单位分钟，数字传输与真实调度频率分开验 |
+| HomeDashboard.vue / setupForm.recommendation_min_source_count | number修饰；1/2/3独立来源 | 形成候选门槛不等于五项质量门，不直接产生推荐 |
+| HomeDashboard.vue / setupForm.negative_keywords | 排除关键词maxlength500，拆分规则同关键词 | 保留重复/原精确目标，字段级错误/长值待验 |
+| HomeDashboard.vue / setupForm.category | 分类maxlength80，trim后空为null | 不生成新分类/多选字段 |
+| HomeDashboard.vue / setupForm.name | 名称maxlength120，trim空时用首关键词命名 | 来源于当前表单，不推导唯一性；重复提交/版本和错误归属待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| HomeDashboard.vue / form.1 / first-rule-inline | form-container / matching-inline-form-scene | [setup-edited · 1440](design/home-direction-c/1440-setup-edited.png) / [setup-edited · 390](design/home-direction-c/390-setup-edited.png)、[setup-busy · 1440](design/home-direction-c/1440-setup-busy.png) / [setup-busy · 390](design/home-direction-c/390-setup-busy.png)、[setup-failed · 1440](design/home-direction-c/1440-setup-failed.png) / [setup-failed · 390](design/home-direction-c/390-setup-failed.png) | 七字段仅一表单变体；完整壳层/手机键盘/全部状态和权限另验 |
+
+### 明确保留的边界
+
+- 20源位置/14组；顶部/全部无view链接、计数view链接、item.route和首条恢复分开，不将同中文字当相同目标。
+- 七字段内联form，无原生弹窗；rules失败不等于无规则。缺automatic_selection显示fallback未配置/0，但load不会因此自动展开；明确not_configured加rules失败才自动展开。
+- 既有64图为独立工作面，未组合真实顶/底导航，不能证明实际首条推荐仍在手机首屏；84槽保守未映射。
+- /home声明reset_on_scope，父key结合组织/工作区。返回旧缓存key、写入后重读失败和全生命周期仍未真实验收，不把缺watcher直接定性为跨范围泄露。
+- NavigationShell实际surfaceProps传capabilities，HomeAutomationOverview接selection；没有把共享导航内部全部控件纳入20个局部候选分母。
+- UiStatePanel默认secondary部分状态有标签但本页无监听；过期/无权限新恢复链接为提案，实际调用方未修改。
+- 目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12。没有本地scope watcher不等于完全无范围隔离；回到已缓存key是否及时刷新及旧请求结果仍须真实Vue验收。
 
 ## P18 局部动作与共享消费者
 

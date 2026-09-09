@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P10外观与P12首页逐项语义
+
+从干净main/8f0d5554继续，前轮九页清单为实质进展。使用requirement-to-implementation与ui-skills-root，按feature-map/蓝图、现有合同和实际三组件/theme.ts/父壳层定位，新增两页清单及合并审核入口。31局部源位置/25组，7字段、2aside/1form和2details不混作弹窗。复用86+64旧图，无追加同类截图或生产代码；66/84状态槽不冒充完整逐控件映射。
+
+关键核对：TH-RESTORE在saving仍可按、saved+dirty真实源码隔离复现；密度不落库/不随撤销恢复。首页无view、各view和动态item.route分开；只恢复首条paused。明确not_configured+规则失败会展开设置，而缺automatic_selection只fallback未配置/零、setupOpen仍false。本轮读到/home为reset_on_scope，NavigationShell父key含组织/工作区且KeepAlive最大12；不因页面缺watcher断言无范围隔离，返回缓存/迟到结果仍待实际Vue验收。
+
+最小验证：P10既有真实setup/theme.ts9组通过；P12buildHomeDesignData验证10市场POST、5周期/3来源选项、无manage/空关键词零调用、首条PATCH版本4及两类读取缺口，均为内存替身，零真实HTTP/缓存/SQL写入。两页源候选/合同/字段/容器/场景引用审核已通过；全局14页/228唯一源位置/205按页累计组，183路由动作、8转发，剩59页与全站共享/六态/主题/真实链/审批待办，不冻结分母。
+
+生产apps/API/OpenAPI/数据库/迁移/权限/配置/env/依赖及宝塔服务未改，无部署/重启。没有创建临时文件、浏览器或服务；新增JSON/审核说明为永久交付，不删旧图。下一P13及业务列表/共享消费者。
+
+最终动作报告生成与只读复核、设计交付审计通过：76包/9364PNG未增加，840独立来源文件/1439绑定、来源漂移/PNG漂移/未登记PNG均0，8080 README链接有效。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check、两份新JSON定向Prettier和git diff --check通过。本轮未改工具、测试或生产代码，不重复未变单元测试，也未执行真实Vue浏览器、生产HTTP或SQL验证；具体审批仍0，不能宣称全页完成或已部署。
+
 ## 2026-09-09 · P01–P09身份路由语义映射
 
 最终74项定向单元及116项UI2全套单元通过，新增15项；新CLI的6路径模式核对与16实际setup隔离检查通过。动作报告重生成/只读复核、设计交付审计均通过；76包9364PNG不变，1439来源绑定/840独立文件、来源与PNG漂移/未登记PNG均0。文档门（73路由/60保护/6角色/153文档）、运行文档、390文件静态检查、format:check及定向Prettier/git diff检查通过。末次仅澄清报告累计组数，已重新生成并只读复验，不重复未变单元。没有创建临时文件/进程，也没有运行真实Vue浏览器/生产/邮件/SQL测试；完整生命周期仍待具体获审后验收。

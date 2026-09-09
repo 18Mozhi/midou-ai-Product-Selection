@@ -1,0 +1,807 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P12",
+  "route": "/home",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+    "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "无原生dialog或确认组件。P10两个aside、P12一个内联form不计弹窗；details只是渐进披露。"
+  },
+  "inputs": {
+    "local": [
+      "setupForm.include_keywords",
+      "setupForm.market",
+      "setupForm.collection_interval_minutes",
+      "setupForm.recommendation_min_source_count",
+      "setupForm.negative_keywords",
+      "setupForm.category",
+      "setupForm.name"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "HD-LOAD",
+      "label": "读取首页与规则",
+      "kind": "read",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1"],
+      "condition": "挂载自动；非ready/empty的UiStatePanel primary统一load，loading内无按钮",
+      "handler": "GET /me/home-dashboard后GET /trends/monitoring-rules；后者失败置rules=[]；前者失败映射state",
+      "variants": [
+        "mounted",
+        "error",
+        "expired",
+        "forbidden",
+        "blocked",
+        "rule-read-failed",
+        "missing-selection"
+      ],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "rules-failed"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "unknown-selection"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "所有源primary仍重读、secondary无监听。新稿登录/选择范围等恢复链接和独立规则失败是提案，不按图升格实际链。"
+    },
+    {
+      "actionId": "HD-RULES",
+      "label": "管理或查看规则",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#5d17be0355b745f2.1",
+        "apps/web/src/components/HomeDashboard.vue#eb4229f8bc621174.1",
+        "apps/web/src/components/HomeAutomationOverview.vue#df3fb85e49a879f8.1"
+      ],
+      "condition": "ready/empty顶部固定；未配置无manage分支；运行计数区固定",
+      "handler": "RouterLink /trends?section=rules",
+      "variants": ["header", "no-manage", "runtime-count"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "readonly"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "readonly-paused"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "三入口标签/权限分支分别保留；链接本身不要求trend:manage，不代表实际规则API授权。"
+    },
+    {
+      "actionId": "HD-OPPORTUNITIES",
+      "label": "查看推荐清单与全部计数",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#2fdb8b56f02fb5d4.1",
+        "apps/web/src/components/HomeDashboard.vue#76f38bef42464794.1"
+      ],
+      "condition": "ready/empty顶部与队列标题两入口",
+      "handler": "RouterLink /opportunities，无view",
+      "variants": ["header-list", "queue-all-count"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "quiet"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不能与子区view=recommended合并目标；recommended_count不由当前返回一条样例反推。"
+    },
+    {
+      "actionId": "HD-START",
+      "label": "创建选品入口",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#169dd3f4eac94585.1"],
+      "condition": "ready/empty顶部固定，无本地能力v-if",
+      "handler": "RouterLink /opportunities/start",
+      "variants": ["header-primary"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "not-configured"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "只导航，不在首页创建机会；后续P16权限/表单/完整壳层首屏另验。"
+    },
+    {
+      "actionId": "HD-RESUME",
+      "label": "恢复第一条暂停规则",
+      "kind": "write",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#6baee2bd21cfaaf6.1"],
+      "condition": "selection.state=not_configured、pausedRules有值且canManage；DOM setupBusy禁用",
+      "handler": "resumeRule(pausedRules[0]) -> PATCH含status=enabled、expected_version、原周期/门槛 -> load",
+      "variants": ["first-paused", "busy", "failed", "success-reload"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "paused"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "resume-busy"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "resume-failed"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "resumed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "仅第一条、不是批量恢复。handler无setupBusy早退；成功文案不证明采集已运行，写成功后读失败/真实调度另验。"
+    },
+    {
+      "actionId": "HD-SETUP",
+      "label": "展开或收起首次设置",
+      "kind": "local",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#d396a13adfe5024b.1"],
+      "condition": "not_configured且无暂停优先分支、可manage；没有setupBusy禁用",
+      "handler": "setupOpen=!setupOpen，输入不清",
+      "variants": ["open", "close", "reopen"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "not-configured"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-closed"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-edited"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原型busy锁是提案。load只在明确not_configured且rules空时自动展开，缺字段仅fallback并不满足该自动展开条件。"
+    },
+    {
+      "actionId": "HD-CREATE-RULE",
+      "label": "提交七字段规则表单",
+      "kind": "write",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#10318724b151ee94.1",
+        "apps/web/src/components/HomeDashboard.vue#a3f78d5afc916240.1"
+      ],
+      "condition": "setupOpen&&canManageRules；按钮setupBusy禁用；handler检查关键词与manage但无busy早退",
+      "handler": "POST /trends/monitoring-rules -> 关form/消息 -> load；七输入映射九请求字段",
+      "variants": [
+        "form-submit",
+        "submit-button",
+        "ten-markets",
+        "empty-keywords",
+        "success-read-failure"
+      ],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "setup-edited"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-invalid"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-busy"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-failed"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-saved"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "setup-saved-read-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "关键词保留重复；语言按现有市场映射，渠道in_app、空分类null、默认名称首关键词。不清七输入；读失败不能抹掉写成功事实，真实权限/SQL/调度待验。"
+    },
+    {
+      "actionId": "HD-RECOMMENDATION",
+      "label": "进入推荐条目",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#9a0707498a265485.1"],
+      "condition": "decisionActions=selection.recommended_items，循环每项",
+      "handler": "RouterLink item.route原样；null评分不显示，其余整数/一位小数",
+      "variants": ["each-recommendation", "null-score", "long-title-reason"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "no-score"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "long-items"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "按服务返回顺序，前端不重新排序；动态目标和全记录字段/长值/真实对象可达未穷尽。"
+    },
+    {
+      "actionId": "HD-CANDIDATES",
+      "label": "查看规则命中候选",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#8ff687f70195e1ba.1",
+        "apps/web/src/components/HomeAutomationOverview.vue#94e724cc55ab8a3c.1"
+      ],
+      "condition": "空推荐且rule_candidate_count真时显示提示入口；运行计数链接固定",
+      "handler": "RouterLink /opportunities?view=rule_candidates",
+      "variants": ["empty-queue-priority", "runtime-count"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "candidates"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源按truthy分支不是严格>0校验；空推荐提示与采集入口互斥，计数区域链接不互斥。"
+    },
+    {
+      "actionId": "HD-EVIDENCE",
+      "label": "查看采集中商品",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#ebc903bac2284608.1",
+        "apps/web/src/components/HomeAutomationOverview.vue#490c957ac97ec485.1"
+      ],
+      "condition": "空推荐、rule_candidate_count假且awaiting_evidence_count真；另计数区固定入口",
+      "handler": "RouterLink /opportunities?view=evidence_pending",
+      "variants": ["empty-queue-fallback", "runtime-count"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "collecting"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不把候选和采集提示同时显示；不把候选总量candidate_count当采集中。真实列表筛选链待验。"
+    },
+    {
+      "actionId": "HD-WORK-HEALTH",
+      "label": "打开本人其他待办和异常",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#7a7b103459397eaa.1"],
+      "condition": "actions排除source_module=opportunity后顺序接health；任一区非空显示",
+      "handler": "RouterLink item.route；key=kind-id，标签按priority/severity",
+      "variants": ["task", "approval", "health", "dynamic-row"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "long-items"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "changes/follows只参与total未逐项显示；不把数据说明total当当前列表行数，也不跨两个数组自行重排优先级。"
+    },
+    {
+      "actionId": "HD-TRUTH",
+      "label": "展开数据说明",
+      "kind": "local",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#d033e930df518c8e.1"],
+      "condition": "ready/empty原生details/summary",
+      "handler": "原生展开，显示四数组total及generated_at，无HTTP",
+      "variants": ["collapsed", "expanded"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "truth-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是TechnicalDetails复制；真实可见行与总投影不等同，所有主题/长文本/键盘状态待验。"
+    },
+    {
+      "actionId": "HD-RECOMMENDED-VIEW",
+      "label": "按推荐view查看机会",
+      "kind": "navigation",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeAutomationOverview.vue#4a67e5db61801646.1"
+      ],
+      "condition": "HomeAutomationOverview在父ready/empty内固定链接",
+      "handler": "RouterLink /opportunities?view=recommended",
+      "variants": ["recommended-count"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "quiet"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "与顶部无view入口保留不同语义；计数是运行摘要不代表已采纳或当前返回行数。"
+    },
+    {
+      "actionId": "HD-RUNTIME",
+      "label": "展开自动运行详情",
+      "kind": "local",
+      "routeApplicability": "P12-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeAutomationOverview.vue#07fccd037ce99d72.1"
+      ],
+      "condition": "父ready/empty传入selection，子原生details",
+      "handler": "展示规则、候选、质量门、人工采纳与两个时间；无请求",
+      "variants": ["collapsed", "expanded", "null-timestamps"],
+      "scenes": [
+        {
+          "package": "home-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "runtime-open"
+        },
+        {
+          "package": "home-direction-c",
+          "scene": "not-configured"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-home-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-home-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "四步骤标记依据不同计数>0，不是每个商品已通过流程的证明；candidate_count与rule_candidate_count字段不能互换。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/HomeAutomationOverview.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+      "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
+      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+      "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.include_keywords",
+        "meaning": "关键词；required/maxlength500；英文逗号/中文逗号/换行分割，trim去空但保留重复",
+        "remaining": "空白关键词、输入长值、Enter与写中改动/离开未全验"
+      },
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.market",
+        "meaning": "市场10项US/GB/DE/FR/JP/KR/AU/CA/SG/GLOBAL；四特定语言，其余en-US",
+        "remaining": "非选项运行输入与服务端校验另验，不增市场或语言"
+      },
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.collection_interval_minutes",
+        "meaning": "number修饰；15/60/360/720/1440分钟",
+        "remaining": "单位分钟，数字传输与真实调度频率分开验"
+      },
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.recommendation_min_source_count",
+        "meaning": "number修饰；1/2/3独立来源",
+        "remaining": "形成候选门槛不等于五项质量门，不直接产生推荐"
+      },
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.negative_keywords",
+        "meaning": "排除关键词maxlength500，拆分规则同关键词",
+        "remaining": "保留重复/原精确目标，字段级错误/长值待验"
+      },
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.category",
+        "meaning": "分类maxlength80，trim后空为null",
+        "remaining": "不生成新分类/多选字段"
+      },
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "binding": "setupForm.name",
+        "meaning": "名称maxlength120，trim空时用首关键词命名",
+        "remaining": "来源于当前表单，不推导唯一性；重复提交/版本和错误归属待验"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/HomeDashboard.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "首页首次规则内联form；仅setupOpen&&canManage，submit与按钮同一写动作",
+        "remaining": "结构容器不是业务弹窗数量；当前无原生模态，所有内容和主题/字段状态未穷尽",
+        "variants": [
+          {
+            "name": "first-rule-inline",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "home-direction-c",
+                "scene": "setup-edited"
+              },
+              {
+                "package": "home-direction-c",
+                "scene": "setup-busy"
+              },
+              {
+                "package": "home-direction-c",
+                "scene": "setup-failed"
+              }
+            ],
+            "remaining": "七字段仅一表单变体；完整壳层/手机键盘/全部状态和权限另验"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "NavigationShell实际surfaceProps传capabilities，HomeAutomationOverview接selection；没有把共享导航内部全部控件纳入20个局部候选分母。",
+      "UiStatePanel默认secondary部分状态有标签但本页无监听；过期/无权限新恢复链接为提案，实际调用方未修改。",
+      "目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12。没有本地scope watcher不等于完全无范围隔离；回到已缓存key是否及时刷新及旧请求结果仍须真实Vue验收。"
+    ]
+  },
+  "compositionGaps": [
+    "20源位置/14组；顶部/全部无view链接、计数view链接、item.route和首条恢复分开，不将同中文字当相同目标。",
+    "七字段内联form，无原生弹窗；rules失败不等于无规则。缺automatic_selection显示fallback未配置/0，但load不会因此自动展开；明确not_configured加rules失败才自动展开。",
+    "既有64图为独立工作面，未组合真实顶/底导航，不能证明实际首条推荐仍在手机首屏；84槽保守未映射。",
+    "/home声明reset_on_scope，父key结合组织/工作区。返回旧缓存key、写入后重读失败和全生命周期仍未真实验收，不把缺watcher直接定性为跨范围泄露。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "source/scene/testReferences只是源审阅与离线提案关联，不授予用户批准或真实运行验收。",
+    "不修改现有生产UI、API/OpenAPI、主题ID、密度持久化、权限、数据库或部署。"
+  ]
+}

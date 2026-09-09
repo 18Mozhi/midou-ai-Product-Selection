@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P10",
+  "route": "/settings/theme",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "无原生dialog或确认组件。P10两个aside、P12一个内联form不计弹窗；details只是渐进披露。"
+  },
+  "inputs": {
+    "local": []
+  },
+  "actions": [
+    {
+      "actionId": "AC-ROOT",
+      "label": "品牌返回应用入口",
+      "kind": "navigation",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#9b4b982bf643379f.1"],
+      "condition": "所有状态固定导航",
+      "handler": "RouterLink /",
+      "variants": ["all-states"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "default"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "最终根落点、登录和最近成员路径另验，不由主题页面图证明。"
+    },
+    {
+      "actionId": "AC-PROFILE",
+      "label": "个人资料入口",
+      "kind": "navigation",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#4a092ea79d6c2f5a.1"],
+      "condition": "固定导航，不随保存状态禁用",
+      "handler": "RouterLink /me",
+      "variants": ["all-states"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "default"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "P11账号壳层、未保存预览离开/返回生命周期待验。"
+    },
+    {
+      "actionId": "AC-MFA",
+      "label": "安全设置入口",
+      "kind": "navigation",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#ad505ab637ba2e57.1"],
+      "condition": "固定导航",
+      "handler": "RouterLink /security/mfa",
+      "variants": ["all-states"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "default"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "P07准入与MFA操作另审，不改身份权限。"
+    },
+    {
+      "actionId": "TH-ROUTE",
+      "label": "当前外观页链接",
+      "kind": "navigation",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#826731794907a876.1"],
+      "condition": "源固定active类、链接自身路径",
+      "handler": "RouterLink /settings/theme",
+      "variants": ["self-link"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "default"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "同路径导航不等于重新load；本地预览保持/路由复用待验。"
+    },
+    {
+      "actionId": "AC-LOGIN",
+      "label": "过期重新登录",
+      "kind": "navigation",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#5587941412d5210f.1"],
+      "condition": "state=expired；读取或保存失败共用状态区",
+      "handler": "RouterLink /login",
+      "variants": ["expired"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "expired"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "没有本页自动重放PUT或返回参数保证；真实会话与返回状态另验。"
+    },
+    {
+      "actionId": "AC-CONTEXT",
+      "label": "选择偏好工作区",
+      "kind": "navigation",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#78d551a8e1f6be17.1"],
+      "condition": "源state=blocked，含scope/网络/限流/其他冲突的合并映射",
+      "handler": "RouterLink /select-context",
+      "variants": ["scope", "rate-limited", "service-blocked", "other-conflict"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "scope"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "rate-limited"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "service-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "图稿只在明确scope错误显示此入口；源误合并不是已修复，不能因429推断没有工作区。"
+    },
+    {
+      "actionId": "TH-LOAD",
+      "label": "读取最新偏好",
+      "kind": "read",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#615525e93bd0aa8d.1"],
+      "condition": "挂载自动GET；error/forbidden/conflict显示按钮，loading无按钮",
+      "handler": "load -> GET /me/ui-preferences；校验theme后替换saved/selected并applyTheme",
+      "variants": ["mounted", "read-error", "conflict-refresh", "invalid-theme"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "read-error"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "read-invalid"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "conflict"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "无scope/代次保护；GET覆盖预览且applyTheme写缓存，不把本次图稿零storage当生产行为。"
+    },
+    {
+      "actionId": "TH-PREVIEW",
+      "label": "预览三种主题",
+      "kind": "local",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#b5fc72dd64e3a6e6.1"],
+      "condition": "工作区可见时3个role=radio；saving仅handler早退，DOM未disabled",
+      "handler": "choose -> selected/theme DOM及缓存；saved状态转ready",
+      "variants": ["deep-ocean", "aurora-purple", "cloud-white"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "deep-ocean-standard"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "aurora-purple-standard"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "cloud-white-standard"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "dirty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "旧按钮无roving/方向键，图稿新增键盘与busy锁只是提案；三套全站主题消费者/真实缓存未验。"
+    },
+    {
+      "actionId": "TH-DENSITY",
+      "label": "切换当前会话密度",
+      "kind": "local",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#e717723479d58780.1"],
+      "condition": "2个role=radio；saving仅handler早退",
+      "handler": "chooseDensity -> selectedDensity/applyDensity；不改变themeDirty、不PUT",
+      "variants": ["standard", "compact"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "deep-ocean-standard"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "deep-ocean-compact"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "density-only"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "没有v-model或density持久化字段。行政壳层compact覆盖和会话返回、主题×密度全控件未验。"
+    },
+    {
+      "actionId": "TH-RESTORE",
+      "label": "撤销主题预览",
+      "kind": "local",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#b13c528391353263.1"],
+      "condition": "仅!dirty禁用；saving仍可操作，handler无保护",
+      "handler": "restore -> selected=saved.theme或deep-ocean -> applyTheme -> ready；密度不变",
+      "variants": ["dirty", "default-fallback", "restore-during-save"],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "dirty"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "density-only"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "saving"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "saved-different"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "保存中撤销竞态源码隔离复现；新稿锁定不同，不以saving图声称源可安全撤销。"
+    },
+    {
+      "actionId": "TH-SAVE",
+      "label": "保存主题偏好",
+      "kind": "write",
+      "routeApplicability": "P10-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#38740096ebfd6c5f.1"],
+      "condition": "!dirty或saving禁用且handler早退；themeDirty只比较theme",
+      "handler": "PUT /me/ui-preferences {theme,expected_version:saved.version或0}；返回仅更新saved，selected不跟随",
+      "variants": [
+        "dirty-save",
+        "no-snapshot-version-zero",
+        "saving",
+        "saved",
+        "response-different",
+        "conflict",
+        "failed"
+      ],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "dirty"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "saving"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "saved"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "saved-different"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "save-error"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "conflict"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-appearance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "请求不含density；GET验证theme而PUT结果直接赋saved。saved状态不等于预览已同步；真实版本竞争/幂等/审计/SQL与生命周期未验。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/ThemeStudio.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+      "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+      "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285"
+    },
+    "inputs": [],
+    "containers": [
+      {
+        "file": "apps/web/src/components/ThemeStudio.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "页面aside导航，不是抽屉或模态",
+        "remaining": "结构容器不是业务弹窗数量；当前无原生模态，所有内容和主题/字段状态未穷尽",
+        "variants": [
+          {
+            "name": "appearance-navigation",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "appearance-direction-c",
+                "scene": "deep-ocean-standard"
+              },
+              {
+                "package": "appearance-direction-c",
+                "scene": "deep-ocean-compact"
+              }
+            ],
+            "remaining": "C提案重新构图，静态样例不证明三套真实壳层已一起换肤"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ThemeStudio.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "本地静态预览aside，含三壳层小样、固定87/18.4/96等样例，不是实际业务数据",
+        "remaining": "结构容器不是业务弹窗数量；当前无原生模态，所有内容和主题/字段状态未穷尽",
+        "variants": [
+          {
+            "name": "static-three-shell-preview",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "appearance-direction-c",
+                "scene": "deep-ocean-standard"
+              },
+              {
+                "package": "appearance-direction-c",
+                "scene": "deep-ocean-compact"
+              }
+            ],
+            "remaining": "C提案重新构图，静态样例不证明三套真实壳层已一起换肤"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "role=radio的3主题/2密度是受控按钮而非v-model；全部实例键盘/六态/主题密度组合与真实缓存未验。",
+      "本页独立ThemeStudio，不拿共享主题浮层的回滚行为、签收或壳层图抵扣整页；无新持久化字段。"
+    ]
+  },
+  "compositionGaps": [
+    "11组/11源位置；3主题+2密度实例不按v-model计数，两个aside不是弹窗。",
+    "既有86PNG中七类控件图未提供通用逐action selector/state证明，66槽保守未映射，不等于缺66图。",
+    "源预览缓存/会话密度与服务器版本分域，保存中restore导致saved+dirty已复现未修；新统一busy与错误分类待审。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "source/scene/testReferences只是源审阅与离线提案关联，不授予用户批准或真实运行验收。",
+    "不修改现有生产UI、API/OpenAPI、主题ID、密度持久化、权限、数据库或部署。"
+  ]
+}
