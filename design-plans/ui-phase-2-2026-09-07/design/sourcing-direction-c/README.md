@@ -1,5 +1,62 @@
 # P21 供应链与利润 · C方向整页待审提案
 
+## 四提交控件图直达
+
+- [1440px · search · default](1440-control-search-default.png)
+- [1440px · search · hover](1440-control-search-hover.png)
+- [1440px · search · focus](1440-control-search-focus.png)
+- [1440px · search · pressed](1440-control-search-pressed.png)
+- [1440px · search · disabled](1440-control-search-disabled.png)
+- [1440px · search · busy](1440-control-search-busy.png)
+- [1440px · quote · default](1440-control-quote-default.png)
+- [1440px · quote · hover](1440-control-quote-hover.png)
+- [1440px · quote · focus](1440-control-quote-focus.png)
+- [1440px · quote · pressed](1440-control-quote-pressed.png)
+- [1440px · quote · disabled](1440-control-quote-disabled.png)
+- [1440px · quote · busy](1440-control-quote-busy.png)
+- [1440px · purchase · default](1440-control-purchase-default.png)
+- [1440px · purchase · hover](1440-control-purchase-hover.png)
+- [1440px · purchase · focus](1440-control-purchase-focus.png)
+- [1440px · purchase · pressed](1440-control-purchase-pressed.png)
+- [1440px · purchase · disabled](1440-control-purchase-disabled.png)
+- [1440px · purchase · busy](1440-control-purchase-busy.png)
+- [1440px · delete · default](1440-control-delete-default.png)
+- [1440px · delete · hover](1440-control-delete-hover.png)
+- [1440px · delete · focus](1440-control-delete-focus.png)
+- [1440px · delete · pressed](1440-control-delete-pressed.png)
+- [1440px · delete · disabled](1440-control-delete-disabled.png)
+- [1440px · delete · busy](1440-control-delete-busy.png)
+- [390px · search · default](390-control-search-default.png)
+- [390px · search · hover](390-control-search-hover.png)
+- [390px · search · focus](390-control-search-focus.png)
+- [390px · search · pressed](390-control-search-pressed.png)
+- [390px · search · disabled](390-control-search-disabled.png)
+- [390px · search · busy](390-control-search-busy.png)
+- [390px · quote · default](390-control-quote-default.png)
+- [390px · quote · hover](390-control-quote-hover.png)
+- [390px · quote · focus](390-control-quote-focus.png)
+- [390px · quote · pressed](390-control-quote-pressed.png)
+- [390px · quote · disabled](390-control-quote-disabled.png)
+- [390px · quote · busy](390-control-quote-busy.png)
+- [390px · purchase · default](390-control-purchase-default.png)
+- [390px · purchase · hover](390-control-purchase-hover.png)
+- [390px · purchase · focus](390-control-purchase-focus.png)
+- [390px · purchase · pressed](390-control-purchase-pressed.png)
+- [390px · purchase · disabled](390-control-purchase-disabled.png)
+- [390px · purchase · busy](390-control-purchase-busy.png)
+- [390px · delete · default](390-control-delete-default.png)
+- [390px · delete · hover](390-control-delete-hover.png)
+- [390px · delete · focus](390-control-delete-focus.png)
+- [390px · delete · pressed](390-control-delete-pressed.png)
+- [390px · delete · disabled](390-control-delete-disabled.png)
+- [390px · delete · busy](390-control-delete-busy.png)
+
+## 当前与历史覆盖
+
+2026-09-09最新：[四提交按钮双端六态](../../SOURCING-CONTROL-STATE-REVIEW.md)新增48张，现62主场景193PNG，24代表状态槽已绑定，仍缺146槽。只细化离线提交按钮与修正手机长报价窗底栏；找货/报价/删除disabled与busy同一源条件，采购另有MOQ/原因条件。焦点/关闭锁/在途反馈非真实Vue实施，不提升批准。以下145图/170槽为上一批记录。
+
+复验沿原命令：默认核对来源/图片并跑全部离线检查；新增--smoke只预检、不生成或验收图片；--capture重渲染本包永久图稿与证据。四按钮文字对比、实际hover/focus/pressed、圆角内命中和键盘精确payload均检查；手机端需滚动查看长表单，状态图保留按钮上下文而不冒充全表单。
+
 2026-09-09：[逐动作审核入口](../../SOURCING-SEMANTIC-REVIEW.md)已将54源位置归38组，关联本包145图；仍缺170代表状态槽的逐控件证据。本轮没有改图、提升批准或实施生产，SC-G01–08继续待处理。
 
 SOURCING-C-r1；起始main/b30fb8a2；62场景、145PNG。具体页面未获审，方向C不是逐页批准或部署许可。

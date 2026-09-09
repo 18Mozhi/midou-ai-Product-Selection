@@ -18,10 +18,10 @@
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "scripts/verify-ui-phase2-sourcing-source.mjs": "1b3e30a35f3a7d754d1f3fcee2cfbb4d1a7ce3c1799d6d6c7914fbc09866e6c6",
-    "scripts/verify-ui-phase2-sourcing-c.mjs": "af56294aafdd2aa27bf66439a6cfe076f7549409ec57bddc8e5339e8a6da3799",
+    "scripts/verify-ui-phase2-sourcing-c.mjs": "adb335c2716645c7d65aa7e25884648db208ccec6cb90d3b1b820e09cf7e382a",
     "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/index.html": "a7590f66142c3bce8f896c6c627cefd858c63af53c8b10bce4f557ba1954f7f4",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "1e967515b799f08aa83e5544fc7bef712172675317c9836979fd0f5a468d9ba4",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "9ba5c7682118ce98f6f853dd42f6fff9ef1aaa78884ede93a9befa22bcf97647"
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "aba83781d10b5d3a935aa5133f90825774796f58fb29eb650ebda66fc0f2e7be",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "128b3554adff94e1eef1b8ed59e90d529710a3de9e7815c6f5b3b86d5252541f"
   },
   "sourceProof": {
     "checks": [
@@ -544,140 +544,140 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "search-keyword",
-      "sha256": "ccc844f97b750444c06bfae658fd9455585cd55d40fe745940a39f54a591ed95"
+      "sha256": "daff211df27b0447396bcc548df4918516587847fc2c992232efc2c03807f315"
     },
     {
       "file": "1440-search-image.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "search-image",
-      "sha256": "b4bdff8c42b711fd3fb6a3396601490d51ac80d4a1d903f2598f9c5ba9b56f22"
+      "sha256": "35a23e31fe5cffcfbacfd766111a85378060d46ad5a1a065c12241b52031d5f1"
     },
     {
       "file": "1440-search-opportunity.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "search-opportunity",
-      "sha256": "98aa2032b7b957399ac9e21a8e4901e0f357b884564c055945dd3bb917b66928"
+      "sha256": "0dc28d37458729675061a84f3fce5fa8663d016c8a4a106bf0ed31f7a9d7c714"
     },
     {
       "file": "1440-search-product_url.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "search-product_url",
-      "sha256": "3096765fdc93c51bfab7e756fc60f993d393fc807ab646173977cfa24ba8380b"
+      "sha256": "da9439d8bbd2780e6780469e09a03125f5d3a1821e6ecf53e93f9b25bc134a6c"
     },
     {
       "file": "1440-search-error.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "search-error",
-      "sha256": "22ad582284b0ac7a4caace61678fa980eb3def1445fce90d69a71157c1859049"
+      "sha256": "35e16f50f5a3d4cd1977ff1ec800910b8552e406d845a4fc664c27e6fe0529cb"
     },
     {
       "file": "1440-search-busy.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "search-busy",
-      "sha256": "81d0e913949ecfe44f9a7f4bd6647dbe7b8b5eb5ad27b3251658596dee81ffc4"
+      "sha256": "bc69a149653dbcf7b13c2afc21cb3e34194110f2167b45dce6619aad466d8549"
     },
     {
       "file": "1440-quote.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote",
-      "sha256": "d7275a05899f6ec78f233e73a110c86c5821904ecda03c5e4e74e73299fcb088"
+      "sha256": "adefb351e85485eff1774673db53900430007be438489b522ca70a7fb00797b1"
     },
     {
       "file": "1440-quote-lower.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-lower",
-      "sha256": "37cbe32766f3f5bf10bb886fca941ff8c21d8c6b14c1ae6944d8b291d201889d"
+      "sha256": "70f294376c0b5c6bf7950b1d3d49797d19bb11eaf87d29f11ea63d1e12cc0f65"
     },
     {
       "file": "1440-quote-defaults.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-defaults",
-      "sha256": "5ae0b1227f6588a055f496ef08ca479767abced320c3daeaa161ca5d3a7ac2e7"
+      "sha256": "101ffd77070d25411e7d8fcee7a1fb9b0b21fcd84c28c1cddb0ea615a3dd11f9"
     },
     {
       "file": "1440-quote-defaults-lower.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-defaults-lower",
-      "sha256": "41ec639fd37f34c43417c647f23deb60ea4e4dd2a34d202064e78d04e1c90681"
+      "sha256": "aab9fe1881e579f28813471b718d4a64dffa4a81e735ae872ebfabe435aa3ae8"
     },
     {
       "file": "1440-quote-error.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-error",
-      "sha256": "450cad15cd40054b00b8350c604dede100e2fae69fad90523a94a3cca92bb507"
+      "sha256": "1441778ea6bc1702525166e07778d151b693017fee75196b5f15f9fa0cd938c4"
     },
     {
       "file": "1440-quote-error-lower.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-error-lower",
-      "sha256": "938f7f38d9d24511f64f65c056c7a694b3e170bf7c0c5874c41fa4b892b5e21b"
+      "sha256": "7b65972088e0308357b0e62cb2f410418db7104db5b712f68cae75e9fce4893f"
     },
     {
       "file": "1440-quote-busy.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-busy",
-      "sha256": "e30521e7e0541ba9470879390ec69baf30731ec8837d645521225c0fc3df4ae9"
+      "sha256": "f6c47d1a66f51624a98ce78f366f23d4603d08d1feaad7fefcf0529c06d789c6"
     },
     {
       "file": "1440-quote-busy-lower.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-busy-lower",
-      "sha256": "e30521e7e0541ba9470879390ec69baf30731ec8837d645521225c0fc3df4ae9"
+      "sha256": "f6c47d1a66f51624a98ce78f366f23d4603d08d1feaad7fefcf0529c06d789c6"
     },
     {
       "file": "1440-purchase.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "purchase",
-      "sha256": "40da7f38e15dcfbd1d23eca34145b1dafcf3ff3fc18a542f7915bb5c7092022d"
+      "sha256": "16db77378b0191175d53780a737b661e3eaea1c03b7cf45766192404e1a700a5"
     },
     {
       "file": "1440-purchase-error.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "purchase-error",
-      "sha256": "8a8afd37d224469941cf70a81245f74a21100fc45b1bfcb655fbdb2ab1255c99"
+      "sha256": "edea23a69ab72c787e72b3b2df5c5b3bc86c81e83e56781285c82bbd190d7695"
     },
     {
       "file": "1440-purchase-busy.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "purchase-busy",
-      "sha256": "7ea816845d8be62ccae01ac64d0a74170c8bee0e17688bbea94fc6ca5c9f921d"
+      "sha256": "d2d104cdab3114677e5618f104d5b74d5f0d87257711c4ff8407d68cf8ea7dfe"
     },
     {
       "file": "1440-delete.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "delete",
-      "sha256": "5b08d78665020c0b371e9f5a6b898da9c4034e5e56f9fbf15ce83b3957508aab"
+      "sha256": "e4ca5f023fb667a5696dc23c5cd21030a471cefc57dbc50a7394a4df87bc3a50"
     },
     {
       "file": "1440-delete-error.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "delete-error",
-      "sha256": "a0944ea10092491b692c5b14848e40eca323b0d9f3de2d03c0210227ec618088"
+      "sha256": "1977ab235451ccd3bd0d1541b1df2f86f841e44c6209ec580d6b5382fdd8a1c6"
     },
     {
       "file": "1440-delete-busy.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "delete-busy",
-      "sha256": "ae7b3c3085de023308b6045d9b292b39291aedd16687ef2db99b7618e61263ce"
+      "sha256": "a5130688053633bd1cc934fab6433207d68194de7122fd869555f6b1b2f92222"
     },
     {
       "file": "1440-cost-missing.png",
@@ -824,7 +824,7 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "purchase-below-moq",
-      "sha256": "b9119bd831c8d4f4cd2b98bd5208832e9fe6b88a2bd337622d137d8860e20fa1"
+      "sha256": "ced9f8bdb0526a7c594a2b71e39ad62a1997477dca378d70d29e610b838f6304"
     },
     {
       "file": "1440-button-focus.png",
@@ -839,6 +839,486 @@
       "width": 1440,
       "scene": "button-hover",
       "sha256": "c2f55922b80a04b4582bd612d5bc67f3c90ae724651aa8e901adf686310aa67c"
+    },
+    {
+      "file": "1440-control-search-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-default",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-default",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0d3fffc726d998ff8235897a0d64269157988782efde094b9ee40f609fa116da"
+    },
+    {
+      "file": "1440-control-search-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-hover",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-hover",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f6ef171992dd2b202c35ae89b0bc0d5e37abac02a59d30295a8bbc60d33733f1"
+    },
+    {
+      "file": "1440-control-search-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-focus",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-focus",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "293390d97411a3714d3c0966d46e36b1cff0b17a2f1e2f1782655750663e133a"
+    },
+    {
+      "file": "1440-control-search-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-pressed",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-pressed",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9f2a176477eecd255b0c5bab1c070fcbf0a513d53f161d2c749b78461dfcf50f"
+    },
+    {
+      "file": "1440-control-search-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-disabled",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "42a16de4c7b69a39e70f27016f59f065bdaa1aa5e817f11c05d47c798dbf3643"
+    },
+    {
+      "file": "1440-control-search-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-busy",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e15c3d68f23d103c8732d0765699585b3fa7264a7a5ca837f367fa7d00ca52fb"
+    },
+    {
+      "file": "1440-control-quote-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-default",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-default",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9c099f66b349e2f26fd160495f5352c34480ab9df8b6fbddd92544fa7a048b46"
+    },
+    {
+      "file": "1440-control-quote-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-hover",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-hover",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0105af619f98f9f7a9a51835bbb4252785dcc57e596e8e9930057727ffeb631a"
+    },
+    {
+      "file": "1440-control-quote-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-focus",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-focus",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6e3485089f25a77b9ace91881cae1d874e663ad5333ec2a1161e70cb12f3895e"
+    },
+    {
+      "file": "1440-control-quote-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-pressed",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-pressed",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "703ad7ba01363cb4e763170101457578ce349c8b4e1246d918dde57d5375953b"
+    },
+    {
+      "file": "1440-control-quote-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-disabled",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3ca081dbfb572377f0c417f2ff9d4437102d89317749ecea6182109182e80026"
+    },
+    {
+      "file": "1440-control-quote-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-busy",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b53e58097ba4e77817d185a23ebb89560523db39a3bb9d7fe048ee62eac274e1"
+    },
+    {
+      "file": "1440-control-purchase-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-default",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-default",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a7f7c8ec16476bb6ddc02e4d28e653c0acbda4a456bca6d97840474c436fbb82"
+    },
+    {
+      "file": "1440-control-purchase-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-hover",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-hover",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4b3fd011bcbd434021fa4b4f539bff47d703d5f1a5abf8b1951a64c8e9f2dd99"
+    },
+    {
+      "file": "1440-control-purchase-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-focus",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-focus",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4ed9c3ce61fbe6ffeee9b996009c026ef220b1aab448fcf063f43ef190a1f761"
+    },
+    {
+      "file": "1440-control-purchase-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-pressed",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-pressed",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "64c7d207fdad8c2ee2081d626c31062c3feaa77071db2e50a8e3ebd5c30e45cc"
+    },
+    {
+      "file": "1440-control-purchase-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-disabled",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "quantity-below-current-quote-moq"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "59b2010969fe448e0f8306a241d6c6d938d44511cfe3a6cc800f8a9d9f699771"
+    },
+    {
+      "file": "1440-control-purchase-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-busy",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e424148b3a399f57a2998ab0e36774d1ba8f9426e2d0fd2e303206195587248c"
+    },
+    {
+      "file": "1440-control-delete-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-default",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-default",
+        "contrast": 7.04437716623466,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c36dadcf40fb4084f40356769fbf00e83317d895a080818202665d91cccd054c"
+    },
+    {
+      "file": "1440-control-delete-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-hover",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-hover",
+        "contrast": 9.176661601106336,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d62a617244270a61fac98aeec6a78ff7b487a1cf3725d1869a7280ac05ac7698"
+    },
+    {
+      "file": "1440-control-delete-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-focus",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-focus",
+        "contrast": 7.04437716623466,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "35e318d9433a644bc5e4fff7aa7355c1aca21ce4377091f40504027e82be21de"
+    },
+    {
+      "file": "1440-control-delete-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-pressed",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-pressed",
+        "contrast": 9.176661601106336,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "25438d0c99bec65195cc4905e186aec217ff5f357419bc2a768d73783d2314dc"
+    },
+    {
+      "file": "1440-control-delete-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-disabled",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8460cd90d3d55f107acb08848c5e17c2db727fa2ece216f8a8125be6dfb678b9"
+    },
+    {
+      "file": "1440-control-delete-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-busy",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8460cd90d3d55f107acb08848c5e17c2db727fa2ece216f8a8125be6dfb678b9"
     },
     {
       "file": "390-workspace.png",
@@ -1034,147 +1514,147 @@
       "pageId": "P21",
       "width": 390,
       "scene": "search-keyword",
-      "sha256": "f7f6ef3d5207bf6e6dbdd8014e107626814d0dc80c032aa0fafd93554622c866"
+      "sha256": "0eafdae1108d2db3b606cec193c76c4d7172a5f69212e389c1270b2449dfcc0b"
     },
     {
       "file": "390-search-image.png",
       "pageId": "P21",
       "width": 390,
       "scene": "search-image",
-      "sha256": "51d75385f45a5bf176c94bd96ab7cbaee63897b7010d0d77c1b741636278484f"
+      "sha256": "a9d9cfcef3b956a125d654a51058f1e69b5b26c2d80b63a124901db7596412df"
     },
     {
       "file": "390-search-opportunity.png",
       "pageId": "P21",
       "width": 390,
       "scene": "search-opportunity",
-      "sha256": "88d1f27c9de5c567ee495e82b7f92549603e225766e7f71d2b5b7463289a5375"
+      "sha256": "def9b932ec7a4247c449dca0bc0901eac055c0c38f2ab536f68f51faa179c65f"
     },
     {
       "file": "390-search-product_url.png",
       "pageId": "P21",
       "width": 390,
       "scene": "search-product_url",
-      "sha256": "3ccded8de62f3937ce4fb5dfaa1ae68b7cd7bf17d00218d41049e4fb4cb08db6"
+      "sha256": "6ec4586412678d97c2f6b33cb87f680dfbce7df32a99260f35ddf93c5fb25ba9"
     },
     {
       "file": "390-search-error.png",
       "pageId": "P21",
       "width": 390,
       "scene": "search-error",
-      "sha256": "6edee1399f224d9c1dd00546af2b6b52330792a4b868db4d37aedfe6d6deda84"
+      "sha256": "b78c6242d8fb910f2292bdc9b90685a618c0291cdc2dda654e53e9619e08aceb"
     },
     {
       "file": "390-search-busy.png",
       "pageId": "P21",
       "width": 390,
       "scene": "search-busy",
-      "sha256": "7bede71fc10952ab80599a6a1670d598512f4e0fbe67b172a5efd97692c57852"
+      "sha256": "2f1257b7445e8b5d9bbcbff7dd243d101300c604a32003920de0db4841520880"
     },
     {
       "file": "390-quote.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote",
-      "sha256": "52e83c0bbf77f0ec9010bd353aec73ab51db4cfc6030eede954206e7a7a7c264"
+      "sha256": "c1b5e181ba62a3f90982a5586fce7755eb4e579e5fa7f14d868422453507eb9f"
     },
     {
       "file": "390-quote-lower.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-lower",
-      "sha256": "95e6945735d5d442877255f9425c53c32063ff9ca23c7e637b4c0004f0b4a24b"
+      "sha256": "50d76b8b36693aaedc6b7f3d697a97f15db31c9d948d104990766943921b6a8c"
     },
     {
       "file": "390-quote-defaults.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-defaults",
-      "sha256": "52e83c0bbf77f0ec9010bd353aec73ab51db4cfc6030eede954206e7a7a7c264"
+      "sha256": "c1b5e181ba62a3f90982a5586fce7755eb4e579e5fa7f14d868422453507eb9f"
     },
     {
       "file": "390-quote-defaults-lower.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-defaults-lower",
-      "sha256": "95e6945735d5d442877255f9425c53c32063ff9ca23c7e637b4c0004f0b4a24b"
+      "sha256": "50d76b8b36693aaedc6b7f3d697a97f15db31c9d948d104990766943921b6a8c"
     },
     {
       "file": "390-quote-error.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-error",
-      "sha256": "52e83c0bbf77f0ec9010bd353aec73ab51db4cfc6030eede954206e7a7a7c264"
+      "sha256": "c1b5e181ba62a3f90982a5586fce7755eb4e579e5fa7f14d868422453507eb9f"
     },
     {
       "file": "390-quote-error-lower.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-error-lower",
-      "sha256": "7cdfe0d35f55371595e8d71c4d449e3877549aef7210960ba990f646b8003206"
+      "sha256": "2fcb82434f2b8d0409feb67b21b132274de6b1b22687b47b85062d0284c68326"
     },
     {
       "file": "390-quote-busy.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-busy",
-      "sha256": "ed134999426e8bc8981d42144d2cc71183f4856bcfe7204fa61edbdf9f74d92a"
+      "sha256": "6aa28b27fdd785242c9b1493fb9359d00459fb9fb7e315a3b7607fac7ae8e2fe"
     },
     {
       "file": "390-quote-busy-lower.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-busy-lower",
-      "sha256": "ed134999426e8bc8981d42144d2cc71183f4856bcfe7204fa61edbdf9f74d92a"
+      "sha256": "6aa28b27fdd785242c9b1493fb9359d00459fb9fb7e315a3b7607fac7ae8e2fe"
     },
     {
       "file": "390-purchase.png",
       "pageId": "P21",
       "width": 390,
       "scene": "purchase",
-      "sha256": "1cab789d0433b1bb31d1e2820014d65fc78c7af0a6ec81be6189112c3cb6f300"
+      "sha256": "8bdcd40db3483d42df72bdc7d34a0113295e94cd5fcf39f2dfe5a1d95fa7d842"
     },
     {
       "file": "390-purchase-error.png",
       "pageId": "P21",
       "width": 390,
       "scene": "purchase-error",
-      "sha256": "c3922dc9a2ec27e3708dfc323e95e9d7c02c691241879f2e1258b6ecbafefd03"
+      "sha256": "afc6c8ab71d77447df559f07d64a2644b2e4d10c547f938ead3ab6a39adc7750"
     },
     {
       "file": "390-purchase-error-lower.png",
       "pageId": "P21",
       "width": 390,
       "scene": "purchase-error-lower",
-      "sha256": "960542511afe204c9b2596284dfb8780ff4e6b26fe5a25c65359c8640763caea"
+      "sha256": "1e7edd1bc370104edebda372dc636387a4d4d4cd343e8f828cbbd90d4282c05d"
     },
     {
       "file": "390-purchase-busy.png",
       "pageId": "P21",
       "width": 390,
       "scene": "purchase-busy",
-      "sha256": "8c53463c329ea16d034ec7c3525b054c05df8bee0b8ebf8d838fc5d479fdd050"
+      "sha256": "6e13f1d23a3c023284aafada9a693d31c921785ea12260f8a4b5db6f73a5a941"
     },
     {
       "file": "390-delete.png",
       "pageId": "P21",
       "width": 390,
       "scene": "delete",
-      "sha256": "ff4fa4385973bb67bc1f2b5cbddd06f02022782b23fd8fbac85bc24ae1ca9d16"
+      "sha256": "2775ca040ab3ca5bcf843519ab07a630bbe5a46e367f9427c2747ca17b67f567"
     },
     {
       "file": "390-delete-error.png",
       "pageId": "P21",
       "width": 390,
       "scene": "delete-error",
-      "sha256": "3094177d49f4327f5b08966617932852863024fd3d97009fbf4e548463014a71"
+      "sha256": "e7e5d7160a4aabed8983175b95ad6b34c9801ff534ec4a0816fd295d9e82b131"
     },
     {
       "file": "390-delete-busy.png",
       "pageId": "P21",
       "width": 390,
       "scene": "delete-busy",
-      "sha256": "355d9d5704e93eb69585740d29bf2e7cdd7da792cb175001c7aa7589aca7aed8"
+      "sha256": "cb15adce7b8674e797cc1b39cb0ff79f59e49ecb4317ee603b9ebf51806245d1"
     },
     {
       "file": "390-cost-missing.png",
@@ -1321,7 +1801,7 @@
       "pageId": "P21",
       "width": 390,
       "scene": "purchase-below-moq",
-      "sha256": "8d32d6ac7fab8abfc2d661b5f51ef4e44ae6d1d250f76fc69de3a2821b2df444"
+      "sha256": "82e7406af74eb490ad8768dcc07947111f123b04150145734602cf6fa8779ece"
     },
     {
       "file": "390-button-focus.png",
@@ -1336,6 +1816,486 @@
       "width": 390,
       "scene": "button-hover",
       "sha256": "1b23cb09eebd3ab25554054074d108d40c8a5f06ad581c766428d096a063f62d"
+    },
+    {
+      "file": "390-control-search-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-default",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-default",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "55d8e7b31ea2e1ce36909013e2ff352e8eb8911eee67159da2dd745925566fbf"
+    },
+    {
+      "file": "390-control-search-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-hover",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-hover",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "73c3f7e7bb4fce7a509e9098cb8914eff82e684a944c971a4bffbada33075c3f"
+    },
+    {
+      "file": "390-control-search-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-focus",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-focus",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6c38ad35ff30ea76549da6cbc2ed0f48d8ac113abeb9ec9ba792a7526bd0223f"
+    },
+    {
+      "file": "390-control-search-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-pressed",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-pressed",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "efc792e51a2c36adb47ce4914e8c5b66af9b4c4b077f025012c27d5acdbf2e5b"
+    },
+    {
+      "file": "390-control-search-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-disabled",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fbc3d54cb827c43cb510f80b5e7905906c97823175f75381bbf25f530ed54ea1"
+    },
+    {
+      "file": "390-control-search-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-busy",
+      "control": {
+        "key": "search",
+        "actionId": "SC-S-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fbc3d54cb827c43cb510f80b5e7905906c97823175f75381bbf25f530ed54ea1"
+    },
+    {
+      "file": "390-control-quote-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-default",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-default",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "967c44702e0d3f26ca04f106a144e005e39ccb930cd4c5a2b44b652a6bbd318a"
+    },
+    {
+      "file": "390-control-quote-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-hover",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-hover",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b031c60f3db74a1721f9a81d04596ea540b06843551263665feb8ec664e675ca"
+    },
+    {
+      "file": "390-control-quote-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-focus",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-focus",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d63d1897b0047b73b2cd7412fa73e55fadf2a610669dffdff83973ad35b62888"
+    },
+    {
+      "file": "390-control-quote-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-pressed",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-pressed",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8e1824f0ad3688f85fa2a7cbe92d202630aa481ab4c1e0de98c2428de3051036"
+    },
+    {
+      "file": "390-control-quote-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-disabled",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "547599c75f770b136db8cc29115d08f3e93729b34cbb6f034c4cf7af68dd78f3"
+    },
+    {
+      "file": "390-control-quote-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-busy",
+      "control": {
+        "key": "quote",
+        "actionId": "SC-QUOTE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "547599c75f770b136db8cc29115d08f3e93729b34cbb6f034c4cf7af68dd78f3"
+    },
+    {
+      "file": "390-control-purchase-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-default",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-default",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1cb1849836b31772dfb9b4e803ed56a459b7f460450298a6b9c47c307ff13590"
+    },
+    {
+      "file": "390-control-purchase-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-hover",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-hover",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ba4345dbb269694d44c359c7b8fec45c8d0136c34008406a2268b492ed7c8ff3"
+    },
+    {
+      "file": "390-control-purchase-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-focus",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-focus",
+        "contrast": 8.273466608002094,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "bf208ac36752d95bf060332b56f7e36b44f7bbf08d897c6985a9c1ab884085e7"
+    },
+    {
+      "file": "390-control-purchase-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-pressed",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-pressed",
+        "contrast": 10.613441575513296,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "dcc5b7c3130337d7c54c0f4bd2dbe57cc18fc197a84d198a8f18590fe752e945"
+    },
+    {
+      "file": "390-control-purchase-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-disabled",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "quantity-below-current-quote-moq"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2c0461a01a89f39573e2698f0c2adabbb01a34ce21a4fe3f03eaa1ad3246f674"
+    },
+    {
+      "file": "390-control-purchase-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-busy",
+      "control": {
+        "key": "purchase",
+        "actionId": "SC-PURCHASE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ca3767c8d58461581db7f8aa5990614b9e1939f7e976fa21db7a906034984315"
+    },
+    {
+      "file": "390-control-delete-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-default",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "default",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-default",
+        "contrast": 7.04437716623466,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1c8a833475e8701e4fba265bb70af4156e1a06638ea9468034f117b017ddeacf"
+    },
+    {
+      "file": "390-control-delete-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-hover",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "hover",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-hover",
+        "contrast": 9.176661601106336,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a032da981bf8a6f484d0d40032110f95db80d5bbf02029150578dfbc138994df"
+    },
+    {
+      "file": "390-control-delete-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-focus",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "focus",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-focus",
+        "contrast": 7.04437716623466,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2e56d5e7e9a740cb80f5599e358dfcf2f9be1d6eb1d922df8cc3b222a4e9179d"
+    },
+    {
+      "file": "390-control-delete-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-pressed",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "pressed",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-pressed",
+        "contrast": 9.176661601106336,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "36674a88700f34b3b5a08f8bd951174528c12ccd9e0f77a9e82694feff1b1a85"
+    },
+    {
+      "file": "390-control-delete-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-disabled",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "disabled",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d922430a746a223533b914ac4cc8a0ee20e874fcb7439c6fdbea9d1166db86f1"
+    },
+    {
+      "file": "390-control-delete-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-busy",
+      "control": {
+        "key": "delete",
+        "actionId": "SC-DELETE-SUBMIT",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "state": "busy",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d922430a746a223533b914ac4cc8a0ee20e874fcb7439c6fdbea9d1166db86f1"
     },
     {
       "file": "768-workspace.png",
@@ -1366,6 +2326,644 @@
       "sha256": "8558fbc4a5b8ea4a07d0e0dca36c156e20be8bd23fea823704c927aeab7ad17b"
     }
   ],
+  "controlStates": [
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-default",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-hover",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-focus",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-pressed",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-default",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-hover",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-focus",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-pressed",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-default",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-hover",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-focus",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-pressed",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "quantity-below-current-quote-moq"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-default",
+      "contrast": 7.04437716623466,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-hover",
+      "contrast": 9.176661601106336,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-focus",
+      "contrast": 7.04437716623466,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-pressed",
+      "contrast": 9.176661601106336,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-default",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-hover",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-focus",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-pressed",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search",
+      "actionId": "SC-S-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-default",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-hover",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-focus",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-pressed",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote",
+      "actionId": "SC-QUOTE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-default",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-hover",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-focus",
+      "contrast": 8.273466608002094,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-pressed",
+      "contrast": 10.613441575513296,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "quantity-below-current-quote-moq"
+    },
+    {
+      "key": "purchase",
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "default",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-default",
+      "contrast": 7.04437716623466,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "hover",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-hover",
+      "contrast": 9.176661601106336,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "focus",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-focus",
+      "contrast": 7.04437716623466,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "pressed",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-pressed",
+      "contrast": 9.176661601106336,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "disabled",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete",
+      "actionId": "SC-DELETE-SUBMIT",
+      "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+      "state": "busy",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    }
+  ],
+  "pageActionVisualReferences": {
+    "P21": {
+      "SC-S-SUBMIT": {
+        "pageId": "P21",
+        "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-search-default",
+          "hover": "control-search-hover",
+          "focus": "control-search-focus",
+          "pressed": "control-search-pressed",
+          "disabled": "control-search-disabled",
+          "busy": "control-search-busy"
+        },
+        "limitation": "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending"
+      },
+      "SC-QUOTE-SUBMIT": {
+        "pageId": "P21",
+        "selector": "#modal button[data-action=\"SC-QUOTE-SUBMIT\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-quote-default",
+          "hover": "control-quote-hover",
+          "focus": "control-quote-focus",
+          "pressed": "control-quote-pressed",
+          "disabled": "control-quote-disabled",
+          "busy": "control-quote-busy"
+        },
+        "limitation": "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending"
+      },
+      "SC-PURCHASE-SUBMIT": {
+        "pageId": "P21",
+        "selector": "#modal button[data-action=\"SC-PURCHASE-SUBMIT\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-purchase-default",
+          "hover": "control-purchase-hover",
+          "focus": "control-purchase-focus",
+          "pressed": "control-purchase-pressed",
+          "disabled": "control-purchase-disabled",
+          "busy": "control-purchase-busy"
+        },
+        "limitation": "disabled uses current MOQ; busy is request in-flight, not accepted purchase task; full reason/field variants pending"
+      },
+      "SC-DELETE-SUBMIT": {
+        "pageId": "P21",
+        "selector": "#modal button[data-action=\"SC-DELETE-SUBMIT\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-delete-default",
+          "hover": "control-delete-hover",
+          "focus": "control-delete-focus",
+          "pressed": "control-delete-pressed",
+          "disabled": "control-delete-disabled",
+          "busy": "control-delete-busy"
+        },
+        "limitation": "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending"
+      }
+    }
+  },
   "actionIds": [
     "SC-COLLECTION",
     "SC-COMPARE",
@@ -1397,7 +2995,9 @@
     "SC-TAB"
   ],
   "checks": [
+    "1440: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions",
     "1440: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
+    "390: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions",
     "390: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
     "nine widths x5 representative surfaces; New York quote local display; 720x500 equivalent reflow only, not actual browser zoom or complete timezone/assistive technology coverage"
   ],

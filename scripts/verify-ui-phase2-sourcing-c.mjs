@@ -8,7 +8,25 @@ import { verifySourcingSource } from "./verify-ui-phase2-sourcing-source.mjs";
 
 const root = "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c";
 const capture = process.argv.includes("--capture");
-assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
+const smoke = process.argv.includes("--smoke");
+assert.ok(process.argv.slice(2).every((v) => ["--capture", "--smoke"].includes(v)));
+assert.ok(!(capture && smoke), "capture and smoke are exclusive");
+const states = ["default", "hover", "focus", "pressed", "disabled", "busy"];
+const controls = [
+  { key: "search", actionId: "SC-S-SUBMIT", ready: "search-keyword", domId: "SC-SEARCH-SUBMIT" },
+  { key: "quote", actionId: "SC-QUOTE-SUBMIT", ready: "quote", domId: "SC-QUOTE-SUBMIT" },
+  {
+    key: "purchase",
+    actionId: "SC-PURCHASE-SUBMIT",
+    ready: "purchase",
+    domId: "SC-PURCHASE-SUBMIT",
+  },
+  { key: "delete", actionId: "SC-DELETE-SUBMIT", ready: "delete", domId: "SC-DELETE-SUBMIT" },
+].map((control) => ({
+  ...control,
+  selector: '#modal button[data-action="' + control.domId + '"]',
+}));
+const controlStates = [];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const sourcePaths = [
   ...[
@@ -37,7 +55,7 @@ const sourceHashes = Object.fromEntries(
 );
 const sourceProof = await verifySourcingSource();
 let old;
-if (!capture) {
+if (!capture && !smoke) {
   old = JSON.parse(await readFile(root + "/evidence.json", "utf8"));
   assert.deepEqual(old.sourceHashes, sourceHashes);
   for (const s of old.screenshots)
@@ -80,7 +98,7 @@ async function layout(page, label) {
     );
   }
 }
-async function shot(page, width, scene) {
+async function shot(page, width, scene, control) {
   const file = `${width}-${scene}.png`;
   if (capture) {
     await page.screenshot({
@@ -93,13 +111,245 @@ async function shot(page, width, scene) {
       pageId: "P21",
       width,
       scene,
+      ...(control ? { control, captureScope: "viewport-with-control-context" } : {}),
       sha256: hash(await readFile(root + "/" + file)),
     });
-  } else
+  } else if (!smoke)
     assert.ok(
       old.screenshots.some((s) => s.file === file),
       file,
     );
+}
+function contrast(foreground, background) {
+  const luminance = (rgb) => {
+    const c = rgb
+      .match(/[\d.]+/g)
+      .slice(0, 3)
+      .map(Number)
+      .map((value) => {
+        const n = value / 255;
+        return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+      });
+    return c[0] * 0.2126 + c[1] * 0.7152 + c[2] * 0.0722;
+  };
+  const a = luminance(foreground),
+    b = luminance(background);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+async function verifyControls(page, width) {
+  const count = () => page.evaluate(() => window.sourcingReview.intents.length);
+  const prepare = async (control) => {
+    await page.evaluate((scene) => {
+      window.sourcingReview.outcome = "success";
+      window.sourcingReview.choose(scene);
+    }, control.ready);
+    if (control.key === "quote") {
+      await page.locator("[name=specification]").fill("30x20cm / 1pc");
+      await page.locator("[name=moq]").fill("100");
+      await page.locator("[name=lead_time_days]").fill("7");
+    }
+    if (control.key === "delete") await page.locator("#modal [name=reason]").fill("重复找货记录");
+    assert.equal(await page.locator("#modal-form").evaluate((form) => form.checkValidity()), true);
+  };
+  for (const control of controls) {
+    for (const state of states) {
+      await page.mouse.move(0, 0);
+      await prepare(control);
+      const target = page.locator(control.selector);
+      assert.equal(await target.count(), 1);
+      let pending = state === "busy" || (state === "disabled" && control.key !== "purchase");
+      if (pending) {
+        await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+        const before = await count();
+        await target.click();
+        assert.equal(await count(), before + 1, "valid pending snapshot records one intent");
+      } else if (state === "disabled") {
+        await page.locator("[name=quantity]").fill("99");
+        assert.match(await page.locator("#modal-submit-hint").innerText(), /少于最小起订量 100/);
+      }
+      await target.scrollIntoViewIfNeeded();
+      await page.evaluate(() => document.activeElement?.blur());
+      const before = await count();
+      assert.equal(await target.isDisabled(), ["disabled", "busy"].includes(state));
+      assert.equal(await target.getAttribute("aria-busy"), String(pending));
+      assert.equal(await target.getAttribute("aria-describedby"), "modal-submit-hint");
+      if (["hover", "pressed"].includes(state)) {
+        await target.hover();
+        assert.ok(await target.evaluate((el) => el.matches(":hover")));
+      }
+      if (state === "focus") {
+        await page.keyboard.press("Tab");
+        await target.focus();
+        assert.ok(await target.evaluate((el) => el.matches(":focus-visible")));
+        assert.equal(await target.evaluate((el) => getComputedStyle(el).outlineWidth), "3px");
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el).outlineColor),
+          "rgb(25, 59, 128)",
+        );
+      }
+      if (state === "pressed") {
+        await page.mouse.down();
+        assert.ok(await target.evaluate((el) => el.matches(":active")));
+        assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
+      }
+      if (pending) {
+        assert.match(await target.innerText(), /正在/);
+        assert.match(await page.locator("#modal-submit-hint").innerText(), /尚未确认|尚未.*确认/);
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el, "::before").animationName),
+          "none",
+        );
+      }
+      if (["disabled", "busy"].includes(state)) {
+        const background = await target.evaluate((el) => getComputedStyle(el).backgroundColor);
+        await target.hover({ force: true });
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el).backgroundColor),
+          background,
+        );
+        await page.mouse.move(0, 0);
+      }
+      const colors = await target.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { foreground: s.color, background: s.backgroundColor, opacity: s.opacity };
+      });
+      const ratio = contrast(colors.foreground, colors.background);
+      assert.equal(colors.opacity, "1");
+      assert.ok(ratio >= 4.5, control.key + "/" + state + " contrast " + ratio);
+      await layout(page, width + "/" + control.key + "/" + state);
+      const rect = await target.boundingBox();
+      assert.ok(
+        rect.y >= 6 && rect.y + rect.height <= page.viewportSize().height - 6,
+        `control/focus inside viewport ${width}/${control.key}/${state}: ${JSON.stringify(rect)}`,
+      );
+      assert.ok(
+        await target.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return [
+            [r.left + 6, r.top + 6],
+            [r.right - 6, r.top + 6],
+            [r.left + 6, r.bottom - 6],
+            [r.right - 6, r.bottom - 6],
+          ].every(([x, y]) => el.contains(document.elementFromPoint(x, y)));
+        }),
+        `all four inset button corners visible ${width}/${control.key}/${state}`,
+      );
+      const record = {
+        key: control.key,
+        actionId: control.actionId,
+        selector: control.selector,
+        state,
+        baseScene: control.ready,
+        pageId: "P21",
+        width,
+        scene: "control-" + control.key + "-" + state,
+        contrast: ratio,
+        condition: pending
+          ? "request-in-flight"
+          : state === "disabled"
+            ? "quantity-below-current-quote-moq"
+            : "valid-input",
+      };
+      controlStates.push(record);
+      await shot(page, width, record.scene, record);
+      if (state === "pressed") {
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+      if (["disabled", "busy"].includes(state)) {
+        await page.mouse.click(rect.x + rect.width / 2, rect.y + rect.height / 2);
+      }
+      assert.equal(await count(), before, "preview/disabled click must not submit");
+      if (pending) {
+        await page.keyboard.press("Escape");
+        assert.equal(
+          await page.locator("dialog[open]").count(),
+          1,
+          "in-flight close lock is proposal only",
+        );
+        await page
+          .locator("#modal-form")
+          .evaluate((form) =>
+            form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })),
+          );
+        assert.equal(await count(), before, "pending duplicate intent rejected");
+      }
+    }
+    await prepare(control);
+    const before = await count();
+    await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+    await page.locator(control.selector).focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await count(), before + 1, "keyboard submit exactly once");
+    const last = await page.evaluate(() => window.sourcingReview.intents.at(-1));
+    const expected = {
+      search: {
+        path: "/sourcing/searches",
+        method: "POST",
+        body: { input_type: "keyword", input_ref: "桌面收纳托盘" },
+      },
+      quote: {
+        path: "/sourcing/quotes",
+        method: "POST",
+        body: {
+          candidate_id: "00000000-0000-4000-8000-000000000102",
+          moq: 100,
+          specification: "30x20cm / 1pc",
+          lead_time_days: 7,
+          location: "广东",
+          confidence_value: 80,
+          stability_status: "unknown",
+          risk_level: "unknown",
+          observed_at: "2026-09-09T00:00:00.000Z",
+          evidence_id: "00000000-0000-4000-8000-000000000202",
+        },
+      },
+      purchase: {
+        path: "/sourcing/purchase-tasks",
+        method: "POST",
+        body: {
+          quote_id: "00000000-0000-4000-8000-000000000300",
+          quantity: 100,
+          reason: "从供应链找货页面创建采购任务",
+        },
+      },
+      delete: {
+        path: "/sourcing/searches/00000000-0000-4000-8000-000000000021",
+        method: "DELETE",
+        body: { reason: "重复找货记录" },
+      },
+    };
+    assert.deepEqual(last, expected[control.key], "exact inert intent, not actual API execution");
+    assert.equal(
+      await page.locator("#modal-submit-hint").evaluate((el) => el === document.activeElement),
+      true,
+    );
+    await page.keyboard.press("Enter");
+    assert.equal(await count(), before + 1);
+    if (control.key === "purchase") {
+      await prepare(control);
+      await page.locator("#modal [name=reason]").fill(" ");
+      assert.equal(await page.locator(control.selector).isDisabled(), true);
+      await page.locator("#modal [name=reason]").fill("核对报价");
+      assert.equal(await page.locator(control.selector).isDisabled(), false);
+    } else {
+      await prepare(control);
+      const field = { search: "input_ref", quote: "specification", delete: "reason" }[control.key];
+      await page.locator('#modal [name="' + field + '"]').fill("");
+      assert.equal(
+        await page.locator(control.selector).isDisabled(),
+        false,
+        "required is not an invented disabled rule",
+      );
+      const beforeInvalid = await count();
+      await page.locator("#modal-form").evaluate((form) => form.requestSubmit());
+      assert.equal(
+        await count(),
+        beforeInvalid,
+        "native required validation prevents an empty submit",
+      );
+    }
+  }
 }
 try {
   for (const width of [1440, 390]) {
@@ -227,7 +477,7 @@ try {
       await click("SC-PURCHASE-OPEN");
       const b = await count();
       await page.locator("[name=quantity]").fill("99");
-      await click("SC-PURCHASE-SUBMIT");
+      assert.equal(await page.locator("[data-action=SC-PURCHASE-SUBMIT]").isDisabled(), true);
       assert.equal(await count(), b);
       await shot(page, width, "purchase-below-moq");
       await page.locator("[name=quantity]").fill("100");
@@ -312,6 +562,10 @@ try {
         await page.locator("[data-action=SC-SOURCE]").first().getAttribute("rel"),
         "noopener noreferrer",
       );
+      await verifyControls(page, width);
+      checks.push(
+        `${width}: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions`,
+      );
       checks.push(
         `${width}: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes`,
       );
@@ -372,6 +626,26 @@ try {
           sourceProof,
           scenes,
           screenshots,
+          controlStates,
+          pageActionVisualReferences: {
+            P21: Object.fromEntries(
+              controls.map((control) => [
+                control.actionId,
+                {
+                  pageId: "P21",
+                  selector: control.selector,
+                  scope: "representative-control-only-not-all-variants-or-Vue",
+                  states: Object.fromEntries(
+                    states.map((state) => [state, "control-" + control.key + "-" + state]),
+                  ),
+                  limitation:
+                    control.key === "purchase"
+                      ? "disabled uses current MOQ; busy is request in-flight, not accepted purchase task; full reason/field variants pending"
+                      : "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending",
+                },
+              ]),
+            ),
+          },
           actionIds: [...actions].sort(),
           checks,
           http,
@@ -399,9 +673,10 @@ try {
   }
   console.log(
     JSON.stringify({
-      mode: capture ? "capture" : "check",
+      mode: capture ? "capture" : smoke ? "smoke" : "check",
       scenes: scenes.length,
-      screenshots: capture ? screenshots.length : old.screenshots.length,
+      screenshots: capture ? screenshots.length : smoke ? 0 : old.screenshots.length,
+      controlStates: controlStates.length,
       sourceChecks: sourceProof.checks.length,
       actions: actions.size,
       checks,

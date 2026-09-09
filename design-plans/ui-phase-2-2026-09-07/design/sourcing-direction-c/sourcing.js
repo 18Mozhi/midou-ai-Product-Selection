@@ -386,6 +386,9 @@
       };
     if (kind === "purchase")
       purchaseForm = { quantity: offer.moq ?? 1, reason: "从供应链找货页面创建采购任务" };
+    // A pending snapshot must contain the explicit synthetic input that was submitted.
+    if (scene && busy && kind === "quote") quoteForm.specification = "30x20cm / 1pc";
+    if (scene && busy && kind === "delete") deleteReason = "重复找货记录（样本原因）";
     renderModal();
     $("#modal").showModal();
     focusField();
@@ -487,7 +490,32 @@
         `<label>删除原因<textarea name="reason" required maxlength="500" ${busy ? "disabled" : ""}>${esc(deleteReason)}</textarea></label>`;
     }
     $("#modal").innerHTML =
-      `<form id="modal-form"><header><div><p class="eyebrow">供应链 / ${modalKind === "delete" ? "危险操作" : "明确输入"}</p><h2 id="dialog-title">${title}</h2></div>${action("SC-MODAL-CLOSE", "×", "", busy, `aria-label="关闭${title}"`)}</header>${body}${modalError ? `<div role="alert" class="notice error">${esc(modalError)}<br><code>synthetic-request-21</code></div>` : ""}<footer>${action("SC-MODAL-CLOSE", "取消", "", busy)}<button type="submit" data-action="SC-${modalKind.toUpperCase()}-SUBMIT" class="primary ${modalKind === "delete" ? "danger" : ""}" ${busy ? "disabled" : ""}>${busy ? "提交中…" : submit}</button></footer></form>`;
+      `<form id="modal-form"><header><div><p class="eyebrow">供应链 / ${modalKind === "delete" ? "危险操作" : "明确输入"}</p><h2 id="dialog-title">${title}</h2></div>${action("SC-MODAL-CLOSE", "×", "", busy, `aria-label="关闭${title}"`)}</header>${body}${modalError ? `<div role="alert" class="notice error">${esc(modalError)}<br><code>synthetic-request-21</code></div>` : ""}<footer><p id="modal-submit-hint" class="submit-hint" role="status" tabindex="-1"></p>${action("SC-MODAL-CLOSE", "取消", "", busy)}<button type="submit" data-action="SC-${modalKind.toUpperCase()}-SUBMIT" aria-describedby="modal-submit-hint" aria-busy="${busy}" class="primary ${modalKind === "delete" ? "danger" : ""}" ${busy ? "disabled" : ""}>${busy ? { search: "正在提交找货", quote: "正在确认报价", purchase: "正在创建任务", delete: "正在删除记录" }[modalKind] : submit}</button></footer></form>`;
+    syncModalSubmit();
+  }
+  function syncModalSubmit() {
+    const button = $("#modal button[type=submit]");
+    if (!button) return;
+    const belowMoq = modalKind === "purchase" && Number(purchaseForm.quantity) < modalOffer.moq;
+    const shortReason = modalKind === "purchase" && purchaseForm.reason.trim().length < 2;
+    button.disabled = busy || belowMoq || shortReason;
+    $("#modal-submit-hint").textContent = busy
+      ? {
+          search: "找货请求提交中，尚未确认排队。请勿重复提交。",
+          quote: "报价确认请求提交中，尚未确认新版本。请勿重复提交。",
+          purchase: "采购请求提交中，尚未确认任务排队。请勿重复提交。",
+          delete: "删除请求提交中，结果尚未确认。请勿重复提交。",
+        }[modalKind]
+      : belowMoq
+        ? "数量少于最小起订量 " + modalOffer.moq + "，请先调整。"
+        : shortReason
+          ? "创建原因需至少两个非空白字符。"
+          : {
+              search: "提交后仅排队，采集结果以实际任务状态为准。",
+              quote: "确认会创建新版本，不改写原始报价和证据。",
+              purchase: "仅创建采购任务，不下单、不付款。",
+              delete: "从工作台移除记录，候选证据与审计仍保留。",
+            }[modalKind];
   }
   function intent(path, method, body) {
     intents.push({ path, method, ...(body === undefined ? {} : { body: structuredClone(body) }) });
@@ -508,6 +536,7 @@
               : null;
       if (form) form[e.target.name] = e.target.value;
       else deleteReason = e.target.value;
+      syncModalSubmit();
     } else if (e.target.closest("#cost-form")) costForm[e.target.name] = e.target.value;
     else if (e.target.name === "review_reason") reviewReason = e.target.value;
   });
@@ -658,6 +687,7 @@
         observed_at: new Date(quoteForm.observed_at).toISOString(),
       });
     else if (modalKind === "purchase") {
+      if (Number(purchaseForm.quantity) < modalOffer.moq) return;
       if (purchaseForm.reason.trim().length < 2) {
         modalError = "请填写至少两个非空白字符的原因。";
         renderModal();
@@ -678,7 +708,12 @@
       }
       intent("/sourcing/searches/" + record.id, "DELETE", { reason: deleteReason.trim() });
     }
-    if (window.sourcingReview.outcome === "error") {
+    if (window.sourcingReview.outcome === "pending") {
+      busy = true;
+      modalError = "";
+      renderModal();
+      $("#modal-submit-hint").focus();
+    } else if (window.sourcingReview.outcome === "error") {
       modalError = "隔离失败样本：输入保留，不自动重放请求。";
       renderModal();
       focusField();

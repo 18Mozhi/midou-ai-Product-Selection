@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P21四提交按钮双端六态
+
+上一轮2b67c069已提交真实动作清单，属实质进展；本轮从干净main继续ui-skills-root/frontend-design及既有Playwright工作流。新增SOURCING-CONTROL-STATE-REVIEW.md、四动作48张双端状态图与精确pageId/actionId/selector/state证据；62主场景保持，P21包现193PNG。24代表槽已映射、146待补，全站22页/479独立源位置/426语义组不变，不冻结分母或提升批准。
+
+普通提交蓝色、危险操作红色、深蓝3px键盘焦点、不透明灰色禁用、静态忙碌标记与明确请求未确认提示。找货/报价/删除disabled和busy来自同一源busy条件；采购disabled代表数量99低于报价MOQ100，原因不足另有DOM检查，未重复算动作。原型补与源码一致的采购禁用更新、required与disabled分开；合成pending模式记录一次精确请求意图并锁定提交，键盘焦点落当前窗口状态。没有真实请求、任务创建或取消能力，原生模态/关闭锁/焦点仍是提案，SC-G01–08未关闭。
+
+初次smoke发现390px报价提交按钮y967+44超1000px视口；旧footer负吸附偏移导致裁切，改为bottom0和焦点留白。增加命中检查时2px采样落入8px圆角之外，改为6px内侧采样以测真实遮挡，不放宽按钮可见边界。最终smoke及完整capture通过：9真实setup组、48控件实例、默认/鼠标悬停/键盘focus/按下/禁用/在途、文字对比最低约6.36、键盘精确payload与重入拦截、required/MOQ/原因恢复、多屏宽及NY时间检查；HTTP/页面错误0。仅目检390-control-quote-focus及1440-control-delete-busy两张，不声称全部人工审阅。默认check未另重复跑；capture跑相同交互，设计审计再核对来源和PNG哈希。
+
+动作审计通过；新审核文档51链接存在；docs（73路由/60保护/6角色/153必需文档）、runtime-docs、390文件static-analysis、format:check通过。设计审计76包/10272PNG、844独立来源/1451绑定、8436 README链接，source/png漂移及未登记图0；全页完成未证明，批准0，G0进行中/G1–G5待验。
+
+只修改离线原型、永久验证脚本、状态图/证据/图册及相关审核/计划/Feature Map；生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/运行配置、依赖/安全权限、部署均未改，无重启要求。新增--smoke仅预检，不验收图片；默认check完整复验，--capture只重生成本包永久交付物。未重跑未受影响的真实Vue E2E或构建。无新临时文件/服务，所有验证浏览器finally关闭且无headless_shell残留；旧清理受阻output/playwright/ui-phase2-competitor-races-20260909目录两文件仍保留，不绕过。下一继续P21次级控件/其他页面及具体审核，完整实施和宝塔签收未完成。
+
 ## 2026-09-09 · P21真实动作与既有图稿对账
 
 从干净main/dc45d95d继续，使用ui-skills-root/frontend-design和既有Playwright工作流，按AGENTS、Feature Map、蓝图3.6追踪SW/SD/SP/SC及共享PP/RQ六组件。新增SOURCING-SEMANTIC-REVIEW.md与action-reviews/P21.json：54局部位置归38组（31动作/7装配关联），25输入/12结构/4自定义窗口；共享10源位置去重，全站新增44独立位置，现22页/479位置/426语义组。51页同级审核、全站冻结分母和批准仍未完成。
