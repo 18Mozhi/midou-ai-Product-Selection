@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P25五类写入按钮逐态图
+
+从干净main/c67d02f2继续，使用ui-skills-root/frontend-design细化C按钮语言、Playwright原生采图，不使用子代理。独立approval-controls-direction-c包复用原94图的事实、请求预览控制器和样式；新增主动作/危险动作hover/pressed、键盘focus、可读忙碌及失败保留演示。27适用代表槽双端54PNG，另5失败场景双端10PNG，共64永久图；P25五组明确selector映射，未映射144→117，其余组/审批/实际来源不变。模板/发布不编造空字段禁用，发起无发布模板变体待补。
+
+5类离线预览body沿原合同，等待只让实际触发按钮显示动作文字，锁本窗输入，失败恢复后重试相同body。没有模拟审批成功、真实HTTP/存储或修改事实。跨窗pending归属仍未完整实现/验收，原Vue的读写迟到与关闭缺口未修。生产Vue/CSS/API/OpenAPI/后端/Worker/Python/数据库/配置/env/依赖/权限/宝塔均未改，无需重启。
+
+最小smoke先通过；首次capture在按下后释放到遮罩触发旧关闭，测试失败不隐瞒。仅修验证手势为窗内空白释放，并把pressed加入smoke；44观察复测通过，随后完整capture及无参数哈希/原生状态复验各64观察通过，双端HTTP/存储/控制台错误0。目视检查390驳回busy、390模板error、1440批准pressed及390批准focus，按钮可达、文字清晰、失败上下文保留。收尾将观察记录的视口宽度独立命名viewportWidth，避免被按钮width覆盖，重新smoke/capture/全量验证；截图本身始终使用正确viewport。旧包来源哈希核对通过，无覆盖旧图。
+
+本批只创建永久审核包和永久验证脚本，无临时文件/日志/服务，浏览器finally关闭，收尾进程查询无Chromium/headless残留。原拒绝清理的output/playwright/p16-layout-20260910/.last-run.json，以及ui-phase2-competitor-races-20260909/playwright.config.ts、results/.last-run.json不重试删除，不暂存。动作审计通过：26页/579独立源/549组/467路由动作/58关联、余47页；设计审计77包/10838PNG、来源/图片漂移0、未登记图片0，批准页仍0且全站分母未冻结。verify:docs、verify:runtime-docs、verify:static-analysis、format:check及新增原型定向Prettier检查均通过。具体审核、全字段/变体/其他控件、全站实现及真实部署签收继续待办。
+
 ## 2026-09-10 · P25审批逐项核对与布局审核入口
 
 上一轮5bf62e18交付P24清单及源证据，属于实际进展。本轮从干净main继续，按AGENTS→Feature Map approvalWorkflow→蓝图M05-02→真实ApprovalWorkspace/ApprovalQueuePanel/模态钩子与路由缓存核对；使用ui-skills-root/frontend-design，Playwright复用既有原型验证器，无子代理。新增APPROVAL-SEMANTIC-REVIEW.md、P25.json：42源位置/30组（25动作、5关联、5写入），11模型/7结构/10内容关联，四业务窗不被内容变体膨胀。静态全局import超集不当页内运行分母。

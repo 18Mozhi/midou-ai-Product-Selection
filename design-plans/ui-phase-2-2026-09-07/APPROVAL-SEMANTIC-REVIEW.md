@@ -1,5 +1,7 @@
 # P25 审批中心：逐项审核与状态细化基线
 
+2026-09-10增量：[五类写入按钮逐态包](design/approval-controls-direction-c/README.md) / [64图册](design/approval-controls-direction-c/gallery.html)。旧94图保持；27代表视觉槽已绑定实际selector，未映射144→117，另5失败保留场景不计六态槽。新原型控制器在离线请求预览后锁本窗字段、只更新触发按钮的等待标签，并演示失败后同body重试；不是生产修复或真实审批成功。模板/发布不编空字段禁用，发起无发布模板变体仍未采。整体布局与控件待审，跨窗pending归属/全部字段/主题及真实服务仍未验收。以下保留前批来源审阅与发现。
+
 2026-09-10，基线main/5bf62e18。沿已选C方向，使用ui-skills-root/frontend-design按真实ApprovalWorkspace、ApprovalQueuePanel、模态钩子与路由归属核对；没有重新选择风格，没有将P16布局批准迁移到审批页。
 
 [94张现有图与交互](design/approval-direction-c/README.md) · [逐项清单](action-reviews/P25.json) · [原审批/通知合同](approval-notification-contract-review.md)

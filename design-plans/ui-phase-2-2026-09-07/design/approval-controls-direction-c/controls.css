@@ -1,0 +1,61 @@
+/* Additive C proposal only; old approval.css and production Vue are unchanged. */
+.primary:active:not(:disabled) {
+  background: #132f6b;
+  border-color: #132f6b;
+}
+.danger:hover:not(:disabled) {
+  background: #fff0ee;
+  border-color: #9b342e;
+}
+.danger:active:not(:disabled) {
+  background: #7c2b28;
+  border-color: #7c2b28;
+  color: white;
+}
+button:focus-visible {
+  outline: 3px solid #b76a05;
+  outline-offset: 3px;
+}
+button[aria-busy="true"]:disabled {
+  background: #e6edfb;
+  border-color: #708cc5;
+  color: #193b80;
+  cursor: progress;
+}
+button.danger[aria-busy="true"]:disabled {
+  color: #7c2b28;
+  border-color: #bd827a;
+  background: #fff0ee;
+}
+button[aria-busy="true"]::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: -1px;
+  animation: approval-control-spin 1s linear infinite;
+}
+@keyframes approval-control-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button[aria-busy="true"]::before {
+    animation: none;
+  }
+}
+.notice[data-operation="pending"] {
+  border-left-color: #254a9c;
+}
+.notice[data-operation="failure"] {
+  border-left-color: #9b342e;
+}
+.review-failure {
+  display: block;
+  margin-top: 12px;
+}

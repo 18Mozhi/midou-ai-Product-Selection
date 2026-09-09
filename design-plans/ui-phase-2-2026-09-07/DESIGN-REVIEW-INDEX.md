@@ -7,8 +7,8 @@
 - 真实路由与规格：73/73。
 - 有明确整页或分段稿关联：73条；这不是73页全部完成。
 - 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
-- C稿包76个：含1个方向研究包、3个共享表面包；正式清单内PNG共10774张。
-- 1453条来源绑定 / 844个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8942个本地链接已核对。
+- C稿包77个：含1个方向研究包、3个共享表面包；正式清单内PNG共10838张。
+- 1473条来源绑定 / 850个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8946个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
@@ -47,7 +47,7 @@
 | P22 | 费用与利润规则 · `/sourcing/cost-rules` | [规格](page-specs/P22.md) | [cost-rules](design/cost-rules-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P23 | 全部任务 · `/tasks` | [规格](page-specs/P23.md) | [task-forms](design/task-direction-c-forms/README.md) · [task](design/task-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P24 | 任务详情 · `/tasks/:taskId` | [规格](page-specs/P24.md) | [task-forms](design/task-direction-c-forms/README.md) · [task](design/task-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P25 | 审批中心 · `/tasks/approvals` | [规格](page-specs/P25.md) | [approval](design/approval-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P25 | 审批中心 · `/tasks/approvals` | [规格](page-specs/P25.md) | [approval-controls](design/approval-controls-direction-c/README.md) · [approval](design/approval-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P26 | 通知中心 · `/notifications` | [规格](page-specs/P26.md) | [notification](design/notification-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P27 | 自动化规则 · `/automations` | [规格](page-specs/P27.md) | [automation](design/automation-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P28 | 报表与导出 · `/reports` | [规格](page-specs/P28.md) | [report](design/report-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑76个包的浏览器测试，也没有重新人工审核10774张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑77个包的浏览器测试，也没有重新人工审核10838张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。

@@ -1,0 +1,2592 @@
+{
+  "version": "APPROVAL-CONTROLS-C-r1",
+  "approval": "pending",
+  "kind": "additive-listed-control-state-proof",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/index.html": "413988e639becc7de5c90c066aaa45d43da221a0a186c0248fe7b78e6e0ec1c9",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/approval.js": "a542b055ae3e075ccfcbee299977dea5bb330a7ff3c7a6319931a8c3594f0d3d",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/approval.css": "bc1ce99da11fa79a645884c21720623824860f04a231ddbdcc68bd2cfaecbf35",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/data.js": "99f0d81ccd1aefb92553d9d6520bc6349637af58be41e019bc824ac70b6119bc",
+    "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+    "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
+    "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
+    "apps/api/src/approval-service.ts": "6b98cb51eb7c03f94fba328caa512315b2393ddbed8af94365c1d5c9aba4e40d",
+    "apps/api/src/approval-routes.ts": "20eb6d66342334529230abeeb42a311af7e496e586ded0224bbe1eb95e153bee",
+    "apps/api/src/mysql-approval-repository.ts": "fe8cd3e89db2e67766252fe4862575ea85b89aef76dacede10f04767443042e6",
+    "tests/e2e/m05-02-approval-workflow.spec.ts": "16e04f894704fcb1179ebac94eab9b6bd0171f1f6fa9178cbde5973f255f3598",
+    "scripts/lib/ui-phase2-approval-design-data.mjs": "cb7a3e835113e0e181a0a560607b7ac565acdaf4ce3cf144cc13b73bf2c57244",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/evidence.json": "5275c7e5589860d4fa317a44f81c0c7f21cdd9e2fec220e89db0476d8f16a155",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-controls-direction-c/index.html": "72c5c908c32985d54210b8886a23e8798de5fd01d37acf436fc5d97f3d1d9c92",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-controls-direction-c/controls.js": "a7b9ee79a777dc2c0fcadcb2caeaf15413fc465b14a784e79b36ebaf94698cd0",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-controls-direction-c/controls.css": "43a540af775dae052ac10653eed9c26fa5ec693dda91005912726b554adc272e",
+    "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
+    "scripts/verify-ui-phase2-approval-review.mjs": "3943d8f26a3de728e8fea5d2925f3d803e4360dcdd2244310814de341984b486"
+  },
+  "actionVisualReferences": {
+    "AN-A-DECIDE-APPROVE": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P25",
+      "selector": "#approve",
+      "states": {
+        "default": "approve-default",
+        "hover": "approve-hover",
+        "focus": "approve-focus",
+        "pressed": "approve-pressed",
+        "disabled": "approve-disabled",
+        "busy": "approve-busy"
+      }
+    },
+    "AN-A-DECIDE-REJECT": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P25",
+      "selector": "#reject",
+      "states": {
+        "default": "reject-default",
+        "hover": "reject-hover",
+        "focus": "reject-focus",
+        "pressed": "reject-pressed",
+        "disabled": "reject-disabled",
+        "busy": "reject-busy"
+      }
+    },
+    "AN-A-TEMPLATE-SUBMIT": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P25",
+      "selector": "#form-submit",
+      "states": {
+        "default": "template-default",
+        "hover": "template-hover",
+        "focus": "template-focus",
+        "pressed": "template-pressed",
+        "busy": "template-busy"
+      }
+    },
+    "AN-A-PUBLISH-SUBMIT": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P25",
+      "selector": "#publish-confirm",
+      "states": {
+        "default": "publish-default",
+        "hover": "publish-hover",
+        "focus": "publish-focus",
+        "pressed": "publish-pressed",
+        "busy": "publish-busy"
+      }
+    },
+    "AN-A-REQUEST-SUBMIT": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P25",
+      "selector": "#form-submit",
+      "states": {
+        "default": "request-default",
+        "hover": "request-hover",
+        "focus": "request-focus",
+        "pressed": "request-pressed",
+        "busy": "request-busy"
+      }
+    }
+  },
+  "observations": [
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "default",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 112,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "hover",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 112,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "focus",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 112,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "pressed",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 112,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "disabled",
+      "label": "批准并流转",
+      "disabled": true,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 112,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(233, 237, 243)",
+        "color": "rgb(104, 117, 137)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "busy",
+      "label": "正在批准…",
+      "disabled": true,
+      "busy": "true",
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 135.015625,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "approve",
+      "state": "error",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 112,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "default",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 64,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "hover",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 64,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 240, 238)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "focus",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 64,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "pressed",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 64,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(124, 43, 40)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "disabled",
+      "label": "驳回",
+      "disabled": true,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 64,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(233, 237, 243)",
+        "color": "rgb(104, 117, 137)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "busy",
+      "label": "正在驳回…",
+      "disabled": true,
+      "busy": "true",
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 135.015625,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 240, 238)",
+        "color": "rgb(124, 43, 40)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "reject",
+      "state": "error",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 64,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "template",
+      "state": "default",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "template",
+      "state": "hover",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "template",
+      "state": "focus",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "template",
+      "state": "pressed",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "template",
+      "state": "busy",
+      "label": "正在保存草稿…",
+      "disabled": true,
+      "busy": "true",
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 167.015625,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "template",
+      "state": "error",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "publish",
+      "state": "default",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "publish",
+      "state": "hover",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "publish",
+      "state": "focus",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "publish",
+      "state": "pressed",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "publish",
+      "state": "busy",
+      "label": "正在发布…",
+      "disabled": true,
+      "busy": "true",
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 135.015625,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "publish",
+      "state": "error",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "request",
+      "state": "default",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "request",
+      "state": "hover",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "request",
+      "state": "focus",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "request",
+      "state": "pressed",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "request",
+      "state": "busy",
+      "label": "正在发起…",
+      "disabled": true,
+      "busy": "true",
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 135.015625,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 1440,
+      "id": "request",
+      "state": "error",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 96,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "default",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "hover",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "focus",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "pressed",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "disabled",
+      "label": "批准并流转",
+      "disabled": true,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(233, 237, 243)",
+        "color": "rgb(104, 117, 137)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "busy",
+      "label": "正在批准…",
+      "disabled": true,
+      "busy": "true",
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "approve",
+      "state": "error",
+      "label": "批准并流转",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "default",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "hover",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 240, 238)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "focus",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "pressed",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(124, 43, 40)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "disabled",
+      "label": "驳回",
+      "disabled": true,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(233, 237, 243)",
+        "color": "rgb(104, 117, 137)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "busy",
+      "label": "正在驳回…",
+      "disabled": true,
+      "busy": "true",
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 240, 238)",
+        "color": "rgb(124, 43, 40)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "reject",
+      "state": "error",
+      "label": "驳回",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 152,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(155, 52, 46)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "template",
+      "state": "default",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "template",
+      "state": "hover",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "template",
+      "state": "focus",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "template",
+      "state": "pressed",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "template",
+      "state": "busy",
+      "label": "正在保存草稿…",
+      "disabled": true,
+      "busy": "true",
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 72.78125,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "template",
+      "state": "error",
+      "label": "保存草稿",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "publish",
+      "state": "default",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "publish",
+      "state": "hover",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "publish",
+      "state": "focus",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "publish",
+      "state": "pressed",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "publish",
+      "state": "busy",
+      "label": "正在发布…",
+      "disabled": true,
+      "busy": "true",
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "publish",
+      "state": "error",
+      "label": "确认发布",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "request",
+      "state": "default",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "request",
+      "state": "hover",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(25, 59, 128)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "request",
+      "state": "focus",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": true,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "solid",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "request",
+      "state": "pressed",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": true,
+      "pressed": true,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(19, 47, 107)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "request",
+      "state": "busy",
+      "label": "正在发起…",
+      "disabled": true,
+      "busy": "true",
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(230, 237, 251)",
+        "color": "rgb(25, 59, 128)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    },
+    {
+      "viewportWidth": 390,
+      "id": "request",
+      "state": "error",
+      "label": "发起审批",
+      "disabled": false,
+      "busy": null,
+      "hover": false,
+      "pressed": false,
+      "focus": false,
+      "width": 150,
+      "height": 46.390625,
+      "fontSize": 16,
+      "hit": true,
+      "inViewport": true,
+      "overflow": false,
+      "style": {
+        "background": "rgb(37, 74, 156)",
+        "color": "rgb(255, 255, 255)",
+        "outline": "none",
+        "outlineWidth": "3px"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1440-approve-default.png",
+      "scene": "approve-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "default"
+      },
+      "sha256": "6aec188a42a2c6ff094e2f3a6f0f86c5139c5425bcdcd468f2e478a48bb1d3aa"
+    },
+    {
+      "file": "1440-approve-hover.png",
+      "scene": "approve-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "hover"
+      },
+      "sha256": "bfc1d329d3e209e7096382af5ca0d29fd6e53a9c4af321148df29df7713f7391"
+    },
+    {
+      "file": "1440-approve-focus.png",
+      "scene": "approve-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "focus"
+      },
+      "sha256": "7ef4df2c4183d1743b536ec9982ce1b20950828792fb8e0a8806a4ed096d3e90"
+    },
+    {
+      "file": "1440-approve-pressed.png",
+      "scene": "approve-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "pressed"
+      },
+      "sha256": "dc6bcca24ccbdf8fc3b413a305799251e2d1acf4c6486eafa83123b7c599645b"
+    },
+    {
+      "file": "1440-approve-disabled.png",
+      "scene": "approve-disabled",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "disabled"
+      },
+      "sha256": "948b40a16b6b67b1d449575e3e05e924fd8e87e647acbdfd91fb9fa4200fd525"
+    },
+    {
+      "file": "1440-approve-busy.png",
+      "scene": "approve-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "busy"
+      },
+      "sha256": "2189a71b341e773c99dab42e1b216756dbcadf855a85b2d39f15f12dbaa8d796"
+    },
+    {
+      "file": "1440-approve-error.png",
+      "scene": "approve-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "error"
+      },
+      "sha256": "9675ae2e483e74fd77a877225950ddf7d14a3fa9b2897b1d58cc6ac81ded5bc7"
+    },
+    {
+      "file": "1440-reject-default.png",
+      "scene": "reject-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "default"
+      },
+      "sha256": "25dde29a654e16a8f947fc2f8f24bf428bcf2004b7c26510356adcacea7ba8e0"
+    },
+    {
+      "file": "1440-reject-hover.png",
+      "scene": "reject-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "hover"
+      },
+      "sha256": "32e969c2ee8ed2de6ef3e316e8b15ede75b63ffd548cb022e9bc4651472f4d22"
+    },
+    {
+      "file": "1440-reject-focus.png",
+      "scene": "reject-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "focus"
+      },
+      "sha256": "f8e81e50309725d735dc231061623c7c3fb9673f4a30a749d4b117274678bb1b"
+    },
+    {
+      "file": "1440-reject-pressed.png",
+      "scene": "reject-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "pressed"
+      },
+      "sha256": "2ebb69ba5f2d5cfbacb9ec4b776572ddcb42d11b16bb86e95c279935c5479476"
+    },
+    {
+      "file": "1440-reject-disabled.png",
+      "scene": "reject-disabled",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "disabled"
+      },
+      "sha256": "948b40a16b6b67b1d449575e3e05e924fd8e87e647acbdfd91fb9fa4200fd525"
+    },
+    {
+      "file": "1440-reject-busy.png",
+      "scene": "reject-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "busy"
+      },
+      "sha256": "713d1983837e3b02112c5e0c66d93aca4e900e40a86a18c67afbe6dbc9ecadd2"
+    },
+    {
+      "file": "1440-reject-error.png",
+      "scene": "reject-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "error"
+      },
+      "sha256": "c8ca4ef4ce453f56de542fc0284e9d3560b1583ccc2a46a74d4cca30b4c426ec"
+    },
+    {
+      "file": "1440-template-default.png",
+      "scene": "template-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "default"
+      },
+      "sha256": "9b805002ba42edfcd7ff0d80e83bd1dea3f2b9f4ea0857168aea40183bd1d902"
+    },
+    {
+      "file": "1440-template-hover.png",
+      "scene": "template-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "hover"
+      },
+      "sha256": "7e5f9ebb0dec89570ecc3d98537be2400085cfe2e3f37c9dd465054a1f19be0b"
+    },
+    {
+      "file": "1440-template-focus.png",
+      "scene": "template-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "focus"
+      },
+      "sha256": "1aa0576b53bf6b95f41b18e80a0cdad230512e3fc076d536463c9df1bede5f2a"
+    },
+    {
+      "file": "1440-template-pressed.png",
+      "scene": "template-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "pressed"
+      },
+      "sha256": "3b9e73cecf258f99f44d218d609793ea1fcb883f9a037a6262ac30121fec0b23"
+    },
+    {
+      "file": "1440-template-busy.png",
+      "scene": "template-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "busy"
+      },
+      "sha256": "04676588726e430af28707e29bb13804af96cea61c25b8386eec6cd1d32f535e"
+    },
+    {
+      "file": "1440-template-error.png",
+      "scene": "template-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "error"
+      },
+      "sha256": "482588831242c2ce27e4000ca93f43ca1de3a5ec44aa3880f9cbf14fff5053b3"
+    },
+    {
+      "file": "1440-publish-default.png",
+      "scene": "publish-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "default"
+      },
+      "sha256": "fca6adc3ea7f14cf251d0b13afe2a1cb50d0519c8ea6ca60785ef16da8f86227"
+    },
+    {
+      "file": "1440-publish-hover.png",
+      "scene": "publish-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "hover"
+      },
+      "sha256": "1ff13d6cf2f0aae23d383d2f9887732c0a040ceaac9cc1cb54c725f0c126add4"
+    },
+    {
+      "file": "1440-publish-focus.png",
+      "scene": "publish-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "focus"
+      },
+      "sha256": "c39c9c18b77d9e1866798ee6edc039d860e229fd25127a36c8fd6cf77dcb4cd4"
+    },
+    {
+      "file": "1440-publish-pressed.png",
+      "scene": "publish-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "pressed"
+      },
+      "sha256": "6551715f6bc28c29242d15da6768411819642aacf2805f43ef760017044aab25"
+    },
+    {
+      "file": "1440-publish-busy.png",
+      "scene": "publish-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "busy"
+      },
+      "sha256": "64a0c43fea5f6e12dc024d867076db1b769be793f5447d4f30be11169a3d9b06"
+    },
+    {
+      "file": "1440-publish-error.png",
+      "scene": "publish-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "error"
+      },
+      "sha256": "0f68ef6565b5ea6ca5a16a0619de69cf1f2fc984145c1a1e3b57aad9e4154008"
+    },
+    {
+      "file": "1440-request-default.png",
+      "scene": "request-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "default"
+      },
+      "sha256": "edb632cec7f32009bc74f2ef4cbc5f14c5c0d604e2d52a3fcc4c74eb5a075717"
+    },
+    {
+      "file": "1440-request-hover.png",
+      "scene": "request-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "hover"
+      },
+      "sha256": "e6da70a7d222e6e5b824b9d72b1e13a80b7fa8ef017ec469683d6dd9338a462a"
+    },
+    {
+      "file": "1440-request-focus.png",
+      "scene": "request-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "focus"
+      },
+      "sha256": "d9aa31753249052781661b38b77577fca93619610fadbf3d1a18017d24825116"
+    },
+    {
+      "file": "1440-request-pressed.png",
+      "scene": "request-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "pressed"
+      },
+      "sha256": "53665f3f8e61c484b8306f7f0b0d863bc2a696d7bd0d5cc8481665c7fd58779a"
+    },
+    {
+      "file": "1440-request-busy.png",
+      "scene": "request-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "busy"
+      },
+      "sha256": "0efa738cbb3a9ecafa402d37c203804d907386adcd89cf4009e0eb648577b6bc"
+    },
+    {
+      "file": "1440-request-error.png",
+      "scene": "request-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "error"
+      },
+      "sha256": "1568f33761226b8c26dc86ce31d88d2e0aec4dd656098d709d9c74ac56aacfb6"
+    },
+    {
+      "file": "390-approve-default.png",
+      "scene": "approve-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "default"
+      },
+      "sha256": "e2cc45a1d06db57f93cd40f5bff4537c656b6a80f0258117552594f1864ce4d1"
+    },
+    {
+      "file": "390-approve-hover.png",
+      "scene": "approve-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "hover"
+      },
+      "sha256": "e08bdb25ed87d2d6e0478b7b3bea79ed2def044407171f7d3daa707264af38ee"
+    },
+    {
+      "file": "390-approve-focus.png",
+      "scene": "approve-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "focus"
+      },
+      "sha256": "f652f151adb9abb8dadefa5dd84514989303c269063a9ad80c7b37d2cb11ef88"
+    },
+    {
+      "file": "390-approve-pressed.png",
+      "scene": "approve-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "pressed"
+      },
+      "sha256": "23ade6654a3ed05b6aaae41961f2453cc7a0170f03de557d696eaf93d5d51408"
+    },
+    {
+      "file": "390-approve-disabled.png",
+      "scene": "approve-disabled",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "disabled"
+      },
+      "sha256": "879885d446f4c76d05e048a2c93e3a16db32abe87924b4b0fda10137abf3a95c"
+    },
+    {
+      "file": "390-approve-busy.png",
+      "scene": "approve-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "busy"
+      },
+      "sha256": "3db86c31d46ec06a09a7b84564428671d8adf512c23407027b0fe53bde566799"
+    },
+    {
+      "file": "390-approve-error.png",
+      "scene": "approve-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-APPROVE",
+        "selector": "#approve",
+        "state": "error"
+      },
+      "sha256": "681171ca872310c9f20729506967425587d4a6770c941a77f6f38dbb25d8cd4a"
+    },
+    {
+      "file": "390-reject-default.png",
+      "scene": "reject-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "default"
+      },
+      "sha256": "ca38c71d3853fc3059421a4366fc7c31ea4e001a506dfe81af67b69a74d49a66"
+    },
+    {
+      "file": "390-reject-hover.png",
+      "scene": "reject-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "hover"
+      },
+      "sha256": "c2462d7ca05a58dc718c2ded74ba62be8f27e5a27919634ea29c12c5aad7dd69"
+    },
+    {
+      "file": "390-reject-focus.png",
+      "scene": "reject-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "focus"
+      },
+      "sha256": "c61e05fe4812130b5caeced512f770590c20bed8ce332bb2d25bfb137335f4ed"
+    },
+    {
+      "file": "390-reject-pressed.png",
+      "scene": "reject-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "pressed"
+      },
+      "sha256": "fb7c23ffb938e879f17ed748848727366d26053a961c46c917a0686d349da297"
+    },
+    {
+      "file": "390-reject-disabled.png",
+      "scene": "reject-disabled",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "disabled"
+      },
+      "sha256": "879885d446f4c76d05e048a2c93e3a16db32abe87924b4b0fda10137abf3a95c"
+    },
+    {
+      "file": "390-reject-busy.png",
+      "scene": "reject-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "busy"
+      },
+      "sha256": "3111348ad5d002ab82a23397685dd1c8fca8099d196671c9b67ec7b37e936b93"
+    },
+    {
+      "file": "390-reject-error.png",
+      "scene": "reject-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-DECIDE-REJECT",
+        "selector": "#reject",
+        "state": "error"
+      },
+      "sha256": "a0e0ce2adeeb667a8ecb1f39c253adac81c02de711291674ec022cb5245284ee"
+    },
+    {
+      "file": "390-template-default.png",
+      "scene": "template-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "default"
+      },
+      "sha256": "bd701a6f0794eb20a1cadb86caec12d0c81b029e83b62ec26496ce0e5aae573c"
+    },
+    {
+      "file": "390-template-hover.png",
+      "scene": "template-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "hover"
+      },
+      "sha256": "f13fde64d8936aa990a843abebe0133997879478666b9db2fb77e71a35eefb92"
+    },
+    {
+      "file": "390-template-focus.png",
+      "scene": "template-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "focus"
+      },
+      "sha256": "7d72b262bd4b72a8c32c7e1d97a7dc510c12a398df5636ca67814a02fb25fa03"
+    },
+    {
+      "file": "390-template-pressed.png",
+      "scene": "template-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "pressed"
+      },
+      "sha256": "3c31d8217754ac818a6bf24827f776fbe94b097b4b6c4dbd75c0a2aa6e42caa7"
+    },
+    {
+      "file": "390-template-busy.png",
+      "scene": "template-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "busy"
+      },
+      "sha256": "27407a3ac8c3a2ecfee405788816f3264d6c08bf355d1164c12f9b41ab0628e7"
+    },
+    {
+      "file": "390-template-error.png",
+      "scene": "template-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-TEMPLATE-SUBMIT",
+        "selector": "#form-submit",
+        "state": "error"
+      },
+      "sha256": "f6a97e710cbca1d339846a8cde0a762b56948e0df94be950c8be303856004df9"
+    },
+    {
+      "file": "390-publish-default.png",
+      "scene": "publish-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "default"
+      },
+      "sha256": "926e87ba2296f94336869983fa5637321b082128d087e15fc901fe5e1df4e67b"
+    },
+    {
+      "file": "390-publish-hover.png",
+      "scene": "publish-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "hover"
+      },
+      "sha256": "257aee85e160945fa9713703353f1ab542899f7e572edfb7be9c2c3e3b4a788b"
+    },
+    {
+      "file": "390-publish-focus.png",
+      "scene": "publish-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "focus"
+      },
+      "sha256": "570a1b53bb63fcc982a083beebca6ce69236d07f7dcb8d5344f18817c9e8d84b"
+    },
+    {
+      "file": "390-publish-pressed.png",
+      "scene": "publish-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "pressed"
+      },
+      "sha256": "5ac9ebabcec7b7998b48eea96cee6ca1ddc9dfd67fa9e0184c4ae874e33168e8"
+    },
+    {
+      "file": "390-publish-busy.png",
+      "scene": "publish-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "busy"
+      },
+      "sha256": "62284013f89882ccd459f75947e148274a907b4854896360ddd67895996ae717"
+    },
+    {
+      "file": "390-publish-error.png",
+      "scene": "publish-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-PUBLISH-SUBMIT",
+        "selector": "#publish-confirm",
+        "state": "error"
+      },
+      "sha256": "7386db995709ee2ed87c3db83381461059ec59ccd2c3db9b8cae4e51f8241212"
+    },
+    {
+      "file": "390-request-default.png",
+      "scene": "request-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "default"
+      },
+      "sha256": "bcc10579ff1c9a94a06521bd2832368fa7ea08cd63495d67a4a64f4f285e91e0"
+    },
+    {
+      "file": "390-request-hover.png",
+      "scene": "request-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "hover"
+      },
+      "sha256": "d6cc62f74e8fdae3a5e6c4195a7a9511c79f2cdd866f6c1d378c9f10ecc29017"
+    },
+    {
+      "file": "390-request-focus.png",
+      "scene": "request-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "focus"
+      },
+      "sha256": "fc46aef136c49ae678bb889f1aa147fc9aa7b4dc8307b716d6f2e34c2737ffe4"
+    },
+    {
+      "file": "390-request-pressed.png",
+      "scene": "request-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "pressed"
+      },
+      "sha256": "9d24346be27d2639cb3eb772488eb640ae13ec8d1c17493432dac011248b9369"
+    },
+    {
+      "file": "390-request-busy.png",
+      "scene": "request-busy",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "busy"
+      },
+      "sha256": "8fb62a5094191dd5a9fd54cc389daafe142f40022a25e1a2e062ce7378bfcd85"
+    },
+    {
+      "file": "390-request-error.png",
+      "scene": "request-error",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-A-REQUEST-SUBMIT",
+        "selector": "#form-submit",
+        "state": "error"
+      },
+      "sha256": "acf7bd9681106d48a579a5724e7b6bb806195788870c9d4900df5e2967d7ec53"
+    }
+  ],
+  "boundary": "5 representative write controls,27 mapped native visual states and5 extra failure scenes at1440/390;64 PNG. Template/publish/request do not invent independent blank-field disabled scenes. Busy is a click-driven local pending proposal, not a live request; source Vue fields/close/async ownership remain unchanged. All variants/fields/themes/modal consumers/real service/user approval pending."
+}
