@@ -1,0 +1,53 @@
+/* Independent review composition; original packages and production are untouched. */
+.navigation-review .detail-index nav {
+  top: var(--approval-reading-top, 128px);
+}
+.navigation-review #detail-dialog .reading > section,
+.navigation-review #section-decision,
+.navigation-review #technical {
+  scroll-margin-top: var(--approval-target-offset, 128px) !important;
+}
+@media (max-width: 780px) {
+  .navigation-review .detail-index {
+    position: sticky;
+    top: var(--approval-reading-top, 128px);
+    z-index: 2;
+  }
+  .navigation-review .detail-index nav {
+    position: static;
+  }
+}
+.navigation-review button:not(.primary):not(.danger):active:not(:disabled) {
+  background: #dae5f8;
+  border-color: #617eaf;
+  color: #193b80;
+}
+.navigation-review .directory button:active:not(:disabled),
+.navigation-review .detail-index button:active:not(:disabled) {
+  background: #17387b;
+  color: white;
+}
+.navigation-review .technical > summary {
+  font-size: 16px;
+  min-height: 44px;
+  padding-inline: 8px;
+  border-radius: 6px;
+}
+.navigation-review .technical > summary:hover {
+  background: #f0f4fa;
+}
+.navigation-review .technical > summary:active,
+.navigation-review a:active {
+  background: #dae5f8;
+  color: #193b80;
+}
+.navigation-review .resource-links a:hover,
+.navigation-review .evidence-row a:hover {
+  text-decoration-thickness: 2px;
+  background: #f0f4fa;
+}
+.navigation-review a:focus-visible,
+.navigation-review summary:focus-visible {
+  outline: 3px solid #b76a05;
+  outline-offset: 3px;
+}

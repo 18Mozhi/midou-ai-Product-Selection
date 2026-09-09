@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P25页面入口、导航与关闭逐态
+
+上一轮fcbf2518交付88字段/关闭图，为实际进展。本轮从干净main继续，读取AGENTS/Feature Map approvalWorkflow/蓝图M05-02及当前ApprovalQueuePanel/ApprovalWorkspace入口，使用ui-skills-root、frontend-design、Playwright及fixing-accessibility，无子代理。新增独立approval-navigation-direction-c组合：41变体（36既有入口+5阅读目录）原生四态双端328PNG，11逻辑选中双端22，分页禁用双端4，共354；17既有语义组及19额外变体显式映射，新增65代表槽，余48。
+
+smoke先发现仅筛入下一页而边界同时核对上一页的验证清单缺项，补入后通过；首次全量采图复现1440阅读目录首按钮位于视口内但中心命中固定标题。只在新包按实测标题高度安排桌面目录，手机目录固定在标题下方，章节scroll-margin同时计入目录高度；新增章节起点可见断言并把首目录纳入smoke，重新smoke46观察/18点击、capture354观察/82点击、无参数354观察/82点击通过。默认blur、原生hover/Tab/鼠标按下且释放不误操作，选中与pressed分开；原路由/本地切换/上下边界/弹窗和技术展开结果核对，HTTP/存储/控制台错误0。目视1440首目录与390记录判断选中图可达。
+
+旧94布局、64按钮、88字段图均保持；原Vue全部筛选刷新回pending、错误态队列显隐差异、页级requestId未补绑定、字段折叠被新稿直接显示替代及关闭/在途归属差异未迁生产。普通入口没有真实禁用条件不补造图，5新目录不伪作源业务动作。生产Vue/CSS/API/OpenAPI/数据库/env/依赖/权限/后端/Worker/Python/宝塔均未改，无重启或部署。
+
+新目录图片、图册、证据、样式/尺寸控制器与两项脚本均为永久审核交付；无一次性文件/日志/服务，浏览器finally关闭，收尾查询无headless浏览器残留。既有拒绝清理的output/playwright/p16-layout-20260910/.last-run.json及output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts、results/.last-run.json保留不重试、不提交。动作审计26页/579独立源/549组不变，P25余48槽；设计审计79包/11280PNG、来源/图片漂移0、未登记图0、批准页0。verify:docs、verify:runtime-docs、verify:static-analysis、format:check与新原型/P25定向格式、git diff --check均通过。无生产改动，未重复构建或部署。全页审稿、剩余适用性/变体、真实实现与全站部署签收仍未完成。
+
 ## 2026-09-10 · P25字段校验、键盘与空闲关闭
 
 上一轮c69ce082的64按钮图为实际进展。从干净main继续，按AGENTS/Feature Map approvalWorkflow/蓝图M05-02/当前ApprovalWorkspace与useModalDialog核对，使用ui-skills-root、frontend-design、fixing-accessibility及Playwright，无子代理。新增approval-forms-direction-c包，保留旧94布局图和前批64按钮图；当前Vue AST的11字段约束与新DOM比对，补关联帮助/错误、字符计数、首错聚焦和滚动保留标题。44场景双端88PNG，4关闭代表focus映射，余113槽；其余布局批准、所有变体和全站实现/部署不据此通过。

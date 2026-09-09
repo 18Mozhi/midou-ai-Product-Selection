@@ -59,13 +59,61 @@
         {
           "package": "approval-direction-c",
           "scene": "template"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "first-template-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "first-template-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "first-template-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "first-template-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "empty-template-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "empty-template-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "empty-template-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "empty-template-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -77,9 +125,61 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-default",
+          "selector": "#manage"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-hover",
+          "selector": "#manage"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-focus",
+          "selector": "#manage"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "manage-pressed",
+          "selector": "#manage"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "first-template",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#manage",
+          "states": {
+            "default": "first-template-default",
+            "hover": "first-template-hover",
+            "focus": "first-template-focus",
+            "pressed": "first-template-pressed"
+          }
+        },
+        {
+          "key": "empty-template",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#empty-action",
+          "states": {
+            "default": "empty-template-default",
+            "hover": "empty-template-hover",
+            "focus": "empty-template-focus",
+            "pressed": "empty-template-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-REQUEST-OPEN",
@@ -109,13 +209,45 @@
         {
           "package": "approval-direction-c",
           "scene": "request"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-empty-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-empty-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-empty-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-empty-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -127,9 +259,49 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-default",
+          "selector": "#new-request"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-hover",
+          "selector": "#new-request"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-focus",
+          "selector": "#new-request"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-header-pressed",
+          "selector": "#new-request"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "request-empty",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#empty-action",
+          "states": {
+            "default": "request-empty-default",
+            "hover": "request-empty-hover",
+            "focus": "request-empty-focus",
+            "pressed": "request-empty-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-TECH-REQUEST",
@@ -197,13 +369,93 @@
         {
           "package": "approval-direction-c",
           "scene": "version_conflict"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-forbidden-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-forbidden-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-forbidden-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-forbidden-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-expired-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-expired-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-expired-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-expired-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-rate_limited-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-rate_limited-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-rate_limited-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-rate_limited-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-version_conflict-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-version_conflict-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-version_conflict-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-version_conflict-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -215,9 +467,85 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "成员失败走Promise.all整页失败，不借TaskWorkspace的局部成员退化逻辑。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "成员失败走Promise.all整页失败，不借TaskWorkspace的局部成员退化逻辑。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-default",
+          "selector": "#reload"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-hover",
+          "selector": "#reload"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-focus",
+          "selector": "#reload"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "reload-error-pressed",
+          "selector": "#reload"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "reload-forbidden",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#reload",
+          "states": {
+            "default": "reload-forbidden-default",
+            "hover": "reload-forbidden-hover",
+            "focus": "reload-forbidden-focus",
+            "pressed": "reload-forbidden-pressed"
+          }
+        },
+        {
+          "key": "reload-expired",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#reload",
+          "states": {
+            "default": "reload-expired-default",
+            "hover": "reload-expired-hover",
+            "focus": "reload-expired-focus",
+            "pressed": "reload-expired-pressed"
+          }
+        },
+        {
+          "key": "reload-rate_limited",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#reload",
+          "states": {
+            "default": "reload-rate_limited-default",
+            "hover": "reload-rate_limited-hover",
+            "focus": "reload-rate_limited-focus",
+            "pressed": "reload-rate_limited-pressed"
+          }
+        },
+        {
+          "key": "reload-version_conflict",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#reload",
+          "states": {
+            "default": "reload-version_conflict-default",
+            "hover": "reload-version_conflict-hover",
+            "focus": "reload-version_conflict-focus",
+            "pressed": "reload-version_conflict-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-NOTICE-CLOSE",
@@ -237,13 +565,45 @@
         {
           "package": "approval-direction-c",
           "scene": "detail_missing"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_missing-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_missing-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_missing-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_missing-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -255,9 +615,49 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-default",
+          "selector": "#dismiss-detail"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-hover",
+          "selector": "#dismiss-detail"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-focus",
+          "selector": "#dismiss-detail"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "dismiss-detail_error-pressed",
+          "selector": "#dismiss-detail"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "dismiss-detail_missing",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#dismiss-detail",
+          "states": {
+            "default": "dismiss-detail_missing-default",
+            "hover": "dismiss-detail_missing-hover",
+            "focus": "dismiss-detail_missing-focus",
+            "pressed": "dismiss-detail_missing-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-PAGE",
@@ -276,14 +676,54 @@
         {
           "package": "approval-direction-c",
           "scene": "pagination"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-disabled"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-previous-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-previous-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-previous-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-previous-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-previous-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
@@ -294,9 +734,55 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "page query变更本身没有全筛选watch；分页保留深链可能重开详情，不改为清除。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "page query变更本身没有全筛选watch；分页保留深链可能重开详情，不改为清除。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-default",
+          "selector": "#next"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-hover",
+          "selector": "#next"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-focus",
+          "selector": "#next"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-pressed",
+          "selector": "#next"
+        },
+        "disabled": {
+          "package": "approval-navigation-direction-c",
+          "scene": "page-next-disabled",
+          "selector": "#next"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "page-previous",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#previous",
+          "states": {
+            "default": "page-previous-default",
+            "hover": "page-previous-hover",
+            "focus": "page-previous-focus",
+            "pressed": "page-previous-pressed",
+            "disabled": "page-previous-disabled"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-CLOSE-FOCUS",
@@ -330,13 +816,29 @@
         {
           "package": "approval-forms-direction-c",
           "scene": "approve-reopened"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
-        "pressed": "not-mapped",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -352,13 +854,32 @@
         {
           "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前无busy关闭守卫；未模拟在途结果与原生焦点组合，迟到结果问题已有源复现，未修。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "remaining": "当前无busy关闭守卫；未模拟在途结果与原生焦点组合，迟到结果问题已有源复现，未修。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
       "visualStateReferences": {
         "focus": {
-          "package": "approval-forms-direction-c",
-          "scene": "approve-close-focus",
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-focus",
+          "selector": "#detail-close"
+        },
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-default",
+          "selector": "#detail-close"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-hover",
+          "selector": "#detail-close"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "detail-close-pressed",
           "selector": "#detail-close"
         }
       }
@@ -381,13 +902,29 @@
         {
           "package": "approval-direction-c",
           "scene": "task"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
@@ -399,9 +936,35 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-default",
+          "selector": ".resource-links a:first-child"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-hover",
+          "selector": ".resource-links a:first-child"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-focus",
+          "selector": ".resource-links a:first-child"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "resource-pressed",
+          "selector": ".resource-links a:first-child"
+        }
+      }
     },
     {
       "actionId": "AN-A-NAV-RETURN",
@@ -417,13 +980,29 @@
         {
           "package": "approval-direction-c",
           "scene": "detail"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
@@ -435,9 +1014,35 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-default",
+          "selector": ".resource-links a[data-route^=\"/notifications\"]"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-hover",
+          "selector": ".resource-links a[data-route^=\"/notifications\"]"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-focus",
+          "selector": ".resource-links a[data-route^=\"/notifications\"]"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "return-pressed",
+          "selector": ".resource-links a[data-route^=\"/notifications\"]"
+        }
+      }
     },
     {
       "actionId": "AN-A-NAV-EVIDENCE",
@@ -461,13 +1066,77 @@
         {
           "package": "approval-direction-c",
           "scene": "task"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-1-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-1-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-1-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-1-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-2-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-2-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-2-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-2-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-3-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-3-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-3-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-3-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
@@ -479,9 +1148,73 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-default",
+          "selector": ".evidence-row:nth-of-type(1) a"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-hover",
+          "selector": ".evidence-row:nth-of-type(1) a"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-focus",
+          "selector": ".evidence-row:nth-of-type(1) a"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "evidence-0-pressed",
+          "selector": ".evidence-row:nth-of-type(1) a"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "evidence-1",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": ".evidence-row:nth-of-type(2) a",
+          "states": {
+            "default": "evidence-1-default",
+            "hover": "evidence-1-hover",
+            "focus": "evidence-1-focus",
+            "pressed": "evidence-1-pressed"
+          }
+        },
+        {
+          "key": "evidence-2",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": ".evidence-row:nth-of-type(3) a",
+          "states": {
+            "default": "evidence-2-default",
+            "hover": "evidence-2-hover",
+            "focus": "evidence-2-focus",
+            "pressed": "evidence-2-pressed"
+          }
+        },
+        {
+          "key": "evidence-3",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": ".evidence-row:nth-of-type(4) a",
+          "states": {
+            "default": "evidence-3-default",
+            "hover": "evidence-3-hover",
+            "focus": "evidence-3-focus",
+            "pressed": "evidence-3-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-DECIDE-REJECT",
@@ -713,13 +1446,29 @@
         {
           "package": "approval-direction-c",
           "scene": "technical"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -731,9 +1480,35 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-default",
+          "selector": "#technical > summary"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-hover",
+          "selector": "#technical > summary"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-focus",
+          "selector": "#technical > summary"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "technical-pressed",
+          "selector": "#technical > summary"
+        }
+      }
     },
     {
       "actionId": "AN-A-TEMPLATE-CLOSE",
@@ -764,13 +1539,45 @@
         {
           "package": "approval-forms-direction-c",
           "scene": "template-reopened"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-cancel-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-cancel-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-cancel-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-cancel-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
-        "pressed": "not-mapped",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -786,16 +1593,49 @@
         {
           "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "未提交草稿保留，原型统一在途锁定并非当前Vue表现；叠加发布的关闭层级待真实组合验证。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "remaining": "未提交草稿保留，原型统一在途锁定并非当前Vue表现；叠加发布的关闭层级待真实组合验证。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
       "visualStateReferences": {
         "focus": {
-          "package": "approval-forms-direction-c",
+          "package": "approval-navigation-direction-c",
           "scene": "template-close-focus",
           "selector": "#form-close"
+        },
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-default",
+          "selector": "#form-close"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-hover",
+          "selector": "#form-close"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "template-close-pressed",
+          "selector": "#form-close"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "template-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#form-cancel",
+          "states": {
+            "default": "template-cancel-default",
+            "hover": "template-cancel-hover",
+            "focus": "template-cancel-focus",
+            "pressed": "template-cancel-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-TEMPLATE-SUBMIT",
@@ -956,13 +1796,29 @@
         {
           "package": "approval-direction-c",
           "scene": "publish"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -974,9 +1830,35 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-default",
+          "selector": "#publish-00000000-0000-4000-8000-000000000941"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-hover",
+          "selector": "#publish-00000000-0000-4000-8000-000000000941"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-focus",
+          "selector": "#publish-00000000-0000-4000-8000-000000000941"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-open-pressed",
+          "selector": "#publish-00000000-0000-4000-8000-000000000941"
+        }
+      }
     },
     {
       "actionId": "AN-A-PUBLISH-CLOSE",
@@ -1010,13 +1892,45 @@
         {
           "package": "approval-forms-direction-c",
           "scene": "publish-reopened"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-cancel-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-cancel-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-cancel-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-cancel-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
-        "pressed": "not-mapped",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1032,16 +1946,49 @@
         {
           "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "原合同两种关闭描述不同；本轮源检查确认。下次openPublish会清原因，不声称旧原因被重新带入。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "remaining": "原合同两种关闭描述不同；本轮源检查确认。下次openPublish会清原因，不声称旧原因被重新带入。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
       "visualStateReferences": {
         "focus": {
-          "package": "approval-forms-direction-c",
+          "package": "approval-navigation-direction-c",
           "scene": "publish-close-focus",
           "selector": "#publish-close"
+        },
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-default",
+          "selector": "#publish-close"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-hover",
+          "selector": "#publish-close"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "publish-close-pressed",
+          "selector": "#publish-close"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "publish-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#publish-cancel",
+          "states": {
+            "default": "publish-cancel-default",
+            "hover": "publish-cancel-hover",
+            "focus": "publish-cancel-focus",
+            "pressed": "publish-cancel-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-PUBLISH-SUBMIT",
@@ -1177,13 +2124,45 @@
         {
           "package": "approval-forms-direction-c",
           "scene": "request-reopened"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-cancel-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-cancel-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-cancel-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-cancel-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
-        "pressed": "not-mapped",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1199,16 +2178,49 @@
         {
           "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
       "visualStateReferences": {
         "focus": {
-          "package": "approval-forms-direction-c",
+          "package": "approval-navigation-direction-c",
           "scene": "request-close-focus",
           "selector": "#form-close"
+        },
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-default",
+          "selector": "#form-close"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-hover",
+          "selector": "#form-close"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "request-close-pressed",
+          "selector": "#form-close"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "request-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#form-cancel",
+          "states": {
+            "default": "request-cancel-default",
+            "hover": "request-cancel-hover",
+            "focus": "request-cancel-focus",
+            "pressed": "request-cancel-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-REQUEST-SUBMIT",
@@ -1372,13 +2384,53 @@
         {
           "package": "approval-direction-c",
           "scene": "requested"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-selected"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-requested-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-requested-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-requested-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-requested-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-requested-selected"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1390,9 +2442,49 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前页mineCount仅本页can_decide数，不画成全组织审批总量。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "当前页mineCount仅本页can_decide数，不画成全组织审批总量。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-default",
+          "selector": "#queue-decidable"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-hover",
+          "selector": "#queue-decidable"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-focus",
+          "selector": "#queue-decidable"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "queue-mine-pressed",
+          "selector": "#queue-decidable"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "queue-requested",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#queue-requested",
+          "states": {
+            "default": "queue-requested-default",
+            "hover": "queue-requested-hover",
+            "focus": "queue-requested-focus",
+            "pressed": "queue-requested-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-FILTER",
@@ -1412,13 +2504,93 @@
         {
           "package": "approval-direction-c",
           "scene": "empty"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-selected"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-approved-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-approved-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-approved-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-approved-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-approved-selected"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-rejected-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-rejected-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-rejected-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-rejected-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-rejected-selected"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-all-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-all-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-all-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-all-pressed"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-all-selected"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1430,9 +2602,73 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "既有VM已证实全部刷新差异，显式空值仅是C原型修订，Vue尚未修；没有cancelled独立按钮。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "既有VM已证实全部刷新差异，显式空值仅是C原型修订，Vue尚未修；没有cancelled独立按钮。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-default",
+          "selector": "#status-pending"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-hover",
+          "selector": "#status-pending"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-focus",
+          "selector": "#status-pending"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "filter-pending-pressed",
+          "selector": "#status-pending"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "filter-approved",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#status-approved",
+          "states": {
+            "default": "filter-approved-default",
+            "hover": "filter-approved-hover",
+            "focus": "filter-approved-focus",
+            "pressed": "filter-approved-pressed"
+          }
+        },
+        {
+          "key": "filter-rejected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#status-rejected",
+          "states": {
+            "default": "filter-rejected-default",
+            "hover": "filter-rejected-hover",
+            "focus": "filter-rejected-focus",
+            "pressed": "filter-rejected-pressed"
+          }
+        },
+        {
+          "key": "filter-all",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "approval-navigation-direction-c",
+          "selector": "#status-all",
+          "states": {
+            "default": "filter-all-default",
+            "hover": "filter-all-hover",
+            "focus": "filter-all-focus",
+            "pressed": "filter-all-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AN-A-DETAIL",
@@ -1460,13 +2696,29 @@
         {
           "package": "approval-direction-c",
           "scene": "detail_error"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-default"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-hover"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-focus"
+        },
+        {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1478,9 +2730,35 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-navigation-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "同实例A/B返回乱序与关闭后回流已复现；parent作用域隔离不等于同页读取归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "同实例A/B返回乱序与关闭后回流已复现；parent作用域隔离不等于同页读取归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。",
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-default",
+          "selector": "#open-00000000-0000-4000-8000-000000000921"
+        },
+        "hover": {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-hover",
+          "selector": "#open-00000000-0000-4000-8000-000000000921"
+        },
+        "focus": {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-focus",
+          "selector": "#open-00000000-0000-4000-8000-000000000921"
+        },
+        "pressed": {
+          "package": "approval-navigation-direction-c",
+          "scene": "row-pressed",
+          "selector": "#open-00000000-0000-4000-8000-000000000921"
+        }
+      }
     },
     {
       "actionId": "AN-A-QUEUE-FORWARD",
@@ -1964,7 +3242,8 @@
     "模板/请求/发布失败仍主要页级notice；图中窗内错误/统一busy字段锁/直接展开必填只是提案。",
     "单节点UI不改成多节点、证据缺失警告不改成硬门槛、升级不等于自动批准；当前页计数不作全工作区汇总。",
     "新增5写入代表控件64PNG，27视觉槽已有明确selector映射，117代表槽未映射；字段、动态行/模板、叠加焦点、角色/主题/软键盘和真实链继续验。关闭再重开期间pending归属未完整实现/验收。",
-    "2026-09-10表单包新增88PNG，11字段、4关闭focus代表槽及空闲重开图；累计31视觉槽映射、113未映射。表单直接展开、中文字段错误和非详情遮罩关闭为提案；在途归属/真实Vue与服务仍待。旧条目117为前批历史。"
+    "2026-09-10表单包新增88PNG，11字段、4关闭focus代表槽及空闲重开图；累计31视觉槽映射、113未映射。表单直接展开、中文字段错误和非详情遮罩关闭为提案；在途归属/真实Vue与服务仍待。旧条目117为前批历史。",
+    "2026-09-10导航包354PNG：41变体、17既有组/19额外入口，5阅读目录不增加源动作。新增65代表槽，累计96已映射、48未映射；页级requestId、字段折叠替代和状态适用性仍待。仅新稿修复固定标题遮挡目录并核对章节跳转；旧图、源Vue和生产不变。"
   ],
   "approval": "pending-user-review",
   "limits": [
