@@ -1,5 +1,11 @@
 # B3b · 运行拓扑与Redis/MySQL/文件韧性合同复核
 
+## 2026-09-09 P68设计补充 · MYSQL-C-r1（未实施）
+
+[图册](design/mysql-direction-c/README.md)与verify-ui-phase2-mysql-c交70场景145PNG。RS-G04用真实probe/evaluator/service惰性输入复现最小一分钟与无历史uptime分母、累计下降归0、零requests回退10000、资源未知10000占位、恢复固定15/240/90及运行policy二次判断。最近20条/同备份full与binlog副本条件、缺失/未隔离、未来年龄归0、90.001天显示取整90但stale、null中间数值判定与返回null、负恢复值仍可能ready分别保留并标明。探针实际返回available=true或抛错；available=false只是评估器边界样例，不伪称失败回退。
+
+五组源隔离检查覆盖Vue读取与空ID、service取消检查、仓储惰性提交/审计失败及中途取消回滚、真实route handler的认证顺序/14秒race abort/依赖503/finish清理；不代表实际SQL即时中止、事务、权限、审计或恢复验证。七个相关历史hash保持，不改表刷证。三技术详情及模拟复制拒绝、双端断点与缩放已验；RS-G04生产表达迁入、RS-G06保活与真实取消、RS-G07共享复制/主题密度仍待关闭。具体稿待审核，不改SQL/配置/数据库，不部署/迁移/恢复/重启；下一P69。
+
 ## 2026-09-09 P67设计补充 · REDIS-C-r1（未实施）
 
 [图册](design/redis-direction-c/README.md)与verify-ui-phase2-redis-c交61场景126PNG。RS-G03用实际采样器隔离复现：partial全部MEMORY失败与空分组、sampled测量0字节、128键/32轮/16并发、去重/分类/脱敏及成功字节分母；新稿区分无样本、未知、零分母和截断。实际probe/evaluator/service复现五INFO/五CONFIG GET、AOF重写回退、占位0与10000比例、总体运行policy和局部80%不一致；不更改阈值或恢复规则。资源条按各自finding而非总state变色。Vue脚本单飞/15秒/null/清快照/空请求ID、仓储三插入惰性提交/回滚与静态route/server分别验证，不作为真Redis/MySQL/RBAC证据。

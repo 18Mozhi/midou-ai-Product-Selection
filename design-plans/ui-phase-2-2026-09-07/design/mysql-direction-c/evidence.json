@@ -1,0 +1,909 @@
+{
+  "proposal": "MYSQL-C-r1",
+  "sourceHashes": {
+    "packages/database/src/index.ts": "6054d36018ac3fc3e4ac063434a9564211aca03f61c61e14c918da496ee4c0ab",
+    "apps/api/src/mysql-resilience-probe.ts": "ade3544b9857f85b92aa0ee3a1d606ee950c64578dc55dc2223501c21336f2be",
+    "apps/api/src/mysql-resilience-service.ts": "f7c5fb9870ca09c3bd4ad22bdf517e9ede3a3e2b0f77ab74d209f0fc66451a7c",
+    "apps/api/src/mysql-resilience-repository.ts": "8cde0c182946f9d5d663da1adab21fa932ee33f1b7bfdfc4d460965cd8de02e5",
+    "apps/api/src/mysql-resilience-routes.ts": "357476406cc658c7ebbd3dc2f9ab799556a571cdea2bc55dc9f7c96298aa5d6e",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "tests/e2e/m08-03-mysql-resilience.spec.ts": "b24d65304dfcd0daf65d43943ad63efb836563de17f517bdc88f09faa5dea5b8",
+    "infra/baota/mysql-single-primary-manifest.json": "2c57460c5feb9f37079a8f4e056d0919f06052dd0745c7a0cd428ea90deb04ca",
+    "packages/config/src/index.ts": "7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11",
+    "scripts/lib/ui-phase2-mysql-design-data.mjs": "6bafb1c30a4457e899f98f4f10958fd53e1745012b653cc1dd5f15e156b0223d",
+    "scripts/verify-ui-phase2-mysql-c.mjs": "7bed3ee9925fb422154415f3111f787295c0c9f88d9f45b81025bb14a3c4766f",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/index.html": "ce6024f3c199e0519fcd8b6ca39722195e1c47f95b8425e83187a729cf6079c9",
+    "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/mysql.css": "fc0d3c1a2f00bc2244b7f6396eee85f2248848d1cde1cb993cf067cee7af7a45",
+    "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/mysql.js": "7a13258df317b6d320d62936e6a496fab50ca240bb92fa83816bef7144f4dc15",
+    "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/data.js": "5654ab1fb36f0e7d07c63be06ddea15e054d4bf048481e7d96864ebb734f2b25",
+    "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/source-logic.js": "7ee4273e946d11a30bc1478cbf61e6a1a82733020ee8f13de896660dd471c24a"
+  },
+  "sourceChecks": [
+    "Actual probe with inert SHOW/history/recovery/asset rows and statfs: interval>=1-minute versus uptime slow-rate, nonnegative delta/reset, zero requests->10000 hit-rate, 20-row query and full/binlog recovery-copy requirements, isolation, fixed15/240/90, null numeric intermediate versus null DTO, future age clamping/two-decimal round. No real filesystem or SQL executed.",
+    "Actual evaluator/service: 5.7/write/binlog/ROW/exclusion/flush2/sync1/master/no replica, independent resource thresholds, cumulative waits, recovery missing/stale/unknown, clamped storage and raw negative recovery, stricter/relaxed policy versus fixed probe state; public DTO excludes raw identity/paths/SQL. Original E2E kept separate.",
+    "Actual Vue script: single-flight exact GET/IDs, 15s, null empty, auth clearing/transient retention, generic empty requestID and unmount abort. Severity/row-lock/slow-query helpers extracted from source; new prototype qualifies slow-rate window rather than copying unproven current-window claims. Not mounted Vue/preserve or shared clipboard proof.",
+    "Actual service abort checkpoints before/after probe and after record; actual repository inert connection verifies three inserts/commit, audit-fail rollback and abort after first insert rollback/release. Probe has no signal; cancellation after record may occur after its work. No running-SQL interruption, real durability or transaction proof.",
+    "Actual route handler with inert auth/service/timers/events: exact private GET and operate guard before service, default14s race abort, dependency503, correlation and finish cleanup. No real session/RBAC server, socket disconnect or production request executed."
+  ],
+  "contractSources": 7,
+  "checks": [
+    "1440: all 46 datasets unchanged; independent resource meters, unknown caps, clamped over-capacity, rate/cumulative/instant qualifiers, null versus zero/negative recovery, verified plus blocked, rounded stale age and fixed probe versus runtime policy; single-flight/late refusal/retained versus auth clearing/retry/login/null, all three details keyboard/simulated copy/denial, six breakpoints/zoom/font/touch and no business modal; no HTTP/cookies/storage.",
+    "390: all 46 datasets unchanged; independent resource meters, unknown caps, clamped over-capacity, rate/cumulative/instant qualifiers, null versus zero/negative recovery, verified plus blocked, rounded stale age and fixed probe versus runtime policy; single-flight/late refusal/retained versus auth clearing/retry/login/null, all three details keyboard/simulated copy/denial, six breakpoints/zoom/font/touch and no business modal; no HTTP/cookies/storage."
+  ],
+  "errors": [],
+  "httpRequests": 0,
+  "screenshots": [
+    {
+      "scene": "ready",
+      "width": 1440,
+      "file": "1440-ready.png",
+      "sha256": "e341376be7b57f018e2f945ca7388f8361dfaf70c235a40c266ba84605f8eb5e"
+    },
+    {
+      "scene": "availability-boundary",
+      "width": 1440,
+      "file": "1440-availability-boundary.png",
+      "sha256": "e72c328ebe6ddd5d00489dd55cf4d36317ead174d6c425060612d2746717ec9f"
+    },
+    {
+      "scene": "version",
+      "width": 1440,
+      "file": "1440-version.png",
+      "sha256": "b5b3d775cadbb8e774cd4f734e8e0b8f5c395c1975d34bbe562726ab1d2b18ab"
+    },
+    {
+      "scene": "read-only",
+      "width": 1440,
+      "file": "1440-read-only.png",
+      "sha256": "91779efbe3436c16357ef97ad63a4c58a41ca673ee04b9f3f4aeb460f38ef4c7"
+    },
+    {
+      "scene": "binlog-off",
+      "width": 1440,
+      "file": "1440-binlog-off.png",
+      "sha256": "71f3cc9e48d81433481fa8e599b6338baa63008ec56caa681f0eb6fe4aaa6df2"
+    },
+    {
+      "scene": "format",
+      "width": 1440,
+      "file": "1440-format.png",
+      "sha256": "7cef76dcee7eb913b44f0714ebe40335b99bf3442c177ac8233e57c09a6f7595"
+    },
+    {
+      "scene": "excluded",
+      "width": 1440,
+      "file": "1440-excluded.png",
+      "sha256": "8e231fff4f3eb33fd4a00adeead669cfebf269f52c43fd700c86b0d9c9d10cb6"
+    },
+    {
+      "scene": "flush",
+      "width": 1440,
+      "file": "1440-flush.png",
+      "sha256": "043d197e70c083923aeea760fce08dde4ee2f121c97868f90b45cd296d523712"
+    },
+    {
+      "scene": "sync",
+      "width": 1440,
+      "file": "1440-sync.png",
+      "sha256": "43ee699b899d10148480c538252cf828126bb53d3438db9440f85d5a3a0f4c5f"
+    },
+    {
+      "scene": "master",
+      "width": 1440,
+      "file": "1440-master.png",
+      "sha256": "b7ddf1f6b63eec3b9b23ac24a7fe6b17db3e0cd3a92b1c1fedd3509a4bda3fe3"
+    },
+    {
+      "scene": "replica",
+      "width": 1440,
+      "file": "1440-replica.png",
+      "sha256": "7bbbdde6c461844e422c0fd11e2a4c0d4d81d5eca48474e109e4a689e504b829"
+    },
+    {
+      "scene": "connections-unbounded",
+      "width": 1440,
+      "file": "1440-connections-unbounded.png",
+      "sha256": "dbc9cc486f647f875151763a70aff9aff3057d4807dff0244edb8100bbd358e9"
+    },
+    {
+      "scene": "capacity-unknown",
+      "width": 1440,
+      "file": "1440-capacity-unknown.png",
+      "sha256": "518af7d405b7463a277f155b00d00b1ffc677a954163e81b47be616a04f70ffc"
+    },
+    {
+      "scene": "slow-warning",
+      "width": 1440,
+      "file": "1440-slow-warning.png",
+      "sha256": "3eed2c5b9d4c531fb5f3e313cb5c066982798416a5f15727ef9a205d73ba9dbe"
+    },
+    {
+      "scene": "slow-stop",
+      "width": 1440,
+      "file": "1440-slow-stop.png",
+      "sha256": "6147987c7db42f6af5e9df68915563ebb6dbb4fd07c92103c0545fa4681b7fa0"
+    },
+    {
+      "scene": "buffer-warning",
+      "width": 1440,
+      "file": "1440-buffer-warning.png",
+      "sha256": "46dcd9ddfce02276f06d18f0b227663360ae6f0f6211f8413b5d3ad213156b7d"
+    },
+    {
+      "scene": "log-waits",
+      "width": 1440,
+      "file": "1440-log-waits.png",
+      "sha256": "1bf4788b4c845d504525e5b486b6acdfe57538e0b5fdf0afb32401b652390e1f"
+    },
+    {
+      "scene": "row-waits",
+      "width": 1440,
+      "file": "1440-row-waits.png",
+      "sha256": "08b67908233b1feb32693d649d675ce9582f122b8bb66bc3f9582a9ed25b4fc5"
+    },
+    {
+      "scene": "rpo-null",
+      "width": 1440,
+      "file": "1440-rpo-null.png",
+      "sha256": "9bab1864de1301a4432518573cf27d78adc67fadfcb2f7f6bf8bbcf1cf017770"
+    },
+    {
+      "scene": "rto-null",
+      "width": 1440,
+      "file": "1440-rto-null.png",
+      "sha256": "181766146fed86a0fa9ec19f0cd5be6f0265d4c1f730fae4e8c783904afb57e6"
+    },
+    {
+      "scene": "age-null",
+      "width": 1440,
+      "file": "1440-age-null.png",
+      "sha256": "5947ed78dffe34fce59f6a235377e5f07afbc1a960856d898df33d93218001dd"
+    },
+    {
+      "scene": "connections-warning",
+      "width": 1440,
+      "file": "1440-connections-warning.png",
+      "sha256": "ec1641cefb6f11d398a7e5121ecd3d4228561b51569a4cb0090d76232ae5754b"
+    },
+    {
+      "scene": "connections-stop",
+      "width": 1440,
+      "file": "1440-connections-stop.png",
+      "sha256": "efadeab8b6a2b9c31300fa20521ebbae806686d9aa5ad040f86740f5f944e020"
+    },
+    {
+      "scene": "storage-warning",
+      "width": 1440,
+      "file": "1440-storage-warning.png",
+      "sha256": "3c9e317840f3d5d8e2d3ab93c8dd842a438576be0680e602c9ca525cbc3b9f24"
+    },
+    {
+      "scene": "storage-stop",
+      "width": 1440,
+      "file": "1440-storage-stop.png",
+      "sha256": "6eddd6109ecc82f87c3b4618ad347d3ad70d6878cac14583fc97646f2c9520b8"
+    },
+    {
+      "scene": "storage-over",
+      "width": 1440,
+      "file": "1440-storage-over.png",
+      "sha256": "df66a99a8b2d4dd6523fb531f73e62541dcf2b0a831e8a354d72eab3ab8c934a"
+    },
+    {
+      "scene": "zero-values",
+      "width": 1440,
+      "file": "1440-zero-values.png",
+      "sha256": "13d1cd4a14cab86002f53a91590eb6845fca9a395ccbafe5c2e9d1d2c44838cd"
+    },
+    {
+      "scene": "negative-recovery",
+      "width": 1440,
+      "file": "1440-negative-recovery.png",
+      "sha256": "da54a4f1253b4fe465f4257f466622afc6792d5f4a8417b1120f0e689b0ed58e"
+    },
+    {
+      "scene": "long",
+      "width": 1440,
+      "file": "1440-long.png",
+      "sha256": "ba62986663c81bacb0ab3a84e9fd9a67cd54f3c54d424272ed59ccecc56c93ed"
+    },
+    {
+      "scene": "interval-short",
+      "width": 1440,
+      "file": "1440-interval-short.png",
+      "sha256": "521b54cd20c368ea46953cdf7e1f063980fc2dd7c53e7fb97fcae2e0ee585778"
+    },
+    {
+      "scene": "no-previous",
+      "width": 1440,
+      "file": "1440-no-previous.png",
+      "sha256": "6ad39357ecdc0d45ebded3c446bd0cfe3fe2bb9e4e908213fc26cc0f52659417"
+    },
+    {
+      "scene": "counter-reset",
+      "width": 1440,
+      "file": "1440-counter-reset.png",
+      "sha256": "7a9cbc0787fdcd5098743de52e56a828df9de518128e56b3edbc8506169c2e40"
+    },
+    {
+      "scene": "no-buffer-requests",
+      "width": 1440,
+      "file": "1440-no-buffer-requests.png",
+      "sha256": "7f81fe833526f1402829ca3051f98d063409eb7f60292e774261d9e5616d936a"
+    },
+    {
+      "scene": "recovery-empty",
+      "width": 1440,
+      "file": "1440-recovery-empty.png",
+      "sha256": "90e262166712689f5f18ad94da3c53ba73689a0581172f3a56f205a630175ee0"
+    },
+    {
+      "scene": "asset-missing",
+      "width": 1440,
+      "file": "1440-asset-missing.png",
+      "sha256": "e1fcdb2f94324fbeb020b0fa7470b5d80beb253786f1c01f88faec008c09a731"
+    },
+    {
+      "scene": "drill-not-isolated",
+      "width": 1440,
+      "file": "1440-drill-not-isolated.png",
+      "sha256": "e1fcdb2f94324fbeb020b0fa7470b5d80beb253786f1c01f88faec008c09a731"
+    },
+    {
+      "scene": "drill-stale",
+      "width": 1440,
+      "file": "1440-drill-stale.png",
+      "sha256": "b37ea49de167fb44050600df0f7c631720de6edd70fbdb7f5cf716f85efbe9fc"
+    },
+    {
+      "scene": "drill-boundary",
+      "width": 1440,
+      "file": "1440-drill-boundary.png",
+      "sha256": "42b741a292db46fd8504dbd53329b02b769736002294b76e4a2344c90994e4fd"
+    },
+    {
+      "scene": "drill-future",
+      "width": 1440,
+      "file": "1440-drill-future.png",
+      "sha256": "9bc541089acf20bec2915fbdb5f51879bbbcf6ee64969dceae4867dab9d0edf3"
+    },
+    {
+      "scene": "probe-null-rpo",
+      "width": 1440,
+      "file": "1440-probe-null-rpo.png",
+      "sha256": "9bab1864de1301a4432518573cf27d78adc67fadfcb2f7f6bf8bbcf1cf017770"
+    },
+    {
+      "scene": "rpo-probe-stop",
+      "width": 1440,
+      "file": "1440-rpo-probe-stop.png",
+      "sha256": "6d9206010efeee192742b24f0fb581f53ed7bd102a1f8dee04dc2732dacaf31e"
+    },
+    {
+      "scene": "rto-probe-stop",
+      "width": 1440,
+      "file": "1440-rto-probe-stop.png",
+      "sha256": "0397cd0013cedb20f881d98d14d32dd44b55975715bec7b1675b7669fb3ba7b0"
+    },
+    {
+      "scene": "twenty-drills",
+      "width": 1440,
+      "file": "1440-twenty-drills.png",
+      "sha256": "bc915ed081a563ba2466cbe6d9f5ffd9d6a335b6781c0800474ff8f3ca29c7be"
+    },
+    {
+      "scene": "policy-stricter",
+      "width": 1440,
+      "file": "1440-policy-stricter.png",
+      "sha256": "a5b2d2f888b9734cae627971218c806d7a7dd509f4d79bff81b42c8ecf49b504"
+    },
+    {
+      "scene": "policy-relaxed",
+      "width": 1440,
+      "file": "1440-policy-relaxed.png",
+      "sha256": "99fbb20c0feeadf0d5f093ed96a99d6fe9277334fb93a390d1225533b8c4e702"
+    },
+    {
+      "scene": "original",
+      "width": 1440,
+      "file": "1440-original.png",
+      "sha256": "38d3f23603fa5d632a3d6359fd01681b99f2c326b50d54daf498b92f40538017"
+    },
+    {
+      "scene": "loading",
+      "width": 1440,
+      "file": "1440-loading.png",
+      "sha256": "58acee90f60b14fa1cf7b3bac64ce170931514652dfaa760938ed8e58606556c"
+    },
+    {
+      "scene": "empty",
+      "width": 1440,
+      "file": "1440-empty.png",
+      "sha256": "2e0d9dcb7f5072e0b553c9a4583cd0533649cfe897deb855187dc8ed80d73123"
+    },
+    {
+      "scene": "expired",
+      "width": 1440,
+      "file": "1440-expired.png",
+      "sha256": "05bf858e21966b982da54b5ceb87efc71c11d51ec5564c31b900d363baf710a9"
+    },
+    {
+      "scene": "forbidden",
+      "width": 1440,
+      "file": "1440-forbidden.png",
+      "sha256": "6284d9903e624296c17f3a94215d1fdd611348a188b6b6c9df2f71f5971efef7"
+    },
+    {
+      "scene": "rate_limited",
+      "width": 1440,
+      "file": "1440-rate_limited.png",
+      "sha256": "8cae3354c9a8b893d01fc2005845f64b67916944839965326a760e5f9db30a3c"
+    },
+    {
+      "scene": "timeout",
+      "width": 1440,
+      "file": "1440-timeout.png",
+      "sha256": "de93ba3e2f03b193336362b02bb940287bd879e63424ae9264e09f20c6c0bcd9"
+    },
+    {
+      "scene": "unavailable",
+      "width": 1440,
+      "file": "1440-unavailable.png",
+      "sha256": "2a436c7d8ceb585e14a534e2432c58eaccd865e28e1ba4fbfd82bff4f8e04aec"
+    },
+    {
+      "scene": "recovering",
+      "width": 1440,
+      "file": "1440-recovering.png",
+      "sha256": "5108a6c5b9ea5c5beee2ae0a9868431a3bca25b9a98d122a72e158b17dd4f3f5"
+    },
+    {
+      "scene": "refreshing",
+      "width": 1440,
+      "file": "1440-refreshing.png",
+      "sha256": "7298a217d20bfd638b37ddbe6ab5114c2012a0f59b6c31acd4ca65b664060cd7"
+    },
+    {
+      "scene": "refresh-timeout",
+      "width": 1440,
+      "file": "1440-refresh-timeout.png",
+      "sha256": "e2060710540149ac9fe31596ccfdbcda9b1407f4bcd494b37d85336b47ed51ed"
+    },
+    {
+      "scene": "refresh-rate_limited",
+      "width": 1440,
+      "file": "1440-refresh-rate_limited.png",
+      "sha256": "cc00f7a937c3e02a548329f6235016487dcdc47777e0155225b5b15356c6a64e"
+    },
+    {
+      "scene": "refresh-unavailable",
+      "width": 1440,
+      "file": "1440-refresh-unavailable.png",
+      "sha256": "978907c6a0c34b5de20ff0b36a83713be331ef704bd29ab0c3bb04375f86682d"
+    },
+    {
+      "scene": "generic-error",
+      "width": 1440,
+      "file": "1440-generic-error.png",
+      "sha256": "1a0160a5b30413f72ea7195a439454f728e34fa2683b2de4cea21f5d87b0ee80"
+    },
+    {
+      "scene": "request-detail",
+      "width": 1440,
+      "file": "1440-request-detail.png",
+      "sha256": "2245d9b99bee1ff819c2738a6afc879a0b5d39a34c55185cd04700787f4ae7df"
+    },
+    {
+      "scene": "failure-detail",
+      "width": 1440,
+      "file": "1440-failure-detail.png",
+      "sha256": "0965ab8d0ff7ffeb702e8d1d4c16f25931ff6fac7eeb3026936a52b9785f6b1f"
+    },
+    {
+      "scene": "refresh-detail",
+      "width": 1440,
+      "file": "1440-refresh-detail.png",
+      "sha256": "aeb626957d7f7c92572791379d946ac39d54074d7139907c5006cc7a948b76ca"
+    },
+    {
+      "scene": "copy-success",
+      "width": 1440,
+      "file": "1440-copy-success.png",
+      "sha256": "757fae4c73056c6527abcbd76eee661c2aa715110088844b3a17c01341b39e73"
+    },
+    {
+      "scene": "copy-denied",
+      "width": 1440,
+      "file": "1440-copy-denied.png",
+      "sha256": "417ccf23fb798fcb374b308238613af4dd177db16e0e8b07ef39566ce156593c"
+    },
+    {
+      "scene": "failure-copy-denied",
+      "width": 1440,
+      "file": "1440-failure-copy-denied.png",
+      "sha256": "88cff417398a7656196e7a45811552e0c6e9d2956b91415506a7a132284d0186"
+    },
+    {
+      "scene": "refresh-copy-denied",
+      "width": 1440,
+      "file": "1440-refresh-copy-denied.png",
+      "sha256": "02b408b94decfeebc29908e13bfb22e05ddce6515f98ddbc04ab9583cc1ae607"
+    },
+    {
+      "scene": "focus",
+      "width": 1440,
+      "file": "1440-focus.png",
+      "sha256": "23399c7ae228e9ca687aaf8e61da231cb1249675486361042287a7715fd6da22"
+    },
+    {
+      "scene": "hover",
+      "width": 1440,
+      "file": "1440-hover.png",
+      "sha256": "18b2f28918a28f16f7b14b48be84aadd77137ff4d9bd52f456318df7a777cd07"
+    },
+    {
+      "scene": "pressed",
+      "width": 1440,
+      "file": "1440-pressed.png",
+      "sha256": "0a81cd949c7c5a77269258ff1ef765764e272e87e7ae01f2b2a71e160f5bd90c"
+    },
+    {
+      "scene": "review-tools",
+      "width": 1440,
+      "file": "1440-review-tools.png",
+      "sha256": "4ed589bb573a716b85425e08fdfd3a0101653a1f62b511d60db080eca797109f"
+    },
+    {
+      "scene": "ready",
+      "width": 390,
+      "file": "390-ready.png",
+      "sha256": "0bcd7e11ac855dc65fd1fd091ddc08023af6979b4115aa4b437fcc0ecccf668c"
+    },
+    {
+      "scene": "availability-boundary",
+      "width": 390,
+      "file": "390-availability-boundary.png",
+      "sha256": "525e13edff30050ac8f3f99f00b03a1aac5755dcd4fa1f337e9a2382af4e2ddd"
+    },
+    {
+      "scene": "version",
+      "width": 390,
+      "file": "390-version.png",
+      "sha256": "bef94da23b9712a5e40922e36d11062f20bb6811fb1d8e42fa464ac0fdb7e002"
+    },
+    {
+      "scene": "read-only",
+      "width": 390,
+      "file": "390-read-only.png",
+      "sha256": "7f0cc31a10d8d2d08cfda63630bc458855f92626ec846a3821241ea4f317181b"
+    },
+    {
+      "scene": "binlog-off",
+      "width": 390,
+      "file": "390-binlog-off.png",
+      "sha256": "8a3fe660c71ce69f3a81597e0a98624ef23a4e160aa65ea33db596123d70f7b3"
+    },
+    {
+      "scene": "format",
+      "width": 390,
+      "file": "390-format.png",
+      "sha256": "7b26384ad3b6c664928a17cbe7584edcf3fe05fd1777216a267b3b1b583f69c2"
+    },
+    {
+      "scene": "excluded",
+      "width": 390,
+      "file": "390-excluded.png",
+      "sha256": "06552c016d1befc1a4daf2d2f6d9c8068fa7d15d7564ddcbc8fb0ee493293ca5"
+    },
+    {
+      "scene": "flush",
+      "width": 390,
+      "file": "390-flush.png",
+      "sha256": "724e6c9010e9ef689eaabf5a4ed32008b9f0900d2980ebbf54ed119c8a564b86"
+    },
+    {
+      "scene": "sync",
+      "width": 390,
+      "file": "390-sync.png",
+      "sha256": "e7a696550c9a781f2811a6ffba4ec9fbeb43c196629fe106d67734b138fb3f42"
+    },
+    {
+      "scene": "master",
+      "width": 390,
+      "file": "390-master.png",
+      "sha256": "67ad820f8a676c28039774cc73b0fbe715e8fb759535af786ddb9091800a7918"
+    },
+    {
+      "scene": "replica",
+      "width": 390,
+      "file": "390-replica.png",
+      "sha256": "380cb5a420feaa95300d78c7affcab3200b9a9854a091a2484f7581280e447d6"
+    },
+    {
+      "scene": "connections-unbounded",
+      "width": 390,
+      "file": "390-connections-unbounded.png",
+      "sha256": "d56ca0a8be3544341650c0b5e31e5bb6338e62202e973dd1dc39c6d9fc2c4a28"
+    },
+    {
+      "scene": "capacity-unknown",
+      "width": 390,
+      "file": "390-capacity-unknown.png",
+      "sha256": "0f04037793f643d3dbca9f419f55b45d91d115ef0588859268d6c3bbb91c7b8d"
+    },
+    {
+      "scene": "slow-warning",
+      "width": 390,
+      "file": "390-slow-warning.png",
+      "sha256": "b7c3a74e83060fdd62c2de46f86f998236f9468fa8f67b476e937f1f211ad600"
+    },
+    {
+      "scene": "slow-stop",
+      "width": 390,
+      "file": "390-slow-stop.png",
+      "sha256": "6164425b5a9fb9cb36b95f78d225e0787fcac32458306ac1cc24e8bd7fda52a9"
+    },
+    {
+      "scene": "buffer-warning",
+      "width": 390,
+      "file": "390-buffer-warning.png",
+      "sha256": "6ec8606b5852b647d648fa1c864c4c6088e4337119e63cdb94ae12d4ecf12809"
+    },
+    {
+      "scene": "log-waits",
+      "width": 390,
+      "file": "390-log-waits.png",
+      "sha256": "28f29ec0371a4f3af57f900a27e9c58d398e422f95f2cbd0aa6e58a9b6fbd9ee"
+    },
+    {
+      "scene": "row-waits",
+      "width": 390,
+      "file": "390-row-waits.png",
+      "sha256": "a83245b2a6dc2e558285b33603b12b43c0de6e458f0eb1aebef6696aa7d8c2f9"
+    },
+    {
+      "scene": "rpo-null",
+      "width": 390,
+      "file": "390-rpo-null.png",
+      "sha256": "8e8832b7c890f90784561fe3c89c24197bf38a8a820aa6376074fb97fbe6e21a"
+    },
+    {
+      "scene": "rto-null",
+      "width": 390,
+      "file": "390-rto-null.png",
+      "sha256": "3fb297031085ecf939f44ca0d1ef633492391157cd088d6765398564d4dc0723"
+    },
+    {
+      "scene": "age-null",
+      "width": 390,
+      "file": "390-age-null.png",
+      "sha256": "7b0c48160bbdc563155c2002129163ce429ba534d9acd9a4cc94b15529335360"
+    },
+    {
+      "scene": "connections-warning",
+      "width": 390,
+      "file": "390-connections-warning.png",
+      "sha256": "d2b16eb96942d8ec2af6c5f13189f9603c8305843404c69193b430eb34ea9011"
+    },
+    {
+      "scene": "connections-stop",
+      "width": 390,
+      "file": "390-connections-stop.png",
+      "sha256": "beca3c8b4a5f7e0bcb5b731d81529ac10813e4acf984faae5794bd71d8f2164d"
+    },
+    {
+      "scene": "storage-warning",
+      "width": 390,
+      "file": "390-storage-warning.png",
+      "sha256": "cf325b3bf8ba71946cb0f9f0051dbb848e9b204f34b6845d29c7c79fd29b7e72"
+    },
+    {
+      "scene": "storage-stop",
+      "width": 390,
+      "file": "390-storage-stop.png",
+      "sha256": "8441f6b9b7e96e822a053d68fd0af2e4fc916b2636d9c376864ecb7860c2cb87"
+    },
+    {
+      "scene": "storage-over",
+      "width": 390,
+      "file": "390-storage-over.png",
+      "sha256": "47095a235f54fe67961eca1971a62423f04221f2720d0097c8e24c87c010ab2c"
+    },
+    {
+      "scene": "zero-values",
+      "width": 390,
+      "file": "390-zero-values.png",
+      "sha256": "211874c7f26356f30a935cae9381af469d8928583350ada79d68d0b1b21b858d"
+    },
+    {
+      "scene": "negative-recovery",
+      "width": 390,
+      "file": "390-negative-recovery.png",
+      "sha256": "a6d4b17afd5251402d183a7b6eec7b5fc86988ed6fa7dddf6acd365fd89b4cb9"
+    },
+    {
+      "scene": "negative-recovery",
+      "width": 390,
+      "file": "390-negative-recovery-detail.png",
+      "sha256": "46f219bf66e69acae1539713b6d5f9307d314ef21333067fd862e2af4aca11f6"
+    },
+    {
+      "scene": "long",
+      "width": 390,
+      "file": "390-long.png",
+      "sha256": "60f1f103a4a9775e91705ba18ae770ddb3318a0decff56e67d8166b6151dc922"
+    },
+    {
+      "scene": "interval-short",
+      "width": 390,
+      "file": "390-interval-short.png",
+      "sha256": "ab03bc21f46ef10696559db3f50012c853f886042f2cfe7120cc2dbd27e36919"
+    },
+    {
+      "scene": "no-previous",
+      "width": 390,
+      "file": "390-no-previous.png",
+      "sha256": "ff466cfdd6949dcb6fbb69c7d53a060821daca7a005993ab3df5384b877a5c52"
+    },
+    {
+      "scene": "counter-reset",
+      "width": 390,
+      "file": "390-counter-reset.png",
+      "sha256": "3ba79841495dfc72ee54790dd90a5a92d0e901559f4be2b94cc9cdfd4ceba7a9"
+    },
+    {
+      "scene": "no-buffer-requests",
+      "width": 390,
+      "file": "390-no-buffer-requests.png",
+      "sha256": "c65e8bc89371e53e4f50af9b5c6895235c429e160c364864e636fa2c3e1643c1"
+    },
+    {
+      "scene": "recovery-empty",
+      "width": 390,
+      "file": "390-recovery-empty.png",
+      "sha256": "6718ec2ffe8bcfd74be61cf217e2a911bd0688d1dcc5e1ae61cc15e79d0e8a8e"
+    },
+    {
+      "scene": "asset-missing",
+      "width": 390,
+      "file": "390-asset-missing.png",
+      "sha256": "bbe5ad1ada21b1deec1b7ca6f1652fe4d5ea2b260a3d0b6e2c6a692a8ed6db5b"
+    },
+    {
+      "scene": "drill-not-isolated",
+      "width": 390,
+      "file": "390-drill-not-isolated.png",
+      "sha256": "bbe5ad1ada21b1deec1b7ca6f1652fe4d5ea2b260a3d0b6e2c6a692a8ed6db5b"
+    },
+    {
+      "scene": "drill-stale",
+      "width": 390,
+      "file": "390-drill-stale.png",
+      "sha256": "5b5d72e8b1029b5dcd766e4f74fb31b56b5ccc5447f0baea6b05cbd2fc3cf2d1"
+    },
+    {
+      "scene": "drill-stale",
+      "width": 390,
+      "file": "390-drill-stale-detail.png",
+      "sha256": "d87a28ee21e9576dfc38bf0f0bb5a58caae8461637b89835802d422926b065c7"
+    },
+    {
+      "scene": "drill-boundary",
+      "width": 390,
+      "file": "390-drill-boundary.png",
+      "sha256": "cc7a7f7204c8f373173445a766252fad17b26e0c8e643ef9a1b20b12393d34f9"
+    },
+    {
+      "scene": "drill-future",
+      "width": 390,
+      "file": "390-drill-future.png",
+      "sha256": "071af755213d92bad4e21e065c3b94809d29edee635e107bd975b91ab82781ed"
+    },
+    {
+      "scene": "probe-null-rpo",
+      "width": 390,
+      "file": "390-probe-null-rpo.png",
+      "sha256": "8e8832b7c890f90784561fe3c89c24197bf38a8a820aa6376074fb97fbe6e21a"
+    },
+    {
+      "scene": "probe-null-rpo",
+      "width": 390,
+      "file": "390-probe-null-rpo-detail.png",
+      "sha256": "6c392f21abb203789f23d4100228f1dd6269ab444bb5243785a5e156ec6cdff9"
+    },
+    {
+      "scene": "rpo-probe-stop",
+      "width": 390,
+      "file": "390-rpo-probe-stop.png",
+      "sha256": "75113813da426a60e2cca310d6b8a4e4ad33e2c2dd7303ac4aad6edb712dd402"
+    },
+    {
+      "scene": "rto-probe-stop",
+      "width": 390,
+      "file": "390-rto-probe-stop.png",
+      "sha256": "13250c7230cc2ed05951f9f2b55122906b47e8b7639939d342e174443a3bdb29"
+    },
+    {
+      "scene": "twenty-drills",
+      "width": 390,
+      "file": "390-twenty-drills.png",
+      "sha256": "29c6ef7bd6ac2a067f25eca39509e50d4a91073771acf9563bf5883c1c8fe98a"
+    },
+    {
+      "scene": "policy-stricter",
+      "width": 390,
+      "file": "390-policy-stricter.png",
+      "sha256": "1b41e408c2a2e2a8cd75b51fbd09df698d0c40e8b9f2344183eba7be97a577a7"
+    },
+    {
+      "scene": "policy-relaxed",
+      "width": 390,
+      "file": "390-policy-relaxed.png",
+      "sha256": "04980d4b84505ec6d5c090bde869bd0cd482a88b5fe9c98ada3e8f1921637342"
+    },
+    {
+      "scene": "original",
+      "width": 390,
+      "file": "390-original.png",
+      "sha256": "8f00631465009a256bc61005e442fb16ed8d8e3b7fef26dc0e9129244a0b4585"
+    },
+    {
+      "scene": "loading",
+      "width": 390,
+      "file": "390-loading.png",
+      "sha256": "a6a0a3d1741c9df502cee93fa46ed7b94fbe5f9d5fed85f523322e9c0a2ecb41"
+    },
+    {
+      "scene": "empty",
+      "width": 390,
+      "file": "390-empty.png",
+      "sha256": "d12cbf84c411c50023aeab47609a86f48ae8e0d09f70621235bc1a181210beb3"
+    },
+    {
+      "scene": "expired",
+      "width": 390,
+      "file": "390-expired.png",
+      "sha256": "6dbbd77784afcde07b763629a19be998101035d5c6537e968d24f9f882ca6519"
+    },
+    {
+      "scene": "forbidden",
+      "width": 390,
+      "file": "390-forbidden.png",
+      "sha256": "4b97fec4aafeca7b7fa92522aa04b9a1e5f98cc70281e8da8d28205ca74ecf73"
+    },
+    {
+      "scene": "rate_limited",
+      "width": 390,
+      "file": "390-rate_limited.png",
+      "sha256": "ed949e45939acf51473ff98457982271bb37c6a2dc22f33da35a05a57b2a71d6"
+    },
+    {
+      "scene": "timeout",
+      "width": 390,
+      "file": "390-timeout.png",
+      "sha256": "cd8e7e6db420b629f851cbe5acf9be7b40caf2bd58a6c6cb1df21526f8cdbe07"
+    },
+    {
+      "scene": "unavailable",
+      "width": 390,
+      "file": "390-unavailable.png",
+      "sha256": "22724ee4d5917ac553417dc4bcca6b10824f800f883e6c1054408eeaafeb986d"
+    },
+    {
+      "scene": "recovering",
+      "width": 390,
+      "file": "390-recovering.png",
+      "sha256": "e8629778f8bfc269f11f9aae8e9a7e5657559673a2669e3c6879845fa81044ac"
+    },
+    {
+      "scene": "refreshing",
+      "width": 390,
+      "file": "390-refreshing.png",
+      "sha256": "3323fd8eb8921d321818b510d850ed44929d72b039e155c53262800a28ceb7d4"
+    },
+    {
+      "scene": "refresh-timeout",
+      "width": 390,
+      "file": "390-refresh-timeout.png",
+      "sha256": "8502d9037cc2283d182c747e91f52429aa350d49428c6e44e88f05c7ebba50a8"
+    },
+    {
+      "scene": "refresh-rate_limited",
+      "width": 390,
+      "file": "390-refresh-rate_limited.png",
+      "sha256": "782fe350822330fb9d917c33a184c0ec482122a6d4e30001c7e2b57c4b58997a"
+    },
+    {
+      "scene": "refresh-unavailable",
+      "width": 390,
+      "file": "390-refresh-unavailable.png",
+      "sha256": "04f9fc7980bd54e4b03aed41ca2ab454ce4ed4e04b4c53af80e0039712f81e69"
+    },
+    {
+      "scene": "generic-error",
+      "width": 390,
+      "file": "390-generic-error.png",
+      "sha256": "3f54a18d347193c00d163c6322c7c0b5784476ce67e45a1d4a61e3d998fa8b14"
+    },
+    {
+      "scene": "request-detail",
+      "width": 390,
+      "file": "390-request-detail.png",
+      "sha256": "e8dc065dea6b568c9ea2640ae21505fda00507303ca46d1c649b2e841d6fe3be"
+    },
+    {
+      "scene": "request-detail",
+      "width": 390,
+      "file": "390-request-detail-detail.png",
+      "sha256": "d1201bf5b15d22bf6f957d328bc586e5de94192ce79603452c48822eb83dce4a"
+    },
+    {
+      "scene": "failure-detail",
+      "width": 390,
+      "file": "390-failure-detail.png",
+      "sha256": "56e98e36af7b26f04205c51c0760da04e5e1323af6d034bf4a1cf69c7fc0d0ec"
+    },
+    {
+      "scene": "refresh-detail",
+      "width": 390,
+      "file": "390-refresh-detail.png",
+      "sha256": "7e477dbc723f2ab8b6b3b4c19447b4897ece949c336e423bb612668739c4725a"
+    },
+    {
+      "scene": "refresh-detail",
+      "width": 390,
+      "file": "390-refresh-detail-detail.png",
+      "sha256": "809d109a1b90a713efffefced0265bf9db440268832d3d51c1dadca8fcada90e"
+    },
+    {
+      "scene": "copy-success",
+      "width": 390,
+      "file": "390-copy-success.png",
+      "sha256": "9677709544d584e701ede220847956bf3ec44b27facdb1691278952b73313270"
+    },
+    {
+      "scene": "copy-denied",
+      "width": 390,
+      "file": "390-copy-denied.png",
+      "sha256": "df2b2f538731da4d86fcb0d19b10f4e81febd7f83272e94207282ba7c06f5b02"
+    },
+    {
+      "scene": "failure-copy-denied",
+      "width": 390,
+      "file": "390-failure-copy-denied.png",
+      "sha256": "0d4cdbd66fa782b6ccd68a1f31c5895648c000f42eded84f653a4b13d6ada26e"
+    },
+    {
+      "scene": "refresh-copy-denied",
+      "width": 390,
+      "file": "390-refresh-copy-denied.png",
+      "sha256": "7dafd88084ed612182c65df2a1800e752d7c92bf0920971b04294851efa71eb2"
+    },
+    {
+      "scene": "focus",
+      "width": 390,
+      "file": "390-focus.png",
+      "sha256": "2940db7a485bcb48adb6336ecf7367919d69886c486c9bf4f7a90a903d3b4ed4"
+    },
+    {
+      "scene": "hover",
+      "width": 390,
+      "file": "390-hover.png",
+      "sha256": "2608321c98f62518488dba9a3f5353ea36919db20472a09d6e3b6e82b4922843"
+    },
+    {
+      "scene": "pressed",
+      "width": 390,
+      "file": "390-pressed.png",
+      "sha256": "bbb1abcfd160a5dbb0ec39d73981184554cb3b0565fbdae93807fd5fd68be35f"
+    },
+    {
+      "scene": "review-tools",
+      "width": 390,
+      "file": "390-review-tools.png",
+      "sha256": "199ad94d0fd871f49b6b3e07519643af5803e661554dd58277e7d862e7748c72"
+    }
+  ]
+}
