@@ -1,0 +1,1411 @@
+{
+  "proposal": "SOURCING-C-r1",
+  "kind": "page-or-section-proposal",
+  "approval": "pending-user-review",
+  "baselineRevision": "b30fb8a2f07a84825037a4a52dba7796109801c5",
+  "sourceHashes": {
+    "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+    "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+    "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+    "apps/web/src/components/sourcing-workspace-types.ts": "70c451bf950fcd23c2a6dd87d693ceed46439ca68c9af92727302af09f025646",
+    "apps/api/src/sourcing-service.ts": "9f79bd995471188647716b138fdf5bc4b131f8140088f49ab4facba224512518",
+    "apps/api/src/mysql-sourcing-repository.ts": "e68d7c0e04c24ca49b2bdb4ba6c0043a098122657a05c2fefe07d5aa5ffdf660",
+    "apps/api/src/sourcing-routes.ts": "ab53d7fb9f03623aa5a2db55920fef199daf93f142cdd7ebcfdf8dfe14882c9c",
+    "tests/e2e/m04-06-sourcing.spec.ts": "923878a13bc8db5f5edff7f693fde8a2e4d4269b91dd45ec760fbfbfb1c1582b",
+    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
+    "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
+    "scripts/verify-ui-phase2-sourcing-source.mjs": "1b3e30a35f3a7d754d1f3fcee2cfbb4d1a7ce3c1799d6d6c7914fbc09866e6c6",
+    "scripts/verify-ui-phase2-sourcing-c.mjs": "af56294aafdd2aa27bf66439a6cfe076f7549409ec57bddc8e5339e8a6da3799",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/index.html": "a7590f66142c3bce8f896c6c627cefd858c63af53c8b10bce4f557ba1954f7f4",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "1e967515b799f08aa83e5544fc7bef712172675317c9836979fd0f5a468d9ba4",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "9ba5c7682118ce98f6f853dd42f6fff9ef1aaa78884ede93a9befa22bcf97647"
+  },
+  "sourceProof": {
+    "checks": [
+      "UNFIXED SC-G02: comparison-history failure blocks otherwise loaded list; no optional degradation in actual setup",
+      "four search kinds preserve draft/cancel with zero request; exact two-field POST, error retains form",
+      "quote exact immutable-version intent excludes raw price/currency; existing1/7/80 defaults and variable-label gap remain; zero preserved and local time roundtrips",
+      "sixth checkbox is rolled back to accepted five IDs, deselection works, exact comparison quote IDs retained on failure",
+      "purchase locks quote, resets MOQ, trims reason; queued acceptance never proves procurement executed",
+      "delete only trimmed reason, no invented revision; refresh success notice erased by reload remains UNFIXED",
+      "actual comparison normalizes formatting only, not units/semantic equivalence",
+      "SC cost read Promise.all fails atomically on reviewer error; no invented ready snapshot/reviewer count",
+      "cost submission uses opportunity version; review uses independent review version; recalculation queues platform/version only"
+    ],
+    "limits": "Actual setup functions with inert transport/router and checkbox class; no DOM mount, SQL, RBAC, worker, quote validity, asynchronous ownership or actual timezone matrix proof."
+  },
+  "scenes": [
+    {
+      "id": "workspace",
+      "label": "完整找货工作台",
+      "pageId": "P21"
+    },
+    {
+      "id": "keyword-record",
+      "label": "关键词记录 / 无机会成本",
+      "pageId": "P21"
+    },
+    {
+      "id": "missing-quote",
+      "label": "待确认报价字段",
+      "pageId": "P21"
+    },
+    {
+      "id": "readonly",
+      "label": "只读货源",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-only",
+      "label": "独立成本权限",
+      "pageId": "P21"
+    },
+    {
+      "id": "platform-inspect",
+      "label": "受权采集明细",
+      "pageId": "P21"
+    },
+    {
+      "id": "queued",
+      "label": "首次排队",
+      "pageId": "P21"
+    },
+    {
+      "id": "running",
+      "label": "来源执行中",
+      "pageId": "P21"
+    },
+    {
+      "id": "source-blocked",
+      "label": "部分来源受阻",
+      "pageId": "P21"
+    },
+    {
+      "id": "failed",
+      "label": "采集失败",
+      "pageId": "P21"
+    },
+    {
+      "id": "empty-result",
+      "label": "采集成功无候选",
+      "pageId": "P21"
+    },
+    {
+      "id": "empty",
+      "label": "无找货记录",
+      "pageId": "P21"
+    },
+    {
+      "id": "loading",
+      "label": "正在读取",
+      "pageId": "P21"
+    },
+    {
+      "id": "error",
+      "label": "读取失败",
+      "pageId": "P21"
+    },
+    {
+      "id": "expired",
+      "label": "会话过期",
+      "pageId": "P21"
+    },
+    {
+      "id": "forbidden",
+      "label": "无权限",
+      "pageId": "P21"
+    },
+    {
+      "id": "rate-limited",
+      "label": "限流",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-empty",
+      "label": "搜索无结果",
+      "pageId": "P21"
+    },
+    {
+      "id": "detail-error",
+      "label": "详情失败",
+      "pageId": "P21"
+    },
+    {
+      "id": "comparison-error",
+      "label": "对比历史读取失败",
+      "pageId": "P21"
+    },
+    {
+      "id": "erp",
+      "label": "ERP参考不作为确认报价",
+      "pageId": "P21"
+    },
+    {
+      "id": "select-one",
+      "label": "选择一家",
+      "pageId": "P21"
+    },
+    {
+      "id": "select-two",
+      "label": "选择两家",
+      "pageId": "P21"
+    },
+    {
+      "id": "select-five",
+      "label": "最多五家",
+      "pageId": "P21"
+    },
+    {
+      "id": "comparison",
+      "label": "已保存对比",
+      "pageId": "P21"
+    },
+    {
+      "id": "spec-format",
+      "label": "规格仅格式差异",
+      "pageId": "P21"
+    },
+    {
+      "id": "spec-different",
+      "label": "规格不一致",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-keyword",
+      "label": "找货输入 / keyword",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-image",
+      "label": "找货输入 / image",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-opportunity",
+      "label": "找货输入 / opportunity",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-product_url",
+      "label": "找货输入 / product_url",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-error",
+      "label": "找货失败保留",
+      "pageId": "P21"
+    },
+    {
+      "id": "search-busy",
+      "label": "找货提交中",
+      "pageId": "P21"
+    },
+    {
+      "id": "quote",
+      "label": "确认新报价版本",
+      "pageId": "P21"
+    },
+    {
+      "id": "quote-defaults",
+      "label": "缺字段预填非事实",
+      "pageId": "P21"
+    },
+    {
+      "id": "quote-error",
+      "label": "报价失败保留",
+      "pageId": "P21"
+    },
+    {
+      "id": "quote-busy",
+      "label": "报价提交中",
+      "pageId": "P21"
+    },
+    {
+      "id": "purchase",
+      "label": "锁定报价与MOQ",
+      "pageId": "P21"
+    },
+    {
+      "id": "purchase-error",
+      "label": "采购失败保留",
+      "pageId": "P21"
+    },
+    {
+      "id": "purchase-busy",
+      "label": "采购提交中",
+      "pageId": "P21"
+    },
+    {
+      "id": "delete",
+      "label": "删除保留证据",
+      "pageId": "P21"
+    },
+    {
+      "id": "delete-error",
+      "label": "删除失败保留",
+      "pageId": "P21"
+    },
+    {
+      "id": "delete-busy",
+      "label": "删除提交中",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-missing",
+      "label": "利润输入不足",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-calculated",
+      "label": "已计算历史快照",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-pending",
+      "label": "成本待复核",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-overdue",
+      "label": "复核超时不自动批准",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-approved",
+      "label": "复核通过记录",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-rejected",
+      "label": "复核驳回记录",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-readonly",
+      "label": "成本只读",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-review-approved",
+      "label": "内联通过原因",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-review-rejected",
+      "label": "内联驳回原因",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-error",
+      "label": "成本读取失败",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-reviewers-empty",
+      "label": "无可选复核人",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-submit-error",
+      "label": "成本提交失败保留",
+      "pageId": "P21"
+    },
+    {
+      "id": "cost-recalculating",
+      "label": "利润重算排队",
+      "pageId": "P21"
+    },
+    {
+      "id": "deep-ocean-standard",
+      "label": "deep-ocean / standard",
+      "pageId": "P21"
+    },
+    {
+      "id": "deep-ocean-compact",
+      "label": "deep-ocean / compact",
+      "pageId": "P21"
+    },
+    {
+      "id": "cloud-white-standard",
+      "label": "cloud-white / standard",
+      "pageId": "P21"
+    },
+    {
+      "id": "cloud-white-compact",
+      "label": "cloud-white / compact",
+      "pageId": "P21"
+    },
+    {
+      "id": "aurora-purple-standard",
+      "label": "aurora-purple / standard",
+      "pageId": "P21"
+    },
+    {
+      "id": "aurora-purple-compact",
+      "label": "aurora-purple / compact",
+      "pageId": "P21"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1440-workspace.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "workspace",
+      "sha256": "c2f55922b80a04b4582bd612d5bc67f3c90ae724651aa8e901adf686310aa67c"
+    },
+    {
+      "file": "1440-keyword-record.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "keyword-record",
+      "sha256": "10052452278a7b09d8d476575b4928ba82cdc22230b9b1720243aa36b8d63182"
+    },
+    {
+      "file": "1440-missing-quote.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "missing-quote",
+      "sha256": "a13467badc3d0565b9d7f1093b8ff2b9e60b644e2e325c42d07bb7cf3edfbd0a"
+    },
+    {
+      "file": "1440-readonly.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "readonly",
+      "sha256": "2dc6f8a0639763c15db404fac29169c64e264f060afdddadeebb740316d533f4"
+    },
+    {
+      "file": "1440-cost-only.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-only",
+      "sha256": "08e6a691e7b7765a588e5ae96a532933a9b3a20b115632a60e829b991f5197ab"
+    },
+    {
+      "file": "1440-platform-inspect.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "platform-inspect",
+      "sha256": "24b427c1cedb177d435559aa4aecf710a76424abaaaff22dac7a885faa92d384"
+    },
+    {
+      "file": "1440-queued.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "queued",
+      "sha256": "e604b6fd4d77cac67d02982d781df4e2d33f317d68f571ab60d9f8067d1b01ba"
+    },
+    {
+      "file": "1440-running.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "running",
+      "sha256": "4807379dc6238695868616e2cdaa5171aa55152fd28346ec436297150e506b5b"
+    },
+    {
+      "file": "1440-source-blocked.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "source-blocked",
+      "sha256": "eabaff52ac753eb3d059f32b2897bd9920d20d9863b3ebfd818be1c8437cef4f"
+    },
+    {
+      "file": "1440-failed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "failed",
+      "sha256": "7d485561e678cf4bcab882a068e399fcdae2b98d58949293267b2fadc440e40c"
+    },
+    {
+      "file": "1440-empty-result.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "empty-result",
+      "sha256": "dc854aaf4c7630b7f80c83b81487365996614d5b317e4703852b9a302e57a66a"
+    },
+    {
+      "file": "1440-empty.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "empty",
+      "sha256": "355ac198e62b7cdb21d3292394d7b1ba167e0f7bc7dc6d2692f12b2ec9b00a3a"
+    },
+    {
+      "file": "1440-loading.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "loading",
+      "sha256": "d01097b08489c40d0647f83dbf65a6b9133405ee7204844c2d29a8d1e3d4f013"
+    },
+    {
+      "file": "1440-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "error",
+      "sha256": "eaaa880a6edc12b48af9a45e72e30279ceb46fed5c9ed866c4511546da465665"
+    },
+    {
+      "file": "1440-expired.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "expired",
+      "sha256": "4132fd1db372478a52698a6555933a0e1ab752cee5c86b3c2cce7cab2f73fddc"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "forbidden",
+      "sha256": "1d4c3d3dc1965d0e6946eebe8137297dab2b6162523e0be47db6fa5c1f3d30f1"
+    },
+    {
+      "file": "1440-rate-limited.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "rate-limited",
+      "sha256": "1b158c9c01367b680897a5007dfd5df5ce8f4a5dbb0f6be314549531e233fb6a"
+    },
+    {
+      "file": "1440-search-empty.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-empty",
+      "sha256": "a05f3ffabba16ed0e5e78e685749efccfd34e63298e9836a1874a0171347019e"
+    },
+    {
+      "file": "1440-detail-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "detail-error",
+      "sha256": "0b7f69dcd7aea9594450476b72df97ea64c4866553fdfa7476bbe21f484b307b"
+    },
+    {
+      "file": "1440-comparison-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "comparison-error",
+      "sha256": "c78a5a922f3a23879da5864d74fc6e0c1b56d7ec6f843a27d17a56513e77b4a0"
+    },
+    {
+      "file": "1440-erp.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "erp",
+      "sha256": "6f8135afce4d438a63411b3c003f3ea7846a5d145474a8d39bbd1b62010fb769"
+    },
+    {
+      "file": "1440-select-one.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "select-one",
+      "sha256": "95e67424afa869b3843b4324295cc14372b4702abf46f56ae8bae079fad9fec4"
+    },
+    {
+      "file": "1440-select-two.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "select-two",
+      "sha256": "2774804bd1988c73753e3402ce142106b0c4cd00537f19937b2a809e41fc412b"
+    },
+    {
+      "file": "1440-select-five.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "select-five",
+      "sha256": "c8a07632f8da9ccbe4ed8d7a113feb267c505142a0b0f00c56a8d226a530b92e"
+    },
+    {
+      "file": "1440-comparison.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "comparison",
+      "sha256": "91e7062d5b4d9576f79048352b0027e20ff297c41db4ce4dd391267ff8788a2d"
+    },
+    {
+      "file": "1440-spec-format.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "spec-format",
+      "sha256": "a2a69f9461f2ae0838a2fbcc3ebe089a7ac4aa0c57d131f3a9ee0073b10d4548"
+    },
+    {
+      "file": "1440-spec-different.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "spec-different",
+      "sha256": "f473ec0bb08c04602cfc706f9b6f1c3bf7bc1814f8fb34738ed677ddab626fe0"
+    },
+    {
+      "file": "1440-search-keyword.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-keyword",
+      "sha256": "ccc844f97b750444c06bfae658fd9455585cd55d40fe745940a39f54a591ed95"
+    },
+    {
+      "file": "1440-search-image.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-image",
+      "sha256": "b4bdff8c42b711fd3fb6a3396601490d51ac80d4a1d903f2598f9c5ba9b56f22"
+    },
+    {
+      "file": "1440-search-opportunity.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-opportunity",
+      "sha256": "98aa2032b7b957399ac9e21a8e4901e0f357b884564c055945dd3bb917b66928"
+    },
+    {
+      "file": "1440-search-product_url.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-product_url",
+      "sha256": "3096765fdc93c51bfab7e756fc60f993d393fc807ab646173977cfa24ba8380b"
+    },
+    {
+      "file": "1440-search-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-error",
+      "sha256": "22ad582284b0ac7a4caace61678fa980eb3def1445fce90d69a71157c1859049"
+    },
+    {
+      "file": "1440-search-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "search-busy",
+      "sha256": "81d0e913949ecfe44f9a7f4bd6647dbe7b8b5eb5ad27b3251658596dee81ffc4"
+    },
+    {
+      "file": "1440-quote.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote",
+      "sha256": "d7275a05899f6ec78f233e73a110c86c5821904ecda03c5e4e74e73299fcb088"
+    },
+    {
+      "file": "1440-quote-lower.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-lower",
+      "sha256": "37cbe32766f3f5bf10bb886fca941ff8c21d8c6b14c1ae6944d8b291d201889d"
+    },
+    {
+      "file": "1440-quote-defaults.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-defaults",
+      "sha256": "5ae0b1227f6588a055f496ef08ca479767abced320c3daeaa161ca5d3a7ac2e7"
+    },
+    {
+      "file": "1440-quote-defaults-lower.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-defaults-lower",
+      "sha256": "41ec639fd37f34c43417c647f23deb60ea4e4dd2a34d202064e78d04e1c90681"
+    },
+    {
+      "file": "1440-quote-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-error",
+      "sha256": "450cad15cd40054b00b8350c604dede100e2fae69fad90523a94a3cca92bb507"
+    },
+    {
+      "file": "1440-quote-error-lower.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-error-lower",
+      "sha256": "938f7f38d9d24511f64f65c056c7a694b3e170bf7c0c5874c41fa4b892b5e21b"
+    },
+    {
+      "file": "1440-quote-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-busy",
+      "sha256": "e30521e7e0541ba9470879390ec69baf30731ec8837d645521225c0fc3df4ae9"
+    },
+    {
+      "file": "1440-quote-busy-lower.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "quote-busy-lower",
+      "sha256": "e30521e7e0541ba9470879390ec69baf30731ec8837d645521225c0fc3df4ae9"
+    },
+    {
+      "file": "1440-purchase.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "purchase",
+      "sha256": "40da7f38e15dcfbd1d23eca34145b1dafcf3ff3fc18a542f7915bb5c7092022d"
+    },
+    {
+      "file": "1440-purchase-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "purchase-error",
+      "sha256": "8a8afd37d224469941cf70a81245f74a21100fc45b1bfcb655fbdb2ab1255c99"
+    },
+    {
+      "file": "1440-purchase-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "purchase-busy",
+      "sha256": "7ea816845d8be62ccae01ac64d0a74170c8bee0e17688bbea94fc6ca5c9f921d"
+    },
+    {
+      "file": "1440-delete.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "delete",
+      "sha256": "5b08d78665020c0b371e9f5a6b898da9c4034e5e56f9fbf15ce83b3957508aab"
+    },
+    {
+      "file": "1440-delete-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "delete-error",
+      "sha256": "a0944ea10092491b692c5b14848e40eca323b0d9f3de2d03c0210227ec618088"
+    },
+    {
+      "file": "1440-delete-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "delete-busy",
+      "sha256": "ae7b3c3085de023308b6045d9b292b39291aedd16687ef2db99b7618e61263ce"
+    },
+    {
+      "file": "1440-cost-missing.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-missing",
+      "sha256": "9217af4802c9a19b38235d5b913723653934f2bf0b07e9fd287d87595b166de8"
+    },
+    {
+      "file": "1440-cost-calculated.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-calculated",
+      "sha256": "7dc13914c55e9eb6503284015f255653360f8b01768a53ba2c4a3fa31d7d5086"
+    },
+    {
+      "file": "1440-cost-pending.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-pending",
+      "sha256": "be9b410ecc4973c84b1ab0a127db665c088ed35512ab7e840d611fd521222bf7"
+    },
+    {
+      "file": "1440-cost-overdue.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-overdue",
+      "sha256": "f8278f366d709894db350f64eb053949c671537a18aafcdbfa8ff360462d2e6b"
+    },
+    {
+      "file": "1440-cost-approved.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-approved",
+      "sha256": "cb2f719b6b7a0a9d8cd648e70c7f17267d4e13fef3a23c6f72e366fca5497585"
+    },
+    {
+      "file": "1440-cost-rejected.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-rejected",
+      "sha256": "2f58876cef2ec9f9d67e56a7423a8adc1eca93a685db704d1690eedd233f3f92"
+    },
+    {
+      "file": "1440-cost-readonly.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-readonly",
+      "sha256": "3e3c4faf422f6e504dd81aadf0cd185173be942d4d4037fc92bcfc50609efa54"
+    },
+    {
+      "file": "1440-cost-review-approved.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-review-approved",
+      "sha256": "d572b69faab375729ba33e11e326259ebf250a12fcf2cbd018ed2f941deda619"
+    },
+    {
+      "file": "1440-cost-review-rejected.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-review-rejected",
+      "sha256": "8865241c7e2a0a096056fb091c118e408d13c7a5e37f00af37af137f9d257e47"
+    },
+    {
+      "file": "1440-cost-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-error",
+      "sha256": "c27735e3e049900fb8de5fb0bf54858c7b3dcd980fd76547fe06d582a579ea78"
+    },
+    {
+      "file": "1440-cost-reviewers-empty.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-reviewers-empty",
+      "sha256": "23c3db8adf94c493d87454ef8e26c46fa965bbe3b187810d52181bed6a593e18"
+    },
+    {
+      "file": "1440-cost-submit-error.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-submit-error",
+      "sha256": "ec1a7417fb0fc9ce5e110e271a501a505adf44c804d453b095c1abcecc0968cf"
+    },
+    {
+      "file": "1440-cost-recalculating.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cost-recalculating",
+      "sha256": "d6852eee45715cdfc9b43313223b463cfb70329608c4944fa1cde614414545cb"
+    },
+    {
+      "file": "1440-deep-ocean-standard.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "deep-ocean-standard",
+      "sha256": "6456fb009735b1b1959eaac855f543876e99877dc9ddc3aeb9ad14a097c32fcf"
+    },
+    {
+      "file": "1440-deep-ocean-compact.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "deep-ocean-compact",
+      "sha256": "3f87ba93130df750c8299fa4bd4ed2c3da2879336d53665bf721fa8c5f8aaa79"
+    },
+    {
+      "file": "1440-cloud-white-standard.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cloud-white-standard",
+      "sha256": "e11936b895651fd368a8cfc9a55b8d702826a77494d2499287ffa53662a2d4c5"
+    },
+    {
+      "file": "1440-cloud-white-compact.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "cloud-white-compact",
+      "sha256": "b7b3f3c367c0eb0fcc749b9d1dc59b37e216132e7ee84b060d6172991b7ee5d6"
+    },
+    {
+      "file": "1440-aurora-purple-standard.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "aurora-purple-standard",
+      "sha256": "dcdadc4394ff610b24e48ab7aa1545c3e72aab57ee4fe0ddd32b10ae87d89b37"
+    },
+    {
+      "file": "1440-aurora-purple-compact.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "aurora-purple-compact",
+      "sha256": "19892cb618b5979320d624861b4acfd118434d17a75cc0f4b602ea19bc80bab0"
+    },
+    {
+      "file": "1440-sixth-rejected.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "sixth-rejected",
+      "sha256": "7da091e1c8ea63485e8c61c18ef8e982470bf5795b3577e2892518bc02095e13"
+    },
+    {
+      "file": "1440-purchase-below-moq.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "purchase-below-moq",
+      "sha256": "b9119bd831c8d4f4cd2b98bd5208832e9fe6b88a2bd337622d137d8860e20fa1"
+    },
+    {
+      "file": "1440-button-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "button-focus",
+      "sha256": "c2f55922b80a04b4582bd612d5bc67f3c90ae724651aa8e901adf686310aa67c"
+    },
+    {
+      "file": "1440-button-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "button-hover",
+      "sha256": "c2f55922b80a04b4582bd612d5bc67f3c90ae724651aa8e901adf686310aa67c"
+    },
+    {
+      "file": "390-workspace.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "workspace",
+      "sha256": "1b23cb09eebd3ab25554054074d108d40c8a5f06ad581c766428d096a063f62d"
+    },
+    {
+      "file": "390-keyword-record.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "keyword-record",
+      "sha256": "0aaf55ba0d52d912c95514dc940af8106a3fdb72bab56751eb4783fd76d0c4d2"
+    },
+    {
+      "file": "390-missing-quote.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "missing-quote",
+      "sha256": "016006b2951dbb508f3a79ef1a556bf6b03f1f533a62c8503badcabee3c9771b"
+    },
+    {
+      "file": "390-readonly.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "readonly",
+      "sha256": "0d683e6c84d924a4b24add820b82761cad0edc1974584d955d3142dec66b351d"
+    },
+    {
+      "file": "390-cost-only.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-only",
+      "sha256": "119fb2306db9e608c91a2c1967c7a3a75dfaf2cb03b5d1087a67e7b0a2cecefe"
+    },
+    {
+      "file": "390-platform-inspect.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "platform-inspect",
+      "sha256": "bded416a25203200c2b3fe8fb202aca2e5833fb203f241be0e472f8d08c6d9b3"
+    },
+    {
+      "file": "390-queued.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "queued",
+      "sha256": "d68fcb2a243a86dc02e666a4c477f2227df1e3013b0b978c56ab52ec52a81599"
+    },
+    {
+      "file": "390-running.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "running",
+      "sha256": "a80e1387118a5aa64ffa28dc5730109039b015db0127e532ecc8adce9166f2b3"
+    },
+    {
+      "file": "390-source-blocked.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "source-blocked",
+      "sha256": "63e60b5ea76e7ceefcb503c2940ca1bda4779b98750c6cea4e2cd7a2485d1744"
+    },
+    {
+      "file": "390-failed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "failed",
+      "sha256": "5bd9a323ec53cb9856436cf99c04a20665930e42e69fe0485e574484f47b7710"
+    },
+    {
+      "file": "390-empty-result.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "empty-result",
+      "sha256": "6e6957224ed3aca9f8f9650475d6237784b29f1ade052b04e3411125fc231843"
+    },
+    {
+      "file": "390-empty.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "empty",
+      "sha256": "041c6dc39a5e31e993eda8aa86a4036ab0b23a9ded5f9f8cdcf1f3d8ed69433e"
+    },
+    {
+      "file": "390-loading.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "loading",
+      "sha256": "768d0e28115b6e047055f1689178df32f4a66eedf39177d5f64255bfadad2102"
+    },
+    {
+      "file": "390-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "error",
+      "sha256": "bff70d62de158daa568dfd7892e64ba61289d3f2dedf4806530ff2db9c5e9462"
+    },
+    {
+      "file": "390-expired.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "expired",
+      "sha256": "9e99ef722252d1ae73cc7340d9ef8876bee93e97ce49402ef952832a503e7dbb"
+    },
+    {
+      "file": "390-forbidden.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "forbidden",
+      "sha256": "3a9dc5f670e2ab9cde0a3af39b5a4ee27c7d02741c892f91d2f742b4079298c6"
+    },
+    {
+      "file": "390-rate-limited.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "rate-limited",
+      "sha256": "2618cd778a94a7f7235829a5d3aa4ce3f8082bc04316e5ec06b3cefdbefa451e"
+    },
+    {
+      "file": "390-search-empty.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-empty",
+      "sha256": "061009692fbcc6e0af4ccf82356687c36e517899e9ebbb3ad8bec519e3df75b3"
+    },
+    {
+      "file": "390-detail-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "detail-error",
+      "sha256": "66789947025e6dae705f9caf72404a277505934b5a1e8a0b759593342878d2f2"
+    },
+    {
+      "file": "390-comparison-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "comparison-error",
+      "sha256": "50268a4cf59b6b85314f2eea576a64a1ab9fd14f7a967433330015694d652160"
+    },
+    {
+      "file": "390-erp.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "erp",
+      "sha256": "745ffe8396d3b6f948db25c5a9412bb115329f626643fea3642b6f2d108a913d"
+    },
+    {
+      "file": "390-select-one.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "select-one",
+      "sha256": "cece5bdbf9e96b8827db99ae6833cc16558230d5dcfa862a62893096fce7b172"
+    },
+    {
+      "file": "390-select-two.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "select-two",
+      "sha256": "41525b789d56028f94c76a6d80870073c5eb1079f55943755bcf74969327752d"
+    },
+    {
+      "file": "390-select-five.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "select-five",
+      "sha256": "82cbc26e588da221868edadf69f4afb372b167c953412868b2860dece9ac8f87"
+    },
+    {
+      "file": "390-comparison.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "comparison",
+      "sha256": "65e5a360c48dd484a4df111656c257a2879aa7704918bd08c65b653cfbbe7f3c"
+    },
+    {
+      "file": "390-spec-format.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "spec-format",
+      "sha256": "71b7cb4a633fc8b1f7920a36d64a02b5951211f100ef50ee8cbe9a4c0f0878c7"
+    },
+    {
+      "file": "390-spec-different.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "spec-different",
+      "sha256": "7a8a56ff7103cf251fc0306e284facdf877eed72f650e320630ffefd4a727428"
+    },
+    {
+      "file": "390-search-keyword.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-keyword",
+      "sha256": "f7f6ef3d5207bf6e6dbdd8014e107626814d0dc80c032aa0fafd93554622c866"
+    },
+    {
+      "file": "390-search-image.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-image",
+      "sha256": "51d75385f45a5bf176c94bd96ab7cbaee63897b7010d0d77c1b741636278484f"
+    },
+    {
+      "file": "390-search-opportunity.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-opportunity",
+      "sha256": "88d1f27c9de5c567ee495e82b7f92549603e225766e7f71d2b5b7463289a5375"
+    },
+    {
+      "file": "390-search-product_url.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-product_url",
+      "sha256": "3ccded8de62f3937ce4fb5dfaa1ae68b7cd7bf17d00218d41049e4fb4cb08db6"
+    },
+    {
+      "file": "390-search-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-error",
+      "sha256": "6edee1399f224d9c1dd00546af2b6b52330792a4b868db4d37aedfe6d6deda84"
+    },
+    {
+      "file": "390-search-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "search-busy",
+      "sha256": "7bede71fc10952ab80599a6a1670d598512f4e0fbe67b172a5efd97692c57852"
+    },
+    {
+      "file": "390-quote.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote",
+      "sha256": "52e83c0bbf77f0ec9010bd353aec73ab51db4cfc6030eede954206e7a7a7c264"
+    },
+    {
+      "file": "390-quote-lower.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-lower",
+      "sha256": "95e6945735d5d442877255f9425c53c32063ff9ca23c7e637b4c0004f0b4a24b"
+    },
+    {
+      "file": "390-quote-defaults.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-defaults",
+      "sha256": "52e83c0bbf77f0ec9010bd353aec73ab51db4cfc6030eede954206e7a7a7c264"
+    },
+    {
+      "file": "390-quote-defaults-lower.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-defaults-lower",
+      "sha256": "95e6945735d5d442877255f9425c53c32063ff9ca23c7e637b4c0004f0b4a24b"
+    },
+    {
+      "file": "390-quote-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-error",
+      "sha256": "52e83c0bbf77f0ec9010bd353aec73ab51db4cfc6030eede954206e7a7a7c264"
+    },
+    {
+      "file": "390-quote-error-lower.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-error-lower",
+      "sha256": "7cdfe0d35f55371595e8d71c4d449e3877549aef7210960ba990f646b8003206"
+    },
+    {
+      "file": "390-quote-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-busy",
+      "sha256": "ed134999426e8bc8981d42144d2cc71183f4856bcfe7204fa61edbdf9f74d92a"
+    },
+    {
+      "file": "390-quote-busy-lower.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "quote-busy-lower",
+      "sha256": "ed134999426e8bc8981d42144d2cc71183f4856bcfe7204fa61edbdf9f74d92a"
+    },
+    {
+      "file": "390-purchase.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "purchase",
+      "sha256": "1cab789d0433b1bb31d1e2820014d65fc78c7af0a6ec81be6189112c3cb6f300"
+    },
+    {
+      "file": "390-purchase-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "purchase-error",
+      "sha256": "c3922dc9a2ec27e3708dfc323e95e9d7c02c691241879f2e1258b6ecbafefd03"
+    },
+    {
+      "file": "390-purchase-error-lower.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "purchase-error-lower",
+      "sha256": "960542511afe204c9b2596284dfb8780ff4e6b26fe5a25c65359c8640763caea"
+    },
+    {
+      "file": "390-purchase-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "purchase-busy",
+      "sha256": "8c53463c329ea16d034ec7c3525b054c05df8bee0b8ebf8d838fc5d479fdd050"
+    },
+    {
+      "file": "390-delete.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "delete",
+      "sha256": "ff4fa4385973bb67bc1f2b5cbddd06f02022782b23fd8fbac85bc24ae1ca9d16"
+    },
+    {
+      "file": "390-delete-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "delete-error",
+      "sha256": "3094177d49f4327f5b08966617932852863024fd3d97009fbf4e548463014a71"
+    },
+    {
+      "file": "390-delete-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "delete-busy",
+      "sha256": "355d9d5704e93eb69585740d29bf2e7cdd7da792cb175001c7aa7589aca7aed8"
+    },
+    {
+      "file": "390-cost-missing.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-missing",
+      "sha256": "b3a1bb253d685df5985ec3e045b531d54d91550d481c2c02d509fbc0ddcb11b0"
+    },
+    {
+      "file": "390-cost-calculated.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-calculated",
+      "sha256": "6a59a7fefdc24917faafb9bce9bcdec4d73ff477b11e9e39469f130934de14e7"
+    },
+    {
+      "file": "390-cost-pending.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-pending",
+      "sha256": "7a906d05d89d89a380779f1503227dd4ef630c2043cbe468ab5e9988654aec5b"
+    },
+    {
+      "file": "390-cost-overdue.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-overdue",
+      "sha256": "234d68e2a5d6150157d533c38764ad5bf581ec654ee287a5286756c221c80556"
+    },
+    {
+      "file": "390-cost-approved.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-approved",
+      "sha256": "d4eb7adb00620c87c9e04021dc4effcaf8462e676f2916fa726c0e8d78cb544f"
+    },
+    {
+      "file": "390-cost-rejected.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-rejected",
+      "sha256": "488209251209e71132cd779a3a4f54b42dad15b6b290092aa1bcce269cb11da8"
+    },
+    {
+      "file": "390-cost-readonly.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-readonly",
+      "sha256": "5dab63ec317f9b0a36e1e4ca6fb8da047f89645c3349b0c02f4ddf55b003671b"
+    },
+    {
+      "file": "390-cost-review-approved.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-review-approved",
+      "sha256": "0fd80033d2dfb6cdd9070adfa2cedd8a1428007b380494f4f43439f8fc49f6ca"
+    },
+    {
+      "file": "390-cost-review-rejected.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-review-rejected",
+      "sha256": "ea83bd0dd5e87751b99cb280de8ee273ef9365434c7fac6908739f8497a53a4d"
+    },
+    {
+      "file": "390-cost-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-error",
+      "sha256": "5c36422ef04e7e0be59dc1d908e633016baef0929bdbd3022ac5110f8782384c"
+    },
+    {
+      "file": "390-cost-reviewers-empty.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-reviewers-empty",
+      "sha256": "a8b4f987f5dd14f2f13a16a855dc2127549f6a2363ae8263f84208a290cacdd5"
+    },
+    {
+      "file": "390-cost-submit-error.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-submit-error",
+      "sha256": "0e88616486a59851507862164b1c2fb328c0bc5a46c1c5c40ac0342f810aa3c4"
+    },
+    {
+      "file": "390-cost-recalculating.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cost-recalculating",
+      "sha256": "42a82e5cecb9779e0c826d58ace4c582a4502bd9bcb35c5e21acab9c75153e61"
+    },
+    {
+      "file": "390-deep-ocean-standard.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "deep-ocean-standard",
+      "sha256": "23d61ea13146accd6b397283e49f834660617f566253abba6dcf046f4b6b4587"
+    },
+    {
+      "file": "390-deep-ocean-compact.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "deep-ocean-compact",
+      "sha256": "779a03f6ec0f7d0cc0425c31c869d7a49e34ae87b808e7ba4994f4596266388b"
+    },
+    {
+      "file": "390-cloud-white-standard.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cloud-white-standard",
+      "sha256": "2ad2f29270a2aa0e0a10e63abb4e8b5b67e896666ae40fa32600bf386abd877a"
+    },
+    {
+      "file": "390-cloud-white-compact.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "cloud-white-compact",
+      "sha256": "8c6df29e53ee9d486f30e65c2cd7ec07e2bc7a139b693506d2a3fccd6e162b81"
+    },
+    {
+      "file": "390-aurora-purple-standard.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "aurora-purple-standard",
+      "sha256": "ac9b70b5dee25ab92f0bcfed963c8778d09d868ba6d7a0eaa85e16412b058e51"
+    },
+    {
+      "file": "390-aurora-purple-compact.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "aurora-purple-compact",
+      "sha256": "4f0dc0a5e3f93850a56247a3acf7d7f86b01954b11ec5e1cc147238afcd41518"
+    },
+    {
+      "file": "390-sixth-rejected.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "sixth-rejected",
+      "sha256": "ec4cc87c6c1f421bbc3b0a7a550cbeb3be4e6ccb0a30a09dc7bc5d397cc771b6"
+    },
+    {
+      "file": "390-purchase-below-moq.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "purchase-below-moq",
+      "sha256": "8d32d6ac7fab8abfc2d661b5f51ef4e44ae6d1d250f76fc69de3a2821b2df444"
+    },
+    {
+      "file": "390-button-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "button-focus",
+      "sha256": "1b23cb09eebd3ab25554054074d108d40c8a5f06ad581c766428d096a063f62d"
+    },
+    {
+      "file": "390-button-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "button-hover",
+      "sha256": "1b23cb09eebd3ab25554054074d108d40c8a5f06ad581c766428d096a063f62d"
+    },
+    {
+      "file": "768-workspace.png",
+      "pageId": "P21",
+      "width": 768,
+      "scene": "workspace",
+      "sha256": "7e69d4b99b511985fcab88421f9559e536c386ea8abef1222ed901927dcafd75"
+    },
+    {
+      "file": "768-cost-calculated.png",
+      "pageId": "P21",
+      "width": 768,
+      "scene": "cost-calculated",
+      "sha256": "e2d00ffba883a4098954d4f2041bd664ffa2c3f0867465fe45cc367b68bbe2b2"
+    },
+    {
+      "file": "1024-workspace.png",
+      "pageId": "P21",
+      "width": 1024,
+      "scene": "workspace",
+      "sha256": "bc115121664d3dc5fe150dbfcbc2604fd8a5fb2e7fc0414607f98038aa3e7c6b"
+    },
+    {
+      "file": "1024-cost-calculated.png",
+      "pageId": "P21",
+      "width": 1024,
+      "scene": "cost-calculated",
+      "sha256": "8558fbc4a5b8ea4a07d0e0dca36c156e20be8bd23fea823704c927aeab7ad17b"
+    }
+  ],
+  "actionIds": [
+    "SC-COLLECTION",
+    "SC-COMPARE",
+    "SC-COST-LOAD",
+    "SC-COST-RECALCULATE",
+    "SC-COST-REVIEW",
+    "SC-COST-SUBMIT",
+    "SC-DELETE-OPEN",
+    "SC-DELETE-SUBMIT",
+    "SC-DETAIL",
+    "SC-ERP",
+    "SC-MODAL-CLOSE",
+    "SC-OPPORTUNITY",
+    "SC-PURCHASE-OPEN",
+    "SC-PURCHASE-SUBMIT",
+    "SC-QUOTE-OPEN",
+    "SC-QUOTE-SUBMIT",
+    "SC-REFRESH",
+    "SC-REVIEW-CANCEL",
+    "SC-REVIEW-OPEN",
+    "SC-RULES",
+    "SC-S-OPEN",
+    "SC-SEARCH",
+    "SC-SEARCH-CLEAR",
+    "SC-SEARCH-SUBMIT",
+    "SC-SELECT",
+    "SC-SOURCE",
+    "SC-STATE",
+    "SC-TAB"
+  ],
+  "checks": [
+    "1440: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
+    "390: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
+    "nine widths x5 representative surfaces; New York quote local display; 720x500 equivalent reflow only, not actual browser zoom or complete timezone/assistive technology coverage"
+  ],
+  "http": [],
+  "errors": [],
+  "limits": [
+    "Offline synthetic HTML only, not Vue/SQL/RBAC/collection/purchase/notification acceptance.",
+    "All-state/role/theme/dialog/lifecycle denominators unproven; P22 remains separate and unfinished.",
+    "No production edits, approval promotion or new dependencies."
+  ]
+}

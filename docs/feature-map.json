@@ -5,7 +5,7 @@
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
-  "uiPhase2DesignDeliveryAudit": "design-plans/ui-phase-2-2026-09-07/DESIGN-REVIEW-INDEX.md and design-delivery-audit.json, audited by node scripts/audit-ui-phase2-design-delivery.mjs (read-only; --write updates only these two reports). After COMPETITOR-C-r1:73 canonical routes/specs,71 with explicit page-or-section C links and2 without whole-page proposal links (P21-P22). Existing coverage/approvals unchanged; artifact integrity is not full action/dialog/theme/runtime acceptance. Next P21-P22; concrete review, Vue, global gates and deployment/signoff pending.",
+  "uiPhase2DesignDeliveryAudit": "design-plans/ui-phase-2-2026-09-07/DESIGN-REVIEW-INDEX.md and design-delivery-audit.json, audited by node scripts/audit-ui-phase2-design-delivery.mjs (read-only; --write updates only these two reports). After SOURCING-C-r1:73 canonical routes/specs,72 with explicit page-or-section C links and1 without a whole-page proposal link (P22). Existing coverage/approvals unchanged; artifact integrity is not full action/dialog/theme/runtime acceptance. Next P22; concrete review, Vue, global gates and deployment/signoff pending.",
   "implementation": {
     "currentPhase": "P08",
     "completedModules": [
@@ -1373,6 +1373,7 @@
     },
     "sourcingDiscovery": {
       "module": "M04-06",
+      "uiPhase2SourcingC": "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/README.md: SOURCING-C-r1 P21 proposal,62 scenes145 PNGs for offers/comparison/opportunity cost, four dialogs and inline reviews. Nine real setup isolated groups reproduce comparison-history blocking, notice loss and other UNFIXED source gaps. node scripts/verify-ui-phase2-sourcing-c.mjs verifies sources/images and offline DOM; --capture regenerates only this package; source-only via verify-ui-phase2-sourcing-source.mjs. Max5/MOQ/quote time and independent opportunity/review versions checked without HTTP or actual writes. Focus/busy/degradation/copy are proposals; Vue/API/OpenAPI/config/dependency/database/permissions/production unchanged and no restart. Full states/themes/lifecycle, P22, concrete approval, implementation/deployment pending.",
       "entrypoints": [
         "../apps/api/src/sourcing-service.ts",
         "../apps/api/src/mysql-sourcing-repository.ts",

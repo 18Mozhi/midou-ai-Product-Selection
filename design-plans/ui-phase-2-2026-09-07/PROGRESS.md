@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · W03 P21供应链与成本 / SOURCING-C-r1
+
+提交前门禁：最终capture与只读verify通过62场景145PNG/九源分组/28场景DOM动作标记，HTTP尝试和浏览器错误0。全站审计73路由/69包/7860PNG/1194来源绑定（798唯一文件）/8033图册链接，漂移0；72路由有关联，P22缺整页稿，原门禁/用户批准保持。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（496生产文件/51仓储模块/最长640）、五交付代码Prettier及git diff --check通过。人工审看1440货源主面和390长报价表单下部，操作区可达；代表图审看不等于全图人工验收。最终进程检查无本验证器或Playwright临时浏览器残留，正式图保留，无一次性临时产物。
+
+从干净main/b30fb8a2接续。使用ui-skills-root定位、frontend-design构图、Playwright隔离浏览器，交[62场景145PNG](design/sourcing-direction-c/README.md)：124双端主图、9长弹窗下部、8选择/MOQ/控件补图、4平板/桌面代表图。目录范围蓝区与供应商事实/对象操作分开，对比和机会成本是本地可键盘切换内容区；不重复原四阶段总览卡，也不把费用规则审批搬进P21。
+
+九组实际setup检查复现历史GET阻断列表、variable标签、刷新提示丢失、成本复核人GET失败等源缺口，未修改源码。四找货输入保留且只发两字段；报价原价格/币种不编辑、当地时间转回原时刻、0保留；五家上限与原生checked同步；采购quote ID/MOQ/trim原因；删除仅reason；成本用机会version7、复核用review.version3。初轮原型tab遗漏type导致键盘切换失败，已补type=button并复测；第六复选框测试改用click以验证确实拒绝勾选，不用check强迫超限。
+
+双端DOM与9宽度×5代表面、上海/纽约报价时间、720×500等效重排抽样。窗内焦点循环/归还、Escape/遮罩、busy锁、错误保留、内联review取消和权限投影均只属于提案，不关闭SC-G01–08。源代码/API/OpenAPI/配置/依赖/数据库/权限/费用算法/Worker/生产和旧图证据/coverage/用户批准保持。145正式图保留，无一次性临时文件或服务，浏览器finally关闭。下一P22，全站实现部署签收未完成；最终门禁提交前补记。
+
 ## 2026-09-09 · W03 P19/P20竞品与规则 / COMPETITOR-C-r1
 
 提交前门禁：最终capture与只读verify通过47场景108PNG/九源分组/25场景DOM动作标记，HTTP尝试与浏览器错误0。全站审计73路由/68包/7715PNG/1176来源绑定（784唯一文件）/7884图册链接，来源和PNG漂移0；71路由有关联、P21/P22缺稿，原门禁/批准不提升。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（496生产文件/51仓储模块/最长640）、五交付代码Prettier及git diff --check通过。曾发现图册生成模板单行超长，拆行后复验通过并重生成本包绑定；没有刷新其他包证据。最终进程检查无本验证器或Playwright临时浏览器残留，108正式图保留，无一次性临时产物。
