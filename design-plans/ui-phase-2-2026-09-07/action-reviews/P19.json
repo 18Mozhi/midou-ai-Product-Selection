@@ -401,6 +401,38 @@
         {
           "package": "competitor-direction-c",
           "scene": "detail-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-selected-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-selected-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-selected-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-selected-pressed"
         }
       ],
       "testReferences": [
@@ -411,14 +443,50 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "CP-B02已局部修复，不能提升为KeepAlive/history/scope全验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。主图为未选中第二对象，另列已选中第一对象。源不因busy禁用，未伪造disabled/busy图；这两槽仍未标通过。真实读代次/历史与KeepAlive独立验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-default",
+          "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-hover",
+          "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-focus",
+          "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-detail-pressed",
+          "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "detail-selected",
+          "package": "competitor-direction-c",
+          "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-detail-selected-default",
+            "hover": "control-detail-selected-hover",
+            "focus": "control-detail-selected-focus",
+            "pressed": "control-detail-selected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-SOURCE",
@@ -642,6 +710,54 @@
         {
           "package": "competitor-direction-c",
           "scene": "more-open"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-resume-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-resume-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-resume-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-resume-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-resume-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-resume-busy"
         }
       ],
       "testReferences": [
@@ -652,14 +768,62 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "没有两套业务动作；旧成功后的完整反馈归属未随采集修复；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。暂停和恢复分别记录；busy指详情内当前提交，明确捕获对象，其他对象只禁写不挂正在提交标记。仅离线pending模型；跨顶部/弹窗写入、终态错误/迟到结果与真实Vue未验。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-default",
+          "selector": "[data-action=\"CP-TOGGLE\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-hover",
+          "selector": "[data-action=\"CP-TOGGLE\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-focus",
+          "selector": "[data-action=\"CP-TOGGLE\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-pressed",
+          "selector": "[data-action=\"CP-TOGGLE\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-disabled",
+          "selector": "[data-action=\"CP-TOGGLE\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "scene": "control-toggle-busy",
+          "selector": "[data-action=\"CP-TOGGLE\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "resume",
+          "package": "competitor-direction-c",
+          "selector": "[data-action=\"CP-TOGGLE\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-resume-default",
+            "hover": "control-resume-hover",
+            "focus": "control-resume-focus",
+            "pressed": "control-resume-pressed",
+            "disabled": "control-resume-disabled",
+            "busy": "control-resume-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-DELETE-OPEN",
@@ -687,6 +851,30 @@
         {
           "package": "competitor-direction-c",
           "scene": "delete"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-busy"
         }
       ],
       "testReferences": [
@@ -697,14 +885,46 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "原生更多开合和删除开窗分别核对；不把函数可重入当DOM必然可达；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。打开弹窗不是DELETE；disabled/busy代表详情内另一写入在途，不给打开按钮旋转标记。原源桌面直露/移动菜单与新稿统一菜单差异待审。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-default",
+          "selector": "[data-action=\"CP-DELETE-OPEN\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-hover",
+          "selector": "[data-action=\"CP-DELETE-OPEN\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-focus",
+          "selector": "[data-action=\"CP-DELETE-OPEN\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-pressed",
+          "selector": "[data-action=\"CP-DELETE-OPEN\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-disabled",
+          "selector": "[data-action=\"CP-DELETE-OPEN\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "scene": "control-delete-open-busy",
+          "selector": "[data-action=\"CP-DELETE-OPEN\"]"
+        }
+      }
     },
     {
       "actionId": "CP-MORE",
@@ -721,6 +941,38 @@
         {
           "package": "competitor-direction-c",
           "scene": "more-open"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-expanded-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-expanded-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-expanded-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-more-expanded-pressed"
         }
       ],
       "testReferences": [
@@ -731,14 +983,50 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "完整焦点路径、菜单外点击行为/所有断点未验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。关闭及展开两变体的四态；不增加请求或伪造busy/disabled图，剩余两槽不标完成。桌面菜单是C提案，真实源桌面直露未改。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-more-default",
+          "selector": "[data-action=\"CP-MORE\"] > summary"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-more-hover",
+          "selector": "[data-action=\"CP-MORE\"] > summary"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-more-focus",
+          "selector": "[data-action=\"CP-MORE\"] > summary"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-more-pressed",
+          "selector": "[data-action=\"CP-MORE\"] > summary"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "more-expanded",
+          "package": "competitor-direction-c",
+          "selector": "[data-action=\"CP-MORE\"] > summary",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-more-expanded-default",
+            "hover": "control-more-expanded-hover",
+            "focus": "control-more-expanded-focus",
+            "pressed": "control-more-expanded-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-TASK-LINK",
@@ -759,6 +1047,22 @@
         {
           "package": "competitor-direction-c",
           "scene": "task-only"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-pressed"
         }
       ],
       "testReferences": [
@@ -769,14 +1073,36 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-not-disabled-in-source",
         "busy": "not-applicable-not-disabled-in-source"
       },
-      "remaining": "现图是时间轴相关场景，不等于已建链接状态已画齐或真实任务页可达；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。只绑定已有样本返回ID的价格任务链接，四态均为导航，无disabled/busy。评论任务链接、真实任务详情与跨刷新映射仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-default",
+          "selector": "[data-action=\"CP-TASK-LINK\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-hover",
+          "selector": "[data-action=\"CP-TASK-LINK\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-focus",
+          "selector": "[data-action=\"CP-TASK-LINK\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-link-pressed",
+          "selector": "[data-action=\"CP-TASK-LINK\"]"
+        }
+      }
     },
     {
       "actionId": "CP-TASK-CREATE",
@@ -801,6 +1127,54 @@
         {
           "package": "competitor-direction-c",
           "scene": "alerts-mixed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-review-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-review-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-review-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-review-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-review-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-task-review-busy"
         }
       ],
       "testReferences": [
@@ -811,14 +1185,62 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "创建手动验证任务不等于系统告警任务；源回调与全部失败态仍待验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。价格和评论分别用各自change/证据建意图，pending不显示已建任务链接；ID返回后链接另审。详情内写锁和目标提示不证明真实幂等或所有并发写入。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-default",
+          "selector": "[data-action=\"CP-TASK-CREATE\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-hover",
+          "selector": "[data-action=\"CP-TASK-CREATE\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-focus",
+          "selector": "[data-action=\"CP-TASK-CREATE\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-pressed",
+          "selector": "[data-action=\"CP-TASK-CREATE\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-disabled",
+          "selector": "[data-action=\"CP-TASK-CREATE\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "scene": "control-task-create-busy",
+          "selector": "[data-action=\"CP-TASK-CREATE\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "task-review",
+          "package": "competitor-direction-c",
+          "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-task-review-default",
+            "hover": "control-task-review-hover",
+            "focus": "control-task-review-focus",
+            "pressed": "control-task-review-pressed",
+            "disabled": "control-task-review-disabled",
+            "busy": "control-task-review-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-HELP",
@@ -835,6 +1257,38 @@
         {
           "package": "competitor-direction-c",
           "scene": "directory"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-expanded-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-expanded-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-expanded-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-help-expanded-pressed"
         }
       ],
       "testReferences": [
@@ -845,14 +1299,50 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "现整页关联不是展开态专用图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件的双端精确状态图，待用户审核，不是全变体/主题或真实Vue通过。关闭及展开两变体的四态，Enter/Space保持原生details开合，零请求。不伪造busy/disabled图，剩余两槽不标完成；长文/主题/辅助技术仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-help-default",
+          "selector": "[data-action=\"CP-HELP\"] > summary"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-help-hover",
+          "selector": "[data-action=\"CP-HELP\"] > summary"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-help-focus",
+          "selector": "[data-action=\"CP-HELP\"] > summary"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-help-pressed",
+          "selector": "[data-action=\"CP-HELP\"] > summary"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "help-expanded",
+          "package": "competitor-direction-c",
+          "selector": "[data-action=\"CP-HELP\"] > summary",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-help-expanded-default",
+            "hover": "control-help-expanded-hover",
+            "focus": "control-help-expanded-focus",
+            "pressed": "control-help-expanded-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-CREATE-CONTAINER",

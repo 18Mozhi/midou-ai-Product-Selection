@@ -16,10 +16,10 @@
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "scripts/verify-ui-phase2-competitor-source.mjs": "66f247271940138c9ce44b476c693acc67731d908e902d0205b40aab382aeeb5",
     "scripts/verify-ui-phase2-competitor-boundaries.mjs": "2125382dd972924c4ba00da4c20abd75048ab0a1ee9b4467b9b12cca598a1df7",
-    "scripts/verify-ui-phase2-competitor-c.mjs": "33a79f924865d6758e587676e93ce08b8d9cc29b68d2c480fc0f3abe5dcb9037",
+    "scripts/verify-ui-phase2-competitor-c.mjs": "74a0f08115d705d174c42aff41fa297f684422a3252d6236344e70886ed80e83",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/index.html": "694070719fadf31f425cbd08c8afedbec8b3cb485d274f86bca10e6b6e0c9aa2",
-    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css": "25ad4ca14e8b5c499d4f86d81e1ba9378a8abcc707d1cd15b2cd0e9fec59f0f2",
-    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "32abaea737476070592b7f8a1b53c8dfbccc852a0bc5a893656a7520555d91ee"
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css": "00c519ad4e1ad83a59c367477319c0eecd5607e8dc9564de04af6e2da9cf2cef",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "8417e393b7c41b50268434ec496d18ce8dd224b11d7819f3b9d688718082c91a"
   },
   "sourceProof": {
     "checks": [
@@ -107,6 +107,31 @@
       "id": "paused",
       "pageId": "P19",
       "label": "暂停监控"
+    },
+    {
+      "id": "toggle-busy",
+      "pageId": "P19",
+      "label": "暂停请求提交中"
+    },
+    {
+      "id": "resume-busy",
+      "pageId": "P19",
+      "label": "恢复请求提交中"
+    },
+    {
+      "id": "task-busy",
+      "pageId": "P19",
+      "label": "价格验证任务提交中"
+    },
+    {
+      "id": "review-task-busy",
+      "pageId": "P19",
+      "label": "评论验证任务提交中"
+    },
+    {
+      "id": "task-created",
+      "pageId": "P19",
+      "label": "价格验证任务已返回ID"
     },
     {
       "id": "readonly",
@@ -326,7 +351,7 @@
         "contrast": 8.273466608002094
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "4397b44d0b8b239fe5d623893d3761bfa090fd7793ec36c4509ce373e66f2708"
+      "sha256": "9d507d5d9f486d6a9b2c0844ff7f76a253131c578aca307baddd17e4a9e3253d"
     },
     {
       "file": "1440-control-collect-hover.png",
@@ -416,7 +441,7 @@
         "contrast": 5.334190621262918
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "b98d04b2701e091ff7d5e3125829352b661f7d6baecf5fb1591706d1d50522e4"
+      "sha256": "116e9ce7a987fb622f3ab81a5c474001d085b7d7215d95c2bf791595b1ebb000"
     },
     {
       "file": "1440-control-create-default.png",
@@ -1658,7 +1683,7 @@
         "contrast": 8.273466608002094
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "e04c02951eb75df7b3ff5440b9fdc158b80cceea256555f3cbde45ea28ea848c"
+      "sha256": "66690aa4ca326889f13353caa4331c4a326669f9a771abd8ddf1fa6690463861"
     },
     {
       "file": "1440-control-rule-back-pressed.png",
@@ -1751,6 +1776,1050 @@
       "sha256": "37439b4c50d4bd620d03d4ca73bbbe42ca2651295dbb984b59b6e14f1abb0c2c"
     },
     {
+      "file": "1440-control-detail-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-default",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4397b44d0b8b239fe5d623893d3761bfa090fd7793ec36c4509ce373e66f2708"
+    },
+    {
+      "file": "1440-control-detail-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-hover",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-hover",
+        "width": 1440,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1e7bcf86dcd8ea75a9aaf9ad90d3f6f00cdfa03b5fa93fdadb78055bfda83c18"
+    },
+    {
+      "file": "1440-control-detail-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-focus",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d368f7b61aecce8ca0cd2e2e7a6ce7ec67f0658796b5846dfad90bd081d00a6a"
+    },
+    {
+      "file": "1440-control-detail-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-pressed",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-pressed",
+        "width": 1440,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4114f3a59421a92ca5ba03dc5dce65ed439e9780c09f70fc1329b44e8198f87d"
+    },
+    {
+      "file": "1440-control-detail-selected-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-selected-default",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-default",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4397b44d0b8b239fe5d623893d3761bfa090fd7793ec36c4509ce373e66f2708"
+    },
+    {
+      "file": "1440-control-detail-selected-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-selected-hover",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-hover",
+        "width": 1440,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ed044233c31b6536e21da7ddde82e3d0296bf0f77fb00b1dfe5c84db2204ffd0"
+    },
+    {
+      "file": "1440-control-detail-selected-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-selected-focus",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-focus",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "edf531657b1a954f4130ab64fe791329f948546d940ca80ddafe52b206c4e842"
+    },
+    {
+      "file": "1440-control-detail-selected-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-detail-selected-pressed",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-pressed",
+        "width": 1440,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a03829d7badf74a019c6c7d3034e682e8bef64fb0b2160c5982dea7e61ee287c"
+    },
+    {
+      "file": "1440-control-toggle-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-toggle-default",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "da2ccd2063a978f383217a731cbfa1e979cb1f5a028bce9e5b85da6a766148e5"
+    },
+    {
+      "file": "1440-control-toggle-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-toggle-hover",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "266722053dfb879479dd0c4d0b1de59db3e69c153921350b3bc73c40fe0f21ba"
+    },
+    {
+      "file": "1440-control-toggle-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-toggle-focus",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "690bb717869fab650b182a0febc730f42c928f4c89d863e47af2ca1e8e1b427b"
+    },
+    {
+      "file": "1440-control-toggle-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-toggle-pressed",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b169ea717e23bc2000cb1b050c2a4145e4c662fa99cd57f75b4c0712e4d665a0"
+    },
+    {
+      "file": "1440-control-toggle-disabled.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-toggle-disabled",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "disabled",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2bdaa0791d5552755cf9c4c8515ba7ecf00d1f7da7245c1e4f42758c9cab40fd"
+    },
+    {
+      "file": "1440-control-toggle-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-toggle-busy",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "busy",
+        "baseScene": "toggle-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3e41f0833f6d2b6af177b2473365d50633b2ea9b8f83ce25962fa7bba449ccda"
+    },
+    {
+      "file": "1440-control-resume-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-resume-default",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "default",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "dab01e1aa6734fb5a0233d339038e13993866a1ba693750af5ad0daa9d85f0fd"
+    },
+    {
+      "file": "1440-control-resume-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-resume-hover",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "hover",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e2e29ae967a1d56fb139887efa2d29eb04ae7e3c65de249f83f64df65cf55c35"
+    },
+    {
+      "file": "1440-control-resume-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-resume-focus",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "focus",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d4ddcbceaff350e745acae5b51c76373f2b4f39f73aab32c0a16c018277f5703"
+    },
+    {
+      "file": "1440-control-resume-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-resume-pressed",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "pressed",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "eecff5a311c820551c23bceeb332f817d4eae17c8f8a890c497fabaa9b7854b3"
+    },
+    {
+      "file": "1440-control-resume-disabled.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-resume-disabled",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "disabled",
+        "baseScene": "resume-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f06dcc467571fbf6c74f20e90137c91962244a8bc98e353d81016e32adfc5bd1"
+    },
+    {
+      "file": "1440-control-resume-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-resume-busy",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "busy",
+        "baseScene": "resume-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d05b3fb0b3fd5b47ed7d58bc90258895513e36a2a2dd24344267559845153d66"
+    },
+    {
+      "file": "1440-control-delete-open-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-delete-open-default",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-default",
+        "width": 1440,
+        "contrast": 7.04437716623466
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "da2ccd2063a978f383217a731cbfa1e979cb1f5a028bce9e5b85da6a766148e5"
+    },
+    {
+      "file": "1440-control-delete-open-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-delete-open-hover",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-hover",
+        "width": 1440,
+        "contrast": 6.328246391024151
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e65fafa3252054b2e965582e54cd89b523113a04d2d0fa581c1979a0f319a478"
+    },
+    {
+      "file": "1440-control-delete-open-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-delete-open-focus",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-focus",
+        "width": 1440,
+        "contrast": 7.04437716623466
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9a05a5fdd128eaeba7dbea1c9dad5577d9c63047112c7f3f2cf3cd680b673f03"
+    },
+    {
+      "file": "1440-control-delete-open-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-delete-open-pressed",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-pressed",
+        "width": 1440,
+        "contrast": 6.328246391024151
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c7a20415396e6ef963e0862d012171278c8881cd9cacb919abaf18ef5c4651f9"
+    },
+    {
+      "file": "1440-control-delete-open-disabled.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-delete-open-disabled",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "disabled",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2bdaa0791d5552755cf9c4c8515ba7ecf00d1f7da7245c1e4f42758c9cab40fd"
+    },
+    {
+      "file": "1440-control-delete-open-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-delete-open-busy",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "busy",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2b1a90b07dffc1c408580235d9a318b1cf8015bdaa16cb95b356e0863a7d9d19"
+    },
+    {
+      "file": "1440-control-task-create-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-create-default",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "90eb9cdb0de416e55e16b82ef9afcd7d03ae665fc5cd6118e9aeac7cac08b9b5"
+    },
+    {
+      "file": "1440-control-task-create-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-create-hover",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "308db2a5e8103a13b1a42707e108257414272398086cb8b638e65337705d73e9"
+    },
+    {
+      "file": "1440-control-task-create-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-create-focus",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "225ff58bcb2ecd6f56e0c37680bca4dc0ee0e48c7f702bde5c0a12ff89ccfd3e"
+    },
+    {
+      "file": "1440-control-task-create-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-create-pressed",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b7ca7a6c416e5a549b231a3f01fa097b7eabdbaf2b20c3ef1e98fdc0957d582c"
+    },
+    {
+      "file": "1440-control-task-create-disabled.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-create-disabled",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "disabled",
+        "baseScene": "toggle-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b9842eacd9ed2a5ad69641c269ea574240804a0ccff28844aec1c18d59bc5429"
+    },
+    {
+      "file": "1440-control-task-create-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-create-busy",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "busy",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "56ea6cdfd9da41578fee0d4aa1fafe7e479273c19870964dced980408b693697"
+    },
+    {
+      "file": "1440-control-task-review-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-review-default",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "73adfc84413355b51167497302053ba975a6946462857c614a3253b51fef573b"
+    },
+    {
+      "file": "1440-control-task-review-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-review-hover",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e0082a402a2a5081e5c752685c39c7330239cb845128e9ce09194cc529c40dec"
+    },
+    {
+      "file": "1440-control-task-review-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-review-focus",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7d717cd0a9cf2774fdc214c293a02fffb6d6cdb7edbb3a97a49debb7a1f78e81"
+    },
+    {
+      "file": "1440-control-task-review-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-review-pressed",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4cb1fa824741215d7bee892d8dc598c5d555324d530758e4c59f19b7069b7ea8"
+    },
+    {
+      "file": "1440-control-task-review-disabled.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-review-disabled",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "disabled",
+        "baseScene": "toggle-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3037945953cc71d82a98e29ee6946742fe35326417a360dd4250162b96865a90"
+    },
+    {
+      "file": "1440-control-task-review-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-review-busy",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "busy",
+        "baseScene": "review-task-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7f4af5f1b8e12cc6b77e244a868e256de64ed3307bce9da5aafe47267f36cfcd"
+    },
+    {
+      "file": "1440-control-more-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-default",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b8a5c7d6a5ca18bad7231dca90a761a9b8cae54aaf97ec1055dfc1de2801fd69"
+    },
+    {
+      "file": "1440-control-more-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-hover",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3bf843b5245b3dc6dc9c329d56c7fff866f849d19cc41f3a3e63160a0162147e"
+    },
+    {
+      "file": "1440-control-more-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-focus",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "72f78c26ac03c072326033611969b927520117e1f30a396910f1a39d08b60d38"
+    },
+    {
+      "file": "1440-control-more-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-pressed",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "48acc699b3d847736fe748b741cb9197c8ed9760c7c9156e58e1ece9e969bcc8"
+    },
+    {
+      "file": "1440-control-more-expanded-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-expanded-default",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-default",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fde5ab966d52119c078fe8e87fd263deed8ab1b8d3e6ed0725f3e28fa868e5a3"
+    },
+    {
+      "file": "1440-control-more-expanded-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-expanded-hover",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fde5ab966d52119c078fe8e87fd263deed8ab1b8d3e6ed0725f3e28fa868e5a3"
+    },
+    {
+      "file": "1440-control-more-expanded-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-expanded-focus",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-focus",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "52f16ca40383e4953934e2f8b3bbb4be8d9e51bbd4391b4c9ca21d86955aab06"
+    },
+    {
+      "file": "1440-control-more-expanded-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-more-expanded-pressed",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "07d0cc51e3d4a14dcfd352abcc37555256089a700109953453157235b8650c76"
+    },
+    {
+      "file": "1440-control-help-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-default",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a1f22533fa8988b1a6afabc59204c0200efa93d50543c0e373795e05a7b9adfa"
+    },
+    {
+      "file": "1440-control-help-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-hover",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2ec981fa0e11a5d77389628651f8f7f50efd035b6ef3c38ed706c3fdec6aff8b"
+    },
+    {
+      "file": "1440-control-help-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-focus",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b1eef4edcf186875528d0a420467bfb49f63ee2816f79654d73064ac60fb9afd"
+    },
+    {
+      "file": "1440-control-help-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-pressed",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6b0209ffd26e5606b1c387700c19ef8b1c4c5507d428161adc67898e6a8fe1a1"
+    },
+    {
+      "file": "1440-control-help-expanded-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-expanded-default",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3acba7b0da97fd267b4044825739eb4ab3e1422f2fe9d5890e9ce22fcc7a4daf"
+    },
+    {
+      "file": "1440-control-help-expanded-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-expanded-hover",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "319437aa21c554ffb1f6170d6be519334d6be850c42ec047d5e1b4af8657399d"
+    },
+    {
+      "file": "1440-control-help-expanded-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-expanded-focus",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2820e94d0eda86432fd4781ade9348a6b6c854546f916a09374cabe43472b4a5"
+    },
+    {
+      "file": "1440-control-help-expanded-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-help-expanded-pressed",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "62362fc32016d2bf4699f5211032104d0fc729f803fd8f3e8f37d778c5465d5e"
+    },
+    {
+      "file": "1440-control-task-link-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-link-default",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "default",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-default",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "39c34f71bda50dd6e98552d0feb8979c54a717deae7ef64ca8a8fbc94eef66d9"
+    },
+    {
+      "file": "1440-control-task-link-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-link-hover",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "hover",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-hover",
+        "width": 1440,
+        "contrast": 7.432386706138498
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a09c7ccfc68c47a2052074034e6e78f324d1cc4af7686a21f9b54ff75c490926"
+    },
+    {
+      "file": "1440-control-task-link-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-link-focus",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "focus",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-focus",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fbcf39527d99abc371a8ca03f5bdce68bca39dd06366b7e163be2970fdd38696"
+    },
+    {
+      "file": "1440-control-task-link-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-task-link-pressed",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "pressed",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-pressed",
+        "width": 1440,
+        "contrast": 7.432386706138498
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a2d93736e28c3f8fbf838569ad8571b950f4a3e123cbe34ac22608293fcb31a2"
+    },
+    {
       "file": "1440-directory.png",
       "width": 1440,
       "pageId": "P19",
@@ -1776,7 +2845,7 @@
       "width": 1440,
       "pageId": "P19",
       "scene": "collect-busy",
-      "sha256": "f21c23f7146be8e80642bb50c4f75ad0ea93b29769f93dab8131c3fb906777b4"
+      "sha256": "d4dcb4ec6303add2c252491910b0a97b8adbf7255059e8a9a03f8e86bbf65ebd"
     },
     {
       "file": "1440-running.png",
@@ -1805,6 +2874,41 @@
       "pageId": "P19",
       "scene": "paused",
       "sha256": "23b2bb63e7fb31e9d7150c1b25f2ba998e93ebb4e32a1c59292788322adb3296"
+    },
+    {
+      "file": "1440-toggle-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "toggle-busy",
+      "sha256": "5816f64a8bb2f996fc772a7526f7860aa90160af644c5f31c9684bd3ab7f7c52"
+    },
+    {
+      "file": "1440-resume-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "resume-busy",
+      "sha256": "6a1e05717950782bfe067c90062f0d7bdc3d913abea43d87c7612b89f3c9fe1a"
+    },
+    {
+      "file": "1440-task-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "task-busy",
+      "sha256": "ede16f44503e0bc68825f6a0581affcc3c0a993217e857e8b28af1997a75af03"
+    },
+    {
+      "file": "1440-review-task-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "review-task-busy",
+      "sha256": "9ec5a18373b722e06d2944aeae89e86bee6a4f70e289153bf10060acca93523e"
+    },
+    {
+      "file": "1440-task-created.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "task-created",
+      "sha256": "963a53096bae50a5599be0e135cb497407be779c158b0f45a884215afc25098b"
     },
     {
       "file": "1440-readonly.png",
@@ -2014,7 +3118,7 @@
       "width": 1440,
       "pageId": "P20",
       "scene": "rule-global",
-      "sha256": "25ba35e7527b2dfc676e749853220486192e55afed50c7c515d89301045291ef"
+      "sha256": "113e8a0bbdc8a99cfed6b6f04a4148218be05f801a17988087d3cc62fcb0e823"
     },
     {
       "file": "1440-rule-target.png",
@@ -2091,7 +3195,7 @@
       "width": 1440,
       "pageId": "P19",
       "scene": "more-open",
-      "sha256": "eb2a7292bd3c6011f7024372f087aaf18be42571a71bb90cbfd469a735bb5160"
+      "sha256": "dc54844c480ac4ea1b1cc0d19cfa1425f7ac4d29f519009bffa32b857a9ee7a7"
     },
     {
       "file": "1440-delete-required.png",
@@ -3562,6 +4666,1050 @@
       "sha256": "8d2d3ffb3cb40f824866447a84ba843a9d618bb7655fe2dc499f9fc35bae4898"
     },
     {
+      "file": "390-control-detail-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-default",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "155ec7f63128af1fb277b3d2688ea096b3b2b3625128270f3e9b70ba35d7d35b"
+    },
+    {
+      "file": "390-control-detail-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-hover",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-hover",
+        "width": 390,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "77340edcb012efe12ba03d185ec15d599091b71ef23308e70e847eed86ca0203"
+    },
+    {
+      "file": "390-control-detail-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-focus",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "53aa02d566d83a7e175161dba158a790e772442e4314b90a4698f82dc546ec77"
+    },
+    {
+      "file": "390-control-detail-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-pressed",
+      "control": {
+        "key": "detail",
+        "actionId": "CP-DETAIL",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+        "scene": "control-detail-pressed",
+        "width": 390,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cab414eb287a626af43e9f70b8c0764633b11397b4a90bf4070bbff330611565"
+    },
+    {
+      "file": "390-control-detail-selected-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-selected-default",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-default",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cf2877bf702fed9840918f927004a926af9d8dbc6684497ef70810a6ec10a4ba"
+    },
+    {
+      "file": "390-control-detail-selected-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-selected-hover",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-hover",
+        "width": 390,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "557d40c093db537244e6a10cd084c6fff3c808ee5ff497d4545f9ad920f09183"
+    },
+    {
+      "file": "390-control-detail-selected-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-selected-focus",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-focus",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b31be06275a1b47888110adc1aa0c556249d66441ab6546ac1219770085dbabd"
+    },
+    {
+      "file": "390-control-detail-selected-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-detail-selected-pressed",
+      "control": {
+        "key": "detail-selected",
+        "actionId": "CP-DETAIL",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+        "scene": "control-detail-selected-pressed",
+        "width": 390,
+        "contrast": 11.694956657696792
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "032cb40c88874eaed948df3e80085d4bdf6068aaea9e370cf981e2eb65fbd48e"
+    },
+    {
+      "file": "390-control-toggle-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-toggle-default",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "22752727ae7bbe5ad144de315ebc2bce8235457a15ec9fc99323d7be727cf6b9"
+    },
+    {
+      "file": "390-control-toggle-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-toggle-hover",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "5e6d30a82fe81603b6e2725f5cf37bcc9c711798b03b4a2594553f98d352e94a"
+    },
+    {
+      "file": "390-control-toggle-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-toggle-focus",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "16963dcae19d88b141b82d5079dfb97088b938d9ab65e21c77bc29fb4497f503"
+    },
+    {
+      "file": "390-control-toggle-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-toggle-pressed",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "71358919ff457800490750430e0bd3b40db0b1c577c9bb16731f97019f9ac521"
+    },
+    {
+      "file": "390-control-toggle-disabled.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-toggle-disabled",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "disabled",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f57aacb96794a1abcb166e84b6e6426be4cc3ef975a040149c412cdbc8dda5e1"
+    },
+    {
+      "file": "390-control-toggle-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-toggle-busy",
+      "control": {
+        "key": "toggle",
+        "actionId": "CP-TOGGLE",
+        "state": "busy",
+        "baseScene": "toggle-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-toggle-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ad55d5359b9f0c2287308c9a6a0a3b4e160273cd0659a97986cd056dc03259f4"
+    },
+    {
+      "file": "390-control-resume-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-resume-default",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "default",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "21f28f91b61ea0616437b4ed8c6d9d39bc69227caefb62334eafde4df27ae295"
+    },
+    {
+      "file": "390-control-resume-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-resume-hover",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "hover",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1fd9454fa337e80d2ea1e8c05fd181f6a74bc34c1e18b16fc85681d7c8fdcc47"
+    },
+    {
+      "file": "390-control-resume-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-resume-focus",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "focus",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "994c8d31d0d32d292b358d8caf10f1b99117a67b76913090f714a07f52453328"
+    },
+    {
+      "file": "390-control-resume-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-resume-pressed",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "pressed",
+        "baseScene": "paused",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3de8aa8a19f17a459f30fe722bc19db2d506fd3ac46921a414e59d8d0f4f6760"
+    },
+    {
+      "file": "390-control-resume-disabled.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-resume-disabled",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "disabled",
+        "baseScene": "resume-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4c1d9fc7f28d2a5099655069977800dac0e3cbf158283c0aab5bb7c3881e0706"
+    },
+    {
+      "file": "390-control-resume-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-resume-busy",
+      "control": {
+        "key": "resume",
+        "actionId": "CP-TOGGLE",
+        "state": "busy",
+        "baseScene": "resume-busy",
+        "selector": "[data-action=\"CP-TOGGLE\"]",
+        "scene": "control-resume-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "37f90c3105dca931ffb94115e3ae5fb7e2957781dc20370fdb30eadc425ac3f6"
+    },
+    {
+      "file": "390-control-delete-open-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-delete-open-default",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-default",
+        "width": 390,
+        "contrast": 7.04437716623466
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d0c3677945330a1f88edc68cbad3bb63ede0b00efe01052131bfd3dfeb7af30c"
+    },
+    {
+      "file": "390-control-delete-open-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-delete-open-hover",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-hover",
+        "width": 390,
+        "contrast": 6.328246391024151
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "aeb9a777bd29111dd51c6518c29fb0a2c4e3a7513c51df97e6178628140ee6d7"
+    },
+    {
+      "file": "390-control-delete-open-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-delete-open-focus",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-focus",
+        "width": 390,
+        "contrast": 7.04437716623466
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "322a233bb4bad730b7c698e148087f79c9502b298976bd09488a1b8efafa19da"
+    },
+    {
+      "file": "390-control-delete-open-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-delete-open-pressed",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-pressed",
+        "width": 390,
+        "contrast": 6.328246391024151
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8982c1c0f65a746bf0f243281652f07409fc06eae39ba9bdf1303b93bd5091d8"
+    },
+    {
+      "file": "390-control-delete-open-disabled.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-delete-open-disabled",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "disabled",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "113bde926511f52aa83323af6704524233d868d9533fc4466d93bd4c75b58d9e"
+    },
+    {
+      "file": "390-control-delete-open-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-delete-open-busy",
+      "control": {
+        "key": "delete-open",
+        "actionId": "CP-DELETE-OPEN",
+        "state": "busy",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+        "scene": "control-delete-open-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "51ddbe35f408d152ed7697c65291bef663bd1dc553fb4cb524b06010bb21285e"
+    },
+    {
+      "file": "390-control-task-create-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-create-default",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4eb9f63c7fd29cc00a5abd55f1a5ab11a02100365d334524de38e1c125d1f226"
+    },
+    {
+      "file": "390-control-task-create-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-create-hover",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "95e086bff61f4afcfed88229fd5b39641da8a6f977dac2087170a56db8504dc2"
+    },
+    {
+      "file": "390-control-task-create-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-create-focus",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2f0b5062ddb0fee4e8cdbe777df284f20753b7c051aa7a436d28440394615f3c"
+    },
+    {
+      "file": "390-control-task-create-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-create-pressed",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d747a4f3a86d7f1f8a155f36c5c9713b66e6f310e3e35bb0b32dc8edb1478d28"
+    },
+    {
+      "file": "390-control-task-create-disabled.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-create-disabled",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "disabled",
+        "baseScene": "toggle-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9da24d00c8dd466bd77b63d4078e1b711ff27a44293a599af46af2d56ef3d24b"
+    },
+    {
+      "file": "390-control-task-create-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-create-busy",
+      "control": {
+        "key": "task-create",
+        "actionId": "CP-TASK-CREATE",
+        "state": "busy",
+        "baseScene": "task-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE\"]",
+        "scene": "control-task-create-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d8e7f1db7793c7c884390a32bef1837fce27671323da5217c97aa92fe1b093c6"
+    },
+    {
+      "file": "390-control-task-review-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-review-default",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "36f9bbd1bf505c0178f4bd1166c63862ff9844cec509418e1e04b656f771b972"
+    },
+    {
+      "file": "390-control-task-review-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-review-hover",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e49fdf99c105e56e03f113e21440fd499dd77725dca51a1812126ea1a403ca82"
+    },
+    {
+      "file": "390-control-task-review-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-review-focus",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0952c1e7949b9a4b2aa43805d3a62ae1e33a64ab070de4587c99c3acc5c9ddfc"
+    },
+    {
+      "file": "390-control-task-review-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-review-pressed",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cbc55f7a970203030ea23a16a9f1b74414fd20aa59e3b452693b91d5fbad52f5"
+    },
+    {
+      "file": "390-control-task-review-disabled.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-review-disabled",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "disabled",
+        "baseScene": "toggle-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6c0ca977a055b3839a8ee54b6c499ceea57fca759c8703530b16b44e4fc9559c"
+    },
+    {
+      "file": "390-control-task-review-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-review-busy",
+      "control": {
+        "key": "task-review",
+        "actionId": "CP-TASK-CREATE",
+        "state": "busy",
+        "baseScene": "review-task-busy",
+        "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+        "scene": "control-task-review-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "258c51473f1468361f2a94acfbab68202a79ed587693ae25e6b721d004524a4a"
+    },
+    {
+      "file": "390-control-more-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-default",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a4f8cafc3397f1eac963190c4c6b3fd68c4fc23b50f4b4cd22a08234adef95d9"
+    },
+    {
+      "file": "390-control-more-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-hover",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8981f9bf0f8095b02b9e6dea8e051f9eb241c25dbe7a9835d22a7b75a202bd66"
+    },
+    {
+      "file": "390-control-more-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-focus",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "edecad93ae1eec858d8fd1687a2ef116c1961d1abf2da8fdc345dab9188017c7"
+    },
+    {
+      "file": "390-control-more-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-pressed",
+      "control": {
+        "key": "more",
+        "actionId": "CP-MORE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e1e2094c06787bc13d1edf0d1783eccba5dccb860785f4fcf103006bf6391335"
+    },
+    {
+      "file": "390-control-more-expanded-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-expanded-default",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-default",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b34be40e6bb810eb56311719d589a5b2046587590e871d8de1a5f073e0622a46"
+    },
+    {
+      "file": "390-control-more-expanded-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-expanded-hover",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b34be40e6bb810eb56311719d589a5b2046587590e871d8de1a5f073e0622a46"
+    },
+    {
+      "file": "390-control-more-expanded-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-expanded-focus",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-focus",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "437699bb82cb1a5885e1360f0e8015b720490df5b952d103737f24d7b6632a80"
+    },
+    {
+      "file": "390-control-more-expanded-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-more-expanded-pressed",
+      "control": {
+        "key": "more-expanded",
+        "actionId": "CP-MORE",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-MORE\"] > summary",
+        "scene": "control-more-expanded-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6caa3e1cc8b00842d44ecdbd94db5467c8901bb070f5f27d439c6c798e348817"
+    },
+    {
+      "file": "390-control-help-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-default",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "575ff650e85a05c1ae5dba9b2282f907cdfde2980c49223fb5348e6681c8d1bd"
+    },
+    {
+      "file": "390-control-help-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-hover",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "844d93c2ff63b952203546217919e6325b8abae0d8766b9fa03521f485f552fe"
+    },
+    {
+      "file": "390-control-help-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-focus",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "47132307c477195d72d60cc0d9f95082ed4304f0668728d15e0312d6e25bf41d"
+    },
+    {
+      "file": "390-control-help-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-pressed",
+      "control": {
+        "key": "help",
+        "actionId": "CP-HELP",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6b32d2a757dd5d5afcd72be3f3105669f4d65037263754fe5ddaf05aa0b082a2"
+    },
+    {
+      "file": "390-control-help-expanded-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-expanded-default",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-default",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "76c5af4c5702d2b1d0cf68a65c2b9930f0cc11b6e805a1af1789b30ddf5340ac"
+    },
+    {
+      "file": "390-control-help-expanded-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-expanded-hover",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "76c5af4c5702d2b1d0cf68a65c2b9930f0cc11b6e805a1af1789b30ddf5340ac"
+    },
+    {
+      "file": "390-control-help-expanded-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-expanded-focus",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-focus",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e4aabe095bbc85e41aa27760f7f42caf340c5659a3adb3f96bf4c118db9fdf63"
+    },
+    {
+      "file": "390-control-help-expanded-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-help-expanded-pressed",
+      "control": {
+        "key": "help-expanded",
+        "actionId": "CP-HELP",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": "[data-action=\"CP-HELP\"] > summary",
+        "scene": "control-help-expanded-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fe7ad14e14bb7a3eb5c64e8bcc6fb628e93a838abad2b79c65dd291ee80a10b8"
+    },
+    {
+      "file": "390-control-task-link-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-link-default",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "default",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-default",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "57a97271bb9e0b3d8d415a9a1b31f341f4be4c8dae12f0ea39b2434134d468d6"
+    },
+    {
+      "file": "390-control-task-link-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-link-hover",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "hover",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-hover",
+        "width": 390,
+        "contrast": 7.432386706138498
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fdb448629aef433e9cf81d791c675d0ff21add5ad5ea83e0e1d4f4a9e85047fb"
+    },
+    {
+      "file": "390-control-task-link-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-link-focus",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "focus",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-focus",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f546c683604ee7e7138026d2f2356fbeffff0e0b9469637063e899b1b667d9ba"
+    },
+    {
+      "file": "390-control-task-link-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-task-link-pressed",
+      "control": {
+        "key": "task-link",
+        "actionId": "CP-TASK-LINK",
+        "state": "pressed",
+        "baseScene": "task-created",
+        "selector": "[data-action=\"CP-TASK-LINK\"]",
+        "scene": "control-task-link-pressed",
+        "width": 390,
+        "contrast": 7.432386706138498
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "731210f150258613d5a01c0d7163e24fdae8acc5cd546b1ea0cfb039d758ef2f"
+    },
+    {
       "file": "390-directory.png",
       "width": 390,
       "pageId": "P19",
@@ -3587,7 +5735,7 @@
       "width": 390,
       "pageId": "P19",
       "scene": "collect-busy",
-      "sha256": "8512f52cdee2d698a180015d3888893da740c322200150f1b3953409d4e9f0bf"
+      "sha256": "624763e1040fafca05d1b26e9220eaecda8e2ae424caecfe7af62f426f553add"
     },
     {
       "file": "390-running.png",
@@ -3616,6 +5764,41 @@
       "pageId": "P19",
       "scene": "paused",
       "sha256": "891319cfed2d80d292fefb3eb69b1df210253f954b969199632c3d4a4d9c7a94"
+    },
+    {
+      "file": "390-toggle-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "toggle-busy",
+      "sha256": "8af107d73bcef5a66439235a7ab17c52647a0540304552b305bf29fb0c5ec5f1"
+    },
+    {
+      "file": "390-resume-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "resume-busy",
+      "sha256": "d74220cfbc8283a656553be1d7e9f170ff4d4cdc5b11fbd472bfdf736b2e205a"
+    },
+    {
+      "file": "390-task-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "task-busy",
+      "sha256": "3b7cb8b2bbb3d549d2bc9ad0b5d705e9bd6809d68112b11eeaab65d49209eb28"
+    },
+    {
+      "file": "390-review-task-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "review-task-busy",
+      "sha256": "dc2d47a74598895ef15cab2c9be471c43156cda6122055d58cf62ab016f1c678"
+    },
+    {
+      "file": "390-task-created.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "task-created",
+      "sha256": "01b008b159d9b9e6230ed8e2c6db0d79f588e04c513244656479c4a340ff02be"
     },
     {
       "file": "390-readonly.png",
@@ -3902,7 +6085,7 @@
       "width": 390,
       "pageId": "P19",
       "scene": "more-open",
-      "sha256": "859948742253244b18c02c7576df4d9abb2cfe0faf02fec7953f16f0725fc49b"
+      "sha256": "a1f5ca7891fb97454c041afb8bd91357a32a187ba41fb1a27b58268741970217"
     },
     {
       "file": "390-delete-required.png",
@@ -4763,6 +6946,586 @@
       "contrast": 7.432386706138498
     },
     {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-hover",
+      "width": 1440,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-pressed",
+      "width": 1440,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-default",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-hover",
+      "width": 1440,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-focus",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-pressed",
+      "width": 1440,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "disabled",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "busy",
+      "baseScene": "toggle-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "default",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "hover",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "focus",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "pressed",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "disabled",
+      "baseScene": "resume-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "busy",
+      "baseScene": "resume-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-default",
+      "width": 1440,
+      "contrast": 7.04437716623466
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-hover",
+      "width": 1440,
+      "contrast": 6.328246391024151
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-focus",
+      "width": 1440,
+      "contrast": 7.04437716623466
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-pressed",
+      "width": 1440,
+      "contrast": 6.328246391024151
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "disabled",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "busy",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "disabled",
+      "baseScene": "toggle-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "busy",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "disabled",
+      "baseScene": "toggle-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "busy",
+      "baseScene": "review-task-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-default",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-focus",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "default",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-default",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "hover",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-hover",
+      "width": 1440,
+      "contrast": 7.432386706138498
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "focus",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-focus",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "pressed",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-pressed",
+      "width": 1440,
+      "contrast": 7.432386706138498
+    },
+    {
       "key": "collect",
       "actionId": "CP-COLLECT",
       "state": "default",
@@ -5561,6 +8324,586 @@
       "scene": "control-source-pressed",
       "width": 390,
       "contrast": 7.432386706138498
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-hover",
+      "width": 390,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "detail",
+      "actionId": "CP-DETAIL",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scene": "control-detail-pressed",
+      "width": 390,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-default",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-hover",
+      "width": 390,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-focus",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "detail-selected",
+      "actionId": "CP-DETAIL",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scene": "control-detail-selected-pressed",
+      "width": 390,
+      "contrast": 11.694956657696792
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "disabled",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "toggle",
+      "actionId": "CP-TOGGLE",
+      "state": "busy",
+      "baseScene": "toggle-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-toggle-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "default",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "hover",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "focus",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "pressed",
+      "baseScene": "paused",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "disabled",
+      "baseScene": "resume-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "resume",
+      "actionId": "CP-TOGGLE",
+      "state": "busy",
+      "baseScene": "resume-busy",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scene": "control-resume-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-default",
+      "width": 390,
+      "contrast": 7.04437716623466
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-hover",
+      "width": 390,
+      "contrast": 6.328246391024151
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-focus",
+      "width": 390,
+      "contrast": 7.04437716623466
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-pressed",
+      "width": 390,
+      "contrast": 6.328246391024151
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "disabled",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "delete-open",
+      "actionId": "CP-DELETE-OPEN",
+      "state": "busy",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scene": "control-delete-open-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "disabled",
+      "baseScene": "toggle-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-create",
+      "actionId": "CP-TASK-CREATE",
+      "state": "busy",
+      "baseScene": "task-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scene": "control-task-create-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "disabled",
+      "baseScene": "toggle-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "task-review",
+      "actionId": "CP-TASK-CREATE",
+      "state": "busy",
+      "baseScene": "review-task-busy",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scene": "control-task-review-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "more",
+      "actionId": "CP-MORE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-default",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-focus",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "more-expanded",
+      "actionId": "CP-MORE",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scene": "control-more-expanded-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "help",
+      "actionId": "CP-HELP",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-default",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-focus",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "help-expanded",
+      "actionId": "CP-HELP",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scene": "control-help-expanded-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "default",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-default",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "hover",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-hover",
+      "width": 390,
+      "contrast": 7.432386706138498
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "focus",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-focus",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "task-link",
+      "actionId": "CP-TASK-LINK",
+      "state": "pressed",
+      "baseScene": "task-created",
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scene": "control-task-link-pressed",
+      "width": 390,
+      "contrast": 7.432386706138498
     }
   ],
   "actionVisualReferences": {
@@ -5711,6 +9054,96 @@
         "pressed": "control-source-pressed"
       },
       "limitation": "four pointer/keyboard states only; no source disabled or request-busy state"
+    },
+    "CP-DETAIL": {
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000020\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-detail-default",
+        "hover": "control-detail-hover",
+        "focus": "control-detail-focus",
+        "pressed": "control-detail-pressed"
+      },
+      "limitation": "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+    },
+    "CP-TOGGLE": {
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-toggle-default",
+        "hover": "control-toggle-hover",
+        "focus": "control-toggle-focus",
+        "pressed": "control-toggle-pressed",
+        "disabled": "control-toggle-disabled",
+        "busy": "control-toggle-busy"
+      },
+      "limitation": "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+    },
+    "CP-DELETE-OPEN": {
+      "selector": "[data-action=\"CP-DELETE-OPEN\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-delete-open-default",
+        "hover": "control-delete-open-hover",
+        "focus": "control-delete-open-focus",
+        "pressed": "control-delete-open-pressed",
+        "disabled": "control-delete-open-disabled",
+        "busy": "control-delete-open-busy"
+      },
+      "limitation": "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+    },
+    "CP-TASK-CREATE": {
+      "selector": "[data-action=\"CP-TASK-CREATE\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-task-create-default",
+        "hover": "control-task-create-hover",
+        "focus": "control-task-create-focus",
+        "pressed": "control-task-create-pressed",
+        "disabled": "control-task-create-disabled",
+        "busy": "control-task-create-busy"
+      },
+      "limitation": "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+    },
+    "CP-MORE": {
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-more-default",
+        "hover": "control-more-hover",
+        "focus": "control-more-focus",
+        "pressed": "control-more-pressed"
+      },
+      "limitation": "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+    },
+    "CP-HELP": {
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-help-default",
+        "hover": "control-help-hover",
+        "focus": "control-help-focus",
+        "pressed": "control-help-pressed"
+      },
+      "limitation": "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+    },
+    "CP-TASK-LINK": {
+      "selector": "[data-action=\"CP-TASK-LINK\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-task-link-default",
+        "hover": "control-task-link-hover",
+        "focus": "control-task-link-focus",
+        "pressed": "control-task-link-pressed"
+      },
+      "limitation": "four pointer/keyboard states only; no source disabled or request-busy state"
     }
   },
   "controlVariantReferences": {
@@ -5765,6 +9198,70 @@
         "focus": "control-rule-current-focus",
         "pressed": "control-rule-current-pressed"
       }
+    },
+    "detail-selected": {
+      "actionId": "CP-DETAIL",
+      "pageId": "P19",
+      "selector": "[data-object=\"00000000-0000-4000-8000-000000000019\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-detail-selected-default",
+        "hover": "control-detail-selected-hover",
+        "focus": "control-detail-selected-focus",
+        "pressed": "control-detail-selected-pressed"
+      }
+    },
+    "resume": {
+      "actionId": "CP-TOGGLE",
+      "pageId": "P19",
+      "selector": "[data-action=\"CP-TOGGLE\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-resume-default",
+        "hover": "control-resume-hover",
+        "focus": "control-resume-focus",
+        "pressed": "control-resume-pressed",
+        "disabled": "control-resume-disabled",
+        "busy": "control-resume-busy"
+      }
+    },
+    "task-review": {
+      "actionId": "CP-TASK-CREATE",
+      "pageId": "P19",
+      "selector": "[data-action=\"CP-TASK-CREATE-REVIEW\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-task-review-default",
+        "hover": "control-task-review-hover",
+        "focus": "control-task-review-focus",
+        "pressed": "control-task-review-pressed",
+        "disabled": "control-task-review-disabled",
+        "busy": "control-task-review-busy"
+      }
+    },
+    "more-expanded": {
+      "actionId": "CP-MORE",
+      "pageId": "P19",
+      "selector": "[data-action=\"CP-MORE\"] > summary",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-more-expanded-default",
+        "hover": "control-more-expanded-hover",
+        "focus": "control-more-expanded-focus",
+        "pressed": "control-more-expanded-pressed"
+      }
+    },
+    "help-expanded": {
+      "actionId": "CP-HELP",
+      "pageId": "P19",
+      "selector": "[data-action=\"CP-HELP\"] > summary",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-help-expanded-default",
+        "hover": "control-help-expanded-hover",
+        "focus": "control-help-expanded-focus",
+        "pressed": "control-help-expanded-pressed"
+      }
     }
   },
   "actionIds": [
@@ -5792,13 +9289,16 @@
     "CP-STATE-PRIMARY",
     "CP-TASK-CREATE",
     "CP-TASK-CREATE-REVIEW",
+    "CP-TASK-LINK",
     "CP-TOGGLE"
   ],
   "checks": [
     "1440: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue",
+    "1440: object selection/disclosure/task links plus toggle/resume/delete-open/price+review task states; exact POST target/payload and shared write lock, A-to-B-to-A progress ownership, no task link before response; offline only",
     "1440: seven secondary variants (40 states) and four navigation variants (16 states), Enter activation, exact href, external-link safety, secondary zero writes/focus return/create draft retention/delete reopen reset; disabled secondary controls only model proposed form-busy lock, not existing Vue or abort semantics",
     "1440: scenes/layout, search/deep link, independent permissions, pending/paused, source link, no rule writes beyond create, create validation/retention, rule threshold omission/null/zero/reset, delete trim/retention/cancel, keyboard trap/return/Escape/backdrop, busy guard, hover/focus; all intents inert",
     "390: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue",
+    "390: object selection/disclosure/task links plus toggle/resume/delete-open/price+review task states; exact POST target/payload and shared write lock, A-to-B-to-A progress ownership, no task link before response; offline only",
     "390: seven secondary variants (40 states) and four navigation variants (16 states), Enter activation, exact href, external-link safety, secondary zero writes/focus return/create draft retention/delete reopen reset; disabled secondary controls only model proposed form-busy lock, not existing Vue or abort semantics",
     "390: scenes/layout, search/deep link, independent permissions, pending/paused, source link, no rule writes beyond create, create validation/retention, rule threshold omission/null/zero/reset, delete trim/retention/cancel, keyboard trap/return/Escape/backdrop, busy guard, hover/focus; all intents inert",
     "12 widths x5 representative scenes; 720x500 CSS-pixel reflow equivalent only, not actual browser zoom/assistive technology"
@@ -5811,6 +9311,7 @@
     "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
     "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",
     "Four primary controls have 24 representative states at two widths; dialog disabled and busy share one real busy condition. Not all control variants/fields/themes or P20 create-query background.",
-    "Seven secondary variants add40 states and four navigation variants add16; cancel/back locking is proposed and does not change Vue or abort in-flight writes. P20 abnormal create query and all themes/fields remain outside these representative screenshots."
+    "Seven secondary variants add40 states and four navigation variants add16; cancel/back locking is proposed and does not change Vue or abort in-flight writes. P20 abnormal create query and all themes/fields remain outside these representative screenshots.",
+    "Twelve object-operation variants add58 states and five scenes; only detail-pane write controls share pending lock, with progress tied to captured object. Modal/top-level concurrent writes, real async completion/failure and full Vue lifecycle are not proven. Selected/read and disclosures have only four representative pointer/keyboard states."
   ]
 }

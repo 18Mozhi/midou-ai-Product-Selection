@@ -1,5 +1,21 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P19对象操作与任务状态图
+
+从干净main/1bd2eb22继续；前轮次级状态图为实质进展。使用ui-skills-root/frontend-design/Playwright，复用依赖与现有脚本；读取AGENTS、Feature Map、蓝图3.5、实际Vue对象/启停/删除入口/task/create条件。没有生产改动或安装依赖。
+
+新增对象选择/已选择、暂停/恢复、删除入口、价格/评论任务、更多和帮助的收起/展开、任务链接共12变体58代表状态双端116图，加5个完整场景双端10图，共126新PNG。本包现53场景396PNG、27代表控件变体138状态/276双端实例。7语义组增加34代表槽，5额外变体不膨胀动作分母；P19剩24/P20仍30共54。对象与开合不造disabled/busy图，相关未映射槽不标通过。
+
+离线稿新增详情写入pending记录，捕获对象ID/标题/动作；详情内其他写入禁用，旋转标记只跟本对象本操作。A→B→A显示归属不串对象，B仍可读取但不重复写。顶部/弹窗并发、真实异步成功失败及生命周期并未因此闭环。任务pending不显示已建链接；价格/评论分别使用原change/evidence及四字段payload，启停保持status/expected_revision。
+
+首轮smoke失败于对象Enter无GET：离线对象button未设type，委托事件忽略了默认submit。只在原型补type=button后复测通过，不认定真实Vue直接事件也有此问题。后续语义核对发现恢复禁用代表图应保留暂停对象，改为resume-busy背景并新增badge断言，smoke再通过。完整capture生成396图并通过276双端实例、原有交互、12屏宽×5代表场景；HTTP/页面错误0，文字对比最低5.33419。新增原生summary Enter/Space、删除入口零写入、精确启停/任务payload及A-B-A归属检查。
+
+只目检390-toggle-busy、1440-detail-hover；未宣称396图全人工审阅。上一轮待审390-control-collect-busy/1440-control-delete-focus与1bd2eb22字节哈希一致，不替换或重复申请批准。新COMPETITOR-OBJECT-STATE-REVIEW含131有效链接，PLAN/规格/其他审核入口/Feature Map/README同步；DOM标记25到26只是既有动态任务链接新增场景，源动作分母不变。
+
+未改生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、安全、env/配置、依赖或部署，无运行参数/重启要求；审计库与48单元用例本轮未变，不重复未受影响的单元/Vue构建/46例E2E。新增图/文档/脚本为永久交付，无新临时产物/服务，浏览器finally关闭且无headless-shell残留。前轮清理被拒目录output/playwright/ui-phase2-competitor-races-20260909仍不绕过。全站其余52页同级细化、控件/页面批准、真实实施与宝塔签收继续。
+
+收口：动作审计仍21页/435独立源位置/388语义组；verify:docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check及git diff --check通过。设计审计76包9938PNG、842独立来源/1447绑定、8384 README链接，来源/PNG漂移及未登记图0；完整页面批准0、分母未冻结、G0进行中/G1–G5待验。
+
 ## 2026-09-09 · P19/P20次级操作与导航细化
 
 从干净main/1fa3104d继续，前轮50新图及提交为实质进展。使用ui-skills-root/frontend-design及Playwright，复用已有依赖和永久验证器；读取AGENTS、Feature Map、蓝图3.5、C方向与实际Vue关闭/取消/上一步/规则路由条件。没有重建服务或安装包。

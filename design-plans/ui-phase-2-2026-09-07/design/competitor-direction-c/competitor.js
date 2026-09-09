@@ -15,6 +15,11 @@
     ["blocked-captcha", "P19", "验证码阻塞"],
     ["terminal", "P19", "采集失败无快照"],
     ["paused", "P19", "暂停监控"],
+    ["toggle-busy", "P19", "暂停请求提交中"],
+    ["resume-busy", "P19", "恢复请求提交中"],
+    ["task-busy", "P19", "价格验证任务提交中"],
+    ["review-task-busy", "P19", "评论验证任务提交中"],
+    ["task-created", "P19", "价格验证任务已返回ID"],
     ["readonly", "P19", "只读角色"],
     ["task-only", "P19", "独立任务权限"],
     ["deep-link", "P19", "深链优先搜索"],
@@ -123,6 +128,7 @@
     opener,
     busy = false,
     collectionSubmitting = false,
+    objectPending = null,
     feedback = "",
     formError = "",
     taskCreated = {};
@@ -132,6 +138,15 @@
   const intents = [];
   const button = (id, text, cls = "", disabled = false, submitting = false) =>
     `<button type="button" data-action="${id}" class="${cls}" ${disabled ? "disabled" : ""} ${submitting ? 'aria-busy="true"' : ""}>${text}</button>`;
+  const pendingFor = (id) => objectPending?.id === selected.id && objectPending.action === id;
+  const objectButton = (id, text, cls = "") =>
+    button(
+      id,
+      pendingFor(id) ? (id === "CP-TOGGLE" ? "正在提交启停…" : "正在创建任务…") : text,
+      cls,
+      Boolean(objectPending) || collectionSubmitting,
+      pendingFor(id),
+    );
   const link = (id, text, href) => `<a data-action="${id}" class="link" href="${href}">${text}</a>`;
   const badge = (text, good = false) => `<span class="badge ${good ? "good" : ""}">${text}</span>`;
   const is = (...ids) => ids.includes(current.id);
@@ -150,9 +165,20 @@
     modalKind = "";
     busy = false;
     collectionSubmitting = is("collect-busy");
+    objectPending = is("toggle-busy", "resume-busy", "task-busy", "review-task-busy")
+      ? {
+          id: selected.id,
+          title: selected.title,
+          action: is("toggle-busy", "resume-busy")
+            ? "CP-TOGGLE"
+            : is("review-task-busy")
+              ? "CP-TASK-CREATE-REVIEW"
+              : "CP-TASK-CREATE",
+        }
+      : null;
     feedback = "";
     formError = "";
-    taskCreated = {};
+    taskCreated = is("task-created") ? { [selected.id + ":price"]: true } : {};
     reason = "";
     step = 1;
     createForm = {
@@ -162,7 +188,7 @@
       opportunity_id: "",
     };
     ruleForm = { competitor_id: "", metric: "price", direction: "decrease", threshold_value: 1 };
-    if (is("paused")) selected.status = "已暂停";
+    if (is("paused", "resume-busy")) selected.status = "已暂停";
     if (is("partial")) selected.price = "价格未采到";
     document.documentElement.dataset.theme = id.startsWith("cloud-white")
       ? "cloud-white"
@@ -189,7 +215,7 @@
   function render() {
     const rp = rulesPage();
     $("#app").innerHTML =
-      `<header class="identity"><span class="brand">Scout<i>Ops</i></span><span class="meta">样本组织 / 桌面收纳工作区</span></header><div class="layout"><aside class="scope"><div><p class="eyebrow">竞争观察</p><h2>看清每一次变化</h2><p>当前工作区的竞品、快照与显式阈值。</p></div>${manager() ? button(rp ? "CP-RULE-OPEN" : "CP-CREATE-OPEN", rp ? "＋ 新建监控规则" : "＋ 添加竞品", "primary") : "<p>只读监控权限</p>"}<nav aria-label="竞品页面">${link("CP-RULE-BACK", "竞品目录", "/competitors")}${link("CP-RULE-NAV", "监控规则", "/competitors/monitoring-rules")}</nav><div class="scope-foot">仅展示采集事实。<br>监控就绪不等于机会已通过竞争质量门。<br><br>样本数据 · 不连接生产</div></aside><main class="workspace"><div class="heading"><div><p class="eyebrow">${rp ? "规则范围 / 阈值 / 状态" : "目录 / 变化 / 原始证据"}</p><h1>${rp ? "让每一次提醒有据可依" : "竞品发生了什么变化？"}</h1><p>${rp ? "先确认适用对象，再读指标与阈值。" : "选择一个监控对象，从最近变化追到对应快照。"}</p></div>${badge(rp ? "P20 · 独立规则页面" : "P19 · 竞品目录")}</div>${feedback ? `<div class="toast" role="status">${esc(feedback)}</div>` : ""}${content()}<p class="artifact-note">COMPETITOR-C-r1 · ${esc(current.label)} · 合成合同样本，不是实际监控结果。设计提案待审核。</p></main></div>`;
+      `<header class="identity"><span class="brand">Scout<i>Ops</i></span><span class="meta">样本组织 / 桌面收纳工作区</span></header><div class="layout"><aside class="scope"><div><p class="eyebrow">竞争观察</p><h2>看清每一次变化</h2><p>当前工作区的竞品、快照与显式阈值。</p></div>${manager() ? button(rp ? "CP-RULE-OPEN" : "CP-CREATE-OPEN", rp ? "＋ 新建监控规则" : "＋ 添加竞品", "primary") : "<p>只读监控权限</p>"}<nav aria-label="竞品页面">${link("CP-RULE-BACK", "竞品目录", "/competitors")}${link("CP-RULE-NAV", "监控规则", "/competitors/monitoring-rules")}</nav><div class="scope-foot">仅展示采集事实。<br>监控就绪不等于机会已通过竞争质量门。<br><br>样本数据 · 不连接生产</div></aside><main class="workspace"><div class="heading"><div><p class="eyebrow">${rp ? "规则范围 / 阈值 / 状态" : "目录 / 变化 / 原始证据"}</p><h1>${rp ? "让每一次提醒有据可依" : "竞品发生了什么变化？"}</h1><p>${rp ? "先确认适用对象，再读指标与阈值。" : "选择一个监控对象，从最近变化追到对应快照。"}</p></div>${badge(rp ? "P20 · 独立规则页面" : "P19 · 竞品目录")}</div>${feedback ? `<div class="toast" role="status">${esc(feedback)}</div>` : ""}${objectPending ? `<section class="notice info" data-object-operation="${objectPending.id}" aria-busy="true"><strong>正在为“${esc(objectPending.title)}”提交${objectPending.action === "CP-TOGGLE" ? "启停" : "验证任务"}请求</strong><p>尚未确认结果；当前请求结束前，竞品详情内的其他写入入口暂不可用。切换查看对象不会改变本次提交目标。</p></section>` : ""}${content()}<p class="artifact-note">COMPETITOR-C-r1 · ${esc(current.label)} · 合成合同样本，不是实际监控结果。设计提案待审核。</p></main></div>`;
     $(`[data-action="${rp ? "CP-RULE-NAV" : "CP-RULE-BACK"}"]`).setAttribute(
       "aria-current",
       "page",
@@ -230,7 +256,7 @@
             v.toLowerCase().includes(search.toLowerCase().trim()),
           ),
         );
-    return `${is("rules-unknown") ? note("规则状态未知", "竞品目录可用，但规则读取失败；不显示“零条生效规则”，请重新读取。", "info") + button("CP-STATE-PRIMARY", "重新读取") : ""}<div class="directory"><aside class="objects"><label class="search">搜索竞品<input id="search" data-action="CP-SEARCH" type="search" placeholder="标题、ASIN、来源站点" value="${esc(search)}" /></label><p class="meta">${filtered.length} 个匹配对象${deep ? " · 深链对象优先" : ""}</p>${filtered.map((o) => `<button class="object" data-action="CP-DETAIL" data-object="${o.id}" aria-pressed="${selected.id === o.id}"><strong>${esc(o.title)}</strong><small>${o.source_site} · ${o.market}</small><span class="object-price">${o.id === selected.id ? esc(selected.price) : o.price}</span><small>${o.id === selected.id ? selected.status : o.status} · 查看详情 →</small></button>`).join("")}</aside><article class="detail">${!filtered.length ? emptyPanel("没有匹配的竞品", "只搜索标题、ASIN 和来源站点，不扩大到其他字段。", "CP-SEARCH-CLEAR", "清空搜索") : detail()}</article></div><details class="help" data-action="CP-HELP"><summary>帮助：从公开链接到变化提醒</summary><p>添加链接 → 首个真实快照 → 后续变化 → 达到显式阈值才排队通知与任务。没有触发记录不代表已发送提醒。</p></details>`;
+    return `${is("rules-unknown") ? note("规则状态未知", "竞品目录可用，但规则读取失败；不显示“零条生效规则”，请重新读取。", "info") + button("CP-STATE-PRIMARY", "重新读取") : ""}<div class="directory"><aside class="objects"><label class="search">搜索竞品<input id="search" data-action="CP-SEARCH" type="search" placeholder="标题、ASIN、来源站点" value="${esc(search)}" /></label><p class="meta">${filtered.length} 个匹配对象${deep ? " · 深链对象优先" : ""}</p>${filtered.map((o) => `<button type="button" class="object" data-action="CP-DETAIL" data-object="${o.id}" aria-pressed="${selected.id === o.id}"><strong>${esc(o.title)}</strong><small>${o.source_site} · ${o.market}</small><span class="object-price">${o.id === selected.id ? esc(selected.price) : o.price}</span><small>${o.id === selected.id ? selected.status : o.status} · 查看详情 →</small></button>`).join("")}</aside><article class="detail">${!filtered.length ? emptyPanel("没有匹配的竞品", "只搜索标题、ASIN 和来源站点，不扩大到其他字段。", "CP-SEARCH-CLEAR", "清空搜索") : detail()}</article></div><details class="help" data-action="CP-HELP"><summary>帮助：从公开链接到变化提醒</summary><p>添加链接 → 首个真实快照 → 后续变化 → 达到显式阈值才排队通知与任务。没有触发记录不代表已发送提醒。</p></details>`;
   }
   function detail() {
     const pending = is("pending", "running"),
@@ -249,7 +275,7 @@
       }[current.id];
       status = note(text[0], text[1] + "<br><code>任务 synthetic-collection-19</code>");
     }
-    return `<div class="detail-head"><div><p class="meta">${selected.market} · ${selected.source_site} / ${selected.external_id}</p><h2>${esc(selected.title)}</h2><a class="source" data-action="CP-SOURCE" href="${sourceUrl}" target="_blank" rel="noopener noreferrer">打开来源商品 ↗ <span class="meta">（新窗口）</span></a></div>${badge(selected.status, selected.status === "监控中")}</div><div class="actions">${manager() ? button("CP-COLLECT", collectionSubmitting ? "正在提交采集…" : selected.status === "已暂停" ? "恢复后可采集" : pending ? "采集中…" : noSnapshot ? "重新尝试首次采集" : "立即采集", "primary", collectionSubmitting || pending || selected.status === "已暂停", collectionSubmitting) : ""}${link("CP-RULE-NAV-CURRENT", "当前竞品规则", "/competitors/monitoring-rules?competitor=" + selected.id)}${manager() ? `<details data-action="CP-MORE"><summary>更多操作</summary><div class="menu">${button("CP-TOGGLE", selected.status === "已暂停" ? "恢复监控" : "暂停监控")}${button("CP-DELETE-OPEN", "删除竞品监控", "danger")}</div></details>` : ""}</div>${status}${is("detail-error") ? note("详情暂不可用", "目录信息保留；不把旧详情标成刚刚更新。", "error") + button("CP-DETAIL-RETRY", "重读当前详情") : ""}${noSnapshot ? emptyPanel("等待第一个真实快照", "价格、排名、评论、评分和库存尚未采到，不用示例值补齐。") : `<section class="evidence" aria-label="当前快照"><p class="meta">当前快照 / 原始采集事实</p><p class="price">${partial ? "价格未采到" : esc(selected.price)}</p><div class="facts"><div><small>排名</small><b>${partial ? "未采到" : "#126"}</b></div><div><small>评论 / 评分</small><b>${partial ? "0 / 未采到" : "86 / 4.3"}</b></div><div><small>库存</small><b>${partial ? "未知" : "有货"}</b></div></div><footer><span class="meta">${partial ? "来源异常 · 时效未知 · 币种未采到" : "来源正常 · 新鲜"} · 2026-09-09 08:00</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></footer></section><section aria-label="变化与提醒"><div class="section-heading"><h3>最近变化</h3><small>事实、提醒与任务分别展示</small></div><article class="event"><div class="event-title"><strong>价格变化</strong><time class="meta">09-09 08:00</time></div><p class="delta">${partial ? "币种未采到" : second ? "GBP" : "USD"} ${second ? "35.00 → 32.50" : "30.00 → 28.00"}</p><p>影响说明：记录到价格下降，需结合原始证据复核。</p><div class="status-line">${badge(is("alerts-mixed") ? "系统通知：发送失败" : "系统通知：待发送")}${badge(is("alerts-mixed") ? "系统任务：已创建" : "系统任务：待创建")}</div><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code>${taskCreated[selected.id + ":price"] ? link("CP-TASK-LINK", "打开验证任务", "/tasks?task=" + taskId) : taskPermission() ? button("CP-TASK-CREATE", "生成验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article><article class="event"><div class="event-title"><strong>评论数变化</strong><time class="meta">09-08 16:00</time></div><p>85 → 86</p><p class="meta">说明：评论数增加 1；未匹配到触发提醒记录。</p>${badge("无关联提醒 · 不声称已通知")}<code>证据 synthetic-evidence-18</code>${taskCreated[selected.id + ":review"] ? link("CP-TASK-LINK", "打开评论验证任务", "/tasks?task=" + taskId) : taskPermission() ? button("CP-TASK-CREATE-REVIEW", "生成评论验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article></section>`}<section class="history" aria-label="采集快照"><div class="section-heading"><h3>采集快照</h3><small>${is("history-window") ? "返回窗口 100 条 / 最多 100 条" : noSnapshot ? "尚无快照" : "样本返回 2 条 / 最多 100 条"}</small></div>${noSnapshot ? "<p class='meta'>首次真实快照尚未形成。</p>" : `<div class="snapshot"><strong>${partial ? "价格未采到" : esc(selected.price)}</strong><time class="meta">2026-09-09 08:00</time><span>${partial ? "库存未知" : "有货"} · 评分 ${partial ? "未采到" : "4.3"} · 评论 ${partial ? "0" : "86"}</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></div><div class="snapshot"><strong>${second ? "GBP 35.00" : "USD 30.00"}</strong><time class="meta">2026-09-08 08:00</time><span>有货 · 评分 4.3 · 评论 85</span><code>证据 synthetic-evidence-18</code></div><p class="meta">${is("history-window") ? "中间 98 条在本静态图中省略，不是完整长列表验证。" : ""}返回窗口最早快照，不一定是全历史首次基线。变化最多返回 200 条、提醒最多 100 条。</p>`}</section>`;
+    return `<div class="detail-head"><div><p class="meta">${selected.market} · ${selected.source_site} / ${selected.external_id}</p><h2>${esc(selected.title)}</h2><a class="source" data-action="CP-SOURCE" href="${sourceUrl}" target="_blank" rel="noopener noreferrer">打开来源商品 ↗ <span class="meta">（新窗口）</span></a></div>${badge(selected.status, selected.status === "监控中")}</div><div class="actions">${manager() ? button("CP-COLLECT", collectionSubmitting ? "正在提交采集…" : selected.status === "已暂停" ? "恢复后可采集" : pending ? "采集中…" : noSnapshot ? "重新尝试首次采集" : "立即采集", "primary", collectionSubmitting || Boolean(objectPending) || pending || selected.status === "已暂停", collectionSubmitting) : ""}${link("CP-RULE-NAV-CURRENT", "当前竞品规则", "/competitors/monitoring-rules?competitor=" + selected.id)}${manager() ? `<details data-action="CP-MORE"><summary>更多操作</summary><div class="menu">${objectButton("CP-TOGGLE", selected.status === "已暂停" ? "恢复监控" : "暂停监控")}${objectButton("CP-DELETE-OPEN", "删除竞品监控", "danger")}</div></details>` : ""}</div>${status}${is("detail-error") ? note("详情暂不可用", "目录信息保留；不把旧详情标成刚刚更新。", "error") + button("CP-DETAIL-RETRY", "重读当前详情") : ""}${noSnapshot ? emptyPanel("等待第一个真实快照", "价格、排名、评论、评分和库存尚未采到，不用示例值补齐。") : `<section class="evidence" aria-label="当前快照"><p class="meta">当前快照 / 原始采集事实</p><p class="price">${partial ? "价格未采到" : esc(selected.price)}</p><div class="facts"><div><small>排名</small><b>${partial ? "未采到" : "#126"}</b></div><div><small>评论 / 评分</small><b>${partial ? "0 / 未采到" : "86 / 4.3"}</b></div><div><small>库存</small><b>${partial ? "未知" : "有货"}</b></div></div><footer><span class="meta">${partial ? "来源异常 · 时效未知 · 币种未采到" : "来源正常 · 新鲜"} · 2026-09-09 08:00</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></footer></section><section aria-label="变化与提醒"><div class="section-heading"><h3>最近变化</h3><small>事实、提醒与任务分别展示</small></div><article class="event"><div class="event-title"><strong>价格变化</strong><time class="meta">09-09 08:00</time></div><p class="delta">${partial ? "币种未采到" : second ? "GBP" : "USD"} ${second ? "35.00 → 32.50" : "30.00 → 28.00"}</p><p>影响说明：记录到价格下降，需结合原始证据复核。</p><div class="status-line">${badge(is("alerts-mixed") ? "系统通知：发送失败" : "系统通知：待发送")}${badge(is("alerts-mixed") ? "系统任务：已创建" : "系统任务：待创建")}</div><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code>${taskCreated[selected.id + ":price"] ? link("CP-TASK-LINK", "打开验证任务", "/tasks?task=" + taskId) : taskPermission() ? objectButton("CP-TASK-CREATE", "生成验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article><article class="event"><div class="event-title"><strong>评论数变化</strong><time class="meta">09-08 16:00</time></div><p>85 → 86</p><p class="meta">说明：评论数增加 1；未匹配到触发提醒记录。</p>${badge("无关联提醒 · 不声称已通知")}<code>证据 synthetic-evidence-18</code>${taskCreated[selected.id + ":review"] ? link("CP-TASK-LINK", "打开评论验证任务", "/tasks?task=" + taskId) : taskPermission() ? objectButton("CP-TASK-CREATE-REVIEW", "生成评论验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article></section>`}<section class="history" aria-label="采集快照"><div class="section-heading"><h3>采集快照</h3><small>${is("history-window") ? "返回窗口 100 条 / 最多 100 条" : noSnapshot ? "尚无快照" : "样本返回 2 条 / 最多 100 条"}</small></div>${noSnapshot ? "<p class='meta'>首次真实快照尚未形成。</p>" : `<div class="snapshot"><strong>${partial ? "价格未采到" : esc(selected.price)}</strong><time class="meta">2026-09-09 08:00</time><span>${partial ? "库存未知" : "有货"} · 评分 ${partial ? "未采到" : "4.3"} · 评论 ${partial ? "0" : "86"}</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></div><div class="snapshot"><strong>${second ? "GBP 35.00" : "USD 30.00"}</strong><time class="meta">2026-09-08 08:00</time><span>有货 · 评分 4.3 · 评论 85</span><code>证据 synthetic-evidence-18</code></div><p class="meta">${is("history-window") ? "中间 98 条在本静态图中省略，不是完整长列表验证。" : ""}返回窗口最早快照，不一定是全历史首次基线。变化最多返回 200 条、提醒最多 100 条。</p>`}</section>`;
   }
   function ruleDirectory() {
     const rows = is("rules-empty") ? [] : is("rules-disabled") ? [rules[2]] : rules;
@@ -499,13 +525,21 @@
       feedback = "隔离受理演示：采集请求排队，不代表已采集成功。";
       render();
     } else if (id === "CP-TOGGLE") {
+      if (objectPending || collectionSubmitting) return;
       intent("/competitors/" + selected.id + "/actions", "POST", {
         status: selected.status === "已暂停" ? "active" : "paused",
         expected_revision: 7,
       });
+      if (window.competitorReview.outcome === "pending") {
+        objectPending = { id: selected.id, title: selected.title, action: id };
+        render();
+        $("[data-action=CP-MORE]")?.setAttribute("open", "");
+        return;
+      }
       feedback = "隔离启停意图已记录；目录状态未模拟持久化。";
       render();
     } else if (["CP-TASK-CREATE", "CP-TASK-CREATE-REVIEW"].includes(id)) {
+      if (objectPending || collectionSubmitting) return;
       const review = id.endsWith("REVIEW"),
         second = selected.id === objects[1].id;
       const field = review ? "评论数" : "价格",
@@ -521,6 +555,11 @@
         priority: "high",
         due_at: null,
       });
+      if (window.competitorReview.outcome === "pending") {
+        objectPending = { id: selected.id, title: selected.title, action: id };
+        render();
+        return;
+      }
       taskCreated[selected.id + (review ? ":review" : ":price")] = true;
       feedback = "仅创建隔离任务样本，不是真实任务。";
       render();

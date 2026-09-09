@@ -163,7 +163,111 @@ const navigationControls = [
   kind: "navigation",
   states: pointerStates,
 }));
-const allControls = [...controls, ...secondaryControls, ...navigationControls];
+const objectControls = [
+  {
+    key: "detail",
+    actionId: "CP-DETAIL",
+    kind: "detail",
+    selector: '[data-object="00000000-0000-4000-8000-000000000020"]',
+    states: pointerStates,
+  },
+  {
+    key: "detail-selected",
+    actionId: "CP-DETAIL",
+    kind: "detail",
+    selector: '[data-object="00000000-0000-4000-8000-000000000019"]',
+    states: pointerStates,
+    variantOnly: true,
+  },
+  {
+    key: "toggle",
+    actionId: "CP-TOGGLE",
+    kind: "object-write",
+    openMore: true,
+    disabled: "task-busy",
+    busy: "toggle-busy",
+  },
+  {
+    key: "resume",
+    actionId: "CP-TOGGLE",
+    kind: "object-write",
+    ready: "paused",
+    openMore: true,
+    disabled: "resume-busy",
+    busy: "resume-busy",
+    variantOnly: true,
+  },
+  {
+    key: "delete-open",
+    actionId: "CP-DELETE-OPEN",
+    kind: "object-open",
+    openMore: true,
+    disabled: "task-busy",
+    busy: "task-busy",
+  },
+  {
+    key: "task-create",
+    actionId: "CP-TASK-CREATE",
+    kind: "object-write",
+    disabled: "toggle-busy",
+    busy: "task-busy",
+  },
+  {
+    key: "task-review",
+    actionId: "CP-TASK-CREATE",
+    kind: "object-write",
+    selector: '[data-action="CP-TASK-CREATE-REVIEW"]',
+    disabled: "toggle-busy",
+    busy: "review-task-busy",
+    variantOnly: true,
+  },
+  {
+    key: "more",
+    actionId: "CP-MORE",
+    kind: "disclosure",
+    selector: '[data-action="CP-MORE"] > summary',
+    states: pointerStates,
+  },
+  {
+    key: "more-expanded",
+    actionId: "CP-MORE",
+    kind: "disclosure",
+    selector: '[data-action="CP-MORE"] > summary',
+    states: pointerStates,
+    openMore: true,
+    variantOnly: true,
+  },
+  {
+    key: "help",
+    actionId: "CP-HELP",
+    kind: "disclosure",
+    selector: '[data-action="CP-HELP"] > summary',
+    states: pointerStates,
+  },
+  {
+    key: "help-expanded",
+    actionId: "CP-HELP",
+    kind: "disclosure",
+    selector: '[data-action="CP-HELP"] > summary',
+    states: pointerStates,
+    openHelp: true,
+    variantOnly: true,
+  },
+  {
+    key: "task-link",
+    actionId: "CP-TASK-LINK",
+    kind: "navigation",
+    ready: "task-created",
+    href: "/tasks?task=00000000-0000-4000-8000-000000000023",
+    states: pointerStates,
+  },
+].map((control) => ({
+  pageId: "P19",
+  ready: "directory",
+  selector: `[data-action="${control.actionId}"]`,
+  ...control,
+}));
+const allControls = [...controls, ...secondaryControls, ...navigationControls, ...objectControls];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const files = [
   "apps/web/src/components/CompetitorMonitor.vue",
@@ -278,17 +382,32 @@ async function verifyControls(page, width) {
       window.competitorReview.outcome = "success";
       window.competitorReview.choose(scene);
     }, id);
+  const prepare = async (control) => {
+    for (const [flag, id] of [
+      [control.openMore, "CP-MORE"],
+      [control.openHelp, "CP-HELP"],
+    ]) {
+      if (flag && !(await page.locator(`[data-action="${id}"]`).getAttribute("open"))) {
+        // Boolean attribute may be an empty string; use the reflected open property.
+        if (!(await page.locator(`[data-action="${id}"]`).evaluate((el) => el.open)))
+          await page.locator(`[data-action="${id}"] > summary`).click();
+      }
+    }
+  };
   for (const control of allControls) {
     for (const state of control.states || states) {
       const baseScene = control[state] || control.ready;
       await page.mouse.move(0, 0);
       await choose(baseScene);
+      await prepare(control);
       const target = page.locator(control.selector);
       assert.equal(await target.count(), 1);
       await target.scrollIntoViewIfNeeded();
       await page.evaluate(() => document.activeElement?.blur());
       const before = await count();
       assert.equal(await target.isDisabled(), ["disabled", "busy"].includes(state));
+      if (control.key === "resume")
+        assert.match(await page.locator(".detail-head > .badge").innerText(), /已暂停/);
       if (["hover", "pressed"].includes(state)) {
         await target.hover();
         assert.ok(await target.evaluate((el) => el.matches(":hover")));
@@ -305,7 +424,13 @@ async function verifyControls(page, width) {
         assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
       }
       if (state === "busy") {
-        if (control.kind) {
+        if (control.kind === "object-open") {
+          assert.equal(
+            await page.locator("[data-object-operation]").getAttribute("aria-busy"),
+            "true",
+          );
+          assert.equal(await target.getAttribute("aria-busy"), null);
+        } else if (["close", "previous"].includes(control.kind)) {
           assert.equal(await page.locator("#modal form").getAttribute("aria-busy"), "true");
           assert.equal(
             await target.getAttribute("aria-busy"),
@@ -364,6 +489,7 @@ async function verifyControls(page, width) {
     }
     if (control.kind) {
       await choose(control.ready);
+      await prepare(control);
       const before = await count();
       const target = page.locator(control.selector);
       if (control.kind === "navigation") {
@@ -383,6 +509,88 @@ async function verifyControls(page, width) {
           await page.locator("dialog[open]").count(),
           control.key === "rule-current" ? 1 : 0,
         );
+      } else if (control.kind === "detail") {
+        const id = await target.getAttribute("data-object");
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await count(), before + 1);
+        assert.deepEqual(await page.evaluate(() => window.competitorReview.intents.at(-1)), {
+          path: "/competitors/" + id,
+          method: "GET",
+        });
+        assert.equal(await page.locator(control.selector).getAttribute("aria-pressed"), "true");
+      } else if (control.kind === "disclosure") {
+        const wasOpen = await target.evaluate((el) => el.parentElement.open);
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await target.evaluate((el) => el.parentElement.open), !wasOpen);
+        await page.keyboard.press("Space");
+        assert.equal(await target.evaluate((el) => el.parentElement.open), wasOpen);
+        assert.equal(await count(), before, "disclosure must not request");
+      } else if (control.kind === "object-open") {
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await page.locator("dialog[open]").count(), 1);
+        assert.equal(await page.locator('[name="reason"]').inputValue(), "");
+        assert.equal(await count(), before, "opening delete is not DELETE");
+      } else if (control.kind === "object-write") {
+        await page.evaluate(() => {
+          window.competitorReview.outcome = "pending";
+        });
+        await target.click();
+        assert.equal(await count(), before + 1);
+        const submitted = await page.evaluate(() => window.competitorReview.intents.at(-1));
+        if (control.actionId === "CP-TOGGLE")
+          assert.deepEqual(submitted, {
+            path: "/competitors/00000000-0000-4000-8000-000000000019/actions",
+            method: "POST",
+            body: { status: control.key === "resume" ? "active" : "paused", expected_revision: 7 },
+          });
+        else {
+          assert.equal(submitted.path, "/tasks");
+          assert.equal(submitted.method, "POST");
+          assert.deepEqual(Object.keys(submitted.body).sort(), [
+            "description",
+            "due_at",
+            "priority",
+            "title",
+          ]);
+          assert.equal(submitted.body.priority, "high");
+          assert.equal(submitted.body.due_at, null);
+          assert.match(submitted.body.description, /00000000-0000-4000-8000-000000000019/);
+          assert.ok(
+            submitted.body.description.includes(
+              control.key === "task-review" ? "synthetic-evidence-18" : "synthetic-evidence-us-19",
+            ),
+          );
+          assert.equal(await page.locator('[data-action="CP-TASK-LINK"]').count(), 0);
+        }
+        const current = page.locator(control.selector);
+        assert.equal(await current.isDisabled(), true);
+        assert.equal(await current.getAttribute("aria-busy"), "true");
+        await current.dispatchEvent("click");
+        assert.equal(await count(), before + 1);
+        await page.locator('[data-object="00000000-0000-4000-8000-000000000020"]').click();
+        await prepare(control);
+        assert.equal(
+          await page.locator("[data-object-operation]").getAttribute("data-object-operation"),
+          "00000000-0000-4000-8000-000000000019",
+        );
+        assert.equal(
+          await page.locator(control.selector).getAttribute("aria-busy"),
+          null,
+          "do not attach A submission to B",
+        );
+        assert.equal(
+          await page.locator(control.selector).isDisabled(),
+          true,
+          "shared write lock still applies",
+        );
+        await page.locator(control.selector).dispatchEvent("click");
+        assert.equal(await count(), before + 2, "only selecting B adds GET");
+        await page.locator('[data-object="00000000-0000-4000-8000-000000000019"]').click();
+        await prepare(control);
+        assert.equal(await page.locator(control.selector).getAttribute("aria-busy"), "true");
       } else {
         if (control.key.startsWith("create")) {
           await page
@@ -458,6 +666,9 @@ async function verifyControls(page, width) {
   assert.match(await page.locator('[data-action="CP-COLLECT"]').innerText(), /采集中/);
   checks.push(
     `${width}: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue`,
+  );
+  checks.push(
+    `${width}: object selection/disclosure/task links plus toggle/resume/delete-open/price+review task states; exact POST target/payload and shared write lock, A-to-B-to-A progress ownership, no task link before response; offline only`,
   );
   checks.push(
     `${width}: seven secondary variants (40 states) and four navigation variants (16 states), Enter activation, exact href, external-link safety, secondary zero writes/focus return/create draft retention/delete reopen reset; disabled secondary controls only model proposed form-busy lock, not existing Vue or abort semantics`,
@@ -721,11 +932,13 @@ try {
               limitation:
                 control.kind === "navigation"
                   ? "four pointer/keyboard states only; no source disabled or request-busy state"
-                  : control.kind
-                    ? "secondary disabled/busy represent existing offline proposal lock while form submits; source Vue still permits closing/back; cancellation never aborts an already sent request"
-                    : control.key === "collect"
-                      ? "paused represents disabled; POST in-flight differs from accepted queued/running task"
-                      : "disabled and busy use the same source busy condition; no invented independent business blocker; create is final step, rule is global price, delete is populated reason",
+                  : ["object-write", "object-open", "detail", "disclosure"].includes(control.kind)
+                    ? "object/disclosure representative only; shared write lock follows source busy, owner-specific progress is proposed; read/disclosure has no fabricated disabled/busy screenshot"
+                    : control.kind
+                      ? "secondary disabled/busy represent existing offline proposal lock while form submits; source Vue still permits closing/back; cancellation never aborts an already sent request"
+                      : control.key === "collect"
+                        ? "paused represents disabled; POST in-flight differs from accepted queued/running task"
+                        : "disabled and busy use the same source busy condition; no invented independent business blocker; create is final step, rule is global price, delete is populated reason",
             },
           ]),
       ),
@@ -759,6 +972,7 @@ try {
         "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",
         "Four primary controls have 24 representative states at two widths; dialog disabled and busy share one real busy condition. Not all control variants/fields/themes or P20 create-query background.",
         "Seven secondary variants add40 states and four navigation variants add16; cancel/back locking is proposed and does not change Vue or abort in-flight writes. P20 abnormal create query and all themes/fields remain outside these representative screenshots.",
+        "Twelve object-operation variants add58 states and five scenes; only detail-pane write controls share pending lock, with progress tied to captured object. Modal/top-level concurrent writes, real async completion/failure and full Vue lifecycle are not proven. Selected/read and disclosures have only four representative pointer/keyboard states.",
       ],
     };
     await writeFile(root + "/evidence.json", JSON.stringify(evidence, null, 2) + "\n");
