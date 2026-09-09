@@ -1,0 +1,2786 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P14",
+  "route": "/trends",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+    "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+    "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+    "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
+    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "六组件3处role=dialog div定义展开规则/异常/无关/恢复4业务变体；规则调用不另计；另有一个共享移动筛选消费者。6form/3aside/1drawer是扫描结构，不是10弹窗。治理4内联表单态不是modal。"
+  },
+  "inputs": {
+    "local": [
+      "anomalySeverity",
+      "anomalyReason",
+      "relevanceReason",
+      "timelineSource",
+      "form.name",
+      "form.include_keywords",
+      "form.negative_keywords",
+      "form.market",
+      "form.language",
+      "form.category",
+      "form.collection_interval_minutes",
+      "form.recommendation_min_source_count",
+      "sourceIds",
+      "signalIds",
+      "newTitle",
+      "newCategory",
+      "reason",
+      "decision.reason"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "TR-RULE-OPEN",
+      "label": "打开创建监控",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
+        "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
+        "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
+        "apps/web/src/components/TrendDetailPanel.vue#658c4019fe00727f.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RULE-OPEN：顶部首条/新增入口",
+        "TR-RULE-OPEN：规则标题入口",
+        "TR-RULE-OPEN：规则空态入口",
+        "TR-RULE-OPEN：详情入口"
+      ],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "四入口均需canManageTrends/canManage；无busy禁用",
+      "handler": "showRule=true；不根据当前主题预填；v-if新建TrendRuleDialog默认US/en-US/60/1",
+      "variants": ["top-first", "top-add", "rules-header", "rules-empty", "detail"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rules-empty"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "八字段不套P12七字段表单；全入口焦点归还/快速重开仍待验。"
+    },
+    {
+      "actionId": "TR-REFRESH-SOURCES",
+      "label": "立即刷新来源",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1"],
+      "sourceContractKeys": ["TR-REFRESH-SOURCES"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "页面允许trend:read；按钮Boolean(busy)禁用，函数无同级busy早退",
+      "handler": "POST /provider-sources/refresh，props.organizationId/workspaceId；服务比对会话范围和Origin；仅显示source_count已开始，无load/轮询",
+      "variants": ["read-only", "busy", "started", "failed"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "refresh-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "refresh-started"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "refresh-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "受理不等于采集完成；本轮不启动真实采集。"
+    },
+    {
+      "actionId": "TR-TAB-RULES",
+      "label": "进入监控规则",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
+        "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1"
+      ],
+      "sourceContractKeys": ["TR-TAB-RULES：顶部入口", "TR-TAB-RULES：导航入口"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "read角色也可查看；顶部与模式导航两个位置",
+      "handler": "setTab('rules')保留其他query，只写section=rules",
+      "variants": ["top", "mode", "readonly", "legacy-tab"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "rules"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rules-readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "保留旧tab=rules优先级；规则列表可能与错误面板同时渲染，C稿隔离是提案。"
+    },
+    {
+      "actionId": "TR-TAB-TOPICS",
+      "label": "进入趋势主题",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1"],
+      "sourceContractKeys": ["TR-TAB-TOPICS"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "模式导航常驻，无busy限制",
+      "handler": "setTab('topics')删除section但保留tab；syncFromRoute先识别section=rules或tab=rules",
+      "variants": ["normal", "legacy-tab"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "topics"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "本轮源隔离确认tab=rules旧链接点击topics后仍rules；兼容迁移未修。"
+    },
+    {
+      "actionId": "TR-TAB-GOVERNANCE",
+      "label": "进入合并拆分",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1"],
+      "sourceContractKeys": ["TR-TAB-GOVERNANCE"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "canManageTrends才显示且handler再次校验",
+      "handler": "setTab('governance')只写section；legacy tab=rules仍可能抢先；子组件离开v-if销毁草稿",
+      "variants": ["manager", "readonly-hidden", "pending-count"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "governance"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "governance-empty"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "governance-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "只进入治理，不执行信号迁移；失败时无同级状态面板，原型保护待实现。"
+    },
+    {
+      "actionId": "TR-RECOVER",
+      "label": "恢复主题工作面",
+      "kind": "read",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1"],
+      "sourceContractKeys": ["TR-RECOVER：empty清除，否则load"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "topics且state!=ready；UiStatePanel内部可用动作取决于kind",
+      "handler": "recoverTopics在empty调用clearFilters，其余load；primary统一恢复，secondary未监听",
+      "variants": ["empty-clear", "error-load", "expired-load", "forbidden-load", "blocked-load"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "blocked"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "C稿登录/选择上下文是待审导航，不是源primary已实现；shared内部全状态仍需消费者验收。"
+    },
+    {
+      "actionId": "TR-TOPIC-SELECT",
+      "label": "选择主题",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1"],
+      "sourceContractKeys": ["TR-TOPIC-SELECT：每个主题实例"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "topics且ready；每条sortedTopics项，无busy禁用",
+      "handler": "mobileDetailOpen=true，push保留其他query并写topic/清section；topic watcher GET详情",
+      "variants": ["first", "other", "followed", "detail-loading"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "topics"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-loading"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "load与topic watcher无任务页同级代次保护；旧详情结果与写入归属仍待真实Vue验证。"
+    },
+    {
+      "actionId": "TR-PAGE-PREV",
+      "label": "上一页",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1"],
+      "sourceContractKeys": ["TR-PAGE-PREV"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "ready列表内；page<=1禁用",
+      "handler": "goPage检查1..pageCount；保留其他query，page=1省略，清topic",
+      "variants": ["first-disabled", "later-page"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "topics"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "page-two"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "页大小20，41总数为合成布局，不宣称真实全量任务。"
+    },
+    {
+      "actionId": "TR-PAGE-NEXT",
+      "label": "下一页",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1"],
+      "sourceContractKeys": ["TR-PAGE-NEXT"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "ready列表内；page>=pageCount禁用",
+      "handler": "goPage检查范围并push，清topic；查询watch重读",
+      "variants": ["next", "last-disabled"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "page-two"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前页排序不保证跨页排名；所有分页组合尚未穷尽。"
+    },
+    {
+      "actionId": "TR-HELP",
+      "label": "展开解释",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1"],
+      "sourceContractKeys": ["TR-HELP：原生details展开"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "topics内原生details，独立于ready状态",
+      "handler": "summary展开帮助；不请求/不计算置信度",
+      "variants": ["closed", "open"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "help"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源帮助称按数量/新鲜度计算置信度，与现有insufficient_data合同不一致；提案诚实文案未迁入。"
+    },
+    {
+      "actionId": "TR-RELOAD",
+      "label": "重新读取规则状态",
+      "kind": "read",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1"],
+      "sourceContractKeys": ["TR-RELOAD：规则状态恢复"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "rules且state不为ready/empty时UiStatePanel primary",
+      "handler": "load并行GET列表/规则/管理者治理，再GET选中详情；不限于规则GET",
+      "variants": ["error", "expired", "blocked", "loading"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "rules-error"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rules"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "该面板后的rules v-for无else，旧规则仍可展示；不把C稿隐藏旧条目当修复。"
+    },
+    {
+      "actionId": "TR-RULE-STATUS",
+      "label": "暂停或启用规则",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1"],
+      "sourceContractKeys": ["TR-RULE-STATUS：暂停/启用"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "仅canManage，按钮无busy禁用；requireTrendManage复核能力",
+      "handler": "PATCH现有id：status按enabled反转、expected_version、原collection_interval_minutes及recommendation_min_source_count；Object.assign返回结果",
+      "variants": ["enabled-to-paused", "paused-to-enabled", "failure", "repeat"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "rules"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rules-paused"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rules-failed-sources"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "下一次用返回version，但并发重入/旧对象结果和重读仍待验；无next_collection_at不能推断已暂停。"
+    },
+    {
+      "actionId": "TR-RULE-RESULTS",
+      "label": "查看规则趋势结果",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1"],
+      "sourceContractKeys": ["TR-RULE-RESULTS：首关键词筛选"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "规则每行read角色可用",
+      "handler": "只设filters.q=include_keywords[0]或空，再applyFilters；保留现有market/category/status，清page/topic/section",
+      "variants": ["first-keyword", "missing-keyword", "existing-filter", "legacy-tab"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filtered"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rules-readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是精确rule_id筛选，也不一定清除其他条件；C稿与原源URL兼容需逐项验收。"
+    },
+    {
+      "actionId": "TR-ANOMALY-SUBMIT",
+      "label": "创建或复用质量工单",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#470531a4d9d0cddb.1",
+        "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1"
+      ],
+      "sourceContractKeys": ["TR-ANOMALY-SUBMIT表单", "TR-ANOMALY-SUBMIT按钮"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "有selected/anomalyEvidence/管理权限；按钮trim原因>=2且非busy；HTML2..500",
+      "handler": "POST /trends/{selected.id}/evidence/{evidenceId}/quality-issues，severity和trim reason；成功记qualityIssueIds，关窗；失败保留",
+      "variants": ["warning", "critical", "busy", "failed", "created", "existing"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-created"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-existing"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "severity不是来源身份；created=false仍成功，内存id不证明下次服务端无工单；切主题与晚到结果待验。"
+    },
+    {
+      "actionId": "TR-ANOMALY-CLOSE",
+      "label": "关闭异常报告",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1",
+        "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1"
+      ],
+      "sourceContractKeys": ["TR-ANOMALY-CLOSE：叉号", "TR-ANOMALY-CLOSE：取消"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "叉号/取消无busy禁用；role div无原生Escape合同",
+      "handler": "anomalyEvidence=null，原因值不在此清空；下次openAnomaly重置warning及空原因",
+      "variants": ["cross", "cancel", "busy-close"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "C稿原生dialog、锁定与返焦不是源实现；关窗不取消已发请求。"
+    },
+    {
+      "actionId": "TR-RELEVANCE-SUBMIT",
+      "label": "提交无关或恢复相关",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#eefb1c65886b1a81.1",
+        "apps/web/src/components/TrendDashboard.vue#5ddc6be7e1b242d6.1"
+      ],
+      "sourceContractKeys": ["TR-RELEVANCE-SUBMIT表单", "TR-RELEVANCE-SUBMIT按钮"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "有selected/relevanceDialog/管理权限；按钮trim原因>=2且非busy，HTML2..500",
+      "handler": "POST /trends/id/relevance：status、trim reason、expected_version；await后不论成功都清dialog/reason，成功load",
+      "variants": ["irrelevant", "restore", "busy", "failed", "saved"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "irrelevant-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "irrelevant-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "irrelevant-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "irrelevant-saved"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "restore-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "restore-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "restore-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源失败关闭丢原因已隔离复现，C稿失败保留未修Vue；不能用正常成功图抵扣失败。"
+    },
+    {
+      "actionId": "TR-RELEVANCE-CLOSE",
+      "label": "关闭相关性表单",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#690d51553ff51b5d.1",
+        "apps/web/src/components/TrendDashboard.vue#51e4bb1af788a0bf.1"
+      ],
+      "sourceContractKeys": ["TR-RELEVANCE-CLOSE：叉号", "TR-RELEVANCE-CLOSE：取消"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "两变体叉号/取消无busy禁用",
+      "handler": "relevanceDialog=null；此处不清原因，下次openRelevance清空",
+      "variants": ["cross", "cancel", "busy-close"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "irrelevant-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "restore-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "与提交函数失败清空不同；原div没有统一键盘/返焦处理。"
+    },
+    {
+      "actionId": "TR-FILTER-APPLY",
+      "label": "应用筛选",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#5dfd077f141d48f4.1",
+        "apps/web/src/components/TrendFilterPanel.vue#3cacb9b51913365b.1"
+      ],
+      "sourceContractKeys": ["TR-FILTER-APPLY表单", "TR-FILTER-APPLY按钮"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "五输入当前草稿，submit进入applyFilters；不trim q/category",
+      "handler": "push q/market/category/status/sort，清page/topic/section，保留其他query；若fullPath未变则load",
+      "variants": ["normal", "same-url", "all-status", "dirty"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "filtered"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "all-status"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "全部status空被省略，syncFromRoute恢复active，旧缺口再次复验；shared capture先关闭不代表读取成功。"
+    },
+    {
+      "actionId": "TR-FILTER-EDIT.market",
+      "label": "修改市场草稿",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#be2b881b65e1cc00.1"],
+      "sourceContractKeys": ["TR-FILTER-EDIT.market"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "全部/US；原生受控输入",
+      "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
+      "variants": ["draft", "applied"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+    },
+    {
+      "actionId": "TR-FILTER-EDIT.category",
+      "label": "修改分类草稿",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#49faf4c9e9529254.1"],
+      "sourceContractKeys": ["TR-FILTER-EDIT.category"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "maxlength80；原生受控输入",
+      "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
+      "variants": ["draft", "applied"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-edited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+    },
+    {
+      "actionId": "TR-FILTER-EDIT.status",
+      "label": "修改状态草稿",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#d6fc8f0fd1a6197f.1"],
+      "sourceContractKeys": ["TR-FILTER-EDIT.status"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "active/irrelevant/stale/空；原生受控输入",
+      "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
+      "variants": ["draft", "applied"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "all-status"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+    },
+    {
+      "actionId": "TR-FILTER-EDIT.q",
+      "label": "修改关键词草稿",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#0fb74fcff8527527.1"],
+      "sourceContractKeys": ["TR-FILTER-EDIT.q"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "maxlength200；原生受控输入",
+      "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
+      "variants": ["draft", "applied"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-edited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+    },
+    {
+      "actionId": "TR-FILTER-SORT",
+      "label": "切换本页排序草稿",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#65cf69becacd32e0.1"],
+      "sourceContractKeys": ["TR-FILTER-SORT"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "impact/latest/momentum/followed四选项",
+      "handler": "emit updateSort→父sort立即变化，sortedTopics重排当前20项；应用后才写URL，GET不传sort",
+      "variants": ["impact", "latest", "momentum", "followed"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "filtered"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是全局排序；未应用草稿已经改变本页顺序，与URL不同。"
+    },
+    {
+      "actionId": "TR-FILTER-CLEAR",
+      "label": "清除筛选",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#45fe0a56771e7ccc.1"],
+      "sourceContractKeys": ["TR-FILTER-CLEAR"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "筛选表单type=button，不触发shared submit.capture",
+      "handler": "清q/market/category，status=active，sort=impact，然后applyFilters",
+      "variants": ["clear", "already-default"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不恢复全部状态；保留legacy tab及未知query，移动抽屉不会因clear按钮自动submit关闭。"
+    },
+    {
+      "actionId": "TR-FILTER-COPY",
+      "label": "复制已应用视图网址",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#1ad5cc0a1ffb53d8.1"],
+      "sourceContractKeys": ["TR-FILTER-COPY"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "type=button，无服务端保存动作",
+      "handler": "navigator.clipboard.writeText(window.location.href)，失败提示复制地址；不应用当前草稿",
+      "variants": ["success", "clipboard-failed", "unapplied-draft"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "filter-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "copy-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "本轮无真实剪贴板写入；原型只展示复制意图，不是实际权限/剪贴板测试。"
+    },
+    {
+      "actionId": "TR-BACK",
+      "label": "返回趋势列表焦点",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#e7201768235a6ce7.1"],
+      "sourceContractKeys": ["TR-BACK：只切移动焦点"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "详情具名返回；源CSS决定移动可见范围",
+      "handler": "returnToTopicList仅mobileDetailOpen=false，不删除topic/query，也不重读",
+      "variants": ["mobile-return", "deep-link-reload"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "topics"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "C稿桌面也单焦点返回，与源双栏不同；reload含topic仍进详情不能误报URL清空。"
+    },
+    {
+      "actionId": "TR-FOLLOW",
+      "label": "关注或取消关注",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#2e0bfe1a9646767e.1"],
+      "sourceContractKeys": ["TR-FOLLOW：关注/取消"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "canManage；按钮与函数均无busy防重入",
+      "handler": "PUT或DELETE /trends/{selected.id}/follow，无body；成功使用当时selected和其id同步followed",
+      "variants": ["follow", "unfollow", "busy", "failure", "switched-selection"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "followed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "follow-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "follow-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源隔离已确认A请求等待期间selected换B，返回后B详情/列表被更新而A未同步；非真实持久化错误证明。"
+    },
+    {
+      "actionId": "TR-OPPORTUNITY-NAV",
+      "label": "转为机会预填导航",
+      "kind": "navigation",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#983f4f1540678cfc.1"],
+      "sourceContractKeys": ["TR-OPPORTUNITY-NAV"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "详情链接不以canManage隐藏；目标权限独立裁决",
+      "handler": "/opportunities?source_topic_id=...&name=...&market=...&category=...，各值编码",
+      "variants": ["selected", "readonly"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不调用POST、不走/opportunities/start，也不表示已通过机会质量门或可以自动采纳。"
+    },
+    {
+      "actionId": "TR-RELEVANCE-OPEN.irrelevant",
+      "label": "打开标记无关",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#0c3b34e3fa894dd6.1"],
+      "sourceContractKeys": ["TR-RELEVANCE-OPEN.irrelevant"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "canManage且detail.status!=irrelevant，无busy禁用",
+      "handler": "openRelevance('irrelevant')检查manage、清原因、打开相应变体",
+      "variants": ["active", "stale", "busy"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "irrelevant-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原始证据不删除；不是直接提交。"
+    },
+    {
+      "actionId": "TR-RELEVANCE-OPEN.active",
+      "label": "打开恢复相关",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#8449f6b045562349.1"],
+      "sourceContractKeys": ["TR-RELEVANCE-OPEN.active"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "v-else-if canManage，即irrelevant主题，无busy禁用",
+      "handler": "openRelevance('active')检查manage并清原因",
+      "variants": ["irrelevant", "busy"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "restore-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "恢复是新相关性记录，不抹除历史。"
+    },
+    {
+      "actionId": "TR-EVIDENCE-ORIGINAL",
+      "label": "打开原始来源",
+      "kind": "navigation",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendEvidenceTimeline.vue#dab48a89a829b124.1"
+      ],
+      "sourceContractKeys": ["TR-EVIDENCE-ORIGINAL：新窗口noopener/noreferrer"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "每条detail.evidence的canonical_url",
+      "handler": "a target=_blank rel=noopener noreferrer，原样href",
+      "variants": ["each-evidence", "long-title"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-long"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "本轮不访问合成原文；实际链接安全、失败和授权内容需另验。"
+    },
+    {
+      "actionId": "TR-ANOMALY-OPEN",
+      "label": "打开指定证据异常报告",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendEvidenceTimeline.vue#436d7eb2bb10817d.1"
+      ],
+      "sourceContractKeys": ["TR-ANOMALY-OPEN：busy/已有工单禁用"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "canManage；busy或qualityIssueIds[item.id]时禁用",
+      "handler": "向上转发原item；openAnomaly设证据、warning、空原因",
+      "variants": ["new", "busy-disabled", "existing-disabled"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "anomaly-existing"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "按精确证据id，不按当前行序号；所有动态证据消费者与迟到结果待验。"
+    },
+    {
+      "actionId": "TR-HISTORY-TECHNICAL",
+      "label": "展开历史操作者",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendEvidenceTimeline.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": ["TR-HISTORY-TECHNICAL：原生details"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "每条relevance_history内部原生details",
+      "handler": "summary展开actor_id，不写数据",
+      "variants": ["none", "history", "expanded"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "detail-history"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "完整历史行/长id/读屏与主题仍待验证。"
+    },
+    {
+      "actionId": "TR-RULE-SUBMIT",
+      "label": "提交八字段监控规则",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendRuleDialog.vue#b2c35007732f84af.1",
+        "apps/web/src/components/TrendRuleDialog.vue#d47ebd79f8eb69dd.1"
+      ],
+      "sourceContractKeys": ["TR-RULE-SUBMIT表单", "TR-RULE-SUBMIT按钮"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "HTML名称/包含词/市场/语言required，提交按钮busy禁用；submit函数不检查busy",
+      "handler": "emit draft：逗号/中文逗号/换行拆词trim去空但不去重；原name/market/language，category空为null，数字周期/门槛，in_app；父POST",
+      "variants": ["default", "edited", "duplicate", "busy", "failed", "saved"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-duplicate"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "7周期/3门槛不扩成API全部允许值；源实际重复词校验报400；源窗外错误/关闭锁定未修。"
+    },
+    {
+      "actionId": "TR-RULE-CLOSE",
+      "label": "取消创建监控",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendRuleDialog.vue#3886e9e1d2205bab.1",
+        "apps/web/src/components/TrendRuleDialog.vue#1c6857e568a31cf2.1"
+      ],
+      "sourceContractKeys": ["TR-RULE-CLOSE：叉号", "TR-RULE-CLOSE：取消"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "叉号/取消无busy禁用",
+      "handler": "emit close→showRule=false，v-if销毁子form；重开默认值，不保留失败关闭前草稿",
+      "variants": ["cross", "cancel", "busy-close", "reopen-default"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rule-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "与异常/相关性ref保留不同；源无初焦点/Escape/循环/返焦，C稿为提案。"
+    },
+    {
+      "actionId": "TR-PROPOSE",
+      "label": "提交合并或拆分提议",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#bcbaae66b685ebbe.1",
+        "apps/web/src/components/TrendChangeQueue.vue#6af3244e4e31bef4.1"
+      ],
+      "sourceContractKeys": ["TR-PROPOSE表单", "TR-PROPOSE按钮"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "selected、原因trim>=2；按钮还检查busy、sourceIds或signalIds/新标题；函数只有selected/原因早退",
+      "handler": "submitProposal发operation、target、按模式source_topic_ids/signal_ids/new_title/new_category、expected_versions、reason；父POST队列不执行",
+      "variants": ["merge", "split", "busy", "failed", "queued"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "merge-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "split-edited"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "proposal-busy"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "proposal-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "proposal-queued"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "expected_versions遍历残留sourceIds；候选限当前页同市场/语言active，但目标活动/保留信号由后端验；成功父不调用resetProposal。"
+    },
+    {
+      "actionId": "TR-PROPOSAL-MODE.merge",
+      "label": "切换合并提议",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#f8b877ec4618bce3.1"],
+      "sourceContractKeys": ["TR-PROPOSAL-MODE.merge"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "治理内联表单，按钮无busy限制",
+      "handler": "operation='merge'，不清sourceIds/signalIds/newTitle/newCategory/reason",
+      "variants": ["merge", "from-split"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "governance"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "merge-edited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不把切模式当重新建表单；旧草稿/版本混合需明确呈现。"
+    },
+    {
+      "actionId": "TR-PROPOSAL-MODE.split",
+      "label": "切换拆分提议",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#c375aa8bfaab646c.1"],
+      "sourceContractKeys": ["TR-PROPOSAL-MODE.split"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "治理内联表单，按钮无busy限制",
+      "handler": "operation='split'，保留此前所有草稿；证据checkbox按selected.evidence展开",
+      "variants": ["split", "from-merge"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "split-edited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "无前端强制原主题保留一条；真实后端拒绝链待验，不擅改业务。"
+    },
+    {
+      "actionId": "TR-DECISION-OPEN.reject",
+      "label": "展开驳回说明",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#dea3207939a5a086.1"],
+      "sourceContractKeys": ["TR-DECISION-OPEN.reject"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "队列item.status=pending，无前端同人限制或busy禁用",
+      "handler": "beginDecision保存item.id/action=reject并清原因，同一decision状态一次对应一条",
+      "variants": ["pending", "switch-row"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "reject-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "self-decision-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "提议人与决定人不同由后端确认，不伪称前端隐藏即授权。"
+    },
+    {
+      "actionId": "TR-DECISION-OPEN.confirm",
+      "label": "展开确认说明",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#3b88c0e433b7a2c1.1"],
+      "sourceContractKeys": ["TR-DECISION-OPEN.confirm"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "pending队列行，无busy禁用",
+      "handler": "beginDecision保存id/action=confirm并清原因",
+      "variants": ["pending", "switch-row"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "confirm-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "只是打开内联form，不执行合并/拆分。"
+    },
+    {
+      "actionId": "TR-DECIDE",
+      "label": "提交确认或驳回",
+      "kind": "write",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#00ba2050cb620a7e.1",
+        "apps/web/src/components/TrendChangeQueue.vue#4bd2e2d1bd990e41.1"
+      ],
+      "sourceContractKeys": ["TR-DECIDE表单", "TR-DECIDE按钮"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "decision.requestId=item.id；原因2..1000；按钮busy/trim<2禁用，函数只检查trim原因",
+      "handler": "子emit requestId/decision/reason/expectedVersion；父POST /trends/change-requests/id/decisions映射expected_version，成功load",
+      "variants": ["confirm", "reject", "failed", "self-forbidden", "completed"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "confirm-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "confirmed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "reject-failed"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "rejected"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "self-decision-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "失败保留；成功状态依赖重读，其他管理员、事务版本与关联迁移未真实验证。"
+    },
+    {
+      "actionId": "TR-DECISION-CANCEL",
+      "label": "收起决定表单",
+      "kind": "local",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#b722bb8cd6a19824.1"],
+      "sourceContractKeys": ["TR-DECISION-CANCEL"],
+      "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
+      "condition": "内联取消无busy禁用",
+      "handler": "decision.requestId=''，不清reason/action；下次beginDecision才清原因",
+      "variants": ["cancel", "busy-cancel", "reopen"],
+      "scenes": [
+        {
+          "package": "trend-direction-c",
+          "scene": "confirm-open"
+        },
+        {
+          "package": "trend-direction-c",
+          "scene": "reject-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-trend-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是撤销已发治理决定，也不新增确认弹窗。"
+    },
+    {
+      "actionId": "TR-FILTER-FORWARD",
+      "label": "父子事件完整转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#377da84835906aec.1"],
+      "sourceContractKeys": ["TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发"],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "topics内筛选消费者，移动760px及以下覆盖层",
+      "handler": "原样事件参数转给父处理器；模型更新不是额外API",
+      "variants": ["@apply", "@clear", "@save-view", "@update-filters", "@update-sort"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": [
+        "TR-FILTER-APPLY",
+        "TR-FILTER-CLEAR",
+        "TR-FILTER-COPY",
+        "TR-FILTER-EDIT.market",
+        "TR-FILTER-EDIT.category",
+        "TR-FILTER-EDIT.status",
+        "TR-FILTER-EDIT.q",
+        "TR-FILTER-SORT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
+          "event": "@apply",
+          "handler": "applyFilters",
+          "targets": ["TR-FILTER-APPLY"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
+          "event": "@clear",
+          "handler": "clearFilters",
+          "targets": ["TR-FILTER-CLEAR"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
+          "event": "@save-view",
+          "handler": "saveViewLink",
+          "targets": ["TR-FILTER-COPY"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
+          "event": "@update-filters",
+          "handler": "Object.assign(filters, $event)",
+          "targets": [
+            "TR-FILTER-EDIT.market",
+            "TR-FILTER-EDIT.category",
+            "TR-FILTER-EDIT.status",
+            "TR-FILTER-EDIT.q"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
+          "event": "@update-sort",
+          "handler": "sort = $event",
+          "targets": ["TR-FILTER-SORT"]
+        }
+      ]
+    },
+    {
+      "actionId": "TR-DETAIL-FORWARD",
+      "label": "父子事件完整转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1"],
+      "sourceContractKeys": ["TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发"],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "原样事件参数转给父处理器；模型更新不是额外API",
+      "variants": ["@back", "@follow", "@create-rule", "@change-relevance", "@report-anomaly"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": [
+        "TR-BACK",
+        "TR-FOLLOW",
+        "TR-RULE-OPEN",
+        "TR-RELEVANCE-OPEN.irrelevant",
+        "TR-RELEVANCE-OPEN.active",
+        "TR-ANOMALY-OPEN"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
+          "event": "@back",
+          "handler": "returnToTopicList",
+          "targets": ["TR-BACK"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
+          "event": "@follow",
+          "handler": "follow",
+          "targets": ["TR-FOLLOW"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
+          "event": "@create-rule",
+          "handler": "showRule = true",
+          "targets": ["TR-RULE-OPEN"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
+          "event": "@change-relevance",
+          "handler": "openRelevance",
+          "targets": ["TR-RELEVANCE-OPEN.irrelevant", "TR-RELEVANCE-OPEN.active"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
+          "event": "@report-anomaly",
+          "handler": "openAnomaly",
+          "targets": ["TR-ANOMALY-OPEN"]
+        }
+      ]
+    },
+    {
+      "actionId": "TR-GOVERNANCE-FORWARD",
+      "label": "父子事件完整转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1"],
+      "sourceContractKeys": ["TR-PROPOSE/TR-DECIDE转发"],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "原样事件参数转给父处理器；模型更新不是额外API",
+      "variants": ["@propose", "@decide"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": ["TR-PROPOSE", "TR-DECIDE"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
+          "event": "@propose",
+          "handler": "proposeTopicChange",
+          "targets": ["TR-PROPOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
+          "event": "@decide",
+          "handler": "decideTopicChange",
+          "targets": ["TR-DECIDE"]
+        }
+      ]
+    },
+    {
+      "actionId": "TR-RULE-CALLER",
+      "label": "父子事件完整转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+        "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RULE-CLOSE/TR-RULE-SUBMIT转发",
+        "一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1"
+      ],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "原样事件参数转给父处理器；模型更新不是额外API",
+      "variants": ["@close", "@submit"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": ["TR-RULE-CLOSE", "TR-RULE-SUBMIT"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+          "event": "@close",
+          "handler": "showRule = false",
+          "targets": ["TR-RULE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+          "event": "@submit",
+          "handler": "createRule",
+          "targets": ["TR-RULE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
+          "event": "@close",
+          "handler": "showRule = false",
+          "targets": ["TR-RULE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
+          "event": "@submit",
+          "handler": "createRule",
+          "targets": ["TR-RULE-SUBMIT"]
+        }
+      ]
+    },
+    {
+      "actionId": "TR-ANOMALY-DEFINITION",
+      "label": "模态定义或共享消费者关联",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1"],
+      "sourceContractKeys": [
+        "warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用"
+      ],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "variants": ["listed-consumer-variants"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": ["TR-ANOMALY-OPEN", "TR-ANOMALY-SUBMIT", "TR-ANOMALY-CLOSE"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "TR-RELEVANCE-DEFINITION",
+      "label": "模态定义或共享消费者关联",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1"],
+      "sourceContractKeys": [
+        "同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；当前失败也关闭清空，需修复验证，不认可为最终体验"
+      ],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "variants": ["listed-consumer-variants"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": [
+        "TR-RELEVANCE-OPEN.irrelevant",
+        "TR-RELEVANCE-OPEN.active",
+        "TR-RELEVANCE-SUBMIT",
+        "TR-RELEVANCE-CLOSE"
+      ],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "TR-FILTER-CALLER",
+      "label": "模态定义或共享消费者关联",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#574e84bbfac61d8b.1"],
+      "sourceContractKeys": [
+        "760px及以下role=dialog，桌面group；打开焦点关闭键、Tab首尾/Escape/遮罩/叉号、关闭归还；submit.capture关闭，清除/复制不触发表单提交"
+      ],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "topics内筛选消费者，移动760px及以下覆盖层",
+      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "variants": ["listed-consumer-variants"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": [
+        "TR-FILTER-APPLY",
+        "TR-FILTER-CLEAR",
+        "TR-FILTER-COPY",
+        "TR-FILTER-EDIT.market",
+        "TR-FILTER-EDIT.category",
+        "TR-FILTER-EDIT.status",
+        "TR-FILTER-EDIT.q",
+        "TR-FILTER-SORT"
+      ],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "TR-EVIDENCE-FORWARD",
+      "label": "父子事件完整转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#ebdc4bab362bae22.1"],
+      "sourceContractKeys": ["TR-ANOMALY-OPEN转发"],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "原样事件参数转给父处理器；模型更新不是额外API",
+      "variants": ["@report-anomaly"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": ["TR-ANOMALY-OPEN"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDetailPanel.vue#ebdc4bab362bae22.1",
+          "event": "@report-anomaly",
+          "handler": "emit('reportAnomaly', $event)",
+          "targets": ["TR-ANOMALY-OPEN"]
+        }
+      ]
+    },
+    {
+      "actionId": "TR-RULE-DEFINITION",
+      "label": "模态定义或共享消费者关联",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1"],
+      "sourceContractKeys": [
+        "一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1"
+      ],
+      "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
+      "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
+      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "variants": ["listed-consumer-variants"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "forwardsTo": ["TR-RULE-OPEN", "TR-RULE-SUBMIT", "TR-RULE-CLOSE"],
+      "forwardBindings": []
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": [
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendFilterPanel.vue",
+      "apps/web/src/components/TrendDetailPanel.vue",
+      "apps/web/src/components/TrendEvidenceTimeline.vue",
+      "apps/web/src/components/TrendRuleDialog.vue",
+      "apps/web/src/components/TrendChangeQueue.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+      "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+      "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+      "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
+      "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+      "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
+      "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
+      "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+      "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "binding": "anomalySeverity",
+        "meaning": "warning/critical；打开异常重置warning，不是从证据自动推断风险。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "binding": "anomalyReason",
+        "meaning": "异常原因required 2..500，提交trim；关闭ref保留，重开清空，失败保留。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "binding": "relevanceReason",
+        "meaning": "相关性原因required 2..500，提交trim；当前失败也清空且关窗。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendEvidenceTimeline.vue",
+        "binding": "timelineSource",
+        "meaning": "来源select为空用aggregate；指定来源查timeline_sources，映射source_count=1；切detail.id清空，仅内存，不发API。",
+        "remaining": "此v-model没有独立旧action候选；必须单列消费者，不为填数捏造按钮ID；每来源/未知来源/重置/实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.name",
+        "meaning": "监控名称required maxlength120；submit不trim，后端另校验。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.include_keywords",
+        "meaning": "包含词required maxlength500；按英文/中文逗号和换行拆分trim去空，不去重。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.negative_keywords",
+        "meaning": "排除词可选maxlength500，同样拆分；不替代服务端规范化/重复拒绝。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.market",
+        "meaning": "独立required输入maxlength40，默认US；不等于筛选页只有US的select。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.language",
+        "meaning": "独立required输入maxlength40，默认en-US，不随市场自动联动。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.category",
+        "meaning": "可选maxlength80；空字符串转null，客户端不trim。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.collection_interval_minutes",
+        "meaning": "v-model.number，15/30/60/180/360/720/1440七选项。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "binding": "form.recommendation_min_source_count",
+        "meaning": "v-model.number，1/2/3三选项；只形成候选，不代表已可采纳。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "binding": "sourceIds",
+        "meaning": "merge候选checkbox数组，当前页/同市场语言/active/非目标；模式切换保留，expected_versions始终遍历。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "binding": "signalIds",
+        "meaning": "split证据checkbox数组，使用selected.evidence的实际id；原主题留一条由后端另验。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "binding": "newTitle",
+        "meaning": "split新标题required maxlength500，submit trim；模式切换保留。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "binding": "newCategory",
+        "meaning": "split可选分类maxlength80，trim后空为null。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "binding": "reason",
+        "meaning": "治理提议原因required 2..1000，submit trim；成功父load不调用子resetProposal。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "binding": "decision.reason",
+        "meaning": "confirm/reject内联原因required 2..1000，trim；beginDecision清空，cancel只清requestId，失败保留。",
+        "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "异常role=dialog div内form，精确证据和severity/reason提交；失败保留。",
+        "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。",
+        "variants": [
+          {
+            "name": "anomaly-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "anomaly-open"
+              }
+            ],
+            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "异常窗内说明aside，只解释工单关联；不是另一个弹窗。",
+        "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。",
+        "variants": [
+          {
+            "name": "anomaly-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "anomaly-open"
+              }
+            ],
+            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "相关性role=dialog div内form，同一结构两业务变体；当前失败也清空原因。",
+        "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。",
+        "variants": [
+          {
+            "name": "irrelevant-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "irrelevant-open"
+              }
+            ],
+            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+          },
+          {
+            "name": "restore-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "restore-open"
+              }
+            ],
+            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendFilterPanel.vue",
+        "tag": "ResponsiveFilterDrawer",
+        "ordinal": 1,
+        "shape": "responsive-filter",
+        "sourceBehavior": "一个ResponsiveFilterDrawer调用；760及以下dialog，桌面group；show/close/Tab/Escape/submit.capture均在共享实现。",
+        "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。",
+        "variants": [
+          {
+            "name": "filter-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "filter-open"
+              }
+            ],
+            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+          },
+          {
+            "name": "filter-edited",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "filter-edited"
+              }
+            ],
+            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendFilterPanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "搜索筛选form，应用提交，清除和复制type=button；排序草稿可立即重排。",
+        "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。",
+        "variants": [
+          {
+            "name": "filter-open",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "filter-open"
+              }
+            ],
+            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+          },
+          {
+            "name": "filter-edited",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "filter-edited"
+              }
+            ],
+            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "规则role div内八字段form，POST由父处理；不是P12七字段首次规则设置。",
+        "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。",
+        "variants": [
+          {
+            "name": "rule-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "rule-open"
+              }
+            ],
+            "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "候选不等于建议采纳的说明aside，无动作。",
+        "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。",
+        "variants": [
+          {
+            "name": "rule-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "rule-open"
+              }
+            ],
+            "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "固定站内通知说明aside，无邮件选择动作。",
+        "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。",
+        "variants": [
+          {
+            "name": "rule-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "rule-open"
+              }
+            ],
+            "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "治理合并/拆分共用内联form，切模式保留草稿，提交只入队。",
+        "remaining": "两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。",
+        "variants": [
+          {
+            "name": "merge-edited",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "merge-edited"
+              }
+            ],
+            "remaining": "两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。"
+          },
+          {
+            "name": "split-edited",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "split-edited"
+              }
+            ],
+            "remaining": "两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendChangeQueue.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "pending队列行内decision form，confirm/reject共用；requestId只允许一个行实例展开。",
+        "remaining": "两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。",
+        "variants": [
+          {
+            "name": "confirm-open",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "confirm-open"
+              }
+            ],
+            "remaining": "两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。"
+          },
+          {
+            "name": "reject-open",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "reject-open"
+              }
+            ],
+            "remaining": "两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "局部65候选包括60控件/事件、3role定义与2共享/规则调用；source scan与结构scan统计对象不同，不能合并为业务弹窗总数。",
+      "MonitoringReadinessStrip只展示事实；外层NavigationShell另审。UiStatePanel两个primary消费者已列，secondary未监听，不能宣称恢复链接真实可用。",
+      "ResponsiveFilterDrawer的show/close/遮罩/Tab/Escape由共享组件实现，当前只审一个调用；本页业务role div不复用它，不自动继承模态能力。",
+      "父/trends为reset_on_scope且提供组织/工作区；局部read/watch没有任务页active/代次保护不等于父无scope隔离。晚到读写结果和缓存激活仍需真实Vue/范围测试。"
+    ]
+  },
+  "compositionGaps": [
+    "42页面动作组的252代表视觉槽均未逐selector映射；146旧图涵盖68双端场景及10下部，不代表每按钮六态/动态行/全部主题。",
+    "源applyFilters全部status回active、相关性失败关窗清原因、已启用无时间仍显示已暂停等与C稿有差异，原型不得冒充修复。",
+    "本轮actual follow在惰性VM中确认A请求等待时selected改B，成功回写B详情及B列表，A未同步；setTab(topics)保留legacy tab=rules并恢复到rules。不是实际浏览器/持久化/权限失败证明，需列入真实实现验收。",
+    "三工作面共享单个state/busy；规则旧条目可与错误同屏，治理无同级状态面板；原型隔离失败、统一忙碌保护与原生模态仍待批准/实现。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "65局部源位置/51组=42页面动作+9转发/定义组，不是全站独立业务分母。18v-model与5受控筛选字段分别核对；原生details也不是弹窗。",
+    "所有source/scene引用与隔离函数输出不授予具体批准，不证明实际Vue/API/MySQL/治理执行/采集完成或部署。"
+  ]
+}

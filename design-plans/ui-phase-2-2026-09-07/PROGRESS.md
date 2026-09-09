@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P14趋势逐项语义
+
+从干净main/7b331ccc继续；前轮P13清单与批量风险证据为实质进展。requirement-to-implementation/ui-skills-root按map/蓝图/趋势合同追六组件、shared筛选、父传参及refreshScope。新增P14清单与审核入口，65源位置/51组（42页面动作、9转发/定义），18模型、10结构容器/15消费者场景关联；3role定义四业务弹窗，规则调用不重复计数，治理内联与共享筛选分开。复用146PNG，目检1440-detail及390-rule-open-lower，不追加同类图或伪称全图目检。
+
+最小校验通过全部候选/合同别名/转发/源hash/18模型/10结构/15关联，252视觉槽保留未映射。buildTrendDesignData执行八字段规则、七周期/三门槛、merge/split与排序/导航，实际重复词校验报trend_rule_keywords_duplicate；全部状态回active、相关性失败关窗清空仍未修。额外直接提取函数到惰性VM：legacy tab=rules执行setTab(topics)/sync后仍rules；follow向A发请求等待中selected换B，返回后B详情/列表变followed，A未同步。仅隔离函数证据，不是DOM/数据库错误证明；旧深链/结果对象归属列入实施验收，不扩大权限或数据规则。
+
+源读取无任务页同级局部代次保护，但父reset_on_scope与组织/工作区传参仍存在，不混报无租户隔离。未改生产apps/API/OpenAPI/配置/env/依赖/权限/数据库，无部署/重启；没有临时文件、浏览器或服务。初次候选工具返回因输出截断无法解析，缩小到必要字段后成功，未重启任何运行服务。下一P15及机会入口。
+
+最终动作报告生成及只读复验通过：16页/341唯一源位置/292按页累计组，254页面动作/22转发定义组、57页待同级映射；全站分母未冻结、具体批准0。设计交付报告生成/复验通过，76包9364PNG不变、840来源文件1439绑定，来源/PNG漂移及未登记PNG均0，8080 README链接有效。verify:docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件静态检查、format:check、新JSON定向Prettier与git diff --check通过。工具/测试/生产代码未改，不重复旧单元/Vue构建/E2E或真实服务测试；没有把隔离函数与图引用升级为真实运行验收。
+
 ## 2026-09-09 · P13今日工作逐项语义
 
 从干净main/8d9351b2继续；前轮P10/P12清单为实质进展。使用requirement-to-implementation和ui-skills-root，先map/蓝图及任务合同，再读TaskWorkspace/TaskListPanel/TaskBatchActions、父mode传参和useModalDialog。新增P13清单与人读审核入口，48局部源候选/36组、6模型与7结构容器；3原生dialog展开7业务变体。保留174逐控件视觉槽未映射、正常路由排除导出/详情编辑，复用66旧图，没有新增重复图片。

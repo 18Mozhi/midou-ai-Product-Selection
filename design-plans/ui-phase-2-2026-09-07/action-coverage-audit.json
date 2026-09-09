@@ -300,6 +300,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "ae595d43ae0be5e3aaf08acedb1b665178d9b12ca629863e2517b2ef35224f6f",
     "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "43bb22faf5a823e1ebc6ce744d8484a81c4b84d36cc01e44a01f3bfd757b26f5",
+    "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
+    "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "82e3dc5aef8c8e581cce8780636f5608d6ca49eb01b45fcbe9cfcae75b72cc80",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -326,7 +329,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "28c5fcb131ace956979a774af03de2e61ada72d993fd15d802adac225fec7e2d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "bfeaa27c4b97948ac0697be486a6a3b1fa360617bde87372e70f1fe5185573d7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "fa30731bf75806768234c07a3faaa61ac378984388ddda5d9bae3efbc367e713",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "98d47be158ab5585230b81ce52df2757d4d7c357ecb9b72edc086a282257dc18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "132b908d07d186c1e93ae0328a98277c807ebfe7591062e1d37ed0d53726af77",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "695797bc21f08b233461852d3a2156c8caa13358c127a27819f4015672cbd984",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "39122dbfd133dd632d56aa217eb6af3f280d86f837056483839b3c3625e3e63c",
@@ -399,13 +402,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 16,
     "oldOnlyIdentities": 15,
-    "reviewedPages": 15,
-    "explicitlyGroupedSourceSites": 276,
-    "semanticGroups": 241,
-    "routeActions": 212,
-    "wiringGroups": 13,
+    "reviewedPages": 16,
+    "explicitlyGroupedSourceSites": 341,
+    "semanticGroups": 292,
+    "routeActions": 254,
+    "wiringGroups": 22,
     "pagesWithoutExplicitSemanticReview": [
-      "P14",
       "P15",
       "P16",
       "P17",
@@ -904,13 +906,34 @@
       "path": "/trends",
       "title": "热点趋势",
       "oldStaticAssociatedCandidates": 107,
-      "review": null,
+      "review": {
+        "pageId": "P14",
+        "sourceSites": 65,
+        "semanticGroups": 51,
+        "routeActions": 42,
+        "wiringGroups": 9,
+        "excludedGroups": 0,
+        "writeActions": 8,
+        "unmappedVisualSlots": 252,
+        "surfaces": {
+          "callerFiles": 6,
+          "localModelBindings": 18,
+          "callerContainers": 10,
+          "consumerVariants": 15,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "trend-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "42页面动作组的252代表视觉槽均未逐selector映射；146旧图涵盖68双端场景及10下部，不代表每按钮六态/动态行/全部主题。",
+        "源applyFilters全部status回active、相关性失败关窗清原因、已启用无时间仍显示已暂停等与C稿有差异，原型不得冒充修复。",
+        "本轮actual follow在惰性VM中确认A请求等待时selected改B，成功回写B详情及B列表，A未同步；setTab(topics)保留legacy tab=rules并恢复到rules。不是实际浏览器/持久化/权限失败证明，需列入真实实现验收。",
+        "三工作面共享单个state/busy；规则旧条目可与错误同屏，治理无同级状态面板；原型隔离失败、统一忙碌保护与原生模态仍待批准/实现。"
+      ]
     },
     {
       "id": "P15",
@@ -1948,6 +1971,23 @@
         "callerFiles": 3,
         "localModelBindings": 6,
         "callerContainers": 7,
+        "consumerVariants": 15,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P14",
+      "sourceSites": 65,
+      "semanticGroups": 51,
+      "routeActions": 42,
+      "wiringGroups": 9,
+      "excludedGroups": 0,
+      "writeActions": 8,
+      "unmappedVisualSlots": 252,
+      "surfaces": {
+        "callerFiles": 6,
+        "localModelBindings": 18,
+        "callerContainers": 10,
         "consumerVariants": 15,
         "runtimeAcceptance": "unproven"
       }
@@ -47674,7 +47714,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-PROPOSE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#f8b877ec4618bce3.1",
@@ -47695,7 +47741,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-PROPOSAL-MODE.merge",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#c375aa8bfaab646c.1",
@@ -47716,7 +47768,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-PROPOSAL-MODE.split",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#6af3244e4e31bef4.1",
@@ -47737,7 +47795,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-PROPOSE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#dea3207939a5a086.1",
@@ -47767,7 +47831,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-DECISION-OPEN.reject",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#3b88c0e433b7a2c1.1",
@@ -47797,7 +47867,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-DECISION-OPEN.confirm",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#00ba2050cb620a7e.1",
@@ -47831,7 +47907,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-DECIDE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#b722bb8cd6a19824.1",
@@ -47865,7 +47947,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-DECISION-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendChangeQueue.vue#4bd2e2d1bd990e41.1",
@@ -47899,7 +47987,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-DECIDE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
@@ -47925,7 +48019,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1",
@@ -47946,7 +48046,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-REFRESH-SOURCES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
@@ -47967,7 +48073,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-TAB-RULES",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1",
@@ -47988,7 +48100,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-TAB-TOPICS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1",
@@ -48009,7 +48127,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-TAB-RULES",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1",
@@ -48035,7 +48159,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-TAB-GOVERNANCE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
@@ -48061,7 +48191,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-FORWARD",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1",
@@ -48091,7 +48227,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RECOVER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1",
@@ -48125,7 +48267,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-TOPIC-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1",
@@ -48155,7 +48303,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-PAGE-PREV",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1",
@@ -48185,7 +48339,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-PAGE-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
@@ -48219,7 +48379,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-DETAIL-FORWARD",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
@@ -48245,7 +48411,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-HELP",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
@@ -48275,7 +48447,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1",
@@ -48305,7 +48483,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
@@ -48339,7 +48523,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
@@ -48373,7 +48563,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-STATUS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
@@ -48403,7 +48599,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-RESULTS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
@@ -48429,7 +48631,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-GOVERNANCE-FORWARD",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
@@ -48455,7 +48663,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-CALLER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
@@ -48481,7 +48695,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-CALLER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1",
@@ -48507,7 +48727,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#470531a4d9d0cddb.1",
@@ -48533,7 +48759,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1",
@@ -48559,7 +48791,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1",
@@ -48585,7 +48823,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
@@ -48611,7 +48855,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1",
@@ -48637,7 +48887,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#eefb1c65886b1a81.1",
@@ -48663,7 +48919,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#690d51553ff51b5d.1",
@@ -48689,7 +48951,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#51e4bb1af788a0bf.1",
@@ -48715,7 +48983,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5ddc6be7e1b242d6.1",
@@ -48741,7 +49015,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#e7201768235a6ce7.1",
@@ -48762,7 +49042,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-BACK",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#2e0bfe1a9646767e.1",
@@ -48788,7 +49074,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FOLLOW",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#658c4019fe00727f.1",
@@ -48814,7 +49106,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#983f4f1540678cfc.1",
@@ -48835,7 +49133,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-OPPORTUNITY-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#0c3b34e3fa894dd6.1",
@@ -48861,7 +49165,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-OPEN.irrelevant",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#8449f6b045562349.1",
@@ -48887,7 +49197,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-OPEN.active",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDetailPanel.vue#ebdc4bab362bae22.1",
@@ -48908,7 +49224,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-EVIDENCE-FORWARD",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendEvidenceTimeline.vue#dab48a89a829b124.1",
@@ -48934,7 +49256,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-EVIDENCE-ORIGINAL",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendEvidenceTimeline.vue#436d7eb2bb10817d.1",
@@ -48964,7 +49292,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendEvidenceTimeline.vue#1c008f867673db60.1",
@@ -48990,7 +49324,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-HISTORY-TECHNICAL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#574e84bbfac61d8b.1",
@@ -49011,7 +49351,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-CALLER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#5dfd077f141d48f4.1",
@@ -49032,7 +49378,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-APPLY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#be2b881b65e1cc00.1",
@@ -49053,7 +49405,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-EDIT.market",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#49faf4c9e9529254.1",
@@ -49074,7 +49432,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-EDIT.category",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#d6fc8f0fd1a6197f.1",
@@ -49095,7 +49459,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-EDIT.status",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#0fb74fcff8527527.1",
@@ -49116,7 +49486,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-EDIT.q",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#65cf69becacd32e0.1",
@@ -49137,7 +49513,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-SORT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#3cacb9b51913365b.1",
@@ -49158,7 +49540,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-APPLY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#45fe0a56771e7ccc.1",
@@ -49179,7 +49567,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-CLEAR",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendFilterPanel.vue#1ad5cc0a1ffb53d8.1",
@@ -49200,7 +49594,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-FILTER-COPY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1",
@@ -49221,7 +49621,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#b2c35007732f84af.1",
@@ -49242,7 +49648,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#3886e9e1d2205bab.1",
@@ -49263,7 +49675,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#1c6857e568a31cf2.1",
@@ -49284,7 +49702,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#d47ebd79f8eb69dd.1",
@@ -49305,7 +49729,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
