@@ -1,3 +1,7 @@
+.skip:not(:focus) {
+  opacity: 0;
+  pointer-events: none;
+}
 .review {
   display: flex;
   flex-wrap: wrap;
@@ -449,6 +453,20 @@ summary {
 .field-error {
   font-size: 13px;
   color: var(--danger);
+}
+.j-work input:not([type="radio"]):hover:not(:disabled),
+.j-work textarea:hover:not(:disabled) {
+  border-color: var(--blue);
+}
+.j-work input:not([type="radio"]):disabled,
+.j-work textarea:disabled {
+  background: #e9edf2;
+  color: var(--muted);
+  cursor: not-allowed;
+}
+.j-work input[aria-invalid="true"]:hover:not(:disabled),
+.j-work textarea[aria-invalid="true"]:hover:not(:disabled) {
+  border-color: var(--danger);
 }
 @media (max-width: 1050px) {
   .j-layout {

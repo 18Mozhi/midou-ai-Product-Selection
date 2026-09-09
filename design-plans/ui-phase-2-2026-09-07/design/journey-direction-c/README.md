@@ -2,7 +2,7 @@
 
 状态：用户已批准本页整体布局，继续细化按钮；具体控制状态及完整页面验收仍待审核。[批准边界](../../P16-C-R2-LAYOUT-APPROVAL.md)。
 
-59个全页场景×双端=118图；10类代表控件共50种状态×双端=100图，总218张永久审核图。零业务弹窗。8动作组的40个适用视觉槽已关联，8个导航禁用/忙碌槽不适用；不等于全页按钮变体或所有输入状态已完成。
+67个全页场景×双端=134图；18类代表控件共102种状态×双端=204图，总338张永久审核图。零业务弹窗。8动作组40个适用视觉槽、8导航不适用的口径不变；新增5个实际字段的8种变体，不重复计算业务动作。
 
 [交互原型](index.html) · [源与图证据](evidence.json) · [页面规格](../../page-specs/P16.md) · [当前合同第9节](../../selection-journey-contract-review.md) · [统一质量门决定](../../JOURNEY-ADOPTION-DECISION.md)
 
@@ -13,6 +13,8 @@
 顶部“审核场景”与“推进隔离样例”仅用于审核；创建、采纳、观察/驳回、恢复采用内存样例返回，不访问API、原文或真实浏览器存储，不启动采集或轮询。相应按钮只记录导航或请求意图，合格样例来自已有隔离回归，不是真实机会推荐。实际输入仍是Google新闻线索，不承诺抓到ASIN价格。
 
 ## 与真实源码的对应及差异
+
+- [字段审核](../../P16-FIELD-STATE-REVIEW.md)：三种输入和原因新增内联错误、错误焦点与修正清理，键盘切换保留焦点及草稿；长度限制和API业务规则不变。忙碌冻结等仍仅为图稿改善，真实Vue未改。
 
 - 统一采纳门与保存成功清错已在c31fddc7实现；助手重新执行当前Vue eligibility、提交函数、三输入校验及禁采纳零请求。采用实际请求字段，adopt携带选中证据ID，observe/reject恒null，不新增expected_version。
 - 五项分别缺失、无已评估机会、合格采纳、提交中、409冲突与刷新、采纳成功均有图。冲突时明确“上次读取状态”；刷新后显示缺门，保留原因，可改为观察。成功只按返回ID显示机会/验证任务链接。
@@ -142,8 +144,76 @@
 | 权限说明副按钮 / 键盘焦点  | [桌面](1440-control-secondary-focus.png)     | [手机](390-control-secondary-focus.png)     |
 | 权限说明副按钮 / 按下      | [桌面](1440-control-secondary-pressed.png)   | [手机](390-control-secondary-pressed.png)   |
 
+## 输入与选择补充图（待审核）
+
+| 整页错误或忙碌场景 | 桌面                              | 手机                             |
+| ------------------ | --------------------------------- | -------------------------------- |
+| 关键词必填错误     | [桌面](1440-keyword-required.png) | [手机](390-keyword-required.png) |
+| ASIN格式错误       | [桌面](1440-asin-invalid.png)     | [手机](390-asin-invalid.png)     |
+| 链接格式错误       | [桌面](1440-url-invalid.png)      | [手机](390-url-invalid.png)      |
+| 原因必填错误       | [桌面](1440-reason-required.png)  | [手机](390-reason-required.png)  |
+| ASIN恢复中         | [桌面](1440-asin-restoring.png)   | [手机](390-asin-restoring.png)   |
+| 链接恢复中         | [桌面](1440-url-restoring.png)    | [手机](390-url-restoring.png)    |
+| ASIN提交中         | [桌面](1440-asin-create-busy.png) | [手机](390-asin-create-busy.png) |
+| 链接提交中         | [桌面](1440-url-create-busy.png)  | [手机](390-url-create-busy.png)  |
+
+| 控件/状态                  | 桌面                                            | 手机                                           |
+| -------------------------- | ----------------------------------------------- | ---------------------------------------------- |
+| 输入类型 / 默认            | [桌面](1440-control-kind-default.png)           | [手机](390-control-kind-default.png)           |
+| 输入类型 / 悬停            | [桌面](1440-control-kind-hover.png)             | [手机](390-control-kind-hover.png)             |
+| 输入类型 / 键盘焦点        | [桌面](1440-control-kind-focus.png)             | [手机](390-control-kind-focus.png)             |
+| 输入类型 / 按下            | [桌面](1440-control-kind-pressed.png)           | [手机](390-control-kind-pressed.png)           |
+| 输入类型 / 禁用            | [桌面](1440-control-kind-disabled.png)          | [手机](390-control-kind-disabled.png)          |
+| 输入类型 / 恢复/提交期间   | [桌面](1440-control-kind-busy.png)              | [手机](390-control-kind-busy.png)              |
+| 候选选择 / 默认            | [桌面](1440-control-candidate-default.png)      | [手机](390-control-candidate-default.png)      |
+| 候选选择 / 悬停            | [桌面](1440-control-candidate-hover.png)        | [手机](390-control-candidate-hover.png)        |
+| 候选选择 / 键盘焦点        | [桌面](1440-control-candidate-focus.png)        | [手机](390-control-candidate-focus.png)        |
+| 候选选择 / 按下            | [桌面](1440-control-candidate-pressed.png)      | [手机](390-control-candidate-pressed.png)      |
+| 候选选择 / 禁用            | [桌面](1440-control-candidate-disabled.png)     | [手机](390-control-candidate-disabled.png)     |
+| 候选选择 / 恢复/提交期间   | [桌面](1440-control-candidate-busy.png)         | [手机](390-control-candidate-busy.png)         |
+| 继续观察 / 默认            | [桌面](1440-control-observe-default.png)        | [手机](390-control-observe-default.png)        |
+| 继续观察 / 悬停            | [桌面](1440-control-observe-hover.png)          | [手机](390-control-observe-hover.png)          |
+| 继续观察 / 键盘焦点        | [桌面](1440-control-observe-focus.png)          | [手机](390-control-observe-focus.png)          |
+| 继续观察 / 按下            | [桌面](1440-control-observe-pressed.png)        | [手机](390-control-observe-pressed.png)        |
+| 继续观察 / 禁用            | [桌面](1440-control-observe-disabled.png)       | [手机](390-control-observe-disabled.png)       |
+| 继续观察 / 恢复/提交期间   | [桌面](1440-control-observe-busy.png)           | [手机](390-control-observe-busy.png)           |
+| 驳回 / 默认                | [桌面](1440-control-reject-default.png)         | [手机](390-control-reject-default.png)         |
+| 驳回 / 悬停                | [桌面](1440-control-reject-hover.png)           | [手机](390-control-reject-hover.png)           |
+| 驳回 / 键盘焦点            | [桌面](1440-control-reject-focus.png)           | [手机](390-control-reject-focus.png)           |
+| 驳回 / 按下                | [桌面](1440-control-reject-pressed.png)         | [手机](390-control-reject-pressed.png)         |
+| 驳回 / 禁用                | [桌面](1440-control-reject-disabled.png)        | [手机](390-control-reject-disabled.png)        |
+| 驳回 / 恢复/提交期间       | [桌面](1440-control-reject-busy.png)            | [手机](390-control-reject-busy.png)            |
+| 关键词输入 / 默认          | [桌面](1440-control-keyword-value-default.png)  | [手机](390-control-keyword-value-default.png)  |
+| 关键词输入 / 悬停          | [桌面](1440-control-keyword-value-hover.png)    | [手机](390-control-keyword-value-hover.png)    |
+| 关键词输入 / 键盘焦点      | [桌面](1440-control-keyword-value-focus.png)    | [手机](390-control-keyword-value-focus.png)    |
+| 关键词输入 / 按下          | [桌面](1440-control-keyword-value-pressed.png)  | [手机](390-control-keyword-value-pressed.png)  |
+| 关键词输入 / 禁用          | [桌面](1440-control-keyword-value-disabled.png) | [手机](390-control-keyword-value-disabled.png) |
+| 关键词输入 / 恢复/提交期间 | [桌面](1440-control-keyword-value-busy.png)     | [手机](390-control-keyword-value-busy.png)     |
+| 关键词输入 / 字段错误      | [桌面](1440-control-keyword-value-invalid.png)  | [手机](390-control-keyword-value-invalid.png)  |
+| ASIN输入 / 默认            | [桌面](1440-control-asin-value-default.png)     | [手机](390-control-asin-value-default.png)     |
+| ASIN输入 / 悬停            | [桌面](1440-control-asin-value-hover.png)       | [手机](390-control-asin-value-hover.png)       |
+| ASIN输入 / 键盘焦点        | [桌面](1440-control-asin-value-focus.png)       | [手机](390-control-asin-value-focus.png)       |
+| ASIN输入 / 按下            | [桌面](1440-control-asin-value-pressed.png)     | [手机](390-control-asin-value-pressed.png)     |
+| ASIN输入 / 禁用            | [桌面](1440-control-asin-value-disabled.png)    | [手机](390-control-asin-value-disabled.png)    |
+| ASIN输入 / 恢复/提交期间   | [桌面](1440-control-asin-value-busy.png)        | [手机](390-control-asin-value-busy.png)        |
+| ASIN输入 / 字段错误        | [桌面](1440-control-asin-value-invalid.png)     | [手机](390-control-asin-value-invalid.png)     |
+| 链接输入 / 默认            | [桌面](1440-control-url-value-default.png)      | [手机](390-control-url-value-default.png)      |
+| 链接输入 / 悬停            | [桌面](1440-control-url-value-hover.png)        | [手机](390-control-url-value-hover.png)        |
+| 链接输入 / 键盘焦点        | [桌面](1440-control-url-value-focus.png)        | [手机](390-control-url-value-focus.png)        |
+| 链接输入 / 按下            | [桌面](1440-control-url-value-pressed.png)      | [手机](390-control-url-value-pressed.png)      |
+| 链接输入 / 禁用            | [桌面](1440-control-url-value-disabled.png)     | [手机](390-control-url-value-disabled.png)     |
+| 链接输入 / 恢复/提交期间   | [桌面](1440-control-url-value-busy.png)         | [手机](390-control-url-value-busy.png)         |
+| 链接输入 / 字段错误        | [桌面](1440-control-url-value-invalid.png)      | [手机](390-control-url-value-invalid.png)      |
+| 决策原因 / 默认            | [桌面](1440-control-reason-default.png)         | [手机](390-control-reason-default.png)         |
+| 决策原因 / 悬停            | [桌面](1440-control-reason-hover.png)           | [手机](390-control-reason-hover.png)           |
+| 决策原因 / 键盘焦点        | [桌面](1440-control-reason-focus.png)           | [手机](390-control-reason-focus.png)           |
+| 决策原因 / 按下            | [桌面](1440-control-reason-pressed.png)         | [手机](390-control-reason-pressed.png)         |
+| 决策原因 / 禁用            | [桌面](1440-control-reason-disabled.png)        | [手机](390-control-reason-disabled.png)        |
+| 决策原因 / 恢复/提交期间   | [桌面](1440-control-reason-busy.png)            | [手机](390-control-reason-busy.png)            |
+| 决策原因 / 字段错误        | [桌面](1440-control-reason-invalid.png)         | [手机](390-control-reason-invalid.png)         |
+
 ## 验证与交接
 
-最小验证：`node scripts/verify-ui-phase2-journey-c.mjs --smoke`。完整只读复验不带参数；`--capture`重拍全部图并登记当前源/图片哈希，旧r1可从Git历史追溯。本批检查源码提取、DOM布局溢出、最小字号触区、各场景及十类代表控件状态，HTTP=0、真实storage=0，浏览器finally关闭。
+最小验证：`node scripts/verify-ui-phase2-journey-c.mjs --smoke`。完整只读复验不带参数；`--capture`重拍全部图并登记当前源/图片哈希，旧r1可从Git历史追溯。本批检查源码提取、DOM布局溢出、最小字号触区、各场景及十八类代表控件状态，HTTP=0、真实storage=0，浏览器finally关闭。
 
-本轮只更新审核原型、验证脚本和文档，未改生产Vue/API/OpenAPI/数据库/权限/环境/依赖，不部署、不重启。218PNG为用户要求的永久交付，无临时图片遗留。三主题/密度、全共享控件六态、全部真实可访问性和生产签收仍需继续；整体布局批准不提升全页或全站完成门。
+本轮只更新审核原型、验证脚本和文档，未改生产Vue/API/OpenAPI/数据库/权限/环境/依赖，不部署、不重启。338PNG为用户要求的永久交付，无临时图片遗留。三主题/密度、全共享控件六态、全部真实可访问性和生产签收仍需继续；整体布局批准不提升全页或全站完成门。

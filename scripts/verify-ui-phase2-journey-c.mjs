@@ -71,6 +71,76 @@ const additionalControls = [
     states: pointerStates,
   },
 ];
+const fieldControls = [
+  {
+    key: "kind",
+    field: "form.input_kind",
+    selector: '[name="kind"][value="asin"]',
+    ready: "asin",
+    disabled: "restoring",
+    busy: "create-busy",
+  },
+  {
+    key: "candidate",
+    field: "selectedResultId",
+    selector: '.candidate:first-of-type [name="candidate"]',
+    ready: "results",
+    disabled: "read-busy",
+    busy: "observe-busy",
+  },
+  {
+    key: "observe",
+    field: "decision.action",
+    selector: '[name="decision"][value="observe"]',
+    ready: "observe-edited",
+    disabled: "read-busy",
+    busy: "observe-busy",
+  },
+  {
+    key: "reject",
+    field: "decision.action",
+    selector: '[name="decision"][value="reject"]',
+    ready: "reject-edited",
+    disabled: "read-busy",
+    busy: "reject-busy",
+  },
+  {
+    key: "keyword-value",
+    field: "form.input_value",
+    selector: '[name="input_value"]',
+    ready: "keyword-edited",
+    disabled: "restoring",
+    busy: "create-busy",
+    invalid: "keyword-required",
+  },
+  {
+    key: "asin-value",
+    field: "form.input_value",
+    selector: '[name="input_value"]',
+    ready: "asin-edited",
+    disabled: "asin-restoring",
+    busy: "asin-create-busy",
+    invalid: "asin-invalid",
+  },
+  {
+    key: "url-value",
+    field: "form.input_value",
+    selector: '[name="input_value"]',
+    ready: "url-edited",
+    disabled: "url-restoring",
+    busy: "url-create-busy",
+    invalid: "url-invalid",
+  },
+  {
+    key: "reason",
+    field: "decision.reason",
+    selector: '[name="reason"]',
+    ready: "observe-edited",
+    disabled: "read-busy",
+    busy: "observe-busy",
+    invalid: "reason-required",
+  },
+];
 const sources = ["index.html", "data.js", "journey.js", "journey.css"]
   .map((v) => `${relative}/${v}`)
   .concat([
@@ -101,6 +171,11 @@ const data = await buildJourneyDesignData(repo),
   sandbox = { window: {} };
 vm.runInNewContext(texts[`${relative}/data.js`], sandbox);
 assert.deepEqual(JSON.parse(JSON.stringify(sandbox.window.JOURNEY_C_DATA)), data);
+for (const control of fieldControls)
+  assert.ok(
+    texts["apps/web/src/components/SelectionJourney.vue"].includes(`v-model="${control.field}"`),
+    `missing source model ${control.field}`,
+  );
 let previous;
 if (!capture && !smoke) {
   previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
@@ -144,7 +219,7 @@ try {
             () => !window.JOURNEY_C.state().busy && !window.JOURNEY_C.state().reading,
           );
       const names = await page.evaluate(() => Object.keys(window.JOURNEY_C.scenes));
-      assert.equal(names.length, 59);
+      assert.equal(names.length, 67);
       for (const name of smoke
         ? ["adopt-ready", "gate-cost", "adopt-conflict", "adopt-decided"]
         : names) {
@@ -190,8 +265,9 @@ try {
           busy: "adopt-busy",
         },
       ];
-      for (const control of [...controls, ...additionalControls])
-        for (const variant of control.states || allStates) {
+      for (const control of [...controls, ...additionalControls, ...fieldControls])
+        for (const variant of control.states ||
+          (control.invalid ? [...allStates, "invalid"] : allStates)) {
           const baseScene = control[variant] || control.ready;
           await page.mouse.move(0, 0);
           await scene(baseScene);
@@ -199,6 +275,18 @@ try {
           await target.scrollIntoViewIfNeeded();
           if (["disabled", "busy"].includes(variant)) assert.equal(await target.isDisabled(), true);
           else assert.equal(await target.isEnabled(), true);
+          if (variant === "invalid") {
+            assert.equal(await target.getAttribute("aria-invalid"), "true");
+            const id = await target.getAttribute("aria-describedby");
+            assert.ok(await page.locator(`#${id}`).innerText());
+            const errorBorder = await target.evaluate((el) => getComputedStyle(el).borderColor);
+            await target.hover();
+            assert.equal(
+              await target.evaluate((el) => getComputedStyle(el).borderColor),
+              errorBorder,
+            );
+            await page.mouse.move(0, 0);
+          }
           if (variant === "hover" || variant === "pressed") {
             await target.hover();
             assert.equal(await target.evaluate((el) => el.matches(":hover")), true);
@@ -218,6 +306,7 @@ try {
           }
           const record = {
             key: control.key,
+            ...(control.field ? { field: control.field } : {}),
             state: variant,
             selector: control.selector,
             scene: `control-${control.key}-${variant}`,
@@ -257,6 +346,88 @@ try {
           );
           await checkPrototypeMetrics(page);
         }
+      for (const entry of [
+        { scene: "keyword", value: "", error: "请填写商品线索。", valid: data.values.keyword },
+        {
+          scene: "asin",
+          value: "short",
+          error: "ASIN 必须为 10 位字母或数字。",
+          valid: data.values.asin,
+        },
+        {
+          scene: "url",
+          value: "not-a-url",
+          error: "请填写有效的商品链接。",
+          valid: data.values.product_url,
+        },
+      ]) {
+        await scene(entry.scene);
+        await page.locator('[name="input_value"]').fill(entry.value);
+        await page.locator('#create-form [type="submit"]').click();
+        assert.equal(await page.locator("#field-error").innerText(), entry.error);
+        assert.equal(
+          await page
+            .locator('[name="input_value"]')
+            .evaluate((el) => el === document.activeElement),
+          true,
+        );
+        assert.equal((await state()).intents.length, 0);
+        await page.locator('[name="input_value"]').fill(entry.valid);
+        assert.equal(await page.locator("#field-error").count(), 0);
+        assert.equal(await page.locator('[name="input_value"]').getAttribute("aria-invalid"), null);
+        assert.equal(await page.locator('[name="input_value"]').getAttribute("maxlength"), "200");
+      }
+      await scene("observe-edited");
+      await page.locator('[name="reason"]').fill("");
+      await page.locator('#decision-form [type="submit"]').click();
+      assert.equal(await page.locator("#reason-error").innerText(), "请填写非空决策原因。");
+      assert.equal((await state()).intents.length, 0);
+      await page.locator('[name="reason"]').fill("独立保留的审核原因");
+      assert.equal(await page.locator("#reason-error").count(), 0);
+      assert.equal(await page.locator('[name="reason"]').getAttribute("maxlength"), "1000");
+      await page.locator('[name="reason"]').fill("因".repeat(1000));
+      await page.keyboard.press("End");
+      await page.keyboard.insertText("超");
+      assert.equal((await state()).decision.reason.length, 1000);
+      await page.locator('[name="reason"]').fill("独立保留的审核原因");
+      await page.locator('[name="decision"][value="observe"]').focus();
+      await page.keyboard.press("ArrowRight");
+      assert.equal((await state()).decision.action, "reject");
+      assert.equal((await state()).decision.reason, "独立保留的审核原因");
+      assert.equal(
+        await page
+          .locator('[name="decision"][value="reject"]')
+          .evaluate((el) => el === document.activeElement),
+        true,
+      );
+      await scene("keyword-edited");
+      await page.locator('[name="kind"][value="keyword"]').focus();
+      await page.keyboard.press("ArrowRight");
+      assert.equal((await state()).form.input_kind, "asin");
+      assert.equal((await state()).form.input_value, data.values.keyword);
+      assert.equal(
+        await page
+          .locator('[name="kind"][value="asin"]')
+          .evaluate((el) => el === document.activeElement),
+        true,
+      );
+      await scene("adopt-ready");
+      await page.locator('.candidate:last-of-type [name="candidate"]').focus();
+      await page.keyboard.press("ArrowLeft");
+      assert.equal((await state()).selected, data.sample.results[0].raw_evidence_id);
+      assert.equal((await state()).decision.reason, "  核对来源后继续验证  ");
+      assert.equal(await page.locator('[name="decision"][value="adopt"]').isDisabled(), true);
+      assert.equal(await page.locator('#decision-form [type="submit"]').isDisabled(), true);
+      assert.equal((await state()).intents.length, 0);
+      await scene("keyword-edited");
+      await page.locator('[name="input_value"]').fill("词".repeat(200));
+      await page.keyboard.press("End");
+      await page.keyboard.insertText("超");
+      assert.equal((await state()).form.input_value.length, 200);
+      await scene("asin-invalid");
+      await page.locator('[name="kind"][value="keyword"]').check();
+      assert.equal((await state()).form.input_value, "short");
+      assert.equal(await page.locator("#field-error").count(), 0);
       for (const [kind, value] of Object.entries(data.values)) {
         await scene(kind === "product_url" ? "url" : kind);
         await page.locator('#create-form [type="submit"]').click();
@@ -278,6 +449,15 @@ try {
         assert.equal((await state()).selected, "");
         assert.equal((await state()).journey.input_value, value.trim());
       }
+      await scene("keyword");
+      await page.locator(".skip").focus();
+      assert.equal(await page.locator(".skip").evaluate((el) => getComputedStyle(el).opacity), "1");
+      await page.keyboard.press("Enter");
+      assert.equal(
+        await page.locator("#work").evaluate((el) => el === document.activeElement),
+        true,
+      );
+      assert.equal(await page.locator(".skip").evaluate((el) => getComputedStyle(el).opacity), "0");
       await scene("keyword-edited");
       await page.locator('[name="kind"][value="asin"]').check();
       assert.equal((await state()).form.input_value, data.values.keyword);
@@ -493,10 +673,42 @@ const actionVisualReferences = Object.fromEntries(
     },
   ]),
 );
+const fieldVisualReferences = Object.fromEntries(
+  fieldControls.map((control) => [
+    control.key,
+    {
+      field: control.field,
+      selector: control.selector,
+      scope: "field-variant-only-not-Vue-acceptance",
+      states: Object.fromEntries(
+        (control.invalid ? [...allStates, "invalid"] : allStates).map((state) => [
+          state,
+          `control-${control.key}-${state}`,
+        ]),
+      ),
+    },
+  ]),
+);
 if (capture)
   await writeFile(
     path.join(root, "evidence.json"),
-    `${JSON.stringify({ version: data.version, approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, knownGaps: data.knownGaps, controlStates, actionVisualReferences, boundary: "59 full scenes and 50 control states at two widths; zero business dialogs. User approved r2 overall layout only; individual control-state review remains pending. Adoption uses isolated fixtures and source checks. Success clears prior error in Vue; reset draft clearing and inactive write ownership remain proposal-only. No HTTP, real storage, backend tasks or production/DB/authorization acceptance.", screenshots }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        version: data.version,
+        approval: "pending",
+        capturedAt: new Date().toISOString(),
+        sourceHashes,
+        knownGaps: data.knownGaps,
+        controlStates,
+        actionVisualReferences,
+        fieldVisualReferences,
+        boundary:
+          "67 full scenes and102 representative control states at two widths; zero business dialogs. Overall layout approved, controls pending. Field validation/focus/busy/error clearing are proposals; real Vue, HTTP, storage, SQL, authorization and production not accepted.",
+        screenshots,
+      },
+      null,
+      2,
+    )}\n`,
   );
 else if (!smoke)
   assert.deepEqual(

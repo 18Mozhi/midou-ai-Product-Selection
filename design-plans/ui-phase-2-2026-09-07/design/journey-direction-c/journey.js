@@ -13,6 +13,14 @@
     "keyword-edited": "关键词已填",
     "asin-edited": "ASIN 已填",
     "url-edited": "链接已填",
+    "keyword-required": "关键词必填错误",
+    "asin-invalid": "ASIN 格式错误",
+    "url-invalid": "链接格式错误",
+    "reason-required": "决策原因必填错误",
+    "asin-restoring": "ASIN 输入恢复中",
+    "url-restoring": "链接输入恢复中",
+    "asin-create-busy": "ASIN 输入提交中",
+    "url-create-busy": "链接输入提交中",
     "create-busy": "创建中",
     "create-failed": "创建未获确认",
     "url-rejected": "非 HTTPS 返回拒绝",
@@ -347,9 +355,9 @@
     };
     if (name.startsWith("asin")) s.form.input_kind = "asin";
     if (name.startsWith("url")) s.form.input_kind = "product_url";
-    if (name.endsWith("edited") || name === "create-busy" || name === "create-failed")
+    if (name.endsWith("edited") || name.endsWith("create-busy") || name === "create-failed")
       s.form.input_value = d.values[s.form.input_kind];
-    if (name === "create-busy") s.busy = true;
+    if (name.endsWith("create-busy")) s.busy = true;
     if (name === "create-failed") {
       s.error = "error";
       s.message = "创建未获得成功确认，原输入保留。";
@@ -361,9 +369,9 @@
       s.error = "error";
       s.message = "服务端拒绝此商品链接，请修正后重试。";
     }
-    if (name === "restoring" || name.startsWith("restore-") || name === "retry-busy") {
+    if (name.endsWith("restoring") || name.startsWith("restore-") || name === "retry-busy") {
       s.savedId = d.sample.id;
-      s.reading = name === "restoring";
+      s.reading = name.endsWith("restoring");
       if (!s.reading) {
         s.error = name.slice(8);
         s.message = `上次旅程恢复失败（${s.error === "expired" ? "登录已过期" : s.error === "forbidden" ? "当前范围无权访问" : "读取暂不可用"}）。活动 ID 保留，不自动创建。`;
@@ -386,6 +394,13 @@
       "keyword-edited",
       "asin-edited",
       "url-edited",
+      "keyword-required",
+      "asin-invalid",
+      "url-invalid",
+      "asin-restoring",
+      "url-restoring",
+      "asin-create-busy",
+      "url-create-busy",
       "create-busy",
       "create-failed",
       "url-rejected",
@@ -574,6 +589,19 @@
       s.form.input_kind = "asin";
       s.message = "已开始下一次，上一任务未取消。输入类型保留，决定草稿清空（提案）。";
     }
+    if (name === "keyword-required") s.fieldError = "请填写商品线索。";
+    if (name === "asin-invalid") {
+      s.form.input_value = "short";
+      s.fieldError = "ASIN 必须为 10 位字母或数字。";
+    }
+    if (name === "url-invalid") {
+      s.form.input_value = "not-a-url";
+      s.fieldError = "请填写有效的商品链接。";
+    }
+    if (name === "reason-required") {
+      s.decision.reason = "";
+      s.reasonError = "请填写非空决策原因。";
+    }
     render();
     document.querySelector("#scene").value = name;
   }
@@ -591,14 +619,47 @@
     .join("");
   document.querySelector("#scene").addEventListener("change", (event) => scene(event.target.value));
   document.querySelector("#advance").addEventListener("click", advance);
+  document.addEventListener(
+    "invalid",
+    (event) => {
+      const field = event.target;
+      if (!["input_value", "reason"].includes(field.name)) return;
+      event.preventDefault();
+      if (field.name === "reason") s.reasonError = "请填写非空决策原因。";
+      else
+        s.fieldError = field.validity.valueMissing
+          ? "请填写商品线索。"
+          : field.validity.patternMismatch
+            ? "ASIN 必须为 10 位字母或数字。"
+            : "请填写有效的商品链接。";
+      render(`[name="${field.name}"]`);
+    },
+    true,
+  );
   document.addEventListener("input", (event) => {
     if (event.target.name === "input_value") s.form.input_value = event.target.value;
     if (event.target.name === "reason") s.decision.reason = event.target.value;
+    const field = event.target;
+    if (
+      ["input_value", "reason"].includes(field.name) &&
+      field.validity.valid &&
+      field.value.trim()
+    ) {
+      const reason = field.name === "reason";
+      if (reason) s.reasonError = "";
+      else s.fieldError = "";
+      document.querySelector(reason ? "#reason-error" : "#field-error")?.remove();
+      field.removeAttribute("aria-invalid");
+      if (reason) field.removeAttribute("aria-describedby");
+      else field.setAttribute("aria-describedby", "input-hint");
+    }
   });
   document.addEventListener("change", (event) => {
     const { name, value } = event.target;
-    if (name === "kind") s.form.input_kind = value;
-    else if (name === "decision") s.decision.action = value;
+    if (name === "kind") {
+      s.form.input_kind = value;
+      s.fieldError = "";
+    } else if (name === "decision") s.decision.action = value;
     else if (name === "candidate") s.selected = value;
     else return;
     render(`[name="${name}"][value="${value}"]`);

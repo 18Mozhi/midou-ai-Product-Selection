@@ -66,7 +66,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -208,7 +208,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -341,7 +341,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -435,7 +435,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -602,7 +602,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -688,7 +688,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -772,7 +772,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -864,7 +864,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
         }
       ],
       "visualStates": {
@@ -1114,17 +1114,136 @@
     ]
   },
   "compositionGaps": [
-    "r2重拍59全页场景及50代表控件状态双端共218PNG；8动作组40适用视觉槽已映射，8导航禁用/忙碌不适用；采纳radio6态及恢复副按钮4态不新增动作组，完整输入/动态变体仍待审核。",
+    "r2重拍67全页场景及102代表控件状态双端共338PNG；8动作组40适用视觉槽已映射，8导航禁用/忙碌不适用；采纳radio6态及恢复副按钮4态不新增动作组，完整输入/动态变体仍待审核。",
     "用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。",
     "既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。",
     "同一decide表单签名不变但语义已变；当前源成功state=ready，reset继续保留旧原因，字段busy锁及错误关联提案尚未整体落地。",
     "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。",
-    "r2追加：8动作组代表性视觉槽40已映射、8导航不适用、0未映射；这是有限清单，不包括所有主次恢复文案、输入/候选/观察驳回字段、主题密度或真实Vue生命周期。"
+    "r2追加：8动作组代表性视觉槽40已映射、8导航不适用、0未映射；这是有限清单，不包括所有主次恢复文案、输入/候选/观察驳回字段、主题密度或真实Vue生命周期。",
+    "5个源模型的8控件变体已关联fieldVisualReferences，忙碌锁/内联错误/修正清理仅待审提案；未证明全部动态行、主题密度、跨范围/输入法/真实Vue与生产生命周期。"
   ],
   "approval": "pending-user-review",
   "limits": [
     "10源位置/8动作组、5模型/3内联结构；零本地业务弹窗，不用共同组件推断全站分母。",
     "图引用与源函数/清单校验不授予具体批准，不证明实际Vue/API/数据库/生产；全站目标与G0–G5保持未完成。"
   ],
-  "layoutApproval": "P16-C-R2-LAYOUT-APPROVAL.md: overall layout only; full page/control approval remains pending"
+  "layoutApproval": "P16-C-R2-LAYOUT-APPROVAL.md: overall layout only; full page/control approval remains pending",
+  "inputVisualStateReferences": {
+    "kind": {
+      "field": "form.input_kind",
+      "selector": "[name=\"kind\"][value=\"asin\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-kind-default",
+        "hover": "control-kind-hover",
+        "focus": "control-kind-focus",
+        "pressed": "control-kind-pressed",
+        "disabled": "control-kind-disabled",
+        "busy": "control-kind-busy"
+      },
+      "package": "journey-direction-c"
+    },
+    "candidate": {
+      "field": "selectedResultId",
+      "selector": ".candidate:first-of-type [name=\"candidate\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-candidate-default",
+        "hover": "control-candidate-hover",
+        "focus": "control-candidate-focus",
+        "pressed": "control-candidate-pressed",
+        "disabled": "control-candidate-disabled",
+        "busy": "control-candidate-busy"
+      },
+      "package": "journey-direction-c"
+    },
+    "observe": {
+      "field": "decision.action",
+      "selector": "[name=\"decision\"][value=\"observe\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-observe-default",
+        "hover": "control-observe-hover",
+        "focus": "control-observe-focus",
+        "pressed": "control-observe-pressed",
+        "disabled": "control-observe-disabled",
+        "busy": "control-observe-busy"
+      },
+      "package": "journey-direction-c"
+    },
+    "reject": {
+      "field": "decision.action",
+      "selector": "[name=\"decision\"][value=\"reject\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-reject-default",
+        "hover": "control-reject-hover",
+        "focus": "control-reject-focus",
+        "pressed": "control-reject-pressed",
+        "disabled": "control-reject-disabled",
+        "busy": "control-reject-busy"
+      },
+      "package": "journey-direction-c"
+    },
+    "keyword-value": {
+      "field": "form.input_value",
+      "selector": "[name=\"input_value\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-keyword-value-default",
+        "hover": "control-keyword-value-hover",
+        "focus": "control-keyword-value-focus",
+        "pressed": "control-keyword-value-pressed",
+        "disabled": "control-keyword-value-disabled",
+        "busy": "control-keyword-value-busy",
+        "invalid": "control-keyword-value-invalid"
+      },
+      "package": "journey-direction-c"
+    },
+    "asin-value": {
+      "field": "form.input_value",
+      "selector": "[name=\"input_value\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-asin-value-default",
+        "hover": "control-asin-value-hover",
+        "focus": "control-asin-value-focus",
+        "pressed": "control-asin-value-pressed",
+        "disabled": "control-asin-value-disabled",
+        "busy": "control-asin-value-busy",
+        "invalid": "control-asin-value-invalid"
+      },
+      "package": "journey-direction-c"
+    },
+    "url-value": {
+      "field": "form.input_value",
+      "selector": "[name=\"input_value\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-url-value-default",
+        "hover": "control-url-value-hover",
+        "focus": "control-url-value-focus",
+        "pressed": "control-url-value-pressed",
+        "disabled": "control-url-value-disabled",
+        "busy": "control-url-value-busy",
+        "invalid": "control-url-value-invalid"
+      },
+      "package": "journey-direction-c"
+    },
+    "reason": {
+      "field": "decision.reason",
+      "selector": "[name=\"reason\"]",
+      "scope": "field-variant-only-not-Vue-acceptance",
+      "states": {
+        "default": "control-reason-default",
+        "hover": "control-reason-hover",
+        "focus": "control-reason-focus",
+        "pressed": "control-reason-pressed",
+        "disabled": "control-reason-disabled",
+        "busy": "control-reason-busy",
+        "invalid": "control-reason-invalid"
+      },
+      "package": "journey-direction-c"
+    }
+  }
 }

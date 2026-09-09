@@ -1,6 +1,6 @@
 # P16 创建选品旅程 · 输入、续办、候选与决定合同
 
-2026-09-09 r2复核：第9节为c31fddc7统一质量门后的当前源码映射；[JOURNEY-C-r2](design/journey-direction-c/README.md)现59整页场景及50代表控件状态双端共218图；[控件审核](P16-CONTROL-STATE-REVIEW.md)列明40适用槽及8导航不适用。第1–8节为历史，不以旧hash或旧文案覆盖新规则。整体布局已批准，具体控制状态仍待用户。
+2026-09-09 r2复核：第9节为c31fddc7统一质量门后的当前源码映射；[JOURNEY-C-r2](design/journey-direction-c/README.md)现67整页场景及102代表控件状态双端共338图；[控件审核](P16-CONTROL-STATE-REVIEW.md)列明40适用槽及8导航不适用。第1–8节为历史，不以旧hash或旧文案覆盖新规则。整体布局已批准，具体控制状态仍待用户。 新增[字段审核](P16-FIELD-STATE-REVIEW.md)，5个源绑定的8控件变体已有状态图与隔离交互验证，生产未改。
 
 2026-09-09 规则实施更新：用户已明确[统一五项质量门](JOURNEY-ADOPTION-DECISION.md)，P16 本地实现复用 P18 判定，前端缺门阻断/提示与后端锁内复核、候选质量门 DTO 均已加入，保存成功清除旧错误态。下文第1–8节和 P16 动作JSON为改前源码快照，不能再当当前源身份或新采纳门的视觉证据。最新范围与测试见该决定文档及 PROGRESS；旧图未静默换绑，视觉稿重采/逐动作审核仍待继续。
 
@@ -150,4 +150,4 @@ SelectionJourney.vue LF SHA-256：05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c
 
 canAdopt要求topic_id、opportunity_id、recommended及五门和all_passed严格true；后端同范围机会锁内复核P18规则，冲突409拒绝。radio、按钮与submit函数都按该规则，改选不合格候选保留原因且不能提交原采纳选择。request仍为action/reason/selected_raw_evidence_id，observe/reject恒null，未新增expected_version。服务端成功后state=ready，reset草稿和在途写归属仍未修。
 
-r2图中五项核对区整体布局已通过；原因错误关联、busy期间冻结输入、reset清空草稿、任务未终态禁决定仍为交互提案。恢复无ID主动作reset与有ID读取、error副动作history.back、expired无副按钮及blocked/forbidden仅说明已按源分支补图；更明确的“重新输入”文案及重试忙碌禁用不等于Vue已有。当前Vue48项隔离回归来自c31fddc7，新59场景/50代表状态原型不替代真实SQL竞争/RBAC/生产。
+r2图中五项核对区整体布局已通过；原因错误关联、busy期间冻结输入、reset清空草稿、任务未终态禁决定仍为交互提案。恢复无ID主动作reset与有ID读取、error副动作history.back、expired无副按钮及blocked/forbidden仅说明已按源分支补图；更明确的“重新输入”文案及重试忙碌禁用不等于Vue已有。当前Vue48项隔离回归来自c31fddc7，新67场景/102代表状态原型不替代真实SQL竞争/RBAC/生产。
