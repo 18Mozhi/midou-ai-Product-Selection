@@ -125,7 +125,159 @@ const mainControls = [
     variantOnly: true,
   },
 ].map((control) => ({ ready: "workspace", states: states.slice(0, 4), ...control }));
-const visualControls = [...allControls, ...mainControls];
+const navigationControls = [
+  { key: "nav-self", actionId: "SC-NAV-SELF", domId: "SC-NAV-SELF", href: "/sourcing" },
+  {
+    key: "nav-rules",
+    actionId: "SC-NAV-RULES",
+    domId: "SC-NAV-RULES",
+    href: "/sourcing/cost-rules",
+  },
+  {
+    key: "nav-context",
+    actionId: "SC-NAV-RULES-CONTEXT",
+    domId: "SC-RULES",
+    href:
+      "/sourcing/cost-rules?from=" +
+      encodeURIComponent("/sourcing?record=00000000-0000-4000-8000-000000000021"),
+  },
+  {
+    key: "nav-collection",
+    actionId: "SC-NAV-COLLECTION",
+    domId: "SC-COLLECTION",
+    ready: "platform-inspect",
+    href: "/platform-admin/collection?task=00000000-0000-4000-8000-000000000070",
+  },
+  {
+    key: "nav-erp",
+    actionId: "SC-ERP",
+    domId: "SC-ERP",
+    ready: "erp",
+    href: "https://example.com/synthetic-erp",
+    external: true,
+  },
+  {
+    key: "nav-source",
+    actionId: "SC-SOURCE",
+    domId: "SC-SOURCE",
+    href: "https://example.com/synthetic-supplier/1",
+    external: true,
+  },
+  {
+    key: "nav-opportunity",
+    actionId: "SC-NAV-OPPORTUNITY",
+    domId: "SC-OPPORTUNITY",
+    ready: "cost-missing",
+    href: "/opportunities/00000000-0000-4000-8000-000000000018?tab=profit&from=/sourcing",
+  },
+  {
+    key: "nav-profit-rules",
+    actionId: "SC-NAV-PROFIT-RULES",
+    domId: "SC-PROFIT-RULES",
+    ready: "cost-missing",
+    href: "/sourcing/cost-rules",
+  },
+  {
+    key: "nav-source-second",
+    actionId: "SC-SOURCE",
+    domId: "SC-SOURCE",
+    href: "https://example.com/synthetic-supplier/2",
+    external: true,
+    variantOnly: true,
+  },
+  {
+    key: "nav-source-unconfirmed",
+    actionId: "SC-SOURCE",
+    domId: "SC-SOURCE",
+    href: "https://example.com/synthetic-supplier/3",
+    external: true,
+    variantOnly: true,
+  },
+  {
+    key: "nav-context-query",
+    actionId: "SC-NAV-RULES-CONTEXT",
+    domId: "SC-RULES",
+    query: "桌面",
+    href:
+      "/sourcing/cost-rules?from=" +
+      encodeURIComponent(
+        "/sourcing?record=00000000-0000-4000-8000-000000000021&q=" + encodeURIComponent("桌面"),
+      ),
+    variantOnly: true,
+  },
+].map((control) => ({
+  ready: "workspace",
+  kind: "navigation",
+  states: states.slice(0, 4),
+  ...control,
+  selector:
+    '#app a[data-action="' +
+    control.domId +
+    '"]' +
+    (control.actionId === "SC-SOURCE" ? '[href="' + control.href + '"]' : ""),
+}));
+const recoveryControls = [
+  {
+    key: "recovery-error-primary",
+    ready: "error",
+    variant: "primary",
+    result: "load",
+    variantOnly: false,
+  },
+  { key: "recovery-error-secondary", ready: "error", variant: "secondary", result: "load" },
+  { key: "recovery-expired-primary", ready: "expired", variant: "primary", result: "load" },
+  ...["forbidden", "rate-limited", "blocked"].flatMap((ready) =>
+    ["primary", "secondary"].map((variant) => ({
+      key: "recovery-" + ready + "-" + variant,
+      ready,
+      variant,
+      result: "load",
+    })),
+  ),
+  { key: "recovery-empty-primary", ready: "empty", variant: "primary", result: "open" },
+  { key: "recovery-empty-secondary", ready: "empty", variant: "secondary", result: "clear" },
+  {
+    key: "recovery-empty-readonly-primary",
+    ready: "empty-readonly",
+    variant: "primary",
+    result: "load",
+  },
+  {
+    key: "recovery-empty-readonly-secondary",
+    ready: "empty-readonly",
+    variant: "secondary",
+    result: "clear",
+  },
+  {
+    key: "recovery-search-primary",
+    ready: "search-empty",
+    variant: "primary",
+    result: "clear",
+    variantOnly: false,
+  },
+  { key: "recovery-search-secondary", ready: "search-empty", variant: "secondary", result: "open" },
+  {
+    key: "recovery-search-readonly-primary",
+    ready: "search-empty-readonly",
+    variant: "primary",
+    result: "clear",
+  },
+  {
+    key: "recovery-search-readonly-secondary",
+    ready: "search-empty-readonly",
+    variant: "secondary",
+    result: "load",
+  },
+].map((control) => ({
+  kind: "recovery",
+  states: states.slice(0, 4),
+  variantOnly: true,
+  ...control,
+  actionId: control.ready.startsWith("search-empty") ? "SC-SEARCH-RECOVERY" : "SC-STATE",
+  selector: '#app .empty [data-recovery="' + control.variant + '"]',
+}));
+const navigationRecoveryControls = [...navigationControls, ...recoveryControls];
+const visualControls = [...allControls, ...mainControls, ...navigationRecoveryControls];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const sourcePaths = [
   ...[
@@ -136,7 +288,9 @@ const sourcePaths = [
     "OpportunityProfitPanel.vue",
     "OpportunityCostReviewQueue.vue",
     "sourcing-workspace-types.ts",
+    "UiStatePanel.vue",
   ].map((f) => "apps/web/src/components/" + f),
+  "apps/web/src/ui/state-contract.ts",
   "apps/api/src/sourcing-service.ts",
   "apps/api/src/mysql-sourcing-repository.ts",
   "apps/api/src/sourcing-routes.ts",
@@ -677,6 +831,193 @@ async function verifyMainControls(page, width) {
     }
   }
 }
+async function verifyNavigationRecovery(page, width) {
+  const count = () => page.evaluate(() => window.sourcingReview.intents.length);
+  const prepare = async (control) => {
+    await page.evaluate((id) => {
+      window.sourcingReview.outcome = "success";
+      window.sourcingReview.choose(id);
+    }, control.ready);
+    if (control.query) await page.locator("#search").fill(control.query);
+  };
+  for (const control of navigationRecoveryControls) {
+    for (const state of control.states) {
+      await page.mouse.move(0, 0);
+      await prepare(control);
+      const target = page.locator(control.selector);
+      assert.equal(await target.count(), 1, control.key);
+      await target.evaluate((el) => el.scrollIntoView({ block: "center", inline: "nearest" }));
+      await page.evaluate(() => document.activeElement?.blur());
+      const n = await count();
+      assert.equal(await target.isDisabled(), false);
+      assert.notEqual(await target.getAttribute("aria-busy"), "true");
+      if (control.kind === "navigation") {
+        assert.equal(await target.getAttribute("href"), control.href);
+        assert.equal(await target.getAttribute("target"), control.external ? "_blank" : null);
+        assert.equal(
+          await target.getAttribute("rel"),
+          control.external ? "noopener noreferrer" : null,
+        );
+        if (control.key === "nav-self")
+          assert.equal(await target.getAttribute("aria-current"), "page");
+      }
+      if (["hover", "pressed"].includes(state)) {
+        await target.hover();
+        assert.ok(await target.evaluate((el) => el.matches(":hover")));
+      }
+      if (state === "focus") {
+        await page.keyboard.press("Tab");
+        await target.focus();
+        assert.ok(await target.evaluate((el) => el.matches(":focus-visible")));
+        assert.equal(await target.evaluate((el) => getComputedStyle(el).outlineWidth), "3px");
+        await target.evaluate((el) => el.scrollIntoView({ block: "center", inline: "nearest" }));
+      }
+      if (state === "pressed") {
+        await page.mouse.down();
+        assert.ok(await target.evaluate((el) => el.matches(":active")));
+        assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
+      }
+      const colors = await target.evaluate((el) => {
+        let ancestor = el;
+        let background = getComputedStyle(el).backgroundColor;
+        while (/^rgba\([^)]*,\s*0\)$/.test(background) && ancestor.parentElement) {
+          ancestor = ancestor.parentElement;
+          background = getComputedStyle(ancestor).backgroundColor;
+        }
+        return { foreground: getComputedStyle(el).color, background };
+      });
+      const ratio = contrast(colors.foreground, colors.background);
+      assert.ok(ratio >= 4.5, control.key + "/" + state + " contrast " + ratio);
+      await layout(page, control.key + "/" + state);
+      const rect = await target.boundingBox();
+      assert.ok(
+        rect.y >= 6 && rect.y + rect.height <= page.viewportSize().height - 6,
+        control.key + " viewport",
+      );
+      assert.ok(
+        await target.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return [
+            [r.left + 6, r.top + 6],
+            [r.right - 6, r.top + 6],
+            [r.left + 6, r.bottom - 6],
+            [r.right - 6, r.bottom - 6],
+          ].every(([x, y]) => el.contains(document.elementFromPoint(x, y)));
+        }),
+        control.key + " unoccluded",
+      );
+      const record = {
+        key: control.key,
+        actionId: control.actionId,
+        selector: control.selector,
+        state,
+        scene: "control-" + control.key + "-" + state,
+        baseScene: control.ready,
+        pageId: "P21",
+        width,
+        contrast: ratio,
+        condition: "source-navigation-or-recovery-no-disabled-busy",
+      };
+      controlStates.push(record);
+      await shot(page, width, record.scene, record);
+      if (state === "pressed") {
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+      assert.equal(await count(), n, "preview does not activate");
+    }
+    await prepare(control);
+    const n = await count();
+    await page.locator(control.selector).focus();
+    await page.keyboard.press("Enter");
+    if (control.kind === "navigation") {
+      assert.equal(await count(), n + 1);
+      assert.deepEqual(await page.evaluate(() => window.sourcingReview.intents.at(-1)), {
+        path: control.href,
+        method: "NAVIGATE",
+      });
+    } else if (control.result === "load") {
+      assert.equal(await count(), n + 1);
+      assert.deepEqual(await page.evaluate(() => window.sourcingReview.intents.at(-1)), {
+        path: "/sourcing/searches",
+        method: "GET",
+      });
+      assert.equal(await page.locator(".workspace [aria-busy=true]").count(), 1);
+      assert.equal(
+        await page
+          .locator(
+            ".recovery-actions button,.record,.workspace [data-action=SC-REFRESH],.workspace [data-action=SC-DELETE-OPEN]",
+          )
+          .count(),
+        0,
+      );
+      assert.equal(
+        await page.locator(".workspace h1").evaluate((el) => document.activeElement === el),
+        true,
+      );
+      assert.match(await page.locator(".scope").innerText(), /记录数量待读取/);
+      if (control.ready.endsWith("readonly"))
+        assert.equal(await page.locator("[data-action=SC-S-OPEN]").count(), 0);
+    } else if (control.result === "open") {
+      assert.equal(await count(), n);
+      assert.equal(await page.locator("#dialog-title").innerText(), "发起供应商找货");
+      await page.keyboard.press("Escape");
+    } else {
+      assert.equal(await count(), n);
+      assert.equal(await page.locator("#search").inputValue(), "");
+      assert.equal(
+        await page.locator("#search").evaluate((el) => document.activeElement === el),
+        true,
+      );
+      assert.equal(
+        await page.locator(".record").count(),
+        control.ready.startsWith("empty") ? 0 : 2,
+      );
+    }
+  }
+  for (const scene of [
+    "loading",
+    "empty",
+    "empty-readonly",
+    "error",
+    "expired",
+    "forbidden",
+    "rate-limited",
+    "blocked",
+  ]) {
+    await prepare({ ready: scene });
+    assert.equal(
+      await page
+        .locator(
+          ".record,.workspace [data-action=SC-REFRESH],.workspace [data-action=SC-DELETE-OPEN]",
+        )
+        .count(),
+      0,
+    );
+    if (scene === "loading")
+      assert.equal(await page.locator(".recovery-actions button").count(), 0);
+    if (scene === "expired")
+      assert.equal(await page.locator(".recovery-actions button").count(), 1);
+  }
+  for (const scene of ["workspace", "readonly", "keyword-record"]) {
+    await prepare({ ready: scene });
+    assert.equal(await page.locator("[data-action=SC-COLLECTION]").count(), 0);
+    if (scene === "keyword-record")
+      assert.equal(
+        await page.locator("[data-action=SC-OPPORTUNITY],[data-action=SC-PROFIT-RULES]").count(),
+        0,
+      );
+  }
+  await prepare({ ready: "workspace" });
+  const n = await count();
+  await page.locator("#search").fill(" COMPLETED_WITH_WARNINGS ");
+  assert.equal(await page.locator(".record").count(), 2);
+  assert.equal(await count(), n);
+  checks.push(
+    width +
+      ": exact navigation destinations and external rel/target; recovery source branches, role-specific empty/search, local clear, loading hides actions/data without inventing disabled/busy; no real router/network/recovery success",
+  );
+}
 async function verifyCloseBehavior(page, control, count) {
   await page.evaluate(() => {
     window.sourcingReview.outcome = "success";
@@ -941,6 +1282,7 @@ try {
       );
       await verifyControls(page, width);
       await verifyMainControls(page, width);
+      await verifyNavigationRecovery(page, width);
       checks.push(
         `${width}: main entry/record/checkbox/write controls; exact opening identity and GET/POST intent, current record retains selection, changed record clears, Space toggles only local state, comparison submission snapshot survives changed checkboxes; no task completion proof`,
       );
@@ -1026,7 +1368,7 @@ try {
                       ]),
                     ),
                     limitation: control.kind
-                      ? "Main control representative only; local/read/checkbox controls have no fabricated busy/disabled. Writes use exact inert snapshots, not server acceptance or resolved lifecycle."
+                      ? "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
                       : control.secondary
                         ? "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
                         : control.key === "purchase"

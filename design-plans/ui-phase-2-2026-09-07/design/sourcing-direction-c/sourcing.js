@@ -23,6 +23,9 @@
     ["failed", "采集失败"],
     ["empty-result", "采集成功无候选"],
     ["empty", "无找货记录"],
+    ["empty-readonly", "只读空目录"],
+    ["blocked", "依赖受阻"],
+    ["search-empty-readonly", "只读搜索无结果"],
     ["loading", "正在读取"],
     ["error", "读取失败"],
     ["expired", "会话过期"],
@@ -96,6 +99,7 @@
     { id: uuid(22), name: "折叠收纳箱", input_type: "keyword", input_ref: "折叠收纳箱" },
   ];
   let current,
+    scopeReadOnly,
     record,
     offers,
     selectedQuotes,
@@ -118,13 +122,13 @@
     costMessage = "";
   const intents = [];
   const is = (...v) => v.includes(current.id),
-    manager = () => !is("readonly", "cost-only"),
-    costAllowed = () => !is("readonly", "cost-readonly"),
+    manager = () => !scopeReadOnly,
+    costAllowed = () => !is("readonly", "cost-readonly", "empty-readonly", "search-empty-readonly"),
     reviewAllowed = () => is("cost-review-approved", "cost-review-rejected", "cost-overdue");
   const action = (id, label, cls = "", disabled = false, attrs = "") =>
     `<button type="button" data-action="${id}" class="${cls} ${["SC-S-OPEN", "SC-DETAIL", "SC-REFRESH", "SC-QUOTE-OPEN", "SC-PURCHASE-OPEN", "SC-DELETE-OPEN", "SC-COMPARE"].includes(id) ? "main-control" : ""}" ${disabled ? "disabled" : ""} ${attrs}>${label}</button>`;
-  const link = (id, label, href, external = false) =>
-    `<a class="${external ? "source-link" : "link"}" data-action="${id}" href="${href}" ${external ? 'target="_blank" rel="noopener noreferrer"' : ""}>${label}</a>`;
+  const link = (id, label, href, external = false, attrs = "") =>
+    `<a class="${external ? "source-link" : "link"} nav-control" data-action="${id}" href="${esc(href)}" ${attrs} ${external ? 'target="_blank" rel="noopener noreferrer"' : ""}>${label}</a>`;
   const badge = (v, cls = "") => `<span class="badge ${cls}">${v}</span>`;
   const notice = (title, body, cls = "") =>
     `<section class="notice ${cls}"><strong>${title}</strong><p>${body}</p></section>`;
@@ -136,6 +140,7 @@
     if ($("#modal").open) $("#modal").close();
     current = scenes.find((s) => s.id === id);
     if (!current) throw new Error("Unknown scene");
+    scopeReadOnly = is("readonly", "cost-only", "empty-readonly", "search-empty-readonly");
     record = { ...records[is("keyword-record") ? 1 : 0] };
     offers = structuredClone(baseOffers.slice(0, is("select-five") ? 6 : 3));
     if (!is("select-five")) {
@@ -158,7 +163,7 @@
       : is("comparison", "spec-format", "spec-different")
         ? "comparison"
         : "offers";
-    query = is("search-empty") ? "不存在的找货记录" : "";
+    query = is("search-empty", "search-empty-readonly") ? "不存在的找货记录" : "";
     modalKind = "";
     busy = false;
     mainPending = null;
@@ -209,7 +214,8 @@
         : "deep-ocean";
     document.documentElement.dataset.density = id.endsWith("compact") ? "compact" : "standard";
     render();
-    if (id.startsWith("search-") && id !== "search-empty") openModal("search", null, true);
+    if (id.startsWith("search-") && !["search-empty", "search-empty-readonly"].includes(id))
+      openModal("search", null, true);
     else
       for (const kind of ["quote", "purchase", "delete"])
         if (id === kind || id.startsWith(kind + "-"))
@@ -222,6 +228,33 @@
   function empty(title, text, id = "SC-STATE", label = "重新读取") {
     return `<section class="empty"><span class="symbol" aria-hidden="true">◇</span><h2>${title}</h2><p>${text}</p>${id ? action(id, label, "primary") : ""}</section>`;
   }
+  const unavailable = () =>
+    is("loading", "error", "expired", "forbidden", "rate-limited", "blocked");
+  const emptyDirectory = () => is("empty", "empty-readonly");
+  const routePath = () =>
+    "/sourcing?record=" + record.id + (query ? "&q=" + encodeURIComponent(query) : "");
+  function recovery(title, description, primary, secondary) {
+    const button = (item, variant) =>
+      item
+        ? action(
+            item.id,
+            item.label,
+            variant === "primary" ? "primary recovery-control" : "recovery-control",
+            false,
+            'data-recovery="' + variant + '"',
+          )
+        : "";
+    return (
+      '<section class="empty" aria-live="assertive"><span class="symbol" aria-hidden="true">◇</span><h2>' +
+      title +
+      "</h2><p>" +
+      description +
+      '</p><div class="recovery-actions">' +
+      button(primary, "primary") +
+      button(secondary, "secondary") +
+      "</div></section>"
+    );
+  }
   function render() {
     const matches = records.filter((r) =>
       (r.name + " " + r.input_ref + " completed_with_warnings")
@@ -229,36 +262,39 @@
         .includes(query.trim().toLowerCase()),
     );
     $("#app").innerHTML =
-      `<header class="identity"><span class="brand">Scout<i>Ops</i></span><span class="meta">样本组织 / 桌面收纳工作区</span></header><div class="layout"><aside class="scope"><div><p class="eyebrow">供应链找货</p><h2>把报价追到证据</h2><p class="meta">当前工作区的找货记录，保留来源与版本。</p></div>${manager() ? action("SC-S-OPEN", "＋ 发起找货", "primary") : "<p>货源只读权限</p>"}<label>搜索找货记录<input id="search" data-action="SC-SEARCH" type="search" placeholder="记录名称、编号、状态" value="${esc(query)}" /></label><div class="records">${matches.map((r) => action("SC-DETAIL", `<strong>${r.name}</strong><small>${r.input_type === "opportunity" ? "选品机会" : "关键词"} · ${r.id === record.id ? { queued: "等待采集", running: "采集中", failed: "采集失败", "empty-result": "未找到可用候选" }[current.id] || "已完成但有缺失" : "已完成但有缺失"}</small><small>查看详情 →</small>`, "record", false, `data-record="${r.id}" aria-pressed="${r.id === record.id}"`)).join("")}</div><p class="meta">${matches.length} 个匹配记录</p><div class="scope-footer">真实候选 → 确认报价 → 保存对比 → 采购排队<br><br>样本数据，不连接生产</div></aside><main class="workspace"><header class="page-head"><div><p class="eyebrow">${record.input_type === "opportunity" ? "关联机会" : "关键词找货"} / 货源事实</p><h1>${esc(record.name)}</h1><p>先核对规格与证据，再确定采购数量。</p><div class="actions">${manager() ? action("SC-REFRESH", mainPending?.kind === "refresh" && mainPending.recordId === record.id ? "正在提交采集" : "重新采集", "", busy, `aria-busy="${mainPending?.kind === "refresh" && mainPending.recordId === record.id}" ${mainPending ? 'aria-describedby="main-request-status"' : ""}`) : ""}${link("SC-RULES", "费用与利润规则", "/sourcing/cost-rules?from=" + encodeURIComponent("/sourcing?record=" + record.id))}${manager() ? `<details class="more"><summary>更多操作</summary><div>${action("SC-DELETE-OPEN", "删除找货记录", "danger")}</div></details>` : ""}</div></div></header>${message ? `<div class="notice info" role="status">${esc(message)}</div>` : ""}${mainPending ? `<div id="main-request-status" class="notice info" role="status" tabindex="-1">${esc(mainPending.recordName)}：${mainPending.kind === "compare" ? "正在提交 " + mainPending.quoteIds.length + " 家报价对比，尚未确认保存。" : "重新采集请求提交中，尚未确认排队。"} 不自动重放请求。</div>` : ""}${content(matches)}<p class="artifact">P21 · SOURCING-C-r1 · ${esc(current.label)} · 合成合同样本，具体设计待审。</p></main></div>`;
+      `<header class="identity"><span class="brand">Scout<i>Ops</i></span><nav class="page-nav" aria-label="供应链模块">${link("SC-NAV-SELF", "供应商找货", "/sourcing", false, 'aria-current="page"')}${link("SC-NAV-RULES", "费用规则", "/sourcing/cost-rules")}</nav><span class="meta">样本组织 / 桌面收纳工作区</span></header><div class="layout"><aside class="scope"><div><p class="eyebrow">供应链找货</p><h2>把报价追到证据</h2><p class="meta">当前工作区的找货记录，保留来源与版本。</p></div>${manager() ? action("SC-S-OPEN", "＋ 发起找货", "primary") : "<p>货源只读权限</p>"}<label>搜索找货记录<input id="search" data-action="SC-SEARCH" type="search" placeholder="记录名称、编号、状态" value="${esc(query)}" /></label><div class="records">${(unavailable() || emptyDirectory() ? [] : matches).map((r) => action("SC-DETAIL", `<strong>${r.name}</strong><small>${r.input_type === "opportunity" ? "选品机会" : "关键词"} · ${r.id === record.id ? { queued: "等待采集", running: "采集中", failed: "采集失败", "empty-result": "未找到可用候选" }[current.id] || "已完成但有缺失" : "已完成但有缺失"}</small><small>查看详情 →</small>`, "record", false, `data-record="${r.id}" aria-pressed="${r.id === record.id}"`)).join("")}</div><p class="meta">${unavailable() ? "记录数量待读取" : (emptyDirectory() ? 0 : matches.length) + " 个匹配记录"}</p><div class="scope-footer">真实候选 → 确认报价 → 保存对比 → 采购排队<br><br>样本数据，不连接生产</div></aside><main class="workspace">${unavailable() || emptyDirectory() || !matches.length ? '<header class="page-head"><h1>供应链找货</h1><p>当前工作区 · 记录与来源</p></header>' : `<header class="page-head"><div><p class="eyebrow">${record.input_type === "opportunity" ? "关联机会" : "关键词找货"} / 货源事实</p><h1>${esc(record.name)}</h1><p>先核对规格与证据，再确定采购数量。</p><div class="actions">${manager() ? action("SC-REFRESH", mainPending?.kind === "refresh" && mainPending.recordId === record.id ? "正在提交采集" : "重新采集", "", busy, `aria-busy="${mainPending?.kind === "refresh" && mainPending.recordId === record.id}" ${mainPending ? 'aria-describedby="main-request-status"' : ""}`) : ""}${link("SC-RULES", "费用与利润规则", "/sourcing/cost-rules?from=" + encodeURIComponent(routePath()))}${manager() ? `<details class="more"><summary>更多操作</summary><div>${action("SC-DELETE-OPEN", "删除找货记录", "danger")}</div></details>` : ""}</div></div></header>`}${message ? `<div class="notice info" role="status">${esc(message)}</div>` : ""}${mainPending ? `<div id="main-request-status" class="notice info" role="status" tabindex="-1">${esc(mainPending.recordName)}：${mainPending.kind === "compare" ? "正在提交 " + mainPending.quoteIds.length + " 家报价对比，尚未确认保存。" : "重新采集请求提交中，尚未确认排队。"} 不自动重放请求。</div>` : ""}${content(matches)}<p class="artifact">P21 · SOURCING-C-r1 · ${esc(current.label)} · 合成合同样本，具体设计待审。</p></main></div>`;
   }
   function content(matches) {
     if (is("loading"))
-      return `<section class="panel" aria-busy="true"><h2>正在读取找货记录</h2><div class="skeleton"></div><div class="skeleton"></div><p class="meta">未知，不提前显示0个候选。</p></section>`;
-    if (is("empty"))
-      return empty(
+      return `<section class="panel" aria-busy="true" aria-live="polite"><h2>正在读取找货记录</h2><div class="skeleton"></div><div class="skeleton"></div><p class="meta">未知，不提前显示0个候选。</p></section>`;
+    if (emptyDirectory())
+      return recovery(
         "还没有找货记录",
-        "提供关键词、图片引用、机会或商品链接。",
-        manager() ? "SC-S-OPEN" : "SC-STATE",
-        manager() ? "发起找货" : "重新读取",
+        manager()
+          ? "提供关键词、图片引用、机会或商品链接。"
+          : "当前目录没有记录；你只有读取权限，不能发起找货。",
+        { id: manager() ? "SC-S-OPEN" : "SC-STATE", label: manager() ? "发起找货" : "重新读取" },
+        { id: "SC-SEARCH-CLEAR", label: "清空搜索" },
       );
-    if (!matches.length)
-      return empty(
-        "没有匹配的找货记录",
-        "清空搜索后恢复当前工作区记录。",
-        "SC-SEARCH-CLEAR",
-        "清空搜索",
-      );
-    if (is("error", "expired", "forbidden", "rate-limited"))
-      return empty(
+    if (is("error", "expired", "forbidden", "rate-limited", "blocked"))
+      return recovery(
         {
           error: "找货记录读取失败",
           expired: "登录状态已过期",
           forbidden: "当前无读取权限",
           "rate-limited": "请求受到限流",
+          blocked: "读取依赖暂时受阻",
         }[current.id],
-        "此时不能判断记录为空；错误请求号 synthetic-sourcing-21。",
-        "SC-STATE",
-        "重新读取",
+        "此时不能判断记录为空；错误请求号 synthetic-sourcing-21。下方操作仅重新读取本页，不会登录、申请权限或跳转其他页面。",
+        { id: "SC-STATE", label: "重新读取" },
+        is("expired") ? null : { id: "SC-STATE", label: "再次检查" },
+      );
+    if (!matches.length)
+      return recovery(
+        "没有匹配的找货记录",
+        "清空搜索后恢复当前工作区记录，不删除原记录。",
+        { id: "SC-SEARCH-CLEAR", label: "清空搜索" },
+        { id: manager() ? "SC-S-OPEN" : "SC-STATE", label: manager() ? "发起新找货" : "重新读取" },
       );
     const noOffers = is("queued", "running", "failed", "empty-result");
     const progress = is("queued")
@@ -333,7 +369,7 @@
           : is("cost-overdue")
             ? "已超时 / 仍待复核"
             : "待复核";
-    return `<section class="panel"><div class="panel-title"><div><h2>机会成本与利润</h2><p class="meta">机会版本 7 · 已生效输入与待复核输入分开</p></div>${link("SC-OPPORTUNITY", "打开机会详情", "/opportunities/" + opp + "?tab=profit&from=/sourcing")}</div><p>净利润 = 含税售价 − 采购 − 物流 − 平台费 − 支付手续费 − 税费 − 履约成本</p>${
+    return `<section class="panel"><div class="panel-title"><div><h2>机会成本与利润</h2><p class="meta">机会版本 7 · 已生效输入与待复核输入分开</p></div>${link("SC-OPPORTUNITY", "打开机会详情", "/opportunities/" + opp + "?tab=profit&from=/sourcing")}</div>${link("SC-PROFIT-RULES", "管理费用规则", "/sourcing/cost-rules")}<p>净利润 = 含税售价 − 采购 − 物流 − 平台费 − 支付手续费 − 税费 − 履约成本</p>${
       calculated
         ? `<div class="cost-summary"><div class="notice info"><p class="meta">服务端已计算快照 · 规则 SAMPLE-v2</p><strong class="profit-number">USD 20.00</strong><p>净利率 20% · 含税售价 USD 100.00</p><p class="meta">仅展示快照，不在浏览器重算。</p></div><div class="cost-lines">${[
             ["采购", 50],
@@ -620,8 +656,12 @@
       render();
     } else if (id === "SC-STATE") {
       intent("/sourcing/searches", "GET");
-      message = "仅记录重读意图；原页面状态恢复由实际接口决定。";
+      selectedQuotes = [];
+      current = scenes.find((scene) => scene.id === "loading");
+      message = "仅记录列表首个 GET 意图；后续对比历史和详情依赖真实响应，未模拟恢复成功。";
       render();
+      $(".workspace h1").setAttribute("tabindex", "-1");
+      $(".workspace h1").focus();
     } else if (id === "SC-COST-LOAD") {
       intent("/opportunities/" + opp, "GET");
       intent("/opportunities/" + opp + "/profit-analysis", "GET");

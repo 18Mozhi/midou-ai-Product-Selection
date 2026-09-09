@@ -1,5 +1,82 @@
 # P21 供应链与利润 · C方向整页待审提案
 
+[导航、搜索与恢复审核](../../SOURCING-NAVIGATION-RECOVERY-REVIEW.md)。2026-09-09 P21导航与恢复：新增230PNG（28控件变体双端四态224图＋3场景6图），包现65主场景615PNG、51控件变体464双端状态实例。8导航和2恢复代表组新增40槽，累计124已映射、46待补；额外来源、query和角色/主次恢复不增加动作分母。源恢复实际load与通用标签差异已明示，原型不伪造登录/权限/返回能力，加载/失败隐藏旧记录和删除入口。11组源隔离与完整capture通过，具体批准/真实Vue/部署未完成。
+
+## 导航与恢复图直达
+
+- [1440px · empty-readonly](1440-empty-readonly.png)
+- [1440px · search-empty-readonly](1440-search-empty-readonly.png)
+- [1440px · blocked](1440-blocked.png)
+- [390px · empty-readonly](390-empty-readonly.png)
+- [390px · search-empty-readonly](390-search-empty-readonly.png)
+- [390px · blocked](390-blocked.png)
+
+### 1440px
+
+| 控件 | 默认 | 悬停 | 键盘焦点 | 按下 |
+| --- | --- | --- | --- | --- |
+| 供应商找货导航 | [查看](1440-control-nav-self-default.png) | [查看](1440-control-nav-self-hover.png) | [查看](1440-control-nav-self-focus.png) | [查看](1440-control-nav-self-pressed.png) |
+| 费用规则导航 | [查看](1440-control-nav-rules-default.png) | [查看](1440-control-nav-rules-hover.png) | [查看](1440-control-nav-rules-focus.png) | [查看](1440-control-nav-rules-pressed.png) |
+| 当前记录费用规则 | [查看](1440-control-nav-context-default.png) | [查看](1440-control-nav-context-hover.png) | [查看](1440-control-nav-context-focus.png) | [查看](1440-control-nav-context-pressed.png) |
+| 采集任务明细 | [查看](1440-control-nav-collection-default.png) | [查看](1440-control-nav-collection-hover.png) | [查看](1440-control-nav-collection-focus.png) | [查看](1440-control-nav-collection-pressed.png) |
+| ERP 外部页面 | [查看](1440-control-nav-erp-default.png) | [查看](1440-control-nav-erp-hover.png) | [查看](1440-control-nav-erp-focus.png) | [查看](1440-control-nav-erp-pressed.png) |
+| 首家原始商品页 | [查看](1440-control-nav-source-default.png) | [查看](1440-control-nav-source-hover.png) | [查看](1440-control-nav-source-focus.png) | [查看](1440-control-nav-source-pressed.png) |
+| 机会利润详情 | [查看](1440-control-nav-opportunity-default.png) | [查看](1440-control-nav-opportunity-hover.png) | [查看](1440-control-nav-opportunity-focus.png) | [查看](1440-control-nav-opportunity-pressed.png) |
+| 利润面板费用规则 | [查看](1440-control-nav-profit-rules-default.png) | [查看](1440-control-nav-profit-rules-hover.png) | [查看](1440-control-nav-profit-rules-focus.png) | [查看](1440-control-nav-profit-rules-pressed.png) |
+| 第二家原始商品页 | [查看](1440-control-nav-source-second-default.png) | [查看](1440-control-nav-source-second-hover.png) | [查看](1440-control-nav-source-second-focus.png) | [查看](1440-control-nav-source-second-pressed.png) |
+| 未确认候选原始页 | [查看](1440-control-nav-source-unconfirmed-default.png) | [查看](1440-control-nav-source-unconfirmed-hover.png) | [查看](1440-control-nav-source-unconfirmed-focus.png) | [查看](1440-control-nav-source-unconfirmed-pressed.png) |
+| 费用规则 / 带搜索条件 | [查看](1440-control-nav-context-query-default.png) | [查看](1440-control-nav-context-query-hover.png) | [查看](1440-control-nav-context-query-focus.png) | [查看](1440-control-nav-context-query-pressed.png) |
+| 读取失败 / 主操作 | [查看](1440-control-recovery-error-primary-default.png) | [查看](1440-control-recovery-error-primary-hover.png) | [查看](1440-control-recovery-error-primary-focus.png) | [查看](1440-control-recovery-error-primary-pressed.png) |
+| 读取失败 / 次操作 | [查看](1440-control-recovery-error-secondary-default.png) | [查看](1440-control-recovery-error-secondary-hover.png) | [查看](1440-control-recovery-error-secondary-focus.png) | [查看](1440-control-recovery-error-secondary-pressed.png) |
+| 会话过期 / 主操作 | [查看](1440-control-recovery-expired-primary-default.png) | [查看](1440-control-recovery-expired-primary-hover.png) | [查看](1440-control-recovery-expired-primary-focus.png) | [查看](1440-control-recovery-expired-primary-pressed.png) |
+| 无读取权限 / 主操作 | [查看](1440-control-recovery-forbidden-primary-default.png) | [查看](1440-control-recovery-forbidden-primary-hover.png) | [查看](1440-control-recovery-forbidden-primary-focus.png) | [查看](1440-control-recovery-forbidden-primary-pressed.png) |
+| 无读取权限 / 次操作 | [查看](1440-control-recovery-forbidden-secondary-default.png) | [查看](1440-control-recovery-forbidden-secondary-hover.png) | [查看](1440-control-recovery-forbidden-secondary-focus.png) | [查看](1440-control-recovery-forbidden-secondary-pressed.png) |
+| 限流 / 主操作 | [查看](1440-control-recovery-rate-limited-primary-default.png) | [查看](1440-control-recovery-rate-limited-primary-hover.png) | [查看](1440-control-recovery-rate-limited-primary-focus.png) | [查看](1440-control-recovery-rate-limited-primary-pressed.png) |
+| 限流 / 次操作 | [查看](1440-control-recovery-rate-limited-secondary-default.png) | [查看](1440-control-recovery-rate-limited-secondary-hover.png) | [查看](1440-control-recovery-rate-limited-secondary-focus.png) | [查看](1440-control-recovery-rate-limited-secondary-pressed.png) |
+| 依赖受阻 / 主操作 | [查看](1440-control-recovery-blocked-primary-default.png) | [查看](1440-control-recovery-blocked-primary-hover.png) | [查看](1440-control-recovery-blocked-primary-focus.png) | [查看](1440-control-recovery-blocked-primary-pressed.png) |
+| 依赖受阻 / 次操作 | [查看](1440-control-recovery-blocked-secondary-default.png) | [查看](1440-control-recovery-blocked-secondary-hover.png) | [查看](1440-control-recovery-blocked-secondary-focus.png) | [查看](1440-control-recovery-blocked-secondary-pressed.png) |
+| 空目录 / 管理者 / 主操作 | [查看](1440-control-recovery-empty-primary-default.png) | [查看](1440-control-recovery-empty-primary-hover.png) | [查看](1440-control-recovery-empty-primary-focus.png) | [查看](1440-control-recovery-empty-primary-pressed.png) |
+| 空目录 / 管理者 / 次操作 | [查看](1440-control-recovery-empty-secondary-default.png) | [查看](1440-control-recovery-empty-secondary-hover.png) | [查看](1440-control-recovery-empty-secondary-focus.png) | [查看](1440-control-recovery-empty-secondary-pressed.png) |
+| 空目录 / 只读 / 主操作 | [查看](1440-control-recovery-empty-readonly-primary-default.png) | [查看](1440-control-recovery-empty-readonly-primary-hover.png) | [查看](1440-control-recovery-empty-readonly-primary-focus.png) | [查看](1440-control-recovery-empty-readonly-primary-pressed.png) |
+| 空目录 / 只读 / 次操作 | [查看](1440-control-recovery-empty-readonly-secondary-default.png) | [查看](1440-control-recovery-empty-readonly-secondary-hover.png) | [查看](1440-control-recovery-empty-readonly-secondary-focus.png) | [查看](1440-control-recovery-empty-readonly-secondary-pressed.png) |
+| 搜索无结果 / 管理者 / 主操作 | [查看](1440-control-recovery-search-primary-default.png) | [查看](1440-control-recovery-search-primary-hover.png) | [查看](1440-control-recovery-search-primary-focus.png) | [查看](1440-control-recovery-search-primary-pressed.png) |
+| 搜索无结果 / 管理者 / 次操作 | [查看](1440-control-recovery-search-secondary-default.png) | [查看](1440-control-recovery-search-secondary-hover.png) | [查看](1440-control-recovery-search-secondary-focus.png) | [查看](1440-control-recovery-search-secondary-pressed.png) |
+| 搜索无结果 / 只读 / 主操作 | [查看](1440-control-recovery-search-readonly-primary-default.png) | [查看](1440-control-recovery-search-readonly-primary-hover.png) | [查看](1440-control-recovery-search-readonly-primary-focus.png) | [查看](1440-control-recovery-search-readonly-primary-pressed.png) |
+| 搜索无结果 / 只读 / 次操作 | [查看](1440-control-recovery-search-readonly-secondary-default.png) | [查看](1440-control-recovery-search-readonly-secondary-hover.png) | [查看](1440-control-recovery-search-readonly-secondary-focus.png) | [查看](1440-control-recovery-search-readonly-secondary-pressed.png) |
+
+### 390px
+
+| 控件 | 默认 | 悬停 | 键盘焦点 | 按下 |
+| --- | --- | --- | --- | --- |
+| 供应商找货导航 | [查看](390-control-nav-self-default.png) | [查看](390-control-nav-self-hover.png) | [查看](390-control-nav-self-focus.png) | [查看](390-control-nav-self-pressed.png) |
+| 费用规则导航 | [查看](390-control-nav-rules-default.png) | [查看](390-control-nav-rules-hover.png) | [查看](390-control-nav-rules-focus.png) | [查看](390-control-nav-rules-pressed.png) |
+| 当前记录费用规则 | [查看](390-control-nav-context-default.png) | [查看](390-control-nav-context-hover.png) | [查看](390-control-nav-context-focus.png) | [查看](390-control-nav-context-pressed.png) |
+| 采集任务明细 | [查看](390-control-nav-collection-default.png) | [查看](390-control-nav-collection-hover.png) | [查看](390-control-nav-collection-focus.png) | [查看](390-control-nav-collection-pressed.png) |
+| ERP 外部页面 | [查看](390-control-nav-erp-default.png) | [查看](390-control-nav-erp-hover.png) | [查看](390-control-nav-erp-focus.png) | [查看](390-control-nav-erp-pressed.png) |
+| 首家原始商品页 | [查看](390-control-nav-source-default.png) | [查看](390-control-nav-source-hover.png) | [查看](390-control-nav-source-focus.png) | [查看](390-control-nav-source-pressed.png) |
+| 机会利润详情 | [查看](390-control-nav-opportunity-default.png) | [查看](390-control-nav-opportunity-hover.png) | [查看](390-control-nav-opportunity-focus.png) | [查看](390-control-nav-opportunity-pressed.png) |
+| 利润面板费用规则 | [查看](390-control-nav-profit-rules-default.png) | [查看](390-control-nav-profit-rules-hover.png) | [查看](390-control-nav-profit-rules-focus.png) | [查看](390-control-nav-profit-rules-pressed.png) |
+| 第二家原始商品页 | [查看](390-control-nav-source-second-default.png) | [查看](390-control-nav-source-second-hover.png) | [查看](390-control-nav-source-second-focus.png) | [查看](390-control-nav-source-second-pressed.png) |
+| 未确认候选原始页 | [查看](390-control-nav-source-unconfirmed-default.png) | [查看](390-control-nav-source-unconfirmed-hover.png) | [查看](390-control-nav-source-unconfirmed-focus.png) | [查看](390-control-nav-source-unconfirmed-pressed.png) |
+| 费用规则 / 带搜索条件 | [查看](390-control-nav-context-query-default.png) | [查看](390-control-nav-context-query-hover.png) | [查看](390-control-nav-context-query-focus.png) | [查看](390-control-nav-context-query-pressed.png) |
+| 读取失败 / 主操作 | [查看](390-control-recovery-error-primary-default.png) | [查看](390-control-recovery-error-primary-hover.png) | [查看](390-control-recovery-error-primary-focus.png) | [查看](390-control-recovery-error-primary-pressed.png) |
+| 读取失败 / 次操作 | [查看](390-control-recovery-error-secondary-default.png) | [查看](390-control-recovery-error-secondary-hover.png) | [查看](390-control-recovery-error-secondary-focus.png) | [查看](390-control-recovery-error-secondary-pressed.png) |
+| 会话过期 / 主操作 | [查看](390-control-recovery-expired-primary-default.png) | [查看](390-control-recovery-expired-primary-hover.png) | [查看](390-control-recovery-expired-primary-focus.png) | [查看](390-control-recovery-expired-primary-pressed.png) |
+| 无读取权限 / 主操作 | [查看](390-control-recovery-forbidden-primary-default.png) | [查看](390-control-recovery-forbidden-primary-hover.png) | [查看](390-control-recovery-forbidden-primary-focus.png) | [查看](390-control-recovery-forbidden-primary-pressed.png) |
+| 无读取权限 / 次操作 | [查看](390-control-recovery-forbidden-secondary-default.png) | [查看](390-control-recovery-forbidden-secondary-hover.png) | [查看](390-control-recovery-forbidden-secondary-focus.png) | [查看](390-control-recovery-forbidden-secondary-pressed.png) |
+| 限流 / 主操作 | [查看](390-control-recovery-rate-limited-primary-default.png) | [查看](390-control-recovery-rate-limited-primary-hover.png) | [查看](390-control-recovery-rate-limited-primary-focus.png) | [查看](390-control-recovery-rate-limited-primary-pressed.png) |
+| 限流 / 次操作 | [查看](390-control-recovery-rate-limited-secondary-default.png) | [查看](390-control-recovery-rate-limited-secondary-hover.png) | [查看](390-control-recovery-rate-limited-secondary-focus.png) | [查看](390-control-recovery-rate-limited-secondary-pressed.png) |
+| 依赖受阻 / 主操作 | [查看](390-control-recovery-blocked-primary-default.png) | [查看](390-control-recovery-blocked-primary-hover.png) | [查看](390-control-recovery-blocked-primary-focus.png) | [查看](390-control-recovery-blocked-primary-pressed.png) |
+| 依赖受阻 / 次操作 | [查看](390-control-recovery-blocked-secondary-default.png) | [查看](390-control-recovery-blocked-secondary-hover.png) | [查看](390-control-recovery-blocked-secondary-focus.png) | [查看](390-control-recovery-blocked-secondary-pressed.png) |
+| 空目录 / 管理者 / 主操作 | [查看](390-control-recovery-empty-primary-default.png) | [查看](390-control-recovery-empty-primary-hover.png) | [查看](390-control-recovery-empty-primary-focus.png) | [查看](390-control-recovery-empty-primary-pressed.png) |
+| 空目录 / 管理者 / 次操作 | [查看](390-control-recovery-empty-secondary-default.png) | [查看](390-control-recovery-empty-secondary-hover.png) | [查看](390-control-recovery-empty-secondary-focus.png) | [查看](390-control-recovery-empty-secondary-pressed.png) |
+| 空目录 / 只读 / 主操作 | [查看](390-control-recovery-empty-readonly-primary-default.png) | [查看](390-control-recovery-empty-readonly-primary-hover.png) | [查看](390-control-recovery-empty-readonly-primary-focus.png) | [查看](390-control-recovery-empty-readonly-primary-pressed.png) |
+| 空目录 / 只读 / 次操作 | [查看](390-control-recovery-empty-readonly-secondary-default.png) | [查看](390-control-recovery-empty-readonly-secondary-hover.png) | [查看](390-control-recovery-empty-readonly-secondary-focus.png) | [查看](390-control-recovery-empty-readonly-secondary-pressed.png) |
+| 搜索无结果 / 管理者 / 主操作 | [查看](390-control-recovery-search-primary-default.png) | [查看](390-control-recovery-search-primary-hover.png) | [查看](390-control-recovery-search-primary-focus.png) | [查看](390-control-recovery-search-primary-pressed.png) |
+| 搜索无结果 / 管理者 / 次操作 | [查看](390-control-recovery-search-secondary-default.png) | [查看](390-control-recovery-search-secondary-hover.png) | [查看](390-control-recovery-search-secondary-focus.png) | [查看](390-control-recovery-search-secondary-pressed.png) |
+| 搜索无结果 / 只读 / 主操作 | [查看](390-control-recovery-search-readonly-primary-default.png) | [查看](390-control-recovery-search-readonly-primary-hover.png) | [查看](390-control-recovery-search-readonly-primary-focus.png) | [查看](390-control-recovery-search-readonly-primary-pressed.png) |
+| 搜索无结果 / 只读 / 次操作 | [查看](390-control-recovery-search-readonly-secondary-default.png) | [查看](390-control-recovery-search-readonly-secondary-hover.png) | [查看](390-control-recovery-search-readonly-secondary-focus.png) | [查看](390-control-recovery-search-readonly-secondary-pressed.png) |
+
 [主操作状态审核](../../SOURCING-MAIN-STATE-REVIEW.md)。2026-09-09：主操作新增96张双端图；本包62主场景385PNG、23控件变体240双端状态实例。8语义组增加36代表槽，第二采购来源/其他记录/已勾选为3额外变体，不新增业务动作；累计84代表槽已绑定、86待补。局部/读取控件没有源码禁用或busy条件的，不编造图或减分母。仅离线提案，未提升批准、改生产或部署。
 
 ## 主操作状态图直达

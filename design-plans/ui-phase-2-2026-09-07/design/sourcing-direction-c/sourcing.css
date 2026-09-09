@@ -209,6 +209,45 @@ button:disabled {
 .main-check input:focus-visible {
   outline: none;
 }
+.nav-control:focus-visible,
+.recovery-control:focus-visible {
+  outline: 3px solid var(--deep);
+  outline-offset: 3px;
+}
+.nav-control:active,
+.recovery-control:active {
+  box-shadow: inset 0 2px 4px #10245255;
+}
+.nav-control.source-link:hover {
+  background: var(--pale);
+  text-decoration-thickness: 2px;
+}
+.page-nav,
+.recovery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.page-nav a[aria-current="page"] {
+  background: var(--pale);
+  border-color: var(--blue);
+  box-shadow: inset 0 -3px var(--blue);
+}
+.page-nav a[aria-current="page"]:hover {
+  background: #dce7ff;
+}
+.page-nav a[aria-current="page"]:active {
+  box-shadow:
+    inset 0 -3px var(--blue),
+    inset 0 2px 4px #10245255;
+}
+.identity {
+  flex-wrap: wrap;
+}
+#search:focus-visible {
+  outline-color: white;
+}
 small,
 .meta,
 .eyebrow {

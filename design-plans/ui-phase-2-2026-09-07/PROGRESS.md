@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P21导航、搜索和恢复分支
+
+从干净main/e1a30c35继续，上一轮主操作图与验证提交为实际进展。按AGENTS/Feature Map/蓝图3.6、C方向和真实SW、UiStatePanel/state-contract、SC/PP导航追踪，使用ui-skills-root/frontend-design及现有Playwright脚本，不新增依赖/服务或子代理。新增SOURCING-NAVIGATION-RECOVERY-REVIEW.md、28导航/恢复控件变体双端四态224PNG与只读空目录/只读搜索/依赖受阻3场景6PNG，共230新图；包现65主场景615PNG、51控件变体464双端状态实例。
+
+八导航与两恢复代表组增加40槽，P21累计124映射、46待补；不同来源/带q/角色/主次操作不膨胀语义动作分母。源通用文案的返回/登录/申请/影响实际均load，稿中明确重读，不替它新增导航或权限能力。源空目录管理者创建、只读重读、次操作只清query；搜索无结果主清query，次按权限创建或重读。加载无恢复按钮、过期只有主操作；没有disabled/busy条件则不编造图或修改分母规则。
+
+原型增加紧凑模块导航，当前页选中与hover/pressed/focus分开；外部链接保留目标及noopener noreferrer。当前记录费用规则验证record/q样本，机会详情保留固定from=/sourcing而非record；真实路由任意query/历史仍未验。失败/加载隐藏旧记录与采集/删除入口，数量未知不写0；只读身份在重读后保持。重读只记录首个GET并进入loading，不伪造后续读取成功；字段输入/清空不请求。现有SC-G01–08/异步归属/实际Vue未修。
+
+最小源码检查新增2组，总11真实setup隔离组通过。首轮smoke因新增测量正则双转义未识别透明背景，把ERP背景当黑色误报2.538；用浏览器读取链确认实际浅蓝祖先背景后纠正测量，阈值未降低。当前导航hover/pressed补可见差异。最终smoke和完整capture均通过：464双端控件实例、44px触控/16px字、文字最低对比6.328、鼠标/键盘真实状态、焦点边界/内侧命中、精确目标/target/rel、Enter导航或首GET与零写打开/清空、原有主操作/四窗/报价/成本检查、九宽度×五代表面/NY时间/720×500等效重排，HTTP/页面错误0。capture覆盖完整交互，未重复默认check。
+
+只目检390-empty-readonly和1440-control-nav-source-focus两图，不宣称全图人工审阅。动作审计通过，233审核链接存在；docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis及format:check通过。设计审计76包10694PNG、844独立来源/1453绑定、8861 README链接，来源/PNG漂移和未登记图0；局部源审阅仍22页/479位置/426组，完整页面批准0、分母未冻结，G0进行中/G1–G5待验。
+
+只改离线原型/永久验证脚本、图稿/证据/图册、动作审核与当前计划/Feature Map。生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/运行配置、依赖/安全/权限和宝塔均未改，无参数或重启变化，不重跑未受影响生产E2E/构建。可直接打开审核文档/图册；node scripts/verify-ui-phase2-sourcing-c.mjs完整复验，--smoke预检，--capture重生成本包永久交付物。无新临时文件或服务，验证/诊断浏览器均finally关闭，headless_shell为0；旧output/playwright/ui-phase2-competitor-races-20260909中playwright.config.ts、results/.last-run.json因原工具清理被拒仍保留，本轮只读复核不绕过。下一继续P21成本/复核控件与适用性，再P22等51页同级核对；全站用户审核、实际重构、宝塔部署签收未完成。
+
 ## 2026-09-09 · P21主入口、记录、勾选与写请求
 
 从干净main/4badc9f1继续，上一轮关闭/取消及收尾提交为实际进展。本轮沿ui-skills-root/frontend-design/既有Playwright工作流，按AGENTS、Feature Map、蓝图3.6和实际SW处理器核对，未启动子代理。新增SOURCING-MAIN-STATE-REVIEW.md与96双端PNG；包现62主场景385PNG、23控件变体240双端状态实例。8语义组增加36代表槽，第二采购来源/其他记录/已勾选3额外变体不扩动作分母；P21累计84映射、86待补。源码无disabled/busy的局部/读取/勾选不编造图，也未修改审计分母规则。

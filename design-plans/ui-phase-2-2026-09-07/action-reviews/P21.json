@@ -91,24 +91,66 @@
         {
           "package": "sourcing-direction-c",
           "scene": "workspace"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-self-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-self-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-self-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-self-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-self-default",
+          "selector": "#app a[data-action=\"SC-NAV-SELF\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-self-hover",
+          "selector": "#app a[data-action=\"SC-NAV-SELF\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-self-focus",
+          "selector": "#app a[data-action=\"SC-NAV-SELF\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-self-pressed",
+          "selector": "#app a[data-action=\"SC-NAV-SELF\"]"
+        }
+      }
     },
     {
       "actionId": "SC-NAV-RULES",
@@ -125,24 +167,66 @@
         {
           "package": "sourcing-direction-c",
           "scene": "workspace"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-rules-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-rules-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-rules-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-rules-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-rules-default",
+          "selector": "#app a[data-action=\"SC-NAV-RULES\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-rules-hover",
+          "selector": "#app a[data-action=\"SC-NAV-RULES\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-rules-focus",
+          "selector": "#app a[data-action=\"SC-NAV-RULES\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-rules-pressed",
+          "selector": "#app a[data-action=\"SC-NAV-RULES\"]"
+        }
+      }
     },
     {
       "actionId": "SC-S-OPEN",
@@ -193,7 +277,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -267,24 +351,424 @@
         {
           "package": "sourcing-direction-c",
           "scene": "rate-limited"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-error-secondary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-expired-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-expired-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-expired-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-expired-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-forbidden-secondary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-rate-limited-secondary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-blocked-secondary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-secondary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "empty-readonly"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-empty-readonly-secondary-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "共享默认文案与实际去向可能不一致；loading无footer，状态主次矩阵还缺精确控件图。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端主次恢复及只读/管理者空目录、搜索分支已逐selector绑定；过期仅主按钮、加载无按钮。disabled/busy无源条件，不编造图，其槽保留not-mapped等待分母复核。源load首GET/本地清空/零写打开通过隔离检查，真实恢复响应/路由/异步与批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-error-primary-default",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-error-primary-hover",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-error-primary-focus",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-error-primary-pressed",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "recovery-error-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-error-secondary-default",
+            "hover": "control-recovery-error-secondary-hover",
+            "focus": "control-recovery-error-secondary-focus",
+            "pressed": "control-recovery-error-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-expired-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-expired-primary-default",
+            "hover": "control-recovery-expired-primary-hover",
+            "focus": "control-recovery-expired-primary-focus",
+            "pressed": "control-recovery-expired-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-forbidden-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-forbidden-primary-default",
+            "hover": "control-recovery-forbidden-primary-hover",
+            "focus": "control-recovery-forbidden-primary-focus",
+            "pressed": "control-recovery-forbidden-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-forbidden-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-forbidden-secondary-default",
+            "hover": "control-recovery-forbidden-secondary-hover",
+            "focus": "control-recovery-forbidden-secondary-focus",
+            "pressed": "control-recovery-forbidden-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-rate-limited-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-rate-limited-primary-default",
+            "hover": "control-recovery-rate-limited-primary-hover",
+            "focus": "control-recovery-rate-limited-primary-focus",
+            "pressed": "control-recovery-rate-limited-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-rate-limited-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-rate-limited-secondary-default",
+            "hover": "control-recovery-rate-limited-secondary-hover",
+            "focus": "control-recovery-rate-limited-secondary-focus",
+            "pressed": "control-recovery-rate-limited-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-blocked-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-blocked-primary-default",
+            "hover": "control-recovery-blocked-primary-hover",
+            "focus": "control-recovery-blocked-primary-focus",
+            "pressed": "control-recovery-blocked-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-blocked-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-blocked-secondary-default",
+            "hover": "control-recovery-blocked-secondary-hover",
+            "focus": "control-recovery-blocked-secondary-focus",
+            "pressed": "control-recovery-blocked-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-empty-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-empty-primary-default",
+            "hover": "control-recovery-empty-primary-hover",
+            "focus": "control-recovery-empty-primary-focus",
+            "pressed": "control-recovery-empty-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-empty-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-empty-secondary-default",
+            "hover": "control-recovery-empty-secondary-hover",
+            "focus": "control-recovery-empty-secondary-focus",
+            "pressed": "control-recovery-empty-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-empty-readonly-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-empty-readonly-primary-default",
+            "hover": "control-recovery-empty-readonly-primary-hover",
+            "focus": "control-recovery-empty-readonly-primary-focus",
+            "pressed": "control-recovery-empty-readonly-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-empty-readonly-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-empty-readonly-secondary-default",
+            "hover": "control-recovery-empty-readonly-secondary-hover",
+            "focus": "control-recovery-empty-readonly-secondary-focus",
+            "pressed": "control-recovery-empty-readonly-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        }
+      ]
     },
     {
       "actionId": "SC-SEARCH-RECOVERY",
@@ -301,24 +785,159 @@
         {
           "package": "sourcing-direction-c",
           "scene": "search-empty"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-secondary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-empty-readonly"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-primary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-primary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-primary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-primary-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-secondary-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-secondary-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-secondary-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-recovery-search-readonly-secondary-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "只读空筛选次按钮尚无独立图，不借只读目录抵扣。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端主次恢复及只读/管理者空目录、搜索分支已逐selector绑定；过期仅主按钮、加载无按钮。disabled/busy无源条件，不编造图，其槽保留not-mapped等待分母复核。源load首GET/本地清空/零写打开通过隔离检查，真实恢复响应/路由/异步与批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-search-primary-default",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-search-primary-hover",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-search-primary-focus",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-recovery-search-primary-pressed",
+          "selector": "#app .empty [data-recovery=\"primary\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "recovery-search-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-search-secondary-default",
+            "hover": "control-recovery-search-secondary-hover",
+            "focus": "control-recovery-search-secondary-focus",
+            "pressed": "control-recovery-search-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-search-readonly-primary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"primary\"]",
+          "states": {
+            "default": "control-recovery-search-readonly-primary-default",
+            "hover": "control-recovery-search-readonly-primary-hover",
+            "focus": "control-recovery-search-readonly-primary-focus",
+            "pressed": "control-recovery-search-readonly-primary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "recovery-search-readonly-secondary",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app .empty [data-recovery=\"secondary\"]",
+          "states": {
+            "default": "control-recovery-search-readonly-secondary-default",
+            "hover": "control-recovery-search-readonly-secondary-hover",
+            "focus": "control-recovery-search-readonly-secondary-focus",
+            "pressed": "control-recovery-search-readonly-secondary-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        }
+      ]
     },
     {
       "actionId": "SC-DETAIL",
@@ -381,7 +1000,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -492,7 +1111,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -562,24 +1181,97 @@
         {
           "package": "sourcing-direction-c",
           "scene": "cost-missing"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-query-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-query-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-query-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-context-query-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-context-default",
+          "selector": "#app a[data-action=\"SC-RULES\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-context-hover",
+          "selector": "#app a[data-action=\"SC-RULES\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-context-focus",
+          "selector": "#app a[data-action=\"SC-RULES\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-context-pressed",
+          "selector": "#app a[data-action=\"SC-RULES\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "nav-context-query",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app a[data-action=\"SC-RULES\"]",
+          "states": {
+            "default": "control-nav-context-query-default",
+            "hover": "control-nav-context-query-hover",
+            "focus": "control-nav-context-query-focus",
+            "pressed": "control-nav-context-query-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        }
+      ]
     },
     {
       "actionId": "SC-DELETE-OPEN",
@@ -618,7 +1310,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -672,24 +1364,66 @@
         {
           "package": "sourcing-direction-c",
           "scene": "platform-inspect"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-collection-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-collection-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-collection-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-collection-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-collection-default",
+          "selector": "#app a[data-action=\"SC-COLLECTION\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-collection-hover",
+          "selector": "#app a[data-action=\"SC-COLLECTION\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-collection-focus",
+          "selector": "#app a[data-action=\"SC-COLLECTION\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-collection-pressed",
+          "selector": "#app a[data-action=\"SC-COLLECTION\"]"
+        }
+      }
     },
     {
       "actionId": "SC-ERP",
@@ -706,24 +1440,66 @@
         {
           "package": "sourcing-direction-c",
           "scene": "erp"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-erp-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-erp-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-erp-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-erp-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-erp-default",
+          "selector": "#app a[data-action=\"SC-ERP\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-erp-hover",
+          "selector": "#app a[data-action=\"SC-ERP\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-erp-focus",
+          "selector": "#app a[data-action=\"SC-ERP\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-erp-pressed",
+          "selector": "#app a[data-action=\"SC-ERP\"]"
+        }
+      }
     },
     {
       "actionId": "SC-SELECT",
@@ -786,7 +1562,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -859,24 +1635,126 @@
         {
           "package": "sourcing-direction-c",
           "scene": "missing-quote"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-second-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-second-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-second-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-second-pressed"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-unconfirmed-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-unconfirmed-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-unconfirmed-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-source-unconfirmed-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-source-default",
+          "selector": "#app a[data-action=\"SC-SOURCE\"][href=\"https://example.com/synthetic-supplier/1\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-source-hover",
+          "selector": "#app a[data-action=\"SC-SOURCE\"][href=\"https://example.com/synthetic-supplier/1\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-source-focus",
+          "selector": "#app a[data-action=\"SC-SOURCE\"][href=\"https://example.com/synthetic-supplier/1\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-source-pressed",
+          "selector": "#app a[data-action=\"SC-SOURCE\"][href=\"https://example.com/synthetic-supplier/1\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "nav-source-second",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app a[data-action=\"SC-SOURCE\"][href=\"https://example.com/synthetic-supplier/2\"]",
+          "states": {
+            "default": "control-nav-source-second-default",
+            "hover": "control-nav-source-second-hover",
+            "focus": "control-nav-source-second-focus",
+            "pressed": "control-nav-source-second-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        },
+        {
+          "key": "nav-source-unconfirmed",
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "selector": "#app a[data-action=\"SC-SOURCE\"][href=\"https://example.com/synthetic-supplier/3\"]",
+          "states": {
+            "default": "control-nav-source-unconfirmed-default",
+            "hover": "control-nav-source-unconfirmed-hover",
+            "focus": "control-nav-source-unconfirmed-focus",
+            "pressed": "control-nav-source-unconfirmed-pressed"
+          },
+          "scope": "additional-control-variant-not-new-action"
+        }
+      ]
     },
     {
       "actionId": "SC-QUOTE-OPEN",
@@ -919,7 +1797,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1011,7 +1889,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1122,7 +2000,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1212,7 +2090,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1390,7 +2268,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1498,7 +2376,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1633,7 +2511,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1719,7 +2597,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1819,7 +2697,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -1946,7 +2824,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2028,7 +2906,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2128,7 +3006,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2251,7 +3129,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2333,7 +3211,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2429,7 +3307,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2552,7 +3430,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2624,24 +3502,66 @@
         {
           "package": "sourcing-direction-c",
           "scene": "cost-calculated"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-opportunity-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-opportunity-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-opportunity-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-opportunity-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-opportunity-default",
+          "selector": "#app a[data-action=\"SC-OPPORTUNITY\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-opportunity-hover",
+          "selector": "#app a[data-action=\"SC-OPPORTUNITY\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-opportunity-focus",
+          "selector": "#app a[data-action=\"SC-OPPORTUNITY\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-opportunity-pressed",
+          "selector": "#app a[data-action=\"SC-OPPORTUNITY\"]"
+        }
+      }
     },
     {
       "actionId": "SC-COST-WIRING",
@@ -2670,7 +3590,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2721,24 +3641,66 @@
         {
           "package": "sourcing-direction-c",
           "scene": "cost-missing"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-profit-rules-default"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-profit-rules-hover"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-profit-rules-focus"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "control-nav-profit-rules-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-navigation-only",
         "busy": "not-applicable-navigation-only"
       },
-      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+      "remaining": "双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。",
+      "visualStateReferences": {
+        "default": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-profit-rules-default",
+          "selector": "#app a[data-action=\"SC-PROFIT-RULES\"]"
+        },
+        "hover": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-profit-rules-hover",
+          "selector": "#app a[data-action=\"SC-PROFIT-RULES\"]"
+        },
+        "focus": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-profit-rules-focus",
+          "selector": "#app a[data-action=\"SC-PROFIT-RULES\"]"
+        },
+        "pressed": {
+          "package": "sourcing-direction-c",
+          "pageId": "P21",
+          "scene": "control-nav-profit-rules-pressed",
+          "selector": "#app a[data-action=\"SC-PROFIT-RULES\"]"
+        }
+      }
     },
     {
       "actionId": "SC-COST-REVIEW-WIRING",
@@ -2767,7 +3729,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2821,7 +3783,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2861,7 +3823,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2906,7 +3868,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2947,7 +3909,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -2987,7 +3949,7 @@
         {
           "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "62主场景385PNG；共23控件变体240双端状态实例。仅代表状态映射，不代表该动作全部变体、批准或真实Vue/API通过。"
+          "claim": "65主场景615PNG；共51控件变体464双端状态实例，11组真实setup隔离检查。状态引用不代表全部变体、用户批准或真实Vue/API通过。"
         }
       ],
       "visualStates": {
@@ -3701,7 +4663,7 @@
       "scripts/verify-ui-phase2-sourcing-c.mjs",
       "tests/e2e/m04-06-sourcing.spec.ts"
     ],
-    "scope": "本轮九组真实setup隔离检查和62主场景/385PNG重渲染；共23控件变体240双端状态实例。新增主入口、当前/其他记录、未选/已选报价、精确比较和刷新在途意图与共享busy检查；历史真实Vue E2E未重跑，SC-G01–08未修。"
+    "scope": "本轮11组真实setup隔离检查与65主场景615PNG重渲染；共51控件变体464双端状态实例。新增精确导航目标、主次恢复与只读/管理者空目录、搜索、加载隐藏旧数据与操作；只记录导航或首GET，不证明实际router/恢复完成。历史真实Vue E2E未重跑，SC-G01–08未修。"
   },
   "compositionGaps": [
     "四提交及四关闭组共48代表状态槽已绑定，四取消额外变体不增加动作分母；剩122槽未映射。完整输入/错误/主题密度、真实UI与用户批准仍未完成。",

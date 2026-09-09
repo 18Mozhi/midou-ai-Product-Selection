@@ -68,10 +68,11 @@ export async function verifySourcingSource() {
       routes,
     };
   }
-  const sw = () =>
+  const sw = (props) =>
     setup(
       "SourcingWorkspace",
-      "load,detail,items,selected,state,notice,form,showSearch,openSearch,closeSearch,create,quote,quoteCandidate,openQuote,confirm,selectedQuotes,choose,compare,purchaseCandidate,purchaseForm,openPurchase,purchase,deleting,deleteReason,removeSearch,refreshSearch,stabilityText,canManage,canConfirmCost",
+      "load,detail,items,selected,state,notice,form,showSearch,openSearch,closeSearch,create,quote,quoteCandidate,openQuote,confirm,selectedQuotes,choose,compare,purchaseCandidate,purchaseForm,openPurchase,purchase,deleting,deleteReason,removeSearch,refreshSearch,stabilityText,canManage,canConfirmCost,handleStatePrimary,handleStateSecondary,resetQuery,query,filteredItems",
+      props,
     );
   const sc = (props) =>
     setup(
@@ -93,6 +94,55 @@ export async function verifySourcingSource() {
     quote: { id: "q1", version: 2, stability_status: "variable", risk_level: "unknown" },
   };
   try {
+    for (const kind of ["error", "expired", "forbidden", "blocked"]) {
+      for (const handler of ["handleStatePrimary", "handleStateSecondary"]) {
+        const recovery = await sw();
+        recovery.state.value = kind;
+        recovery.selectedQuotes.value = ["old-quote"];
+        recovery.replies.push(new ApiClientError(kind));
+        recovery[handler]();
+        assert.equal(recovery.state.value, "loading");
+        assert.deepEqual(recovery.selectedQuotes.value, []);
+        assert.equal(recovery.calls[0].url, "/sourcing/searches");
+        await new Promise(setImmediate);
+        assert.equal(recovery.state.value, kind);
+        assert.deepEqual(recovery.routes, [], "recovery does not navigate to login/home/history");
+      }
+    }
+    checks.push(
+      "source recovery handlers reload for error/expired/forbidden/blocked; immediate loading clears quote selection, no login/home/history navigation; expired secondary handler exists but shared template hides its absent label",
+    );
+    for (const managed of [true, false]) {
+      const recovery = await sw({ capabilities: managed ? ["supplier_quote:manage"] : [] });
+      recovery.state.value = "empty";
+      recovery.query.value = "missing";
+      recovery.handleStateSecondary();
+      assert.equal(recovery.query.value, "");
+      assert.equal(recovery.state.value, "empty");
+      assert.equal(recovery.calls.length, 0);
+      if (!managed) recovery.replies.push(new ApiClientError("forbidden"));
+      recovery.handleStatePrimary();
+      if (managed) {
+        assert.equal(recovery.showSearch.value, true);
+        assert.equal(recovery.calls.length, 0);
+      } else {
+        assert.equal(recovery.showSearch.value, false);
+        assert.equal(recovery.calls[0].url, "/sourcing/searches");
+        await new Promise(setImmediate);
+      }
+      recovery.items.value = [{ ...item, input_ref: "ABC-REF", status: "completed" }];
+      recovery.query.value = " abc-ref ";
+      assert.equal(recovery.filteredItems.value.length, 1);
+      const count = recovery.calls.length;
+      recovery.query.value = "no-match";
+      assert.equal(recovery.filteredItems.value.length, 0);
+      recovery.resetQuery();
+      assert.equal(recovery.filteredItems.value.length, 1);
+      assert.equal(recovery.calls.length, count, "filter/reset only local");
+    }
+    checks.push(
+      "source empty primary is capability-scoped create or load; empty secondary and search reset only clear query; filtering uses trim/lowercase name/input_ref/status without HTTP",
+    );
     let s = await sw();
     s.replies.push(ok([item]), new ApiClientError("error"));
     await s.load();
