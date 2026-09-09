@@ -140,11 +140,33 @@ export function validateActionReview(
         assert.ok(
           action.scenes.some((scene) => scene.package === ref.package && scene.scene === ref.scene),
         );
-        const target = packages.get(ref.package)?.actionVisualReferences?.[action.actionId];
+        const evidence = packages.get(ref.package);
+        const pageScoped = Object.hasOwn(ref, "pageId");
+        if (pageScoped)
+          assert.equal(ref.pageId, review.pageId, "visual reference belongs to another page");
+        const target = pageScoped
+          ? evidence?.pageActionVisualReferences?.[ref.pageId]?.[action.actionId]
+          : evidence?.actionVisualReferences?.[action.actionId];
         assert.ok(target, "missing action-specific visual evidence");
+        if (pageScoped || target.pageId)
+          assert.equal(target.pageId, review.pageId, "visual evidence belongs to another page");
         assert.equal(target.scope, "representative-control-only-not-all-variants-or-Vue");
         assert.equal(target.selector, ref.selector, "control selector differs from evidence");
         assert.equal(target.states[state], ref.scene, "state differs from evidence");
+        if (pageScoped)
+          for (const width of [1440, 390])
+            assert.ok(
+              evidence.screenshots.some(
+                (shot) =>
+                  shot.pageId === review.pageId &&
+                  shot.scene === ref.scene &&
+                  (shot.width ?? shot.viewport?.width) === width &&
+                  shot.control?.selector === ref.selector &&
+                  shot.control?.actionId === action.actionId &&
+                  shot.control?.state === state,
+              ),
+              "missing page-specific exact control screenshot",
+            );
       }
       for (const [state, value] of Object.entries(action.visualStates))
         if (value === "scene-reference-not-acceptance")

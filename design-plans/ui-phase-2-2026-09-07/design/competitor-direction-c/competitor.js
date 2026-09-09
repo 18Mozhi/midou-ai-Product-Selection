@@ -56,6 +56,12 @@
     ["rules-blocked", "P20", "规则页 / 依赖受阻"],
     ["rules-loading", "P20", "规则读取中"],
     ["rules-readonly", "P20", "只读规则目录"],
+    ["rules-create-link", "P20", "create=1 / 商品链接"],
+    ["rules-create-market", "P20", "create=1 / 市场信息"],
+    ["rules-create-confirm", "P20", "create=1 / 确认采集"],
+    ["rules-create-error", "P20", "create=1 / 失败保留"],
+    ["rules-create-busy", "P20", "create=1 / 提交中"],
+    ["rules-create-readonly", "P20", "只读 create=1 / 不打开弹窗"],
     ["rule-global", "P20", "规则 / 工作区价格"],
     ["rule-target", "P20", "规则 / 指定竞品"],
     ["rule-availability", "P20", "规则 / 库存"],
@@ -133,6 +139,8 @@
     modalKind = "",
     step = 1,
     opener,
+    openerElement,
+    routeQuery = {},
     busy = false,
     collectionSubmitting = false,
     objectPending = null,
@@ -158,7 +166,14 @@
   const badge = (text, good = false) => `<span class="badge ${good ? "good" : ""}">${text}</span>`;
   const is = (...ids) => ids.includes(current.id);
   const manager = () =>
-    !is("readonly", "task-only", "rules-readonly", "empty-readonly", "search-empty-readonly");
+    !is(
+      "readonly",
+      "task-only",
+      "rules-readonly",
+      "empty-readonly",
+      "search-empty-readonly",
+      "rules-create-readonly",
+    );
   const taskPermission = () => !is("readonly", "rules-readonly");
   const rulesPage = () => current.pageId === "P20";
   const note = (title, text, cls = "") =>
@@ -171,6 +186,8 @@
     search = is("search-empty", "search-empty-readonly", "deep-link") ? "不存在的标题" : "";
     deep = is("deep-link");
     modalKind = "";
+    routeQuery = id.startsWith("rules-create-") ? { create: "1" } : {};
+    openerElement = null;
     busy = false;
     collectionSubmitting = is("collect-busy");
     objectPending = is("toggle-busy", "resume-busy", "task-busy", "review-task-busy")
@@ -206,8 +223,8 @@
     document.documentElement.dataset.density = id.endsWith("compact") ? "compact" : "standard";
     $("#scene").value = id;
     render();
-    if (id.startsWith("create-")) {
-      step = id === "create-link" ? 1 : id === "create-market" ? 2 : 3;
+    if ((id.startsWith("create-") || id.startsWith("rules-create-")) && manager()) {
+      step = id.endsWith("-link") ? 1 : id.endsWith("-market") ? 2 : 3;
       openModal("create", true);
     } else if (id.startsWith("delete")) openModal("delete", true);
     else if (id.startsWith("rule-")) {
@@ -326,12 +343,21 @@
     return `${note("范围只在当前工作区", "全部竞品不代表跨组织全局；监控就绪不代表任何机会已通过竞争质量门。", "info")}<section class="rules"><div class="section-heading"><h2>监控规则</h2><span class="meta">${rows.length} 条返回规则 · ${rows.filter((r) => r.status === "已生效").length} 条生效</span></div>${!rows.length ? emptyPanel("尚未配置监控规则", "读取成功后确认无规则。创建明确阈值，才有据可查。", manager() ? "CP-RULE-OPEN" : null, "创建第一条规则") : rows.map((r) => `<article class="rule-row"><div><span class="meta">${r.target ? "指定竞品" : "工作区全部竞品"}</span><h3>${r.metric} · ${r.direction}${r.threshold !== null ? " ≥ " + r.threshold : ""}</h3>${r.metric === "价格" ? "<span class='meta'>数值阈值；接口未提供规则币种</span>" : ""}</div><div class="target">${r.target === null ? "当前工作区全部竞品" : r.target === "removed" || is("rules-no-objects") ? "竞品已移除 / 当前列表不可用" : objects[0].title}<span class="meta">版本 ${r.revision} · 09-09 08:00 更新</span></div>${badge(r.status, r.status === "已生效")}</article>`).join("")}<p class="rule-footer">此页仅读取和新建规则；当前合同没有规则编辑、删除、启停按钮。停用规则仍保留展示，不计入生效数。</p></section>`;
   }
   function openModal(kind, scene = false) {
+    openerElement =
+      !scene && document.activeElement?.closest("#app")
+        ? document.activeElement.closest("[data-action]")
+        : null;
     opener =
-      (!scene &&
-        document.activeElement?.closest("#app") &&
-        document.activeElement.closest("[data-action]")?.dataset.action) ||
-      (kind === "rule" ? "CP-RULE-OPEN" : kind === "delete" ? "CP-DELETE-OPEN" : "CP-CREATE-OPEN");
+      openerElement?.dataset.action ||
+      (kind === "rule"
+        ? "CP-RULE-OPEN"
+        : kind === "delete"
+          ? "CP-DELETE-OPEN"
+          : rulesPage()
+            ? null
+            : "CP-CREATE-OPEN");
     modalKind = kind;
+    if (kind === "create") routeQuery.create = "1";
     busy = scene && current.id.endsWith("busy");
     formError =
       scene && current.id.endsWith("error")
@@ -349,12 +375,21 @@
   }
   function closeModal() {
     if (busy) return;
+    if (modalKind === "create") delete routeQuery.create;
     $("#modal").close();
     modalKind = "";
     formError = "";
     step = 1;
     if (opener === "CP-DELETE-OPEN") $("[data-action='CP-MORE']")?.setAttribute("open", "");
-    document.querySelector(`[data-action="${opener}"]`)?.focus();
+    const returnTarget = openerElement?.isConnected
+      ? openerElement
+      : document.querySelector(`[data-action="${opener}"]`);
+    if (returnTarget) returnTarget.focus();
+    else if (rulesPage()) {
+      const heading = $("#app h1");
+      heading.setAttribute("tabindex", "-1");
+      heading.focus();
+    }
   }
   function field(name, title, attributes = "", value = createForm[name]) {
     return `<label>${title}<input name="${name}" ${attributes} value="${esc(value)}" ${busy ? "disabled" : ""}/></label>`;
@@ -414,7 +449,7 @@
     } else
       body = `${note("停止监控，保留历史", `删除“${esc(selected.title)}”后不再继续监控；已有快照与审计记录保留。`, "error")}<p class="meta">当前版本 7 · 不永久删除历史证据</p><label>删除原因<textarea name="reason" required maxlength="500" ${busy ? "disabled" : ""}>${esc(reason)}</textarea></label>`;
     $("#modal").innerHTML =
-      `<form ${busy ? 'aria-busy="true"' : ""}><header><div><p class="eyebrow">${create ? "建立观察对象" : rule ? "明确范围与阈值" : "危险操作 / 保留审计"}</p><h2 id="dialog-title">${create ? "添加竞品监控" : rule ? "新建监控规则" : "删除竞品监控"}</h2></div>${button(id + "-CLOSE", "×", "", busy)}</header>${body}${formError ? `<div class="notice error" role="alert">${esc(formError)}<br><code>synthetic-request-19</code></div>` : ""}<footer>${create && step > 1 ? button("CP-CREATE-PREVIOUS", "上一步", "", busy) : button(id + "-CLOSE", "取消", "", busy)}<button type="submit" data-action="${id}-SUBMIT" class="primary ${!create && !rule ? "danger" : ""}" ${busy ? 'disabled aria-busy="true"' : ""}>${busy ? (create ? "正在添加…" : rule ? "正在启用…" : "正在删除…") : create ? (step === 3 ? "确认并开始采集" : "下一步") : rule ? "启用规则" : "确认删除"}</button></footer></form>`;
+      `<form ${busy ? 'aria-busy="true"' : ""}><header><div><p class="eyebrow">${create ? (rulesPage() ? "P20 · URL create=1 · 建立观察对象" : "建立观察对象") : rule ? "明确范围与阈值" : "危险操作 / 保留审计"}</p><h2 id="dialog-title">${create ? "添加竞品监控" : rule ? "新建监控规则" : "删除竞品监控"}</h2></div>${button(id + "-CLOSE", "×", "", busy)}</header>${body}${formError ? `<div class="notice error" role="alert">${esc(formError)}<br><code>synthetic-request-19</code></div>` : ""}<footer>${create && step > 1 ? button("CP-CREATE-PREVIOUS", "上一步", "", busy) : button(id + "-CLOSE", "取消", "", busy)}<button type="submit" data-action="${id}-SUBMIT" class="primary ${!create && !rule ? "danger" : ""}" ${busy ? 'disabled aria-busy="true"' : ""}>${busy ? (create ? "正在添加…" : rule ? "正在启用…" : "正在删除…") : create ? (step === 3 ? "确认并开始采集" : "下一步") : rule ? "启用规则" : "确认删除"}</button></footer></form>`;
     $("#modal header button").setAttribute("aria-label", "关闭" + $("#dialog-title").textContent);
   }
   function intent(path, method, body) {
@@ -666,6 +701,17 @@
   $("#scene").innerHTML = scenes
     .map((s) => `<option value="${s.id}">${s.pageId} · ${s.label}</option>`)
     .join("");
-  window.competitorReview = { scenes, choose, intents, outcome: "success" };
+  window.competitorReview = {
+    scenes,
+    choose,
+    intents,
+    outcome: "success",
+    get routePreview() {
+      return {
+        path: rulesPage() ? "/competitors/monitoring-rules" : "/competitors",
+        query: structuredClone(routeQuery),
+      };
+    },
+  };
   choose("directory");
 })();

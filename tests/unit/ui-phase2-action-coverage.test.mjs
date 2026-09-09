@@ -164,6 +164,53 @@ test("explicit contract ID accepts a middle-dot description, never substring mat
   context.contracts[0].claim = "| source | OTHER · EXISTING-SAVE |";
   assert.throws(() => validateActionReview(review, context));
 });
+for (const fault of [
+  "none",
+  "ref-page",
+  "target-page",
+  "missing-page",
+  "missing-action",
+  "selector",
+  "mobile-page",
+  "mobile-state",
+  "mobile-action",
+  "mobile-selector",
+]) {
+  test("page-scoped representative cannot borrow same action from another route " + fault, () => {
+    const { review, context } = fixture();
+    const action = review.actions[0],
+      evidence = context.packages.get("sample");
+    action.visualStates.default = "scene-reference-not-acceptance";
+    action.visualStateReferences = {
+      default: { package: "sample", pageId: "P11", scene: "ready", selector: "#save" },
+    };
+    const target = {
+      pageId: "P11",
+      scope: "representative-control-only-not-all-variants-or-Vue",
+      selector: "#save",
+      states: { default: "ready" },
+    };
+    evidence.actionVisualReferences = { [action.actionId]: { ...target, pageId: "P20" } };
+    evidence.pageActionVisualReferences = { P11: { [action.actionId]: target } };
+    for (const shot of evidence.screenshots)
+      Object.assign(shot, {
+        pageId: "P11",
+        control: { selector: "#save", actionId: action.actionId, state: "default" },
+      });
+    if (fault === "ref-page") action.visualStateReferences.default.pageId = "P20";
+    if (fault === "target-page") target.pageId = "P20";
+    if (fault === "missing-page") evidence.pageActionVisualReferences = {};
+    if (fault === "missing-action") evidence.pageActionVisualReferences.P11 = {};
+    if (fault === "selector") target.selector = "#other";
+    if (fault === "mobile-page") evidence.screenshots[1].pageId = "P20";
+    if (fault === "mobile-state") evidence.screenshots[1].control.state = "busy";
+    if (fault === "mobile-action") evidence.screenshots[1].control.actionId = "OTHER";
+    if (fault === "mobile-selector") evidence.screenshots[1].control.selector = "#other";
+    if (fault === "none")
+      assert.equal(validateActionReview(review, context).unmappedVisualSlots, 5);
+    else assert.throws(() => validateActionReview(review, context));
+  });
+}
 for (const fault of ["none", "selector", "scene", "missing-state", "missing-evidence"]) {
   test("action-specific visual binding " + fault, () => {
     const { review, context } = fixture();

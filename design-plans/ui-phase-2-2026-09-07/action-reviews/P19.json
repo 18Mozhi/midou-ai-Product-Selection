@@ -246,24 +246,62 @@
         {
           "package": "competitor-direction-c",
           "scene": "create-link"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确入口重置/聚焦/原控件回焦，P20专属创建query三步/关闭/只读，第三步精确POST及在途重入守卫；源码只作依据，实际路由/SQL/生命周期未验。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "empty主按钮来自另一状态事件组，不漏掉也不重复登记本控件；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-default",
+          "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-hover",
+          "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-focus",
+          "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-create-open-pressed",
+          "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]"
+        }
+      }
     },
     {
       "actionId": "CP-STATE-RECOVERY",

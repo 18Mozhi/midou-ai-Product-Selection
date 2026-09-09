@@ -76,24 +76,92 @@
         {
           "package": "competitor-direction-c",
           "scene": "rule-global"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-empty-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-empty-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-empty-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-empty-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确入口重置/聚焦/原控件回焦，P20专属创建query三步/关闭/只读，第三步精确POST及在途重入守卫；源码只作依据，实际路由/SQL/生命周期未验。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "ready+规则空不是state=empty；不增加规则编辑/停用按钮；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-default",
+          "selector": ".scope [data-action=\"CP-RULE-OPEN\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-hover",
+          "selector": ".scope [data-action=\"CP-RULE-OPEN\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-focus",
+          "selector": ".scope [data-action=\"CP-RULE-OPEN\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-open-pressed",
+          "selector": ".scope [data-action=\"CP-RULE-OPEN\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "rule-open-empty",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-rule-open-empty-default",
+            "hover": "control-rule-open-empty-hover",
+            "focus": "control-rule-open-empty-focus",
+            "pressed": "control-rule-open-empty-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-RULE-BACK",
@@ -621,45 +689,161 @@
       "scenes": [
         {
           "package": "competitor-direction-c",
-          "scene": "create-link"
+          "scene": "rules-create-link"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-market"
+          "scene": "rules-create-market"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-confirm"
+          "scene": "rules-create-confirm"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-invalid"
+          "scene": "rules-create-error"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-error"
+          "scene": "rules-create-busy"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-busy"
+          "scene": "control-p20-create-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-link-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-link-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-link-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-link-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-market-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-market-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-market-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-next-market-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确入口重置/聚焦/原控件回焦，P20专属创建query三步/关闭/只读，第三步精确POST及在途重入守卫；源码只作依据，实际路由/SQL/生命周期未验。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "准确market/product_url/title；opportunity_id仅非空发送；不把前两步计成POST，不补provider等字段；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-default",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-hover",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-focus",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-pressed",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-disabled",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-busy",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "p20-create-next-link",
+          "package": "competitor-direction-c",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-create-next-link-default",
+            "hover": "control-p20-create-next-link-hover",
+            "focus": "control-p20-create-next-link-focus",
+            "pressed": "control-p20-create-next-link-pressed"
+          }
+        },
+        {
+          "key": "p20-create-next-market",
+          "package": "competitor-direction-c",
+          "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-create-next-market-default",
+            "hover": "control-p20-create-next-market-hover",
+            "focus": "control-p20-create-next-market-focus",
+            "pressed": "control-p20-create-next-market-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-CREATE-CLOSE",
@@ -678,37 +862,129 @@
       "scenes": [
         {
           "package": "competitor-direction-c",
-          "scene": "create-link"
+          "scene": "rules-create-link"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-market"
+          "scene": "rules-create-market"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-confirm"
+          "scene": "rules-create-confirm"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-busy"
+          "scene": "rules-create-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-close-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-close-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-close-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-close-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-close-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-close-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-cancel-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-cancel-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-cancel-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-cancel-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确入口重置/聚焦/原控件回焦，P20专属创建query三步/关闭/只读，第三步精确POST及在途重入守卫；源码只作依据，实际路由/SQL/生命周期未验。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "关闭不取消已经发出的POST；P20双窗时Escape先关规则再创建；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-close-default",
+          "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-close-hover",
+          "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-close-focus",
+          "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-close-pressed",
+          "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-close-disabled",
+          "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-close-busy",
+          "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "p20-create-cancel",
+          "package": "competitor-direction-c",
+          "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-create-cancel-default",
+            "hover": "control-p20-create-cancel-hover",
+            "focus": "control-p20-create-cancel-focus",
+            "pressed": "control-p20-create-cancel-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-CREATE-PREVIOUS",
@@ -724,33 +1000,95 @@
       "scenes": [
         {
           "package": "competitor-direction-c",
-          "scene": "create-market"
+          "scene": "rules-create-market"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-confirm"
+          "scene": "rules-create-confirm"
         },
         {
           "package": "competitor-direction-c",
-          "scene": "create-busy"
+          "scene": "rules-create-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-previous-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-previous-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-previous-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-previous-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-previous-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-create-previous-busy"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确入口重置/聚焦/原控件回焦，P20专属创建query三步/关闭/只读，第三步精确POST及在途重入守卫；源码只作依据，实际路由/SQL/生命周期未验。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "C稿锁busy只是提案，不据图声称Vue已锁步骤；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-previous-default",
+          "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-previous-hover",
+          "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-previous-focus",
+          "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-previous-pressed",
+          "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-previous-disabled",
+          "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "pageId": "P20",
+          "scene": "control-p20-create-previous-busy",
+          "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]"
+        }
+      }
     },
     {
       "actionId": "CP-RULE-CONTAINER",

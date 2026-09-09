@@ -445,7 +445,104 @@ const recoveryControls = [
     expect: "reload",
   },
 ].map((control) => ({ ...control, kind: "recovery", states: pointerStates, variantOnly: true }));
+const entryQueryControls = [
+  {
+    key: "create-open",
+    actionId: "CP-CREATE-OPEN",
+    pageId: "P19",
+    ready: "directory",
+    selector: '.scope [data-action="CP-CREATE-OPEN"]',
+    kind: "entry",
+    modal: "create",
+    states: ["default", "hover", "focus", "pressed"],
+  },
+  {
+    key: "rule-open",
+    actionId: "CP-RULE-OPEN",
+    pageId: "P20",
+    ready: "rules",
+    selector: '.scope [data-action="CP-RULE-OPEN"]',
+    kind: "entry",
+    modal: "rule",
+    states: ["default", "hover", "focus", "pressed"],
+  },
+  {
+    key: "rule-open-empty",
+    actionId: "CP-RULE-OPEN",
+    pageId: "P20",
+    ready: "rules-empty",
+    selector: '.empty [data-action="CP-RULE-OPEN"]',
+    kind: "entry",
+    modal: "rule",
+    states: ["default", "hover", "focus", "pressed"],
+    variantOnly: true,
+  },
+  {
+    pageId: "P20",
+    selector: '#modal [data-action="CP-CREATE-SUBMIT"]',
+    key: "p20-create",
+    actionId: "CP-CREATE-SUBMIT",
+    ready: "rules-create-confirm",
+    disabled: "rules-create-busy",
+    busy: "rules-create-busy",
+    kind: "query-submit",
+    pageOnly: true,
+  },
+  {
+    pageId: "P20",
+    selector: '#modal header [data-action="CP-CREATE-CLOSE"]',
+    key: "p20-create-close",
+    actionId: "CP-CREATE-CLOSE",
+    ready: "rules-create-link",
+    disabled: "rules-create-busy",
+    busy: "rules-create-busy",
+    kind: "query-close",
+    pageOnly: true,
+  },
+  {
+    pageId: "P20",
+    selector: '#modal [data-action="CP-CREATE-PREVIOUS"]',
+    key: "p20-create-previous",
+    actionId: "CP-CREATE-PREVIOUS",
+    ready: "rules-create-market",
+    disabled: "rules-create-busy",
+    busy: "rules-create-busy",
+    kind: "query-previous",
+    pageOnly: true,
+  },
+  {
+    pageId: "P20",
+    selector: '#modal footer [data-action="CP-CREATE-CLOSE"]',
+    key: "p20-create-cancel",
+    actionId: "CP-CREATE-CLOSE",
+    ready: "rules-create-link",
+    kind: "query-close",
+    states: ["default", "hover", "focus", "pressed"],
+    variantOnly: true,
+  },
+  {
+    pageId: "P20",
+    selector: '#modal [data-action="CP-CREATE-SUBMIT"]',
+    key: "p20-create-next-link",
+    actionId: "CP-CREATE-SUBMIT",
+    ready: "rules-create-link",
+    kind: "query-next",
+    states: ["default", "hover", "focus", "pressed"],
+    variantOnly: true,
+  },
+  {
+    pageId: "P20",
+    selector: '#modal [data-action="CP-CREATE-SUBMIT"]',
+    key: "p20-create-next-market",
+    actionId: "CP-CREATE-SUBMIT",
+    ready: "rules-create-market",
+    kind: "query-next",
+    states: ["default", "hover", "focus", "pressed"],
+    variantOnly: true,
+  },
+];
 const allControls = [
+  ...entryQueryControls,
   ...controls,
   ...secondaryControls,
   ...navigationControls,
@@ -469,6 +566,8 @@ const files = [
   "scripts/verify-ui-phase2-competitor-source.mjs",
   "scripts/verify-ui-phase2-competitor-boundaries.mjs",
   "scripts/verify-ui-phase2-competitor-c.mjs",
+  "scripts/lib/ui-phase2-action-coverage.mjs",
+  "tests/unit/ui-phase2-action-coverage.test.mjs",
   ...["index.html", "competitor.css", "competitor.js"].map((f) => root + "/" + f),
 ];
 const sourceHashes = Object.fromEntries(
@@ -616,7 +715,7 @@ async function verifyControls(page, width) {
             "true",
           );
           assert.equal(await target.getAttribute("aria-busy"), null);
-        } else if (["close", "previous"].includes(control.kind)) {
+        } else if (["close", "previous", "query-close", "query-previous"].includes(control.kind)) {
           assert.equal(await page.locator("#modal form").getAttribute("aria-busy"), "true");
           assert.equal(
             await target.getAttribute("aria-busy"),
@@ -678,7 +777,82 @@ async function verifyControls(page, width) {
       await prepare(control);
       const before = await count();
       const target = page.locator(control.selector);
-      if (control.kind === "navigation") {
+      if (control.kind === "entry") {
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await count(), before, "opening a form is not POST");
+        assert.equal(await page.locator("dialog[open]").count(), 1);
+        const field =
+          control.modal === "create" ? '[name="product_url"]' : '[name="competitor_id"]';
+        assert.ok(await page.locator(field).evaluate((el) => el === document.activeElement));
+        if (control.modal === "rule") {
+          assert.equal(await page.locator('[name="competitor_id"]').inputValue(), "");
+          assert.equal(await page.locator('[name="metric"]').inputValue(), "price");
+          assert.equal(await page.locator('[name="direction"]').inputValue(), "decrease");
+          assert.equal(await page.locator('[name="threshold_value"]').inputValue(), "1");
+        }
+        await page.keyboard.press("Escape");
+        assert.ok(
+          await page.locator(control.selector).evaluate((el) => el === document.activeElement),
+        );
+        assert.equal(await count(), before);
+      } else if (control.kind.startsWith("query-")) {
+        assert.match(await page.locator("#app h1").innerText(), /让每一次提醒有据可依/);
+        assert.equal(await page.locator('[data-action="CP-CREATE-OPEN"]').count(), 0);
+        assert.deepEqual(await page.evaluate(() => window.competitorReview.routePreview), {
+          path: "/competitors/monitoring-rules",
+          query: { create: "1" },
+        });
+        if (control.kind === "query-submit") {
+          await page.evaluate(() => {
+            window.competitorReview.outcome = "pending";
+          });
+          await target.click();
+          assert.equal(await count(), before + 1);
+          assert.deepEqual(await page.evaluate(() => window.competitorReview.intents.at(-1)), {
+            path: "/competitors",
+            method: "POST",
+            body: {
+              market: "US",
+              product_url: "https://www.amazon.com/dp/B000000019",
+              title: "桌面收纳托盘 · 胡桃木色",
+            },
+          });
+          await target.dispatchEvent("click");
+          await page.locator("#modal form").dispatchEvent("submit");
+          await page.keyboard.press("Escape");
+          assert.equal(await count(), before + 1);
+          assert.equal(await page.locator("dialog[open]").count(), 1);
+          assert.equal(await target.getAttribute("aria-busy"), "true");
+        } else {
+          if (control.ready.endsWith("-link"))
+            await page.locator('[name="product_url"]').fill("https://www.amazon.com/dp/B000000020");
+          else await page.locator('[name="title"]').fill("规则页保留的创建标题");
+          await target.focus();
+          await page.keyboard.press("Enter");
+          assert.equal(await count(), before, "step/close never POST");
+          if (control.kind === "query-close") {
+            assert.equal(await page.locator("dialog[open]").count(), 0);
+            assert.deepEqual(
+              await page.evaluate(() => window.competitorReview.routePreview.query),
+              {},
+            );
+            assert.ok(
+              await page.locator("#app h1").evaluate((el) => el === document.activeElement),
+            );
+          } else if (control.kind === "query-previous") {
+            assert.equal(await page.locator('[name="product_url"]').count(), 1);
+            await page.locator('[data-action="CP-CREATE-SUBMIT"]').click();
+            assert.equal(await page.locator('[name="title"]').inputValue(), "规则页保留的创建标题");
+          } else {
+            const step = control.ready.endsWith("-link") ? 2 : 3;
+            assert.match(
+              await page.locator('#modal [aria-current="step"]').innerText(),
+              new RegExp("^" + step),
+            );
+          }
+        }
+      } else if (control.kind === "navigation") {
         assert.equal(await target.getAttribute("href"), control.href);
         if (control.key === "source") {
           assert.equal(await target.getAttribute("target"), "_blank");
@@ -897,6 +1071,22 @@ async function verifyControls(page, width) {
       window.competitorReview.outcome = "success";
     });
   }
+  await choose("pending");
+  await choose("rules-create-readonly");
+  assert.equal(await page.locator("dialog[open]").count(), 0);
+  assert.equal(
+    await page.locator('[data-action="CP-CREATE-OPEN"],[data-action="CP-RULE-OPEN"]').count(),
+    0,
+  );
+  assert.deepEqual(await page.evaluate(() => window.competitorReview.routePreview.query), {
+    create: "1",
+  });
+  await choose("rules-create-error");
+  assert.match(await page.locator('#modal [role="alert"]').innerText(), /输入已保留/);
+  assert.match(await page.locator("#modal dl").innerText(), /桌面收纳托盘/);
+  checks.push(
+    `${width}: three entry variants focus/reset/return; six P20 create-query controls with exact final POST, local next/previous, pending lock and readonly query suppression; closing query-only dialog clears modeled create query and focuses rules heading, not a fabricated create entry; actual routing and dual-query priority unproven`,
+  );
   await choose("pending");
   for (const scene of ["expired", "rules-expired", "rules-expired-query"]) {
     await choose(scene);
@@ -1179,7 +1369,7 @@ try {
       controlStates,
       actionVisualReferences: Object.fromEntries(
         allControls
-          .filter((control) => !control.variantOnly)
+          .filter((control) => !control.variantOnly && !control.pageOnly)
           .map((control) => [
             control.actionId,
             {
@@ -1205,6 +1395,25 @@ try {
             },
           ]),
       ),
+      pageActionVisualReferences: {
+        P20: Object.fromEntries(
+          entryQueryControls
+            .filter((c) => c.pageOnly)
+            .map((c) => [
+              c.actionId,
+              {
+                pageId: c.pageId,
+                selector: c.selector,
+                scope: "representative-control-only-not-all-variants-or-Vue",
+                states: Object.fromEntries(
+                  (c.states || states).map((s) => [s, `control-${c.key}-${s}`]),
+                ),
+                limitation:
+                  "P20 create=1-only background; source busy condition for submit, proposed close/back lock; not all fields/themes, actual Vue/routing/dual-query priority or acceptance",
+              },
+            ]),
+        ),
+      },
       controlVariantReferences: Object.fromEntries(
         allControls
           .filter((control) => control.variantOnly)
@@ -1230,6 +1439,7 @@ try {
       http,
       limits: [
         "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
+        "Three form-entry variants and six P20 create-query variants are independently rendered. Query-only modal has no normal create opener on P20; heading focus fallback and routePreview are offline proposals, not actual router/history. Both-query dialog priority remains unresolved; no fabricated busy state for opening or first two next-step buttons.",
         "Recovery variants are page-keyed additional references, not representative-slot promotion. Forbidden secondary and blocked secondary use truthful home-navigation copy proposals; source default labels still say apply-permission/view-impact. Reload records only the first load GET, not later requests or actual recovery. No disabled/busy footer invented: source loading hides the footer.",
         "CP-B02/B03 ownership is locally fixed and source-regressed; other source gaps remain. No global action/dialog denominator or approval promotion.",
         "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",

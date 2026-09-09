@@ -1,5 +1,21 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · 创建入口和P20单create直达弹窗
+
+收口：完整capture生成682PNG，通过536双端控件实例、9源码组/5边界组、原有交互及12屏宽×5代表场景；HTTP/页面错误0，文字对比最低5.33419。只目检390-rules-create-busy及1440-rule-open-empty-focus，未宣称全部人工审阅；原两张待审采集busy/删除focus与2a27160e逐字节一致。审核文档101链接均存在。
+
+动作审计首轮拦截误替换的rules-create-invalid不存在场景；移除该无证据引用，P20非法URL/字段错误图仍留缺口，复测通过。动作审计21页/435独立源位置/388语义组不变，代表槽20+8＝28。58单元例、docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check及diff检查通过。设计审计76包10224PNG、844独立来源/1451绑定、8386 README链接；来源/PNG漂移和未登记图0，完整页面批准0，分母未冻结，G0进行中/G1–G5待验。
+
+只变永久原型/验证脚本/审计库/单元用例/图稿与文档；生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、配置/env、依赖、安全、权限和部署均未改，无调参/重启要求，不重跑未受影响的真实Vue46例。无新临时文件/服务，浏览器finally关闭且无headless-shell残留；旧清理被拒output/playwright/ui-phase2-competitor-races-20260909目录两文件仍保留，不绕过。全站其余52页同级细化、具体批准、实际重设计实施及宝塔签收尚待继续。
+
+从干净main/2a27160e继续，前轮190新图与提交为实质进展。本轮继续ui-skills-root/frontend-design/Playwright，读AGENTS、Feature Map、蓝图3.5、C方向与真实openCreate/openRule/closeCreate/submitCreateStep/onMounted/template。不新增正常P20创建入口、不处理create+competitor双query优先级。
+
+新增3入口变体12状态、6个P20query创建控件变体30状态，双端84图；P20三步/错误/busy/只读六场景双端12图，共96新PNG。包目标66场景682PNG、58变体268状态/536双端实例；五语义组26代表槽，剩P19 20/P20 8共28，四额外变体不膨胀动作分母。
+
+原型保留实际DOM入口用于精准回焦，避免同名两个规则入口都回第一个；P20无创建来源时回标题，routePreview在内存设置/清除create，非浏览器真实路由。只读query不弹窗。确认POST精确market/product_url/title，前两步及上一步不POST；关闭/上一步在途锁仍为离线提案，源Vue未改。双query、真实异步结果/生命周期未关闭。
+
+审计库增加显式pageId引用和pageActionVisualReferences按页取证；缺页/动作时不回退P19旧键，并校验双端截图pageId/selector/actionId/state。新增10正确/损坏用例，总58例通过；smoke536控件实例、HTTP/页面错误0。完整截图与收口结果在本节顶部记录。
+
 ## 2026-09-09 · P19/P20恢复与空结果控件
 
 收口结果：完整capture通过60场景586PNG/452双端实例；9源码组/5边界组、原交互、12屏宽×5代表场景保留，HTTP/页面错误0，最低文字对比5.33419。只目检390搜索次按钮focus和1440规则受阻整页；原两张待审采集busy/删除focus与984f41df字节哈希一致。新审核文档195链接无断链。

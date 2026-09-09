@@ -18,10 +18,12 @@
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "scripts/verify-ui-phase2-competitor-source.mjs": "66f247271940138c9ce44b476c693acc67731d908e902d0205b40aab382aeeb5",
     "scripts/verify-ui-phase2-competitor-boundaries.mjs": "2125382dd972924c4ba00da4c20abd75048ab0a1ee9b4467b9b12cca598a1df7",
-    "scripts/verify-ui-phase2-competitor-c.mjs": "1175edffcca699f530b44fc93de351e5cda71ab8eadc7b8147a780768bf9b24f",
+    "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "76ddeaf4a9b4fec93701b5be6e4b8b998170ef8a2467384d9e341695461a0240",
+    "tests/unit/ui-phase2-action-coverage.test.mjs": "69c8a26cc5f9adf969de84360daa4416666c7f10f25757a1e2817d53e7e6ed44",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/index.html": "694070719fadf31f425cbd08c8afedbec8b3cb485d274f86bca10e6b6e0c9aa2",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css": "5847cb5ef4e99d6a44609a8c92383948117a4bcb3d216ae51cbaa88ef48a3b99",
-    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "9d2880784ee73b4f3c93c03d9483acfcd96d21b04295b2eb4ccd1e408474272e"
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "cb2227d02c54ce1e8a211dd7744b927ba510b442f29b37e0b200722080851d0b"
   },
   "sourceProof": {
     "checks": [
@@ -316,6 +318,36 @@
       "label": "只读规则目录"
     },
     {
+      "id": "rules-create-link",
+      "pageId": "P20",
+      "label": "create=1 / 商品链接"
+    },
+    {
+      "id": "rules-create-market",
+      "pageId": "P20",
+      "label": "create=1 / 市场信息"
+    },
+    {
+      "id": "rules-create-confirm",
+      "pageId": "P20",
+      "label": "create=1 / 确认采集"
+    },
+    {
+      "id": "rules-create-error",
+      "pageId": "P20",
+      "label": "create=1 / 失败保留"
+    },
+    {
+      "id": "rules-create-busy",
+      "pageId": "P20",
+      "label": "create=1 / 提交中"
+    },
+    {
+      "id": "rules-create-readonly",
+      "pageId": "P20",
+      "label": "只读 create=1 / 不打开弹窗"
+    },
+    {
       "id": "rule-global",
       "pageId": "P20",
       "label": "规则 / 工作区价格"
@@ -373,6 +405,762 @@
   ],
   "screenshots": [
     {
+      "file": "1440-control-create-open-default.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-create-open-default",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-default",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9d507d5d9f486d6a9b2c0844ff7f76a253131c578aca307baddd17e4a9e3253d"
+    },
+    {
+      "file": "1440-control-create-open-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-create-open-hover",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-hover",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ab62420aadb093d3131cd68fe047db1464d5cd00a22024f70be9cf795f180396"
+    },
+    {
+      "file": "1440-control-create-open-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-create-open-focus",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-focus",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "bac24a05985b69fe66bf36498d2ae6ebd396465e056f713180918f94943bf2aa"
+    },
+    {
+      "file": "1440-control-create-open-pressed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "control-create-open-pressed",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-pressed",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e72bdcd98fb7196376f721da3e6c3038c60da7fefb8e0dd8ef9a945a90d81a9f"
+    },
+    {
+      "file": "1440-control-rule-open-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-default",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "default",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-default",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c6f40096b206ce32c3955373753dae33417a81082f1644e3d4870496599c4ea9"
+    },
+    {
+      "file": "1440-control-rule-open-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-hover",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "hover",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-hover",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f09c660abe4ccf7b1fe96682552dc43c2907bd371fadccb1f913b4e7bcba91b2"
+    },
+    {
+      "file": "1440-control-rule-open-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-focus",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "focus",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-focus",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fe3cf7dd63f9cd6120d183f4fd88c89d4fb4fab4719bb95b616d25fc003e6c67"
+    },
+    {
+      "file": "1440-control-rule-open-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-pressed",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "pressed",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-pressed",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "5518a6d82d2c493214effd0cf5efe4786d3d9aad2a404b27e72cb4d7204ea782"
+    },
+    {
+      "file": "1440-control-rule-open-empty-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-default",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "default",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-default",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8fa5f2b13c75e643cd4466d317be9e6fa264b57304c08b96ddd52102896ac2cc"
+    },
+    {
+      "file": "1440-control-rule-open-empty-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-hover",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "hover",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-hover",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2b5d2518317fd1cc4d60ada969fa6f95560bd093149a4e6643c4e317f3e6944b"
+    },
+    {
+      "file": "1440-control-rule-open-empty-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-focus",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "focus",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-focus",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2b5e3cc205c3c27c08686bc77559a86f2e472a4f30659ae6dd313201ef6c868c"
+    },
+    {
+      "file": "1440-control-rule-open-empty-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-pressed",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "pressed",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-pressed",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "db95256810f8a4e87aa63e6777a1d23fcf7f5f525d352dd2d2e6d3ebff0fd898"
+    },
+    {
+      "file": "1440-control-p20-create-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-default",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "default",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-default",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "06d14a63dce3c1f50dec2df89e1aadcad364e8c713d9bdeab0ae89e52602c89d"
+    },
+    {
+      "file": "1440-control-p20-create-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-hover",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "hover",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-hover",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3fe5acd8f475b2a8b70a109c56784463c0fa8f0a215cfb8f2d186daaba3f6dfc"
+    },
+    {
+      "file": "1440-control-p20-create-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-focus",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "focus",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-focus",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d55c87541ebdb73eb4d5b531a4aa004693c785661a5d4dec1902051145aeb009"
+    },
+    {
+      "file": "1440-control-p20-create-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-pressed",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "pressed",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-pressed",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e26c4ca0acacc83d938a2c0cd472d1c11b9ad22669340c6d897a38526184038e"
+    },
+    {
+      "file": "1440-control-p20-create-disabled.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-disabled",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "disabled",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a4e92e6b5611d3772f1fe31fa62337ca4c2e52ae9598bf67c26a6e2588a63b65"
+    },
+    {
+      "file": "1440-control-p20-create-busy.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-busy",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "busy",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a4e92e6b5611d3772f1fe31fa62337ca4c2e52ae9598bf67c26a6e2588a63b65"
+    },
+    {
+      "file": "1440-control-p20-create-close-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-default",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "default",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "27482f66b5fdd2243e0c4b2b9afc33db3408af566d78e18fb9537f8ee9036b36"
+    },
+    {
+      "file": "1440-control-p20-create-close-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-hover",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "hover",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "789abef8b9f5dbc17f2d66b24c9e0b2df225a43ea619ffb5c65fc8b44c390261"
+    },
+    {
+      "file": "1440-control-p20-create-close-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-focus",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "focus",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "54949453922c52643ba06fb8015fec6ff9c1eb8b233c31c360bc3d35689e3fd2"
+    },
+    {
+      "file": "1440-control-p20-create-close-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-pressed",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "pressed",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "dfe0435a4f1cecc13574a362dc2e9ff059702086888245c4469b098c6fdfdc33"
+    },
+    {
+      "file": "1440-control-p20-create-close-disabled.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-disabled",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "disabled",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7282b64837aaaf95e29dec98afa5faa959480d27c7e8413fb8ce13c13ae6cffa"
+    },
+    {
+      "file": "1440-control-p20-create-close-busy.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-busy",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "busy",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a4e92e6b5611d3772f1fe31fa62337ca4c2e52ae9598bf67c26a6e2588a63b65"
+    },
+    {
+      "file": "1440-control-p20-create-previous-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-default",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "default",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e57930a8c0e610e97e9cac5aa874d7c008123b299e9d03106666446f936cb603"
+    },
+    {
+      "file": "1440-control-p20-create-previous-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-hover",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "hover",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "44fe4e89ae1794130bf26faa8553a2078361177a0f11c13694c9d420caaef798"
+    },
+    {
+      "file": "1440-control-p20-create-previous-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-focus",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "focus",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "40c8104c7cadc968aac905529d816621a60fe703dcc0e2484a57a4720e10b4ca"
+    },
+    {
+      "file": "1440-control-p20-create-previous-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-pressed",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "pressed",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fa7602986130c78d8191c517e0ecbb327bc3ccacdb78176b7b235f536f34d3c1"
+    },
+    {
+      "file": "1440-control-p20-create-previous-disabled.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-disabled",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "disabled",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-disabled",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b675421bf1919810fa44e603740a2ffe27285b960d9a9404e9981ecc02b4b73e"
+    },
+    {
+      "file": "1440-control-p20-create-previous-busy.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-busy",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "busy",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-busy",
+        "width": 1440,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a4e92e6b5611d3772f1fe31fa62337ca4c2e52ae9598bf67c26a6e2588a63b65"
+    },
+    {
+      "file": "1440-control-p20-create-cancel-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-default",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "default",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-default",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "5b9c3f5a67930001248f0ee2edd6d145b1726eb189d9a8626bc6fa8b90c2b89c"
+    },
+    {
+      "file": "1440-control-p20-create-cancel-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-hover",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "hover",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-hover",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c6be43d401c3c8428336b16a88fa9372db5b573d3142212dcd7e5b241a2401aa"
+    },
+    {
+      "file": "1440-control-p20-create-cancel-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-focus",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "focus",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-focus",
+        "width": 1440,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f0e77340174e6c7e5055cb619d2c3fb0409b033612d376af9ab0926700eecb54"
+    },
+    {
+      "file": "1440-control-p20-create-cancel-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-pressed",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "pressed",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-pressed",
+        "width": 1440,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c5cf19ce4f7ace3197ab2df138d34f914a79d0c73d1b3837005aa961f6dc2720"
+    },
+    {
+      "file": "1440-control-p20-create-next-link-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-default",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "default",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-default",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "42a335d93c809e4a3f6ecd7858b167450cf3edee3ab90ee7ea465ae3ea92580a"
+    },
+    {
+      "file": "1440-control-p20-create-next-link-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-hover",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "hover",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-hover",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d6bc275e6740a9aa1a9ddc2a071b240f3feda97cae8e9b81762b6961a7be0274"
+    },
+    {
+      "file": "1440-control-p20-create-next-link-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-focus",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "focus",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-focus",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "74593dbe4160410db06227979c7641d9373963677f4ff0943bcabcb1ee5ada9d"
+    },
+    {
+      "file": "1440-control-p20-create-next-link-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-pressed",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "pressed",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-pressed",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1353dd0ad0ceaf0a31e7540788f41a1580738c3bfd3078c83cb2aadef87d2290"
+    },
+    {
+      "file": "1440-control-p20-create-next-market-default.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-default",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "default",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-default",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e57930a8c0e610e97e9cac5aa874d7c008123b299e9d03106666446f936cb603"
+    },
+    {
+      "file": "1440-control-p20-create-next-market-hover.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-hover",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "hover",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-hover",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8e69ce06a6aa0ec339caf62e46b9a1f7f72c11eebccd0879acc3e12531c772f3"
+    },
+    {
+      "file": "1440-control-p20-create-next-market-focus.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-focus",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "focus",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-focus",
+        "width": 1440,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cc80da1ba8d35376956d459b271dc50937df3f9dbc4cc1162a8337448e6f8cf8"
+    },
+    {
+      "file": "1440-control-p20-create-next-market-pressed.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-pressed",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "pressed",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-pressed",
+        "width": 1440,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "331b67f4bcacff8e06eee19f3f1c179dae91b13319e65a3a960ff04076cc4771"
+    },
+    {
       "file": "1440-control-collect-default.png",
       "width": 1440,
       "pageId": "P19",
@@ -388,7 +1176,7 @@
         "contrast": 8.273466608002094
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "9d507d5d9f486d6a9b2c0844ff7f76a253131c578aca307baddd17e4a9e3253d"
+      "sha256": "4397b44d0b8b239fe5d623893d3761bfa090fd7793ec36c4509ce373e66f2708"
     },
     {
       "file": "1440-control-collect-hover.png",
@@ -2764,7 +3552,7 @@
         "contrast": 14.102738944447992
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "20057ea8168155581466b14c795a796e33eeb71981ae275b5eb98c5cf8280202"
+      "sha256": "8766729d693482ee20de139d3bd27ec3d818b1686458efc89a6cad453e00e291"
     },
     {
       "file": "1440-control-help-expanded-pressed.png",
@@ -3376,7 +4164,7 @@
         "contrast": 8.273466608002094
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "8eb72c625c56088d72450eae9b94983c76a7d300f407cb0883ec8d2a261de67f"
+      "sha256": "9debd2ec50667c04f94d30a518cfb2f1d214575442881a79a4e90b5f7d9cf4b1"
     },
     {
       "file": "1440-control-p20-retry-hover.png",
@@ -4784,11 +5572,53 @@
       "sha256": "9e0b6c8318ff627359a83960f335b6055e2bdbe787cac286627d80345d566184"
     },
     {
+      "file": "1440-rules-create-link.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-create-link",
+      "sha256": "de7c07cec845644494ca7c3d2a69a9c9d7e5bd5a10d1757acb55fae7114f15a9"
+    },
+    {
+      "file": "1440-rules-create-market.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-create-market",
+      "sha256": "797e2e0a833062ef8e30f8123aa3ab215100646437bb82b73d61fe0bcdf1fdd1"
+    },
+    {
+      "file": "1440-rules-create-confirm.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-create-confirm",
+      "sha256": "d81eb9b243f2dfb9c35db20263a8fedb9c74f4dc6a5451900a6afdcffeaeb897"
+    },
+    {
+      "file": "1440-rules-create-error.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-create-error",
+      "sha256": "70a50de341fb4c3344ca2ad776c96258b9d8aee8b7e90508b0bf297f4c1dd184"
+    },
+    {
+      "file": "1440-rules-create-busy.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-create-busy",
+      "sha256": "13bef3cc82d39e7ab15b91bfc8e3a93ef15f8cea9f675983a3001d20658a21d8"
+    },
+    {
+      "file": "1440-rules-create-readonly.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-create-readonly",
+      "sha256": "569b23bbdfd182a944860c6fb57fe81d4e12609872249418514823ce027aac42"
+    },
+    {
       "file": "1440-rule-global.png",
       "width": 1440,
       "pageId": "P20",
       "scene": "rule-global",
-      "sha256": "113e8a0bbdc8a99cfed6b6f04a4148218be05f801a17988087d3cc62fcb0e823"
+      "sha256": "f67276bdb51bab7aa9f82e51e361bf362cc7091d46dd9a81f4f7737c9a627062"
     },
     {
       "file": "1440-rule-target.png",
@@ -4894,6 +5724,762 @@
       "pageId": "P19",
       "scene": "button-hover",
       "sha256": "09fb5a46c1baa8d77f17b7cd9ce193e6ed666f02ef84b368e44a56c1ccfe61f5"
+    },
+    {
+      "file": "390-control-create-open-default.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-create-open-default",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "default",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-default",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cf2877bf702fed9840918f927004a926af9d8dbc6684497ef70810a6ec10a4ba"
+    },
+    {
+      "file": "390-control-create-open-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-create-open-hover",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "hover",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-hover",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "459dbb0ae9d6a2c3d3dc6e84bfcd68cbd596761a9e12bc52fd2eb91dcd6b6192"
+    },
+    {
+      "file": "390-control-create-open-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-create-open-focus",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "focus",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-focus",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c2faed10efda500dd2e824e926d4f597ff79d463776317bac1ca6ee41be4a795"
+    },
+    {
+      "file": "390-control-create-open-pressed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "control-create-open-pressed",
+      "control": {
+        "key": "create-open",
+        "actionId": "CP-CREATE-OPEN",
+        "state": "pressed",
+        "baseScene": "directory",
+        "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+        "scene": "control-create-open-pressed",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f67bc815f4d8723fa5cb0e8337ad2648c5243e94fa415e2e25ff1d13dd6e87bd"
+    },
+    {
+      "file": "390-control-rule-open-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-default",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "default",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-default",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9487f40d6bdab96e7498a260ed6671cd12c2c7564d537791dc2e39deb5186ade"
+    },
+    {
+      "file": "390-control-rule-open-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-hover",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "hover",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-hover",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "af2698858a85db87c112211c11f2e77c9aa37f854be0d716f4fd4455355e2bb3"
+    },
+    {
+      "file": "390-control-rule-open-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-focus",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "focus",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-focus",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0e899b765b38ff69e54a58fe93b01fbd42ebed51c83cafb8391d4fc0f4993f12"
+    },
+    {
+      "file": "390-control-rule-open-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-pressed",
+      "control": {
+        "key": "rule-open",
+        "actionId": "CP-RULE-OPEN",
+        "state": "pressed",
+        "baseScene": "rules",
+        "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-pressed",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3029e2f9b905441d15af16b9a0823dbd8a7aad6c98bb9a73989a7e9da5cddb3e"
+    },
+    {
+      "file": "390-control-rule-open-empty-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-default",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "default",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-default",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f04cbddbfa277dc090d3792c9e30bfdedd1f761cbe0db97c529d7e5d2c40ea55"
+    },
+    {
+      "file": "390-control-rule-open-empty-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-hover",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "hover",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-hover",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "101aa051d6c8b4fdc07d5c1ecca62a5a6b520b021a05dadde2ed839ee3da17e1"
+    },
+    {
+      "file": "390-control-rule-open-empty-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-focus",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "focus",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-focus",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c76a10e1f21291e45091fe9690d97758c42d65cfd1ded90c00958dd76b61b299"
+    },
+    {
+      "file": "390-control-rule-open-empty-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-rule-open-empty-pressed",
+      "control": {
+        "key": "rule-open-empty",
+        "actionId": "CP-RULE-OPEN",
+        "state": "pressed",
+        "baseScene": "rules-empty",
+        "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+        "scene": "control-rule-open-empty-pressed",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4ce0df05c40274cd380a4130c7d0b7fd0f223482665ab042008c162ede87e9a5"
+    },
+    {
+      "file": "390-control-p20-create-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-default",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "default",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-default",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2650d3aea11b00638330e338c1b0901d3488cac78ca31f51100a68ce39a26e86"
+    },
+    {
+      "file": "390-control-p20-create-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-hover",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "hover",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-hover",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1f5a77afc53fd29de76bbfe7a7ee826f1152c47e8604973944697526fdb99e40"
+    },
+    {
+      "file": "390-control-p20-create-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-focus",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "focus",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-focus",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9a2ac9bdba1ec26ed8d1f38f5223fabb432746427bfe05d70ebc271a976eec1a"
+    },
+    {
+      "file": "390-control-p20-create-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-pressed",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "pressed",
+        "baseScene": "rules-create-confirm",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-pressed",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e3eefa226237bf0ea77805bc052c45da68236b7480320d1efe675a7e1c2b5d0e"
+    },
+    {
+      "file": "390-control-p20-create-disabled.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-disabled",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "disabled",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fafc2ba1a67475eb32adcc2408b10d30026117176405c60ab81b0c73a2db4ea1"
+    },
+    {
+      "file": "390-control-p20-create-busy.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-busy",
+      "control": {
+        "key": "p20-create",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "busy",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fafc2ba1a67475eb32adcc2408b10d30026117176405c60ab81b0c73a2db4ea1"
+    },
+    {
+      "file": "390-control-p20-create-close-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-default",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "default",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "78268596c0fb2528bd764ff59e29e843d1ca594ceec530618f75a6d9a0a0b034"
+    },
+    {
+      "file": "390-control-p20-create-close-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-hover",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "hover",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "743d2a8c0c90140768131357a320776b2d7d3166b86892a1477fea6b32cd6ac7"
+    },
+    {
+      "file": "390-control-p20-create-close-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-focus",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "focus",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6fc488f0624da27ba02283c2209f9f2b97c4ebc9753baf2117cf1c975d3bc200"
+    },
+    {
+      "file": "390-control-p20-create-close-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-pressed",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "pressed",
+        "baseScene": "rules-create-link",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e6e0eb826988a071a51faff969064f974f795367024a93bd85afbdd1ce7cc3a3"
+    },
+    {
+      "file": "390-control-p20-create-close-disabled.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-disabled",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "disabled",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fafc2ba1a67475eb32adcc2408b10d30026117176405c60ab81b0c73a2db4ea1"
+    },
+    {
+      "file": "390-control-p20-create-close-busy.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-close-busy",
+      "control": {
+        "key": "p20-create-close",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "busy",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-close-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fafc2ba1a67475eb32adcc2408b10d30026117176405c60ab81b0c73a2db4ea1"
+    },
+    {
+      "file": "390-control-p20-create-previous-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-default",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "default",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "60953d6b876b0becbed497faf20c2f1968f444ce6811b641b886701a2d39e505"
+    },
+    {
+      "file": "390-control-p20-create-previous-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-hover",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "hover",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f635c0622f98161531f36455decf7172ca70235f24f7d0457dd93eeb4e008cc8"
+    },
+    {
+      "file": "390-control-p20-create-previous-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-focus",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "focus",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9eb01afddb5760eae9bfaed21fd3ef4485db68a51e06a761db4abe8911c6b1d3"
+    },
+    {
+      "file": "390-control-p20-create-previous-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-pressed",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "pressed",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "343cbbc3ba62810274f9bb40947921a286eaaac860ff931e74a2eff97accac47"
+    },
+    {
+      "file": "390-control-p20-create-previous-disabled.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-disabled",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "disabled",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-disabled",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fafc2ba1a67475eb32adcc2408b10d30026117176405c60ab81b0c73a2db4ea1"
+    },
+    {
+      "file": "390-control-p20-create-previous-busy.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-previous-busy",
+      "control": {
+        "key": "p20-create-previous",
+        "actionId": "CP-CREATE-PREVIOUS",
+        "state": "busy",
+        "baseScene": "rules-create-busy",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scene": "control-p20-create-previous-busy",
+        "width": 390,
+        "contrast": 5.334190621262918
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fafc2ba1a67475eb32adcc2408b10d30026117176405c60ab81b0c73a2db4ea1"
+    },
+    {
+      "file": "390-control-p20-create-cancel-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-default",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "default",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-default",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "78268596c0fb2528bd764ff59e29e843d1ca594ceec530618f75a6d9a0a0b034"
+    },
+    {
+      "file": "390-control-p20-create-cancel-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-hover",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "hover",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-hover",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c80ea3167d42ba5a095f9558d60dfd3067d4e80d9ffc7d99137536fbca9fcca9"
+    },
+    {
+      "file": "390-control-p20-create-cancel-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-focus",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "focus",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-focus",
+        "width": 390,
+        "contrast": 14.102738944447992
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "318f299642f316ae325ad18da74066fda418ead7dc6e8aab7983c9f6f23863af"
+    },
+    {
+      "file": "390-control-p20-create-cancel-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-cancel-pressed",
+      "control": {
+        "key": "p20-create-cancel",
+        "actionId": "CP-CREATE-CLOSE",
+        "state": "pressed",
+        "baseScene": "rules-create-link",
+        "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+        "scene": "control-p20-create-cancel-pressed",
+        "width": 390,
+        "contrast": 12.669055719579259
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "723fb1f92bc6303c6fe3ffb7ce47096c792dfcb055ad179905503129ed0b00ca"
+    },
+    {
+      "file": "390-control-p20-create-next-link-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-default",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "default",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-default",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "78268596c0fb2528bd764ff59e29e843d1ca594ceec530618f75a6d9a0a0b034"
+    },
+    {
+      "file": "390-control-p20-create-next-link-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-hover",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "hover",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-hover",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4d19b9d11c0cfb7dab20fdb77ac07c99cd6b9834cbc02088eba482c3a80df426"
+    },
+    {
+      "file": "390-control-p20-create-next-link-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-focus",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "focus",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-focus",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "daab77b4c5fb9bdf6812c1ce35c3186e5b342359607788ca72f94ce6ef7df478"
+    },
+    {
+      "file": "390-control-p20-create-next-link-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-link-pressed",
+      "control": {
+        "key": "p20-create-next-link",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "pressed",
+        "baseScene": "rules-create-link",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-link-pressed",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8e573fa0464d6b8d855db7de8ef748c36b213d821a97576a11e4bd41211effea"
+    },
+    {
+      "file": "390-control-p20-create-next-market-default.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-default",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "default",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-default",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "60953d6b876b0becbed497faf20c2f1968f444ce6811b641b886701a2d39e505"
+    },
+    {
+      "file": "390-control-p20-create-next-market-hover.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-hover",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "hover",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-hover",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d16fdca8a8558f5f8a6969d426ba5635439df6a4c51c54df8ed685aa32332857"
+    },
+    {
+      "file": "390-control-p20-create-next-market-focus.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-focus",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "focus",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-focus",
+        "width": 390,
+        "contrast": 8.273466608002094
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6bb21cb9b2af9da1d116b23c41d94f50e71f1cf96e241aaffe270243e49444ae"
+    },
+    {
+      "file": "390-control-p20-create-next-market-pressed.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "control-p20-create-next-market-pressed",
+      "control": {
+        "key": "p20-create-next-market",
+        "actionId": "CP-CREATE-SUBMIT",
+        "state": "pressed",
+        "baseScene": "rules-create-market",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scene": "control-p20-create-next-market-pressed",
+        "width": 390,
+        "contrast": 10.613441575513296
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a334561c94aeeb566a8bbb528385568b22d451bac995372d5cea51724c7979ee"
     },
     {
       "file": "390-control-collect-default.png",
@@ -9307,6 +10893,48 @@
       "sha256": "2cc96a07e0b7c9656d8fdd5480d84f2c2f6ed99fb8fd1b9d27837c7afa37d3ae"
     },
     {
+      "file": "390-rules-create-link.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-create-link",
+      "sha256": "84b123dc8a7ad9bb8c0fd33dcb8f01f2881cbfaaccf3b989fda830a0fcb35a2b"
+    },
+    {
+      "file": "390-rules-create-market.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-create-market",
+      "sha256": "224bda6c69c8b10ea3f13597ec8c9811aece35d028cb8865533ad378b252ca46"
+    },
+    {
+      "file": "390-rules-create-confirm.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-create-confirm",
+      "sha256": "a7064db743188d2fe7d7d658cce878dd378ced202ba1d7802b5af9119a4dc546"
+    },
+    {
+      "file": "390-rules-create-error.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-create-error",
+      "sha256": "83ad033f0e5643c792f374246337987f0154ad587d45c47f5c97c060d99473dd"
+    },
+    {
+      "file": "390-rules-create-busy.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-create-busy",
+      "sha256": "9f01e34a27991f9072a23ea52dd4e471b79e229619440b88ce3fbe79c20e4b63"
+    },
+    {
+      "file": "390-rules-create-readonly.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-create-readonly",
+      "sha256": "6addbe9bb03bef085975bbc655239af1749dd09209296c7d196063e5fa62945e"
+    },
+    {
       "file": "390-rule-global.png",
       "width": 390,
       "pageId": "P20",
@@ -9448,6 +11076,426 @@
     }
   ],
   "controlStates": [
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-default",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-hover",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-focus",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-pressed",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "default",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-default",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "hover",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-hover",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "focus",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-focus",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "pressed",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-pressed",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "default",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-default",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "hover",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-hover",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "focus",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-focus",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "pressed",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-pressed",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "default",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-default",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "hover",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-hover",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "focus",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-focus",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "pressed",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-pressed",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "disabled",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "busy",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "default",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "hover",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "focus",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "pressed",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "disabled",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "busy",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "default",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "hover",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "focus",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "pressed",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "disabled",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-disabled",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "busy",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-busy",
+      "width": 1440,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "default",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-default",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "hover",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-hover",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "focus",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-focus",
+      "width": 1440,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "pressed",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-pressed",
+      "width": 1440,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "default",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-default",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "hover",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-hover",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "focus",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-focus",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "pressed",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-pressed",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "default",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-default",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "hover",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-hover",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "focus",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-focus",
+      "width": 1440,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "pressed",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-pressed",
+      "width": 1440,
+      "contrast": 10.613441575513296
+    },
     {
       "key": "collect",
       "actionId": "CP-COLLECT",
@@ -11707,6 +13755,426 @@
       "scene": "control-p19-search-readonly-refresh-pressed",
       "width": 1440,
       "contrast": 12.669055719579259
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "default",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-default",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "hover",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-hover",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "focus",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-focus",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "create-open",
+      "actionId": "CP-CREATE-OPEN",
+      "state": "pressed",
+      "baseScene": "directory",
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scene": "control-create-open-pressed",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "default",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-default",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "hover",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-hover",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "focus",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-focus",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open",
+      "actionId": "CP-RULE-OPEN",
+      "state": "pressed",
+      "baseScene": "rules",
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-pressed",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "default",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-default",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "hover",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-hover",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "focus",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-focus",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "rule-open-empty",
+      "actionId": "CP-RULE-OPEN",
+      "state": "pressed",
+      "baseScene": "rules-empty",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scene": "control-rule-open-empty-pressed",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "default",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-default",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "hover",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-hover",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "focus",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-focus",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "pressed",
+      "baseScene": "rules-create-confirm",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-pressed",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "disabled",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "busy",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "default",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "hover",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "focus",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "pressed",
+      "baseScene": "rules-create-link",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "disabled",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-close",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "busy",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-close-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "default",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "hover",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "focus",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "pressed",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "disabled",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-disabled",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-previous",
+      "actionId": "CP-CREATE-PREVIOUS",
+      "state": "busy",
+      "baseScene": "rules-create-busy",
+      "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+      "scene": "control-p20-create-previous-busy",
+      "width": 390,
+      "contrast": 5.334190621262918
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "default",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-default",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "hover",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-hover",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "focus",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-focus",
+      "width": 390,
+      "contrast": 14.102738944447992
+    },
+    {
+      "key": "p20-create-cancel",
+      "actionId": "CP-CREATE-CLOSE",
+      "state": "pressed",
+      "baseScene": "rules-create-link",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scene": "control-p20-create-cancel-pressed",
+      "width": 390,
+      "contrast": 12.669055719579259
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "default",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-default",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "hover",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-hover",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "focus",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-focus",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-link",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "pressed",
+      "baseScene": "rules-create-link",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-link-pressed",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "default",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-default",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "hover",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-hover",
+      "width": 390,
+      "contrast": 10.613441575513296
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "focus",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-focus",
+      "width": 390,
+      "contrast": 8.273466608002094
+    },
+    {
+      "key": "p20-create-next-market",
+      "actionId": "CP-CREATE-SUBMIT",
+      "state": "pressed",
+      "baseScene": "rules-create-market",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scene": "control-p20-create-next-market-pressed",
+      "width": 390,
+      "contrast": 10.613441575513296
     },
     {
       "key": "collect",
@@ -13970,6 +16438,30 @@
     }
   ],
   "actionVisualReferences": {
+    "CP-CREATE-OPEN": {
+      "selector": ".scope [data-action=\"CP-CREATE-OPEN\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P19",
+      "states": {
+        "default": "control-create-open-default",
+        "hover": "control-create-open-hover",
+        "focus": "control-create-open-focus",
+        "pressed": "control-create-open-pressed"
+      },
+      "limitation": "secondary disabled/busy represent existing offline proposal lock while form submits; source Vue still permits closing/back; cancellation never aborts an already sent request"
+    },
+    "CP-RULE-OPEN": {
+      "selector": ".scope [data-action=\"CP-RULE-OPEN\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P20",
+      "states": {
+        "default": "control-rule-open-default",
+        "hover": "control-rule-open-hover",
+        "focus": "control-rule-open-focus",
+        "pressed": "control-rule-open-pressed"
+      },
+      "limitation": "secondary disabled/busy represent existing offline proposal lock while form submits; source Vue still permits closing/back; cancellation never aborts an already sent request"
+    },
     "CP-COLLECT": {
       "selector": "[data-action=\"CP-COLLECT\"]",
       "scope": "representative-control-only-not-all-variants-or-Vue",
@@ -14209,7 +16701,101 @@
       "limitation": "four pointer/keyboard states only; no source disabled or request-busy state"
     }
   },
+  "pageActionVisualReferences": {
+    "P20": {
+      "CP-CREATE-SUBMIT": {
+        "pageId": "P20",
+        "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-p20-create-default",
+          "hover": "control-p20-create-hover",
+          "focus": "control-p20-create-focus",
+          "pressed": "control-p20-create-pressed",
+          "disabled": "control-p20-create-disabled",
+          "busy": "control-p20-create-busy"
+        },
+        "limitation": "P20 create=1-only background; source busy condition for submit, proposed close/back lock; not all fields/themes, actual Vue/routing/dual-query priority or acceptance"
+      },
+      "CP-CREATE-CLOSE": {
+        "pageId": "P20",
+        "selector": "#modal header [data-action=\"CP-CREATE-CLOSE\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-p20-create-close-default",
+          "hover": "control-p20-create-close-hover",
+          "focus": "control-p20-create-close-focus",
+          "pressed": "control-p20-create-close-pressed",
+          "disabled": "control-p20-create-close-disabled",
+          "busy": "control-p20-create-close-busy"
+        },
+        "limitation": "P20 create=1-only background; source busy condition for submit, proposed close/back lock; not all fields/themes, actual Vue/routing/dual-query priority or acceptance"
+      },
+      "CP-CREATE-PREVIOUS": {
+        "pageId": "P20",
+        "selector": "#modal [data-action=\"CP-CREATE-PREVIOUS\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-p20-create-previous-default",
+          "hover": "control-p20-create-previous-hover",
+          "focus": "control-p20-create-previous-focus",
+          "pressed": "control-p20-create-previous-pressed",
+          "disabled": "control-p20-create-previous-disabled",
+          "busy": "control-p20-create-previous-busy"
+        },
+        "limitation": "P20 create=1-only background; source busy condition for submit, proposed close/back lock; not all fields/themes, actual Vue/routing/dual-query priority or acceptance"
+      }
+    }
+  },
   "controlVariantReferences": {
+    "rule-open-empty": {
+      "actionId": "CP-RULE-OPEN",
+      "pageId": "P20",
+      "selector": ".empty [data-action=\"CP-RULE-OPEN\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-rule-open-empty-default",
+        "hover": "control-rule-open-empty-hover",
+        "focus": "control-rule-open-empty-focus",
+        "pressed": "control-rule-open-empty-pressed"
+      }
+    },
+    "p20-create-cancel": {
+      "actionId": "CP-CREATE-CLOSE",
+      "pageId": "P20",
+      "selector": "#modal footer [data-action=\"CP-CREATE-CLOSE\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-p20-create-cancel-default",
+        "hover": "control-p20-create-cancel-hover",
+        "focus": "control-p20-create-cancel-focus",
+        "pressed": "control-p20-create-cancel-pressed"
+      }
+    },
+    "p20-create-next-link": {
+      "actionId": "CP-CREATE-SUBMIT",
+      "pageId": "P20",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-p20-create-next-link-default",
+        "hover": "control-p20-create-next-link-hover",
+        "focus": "control-p20-create-next-link-focus",
+        "pressed": "control-p20-create-next-link-pressed"
+      }
+    },
+    "p20-create-next-market": {
+      "actionId": "CP-CREATE-SUBMIT",
+      "pageId": "P20",
+      "selector": "#modal [data-action=\"CP-CREATE-SUBMIT\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-p20-create-next-market-default",
+        "hover": "control-p20-create-next-market-hover",
+        "focus": "control-p20-create-next-market-focus",
+        "pressed": "control-p20-create-next-market-pressed"
+      }
+    },
     "create-cancel": {
       "actionId": "CP-CREATE-CLOSE",
       "pageId": "P19",
@@ -14622,11 +17208,13 @@
     "CP-TOGGLE"
   ],
   "checks": [
+    "1440: three entry variants focus/reset/return; six P20 create-query controls with exact final POST, local next/previous, pending lock and readonly query suppression; closing query-only dialog clears modeled create query and focuses rules heading, not a fabricated create entry; actual routing and dual-query priority unproven",
     "1440: recovery variants preserve page-specific login fullPath, history.back semantics, empty/search role split and zero-write opening; reload records only first real load GET then shows loading, no fabricated recovery success; four pointer states only",
     "1440: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue",
     "1440: object selection/disclosure/task links plus toggle/resume/delete-open/price+review task states; exact POST target/payload and shared write lock, A-to-B-to-A progress ownership, no task link before response; offline only",
     "1440: seven secondary variants (40 states) and four navigation variants (16 states), Enter activation, exact href, external-link safety, secondary zero writes/focus return/create draft retention/delete reopen reset; disabled secondary controls only model proposed form-busy lock, not existing Vue or abort semantics",
     "1440: scenes/layout, search/deep link, independent permissions, pending/paused, source link, no rule writes beyond create, create validation/retention, rule threshold omission/null/zero/reset, delete trim/retention/cancel, keyboard trap/return/Escape/backdrop, busy guard, hover/focus; all intents inert",
+    "390: three entry variants focus/reset/return; six P20 create-query controls with exact final POST, local next/previous, pending lock and readonly query suppression; closing query-only dialog clears modeled create query and focuses rules heading, not a fabricated create entry; actual routing and dual-query priority unproven",
     "390: recovery variants preserve page-specific login fullPath, history.back semantics, empty/search role split and zero-write opening; reload records only first real load GET then shows loading, no fabricated recovery success; four pointer states only",
     "390: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue",
     "390: object selection/disclosure/task links plus toggle/resume/delete-open/price+review task states; exact POST target/payload and shared write lock, A-to-B-to-A progress ownership, no task link before response; offline only",
@@ -14638,6 +17226,7 @@
   "http": [],
   "limits": [
     "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
+    "Three form-entry variants and six P20 create-query variants are independently rendered. Query-only modal has no normal create opener on P20; heading focus fallback and routePreview are offline proposals, not actual router/history. Both-query dialog priority remains unresolved; no fabricated busy state for opening or first two next-step buttons.",
     "Recovery variants are page-keyed additional references, not representative-slot promotion. Forbidden secondary and blocked secondary use truthful home-navigation copy proposals; source default labels still say apply-permission/view-impact. Reload records only the first load GET, not later requests or actual recovery. No disabled/busy footer invented: source loading hides the footer.",
     "CP-B02/B03 ownership is locally fixed and source-regressed; other source gaps remain. No global action/dialog denominator or approval promotion.",
     "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
