@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P26五个通知提交控件逐态图稿
+
+基线 main / 4493b18d，工作树干净。按 ui-skills-root → frontend-design 与 Playwright 技能，在独立 notification-controls-direction-c 包细化开始处理、关闭、重新打开、全部已读、保存偏好。保留旧98图及其控制器/源数据，新增60张双端默认/原生悬停/键盘焦点/原生按下/等待/失败图。禁用与忙碌共用真实busy条件；新增的等待文案、ARIA和减少动态效果支持仅在提案内。
+
+首次定向检查发现验证器把展开的state错当嵌套s，修正为实际rows/summary后smoke30项通过；capture60项/60PNG及无参数60项/哈希复验通过。真实按钮点击、精确源请求预览、事实不改、等待重复意图阻止、失败相同body重试、详情与偏好Escape差异、邮件禁用、待发请求不随编辑变化、自动read、44px/16px/中心命中/无横溢出、HTTP0/存储空/脚本错误0均验。目视390开始处理等待及1440偏好失败；手机图为按钮滚动可见位置，不代表无需滚动看到全部内容。浏览器finally关闭，进程查询无headless残留。
+
+全图审计82包/11406PNG，源漂移/图漂移/未登记图均0；73路由全页完成仍unproven、批准页0、分母未冻结、G0进行中/G1–G5待办。P26完整逐源动作注册未完成，不提升已审页数；其他入口/字段、真实读写归属、SSE覆盖草稿继续待办。P25剩余21槽与已发具体审稿保留，不重复询问；P16仅布局获批不外推。
+
+verify:docs（153文件/73路由）、verify:runtime-docs、verify:static-analysis（390文件）通过；格式及提交检查见本批最终工具记录。生产Vue/CSS、API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、env/配置、依赖及宝塔未改，无新运行参数、无需重启、未部署。用户可打开本包gallery.html或index.html选择操作与预览反馈；全站实际实现、真实服务验收和部署签收继续。
+
+全部新增图/网页/证据/说明及验证器为永久交付，无新增一次性文件、日志或服务。历史拒绝清理的 `D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\p16-layout-20260910\.last-run.json`、`D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-competitor-races-20260909\playwright.config.ts`、`D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-competitor-races-20260909\results\.last-run.json` 不重试清理、不暂存；现有依赖/构建缓存保留。
+
 ## 2026-09-10 · P25提交中关闭、重开与旧结果隔离图稿
 
 上一轮beba126b交付12诊断图，为实际进展。本轮从干净main继续，按AGENTS/Feature Map approvalWorkflow/蓝图M05-02及真实ApprovalWorkspace、原型record/close/setMode核对。使用ui-skills-root/frontend-design/Playwright，无子代理或依赖安装。新增approval-lifecycle-direction-c组合，复用既有布局、字段帮助、阅读目录尺寸修复，不导入旧controls.js的全局pending回写逻辑；旧94/64/88/354/12图包均未改。
@@ -585,7 +597,6 @@ P18侧表增加6组操作的场景关联，不升级六态通过。规格/Featur
 全站审计更新：73规格/73路由均有整页或分段相关稿，70包/8026 PNG/1208来源绑定（804唯一文件），来源和图片漂移0，未列清单PNG0。不是全页完整证明；原coverage和逐页批准保持0/G0未冻结/G1–G5待验。下一核对全站语义动作/弹窗状态映射和P11/P18/P54多段组合；具体获审页再进入Vue实施，不按方向自动发布。
 
 仅新增P22离线图稿、永久验证器及直接相关规格/计划/地图/审核索引。真实Vue/API/OpenAPI/配置/依赖/权限/SQL/费用规则/Worker/生产/旧证据和用户意见不动；无需重启。166正式截图保留，无一次性临时文件或服务，验证浏览器finally关闭；最终进程检查无本验证器或临时浏览器残留。
-
 
 ## 2026-09-09 · W03 P21供应链与成本 / SOURCING-C-r1
 

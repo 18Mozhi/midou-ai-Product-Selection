@@ -1,0 +1,66 @@
+.control-review {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 24px;
+  color: #264578;
+  background: #eef3fc;
+}
+.control-review select,
+.control-review button {
+  font-size: 16px;
+  min-height: 44px;
+}
+.control-review a {
+  color: #264f9d;
+  padding: 12px 0;
+}
+button:focus-visible {
+  outline: 3px solid #a75d00;
+  outline-offset: 3px;
+}
+button:hover:not(:disabled) {
+  border-color: #325eaa;
+  background: #edf3ff;
+  color: #24467f;
+}
+button:active:not(:disabled) {
+  border-color: #163573;
+  background: #244b91;
+  color: #fff;
+}
+button[aria-busy="true"]:disabled {
+  opacity: 1;
+  color: #264578;
+  background: #e7efff;
+  border-color: #7f9bc9;
+  cursor: progress;
+}
+button[aria-busy="true"]::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: notification-wait 1s linear infinite;
+}
+@keyframes notification-wait {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button[aria-busy="true"]::before {
+    animation: none;
+  }
+}
+@media (max-width: 780px) {
+  .control-review {
+    padding: 12px;
+  }
+}

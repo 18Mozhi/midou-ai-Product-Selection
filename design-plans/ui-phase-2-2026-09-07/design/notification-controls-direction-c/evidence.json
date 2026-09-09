@@ -1,0 +1,1340 @@
+{
+  "version": "NOTIFICATION-CONTROLS-C-r1",
+  "scope": "offline-proposal-not-runtime-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/index.html": "2a0f764e9fc7a757b71d4a26dc51793a566eb9132722d2e6a6802cb0bb03559d",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.js": "7ef47d3b8fe9cf548b7a3d29c146b876f0f4a4b6e14dd34f38215c448b106450",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/notification.css": "6015dd3ce39cef6c84cde0b3af29b415ca2bd3ee6364d98ba5028e8cc49cf60d",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/data.js": "3883bf3cb21d95d1c9f77b74a6fd8583de399d26c6f350bab78e825949bcd30a",
+    "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/realtime-client-metrics.ts": "2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93",
+    "apps/api/src/notification-service.ts": "dedf65d09fd3572256f264a72c122d6ca6f87efe5b80858050ee09c353f8ed2b",
+    "apps/api/src/notification-routes.ts": "1a0fe7ff28d325be35eefe9c92ad19790f480bbf42ef03b38eee96cf5fd417d1",
+    "apps/api/src/mysql-notification-repository.ts": "ef99efb787f4730467e9e071e1681ebb096658409b5815f6f003c27f3ccced1a",
+    "tests/e2e/m05-03-notifications.spec.ts": "aa1dc4edeb6bc3abb1885946643eee1f8b68ac8ec13f44487692fc0c118317f6",
+    "scripts/lib/ui-phase2-notification-design-data.mjs": "2b73b1a8153a3c6e6f9a3dcadbb61e729a630c8cdcbf57bb7b841aa161964084",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-notification-c.mjs": "e3fe50eb64edcc1b7aa10864b41ef8f451c8334c38c7838e624fa51f80d7fcfa",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/index.html": "b7e9f1d04a6cd8143fa79c13581eca976082dcfdc1f14f9b9794b304b01940d9",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/controls.js": "ea7c6dfd3fa8d1881bf2910d8593bc785b3e86574ec6dc1f4cdd5359ab173796",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/controls.css": "d08df2fb38ad623e141244d3cd0e92081952fa8a7fbc5c19bee46c91e9b5d6dc",
+    "scripts/verify-ui-phase2-notification-controls-c.mjs": "9c2ef3a088ce6fc57f14752f4f6e58e94d2b7b768cfffae6d334f70fe7a5a213"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "control": "start",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "start",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "start",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "start",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "start",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "start",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "close",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "close",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "close",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "close",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "close",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "close",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "reopen",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "reopen",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "reopen",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "reopen",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "reopen",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "reopen",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 240,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "markAll",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "markAll",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "markAll",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "markAll",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "markAll",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 133.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "markAll",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "preferences",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "preferences",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "preferences",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "preferences",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "preferences",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 117.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "control": "preferences",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "start",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "start",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "start",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "start",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "start",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "start",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "close",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "close",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "close",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "close",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "close",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "close",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "reopen",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "reopen",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "reopen",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "reopen",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "reopen",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 70.78125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "reopen",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 159.5,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "markAll",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 86,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "markAll",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 86,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "markAll",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 86,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "markAll",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 86,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "markAll",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 123.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "markAll",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 86,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "preferences",
+      "state": "default",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "preferences",
+      "state": "hover",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "preferences",
+      "state": "focus",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "preferences",
+      "state": "pressed",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "preferences",
+      "state": "pending",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 117.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    },
+    {
+      "width": 390,
+      "control": "preferences",
+      "state": "error",
+      "exactPreview": true,
+      "factsUnchanged": true,
+      "targetMetrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      }
+    }
+  ],
+  "actionVisualReferences": {
+    "AN-N-START": {
+      "default": "start-default",
+      "hover": "start-hover",
+      "focus": "start-focus",
+      "pressed": "start-pressed",
+      "pending": "start-pending",
+      "disabled": "start-pending",
+      "busy": "start-pending",
+      "error": "start-error"
+    },
+    "AN-N-CLOSE": {
+      "default": "close-default",
+      "hover": "close-hover",
+      "focus": "close-focus",
+      "pressed": "close-pressed",
+      "pending": "close-pending",
+      "disabled": "close-pending",
+      "busy": "close-pending",
+      "error": "close-error"
+    },
+    "AN-N-REOPEN": {
+      "default": "reopen-default",
+      "hover": "reopen-hover",
+      "focus": "reopen-focus",
+      "pressed": "reopen-pressed",
+      "pending": "reopen-pending",
+      "disabled": "reopen-pending",
+      "busy": "reopen-pending",
+      "error": "reopen-error"
+    },
+    "AN-N-ALL-READ": {
+      "default": "markAll-default",
+      "hover": "markAll-hover",
+      "focus": "markAll-focus",
+      "pressed": "markAll-pressed",
+      "pending": "markAll-pending",
+      "disabled": "markAll-pending",
+      "busy": "markAll-pending",
+      "error": "markAll-error"
+    },
+    "AN-N-PREF-SAVE": {
+      "default": "preferences-default",
+      "hover": "preferences-hover",
+      "focus": "preferences-focus",
+      "pressed": "preferences-pressed",
+      "pending": "preferences-pending",
+      "disabled": "preferences-pending",
+      "busy": "preferences-pending",
+      "error": "preferences-error"
+    }
+  },
+  "screenshots": [
+    {
+      "scene": "start-default",
+      "width": 1440,
+      "file": "start-default-1440.png",
+      "sha256": "5fb39cad83e9e80e99346847e03ef45183a2a6c0a9ca2a6ec0b69f78e4dee639"
+    },
+    {
+      "scene": "start-hover",
+      "width": 1440,
+      "file": "start-hover-1440.png",
+      "sha256": "28c7eb697c235245d3678313a7dc2ad949780443b99c842994dd8fb97012d562"
+    },
+    {
+      "scene": "start-focus",
+      "width": 1440,
+      "file": "start-focus-1440.png",
+      "sha256": "89223521abea1f4a687cfd30a5c83742491db70a0a2c53331555b19c0d105a5c"
+    },
+    {
+      "scene": "start-pressed",
+      "width": 1440,
+      "file": "start-pressed-1440.png",
+      "sha256": "130deb48e4a158d1d51fb40aa9a9a3d24dfab9053c364b5af59e7e3668abc739"
+    },
+    {
+      "scene": "start-pending",
+      "width": 1440,
+      "file": "start-pending-1440.png",
+      "sha256": "590e704267ca6b99f96cffec6615f5625dfcedf5259fa17d23ad10eb1a1cfd20"
+    },
+    {
+      "scene": "start-error",
+      "width": 1440,
+      "file": "start-error-1440.png",
+      "sha256": "202ca43bfa51147f34240c32f1434730f88c4e3988d633fbbcdef0a512bcaad3"
+    },
+    {
+      "scene": "close-default",
+      "width": 1440,
+      "file": "close-default-1440.png",
+      "sha256": "1eb84b27d2361f53492a7feb8b9c971ee458435b24c8bb5ac77627bcd329166d"
+    },
+    {
+      "scene": "close-hover",
+      "width": 1440,
+      "file": "close-hover-1440.png",
+      "sha256": "a1600926884e71a3456fd126ded21556b0a8a99daac456f9bcd3ede051a9a888"
+    },
+    {
+      "scene": "close-focus",
+      "width": 1440,
+      "file": "close-focus-1440.png",
+      "sha256": "6092e21debaf23b1d5f263aa115177cf7b919cc3f28c326e843b9914fda2aa8b"
+    },
+    {
+      "scene": "close-pressed",
+      "width": 1440,
+      "file": "close-pressed-1440.png",
+      "sha256": "e52c87eb81b13d59c310484db54ba6ac551aa1c781b8374dc200f0e54153ea70"
+    },
+    {
+      "scene": "close-pending",
+      "width": 1440,
+      "file": "close-pending-1440.png",
+      "sha256": "7eba377e13a1dbc257045f7d1ab96829a8c0f6f976171447846dc8b1e5064ce7"
+    },
+    {
+      "scene": "close-error",
+      "width": 1440,
+      "file": "close-error-1440.png",
+      "sha256": "0735656abcf002064d454b0775f92cf92d37bff5deaf5e01f42da0e016af146e"
+    },
+    {
+      "scene": "reopen-default",
+      "width": 1440,
+      "file": "reopen-default-1440.png",
+      "sha256": "459b5611def67a2ccfe8a2e7a8fed123be5c742d2220335d609f0fdaa9c355fe"
+    },
+    {
+      "scene": "reopen-hover",
+      "width": 1440,
+      "file": "reopen-hover-1440.png",
+      "sha256": "b6ca2acc1fd6b19df82b454ea758a36de99e6c7729f47831b782c68cf6d2c289"
+    },
+    {
+      "scene": "reopen-focus",
+      "width": 1440,
+      "file": "reopen-focus-1440.png",
+      "sha256": "5261d8af1ace4f393596cde174764bd95cb438ba76916fec49409a5c8aab6e8f"
+    },
+    {
+      "scene": "reopen-pressed",
+      "width": 1440,
+      "file": "reopen-pressed-1440.png",
+      "sha256": "c89de51148e5e2ed58421b16df079e4efaf5574dd71b3abc0ef83b086e15daaa"
+    },
+    {
+      "scene": "reopen-pending",
+      "width": 1440,
+      "file": "reopen-pending-1440.png",
+      "sha256": "839d76c5d9b3bee525f85e94d9e4fe77ca77227f3dd70efd30dd51e67d14dad6"
+    },
+    {
+      "scene": "reopen-error",
+      "width": 1440,
+      "file": "reopen-error-1440.png",
+      "sha256": "91cb682ec26f59769dc8990193e3be17ce7d8170e7690e6ea4dd8809e98f2f45"
+    },
+    {
+      "scene": "markAll-default",
+      "width": 1440,
+      "file": "markAll-default-1440.png",
+      "sha256": "5de24025bb263f96cc60cf1e8d759aaebd542a619bfc0125909bd6cbb8b9af13"
+    },
+    {
+      "scene": "markAll-hover",
+      "width": 1440,
+      "file": "markAll-hover-1440.png",
+      "sha256": "4d1a7d5d47ec44ce2ef90fc56a1440e760048679a4223fbd4ba4e6f2b57f1b48"
+    },
+    {
+      "scene": "markAll-focus",
+      "width": 1440,
+      "file": "markAll-focus-1440.png",
+      "sha256": "7434ff5866164c6547faa52e433093329b2d0cf7687f8ebadd65cb66c21cc2ef"
+    },
+    {
+      "scene": "markAll-pressed",
+      "width": 1440,
+      "file": "markAll-pressed-1440.png",
+      "sha256": "fae8b87a4405ef4cbde321055232ccd419dda28a6be044b30a633d0bb7695639"
+    },
+    {
+      "scene": "markAll-pending",
+      "width": 1440,
+      "file": "markAll-pending-1440.png",
+      "sha256": "6fb5c18de0a3f9740abf6a3057a272e594381b701f1941fde9675230a2099ce5"
+    },
+    {
+      "scene": "markAll-error",
+      "width": 1440,
+      "file": "markAll-error-1440.png",
+      "sha256": "4a405514a62b10850c80d2a992073401838c1fdbe4680a3559cfbefb55c723f1"
+    },
+    {
+      "scene": "preferences-default",
+      "width": 1440,
+      "file": "preferences-default-1440.png",
+      "sha256": "b7a0c6daedd9673da1f7c4fc8d8ed48e5511cc18bda78df155eb0eed756e3bce"
+    },
+    {
+      "scene": "preferences-hover",
+      "width": 1440,
+      "file": "preferences-hover-1440.png",
+      "sha256": "e926fb98635c9ec67a4bc1c4c6c98b7a53cceb9e0423c8c41368e9bc975036c6"
+    },
+    {
+      "scene": "preferences-focus",
+      "width": 1440,
+      "file": "preferences-focus-1440.png",
+      "sha256": "bdfb06db9ec07cfaa578cb2eb2b10b1d4fe44e2919df9983428fd8bb8e4f67d5"
+    },
+    {
+      "scene": "preferences-pressed",
+      "width": 1440,
+      "file": "preferences-pressed-1440.png",
+      "sha256": "9250860058909b8cf40735119d878ec28051adec410dfcebf12a510ee096bdae"
+    },
+    {
+      "scene": "preferences-pending",
+      "width": 1440,
+      "file": "preferences-pending-1440.png",
+      "sha256": "f95b950399e92b1126402a2fd202aad71ad8f1bc630d243f76824be7931baa0b"
+    },
+    {
+      "scene": "preferences-error",
+      "width": 1440,
+      "file": "preferences-error-1440.png",
+      "sha256": "be437b1b8ff587ff663a22853c13f0d6e86a87366096e41f1dcbd3b60c678242"
+    },
+    {
+      "scene": "start-default",
+      "width": 390,
+      "file": "start-default-390.png",
+      "sha256": "bea40ef8934c6f76ecacd1510eaec1f1a7abd0ac625eeb3930f22e80f8b3a7a9"
+    },
+    {
+      "scene": "start-hover",
+      "width": 390,
+      "file": "start-hover-390.png",
+      "sha256": "82460d24931b72a2f69e36c300627bfc106e4f772d846be403212d74c04de3f4"
+    },
+    {
+      "scene": "start-focus",
+      "width": 390,
+      "file": "start-focus-390.png",
+      "sha256": "4cb2c5ca0bfdb3883d38ba5544f69e7fc90b4facbc024474b53e41e2e01ba7bb"
+    },
+    {
+      "scene": "start-pressed",
+      "width": 390,
+      "file": "start-pressed-390.png",
+      "sha256": "72fafa1e587d4f592c650c0fac8bd64a84f063da0194ce5337c8adf5d106df69"
+    },
+    {
+      "scene": "start-pending",
+      "width": 390,
+      "file": "start-pending-390.png",
+      "sha256": "617237df01415c0ff2bcad72faad30e37c9eeaf976648ba028059ebeb49e3960"
+    },
+    {
+      "scene": "start-error",
+      "width": 390,
+      "file": "start-error-390.png",
+      "sha256": "2a3d0670a709cb70a4a8ddba99772533b6d75eb784aa15841370bef80bc353e1"
+    },
+    {
+      "scene": "close-default",
+      "width": 390,
+      "file": "close-default-390.png",
+      "sha256": "ea745c397a82d5cb163b0530b03c0a5075d30c2ab8e8473d4887b92446248434"
+    },
+    {
+      "scene": "close-hover",
+      "width": 390,
+      "file": "close-hover-390.png",
+      "sha256": "b4a3cd4af81e427a1b450e1c79f6d14f2b89754ec3795dc96b20f7b6ad0e2a32"
+    },
+    {
+      "scene": "close-focus",
+      "width": 390,
+      "file": "close-focus-390.png",
+      "sha256": "ed1b3ee4a46d07347c1546aa97df94b59be1764ee1c7c107747b94b7dde18ae7"
+    },
+    {
+      "scene": "close-pressed",
+      "width": 390,
+      "file": "close-pressed-390.png",
+      "sha256": "333da26a0c51a30d76eb757e7b1821a46277e9683c5d20056191f326c70ee335"
+    },
+    {
+      "scene": "close-pending",
+      "width": 390,
+      "file": "close-pending-390.png",
+      "sha256": "b6d05509de947f1adac54a71794fd12fe77fd3bab99bab4bbd2053014d8e1a17"
+    },
+    {
+      "scene": "close-error",
+      "width": 390,
+      "file": "close-error-390.png",
+      "sha256": "a72bb906e06ff4438707ce0771ce9a6daaf7a534a625727bb156d477bed51a0c"
+    },
+    {
+      "scene": "reopen-default",
+      "width": 390,
+      "file": "reopen-default-390.png",
+      "sha256": "60a5d8201fe63e96176d22f9b1f6e2c55eadfd1f42c8b24ca8d04096eeee0dda"
+    },
+    {
+      "scene": "reopen-hover",
+      "width": 390,
+      "file": "reopen-hover-390.png",
+      "sha256": "86456799f966bdd99c199777feb391538900906b1eaa20872432fdc0863e3d12"
+    },
+    {
+      "scene": "reopen-focus",
+      "width": 390,
+      "file": "reopen-focus-390.png",
+      "sha256": "32d27c905054178527405dc766e62b53f17853547780403ca79073235d04e403"
+    },
+    {
+      "scene": "reopen-pressed",
+      "width": 390,
+      "file": "reopen-pressed-390.png",
+      "sha256": "1105d902477939b8adb23223f18f3de772ba398259da42889c1c6d9102ef6420"
+    },
+    {
+      "scene": "reopen-pending",
+      "width": 390,
+      "file": "reopen-pending-390.png",
+      "sha256": "de7879a9b1f18b94d2ae29f05be83f1db3ab692c747fb5ff935063c50d7de765"
+    },
+    {
+      "scene": "reopen-error",
+      "width": 390,
+      "file": "reopen-error-390.png",
+      "sha256": "d9ab97abf859f7da103de4b2ea4f122c1682735b9dd7e82c9592fac0370e0c6e"
+    },
+    {
+      "scene": "markAll-default",
+      "width": 390,
+      "file": "markAll-default-390.png",
+      "sha256": "eea4ff392fd54fc611ef2a39ad08bf51b27f675daabda837401a1e13a4b1c780"
+    },
+    {
+      "scene": "markAll-hover",
+      "width": 390,
+      "file": "markAll-hover-390.png",
+      "sha256": "5caad0ea7521432c4c51269fe793251ecb8eb822d592586f6aa04818e7135529"
+    },
+    {
+      "scene": "markAll-focus",
+      "width": 390,
+      "file": "markAll-focus-390.png",
+      "sha256": "0ace582044e71508efdb5e31b3042c4164ee7bc2a6e8e5f2f0f0293263351934"
+    },
+    {
+      "scene": "markAll-pressed",
+      "width": 390,
+      "file": "markAll-pressed-390.png",
+      "sha256": "c960c9e1db2e61d6e8c40b230710d85d8720a21ba661a9e8d62c53aa7ee10231"
+    },
+    {
+      "scene": "markAll-pending",
+      "width": 390,
+      "file": "markAll-pending-390.png",
+      "sha256": "b5e4d7a9073270fb297a2faeb4fc11a9fc78ed5130e99221a940e833b210af66"
+    },
+    {
+      "scene": "markAll-error",
+      "width": 390,
+      "file": "markAll-error-390.png",
+      "sha256": "a0d903f4f4a2cb7a1fafdfd9ae7c905b899522514f47a23755ce56d378a60ab6"
+    },
+    {
+      "scene": "preferences-default",
+      "width": 390,
+      "file": "preferences-default-390.png",
+      "sha256": "e6c03f0eb709ef568f2807e14d46518fc4d9584eb36ff533cebb5d66357d2b7e"
+    },
+    {
+      "scene": "preferences-hover",
+      "width": 390,
+      "file": "preferences-hover-390.png",
+      "sha256": "4f614411fde6cb0b8750272657470bd118a6644ef0ca27e73ee9a8a536fb4f32"
+    },
+    {
+      "scene": "preferences-focus",
+      "width": 390,
+      "file": "preferences-focus-390.png",
+      "sha256": "e1d3532935fc3e225c5e8fed151278fb87a91cf34fb578b86cff32dfbe22ca97"
+    },
+    {
+      "scene": "preferences-pressed",
+      "width": 390,
+      "file": "preferences-pressed-390.png",
+      "sha256": "191d563ed3ee13bad49927072835d1ec3be7d6403eaa935a041e2aecbdcead22"
+    },
+    {
+      "scene": "preferences-pending",
+      "width": 390,
+      "file": "preferences-pending-390.png",
+      "sha256": "bbcaf6c1d7c32684960a1cb69059bc67bd539c5744faf9d12f20ae1a470cbf4a"
+    },
+    {
+      "scene": "preferences-error",
+      "width": 390,
+      "file": "preferences-error-390.png",
+      "sha256": "e5956f0d21ee54bf893c7674a37312205ca44e1bb97f2c2eda0e0d1791390e50"
+    }
+  ]
+}

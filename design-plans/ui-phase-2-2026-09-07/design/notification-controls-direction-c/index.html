@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P26 通知操作逐态 · C方向待审</title>
+    <link rel="stylesheet" href="../notification-direction-c/notification.css" />
+    <link rel="stylesheet" href="controls.css" />
+    <script src="../notification-direction-c/data.js" defer></script>
+    <script src="../notification-direction-c/notification.js" defer></script>
+    <script src="controls.js" defer></script>
+  </head>
+  <body>
+    <header class="control-review" aria-label="独立审稿工具">
+      <strong>P26 · 通知操作待审</strong>
+      <label for="control-picker">操作</label
+      ><select id="control-picker"></select>
+      <label for="mode-picker">提交反馈</label
+      ><select id="mode-picker">
+        <option value="intent">只生成预览</option>
+        <option value="busy">等待中</option>
+        <option value="error">失败</option>
+      </select>
+      <button type="button" id="prepare-control">查看</button>
+      <a href="gallery.html">状态图册</a><a href="README.md">范围与差异</a>
+    </header>
+    <div id="app"></div>
+    <dialog id="detail" aria-labelledby="detail-title"></dialog>
+    <dialog id="preferences" aria-labelledby="preferences-title"></dialog>
+  </body>
+</html>
