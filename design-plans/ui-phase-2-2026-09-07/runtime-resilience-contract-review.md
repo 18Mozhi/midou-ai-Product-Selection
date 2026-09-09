@@ -1,5 +1,11 @@
 # B3b · 运行拓扑与Redis/MySQL/文件韧性合同复核
 
+## 2026-09-09 P67设计补充 · REDIS-C-r1（未实施）
+
+[图册](design/redis-direction-c/README.md)与verify-ui-phase2-redis-c交61场景126PNG。RS-G03用实际采样器隔离复现：partial全部MEMORY失败与空分组、sampled测量0字节、128键/32轮/16并发、去重/分类/脱敏及成功字节分母；新稿区分无样本、未知、零分母和截断。实际probe/evaluator/service复现五INFO/五CONFIG GET、AOF重写回退、占位0与10000比例、总体运行policy和局部80%不一致；不更改阈值或恢复规则。资源条按各自finding而非总state变色。Vue脚本单飞/15秒/null/清快照/空请求ID、仓储三插入惰性提交/回滚与静态route/server分别验证，不作为真Redis/MySQL/RBAC证据。
+
+三个请求技术消费者各自展开、模拟复制及拒绝反馈有图；recovering仅UI枚举不发起恢复。七个相关旧hash保持，未改表刷证。everysec、网络监听与演练没有当前GET证据，源loading/AOF/RDB和累计拒绝/淘汰仍原判定。RS-G03生产表达迁入和RS-G06共享复制/保活未关闭；本稿待审，不部署、不清缓存/键、不恢复、不重启。下一P68。
+
 ## 2026-09-09 P66设计补充 · TOPOLOGY-C-r1（未实施）
 
 [图册](design/topology-direction-c/README.md)与永久verify-ui-phase2-topology-c复验器交付81场景181PNG。实际evaluator/service验证预期节点过滤、90秒边界、API未来心跳仍ready而Worker未来快照stale、ready可并存监督器blocker/严重重启告警、八类告警、业务一分钟/等待排除/先取前四再校验、重启首条/下降增量0与重置标记。健康仓库汇总函数惰性执行验证零样本null、包含失败和超时的分位数；源码Vue验证单飞/15秒/401403清快照/其他保留与卸载abort，提取原队列筛选和老化逻辑。仓库SQL和路由guard只静态绑定，不声明实库事务或权限服务器通过。
