@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P19/P20恢复与空结果控件
+
+收口结果：完整capture通过60场景586PNG/452双端实例；9源码组/5边界组、原交互、12屏宽×5代表场景保留，HTTP/页面错误0，最低文字对比5.33419。只目检390搜索次按钮focus和1440规则受阻整页；原两张待审采集busy/删除focus与984f41df字节哈希一致。新审核文档195链接无断链。
+
+动作审计仍21页/435独立源位置/388语义组；额外恢复变体不提升代表槽。docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check与diff检查通过。设计审计76包10128PNG、842独立来源/1449绑定、8385 README链接，来源/PNG漂移及未登记图0；完整页面批准0、分母未冻结，G0进行中/G1–G5待验。
+
+无生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库、配置/env、依赖、安全或权限变动，未部署、无参数/重启要求；未重复未受影响的真实Vue46例和审计库48单元用例。无新临时产物或服务，验证器浏览器关闭且无headless-shell残留；旧清理被拒目录output/playwright/ui-phase2-competitor-races-20260909继续保留。后续继续正常创建入口、P20异常创建背景、全主题/字段/页面逐项审核与实际实施，不能据本批宣称全部完成。
+
+从干净main/984f41df继续；使用ui-skills-root/frontend-design/Playwright，先读AGENTS、Feature Map、蓝图3.5及真实恢复/load/共享状态组件。离线稿补失败次按钮、搜索次按钮、只读空目录/搜索分支；P20会话/权限/受阻有独立场景，重新登录保留本页及competitor查询样本。源“申请权限/查看影响”实际都回home，稿中按真实去向改文案；生产未改。
+
+22额外控件变体88状态双端176图、7新整页双端14图，共190新PNG；目标本包60场景586PNG、49控件变体226状态/452双端实例。pageId/selector/state逐项映射additionalControlVariants，不覆写跨页同名代表键，因此P19仍24/P20仍30未映射代表槽；全局21页同级语义/52页待继续，不以图数冒充动作或批准。
+
+最小smoke通过452控件实例，HTTP/页面错误0；检查真实Enter、角色分支/零写入创建与回焦、重试仅首个GET然后loading、登录回跳fullPath与history.back内存意图。未模拟后续读取/成功响应，不宣称实际恢复；loading隐藏footer，不制造disabled/busy。完整捕获与文档收口结果见本节顶部。
+
 ## 2026-09-09 · P19对象操作与任务状态图
 
 从干净main/1bd2eb22继续；前轮次级状态图为实质进展。使用ui-skills-root/frontend-design/Playwright，复用依赖与现有脚本；读取AGENTS、Feature Map、蓝图3.5、实际Vue对象/启停/删除入口/task/create条件。没有生产改动或安装依赖。

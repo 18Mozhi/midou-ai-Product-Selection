@@ -24,7 +24,10 @@
     ["task-only", "P19", "独立任务权限"],
     ["deep-link", "P19", "深链优先搜索"],
     ["search-empty", "P19", "搜索无结果"],
+    ["search-empty-readonly", "P19", "只读 / 搜索无结果"],
     ["empty", "P19", "首次空目录"],
+    ["empty-readonly", "P19", "只读 / 空目录"],
+    ["recovery-blocked", "P19", "目录依赖受阻 / 恢复操作"],
     ["loading", "P19", "目录读取中"],
     ["error", "P19", "目录读取失败"],
     ["expired", "P19", "会话过期"],
@@ -47,6 +50,10 @@
     ["rules-disabled", "P20", "只有停用规则"],
     ["rules-no-objects", "P20", "对象空但规则仍存在"],
     ["rules-error", "P20", "规则读取失败"],
+    ["rules-expired", "P20", "规则页 / 会话过期"],
+    ["rules-expired-query", "P20", "规则页 / 含筛选地址的会话过期"],
+    ["rules-forbidden", "P20", "规则页 / 无读取权限"],
+    ["rules-blocked", "P20", "规则页 / 依赖受阻"],
     ["rules-loading", "P20", "规则读取中"],
     ["rules-readonly", "P20", "只读规则目录"],
     ["rule-global", "P20", "规则 / 工作区价格"],
@@ -150,7 +157,8 @@
   const link = (id, text, href) => `<a data-action="${id}" class="link" href="${href}">${text}</a>`;
   const badge = (text, good = false) => `<span class="badge ${good ? "good" : ""}">${text}</span>`;
   const is = (...ids) => ids.includes(current.id);
-  const manager = () => !is("readonly", "task-only", "rules-readonly");
+  const manager = () =>
+    !is("readonly", "task-only", "rules-readonly", "empty-readonly", "search-empty-readonly");
   const taskPermission = () => !is("readonly", "rules-readonly");
   const rulesPage = () => current.pageId === "P20";
   const note = (title, text, cls = "") =>
@@ -160,7 +168,7 @@
     current = scenes.find((s) => s.id === id);
     if (!current) throw new Error("Unknown scene");
     selected = { ...objects[0] };
-    search = is("search-empty", "deep-link") ? "不存在的标题" : "";
+    search = is("search-empty", "search-empty-readonly", "deep-link") ? "不存在的标题" : "";
     deep = is("deep-link");
     modalKind = "";
     busy = false;
@@ -209,8 +217,8 @@
       openModal("rule", true);
     }
   }
-  function emptyPanel(title, description, action, label) {
-    return `<section class="empty"><div class="symbol" aria-hidden="true">◇</div><h2>${title}</h2><p>${description}</p>${action ? button(action, label, "primary") : ""}</section>`;
+  function emptyPanel(title, description, action, label, secondary, secondaryLabel) {
+    return `<section class="empty"><div class="symbol" aria-hidden="true">◇</div><h2>${title}</h2><p>${description}</p>${secondary ? `<div class="recovery-actions">${button(action, label, "primary")}${button(secondary, secondaryLabel)}</div>` : action ? button(action, label, "primary") : ""}</section>`;
   }
   function render() {
     const rp = rulesPage();
@@ -225,12 +233,21 @@
     if (is("loading", "rules-loading"))
       return `<section class="rules" aria-busy="true" aria-label="正在读取"><h2>正在读取${rulesPage() ? "规则" : "竞品"}</h2><div class="loading"></div><div class="loading"></div><p class="meta">数据未知，不提前显示零条。</p></section>`;
     const errors = {
-      error: ["竞品目录未能读取", "请重试，尚不能确认目录为空。", "CP-STATE-PRIMARY", "重新读取"],
+      error: [
+        "竞品目录未能读取",
+        "请重试，尚不能确认目录为空。返回操作使用浏览器历史，不固定跳转到竞品列表。",
+        "CP-STATE-PRIMARY",
+        "重新读取",
+        "CP-STATE-SECONDARY",
+        "返回上一页",
+      ],
       "rules-error": [
         "规则暂时无法读取",
         "不能据此判断没有规则，启用状态也暂不可确认。",
         "CP-STATE-PRIMARY",
         "重新读取",
+        "CP-STATE-SECONDARY",
+        "返回上一页",
       ],
       expired: ["登录状态已过期", "重新登录后返回当前竞品页面。", "CP-STATE-PRIMARY", "重新登录"],
       forbidden: [
@@ -238,16 +255,43 @@
         "请联系管理员核对当前工作区权限。",
         "CP-STATE-PRIMARY",
         "返回工作台",
+        "CP-STATE-SECONDARY",
+        "离开此页",
       ],
     };
+    const blocked = [
+      "读取暂时受阻",
+      "可能因限流、超时或依赖不可用而受阻；重试仅重新读取，不宣称采集已恢复。",
+      "CP-STATE-PRIMARY",
+      "稍后重试",
+      "CP-STATE-SECONDARY",
+      "返回工作台",
+    ];
+    errors["recovery-blocked"] = blocked;
+    errors["rules-blocked"] = blocked;
+    errors["rules-forbidden"] = errors.forbidden;
+    errors["rules-expired"] = [
+      "规则页登录状态已过期",
+      "重新登录后返回监控规则页，不自动重放任何未提交操作。",
+      "CP-STATE-PRIMARY",
+      "重新登录",
+    ];
+    errors["rules-expired-query"] = [
+      "规则页登录状态已过期",
+      "重新登录链接保留当前规则页及 competitor 查询参数；仅保留地址，不保证草稿持久化。",
+      "CP-STATE-PRIMARY",
+      "重新登录",
+    ];
     if (errors[current.id]) return emptyPanel(...errors[current.id]);
     if (rulesPage()) return ruleDirectory();
-    if (is("empty"))
+    if (is("empty", "empty-readonly"))
       return emptyPanel(
         "建立第一个竞品观察对象",
         "填写公开商品链接和市场，首个快照只建立比较起点。",
-        manager() ? "CP-CREATE-OPEN" : "CP-STATE-PRIMARY",
+        "CP-STATE-PRIMARY",
         manager() ? "添加竞品" : "刷新数据",
+        "CP-STATE-SECONDARY",
+        manager() ? "刷新数据" : "返回工作台",
       );
     const filtered = deep
       ? [selected]
@@ -256,7 +300,7 @@
             v.toLowerCase().includes(search.toLowerCase().trim()),
           ),
         );
-    return `${is("rules-unknown") ? note("规则状态未知", "竞品目录可用，但规则读取失败；不显示“零条生效规则”，请重新读取。", "info") + button("CP-STATE-PRIMARY", "重新读取") : ""}<div class="directory"><aside class="objects"><label class="search">搜索竞品<input id="search" data-action="CP-SEARCH" type="search" placeholder="标题、ASIN、来源站点" value="${esc(search)}" /></label><p class="meta">${filtered.length} 个匹配对象${deep ? " · 深链对象优先" : ""}</p>${filtered.map((o) => `<button type="button" class="object" data-action="CP-DETAIL" data-object="${o.id}" aria-pressed="${selected.id === o.id}"><strong>${esc(o.title)}</strong><small>${o.source_site} · ${o.market}</small><span class="object-price">${o.id === selected.id ? esc(selected.price) : o.price}</span><small>${o.id === selected.id ? selected.status : o.status} · 查看详情 →</small></button>`).join("")}</aside><article class="detail">${!filtered.length ? emptyPanel("没有匹配的竞品", "只搜索标题、ASIN 和来源站点，不扩大到其他字段。", "CP-SEARCH-CLEAR", "清空搜索") : detail()}</article></div><details class="help" data-action="CP-HELP"><summary>帮助：从公开链接到变化提醒</summary><p>添加链接 → 首个真实快照 → 后续变化 → 达到显式阈值才排队通知与任务。没有触发记录不代表已发送提醒。</p></details>`;
+    return `${is("rules-unknown") ? note("规则状态未知", "竞品目录可用，但规则读取失败；不显示“零条生效规则”，请重新读取。", "info") + button("CP-STATE-PRIMARY", "重新读取") : ""}<div class="directory"><aside class="objects"><label class="search">搜索竞品<input id="search" data-action="CP-SEARCH" type="search" placeholder="标题、ASIN、来源站点" value="${esc(search)}" /></label><p class="meta">${filtered.length} 个匹配对象${deep ? " · 深链对象优先" : ""}</p>${filtered.map((o) => `<button type="button" class="object" data-action="CP-DETAIL" data-object="${o.id}" aria-pressed="${selected.id === o.id}"><strong>${esc(o.title)}</strong><small>${o.source_site} · ${o.market}</small><span class="object-price">${o.id === selected.id ? esc(selected.price) : o.price}</span><small>${o.id === selected.id ? selected.status : o.status} · 查看详情 →</small></button>`).join("")}</aside><article class="detail">${!filtered.length ? emptyPanel("没有匹配的竞品", "只搜索标题、ASIN 和来源站点，不扩大到其他字段。", "CP-SEARCH-CLEAR", "清空搜索", "CP-SEARCH-SECONDARY", manager() ? "添加竞品监控" : "刷新数据") : detail()}</article></div><details class="help" data-action="CP-HELP"><summary>帮助：从公开链接到变化提醒</summary><p>添加链接 → 首个真实快照 → 后续变化 → 达到显式阈值才排队通知与任务。没有触发记录不代表已发送提醒。</p></details>`;
   }
   function detail() {
     const pending = is("pending", "running"),
@@ -575,18 +619,39 @@
     } else if (id === "CP-RULE-BACK") {
       intent("/competitors", "NAVIGATE");
       choose("directory");
-    } else if (id === "CP-STATE-PRIMARY") {
-      intent(
-        is("expired")
-          ? "/login?return_to=%2Fcompetitors"
-          : is("forbidden")
-            ? "/home"
-            : rulesPage()
-              ? "/competitor-monitor-rules"
-              : "/competitors",
-        is("expired", "forbidden") ? "NAVIGATE" : "GET",
-      );
-      feedback = "仅记录恢复意图；不访问目的地。";
+    } else if (["CP-STATE-PRIMARY", "CP-STATE-SECONDARY", "CP-SEARCH-SECONDARY"].includes(id)) {
+      const primary = id === "CP-STATE-PRIMARY";
+      const empty = is("empty", "empty-readonly");
+      const expired = is("expired", "rules-expired", "rules-expired-query");
+      if ((primary && empty && manager()) || (id === "CP-SEARCH-SECONDARY" && manager())) {
+        step = 1;
+        openModal("create");
+        return;
+      }
+      const reload =
+        id === "CP-SEARCH-SECONDARY" ||
+        (primary && !expired && !is("forbidden", "rules-forbidden")) ||
+        (!primary && empty && manager());
+      if (reload) {
+        // Both routes run load(): competitors first, then rules and conditional detail.
+        // Record only its first request, never fabricate completion or later responses.
+        intent("/competitors", "GET");
+        choose(rulesPage() ? "rules-loading" : "loading");
+        feedback = "仅记录 load() 的首个目录读取；后续规则/详情请求未模拟，不代表恢复成功。";
+      } else if (primary && expired) {
+        const route = rulesPage()
+          ? "/competitors/monitoring-rules" +
+            (is("rules-expired-query") ? "?competitor=" + competitorId : "")
+          : "/competitors";
+        intent("/login?return_to=" + encodeURIComponent(route), "NAVIGATE");
+        feedback = "仅记录重新登录地址；不导航、不自动重放写入。";
+      } else if (!primary && is("error", "rules-error")) {
+        intent("history.back()", "LOCAL");
+        feedback = "仅记录浏览器历史返回；上一个地址由真实浏览器历史决定。";
+      } else {
+        intent("/home", "NAVIGATE");
+        feedback = "仅记录返回工作台；未接入权限申请或影响分析页面。";
+      }
       render();
     } else if (id === "CP-DETAIL-RETRY") {
       intent("/competitors/" + selected.id, "GET");

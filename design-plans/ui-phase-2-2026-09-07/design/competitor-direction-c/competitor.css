@@ -506,6 +506,13 @@ header.identity {
 .help p {
   padding-top: 12px;
 }
+.recovery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
 .empty {
   padding: 52px 28px;
   text-align: center;

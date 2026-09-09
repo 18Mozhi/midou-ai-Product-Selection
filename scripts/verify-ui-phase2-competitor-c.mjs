@@ -267,10 +267,196 @@ const objectControls = [
   selector: `[data-action="${control.actionId}"]`,
   ...control,
 }));
-const allControls = [...controls, ...secondaryControls, ...navigationControls, ...objectControls];
+const recoveryControls = [
+  {
+    key: "p19-retry",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "error",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "reload",
+  },
+  {
+    key: "p19-back",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "error",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "back",
+  },
+  {
+    key: "p19-login",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "expired",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "login",
+  },
+  {
+    key: "p19-forbidden-primary",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "forbidden",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "home",
+  },
+  {
+    key: "p19-forbidden-secondary",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "forbidden",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "home",
+  },
+  {
+    key: "p19-blocked-retry",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "recovery-blocked",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "reload",
+  },
+  {
+    key: "p19-blocked-home",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "recovery-blocked",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "home",
+  },
+  {
+    key: "p20-retry",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-error",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "reload",
+  },
+  {
+    key: "p20-back",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-error",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "back",
+  },
+  {
+    key: "p20-login",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-expired",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "login",
+  },
+  {
+    key: "p20-forbidden-primary",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-forbidden",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "home",
+  },
+  {
+    key: "p20-forbidden-secondary",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-forbidden",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "home",
+  },
+  {
+    key: "p20-blocked-retry",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-blocked",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "reload",
+  },
+  {
+    key: "p20-blocked-home",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-blocked",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "home",
+  },
+  {
+    key: "p20-login-query",
+    pageId: "P20",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "rules-expired-query",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "login",
+  },
+  {
+    key: "p19-empty-create",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "empty",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "create",
+  },
+  {
+    key: "p19-empty-refresh",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "empty",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "reload",
+  },
+  {
+    key: "p19-empty-readonly-refresh",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "empty-readonly",
+    selector: '.empty [data-action="CP-STATE-PRIMARY"]',
+    expect: "reload",
+  },
+  {
+    key: "p19-empty-readonly-home",
+    pageId: "P19",
+    actionId: "CP-STATE-RECOVERY",
+    ready: "empty-readonly",
+    selector: '.empty [data-action="CP-STATE-SECONDARY"]',
+    expect: "home",
+  },
+  {
+    key: "p19-search-clear",
+    pageId: "P19",
+    actionId: "CP-SEARCH-RECOVERY",
+    ready: "search-empty",
+    selector: '.empty [data-action="CP-SEARCH-CLEAR"]',
+    expect: "clear",
+  },
+  {
+    key: "p19-search-create",
+    pageId: "P19",
+    actionId: "CP-SEARCH-RECOVERY",
+    ready: "search-empty",
+    selector: '.empty [data-action="CP-SEARCH-SECONDARY"]',
+    expect: "create",
+  },
+  {
+    key: "p19-search-readonly-refresh",
+    pageId: "P19",
+    actionId: "CP-SEARCH-RECOVERY",
+    ready: "search-empty-readonly",
+    selector: '.empty [data-action="CP-SEARCH-SECONDARY"]',
+    expect: "reload",
+  },
+].map((control) => ({ ...control, kind: "recovery", states: pointerStates, variantOnly: true }));
+const allControls = [
+  ...controls,
+  ...secondaryControls,
+  ...navigationControls,
+  ...objectControls,
+  ...recoveryControls,
+];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const files = [
   "apps/web/src/components/CompetitorMonitor.vue",
+  "apps/web/src/components/UiStatePanel.vue",
+  "apps/web/src/ui/state-contract.ts",
   "apps/web/src/components/shared/monitoring-readiness.ts",
   "apps/api/src/competitor-service.ts",
   "apps/api/src/competitor-routes.ts",
@@ -509,6 +695,56 @@ async function verifyControls(page, width) {
           await page.locator("dialog[open]").count(),
           control.key === "rule-current" ? 1 : 0,
         );
+      } else if (control.kind === "recovery") {
+        await target.focus();
+        await page.keyboard.press("Enter");
+        if (control.expect === "create") {
+          assert.equal(await count(), before, "opening create cannot write");
+          assert.equal(await page.locator("dialog[open]").count(), 1);
+          assert.equal(await page.locator('[name="product_url"]').count(), 1);
+          await page.locator('#modal header [data-action="CP-CREATE-CLOSE"]').click();
+          assert.ok(
+            await page.locator(control.selector).evaluate((el) => el === document.activeElement),
+          );
+        } else if (control.expect === "clear") {
+          assert.equal(await count(), before, "clear search is local");
+          assert.equal(await page.locator("#search").inputValue(), "");
+          assert.equal(await page.locator(".object").count(), 3);
+        } else {
+          assert.equal(await count(), before + 1);
+          const route =
+            control.pageId === "P20"
+              ? "/competitors/monitoring-rules" +
+                (control.key === "p20-login-query"
+                  ? "?competitor=00000000-0000-4000-8000-000000000019"
+                  : "")
+              : "/competitors";
+          const expected =
+            control.expect === "reload"
+              ? { path: "/competitors", method: "GET" }
+              : control.expect === "back"
+                ? { path: "history.back()", method: "LOCAL" }
+                : {
+                    path:
+                      control.expect === "login"
+                        ? "/login?return_to=" + encodeURIComponent(route)
+                        : "/home",
+                    method: "NAVIGATE",
+                  };
+          assert.deepEqual(
+            await page.evaluate(() => window.competitorReview.intents.at(-1)),
+            expected,
+          );
+          assert.equal(await page.locator("dialog[open]").count(), 0);
+          if (control.expect === "reload") {
+            assert.equal(await page.locator('section[aria-busy="true"]').count(), 1);
+            assert.equal(
+              await page.locator(".empty [data-action]").count(),
+              0,
+              "load hides recovery footer",
+            );
+          }
+        }
       } else if (control.kind === "detail") {
         const id = await target.getAttribute("data-object");
         await target.focus();
@@ -661,6 +897,33 @@ async function verifyControls(page, width) {
       window.competitorReview.outcome = "success";
     });
   }
+  await choose("pending");
+  for (const scene of ["expired", "rules-expired", "rules-expired-query"]) {
+    await choose(scene);
+    assert.equal(
+      await page.locator('.empty [data-action="CP-STATE-SECONDARY"]').count(),
+      0,
+      "expired has no secondary",
+    );
+  }
+  for (const scene of ["empty-readonly", "search-empty-readonly"]) {
+    await choose(scene);
+    assert.equal(
+      await page.locator('[data-action="CP-CREATE-OPEN"]').count(),
+      0,
+      "readonly never offers create",
+    );
+  }
+  await choose("rules-empty");
+  assert.equal(await page.locator('[aria-busy="true"]').count(), 0);
+  assert.equal(
+    await page.locator('[data-action="CP-STATE-PRIMARY"]').count(),
+    0,
+    "empty rules are ready, not empty UiStatePanel",
+  );
+  checks.push(
+    `${width}: recovery variants preserve page-specific login fullPath, history.back semantics, empty/search role split and zero-write opening; reload records only first real load GET then shows loading, no fabricated recovery success; four pointer states only`,
+  );
   await choose("pending");
   assert.equal(await page.locator('[data-action="CP-COLLECT"]').getAttribute("aria-busy"), null);
   assert.match(await page.locator('[data-action="CP-COLLECT"]').innerText(), /采集中/);
@@ -967,6 +1230,7 @@ try {
       http,
       limits: [
         "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
+        "Recovery variants are page-keyed additional references, not representative-slot promotion. Forbidden secondary and blocked secondary use truthful home-navigation copy proposals; source default labels still say apply-permission/view-impact. Reload records only the first load GET, not later requests or actual recovery. No disabled/busy footer invented: source loading hides the footer.",
         "CP-B02/B03 ownership is locally fixed and source-regressed; other source gaps remain. No global action/dialog denominator or approval promotion.",
         "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
         "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",

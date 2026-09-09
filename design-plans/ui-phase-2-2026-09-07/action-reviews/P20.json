@@ -197,13 +197,157 @@
         {
           "package": "competitor-direction-c",
           "scene": "rules-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-retry-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-retry-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-retry-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-retry-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-back-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-back-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-back-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-back-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-expired"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-forbidden"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-primary-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-primary-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-primary-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-primary-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-secondary-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-secondary-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-secondary-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-forbidden-secondary-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-blocked"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-retry-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-retry-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-retry-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-retry-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-home-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-home-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-home-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-blocked-home-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-expired-query"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-query-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-query-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-query-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p20-login-query-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确selector四态、Enter主次去向、登录保留页面/query、history.back意图、角色分支、创建零写入及回焦；load仅记录首个GET并进入loading，不模拟后续请求或真实恢复。"
         }
       ],
       "visualStates": {
@@ -214,7 +358,105 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "只有规则loading/error图；不能借P19会话/权限稿填成P20专用异常图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补按页面和主次按钮独立的四态额外变体，详见COMPETITOR-RECOVERY-STATE-REVIEW；不将同一CP-STATE-RECOVERY跨页覆盖代表键。代表槽状态本批不提升，source loading隐藏footer，不伪造disabled/busy按钮。仍缺全部主题/密度/真实浏览器history和完整fullPath组合、实际异步恢复、真实Vue与用户批准。",
+      "additionalControlVariants": [
+        {
+          "key": "p20-retry",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-retry-default",
+            "hover": "control-p20-retry-hover",
+            "focus": "control-p20-retry-focus",
+            "pressed": "control-p20-retry-pressed"
+          }
+        },
+        {
+          "key": "p20-back",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-back-default",
+            "hover": "control-p20-back-hover",
+            "focus": "control-p20-back-focus",
+            "pressed": "control-p20-back-pressed"
+          }
+        },
+        {
+          "key": "p20-login",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-login-default",
+            "hover": "control-p20-login-hover",
+            "focus": "control-p20-login-focus",
+            "pressed": "control-p20-login-pressed"
+          }
+        },
+        {
+          "key": "p20-forbidden-primary",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-forbidden-primary-default",
+            "hover": "control-p20-forbidden-primary-hover",
+            "focus": "control-p20-forbidden-primary-focus",
+            "pressed": "control-p20-forbidden-primary-pressed"
+          }
+        },
+        {
+          "key": "p20-forbidden-secondary",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-forbidden-secondary-default",
+            "hover": "control-p20-forbidden-secondary-hover",
+            "focus": "control-p20-forbidden-secondary-focus",
+            "pressed": "control-p20-forbidden-secondary-pressed"
+          }
+        },
+        {
+          "key": "p20-blocked-retry",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-blocked-retry-default",
+            "hover": "control-p20-blocked-retry-hover",
+            "focus": "control-p20-blocked-retry-focus",
+            "pressed": "control-p20-blocked-retry-pressed"
+          }
+        },
+        {
+          "key": "p20-blocked-home",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-blocked-home-default",
+            "hover": "control-p20-blocked-home-hover",
+            "focus": "control-p20-blocked-home-focus",
+            "pressed": "control-p20-blocked-home-pressed"
+          }
+        },
+        {
+          "key": "p20-login-query",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p20-login-query-default",
+            "hover": "control-p20-login-query-hover",
+            "focus": "control-p20-login-query-focus",
+            "pressed": "control-p20-login-query-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-LIST-REGION-EXCLUDED",

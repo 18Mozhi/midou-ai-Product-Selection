@@ -307,13 +307,197 @@
         {
           "package": "competitor-direction-c",
           "scene": "rate-limited"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-retry-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-retry-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-retry-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-retry-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-back-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-back-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-back-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-back-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-login-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-login-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-login-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-login-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-primary-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-primary-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-primary-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-primary-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-secondary-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-secondary-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-secondary-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-forbidden-secondary-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "recovery-blocked"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-retry-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-retry-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-retry-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-retry-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-home-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-home-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-home-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-blocked-home-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-create-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-create-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-create-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-create-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-refresh-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-refresh-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-refresh-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-refresh-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "empty-readonly"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-refresh-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-refresh-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-refresh-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-refresh-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-home-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-home-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-home-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-empty-readonly-home-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确selector四态、Enter主次去向、登录保留页面/query、history.back意图、角色分支、创建零写入及回焦；load仅记录首个GET并进入loading，不模拟后续请求或真实恢复。"
         }
       ],
       "visualStates": {
@@ -324,7 +508,141 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "一个源事件调用含primary/secondary两个分支，不是单一请求；全分支标签/路由与六态待验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补按页面和主次按钮独立的四态额外变体，详见COMPETITOR-RECOVERY-STATE-REVIEW；不将同一CP-STATE-RECOVERY跨页覆盖代表键。代表槽状态本批不提升，source loading隐藏footer，不伪造disabled/busy按钮。仍缺全部主题/密度/真实浏览器history和完整fullPath组合、实际异步恢复、真实Vue与用户批准。",
+      "additionalControlVariants": [
+        {
+          "key": "p19-retry",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-retry-default",
+            "hover": "control-p19-retry-hover",
+            "focus": "control-p19-retry-focus",
+            "pressed": "control-p19-retry-pressed"
+          }
+        },
+        {
+          "key": "p19-back",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-back-default",
+            "hover": "control-p19-back-hover",
+            "focus": "control-p19-back-focus",
+            "pressed": "control-p19-back-pressed"
+          }
+        },
+        {
+          "key": "p19-login",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-login-default",
+            "hover": "control-p19-login-hover",
+            "focus": "control-p19-login-focus",
+            "pressed": "control-p19-login-pressed"
+          }
+        },
+        {
+          "key": "p19-forbidden-primary",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-forbidden-primary-default",
+            "hover": "control-p19-forbidden-primary-hover",
+            "focus": "control-p19-forbidden-primary-focus",
+            "pressed": "control-p19-forbidden-primary-pressed"
+          }
+        },
+        {
+          "key": "p19-forbidden-secondary",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-forbidden-secondary-default",
+            "hover": "control-p19-forbidden-secondary-hover",
+            "focus": "control-p19-forbidden-secondary-focus",
+            "pressed": "control-p19-forbidden-secondary-pressed"
+          }
+        },
+        {
+          "key": "p19-blocked-retry",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-blocked-retry-default",
+            "hover": "control-p19-blocked-retry-hover",
+            "focus": "control-p19-blocked-retry-focus",
+            "pressed": "control-p19-blocked-retry-pressed"
+          }
+        },
+        {
+          "key": "p19-blocked-home",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-blocked-home-default",
+            "hover": "control-p19-blocked-home-hover",
+            "focus": "control-p19-blocked-home-focus",
+            "pressed": "control-p19-blocked-home-pressed"
+          }
+        },
+        {
+          "key": "p19-empty-create",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-empty-create-default",
+            "hover": "control-p19-empty-create-hover",
+            "focus": "control-p19-empty-create-focus",
+            "pressed": "control-p19-empty-create-pressed"
+          }
+        },
+        {
+          "key": "p19-empty-refresh",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-empty-refresh-default",
+            "hover": "control-p19-empty-refresh-hover",
+            "focus": "control-p19-empty-refresh-focus",
+            "pressed": "control-p19-empty-refresh-pressed"
+          }
+        },
+        {
+          "key": "p19-empty-readonly-refresh",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-PRIMARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-empty-readonly-refresh-default",
+            "hover": "control-p19-empty-readonly-refresh-hover",
+            "focus": "control-p19-empty-readonly-refresh-focus",
+            "pressed": "control-p19-empty-readonly-refresh-pressed"
+          }
+        },
+        {
+          "key": "p19-empty-readonly-home",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-STATE-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-empty-readonly-home-default",
+            "hover": "control-p19-empty-readonly-home-hover",
+            "focus": "control-p19-empty-readonly-home-focus",
+            "pressed": "control-p19-empty-readonly-home-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-SEARCH-RECOVERY",
@@ -349,13 +667,65 @@
         {
           "package": "competitor-direction-c",
           "scene": "readonly"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-clear-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-clear-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-clear-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-clear-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-create-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-create-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-create-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-create-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "search-empty-readonly"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-readonly-refresh-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-readonly-refresh-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-readonly-refresh-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-p19-search-readonly-refresh-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-competitor-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+          "claim": "离线精确selector四态、Enter主次去向、登录保留页面/query、history.back意图、角色分支、创建零写入及回焦；load仅记录首个GET并进入loading，不模拟后续请求或真实恢复。"
         }
       ],
       "visualStates": {
@@ -366,7 +736,45 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "query watcher清competitor/create；标题/ASIN/站点匹配不扩展成服务器搜索；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补按页面和主次按钮独立的四态额外变体，详见COMPETITOR-RECOVERY-STATE-REVIEW；不将同一CP-STATE-RECOVERY跨页覆盖代表键。代表槽状态本批不提升，source loading隐藏footer，不伪造disabled/busy按钮。仍缺全部主题/密度/真实浏览器history和完整fullPath组合、实际异步恢复、真实Vue与用户批准。",
+      "additionalControlVariants": [
+        {
+          "key": "p19-search-clear",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-SEARCH-CLEAR\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-search-clear-default",
+            "hover": "control-p19-search-clear-hover",
+            "focus": "control-p19-search-clear-focus",
+            "pressed": "control-p19-search-clear-pressed"
+          }
+        },
+        {
+          "key": "p19-search-create",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-SEARCH-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-search-create-default",
+            "hover": "control-p19-search-create-hover",
+            "focus": "control-p19-search-create-focus",
+            "pressed": "control-p19-search-create-pressed"
+          }
+        },
+        {
+          "key": "p19-search-readonly-refresh",
+          "package": "competitor-direction-c",
+          "selector": ".empty [data-action=\"CP-SEARCH-SECONDARY\"]",
+          "scope": "additional-control-variant-not-new-action",
+          "states": {
+            "default": "control-p19-search-readonly-refresh-default",
+            "hover": "control-p19-search-readonly-refresh-hover",
+            "focus": "control-p19-search-readonly-refresh-focus",
+            "pressed": "control-p19-search-readonly-refresh-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "CP-DETAIL",
