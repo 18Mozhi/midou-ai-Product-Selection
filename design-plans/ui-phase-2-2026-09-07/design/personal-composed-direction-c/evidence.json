@@ -1,0 +1,3859 @@
+{
+  "version": "PERSONAL-C-composed-r1",
+  "approval": "pending",
+  "kind": "continuous-five-section-offline-proposal",
+  "actionVisualReferences": {
+    "AC-ROOT": {
+      "selector": ".brand",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "profile",
+        "hover": "AC-ROOT-hover",
+        "focus": "AC-ROOT-focus",
+        "pressed": "AC-ROOT-pressed"
+      }
+    },
+    "AC-CONTEXT": {
+      "selector": ".identity [href=\"/select-context\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "profile",
+        "hover": "AC-CONTEXT-hover",
+        "focus": "AC-CONTEXT-focus",
+        "pressed": "AC-CONTEXT-pressed"
+      }
+    },
+    "AC-SECTION": {
+      "selector": "[data-section=\"permissions\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "profile",
+        "hover": "AC-SECTION-hover",
+        "focus": "AC-SECTION-focus",
+        "pressed": "AC-SECTION-pressed"
+      }
+    },
+    "TH-ROUTE": {
+      "selector": ".appearance",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "profile",
+        "hover": "TH-ROUTE-hover",
+        "focus": "TH-ROUTE-focus",
+        "pressed": "TH-ROUTE-pressed"
+      }
+    },
+    "PC-LOAD": {
+      "selector": "#refresh",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "profile",
+        "hover": "PC-LOAD-hover",
+        "focus": "PC-LOAD-focus",
+        "pressed": "PC-LOAD-pressed",
+        "disabled": "profile-refresh-busy",
+        "busy": "profile-refresh-busy"
+      }
+    },
+    "PC-SAVE-PROFILE": {
+      "selector": "#profile-form button",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "profile",
+        "hover": "PC-SAVE-PROFILE-hover",
+        "focus": "PC-SAVE-PROFILE-focus",
+        "pressed": "PC-SAVE-PROFILE-pressed",
+        "disabled": "profile-busy",
+        "busy": "profile-busy"
+      }
+    },
+    "PC-ORG-TOKENS": {
+      "selector": "#token-link",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "permissions-token",
+        "hover": "PC-ORG-TOKENS-hover",
+        "focus": "PC-ORG-TOKENS-focus",
+        "pressed": "PC-ORG-TOKENS-pressed"
+      }
+    },
+    "AC-MFA": {
+      "selector": "[href=\"/security/mfa\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "security",
+        "hover": "AC-MFA-hover",
+        "focus": "AC-MFA-focus",
+        "pressed": "AC-MFA-pressed"
+      }
+    },
+    "PC-PASSWORD": {
+      "selector": "#password-form button",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "security",
+        "hover": "PC-PASSWORD-hover",
+        "focus": "PC-PASSWORD-focus",
+        "pressed": "PC-PASSWORD-pressed",
+        "disabled": "security-password-busy",
+        "busy": "security-password-busy"
+      }
+    },
+    "PC-REVOKE": {
+      "selector": "[data-revoke]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "security",
+        "hover": "PC-REVOKE-hover",
+        "focus": "PC-REVOKE-focus",
+        "pressed": "PC-REVOKE-pressed",
+        "disabled": "security-busy",
+        "busy": "security-busy"
+      }
+    },
+    "PC-PREFERENCES": {
+      "selector": "#preferences-form button",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "notifications",
+        "hover": "PC-PREFERENCES-hover",
+        "focus": "PC-PREFERENCES-focus",
+        "pressed": "PC-PREFERENCES-pressed",
+        "disabled": "notifications-busy",
+        "busy": "notifications-busy"
+      }
+    },
+    "PC-TREND": {
+      "selector": "[href^=\"/trends?topic=\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "assets",
+        "hover": "PC-TREND-hover",
+        "focus": "PC-TREND-focus",
+        "pressed": "PC-TREND-pressed"
+      }
+    },
+    "PC-DECISION": {
+      "selector": "[href^=\"/opportunities/\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "assets",
+        "hover": "PC-DECISION-hover",
+        "focus": "PC-DECISION-focus",
+        "pressed": "PC-DECISION-pressed"
+      }
+    },
+    "PC-TASK": {
+      "selector": "[href=\"/tasks\"]",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "states": {
+        "default": "assets",
+        "hover": "PC-TASK-hover",
+        "focus": "PC-TASK-focus",
+        "pressed": "PC-TASK-pressed"
+      }
+    }
+  },
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/index.html": "3da1602796fbaae04014225df7d1588027df39f74361ede7d93063debcb57e76",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/data.js": "d79f16bcae40c38edbb5ae03fc04cd3ea38e4a8a2c1d0e7c3b2cc0d68e1485e9",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/sections.js": "db28811e96d660bfc8bd096a010d38e640accfc19b6cd8f976858843979f4e73",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/sections.css": "e0d0a010f98ad915c53fe4b1c742949ec1d79a92cbaadd01b17dbc785d2ef1fd",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/personal.css": "14243cf2a0f636064e560001da98eb91816d783884be6d8c4d407bf649376773",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/api/src/auth-routes.ts": "5d5b22eefa875eeadd26ffa5a7bf7c1e5414c666b21006264e4a789248451fea",
+    "apps/api/src/mysql-auth-repository.ts": "c5027f7b83d1f2249661b5575010e713be18f4d9773c487047f4e6ff08c9359c",
+    "packages/auth/src/index.ts": "f1cb431af4cc9a00e2e3c073a9851f2509fe137974f37f6fbef4888a9b4ba5f1",
+    "apps/api/src/notification-routes.ts": "1a0fe7ff28d325be35eefe9c92ad19790f480bbf42ef03b38eee96cf5fd417d1",
+    "apps/api/src/notification-service.ts": "dedf65d09fd3572256f264a72c122d6ca6f87efe5b80858050ee09c353f8ed2b",
+    "apps/api/src/personal-center-routes.ts": "f134d4f607a6eaabaf89d32466068f20733d886d7574ec25f55ada282cb17ca1",
+    "apps/api/src/mysql-personal-center-repository.ts": "d0a764d834318829864ff630c579ecb4e2b4361f46bdeb767c46f4555508e2bb",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "tests/e2e/ui-phase2-account-contracts.spec.ts": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+    "scripts/lib/ui-phase2-personal-design-data.mjs": "6d293c57073db2ac536462a8944c2e9cc2e0fafb565efd6988889762c7e54178",
+    "scripts/lib/ui-phase2-personal-sections-data.mjs": "f75c8b3d4fb6686b43927b30101c17d71a95f6fc6a96d46dd81d81b6faa12f73",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/index.html": "3d3e7076081c9ae95be136907a90bf0ffe9e64de617741df0d89f188fa7d8676",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/composed.js": "ce448b814b8a19fc836d4aecc6869a28c3975693fc4bbf9356961f7d6b8b50aa",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/composed.css": "4b26ed5a1232a676d39e6c05dd3566b1b74192dfc9454b764b6c4d7c3cd7e0b3",
+    "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1"
+  },
+  "boundary": "No Vue/router/history/backend/production acceptance. 720px reflow is not real browser 200% zoom. Six-state sample board does not close every action state mapping.",
+  "screenshots": [
+    {
+      "file": "1440-profile.png",
+      "scene": "profile",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "31a6fd1d5f80fa671401e9bb278071d4e56b6427454961a93d1a5f0f6f47e1fe"
+    },
+    {
+      "file": "1440-permissions.png",
+      "scene": "permissions",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4c995ff10ca1098db5a6ad7fed00d4d1def6998a131de7a52132cf0fa8241a7b"
+    },
+    {
+      "file": "1440-security.png",
+      "scene": "security",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "17844f803cca92064108c8754a5d4915f39979d41dca9818ff6b376cf83edeef"
+    },
+    {
+      "file": "1440-notifications.png",
+      "scene": "notifications",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e6ba021f910a7e8dd3b0fa162c54cc294cbbacfaeb5138938093ec0128dfde87"
+    },
+    {
+      "file": "1440-assets.png",
+      "scene": "assets",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c95da5b39db29e43e79857c3e244c41ab3576a8c58cfccdc25ae0f8881623f2d"
+    },
+    {
+      "file": "1440-profile-loading.png",
+      "scene": "profile-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9f5684a7b66a99a7805928c2139dd27a71d0588bad27e59fb7b75ebf3ea44cbf"
+    },
+    {
+      "file": "1440-profile-error.png",
+      "scene": "profile-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "36ce906b910db2767053e0676575a8ddebe23ff1ca25d2cdcc38c49d03b853ba"
+    },
+    {
+      "file": "1440-permissions-loading.png",
+      "scene": "permissions-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4ef548ab74ec16fe80fc46f3009797696c3b3d2bfcf85994af8f794e114e7498"
+    },
+    {
+      "file": "1440-permissions-error.png",
+      "scene": "permissions-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "20c3b526d33097a3dd3c3efd889f621166c84a774a4ca153088e4a3e5491f5eb"
+    },
+    {
+      "file": "1440-security-loading.png",
+      "scene": "security-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fe2c68cd7188d562e8e44c33e026c8e46a69d7cbf4954133dbeb27527fb04bf8"
+    },
+    {
+      "file": "1440-security-error.png",
+      "scene": "security-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ba1f3bde13370adbba9dfe6f6cdb9eabcc4b120e24127b2667545a4a76c580d0"
+    },
+    {
+      "file": "1440-notifications-loading.png",
+      "scene": "notifications-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "765a5543d858bbd76cd25618533804ccae4c2a03d37538df35fbbf3df2a1911e"
+    },
+    {
+      "file": "1440-notifications-error.png",
+      "scene": "notifications-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "cee414a2d4049bec21ee35667c57c26d1f7180f8fcf9e5a422bb812652e93c3b"
+    },
+    {
+      "file": "1440-assets-loading.png",
+      "scene": "assets-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4c98e3370fc7e9938082317857edc746cbf653fb235876ad90abfde94da1e541"
+    },
+    {
+      "file": "1440-assets-error.png",
+      "scene": "assets-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a772797683d7d2f9992c9b62763b95338bb2d69e50f6e2becb3155d2770cc8b3"
+    },
+    {
+      "file": "1440-profile-busy.png",
+      "scene": "profile-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b42a27d97fefcf6d3527cc9dc469d8b15e280a5abd4c375d29329000ef995a08"
+    },
+    {
+      "file": "1440-profile-refresh-busy.png",
+      "scene": "profile-refresh-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9f90c95243b0394151f6c7f77c64a15e75cc7ff11c200f2fe43a6154e148617e"
+    },
+    {
+      "file": "1440-profile-failed.png",
+      "scene": "profile-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "33e3888af17a5c19638861d12e240acaba8d509cce2e28eebdb57dba7d35f85a"
+    },
+    {
+      "file": "1440-profile-saved.png",
+      "scene": "profile-saved",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2cc67012f1a20a5908eaa581cf52afde946d2795dce91bd3aaed606ce59d97df"
+    },
+    {
+      "file": "1440-permissions-token.png",
+      "scene": "permissions-token",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1c2b25676b552a0fbdfb967b8d7f2a9d87f16e5d6f90e5192a07e45a4fbd580d"
+    },
+    {
+      "file": "1440-security-empty.png",
+      "scene": "security-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c071fd54a9ed6032bfa64a2dde8fd04ecf15aed375804315d025fda86668de22"
+    },
+    {
+      "file": "1440-security-busy.png",
+      "scene": "security-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 54,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b1ead51afaff006178a020aeacb32b78b39b3d960d50d10216a9926c4e6a48fb"
+    },
+    {
+      "file": "1440-security-password-busy.png",
+      "scene": "security-password-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 54,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ed22e383e714ce08f315d55f6dfee8faf7fea919654cd42519164450459f398a"
+    },
+    {
+      "file": "1440-notifications-busy.png",
+      "scene": "notifications-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "016bab3191cc60d0eb56c12a7e4e859ac290b0314c025454b634df7d6154fcdc"
+    },
+    {
+      "file": "1440-notifications-mail-blocked.png",
+      "scene": "notifications-mail-blocked",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "301a6638c8817d4879842d1b99d292937d21bfb17bcd8208a88c1205d1802652"
+    },
+    {
+      "file": "1440-assets-empty.png",
+      "scene": "assets-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c78bafeffc3f903a17fb0c54f45bd35fc3ec3eaca7ba3d43b2394385ddf7c1c4"
+    },
+    {
+      "file": "1440-controls.png",
+      "scene": "controls",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 33,
+        "textNodesChecked": 70,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f884428009cffdaa8ad2f7ab6756c4546cfc991d68b8c66530901f6dad51e974"
+    },
+    {
+      "file": "1440-profile-light-comfortable.png",
+      "scene": "profile-light-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ee8eca83cf4d5257d3f7157f14c40066116a4cdd45f60fd341c2e87e5880dd1a"
+    },
+    {
+      "file": "1440-permissions-light-comfortable.png",
+      "scene": "permissions-light-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "45bb86441a3112aee35cea0528d226f922965c73942b1f8ac98004e0f8b7ced4"
+    },
+    {
+      "file": "1440-security-light-comfortable.png",
+      "scene": "security-light-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ba1490f81d1070b210e6fde3310a749b60e09396229b856bf281f640aedf4276"
+    },
+    {
+      "file": "1440-notifications-light-comfortable.png",
+      "scene": "notifications-light-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "00b5b28971e8deb33cbd03598197b2034a93dae02d5efd9342ecca5c58fe8353"
+    },
+    {
+      "file": "1440-assets-light-comfortable.png",
+      "scene": "assets-light-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e969bb836ffb0e499f26c270130592ea0d83c141685784b9009a332dd6745236"
+    },
+    {
+      "file": "1440-profile-light-compact.png",
+      "scene": "profile-light-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "911022faa7648a27f21e03fff7d6f7b14fc1aa1fbd5b62a514d4140e0b384618"
+    },
+    {
+      "file": "1440-permissions-light-compact.png",
+      "scene": "permissions-light-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8209a9388f994280a791d23df903a5dfbed827d615870c7dc6a1b8143d7eaa09"
+    },
+    {
+      "file": "1440-security-light-compact.png",
+      "scene": "security-light-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3870b447eda8a2a3537b3fa1d39504c9303cbd7e21688c223de42051cca405a0"
+    },
+    {
+      "file": "1440-notifications-light-compact.png",
+      "scene": "notifications-light-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e381c5e35c0f844c8073f6d136c5dc737653622d96fa69e1c1bb10ebfcbc0c22"
+    },
+    {
+      "file": "1440-assets-light-compact.png",
+      "scene": "assets-light-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "490444bd96025c8dbbb6573008c11d0ded948f61bb07e297121d72937cc6ac21"
+    },
+    {
+      "file": "1440-profile-dark-comfortable.png",
+      "scene": "profile-dark-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "480398fdfcf7427019b4491f8b0944ad39b3c1551f9074e95bf0b313e37a5c23"
+    },
+    {
+      "file": "1440-permissions-dark-comfortable.png",
+      "scene": "permissions-dark-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "06b3de0c4552e74da4f1d0bb0c10b57d665fcb4f1e79052b974fa220f160d803"
+    },
+    {
+      "file": "1440-security-dark-comfortable.png",
+      "scene": "security-dark-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c3bc796b9c1c237c6393bd06c88d07845cf34fc1018d2c413251eeadbe4983bc"
+    },
+    {
+      "file": "1440-notifications-dark-comfortable.png",
+      "scene": "notifications-dark-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "115d679bb679af6ac58bd3af0d4a0b5abeec444bfb31b7f74714640f820e5617"
+    },
+    {
+      "file": "1440-assets-dark-comfortable.png",
+      "scene": "assets-dark-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a7707ce083666d4abe9d8532f74e46adac8562cbc1e6fe4e9048c7e2be20697b"
+    },
+    {
+      "file": "1440-profile-dark-compact.png",
+      "scene": "profile-dark-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "39b87211eb956e6d1d44e86a2643812221e5586a36ae71c9a6f42873892ccda5"
+    },
+    {
+      "file": "1440-permissions-dark-compact.png",
+      "scene": "permissions-dark-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "dbd7eac355d97c90cc396626622e77cb61a1dc48d3fda8f91399a6be4a50baf7"
+    },
+    {
+      "file": "1440-security-dark-compact.png",
+      "scene": "security-dark-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "499b3430aa9b1cd231f68dc10e781b143b3efabeb10cef81f2a82ed94991603e"
+    },
+    {
+      "file": "1440-notifications-dark-compact.png",
+      "scene": "notifications-dark-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "37cb96034dd72c1c95bce43fb5ea70dca3caca2bf4292f77c2e1c299a404258b"
+    },
+    {
+      "file": "1440-assets-dark-compact.png",
+      "scene": "assets-dark-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0f05bc46b4cc7f004c4a5afb87ca103881310fac4bd428729e00d792773d4c9c"
+    },
+    {
+      "file": "1440-profile-contrast-comfortable.png",
+      "scene": "profile-contrast-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5ee8be3796047094be8dc58314c0e103ee7455b69f635b91165b6dabd2f624ca"
+    },
+    {
+      "file": "1440-permissions-contrast-comfortable.png",
+      "scene": "permissions-contrast-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e6033e1272a6cd1a24e8d6e4929bee4100fb45eaff82224614402f63389fccb1"
+    },
+    {
+      "file": "1440-security-contrast-comfortable.png",
+      "scene": "security-contrast-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "950efc8550f55e84e0244657b0a5bee5149ad3282352d543b0ea67d4dfdfdce0"
+    },
+    {
+      "file": "1440-notifications-contrast-comfortable.png",
+      "scene": "notifications-contrast-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4647e2e644858b144a5711469466aa4a4c8d66de7b903de6aa516a751ad729c6"
+    },
+    {
+      "file": "1440-assets-contrast-comfortable.png",
+      "scene": "assets-contrast-comfortable",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "686f55bcf89b343645f0517a8608cf11024234cbdbea52d1f42439ba1b9024a6"
+    },
+    {
+      "file": "1440-profile-contrast-compact.png",
+      "scene": "profile-contrast-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "57490886ae6fd169080a2d9ee79bc3a5ccc7f12320a28961d8187bca81728655"
+    },
+    {
+      "file": "1440-permissions-contrast-compact.png",
+      "scene": "permissions-contrast-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1341fb0547d24df11fd0c7b9b2618f5aa7aa895eacf9123df086bd2bf0ab391d"
+    },
+    {
+      "file": "1440-security-contrast-compact.png",
+      "scene": "security-contrast-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "20deea0851d8e35af540e4388943725bf720a7b8386a86679bf36cb67dfd6612"
+    },
+    {
+      "file": "1440-notifications-contrast-compact.png",
+      "scene": "notifications-contrast-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3c06d720adba888dab21d07c606327c2414f56a086abea7c96f9a04ed9b67374"
+    },
+    {
+      "file": "1440-assets-contrast-compact.png",
+      "scene": "assets-contrast-compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "98b6616bbc03d3f9be7d8ffc1dd0a5325ef096a5ced1220495cece442b008845"
+    },
+    {
+      "file": "1440-profile-real-hover.png",
+      "scene": "profile-real-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5f7fbe4291431115388c4313f310a618c2050d4750c44918b2d71444ffb754c9"
+    },
+    {
+      "file": "1440-profile-real-focus.png",
+      "scene": "profile-real-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5f7fbe4291431115388c4313f310a618c2050d4750c44918b2d71444ffb754c9"
+    },
+    {
+      "file": "1440-profile-real-pressed.png",
+      "scene": "profile-real-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5f7fbe4291431115388c4313f310a618c2050d4750c44918b2d71444ffb754c9"
+    },
+    {
+      "file": "1440-AC-ROOT-hover.png",
+      "scene": "AC-ROOT-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7a4cb27a7154666fe4b2650b1f89eb3b61db81dd23fa6edad2f9803e342aed01"
+    },
+    {
+      "file": "1440-AC-ROOT-focus.png",
+      "scene": "AC-ROOT-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4c7b6fb68891f9d5d5b8831df357ee58046580aed2c0012535dd76ce2b263fe2"
+    },
+    {
+      "file": "1440-AC-ROOT-pressed.png",
+      "scene": "AC-ROOT-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "dba5329a44a81ff988b4ceab2bb736acfddbc5272f02ca1e4842b47c19c461af"
+    },
+    {
+      "file": "1440-AC-CONTEXT-hover.png",
+      "scene": "AC-CONTEXT-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3147d3e37c36da5740d02877ca15885649b3e15f5e357d421c44b5e5219e2ce5"
+    },
+    {
+      "file": "1440-AC-CONTEXT-focus.png",
+      "scene": "AC-CONTEXT-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "846ad9930b732bfb607a7346714624078f1955fdfcf003205a43502ed80dcb73"
+    },
+    {
+      "file": "1440-AC-CONTEXT-pressed.png",
+      "scene": "AC-CONTEXT-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "70ad468740103442e0f555c8411e78a5eb9d716887f60e12890ea402b7c0c60a"
+    },
+    {
+      "file": "1440-AC-SECTION-hover.png",
+      "scene": "AC-SECTION-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "94a2f23745985fed0657be25c67454e8f9c3e1c05ec725853f927ddea1185e66"
+    },
+    {
+      "file": "1440-AC-SECTION-focus.png",
+      "scene": "AC-SECTION-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c3a303b2601a4194ab772b1232c7eaec8548679cc88402bfcf34c86237562b46"
+    },
+    {
+      "file": "1440-AC-SECTION-pressed.png",
+      "scene": "AC-SECTION-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "16e0d2db38857c45206d032730d1e3d3d471fae042cb4ec783a26c32713d7935"
+    },
+    {
+      "file": "1440-TH-ROUTE-hover.png",
+      "scene": "TH-ROUTE-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1fbdcd53f82fa61e24e22383dd2322bc94d0a2e6cde8f7cf4505fa2a6e4c0e41"
+    },
+    {
+      "file": "1440-TH-ROUTE-focus.png",
+      "scene": "TH-ROUTE-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "48c5d805a7365df34ab237e52d64e8ac102b0e06c782777d8c9413e438c35f8c"
+    },
+    {
+      "file": "1440-TH-ROUTE-pressed.png",
+      "scene": "TH-ROUTE-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "222b4f111f348be2022edb5779254ce4a424d3e44b507a7cae84353c490bb3ab"
+    },
+    {
+      "file": "1440-PC-LOAD-hover.png",
+      "scene": "PC-LOAD-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5d407da228438e6f6297cd01c58c7e8a7fcc39cc294dbbf643195a0ed1ecf38f"
+    },
+    {
+      "file": "1440-PC-LOAD-focus.png",
+      "scene": "PC-LOAD-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "22a4f18f4a8639caa417d13acc2be418f7cc3947a3dbace3f9cb986610885794"
+    },
+    {
+      "file": "1440-PC-LOAD-pressed.png",
+      "scene": "PC-LOAD-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e4d603bf3f659083fe66a496fd9b4e3c8dde1514748c671b8cef95f43fb03e12"
+    },
+    {
+      "file": "1440-PC-SAVE-PROFILE-hover.png",
+      "scene": "PC-SAVE-PROFILE-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c06e9c7efa3061a234cd3368427f6382a9783e79117674c4b5de4fbb1ac89dbc"
+    },
+    {
+      "file": "1440-PC-SAVE-PROFILE-focus.png",
+      "scene": "PC-SAVE-PROFILE-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6b7aedfb1e7e3c6a609077ee4f9c9df9ea2e422f295bb000ed97499ae044dae6"
+    },
+    {
+      "file": "1440-PC-SAVE-PROFILE-pressed.png",
+      "scene": "PC-SAVE-PROFILE-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c06e9c7efa3061a234cd3368427f6382a9783e79117674c4b5de4fbb1ac89dbc"
+    },
+    {
+      "file": "1440-PC-ORG-TOKENS-hover.png",
+      "scene": "PC-ORG-TOKENS-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d80374eef6370fb79e4860bb7e2e748bcd99ef9a9b4188f0c8e5f74aa01a4142"
+    },
+    {
+      "file": "1440-PC-ORG-TOKENS-focus.png",
+      "scene": "PC-ORG-TOKENS-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ad40f4d6ce56001c4a3aa3d2668aecc7f9c664abe739fa7aa3f9e4fed92eab7f"
+    },
+    {
+      "file": "1440-PC-ORG-TOKENS-pressed.png",
+      "scene": "PC-ORG-TOKENS-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a5aac2a196c7def08d9a20fd3e7832dbad2a8f8ffc2cb46d299101d4dd71e27d"
+    },
+    {
+      "file": "1440-AC-MFA-hover.png",
+      "scene": "AC-MFA-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "318e9ddbcafb02f8d8d848fd5110ac9d31427d5834cf27abfd8e542ddc40423a"
+    },
+    {
+      "file": "1440-AC-MFA-focus.png",
+      "scene": "AC-MFA-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "94486bc84366a218c16cccb39c683646af26a0467dcc12bfca97f475aa1bdffb"
+    },
+    {
+      "file": "1440-AC-MFA-pressed.png",
+      "scene": "AC-MFA-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "318e9ddbcafb02f8d8d848fd5110ac9d31427d5834cf27abfd8e542ddc40423a"
+    },
+    {
+      "file": "1440-PC-PASSWORD-hover.png",
+      "scene": "PC-PASSWORD-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fa9c917229a2d46408fdc947a2c45beb0081e98b0946d8ee789454e49565166c"
+    },
+    {
+      "file": "1440-PC-PASSWORD-focus.png",
+      "scene": "PC-PASSWORD-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9f83977497982d18c0df946c745b49a085968074e757936e2dba1e8c2e378d7d"
+    },
+    {
+      "file": "1440-PC-PASSWORD-pressed.png",
+      "scene": "PC-PASSWORD-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fa9c917229a2d46408fdc947a2c45beb0081e98b0946d8ee789454e49565166c"
+    },
+    {
+      "file": "1440-PC-REVOKE-hover.png",
+      "scene": "PC-REVOKE-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "58762709c332257facd0bcfa2a977bdfa94af7b2aaaf34a385935c5d55469240"
+    },
+    {
+      "file": "1440-PC-REVOKE-focus.png",
+      "scene": "PC-REVOKE-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d33578f94ad34e0d1bb15c3081719aa0d9cd6bdf1eb544ff334d40446b421d88"
+    },
+    {
+      "file": "1440-PC-REVOKE-pressed.png",
+      "scene": "PC-REVOKE-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b909e71d47b40e6ae7c40fd83f9b6b136fefb7764dc5a97facd89bf3e57cb925"
+    },
+    {
+      "file": "1440-PC-PREFERENCES-hover.png",
+      "scene": "PC-PREFERENCES-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1045481077bbf55536e96962a559a8318030833d0e18636d3d905c0942b05507"
+    },
+    {
+      "file": "1440-PC-PREFERENCES-focus.png",
+      "scene": "PC-PREFERENCES-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4f8db43c4a476098bb84b74252a8455ad4d7702b680bcbb10a977ffd01e512a2"
+    },
+    {
+      "file": "1440-PC-PREFERENCES-pressed.png",
+      "scene": "PC-PREFERENCES-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b51d2c811f40d90fcd19300b8da529a052ea7d8c46279757e9873a860b2b826c"
+    },
+    {
+      "file": "1440-PC-TREND-hover.png",
+      "scene": "PC-TREND-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d6d17c398ca0b083fa2cf49f098a6d21c90570dacd8d830f8b6165bc3ff2f059"
+    },
+    {
+      "file": "1440-PC-TREND-focus.png",
+      "scene": "PC-TREND-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "13a8a74e6488c2490e571d1371a5430e34ea4a9c3631e227dc2bd14115417f6e"
+    },
+    {
+      "file": "1440-PC-TREND-pressed.png",
+      "scene": "PC-TREND-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5ce2f135ce899d690d8be22eeb7d87e8ed8cba60857325da09498e283cb53fa0"
+    },
+    {
+      "file": "1440-PC-DECISION-hover.png",
+      "scene": "PC-DECISION-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9c1e32c88ede432d9a42fb73536990a70e92bbb7303aabdd78f9eb9f557ce9d9"
+    },
+    {
+      "file": "1440-PC-DECISION-focus.png",
+      "scene": "PC-DECISION-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4722d333d5143b6969c068bb3bc12a1955f6354b7b090e8551bc1eb436241c11"
+    },
+    {
+      "file": "1440-PC-DECISION-pressed.png",
+      "scene": "PC-DECISION-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9c1e32c88ede432d9a42fb73536990a70e92bbb7303aabdd78f9eb9f557ce9d9"
+    },
+    {
+      "file": "1440-PC-TASK-hover.png",
+      "scene": "PC-TASK-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "00b6f608d6f48a6e412f1662afc9bfa2cb90ac9d078ab03eafe9c570a4aba0b1"
+    },
+    {
+      "file": "1440-PC-TASK-focus.png",
+      "scene": "PC-TASK-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9c72090795bb7923ded5c8887e732965f7f58ba2911555eff56b86c303ee3983"
+    },
+    {
+      "file": "1440-PC-TASK-pressed.png",
+      "scene": "PC-TASK-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "00b6f608d6f48a6e412f1662afc9bfa2cb90ac9d078ab03eafe9c570a4aba0b1"
+    },
+    {
+      "file": "390-profile.png",
+      "scene": "profile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "efd478b2e5d9070ae4bfa569320c03f86a984741abc90cdd9a32d2aacb13e156"
+    },
+    {
+      "file": "390-permissions.png",
+      "scene": "permissions",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "57566bec6b6001ddce07bf19d710aeec8c81f5c683ec1b813c2d37ed86423aff"
+    },
+    {
+      "file": "390-security.png",
+      "scene": "security",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "86aebc8b27cf53c5922164260644136782101dedc92c9c6ef93e35f703b54b7f"
+    },
+    {
+      "file": "390-notifications.png",
+      "scene": "notifications",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "268de72d3f93bc1c2d695e14a9376b34ba82ceed45f5585b42b91c74a8d17ccb"
+    },
+    {
+      "file": "390-assets.png",
+      "scene": "assets",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "bc3a802e9c1d87cf7ab4a1bc8a5caddf20de7454ca3b80765c5fa70b6d61e5fd"
+    },
+    {
+      "file": "390-profile-loading.png",
+      "scene": "profile-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "84ef593aae055eb2b4b57dc99c6145996d0eefb73f1e2d3f00ac11e744295d5d"
+    },
+    {
+      "file": "390-profile-error.png",
+      "scene": "profile-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c8d6035530d9f11319ace62cdb7e8b48975218416c6e0a74920bb6b47d6e304d"
+    },
+    {
+      "file": "390-permissions-loading.png",
+      "scene": "permissions-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7e7cc9ed501a0ea3fac934328fdb0f699407cf62fee90517adca84ee94a3eae1"
+    },
+    {
+      "file": "390-permissions-error.png",
+      "scene": "permissions-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0a4ee088e6b21a55fcd5bf20c108257d78fa20a58ca56e799a9cdaa1b2db62b1"
+    },
+    {
+      "file": "390-security-loading.png",
+      "scene": "security-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fca37b3667c5866b6b3fe0e1d6a806c079a414233f42159e79bfc89275d877ad"
+    },
+    {
+      "file": "390-security-error.png",
+      "scene": "security-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "66bc9e4b1e6ea35fae56a03a4049ba6187de6b22af7d4fbec0612aa74c2200d7"
+    },
+    {
+      "file": "390-notifications-loading.png",
+      "scene": "notifications-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d795b42fc38da51702733cc3811917079ee0007bfd5c0d8c1fb0f86c030bd308"
+    },
+    {
+      "file": "390-notifications-error.png",
+      "scene": "notifications-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "13a6f686b89633169ce49ed19030061254b8e16cec65bfb1f8c91235289f29b1"
+    },
+    {
+      "file": "390-assets-loading.png",
+      "scene": "assets-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "717aee32a532019fdcd837ec407ae72689573eb1ae015d6d65da19dae756826c"
+    },
+    {
+      "file": "390-assets-error.png",
+      "scene": "assets-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 28,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2eeb2c6d79766c663c64299388e6c4e093993aed7f5b16d651d967cc6d6a0c1d"
+    },
+    {
+      "file": "390-profile-busy.png",
+      "scene": "profile-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a2b565c7f986b7298c4aa8235aac539eff683c2e3d9127c2fa6ad279b1bc7bc7"
+    },
+    {
+      "file": "390-profile-refresh-busy.png",
+      "scene": "profile-refresh-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "fd13c933d456063b6a0370a9c0230e809aec75d1ea35ff9090fa0b8b336025bc"
+    },
+    {
+      "file": "390-profile-failed.png",
+      "scene": "profile-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b78ce0a06b671374468d902a6bbeb6e5ef1809cb8e15ad45d9c6c0f6bb777f5d"
+    },
+    {
+      "file": "390-profile-saved.png",
+      "scene": "profile-saved",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "644e27fef74ed41c414da5bb164b551b64dd4fe1f0c1bd04fff246006d2a7a03"
+    },
+    {
+      "file": "390-permissions-token.png",
+      "scene": "permissions-token",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "06fe985499bda295e7228a633c9c3565e9473d97c70c3d91a837e0c46ecfdb42"
+    },
+    {
+      "file": "390-security-empty.png",
+      "scene": "security-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 10,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "71deef1a7e517de36406eeba3fbea1e5da24d5c6bf01a32f82465c6f30bb6bc8"
+    },
+    {
+      "file": "390-security-busy.png",
+      "scene": "security-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 50,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2af089911a09e1e3229765a4989987fd2ca6ab141f1c03ca2fa9a68ba74751e8"
+    },
+    {
+      "file": "390-security-password-busy.png",
+      "scene": "security-password-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 50,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5e9cb08015f1986139911a16147d74660887b0b8e26e3d743566b231805b8577"
+    },
+    {
+      "file": "390-notifications-busy.png",
+      "scene": "notifications-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "42f1acc60ec5171953ce54bbfc47f53136c83e683e053fa98ad9ced89a655e7a"
+    },
+    {
+      "file": "390-notifications-mail-blocked.png",
+      "scene": "notifications-mail-blocked",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "802c8784b01e511c9dfcb44b93bd7f679bc1a2d87b4b35504375122640f4f2b3"
+    },
+    {
+      "file": "390-assets-empty.png",
+      "scene": "assets-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e18fbfa37b51257aa12061dcdf4576e2b43b2c192f00710c62b936727d1d5d45"
+    },
+    {
+      "file": "390-controls.png",
+      "scene": "controls",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 33,
+        "textNodesChecked": 66,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a98ae761137c40bc57b1a67ef260ed29d0ffcbd177f4515b8191b7806a8d5c41"
+    },
+    {
+      "file": "390-profile-light-comfortable.png",
+      "scene": "profile-light-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "129f7a9acf5f287ac920bf6eae9d51d5af7bf58d07cbdc6f99095a2f2eeedec8"
+    },
+    {
+      "file": "390-permissions-light-comfortable.png",
+      "scene": "permissions-light-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b749485276b58a3e0e675a97cccc8a4e905bde3909da2b4bc499d15de010b180"
+    },
+    {
+      "file": "390-security-light-comfortable.png",
+      "scene": "security-light-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6427c620294b61a0f53c0bbbaf2f5a6911196883548447eb02eaeeb666d2b4a2"
+    },
+    {
+      "file": "390-notifications-light-comfortable.png",
+      "scene": "notifications-light-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "cd24cbe17fba3aee933b4781438a901980a8d6a5071b2f6cdaa11e5f4b8c1c16"
+    },
+    {
+      "file": "390-assets-light-comfortable.png",
+      "scene": "assets-light-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "90ad3540cd6db2985646bf29d6173293c737649297f4532ebabb544fff94fa52"
+    },
+    {
+      "file": "390-profile-light-compact.png",
+      "scene": "profile-light-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "129f7a9acf5f287ac920bf6eae9d51d5af7bf58d07cbdc6f99095a2f2eeedec8"
+    },
+    {
+      "file": "390-permissions-light-compact.png",
+      "scene": "permissions-light-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a5e2a0ec7f4ff66ffa1f7bc0e4cafa50aac14ed2ae91e340b5561c1a4cb63b82"
+    },
+    {
+      "file": "390-security-light-compact.png",
+      "scene": "security-light-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ec9882177c76c5ba889699cece03a643a8069e1d9230f6b61bc6f3cbc7d16ba5"
+    },
+    {
+      "file": "390-notifications-light-compact.png",
+      "scene": "notifications-light-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "cd24cbe17fba3aee933b4781438a901980a8d6a5071b2f6cdaa11e5f4b8c1c16"
+    },
+    {
+      "file": "390-assets-light-compact.png",
+      "scene": "assets-light-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8c6edcba73a4bbeb0a91b37f8eb9f1d37a79f2589b6feaacd8329201641f5073"
+    },
+    {
+      "file": "390-profile-dark-comfortable.png",
+      "scene": "profile-dark-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d76da9a0da1b8136d19afafbfeb7902d66b6a5a644b3fff06531fff99280dfcb"
+    },
+    {
+      "file": "390-permissions-dark-comfortable.png",
+      "scene": "permissions-dark-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5b850b08d017217413d7d3ef71f2561397f2be906c92751f7d676247432dfe76"
+    },
+    {
+      "file": "390-security-dark-comfortable.png",
+      "scene": "security-dark-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "66db53094aef5f7eb2d43dda7c95ebfc6cc519e794d09e5b6e605147f19ea5d8"
+    },
+    {
+      "file": "390-notifications-dark-comfortable.png",
+      "scene": "notifications-dark-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c540f8a391220a1f93695f77043bffa77eb0793b67acdabb69f892f28345d306"
+    },
+    {
+      "file": "390-assets-dark-comfortable.png",
+      "scene": "assets-dark-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3ced363a9f4c48e1f4c92f4cb5e030c345f48544805ac0dd918eba4f1a096fb2"
+    },
+    {
+      "file": "390-profile-dark-compact.png",
+      "scene": "profile-dark-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d76da9a0da1b8136d19afafbfeb7902d66b6a5a644b3fff06531fff99280dfcb"
+    },
+    {
+      "file": "390-permissions-dark-compact.png",
+      "scene": "permissions-dark-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a562912f57a671ba12da43015bb23a0d7e853eda20df40c4eaa8007cb21d9849"
+    },
+    {
+      "file": "390-security-dark-compact.png",
+      "scene": "security-dark-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b01250892a1e9bca26a5e1495a64c404de972f4e03b35349b549e306d011a1e3"
+    },
+    {
+      "file": "390-notifications-dark-compact.png",
+      "scene": "notifications-dark-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c540f8a391220a1f93695f77043bffa77eb0793b67acdabb69f892f28345d306"
+    },
+    {
+      "file": "390-assets-dark-compact.png",
+      "scene": "assets-dark-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1769c9d6a8f5388f9c3cd733472b8ce1d33808366f1bab5ef0be7822c0a30c54"
+    },
+    {
+      "file": "390-profile-contrast-comfortable.png",
+      "scene": "profile-contrast-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "09612d035e10f9a19225a3833bd78e1fc8df41942657e317131f8b3ca5ca8dad"
+    },
+    {
+      "file": "390-permissions-contrast-comfortable.png",
+      "scene": "permissions-contrast-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "699ed8c7b6e6a6530a301369d095f062532af1b79a53b6e6074146c6570efd3b"
+    },
+    {
+      "file": "390-security-contrast-comfortable.png",
+      "scene": "security-contrast-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "78e7b38a2cfbad2264aad952a18c6851ded670aecab2092a47231f0a1c4b566c"
+    },
+    {
+      "file": "390-notifications-contrast-comfortable.png",
+      "scene": "notifications-contrast-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "147ec512e244521d57cb2389a2b1ede78a1d3acba71408007a2b21142017e587"
+    },
+    {
+      "file": "390-assets-contrast-comfortable.png",
+      "scene": "assets-contrast-comfortable",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1bc9c695e623f093b5ad9a460e29127600e0180d2b47f7d8c566d96b716f3de5"
+    },
+    {
+      "file": "390-profile-contrast-compact.png",
+      "scene": "profile-contrast-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "09612d035e10f9a19225a3833bd78e1fc8df41942657e317131f8b3ca5ca8dad"
+    },
+    {
+      "file": "390-permissions-contrast-compact.png",
+      "scene": "permissions-contrast-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0e663671ab0db4085d2374155cd8de599c78cc63783ecd73a68781924aae859e"
+    },
+    {
+      "file": "390-security-contrast-compact.png",
+      "scene": "security-contrast-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ca52b88028b743e210a75c1483dfd3f09c671acbbd97116785787f3f44d9cac7"
+    },
+    {
+      "file": "390-notifications-contrast-compact.png",
+      "scene": "notifications-contrast-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "147ec512e244521d57cb2389a2b1ede78a1d3acba71408007a2b21142017e587"
+    },
+    {
+      "file": "390-assets-contrast-compact.png",
+      "scene": "assets-contrast-compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b8f081f488e2d9a6ed05fb4282b2efe5996d107b47e698917627ab22e909d405"
+    },
+    {
+      "file": "390-profile-real-hover.png",
+      "scene": "profile-real-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e45bc8e31d616ed6f17ae33dfa8d6c66174e14697ce79a90897eedb7302c5e6a"
+    },
+    {
+      "file": "390-profile-real-focus.png",
+      "scene": "profile-real-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e45bc8e31d616ed6f17ae33dfa8d6c66174e14697ce79a90897eedb7302c5e6a"
+    },
+    {
+      "file": "390-profile-real-pressed.png",
+      "scene": "profile-real-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e45bc8e31d616ed6f17ae33dfa8d6c66174e14697ce79a90897eedb7302c5e6a"
+    },
+    {
+      "file": "390-AC-ROOT-hover.png",
+      "scene": "AC-ROOT-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "99aaff7c4cdfa97f1ca4126cbfe2cfc2abc2caa99e8fa4e426c1d87d748f58a2"
+    },
+    {
+      "file": "390-AC-ROOT-focus.png",
+      "scene": "AC-ROOT-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b9f730f7d0f66f6a33bbd958376194d7230b8396717f4a85527b4a353392c5d5"
+    },
+    {
+      "file": "390-AC-ROOT-pressed.png",
+      "scene": "AC-ROOT-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6a49434b69d2646cd07f061bb0916cb492708216c05ca8c9644d1403537a9b52"
+    },
+    {
+      "file": "390-AC-CONTEXT-hover.png",
+      "scene": "AC-CONTEXT-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0da4f1d75cffaf1dd890021606c6d9e93df4daed3dd507a6a171ec3df1948bc9"
+    },
+    {
+      "file": "390-AC-CONTEXT-focus.png",
+      "scene": "AC-CONTEXT-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "03bf6f55e4d2c0d4b6f831bf660cf10e96c4d5a8bff2b76124cb17e5090f5a40"
+    },
+    {
+      "file": "390-AC-CONTEXT-pressed.png",
+      "scene": "AC-CONTEXT-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "821129963403acf17c70546201eafbb74d76ce78217901b556adf2041968e022"
+    },
+    {
+      "file": "390-AC-SECTION-hover.png",
+      "scene": "AC-SECTION-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e4eb518e869918c25b00a104dd16b723f431ed8556be3393567259bb59957624"
+    },
+    {
+      "file": "390-AC-SECTION-focus.png",
+      "scene": "AC-SECTION-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5b3385bda7f9dc1d8816edb0ded7f289d509aab44454fa1f587c0899cbd9a77d"
+    },
+    {
+      "file": "390-AC-SECTION-pressed.png",
+      "scene": "AC-SECTION-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "2f62866df773a042897550372b989e79cfc3933b9e51d1b61190f5b6fd4f3e22"
+    },
+    {
+      "file": "390-TH-ROUTE-hover.png",
+      "scene": "TH-ROUTE-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7e7048c3f715919324fd346e6906bf4acd8a7c027016b7fa352dea1261c00136"
+    },
+    {
+      "file": "390-TH-ROUTE-focus.png",
+      "scene": "TH-ROUTE-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0c15c1f558804a97ac9f7222de523fcde6a21b28d05772689344cd3231197faa"
+    },
+    {
+      "file": "390-TH-ROUTE-pressed.png",
+      "scene": "TH-ROUTE-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "07c68e6cd54e6526c7f18e6a65afb097db10d71ef353800c1f9da3d8d380cbd8"
+    },
+    {
+      "file": "390-PC-LOAD-hover.png",
+      "scene": "PC-LOAD-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d418669953752607f1fdb9cf181eb573e374931c551a2a40284bb39d914f5568"
+    },
+    {
+      "file": "390-PC-LOAD-focus.png",
+      "scene": "PC-LOAD-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ed0703fafd021f9508e448acb7757d97cd7e0bb912400febf93955ff32ca24e3"
+    },
+    {
+      "file": "390-PC-LOAD-pressed.png",
+      "scene": "PC-LOAD-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "44bd4b2a87fe6cdf69ea98dd981f73b27987e7c345c9fde497bbb9f195cda73a"
+    },
+    {
+      "file": "390-PC-SAVE-PROFILE-hover.png",
+      "scene": "PC-SAVE-PROFILE-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d9f521f0070dc533c5d6fcb42ea0897df1a3d21192756b7c08ec4f6dc1661825"
+    },
+    {
+      "file": "390-PC-SAVE-PROFILE-focus.png",
+      "scene": "PC-SAVE-PROFILE-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0706c5ea30454aa0afa9112085354e4a1571d4dce2a520fc799e1331c611878d"
+    },
+    {
+      "file": "390-PC-SAVE-PROFILE-pressed.png",
+      "scene": "PC-SAVE-PROFILE-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d9f521f0070dc533c5d6fcb42ea0897df1a3d21192756b7c08ec4f6dc1661825"
+    },
+    {
+      "file": "390-PC-ORG-TOKENS-hover.png",
+      "scene": "PC-ORG-TOKENS-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1409e49b1e1a3a74176653228b904d74e6dbaa250cd566f72aaea385a2380dda"
+    },
+    {
+      "file": "390-PC-ORG-TOKENS-focus.png",
+      "scene": "PC-ORG-TOKENS-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a36d2f172bd1121a5093dc988437ffde6dbe494490240a7766c9798f17ec62ad"
+    },
+    {
+      "file": "390-PC-ORG-TOKENS-pressed.png",
+      "scene": "PC-ORG-TOKENS-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 37,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1409e49b1e1a3a74176653228b904d74e6dbaa250cd566f72aaea385a2380dda"
+    },
+    {
+      "file": "390-AC-MFA-hover.png",
+      "scene": "AC-MFA-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0c25f37cb8d5a06e4bdf1726edef72643fb24ca0f9698ebcfc2a53677e5d1346"
+    },
+    {
+      "file": "390-AC-MFA-focus.png",
+      "scene": "AC-MFA-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6020354f77a3b8ac81d1bebccfb59d8c9593464388cccfb8fa8f7400b9b48f82"
+    },
+    {
+      "file": "390-AC-MFA-pressed.png",
+      "scene": "AC-MFA-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "0c25f37cb8d5a06e4bdf1726edef72643fb24ca0f9698ebcfc2a53677e5d1346"
+    },
+    {
+      "file": "390-PC-PASSWORD-hover.png",
+      "scene": "PC-PASSWORD-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f53ae50440ab3eb9a221a9ef070239ba455d73403559480ae82448c2f973cbf0"
+    },
+    {
+      "file": "390-PC-PASSWORD-focus.png",
+      "scene": "PC-PASSWORD-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "06c988d14519b5022e58bdaefa3606085ab189fd939ce584947f0c1a3d13ada8"
+    },
+    {
+      "file": "390-PC-PASSWORD-pressed.png",
+      "scene": "PC-PASSWORD-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f53ae50440ab3eb9a221a9ef070239ba455d73403559480ae82448c2f973cbf0"
+    },
+    {
+      "file": "390-PC-REVOKE-hover.png",
+      "scene": "PC-REVOKE-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "166a05adcd0c69fb66caefbfc7d4fefd50966961f175faf1a1b86797d5e85e6a"
+    },
+    {
+      "file": "390-PC-REVOKE-focus.png",
+      "scene": "PC-REVOKE-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "12fb058bb10a0537619c6094726249067f7917cf3d7db810d6287b80eeffa760"
+    },
+    {
+      "file": "390-PC-REVOKE-pressed.png",
+      "scene": "PC-REVOKE-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 49,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "322b6e05c4b28bb38f5639e86820ae4ea4ebef9ab4f2209314f98635d260fa7b"
+    },
+    {
+      "file": "390-PC-PREFERENCES-hover.png",
+      "scene": "PC-PREFERENCES-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c24547b85ba20280aa420c8bb131dda8f71212ce823b2f52f4b5397e9f9a75e2"
+    },
+    {
+      "file": "390-PC-PREFERENCES-focus.png",
+      "scene": "PC-PREFERENCES-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "119e51b104b2407c1cfc4baa5ef6f277a1a321b820ea0dce4027dcccb11cddad"
+    },
+    {
+      "file": "390-PC-PREFERENCES-pressed.png",
+      "scene": "PC-PREFERENCES-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 36,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c24547b85ba20280aa420c8bb131dda8f71212ce823b2f52f4b5397e9f9a75e2"
+    },
+    {
+      "file": "390-PC-TREND-hover.png",
+      "scene": "PC-TREND-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3a74ff2e66f85a5f72a8865331052eee49d784e0162001d98ef726d8985e3661"
+    },
+    {
+      "file": "390-PC-TREND-focus.png",
+      "scene": "PC-TREND-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "7cf219a7aa45ce64146be2d4b022da4a52bb0021c336926d0cc9cef1255074ae"
+    },
+    {
+      "file": "390-PC-TREND-pressed.png",
+      "scene": "PC-TREND-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3a74ff2e66f85a5f72a8865331052eee49d784e0162001d98ef726d8985e3661"
+    },
+    {
+      "file": "390-PC-DECISION-hover.png",
+      "scene": "PC-DECISION-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "78f634c1f88a9e9622acfdc5db3dc4b5f7a1b6a15512033c14a04489bc12c3ad"
+    },
+    {
+      "file": "390-PC-DECISION-focus.png",
+      "scene": "PC-DECISION-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4547997f35f4f62970646f997facde8ee2bd09a9f3853b1862c7c1facde967be"
+    },
+    {
+      "file": "390-PC-DECISION-pressed.png",
+      "scene": "PC-DECISION-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "78f634c1f88a9e9622acfdc5db3dc4b5f7a1b6a15512033c14a04489bc12c3ad"
+    },
+    {
+      "file": "390-PC-TASK-hover.png",
+      "scene": "PC-TASK-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3c7864de4d44443f7daff28b5d2af1f83745556c0f282c1977655c06fd7f7865"
+    },
+    {
+      "file": "390-PC-TASK-focus.png",
+      "scene": "PC-TASK-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "413cbc60fd678d619ed38233efc8be7f082213969fc2490c5b11ef2148902293"
+    },
+    {
+      "file": "390-PC-TASK-pressed.png",
+      "scene": "PC-TASK-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 38,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "3c7864de4d44443f7daff28b5d2af1f83745556c0f282c1977655c06fd7f7865"
+    }
+  ]
+}

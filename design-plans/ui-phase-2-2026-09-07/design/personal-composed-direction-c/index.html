@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>个人中心 · C 方向连续提案</title>
+    <link rel="stylesheet" href="composed.css" />
+    <script defer src="../personal-sections-direction-c/data.js"></script>
+    <script defer src="composed.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#content">跳到主要内容</a>
+    <header class="identity">
+      <a href="/" data-route class="brand">ScoutOps <span>账号空间</span></a>
+      <a href="/select-context" data-route>切换组织与工作区 ↗</a>
+    </header>
+    <div class="workspace">
+      <aside>
+        <p class="eyebrow">PERSONAL / ACCOUNT</p>
+        <h1>个人中心</h1>
+        <p>管理你的身份、使用偏好<br />与账号安全。</p>
+        <nav aria-label="个人中心分区" id="directory"></nav>
+        <div class="scope-note">当前范围：个人账号<br />权限以服务端授权为准</div>
+        <a href="/settings/theme" data-route class="appearance">外观设置 ↗</a>
+      </aside>
+      <main id="content" tabindex="-1">
+        <div class="page-heading">
+          <div>
+            <a href="/" data-route>首页</a><span> / 个人中心</span>
+            <h2 id="title"></h2>
+          </div>
+          <button type="button" id="refresh">刷新资料</button>
+        </div>
+        <div id="panels"></div>
+        <p class="proposal">C 方向 · 连续交互提案 · 隔离样本，未连接服务，具体页面待审核</p>
+        <p id="route-notice" role="status"></p>
+      </main>
+    </div>
+    <details class="review-tools">
+      <summary>设计审核工具（非产品功能）</summary>
+      <label
+        >场景
+        <select id="scene"></select
+      ></label>
+      <label
+        >模拟结果
+        <select id="outcome">
+          <option value="success">成功</option>
+          <option value="error">失败</option>
+          <option value="hold">保持忙碌</option>
+        </select></label
+      >
+      <label
+        >主题
+        <select id="theme">
+          <option value="light">明亮</option>
+          <option value="dark">深色</option>
+          <option value="contrast">高对比</option>
+        </select></label
+      >
+      <label
+        >密度
+        <select id="density">
+          <option value="comfortable">舒适</option>
+          <option value="compact">紧凑</option>
+        </select></label
+      >
+      <button type="button" id="finish">完成挂起操作</button>
+    </details>
+  </body>
+</html>

@@ -72,6 +72,30 @@ test("explicit mapping accepted but runtime/approval not promoted", () => {
   assert.equal(result.unmappedVisualSlots, 6);
   assert.equal(result.writeActions, 1);
 });
+for (const fault of ["none", "selector", "scene", "missing-state", "missing-evidence"]) {
+  test("action-specific visual binding " + fault, () => {
+    const { review, context } = fixture();
+    const action = review.actions[0];
+    action.visualStates.default = "scene-reference-not-acceptance";
+    action.visualStateReferences = {
+      default: { package: "sample", scene: "ready", selector: "#save" },
+    };
+    context.packages.get("sample").actionVisualReferences = {
+      "EXISTING-SAVE": {
+        scope: "representative-control-only-not-all-variants-or-Vue",
+        selector: "#save",
+        states: { default: "ready" },
+      },
+    };
+    if (fault === "selector") action.visualStateReferences.default.selector = "#other";
+    if (fault === "scene") action.visualStateReferences.default.scene = "missing";
+    if (fault === "missing-state") action.visualStateReferences = {};
+    if (fault === "missing-evidence") context.packages.get("sample").actionVisualReferences = {};
+    if (fault === "none")
+      assert.equal(validateActionReview(review, context).unmappedVisualSlots, 5);
+    else assert.throws(() => validateActionReview(review, context));
+  });
+}
 for (const [name, change] of [
   ["source drift", (r, c) => (c.sourceHashes["source.vue"] = "changed")],
   ["duplicate action", (r) => r.actions.push(structuredClone(r.actions[0]))],

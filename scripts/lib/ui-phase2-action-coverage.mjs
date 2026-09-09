@@ -74,6 +74,22 @@ export function validateActionReview(
       assert.ok(files.has(ref.file), "missing verifier");
       assert.equal(ref.evidenceType, "offline-proposal-check-not-Vue");
     }
+    if (action.visualStateReferences) {
+      for (const [state, ref] of Object.entries(action.visualStateReferences)) {
+        assert.equal(action.visualStates[state], "scene-reference-not-acceptance");
+        assert.ok(
+          action.scenes.some((scene) => scene.package === ref.package && scene.scene === ref.scene),
+        );
+        const target = packages.get(ref.package)?.actionVisualReferences?.[action.actionId];
+        assert.ok(target, "missing action-specific visual evidence");
+        assert.equal(target.scope, "representative-control-only-not-all-variants-or-Vue");
+        assert.equal(target.selector, ref.selector, "control selector differs from evidence");
+        assert.equal(target.states[state], ref.scene, "state differs from evidence");
+      }
+      for (const [state, value] of Object.entries(action.visualStates))
+        if (value === "scene-reference-not-acceptance")
+          assert.ok(action.visualStateReferences[state], "missing explicit state reference");
+    }
   }
   assert.deepEqual(
     [...seen].sort(),

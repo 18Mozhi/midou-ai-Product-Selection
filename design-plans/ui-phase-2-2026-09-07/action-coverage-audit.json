@@ -239,6 +239,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "380786ba76be2768899d5a6bfce8b290fabdc67e49652140b40adfdc1d690403",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "992f751544dbd85a665aa14e51d5a8c8cbe7f83c8dc8a70ec77c53050ba9da67",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
+    "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
     "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/evidence.json": "a55004bd7f957bdd5e3dc8134114504f6e48b8cf44897ffd463cf71b97d0e272",
     "design-plans/ui-phase-2-2026-09-07/design/personal-sections-direction-c/evidence.json": "60c1a34ff6f3ba30b2740b565650ae3ad0f8af7302671fd5d274b74149404550",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/evidence.json": "599f5b42258ef5c6f098364fa918c4132e35da6665f7867ee65bddec92e7618c",
@@ -269,8 +270,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/evidence.json": "affcc6c564f332485ea14fd28d1b7c1c7a74de565caeaa4c5b59ccfd1bcd1d48",
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "1796da2704b32d2b2a356d2121387a63aacdb46600e590dbbb63e5486e3ca80b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P11.json": "89af410ed2d5731214dcccf70cac52ff11c806abf75852924cf406c066bfef39",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P11.json": "d44285703c4c7307f461a219df93f81ea978d60b479fcdcd2d3aaf7fcbd293eb",
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
+    "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "1c71dd1cba2e8086f9cd6cdbe493f095cb75c1abc8740ecf1655e48ce799aa8b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "81520123898660bf979d0a199d86664553ba972c07506bacf3575a1d22a4b998",
@@ -282,7 +284,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "fea0eceb27145c978ac8f3d86860592ddf3452fdd2adf504e465e7d0cfbcb751",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "0390626eeebbba15273be33fcdc6320ff7d8eaa5e5a163ace8a45a24f7515e28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "3c6042bd68d860853fbac505171cb8e974e5081143e71e89ae4c55f63e23be49",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "12c958335d3c3a2dfd9e47a7499474fa6b8db841c772542a59a0492849891a94",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "28c5fcb131ace956979a774af03de2e61ada72d993fd15d802adac225fec7e2d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "d302d8629c147f63c4dd241a01b05d3069fe4b54ddab47bd6ef731e6046d5b19",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "597d144c8a50fd94ea658670fb4d4de8782c2da1d071dd941800e2b92512402b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "fa30731bf75806768234c07a3faaa61ac378984388ddda5d9bae3efbc367e713",
@@ -345,8 +347,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "521bb40c9e3166139972537a100486243e73bba1639ac1c2cca8a03fc970a9af",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "9d5945eea5629968885c098c8e477bd7e0bda5b25cbd2ada860304f7a1721e69",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "73d491925cd4090181fd04df614eea603c40885573777c7250057f67c6f5245b",
-    "scripts/audit-ui-phase2-action-coverage.mjs": "9c0292c2bca5653c42e4c1267b0ec25ad9334306550cc3d731810413e7fbed2f",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "d02efd2f4666ac194ec3ee6a3279f3bd3eb44878d842bf24b902fc5b27f9855e",
+    "scripts/audit-ui-phase2-action-coverage.mjs": "1d5cfb81413fca34c9d278ab99080d70c960f563a87778bfe6ebbea8b52271ef",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "8f04d511306633ac26b83d710be083e174cf563424de3a14e5541c4c44832a52",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
     "scripts/audit-ui-phase2-contracts.mjs": "dea579eba9fffb14ca370b23467f7ce822b1e25112196be9ae93f73df3cacbf5",
     "scripts/lib/ui-phase2-contract-audit.mjs": "92007530e6463dae89d24e669347a9d5fb5482e839e7999dff602f1011817a3d"
@@ -581,17 +583,18 @@
         "routeActions": 14,
         "excludedGroups": 1,
         "writeActions": 4,
-        "unmappedVisualSlots": 49
+        "unmappedVisualSlots": 0
       },
       "proposalPackages": [
+        "personal-composed-direction-c",
         "personal-direction-c",
         "personal-sections-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "五分区分属两个离线HTML；第一包四张双端导航占位不计正文，第二包profile入口只记录目标。缺连续五分区装配。",
-        "缺统一六态视觉板到各动作的映射；三主题两密度、实际200%缩放、完整history/异步生命周期未证明。"
+        "连续五分区离线提案及三主题两密度已有双端图；尚未合并真实Vue，未证明浏览器history、实际200%缩放和全输入长文本组合。",
+        "14组代表控件适用六态均显式绑定；不代表每个重复入口、导航/会话变体与主题交叉状态全验，用户批准仍pending。"
       ]
     },
     {
@@ -1421,7 +1424,7 @@
       "routeActions": 14,
       "excludedGroups": 1,
       "writeActions": 4,
-      "unmappedVisualSlots": 49
+      "unmappedVisualSlots": 0
     }
   ],
   "candidates": [

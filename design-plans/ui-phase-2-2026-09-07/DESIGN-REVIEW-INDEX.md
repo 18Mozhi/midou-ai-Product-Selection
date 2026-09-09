@@ -7,8 +7,8 @@
 - 真实路由与规格：73/73。
 - 有明确整页或分段稿关联：73条；这不是73页全部完成。
 - 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
-- C稿包70个：含1个方向研究包、3个共享表面包；正式清单内PNG共8026张。
-- 1208条来源绑定 / 804个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8038个本地链接已核对。
+- C稿包71个：含1个方向研究包、3个共享表面包；正式清单内PNG共8230张。
+- 1233条来源绑定 / 808个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8045个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
@@ -33,7 +33,7 @@
 | P08 | 选择组织与工作区 · `/select-context` | [规格](page-specs/P08.md) | [identity](design/identity-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P09 | 快速引导 · `/onboarding` | [规格](page-specs/P09.md) | [identity](design/identity-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P10 | 外观偏好 · `/settings/theme` | [规格](page-specs/P10.md) | [appearance](design/appearance-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P11 | 个人中心 · `/me` | [规格](page-specs/P11.md) | [personal](design/personal-direction-c/README.md) · [personal-sections](design/personal-sections-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P11 | 个人中心 · `/me` | [规格](page-specs/P11.md) | [personal-composed](design/personal-composed-direction-c/README.md) · [personal](design/personal-direction-c/README.md) · [personal-sections](design/personal-sections-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P12 | 今日行动 · `/home` | [规格](page-specs/P12.md) | [home](design/home-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P13 | 今日工作 · `/work` | [规格](page-specs/P13.md) | [work](design/work-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P14 | 热点趋势 · `/trends` | [规格](page-specs/P14.md) | [trend](design/trend-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑70个包的浏览器测试，也没有重新人工审核8026张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑71个包的浏览器测试，也没有重新人工审核8230张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。
