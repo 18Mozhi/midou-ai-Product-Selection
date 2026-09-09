@@ -1,0 +1,97 @@
+.forms-review {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  background: #f7f9fd;
+  color: #274371;
+}
+.forms-review select {
+  min-height: 44px;
+  max-width: 100%;
+  font-size: 16px;
+}
+.forms-review a {
+  padding: 10px 0;
+}
+.forms-review p {
+  width: 100%;
+  font-size: 13px;
+}
+.preference-row {
+  border: 1px solid #a4b4cc;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 6px;
+}
+.preference-row:hover:not(.disabled) {
+  background: #edf3ff;
+  border-color: #325eaa;
+}
+.preference-row:has(input:focus-visible) {
+  outline: 3px solid #9b5300;
+  outline-offset: 3px;
+}
+.preference-row .field-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+}
+.preference-row small {
+  color: #4e6079;
+  line-height: 1.6;
+}
+.preference-row.disabled {
+  opacity: 1;
+  background: #f0f2f5;
+  border-style: dashed;
+}
+.preference-row input {
+  accent-color: #254a9c;
+}
+.diagnostic {
+  padding: 16px 20px;
+  background: #fff5f1;
+  border: 1px solid #d2a095;
+  border-left: 4px solid #a83c32;
+  margin-bottom: 18px;
+  overflow-wrap: anywhere;
+}
+.diagnostic summary {
+  cursor: pointer;
+  font-size: 16px;
+  min-height: 44px;
+  padding: 8px;
+  margin-top: 8px;
+}
+.diagnostic summary:hover {
+  background: #fae6df;
+}
+.diagnostic summary:active {
+  background: #edd0c5;
+}
+.diagnostic summary:focus-visible,
+button:focus-visible {
+  outline: 3px solid #9b5300;
+  outline-offset: 3px;
+}
+.diagnostic details p {
+  font-size: 13px;
+  margin: 8px 0;
+}
+.diagnostic code {
+  display: block;
+  padding: 12px;
+  color: #623429;
+  background: #fff;
+  border: 1px solid #dabfb8;
+}
+@media (max-width: 780px) {
+  .forms-review {
+    padding: 12px;
+  }
+  .preference-row {
+    padding: 12px;
+  }
+}

@@ -233,15 +233,67 @@
         {
           "package": "notification-direction-c",
           "scene": "error"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-default"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-hover"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-focus"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-pressed"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-expanded"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-forbidden-default"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-forbidden-expanded"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-expired-default"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-expired-expanded"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-rate_limited-default"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-rate_limited-expanded"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-version_conflict-default"
+        },
+        {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-version_conflict-expanded"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -251,9 +303,46 @@
         {
           "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-forms-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      "remaining": "五类页级错误样本经真实api-client/api隔离处理后生成；仅合成编号，真实共享requestId后到覆盖风险未修。代表四态有图，disabled/busy按当前源码无呈现单列；无编号/真实请求/用户批准仍待。",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
+        "handlerBoundary": "原生details展开requestId",
+        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
+        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
+        "sourceHashes": {
+          "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+        }
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-default",
+          "selector": "#page-technical summary"
+        },
+        "hover": {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-hover",
+          "selector": "#page-technical summary"
+        },
+        "focus": {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-focus",
+          "selector": "#page-technical summary"
+        },
+        "pressed": {
+          "package": "notification-forms-direction-c",
+          "scene": "diagnostic-error-pressed",
+          "selector": "#page-technical summary"
+        }
+      }
     },
     {
       "actionId": "AN-N-FILTER-CATEGORY",
@@ -398,8 +487,8 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -487,7 +576,18 @@
             "pressed": "category-system-pressed"
           }
         }
-      ]
+      ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
+        "handlerBoundary": "setFilters更新URL category并重置页码，watch触发load",
+        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
+        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
+        "sourceHashes": {
+          "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+        }
+      }
     },
     {
       "actionId": "AN-N-UNREAD",
@@ -550,8 +650,8 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -603,7 +703,18 @@
             "pressed": "unread-on-pressed"
           }
         }
-      ]
+      ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
+        "handlerBoundary": "setFilters将URL unread=1转换API unread=true",
+        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
+        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
+        "sourceHashes": {
+          "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+        }
+      }
     },
     {
       "actionId": "AN-N-FILTER-STATUS",
@@ -718,8 +829,8 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -795,7 +906,18 @@
             "pressed": "status-closed-pressed"
           }
         }
-      ]
+      ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
+        "handlerBoundary": "setFilters更新URL status，API workflow_status；不修改来源任务状态",
+        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
+        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
+        "sourceHashes": {
+          "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+        }
+      }
     },
     {
       "actionId": "AN-N-LOAD",
@@ -918,8 +1040,8 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -1007,7 +1129,18 @@
             "pressed": "retry-version_conflict-pressed"
           }
         }
-      ]
+      ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
+        "handlerBoundary": "并行重读列表、summary、preferences，generation仅保护Promise.all后的赋值",
+        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
+        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
+        "sourceHashes": {
+          "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+        }
+      }
     },
     {
       "actionId": "AN-N-DETAIL",
@@ -1825,8 +1958,8 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -1865,7 +1998,18 @@
           "selector": "#technical summary"
         }
       },
-      "additionalControlVariants": []
+      "additionalControlVariants": [],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
+        "handlerBoundary": "原生details展示资源/根因键，不执行操作",
+        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
+        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
+        "sourceHashes": {
+          "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+        }
+      }
     },
     {
       "actionId": "AN-N-PREF-WIRING",
@@ -2139,31 +2283,31 @@
         "file": "apps/web/src/components/NotificationCenter.vue",
         "binding": "preferences.in_app_enabled",
         "meaning": "站内通知总开关",
-        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。"
       },
       {
         "file": "apps/web/src/components/NotificationCenter.vue",
         "binding": "preferences.email_enabled",
         "meaning": "邮件渠道固定关闭且禁用；服务未接入，不产生外部发送",
-        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。"
       },
       {
         "file": "apps/web/src/components/NotificationCenter.vue",
         "binding": "preferences.task_enabled",
         "meaning": "任务事件偏好",
-        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。"
       },
       {
         "file": "apps/web/src/components/NotificationCenter.vue",
         "binding": "preferences.approval_enabled",
         "meaning": "审批事件偏好",
-        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。"
       },
       {
         "file": "apps/web/src/components/NotificationCenter.vue",
         "binding": "preferences.competitor_enabled",
         "meaning": "竞品事件偏好",
-        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。"
       }
     ],
     "containers": [
@@ -2294,6 +2438,33 @@
               }
             ],
             "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preference-fields-and-feedback-c-r1",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_off"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_busy"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_error"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_conflict"
+              }
+            ],
+            "remaining": "70图中34字段、10同窗反馈、26页级诊断；表单级错误关联是提案，非字段无效，未解决真实在途/草稿归属。"
           }
         ]
       },
@@ -2348,6 +2519,33 @@
               }
             ],
             "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preference-fields-and-feedback-c-r1",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_off"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_busy"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_error"
+              },
+              {
+                "package": "notification-forms-direction-c",
+                "scene": "modal-preferences_conflict"
+              }
+            ],
+            "remaining": "70图中34字段、10同窗反馈、26页级诊断；表单级错误关联是提案，非字段无效，未解决真实在途/草稿归属。"
           }
         ]
       }
@@ -2359,12 +2557,13 @@
   },
   "compositionGaps": [
     "7项源码特征测试记录现状缺口与busy边界，不是修复证明。",
-    "本批导航240PNG补51代表状态槽；连同旧提交30槽共81映射、19槽未映射，不等于缺19张图。原98+60图未改。",
-    "SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。"
+    "导航240图及本批字段/诊断70图后，代表槽85有图、12按当前源码无呈现单列、3仍待适用性核对；不是完整字段/所有组合或整页批准。原98+60+240图不改。",
+    "SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。",
+    "余3槽为分页busy及偏好关闭disabled/busy，需完整调用边界登记，不用假禁用图填数。"
   ],
   "approval": "pending-user-review",
   "limits": [
     "不改变生产Vue/API/数据库/部署；不把P16布局批准扩展到P26。",
-    "81个代表状态引用及14个额外源控件变体不等于所有字段/组合或真实Vue验收；偏好关闭图标仅额外提案。"
+    "85代表槽与14额外源控件变体不等于全部组合验收；12源码无状态槽不是补图，偏好图标仍仅提案。"
   ]
 }

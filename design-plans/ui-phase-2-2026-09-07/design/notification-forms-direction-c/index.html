@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P26 通知偏好与诊断 · C方向待审</title>
+    <link rel="stylesheet" href="../notification-direction-c/notification.css" />
+    <link rel="stylesheet" href="forms.css" />
+    <script src="../notification-direction-c/data.js" defer></script>
+    <script src="../notification-direction-c/notification.js" defer></script>
+    <script src="data.js" defer></script>
+    <script src="forms.js" defer></script>
+  </head>
+  <body>
+    <header class="forms-review" aria-label="独立审稿工具">
+      <strong>P26 / 偏好与诊断 · 待审</strong>
+      <label for="forms-picker">查看场景</label
+      ><select id="forms-picker"></select>
+      <button type="button" id="forms-prepare">查看</button>
+      <a href="gallery.html">图册</a><a href="README.md">范围与差异</a>
+      <p>仅五个现有偏好字段；邮件不可用。诊断编号为合成样本，不是真实请求。</p>
+    </header>
+    <div id="app"></div>
+    <dialog id="detail" aria-labelledby="detail-title"></dialog>
+    <dialog id="preferences" aria-labelledby="preferences-title"></dialog>
+  </body>
+</html>

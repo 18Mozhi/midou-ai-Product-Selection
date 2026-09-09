@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "759cb060e96611261992750562ad95063092566de2b98b12b3d051733f262428",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "677a8164cc6881dca61c66c00e0da6493b905fad652f39596386ccbd3a9754aa",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -46,6 +46,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "a0db54d8d4ea4a6d4c021f52f1eb37b354138bd47ba51517c33ac6ea0de0b4a4",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "327d6edd6cdc5b93b0eb38d94ea19af971d380d1159232ba081fa6f29a19f342",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "1ea0434130612dc9a9f1ad5dfa9a74fbcdecfeda3a42c3ea1fe8b52a22480c1b",
     "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "0fcad2d2861227e19b5bc60c2d3eabc531e285444a78b5887435dc35daaa60dc",
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
@@ -115,7 +116,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "951e7817102349f8b50496b2403a6b69aa8bcd96461bff34227268c4fef792ca",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "cb0e61cf13531d99bd279dc1b37ad4f3bbbccfa2005efea9dce335f6883be55d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "4d8347c278906df4ce4bef9e90e1643b06a3b85a2a5548d8fd70764a38ffdecb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -124,16 +125,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 84,
+    "packages": 85,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 883,
-    "sourceBindings": 1628,
+    "uniqueBoundFiles": 889,
+    "sourceBindings": 1649,
     "sourceDrift": 0,
-    "pngs": 11655,
+    "pngs": 11725,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 8985,
+    "readmeLinksChecked": 8991,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -387,6 +388,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P26",
       "spec": "page-specs/P26.md",
       "packages": [
+        "notification-forms-direction-c",
         "notification-navigation-direction-c",
         "notification-controls-direction-c",
         "notification-direction-c"
@@ -1152,6 +1154,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/notification-direction-c/evidence.json",
       "prototype": "design/notification-direction-c/index.html",
       "gallery": null
+    },
+    "notification-forms-direction-c": {
+      "id": "notification-forms-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 70,
+      "readme": "design/notification-forms-direction-c/README.md",
+      "evidence": "design/notification-forms-direction-c/evidence.json",
+      "prototype": "design/notification-forms-direction-c/index.html",
+      "gallery": "design/notification-forms-direction-c/gallery.html"
     },
     "notification-navigation-direction-c": {
       "id": "notification-navigation-direction-c",

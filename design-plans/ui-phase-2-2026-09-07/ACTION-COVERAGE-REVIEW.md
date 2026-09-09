@@ -37,7 +37,7 @@
 | [P23 全部任务](page-specs/P23.md) | 111 | [39组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 111 | [33组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 19个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P29 治理概览](page-specs/P29.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2211,15 +2211,17 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P26 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P26.json)：23个局部源位置 → 19组；6类写入，17组路由动作，2组转发/容器关联不重复计动作。6个本地v-model，3处调用/内嵌容器，14个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P26.json)：23个局部源位置 → 19组；6类写入，17组路由动作，2组转发/容器关联不重复计动作。6个本地v-model，3处调用/内嵌容器，16个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
 
-尚有19个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有3个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+另有12个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | AN-N-PREF-OPEN 通知偏好入口 / local | 1处；normal、preferences | [normal · 1440](design/notification-direction-c/1440-normal.png) / [normal · 390](design/notification-direction-c/390-normal.png)、[preferences · 1440](design/notification-direction-c/1440-preferences.png) / [preferences · 390](design/notification-direction-c/390-preferences.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
 | AN-N-ALL-READ 全部标记已读 / write | 1处；all_read_intent、all_read_busy、all_read_error | [all_read_intent · 1440](design/notification-direction-c/1440-all_read_intent.png) / [all_read_intent · 390](design/notification-direction-c/390-all_read_intent.png)、[all_read_busy · 1440](design/notification-direction-c/1440-all_read_busy.png) / [all_read_busy · 390](design/notification-direction-c/390-all_read_busy.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| AN-N-TECH-PAGE 页级技术详情 / local | 1处；error | [error · 1440](design/notification-direction-c/1440-error.png) / [error · 390](design/notification-direction-c/390-error.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
+| AN-N-TECH-PAGE 页级技术详情 / local | 1处；error | [error · 1440](design/notification-direction-c/1440-error.png) / [error · 390](design/notification-direction-c/390-error.png)、[diagnostic-error-default · 1440](design/notification-forms-direction-c/diagnostic-error-default-1440.png) / [diagnostic-error-default · 390](design/notification-forms-direction-c/diagnostic-error-default-390.png)；其余见JSON | 五类页级错误样本经真实api-client/api隔离处理后生成；仅合成编号，真实共享requestId后到覆盖风险未修。代表四态有图，disabled/busy按当前源码无呈现单列；无编号/真实请求/用户批准仍待。 |
 | AN-N-FILTER-CATEGORY 通知分类 / read | 1处；normal、category_task、category_approval、category_competitor、category_system | [normal · 1440](design/notification-direction-c/1440-normal.png) / [normal · 390](design/notification-direction-c/390-normal.png)、[category_task · 1440](design/notification-direction-c/1440-category_task.png) / [category_task · 390](design/notification-direction-c/390-category_task.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
 | AN-N-UNREAD 只看未读 / read | 1处；unread | [unread · 1440](design/notification-direction-c/1440-unread.png) / [unread · 390](design/notification-direction-c/390-unread.png)、[unread-off-default · 1440](design/notification-navigation-direction-c/unread-off-default-1440.png) / [unread-off-default · 390](design/notification-navigation-direction-c/unread-off-default-390.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
 | AN-N-FILTER-STATUS 通知处理状态筛选 / read | 1处；normal、workflow_open、workflow_progress、workflow_closed | [normal · 1440](design/notification-direction-c/1440-normal.png) / [normal · 390](design/notification-direction-c/390-normal.png)、[workflow_open · 1440](design/notification-direction-c/1440-workflow_open.png) / [workflow_open · 390](design/notification-direction-c/390-workflow_open.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
@@ -2249,11 +2251,11 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | 本地字段 | 含义 | 未验事项 |
 | --- | --- | --- |
 | NotificationCenter.vue / unread | 未读过滤：URL unread=1，API unread=true；不是已读写操作 | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| NotificationCenter.vue / preferences.in_app_enabled | 站内通知总开关 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| NotificationCenter.vue / preferences.email_enabled | 邮件渠道固定关闭且禁用；服务未接入，不产生外部发送 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| NotificationCenter.vue / preferences.task_enabled | 任务事件偏好 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| NotificationCenter.vue / preferences.approval_enabled | 审批事件偏好 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| NotificationCenter.vue / preferences.competitor_enabled | 竞品事件偏好 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
+| NotificationCenter.vue / preferences.in_app_enabled | 站内通知总开关 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。 |
+| NotificationCenter.vue / preferences.email_enabled | 邮件渠道固定关闭且禁用；服务未接入，不产生外部发送 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。 |
+| NotificationCenter.vue / preferences.task_enabled | 任务事件偏好 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。 |
+| NotificationCenter.vue / preferences.approval_enabled | 审批事件偏好 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。 |
+| NotificationCenter.vue / preferences.competitor_enabled | 竞品事件偏好 | load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批notification-forms-direction-c以源AST核对原生布尔约束，并补说明关联/键盘焦点/关闭/等待和邮件禁用图；真实Vue未改。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 
@@ -2269,16 +2271,19 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | NotificationCenter.vue / dialog.2 / preferences_busy | native-dialog / matching-dialog-scene | [preferences_busy · 1440](design/notification-direction-c/1440-preferences_busy.png) / [preferences_busy · 390](design/notification-direction-c/390-preferences_busy.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | NotificationCenter.vue / dialog.2 / preferences_error | native-dialog / matching-dialog-scene | [preferences_error · 1440](design/notification-direction-c/1440-preferences_error.png) / [preferences_error · 390](design/notification-direction-c/390-preferences_error.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | NotificationCenter.vue / dialog.2 / preferences_conflict | native-dialog / matching-dialog-scene | [preferences_conflict · 1440](design/notification-direction-c/1440-preferences_conflict.png) / [preferences_conflict · 390](design/notification-direction-c/390-preferences_conflict.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
+| NotificationCenter.vue / dialog.2 / preference-fields-and-feedback-c-r1 | native-dialog / matching-dialog-scene | [modal-preferences · 1440](design/notification-forms-direction-c/modal-preferences-1440.png) / [modal-preferences · 390](design/notification-forms-direction-c/modal-preferences-390.png)、[modal-preferences_off · 1440](design/notification-forms-direction-c/modal-preferences_off-1440.png) / [modal-preferences_off · 390](design/notification-forms-direction-c/modal-preferences_off-390.png)、[modal-preferences_busy · 1440](design/notification-forms-direction-c/modal-preferences_busy-1440.png) / [modal-preferences_busy · 390](design/notification-forms-direction-c/modal-preferences_busy-390.png)、[modal-preferences_error · 1440](design/notification-forms-direction-c/modal-preferences_error-1440.png) / [modal-preferences_error · 390](design/notification-forms-direction-c/modal-preferences_error-390.png)、[modal-preferences_conflict · 1440](design/notification-forms-direction-c/modal-preferences_conflict-1440.png) / [modal-preferences_conflict · 390](design/notification-forms-direction-c/modal-preferences_conflict-390.png) | 70图中34字段、10同窗反馈、26页级诊断；表单级错误关联是提案，非字段无效，未解决真实在途/草稿归属。 |
 | NotificationCenter.vue / form.1 / preferences | form-container / related-scene-only | [preferences · 1440](design/notification-direction-c/1440-preferences.png) / [preferences · 390](design/notification-direction-c/390-preferences.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | NotificationCenter.vue / form.1 / preferences_busy | form-container / related-scene-only | [preferences_busy · 1440](design/notification-direction-c/1440-preferences_busy.png) / [preferences_busy · 390](design/notification-direction-c/390-preferences_busy.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | NotificationCenter.vue / form.1 / preferences_error | form-container / related-scene-only | [preferences_error · 1440](design/notification-direction-c/1440-preferences_error.png) / [preferences_error · 390](design/notification-direction-c/390-preferences_error.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | NotificationCenter.vue / form.1 / preferences_conflict | form-container / related-scene-only | [preferences_conflict · 1440](design/notification-direction-c/1440-preferences_conflict.png) / [preferences_conflict · 390](design/notification-direction-c/390-preferences_conflict.png) | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
+| NotificationCenter.vue / form.1 / preference-fields-and-feedback-c-r1 | form-container / matching-dialog-scene | [modal-preferences · 1440](design/notification-forms-direction-c/modal-preferences-1440.png) / [modal-preferences · 390](design/notification-forms-direction-c/modal-preferences-390.png)、[modal-preferences_off · 1440](design/notification-forms-direction-c/modal-preferences_off-1440.png) / [modal-preferences_off · 390](design/notification-forms-direction-c/modal-preferences_off-390.png)、[modal-preferences_busy · 1440](design/notification-forms-direction-c/modal-preferences_busy-1440.png) / [modal-preferences_busy · 390](design/notification-forms-direction-c/modal-preferences_busy-390.png)、[modal-preferences_error · 1440](design/notification-forms-direction-c/modal-preferences_error-1440.png) / [modal-preferences_error · 390](design/notification-forms-direction-c/modal-preferences_error-390.png)、[modal-preferences_conflict · 1440](design/notification-forms-direction-c/modal-preferences_conflict-1440.png) / [modal-preferences_conflict · 390](design/notification-forms-direction-c/modal-preferences_conflict-390.png) | 70图中34字段、10同窗反馈、26页级诊断；表单级错误关联是提案，非字段无效，未解决真实在途/草稿归属。 |
 
 ### 明确保留的边界
 
 - 7项源码特征测试记录现状缺口与busy边界，不是修复证明。
-- 本批导航240PNG补51代表状态槽；连同旧提交30槽共81映射、19槽未映射，不等于缺19张图。原98+60图未改。
+- 导航240图及本批字段/诊断70图后，代表槽85有图、12按当前源码无呈现单列、3仍待适用性核对；不是完整字段/所有组合或整页批准。原98+60+240图不改。
 - SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。
+- 余3槽为分页busy及偏好关闭disabled/busy，需完整调用边界登记，不用假禁用图填数。
 - useModalDialog提供原生开关/焦点返回；本轮VM测试替身不证明DOM焦点，完整组合仍需真实Vue验收。
 - 旧读取meta/error、自动已读和workflow回执、偏好刷新/关闭存在已复现归属缺口，不能用离线图稿掩盖。
 
