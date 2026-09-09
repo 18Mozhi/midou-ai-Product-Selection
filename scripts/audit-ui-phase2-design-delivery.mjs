@@ -201,8 +201,8 @@ const summary = {
 };
 const audit = {
   schemaVersion: 1,
-  audit: "UI2-C-DELIVERY-AUDIT-r1",
-  baselineRevision: "caceee799d12334ebb926cc14192f09041686f6a",
+  audit: "UI2-C-DELIVERY-AUDIT-r2",
+  baselineRevision: "ab22201caa6b13b4726915d44d8e4f603726c95e",
   scope:
     "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   inputHashes,
@@ -226,7 +226,7 @@ const audit = {
 const rel = (file) => path.posix.relative(relative, file);
 let report = `# C方向逐页审核索引与交付缺口
 
-基线：caceee79；本报告核对当前路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
+本轮起始基线：ab22201c；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
 
 ## 核对结果
 
@@ -239,7 +239,12 @@ let report = `# C方向逐页审核索引与交付缺口
 
 ## 本轮证据结论与下一步
 
-1. **缺少${missing.length}个路由的整页C稿关联**：P01–P09身份/范围/入驻，P10外观设置，P19/P20竞品，P21/P22供应与成本。C目录扫描、规格链接和共享包README交叉核对；没有把主题浮层或导航装配位计为完整页。下一批先做P01–P09身份入口族，随后P10、P19/P20、P21/P22。
+1. **缺少${missing.length}个路由的整页C稿关联**：${pages
+  .filter((p) => missing.includes(p.id))
+  .map((p) => `${p.id} ${p.title}`)
+  .join(
+    "、",
+  )}。C目录扫描、规格链接和共享包README交叉核对；不把共享面或导航装配位计为整页。P01–P09新身份图包已关联，仍待具体审核和完整运行验证；下一按上述缺页顺序补稿。
 2. **有图不等于每个按钮/弹窗六态已覆盖**：PAGES要求逐actionId/dialogId关联验证；现有总coverage仍为未冻结/0已验。各包局部场景、截图及源隔离检查不能证明全站语义分母。后续逐页补动作与变体的状态映射、适用/不适用理由和实际测试，不先把总门改绿。
 3. **审核入口分散，批准与实现仍待办**：旧review.html主要链接历史研究与源码候选；本索引直接列出当前关联图册。P11/P18/P54等多段稿需核对组合，不按包数或PNG数累计成完整页。具体图批准后才能进入相应Vue闭环；此处不修改用户意见或任何生产事实。
 

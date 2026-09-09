@@ -5,7 +5,7 @@
   "sourceOfTruth": "../new-product-enterprise-blueprint.md",
   "locateCommand": "node scripts/locate_flow_v4.mjs \"<keyword>\"",
   "deliveryPlan": "../plans/README.md",
-  "uiPhase2DesignDeliveryAudit": "design-plans/ui-phase-2-2026-09-07/DESIGN-REVIEW-INDEX.md and design-delivery-audit.json, audited by node scripts/audit-ui-phase2-design-delivery.mjs (read-only; --write updates only these two reports). At caceee79 baseline:73 canonical routes/specs,59 with explicit page-or-section C links and14 without corresponding whole-page proposal links (P01-P10,P19-P22); shared theme is not P10.65 packages include research/shared surfaces,7333 PNGs and1135 source bindings show no drift, not full button/dialog/theme/runtime acceptance. Existing coverage and approvals remain unchanged. Next missing identity/onboarding P01-P09, then P10/P19-P22; concrete review, Vue, global gates and deployment/signoff remain pending.",
+  "uiPhase2DesignDeliveryAudit": "design-plans/ui-phase-2-2026-09-07/DESIGN-REVIEW-INDEX.md and design-delivery-audit.json, audited by node scripts/audit-ui-phase2-design-delivery.mjs (read-only; --write updates only these two reports). After IDENTITY-C-r1:73 canonical routes/specs,68 with explicit page-or-section C links and5 without corresponding whole-page proposal links (P10,P19-P22); shared theme is not P10.66 packages include research/shared surfaces,7521 PNGs and1151 source bindings show no drift, not full button/dialog/theme/runtime acceptance. Existing coverage and approvals remain unchanged. Next P10,then P19-P22; concrete review, Vue, global gates and deployment/signoff remain pending.",
   "implementation": {
     "currentPhase": "P08",
     "completedModules": [
@@ -429,6 +429,7 @@
     },
     "authOnboardingPages": {
       "module": "M02-02",
+      "uiPhase2DirectionC": "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/README.md: IDENTITY-C-r1 P01-P09 whole-page/inline-state proposals,82 scenes188 PNGs,26 prototype semantic actions and16 actual Vue setup groups with isolated transport/router. Verify via node scripts/verify-ui-phase2-identity-c.mjs; --capture regenerates only this package; source-only via verify-ui-phase2-identity-source.mjs. No real HTTP, identity, email, cookie revocation, SQL, tenancy authorization or production proof. No native dialogs invented. Per-page review, all-action states, themes/densities, sensitive lifecycle, real Vue and deployment remain pending. Runtime contracts unchanged; no restart required.",
       "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md and page-specs/P01.md through P09.md record nine route specifications, 38 local control/event candidates, 14 v-model source positions (17 mode-expanded input instances), inline identity modes and planned cases I01-I12. No native dialogs exist in the four local page components; the shared landing secondary action and tenancy account placeholder have no consumer handler. Source review is not browser, real identity/tenancy, production or user design acceptance; missing behavior and accessibility checks remain explicit. No runtime contract changes.",
       "entrypoints": [
         "../apps/web/src/components/LocalIdentity.vue",
