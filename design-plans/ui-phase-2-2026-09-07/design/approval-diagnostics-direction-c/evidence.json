@@ -1,0 +1,451 @@
+{
+  "version": "APPROVAL-DIAGNOSTICS-C-r1",
+  "approval": "pending",
+  "kind": "page-request-disclosure-not-Vue",
+  "sourceHashes": {
+    "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+    "tests/e2e/m05-02-approval-workflow.spec.ts": "16e04f894704fcb1179ebac94eab9b6bd0171f1f6fa9178cbde5973f255f3598",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/approval.js": "a542b055ae3e075ccfcbee299977dea5bb330a7ff3c7a6319931a8c3594f0d3d",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/approval.css": "bc1ce99da11fa79a645884c21720623824860f04a231ddbdcc68bd2cfaecbf35",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/data.js": "99f0d81ccd1aefb92553d9d6520bc6349637af58be41e019bc824ac70b6119bc",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-diagnostics-direction-c/index.html": "d68177e8515eb6dbafeec759446f07626dce719c0a2d870e2270834e1c618285",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-diagnostics-direction-c/diagnostics.css": "d35dbfb822d4bb77b3528a38ff22e25c6dd3e4ff7db023cede9fd5b7e0479a31",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-diagnostics-direction-c/diagnostics.js": "d811621c256d63bc681948a7b23e9238f12598ce9a43e89ab10de4e7941bfaf1",
+    "scripts/lib/ui-phase2-approval-diagnostics-data.mjs": "4c8272872a8ba0f6bb6f5fff97eeaeab5599c62b0b483f1bcd7d1f3f03f474d8",
+    "scripts/verify-ui-phase2-approval-diagnostics-c.mjs": "feaaf714543fe4b8946c4be4901cd2d464e400e74f77ff362beaee68ac199872"
+  },
+  "sourceEvidence": {
+    "conflict": {
+      "notice": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    "unexpected": {
+      "notice": "稍后重试。",
+      "requestId": ""
+    },
+    "provenance": "409 response from existing UI2-AN04 fixture; source api/closeDetail isolated with error-parser boundary stub. Unexpected fallback is an isolated Error, not a server response.",
+    "sharedIdOverwrite": "Source later response overwrites page ID while retaining earlier notice; unchanged, no per-dialog ownership claim."
+  },
+  "actionVisualReferences": {
+    "AN-TECH-REQUEST": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "pageId": "P25",
+      "selector": "#request-summary",
+      "states": {
+        "default": "request-default",
+        "hover": "request-hover",
+        "focus": "request-focus",
+        "pressed": "request-pressed"
+      }
+    }
+  },
+  "screenshots": [
+    {
+      "file": "1440-request-default.png",
+      "scene": "request-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "default"
+      },
+      "sha256": "93b6c51a7db119a866934232ca7b790b3fb9006cb5123197d0d5ea328312472d"
+    },
+    {
+      "file": "1440-request-hover.png",
+      "scene": "request-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "hover"
+      },
+      "sha256": "b99e66046bf115b8b31b83aac685f295fb9ca351189377f5243b327ca7f63557"
+    },
+    {
+      "file": "1440-request-focus.png",
+      "scene": "request-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "focus"
+      },
+      "sha256": "bf9ae830f4e68a82d335274c1b62c963a638ae2aaf6bd75adb5c639224098d29"
+    },
+    {
+      "file": "1440-request-pressed.png",
+      "scene": "request-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "pressed"
+      },
+      "sha256": "d71997d09daff4cb58ff295ee31ad5ec0d757f4e863e1c936e0580d4c80a0c0e"
+    },
+    {
+      "file": "1440-request-expanded.png",
+      "scene": "request-expanded",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "expanded"
+      },
+      "sha256": "54759222b23dfcf950527e24e10d11253c4cd252ab500521de7c22cbf0ef43c4"
+    },
+    {
+      "file": "1440-request-no-id.png",
+      "scene": "request-no-id",
+      "pageId": "P25",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-diagnostic",
+        "state": "no-id"
+      },
+      "sha256": "e79926a118f16deb17a9f6be52c85c080ced76d76e896f341655752d155c8477"
+    },
+    {
+      "file": "390-request-default.png",
+      "scene": "request-default",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "default"
+      },
+      "sha256": "0c1124ec7b239e794b341d2e9af1199c65089d60fc8b58b524b5dfce013cbcc6"
+    },
+    {
+      "file": "390-request-hover.png",
+      "scene": "request-hover",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "hover"
+      },
+      "sha256": "6a2da9514cd954749f56e1e38bb26f2a44830f7e4d89236feb9d4d067bb0f97b"
+    },
+    {
+      "file": "390-request-focus.png",
+      "scene": "request-focus",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "focus"
+      },
+      "sha256": "af840bdd56e8377ad81c2a0f69302633ffc781c30ed3bd1618d7bb12d2e832c4"
+    },
+    {
+      "file": "390-request-pressed.png",
+      "scene": "request-pressed",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "pressed"
+      },
+      "sha256": "b2f7e749f8ea1cdd1427c3d067053b4a5ece6d97fa61413357c9f1c2267cff26"
+    },
+    {
+      "file": "390-request-expanded.png",
+      "scene": "request-expanded",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-summary",
+        "state": "expanded"
+      },
+      "sha256": "c59c6f38bfd2168a2c77da0bbae632b88ebcb7f7efec6b05d754f92dde3ff181"
+    },
+    {
+      "file": "390-request-no-id.png",
+      "scene": "request-no-id",
+      "pageId": "P25",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "control": {
+        "actionId": "AN-TECH-REQUEST",
+        "selector": "#request-diagnostic",
+        "state": "no-id"
+      },
+      "sha256": "d3e22bc6e7863f978e71b28bd00687564b2d804a03a608a279388fa1dbd13571"
+    }
+  ],
+  "observations": [
+    {
+      "viewportWidth": 1440,
+      "mode": "default",
+      "width": 1033,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": false,
+      "focus": false,
+      "pressed": false,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 1440,
+      "mode": "hover",
+      "width": 1033,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": true,
+      "focus": false,
+      "pressed": false,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 1440,
+      "mode": "focus",
+      "width": 1033,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": false,
+      "focus": true,
+      "pressed": false,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 1440,
+      "mode": "pressed",
+      "width": 1033,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": true,
+      "focus": false,
+      "pressed": true,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 1440,
+      "mode": "expanded",
+      "width": 1033,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": true,
+      "focus": false,
+      "pressed": false,
+      "open": true,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 1440,
+      "mode": "no-id",
+      "width": 1085,
+      "height": 116.78125,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": false,
+      "focus": false,
+      "pressed": false,
+      "open": false,
+      "text": "稍后重试。",
+      "requestId": ""
+    },
+    {
+      "viewportWidth": 390,
+      "mode": "default",
+      "width": 296,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": false,
+      "focus": false,
+      "pressed": false,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 390,
+      "mode": "hover",
+      "width": 296,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": true,
+      "focus": false,
+      "pressed": false,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 390,
+      "mode": "focus",
+      "width": 296,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": false,
+      "focus": true,
+      "pressed": false,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 390,
+      "mode": "pressed",
+      "width": 296,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": true,
+      "focus": false,
+      "pressed": true,
+      "open": false,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 390,
+      "mode": "expanded",
+      "width": 296,
+      "height": 50.390625,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": true,
+      "focus": false,
+      "pressed": false,
+      "open": true,
+      "text": "刷新审批详情后再判断。",
+      "requestId": "ui2-an-conflict"
+    },
+    {
+      "viewportWidth": 390,
+      "mode": "no-id",
+      "width": 332,
+      "height": 108.78125,
+      "font": 16,
+      "visible": true,
+      "hit": true,
+      "overflow": false,
+      "hover": false,
+      "focus": false,
+      "pressed": false,
+      "open": false,
+      "text": "稍后重试。",
+      "requestId": ""
+    }
+  ],
+  "effects": [
+    {
+      "width": 1440,
+      "pointerAndKeyboardDisclosure": true,
+      "noIdHidden": true,
+      "sceneClearsNotice": true,
+      "businessMutation": false,
+      "http": 0,
+      "errors": 0
+    },
+    {
+      "width": 390,
+      "pointerAndKeyboardDisclosure": true,
+      "noIdHidden": true,
+      "sceneClearsNotice": true,
+      "businessMutation": false,
+      "http": 0,
+      "errors": 0
+    }
+  ],
+  "boundary": "4 native states + expanded + source no-ID fallback, each at1440/390. One source semantic group, no fake disabled/busy or trace/copy controls. Shared ID overwrite remains unchanged; no real request/decision or ownership fix."
+}

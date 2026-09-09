@@ -36,7 +36,7 @@
 | [P22 费用与利润规则](page-specs/P22.md) | 66 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 111 | [39组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 111 | [33组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P26 通知中心](page-specs/P26.md) | 59 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2111,13 +2111,15 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 [逐项机器清单](action-reviews/P25.json)：42个局部源位置 → 30组；5类写入，25组路由动作，5组转发/容器关联不重复计动作。11个本地v-model，7处调用/内嵌容器，10个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
 
-尚有48个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有24个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+另有20个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | AN-A-TEMPLATE-OPEN 管理/配置审批模板 / local | 3处；管理模板、配置第一个模板、空队列配置 | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[no_templates · 1440](design/approval-direction-c/1440-no_templates.png) / [no_templates · 390](design/approval-direction-c/390-no_templates.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。 |
 | AN-A-REQUEST-OPEN 发起审批入口 / local | 2处；头部、空队列 | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[empty · 1440](design/approval-direction-c/1440-empty.png) / [empty · 390](design/approval-direction-c/390-empty.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。 |
-| AN-TECH-REQUEST 页级请求编号 / local | 1处；收起、展开 | [error · 1440](design/approval-direction-c/1440-error.png) / [error · 390](design/approval-direction-c/390-error.png)；其余见JSON | 页级标识可能随其他并发API覆盖；图稿不能把它当每个窗口独立请求归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-TECH-REQUEST 页级请求编号 / local | 1处；收起、展开 | [error · 1440](design/approval-direction-c/1440-error.png) / [error · 390](design/approval-direction-c/390-error.png)、[request-default · 1440](design/approval-diagnostics-direction-c/1440-request-default.png) / [request-default · 390](design/approval-diagnostics-direction-c/390-request-default.png)；其余见JSON | 页级标识可能随其他并发API覆盖；图稿不能把它当每个窗口独立请求归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
 | AN-A-LOAD 刷新最新状态 / read | 1处；error、forbidden、expired、rate_limited、version_conflict | [error · 1440](design/approval-direction-c/1440-error.png) / [error · 390](design/approval-direction-c/390-error.png)、[forbidden · 1440](design/approval-direction-c/1440-forbidden.png) / [forbidden · 390](design/approval-direction-c/390-forbidden.png)；其余见JSON | 成员失败走Promise.all整页失败，不借TaskWorkspace的局部成员退化逻辑。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。 |
 | AN-A-NOTICE-CLOSE 关闭详情错误提示 / local | 1处；详情失败、404 | [detail_error · 1440](design/approval-direction-c/1440-detail_error.png) / [detail_error · 390](design/approval-direction-c/390-detail_error.png)、[detail_missing · 1440](design/approval-direction-c/1440-detail_missing.png) / [detail_missing · 390](design/approval-direction-c/390-detail_missing.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。 |
 | AN-A-PAGE 审批分页 / read | 2处；上一页、下一页 | [pagination · 1440](design/approval-direction-c/1440-pagination.png) / [pagination · 390](design/approval-direction-c/390-pagination.png)、[page-next-default · 1440](design/approval-navigation-direction-c/1440-page-next-default.png) / [page-next-default · 390](design/approval-navigation-direction-c/390-page-next-default.png)；其余见JSON | page query变更本身没有全筛选watch；分页保留深链可能重开详情，不改为清除。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10导航包补实际入口四态/逻辑选中和分页边界；仅列出变体，未列禁用/忙碌不补造。离线点击不等于真实Vue/服务或在途结果归属通过。 |

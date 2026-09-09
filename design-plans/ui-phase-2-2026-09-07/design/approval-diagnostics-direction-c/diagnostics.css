@@ -1,0 +1,63 @@
+.request-diagnostic {
+  margin: 0 0 24px;
+  padding: 20px 24px;
+  border-left: 4px solid #315cc6;
+  background: #eef3fc;
+  color: #243650;
+}
+.request-diagnostic p {
+  margin: 0 0 12px;
+}
+.request-diagnostic .diagnostic-label {
+  color: #415a85;
+  font-size: 14px;
+}
+.request-diagnostic .diagnostic-message {
+  font-size: 18px;
+  font-weight: 600;
+}
+.request-diagnostic details {
+  border-top: 1px solid #becde8;
+}
+.request-diagnostic summary {
+  min-height: 48px;
+  padding: 12px 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #234b9d;
+}
+.request-diagnostic summary:hover {
+  background: #dce7fb;
+}
+.request-diagnostic summary:focus-visible {
+  outline: 3px solid #244eb9;
+  outline-offset: 3px;
+}
+.request-diagnostic summary:active {
+  background: #c7d8f8;
+}
+.request-diagnostic dl {
+  margin: 8px 8px 16px;
+}
+.request-diagnostic dt {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.request-diagnostic dd {
+  margin: 0;
+}
+.request-diagnostic code {
+  font-size: 16px;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.request-diagnostic .diagnostic-boundary {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 8px 16px;
+}
+@media (max-width: 780px) {
+  .request-diagnostic {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P25 页级诊断详情 · C方向待审</title>
+    <link rel="stylesheet" href="../approval-direction-c/approval.css" />
+    <link rel="stylesheet" href="diagnostics.css" />
+    <script src="../approval-direction-c/data.js" defer></script>
+    <script src="../approval-direction-c/approval.js" defer></script>
+    <script src="diagnostics.js" defer></script>
+  </head>
+  <body>
+    <header class="identity"><b>ScoutOps · 人工审批</b><span>C方向 · 诊断详情待审</span></header>
+    <section class="review" aria-label="独立审稿工具">
+      <label for="scene-picker">原布局场景</label
+      ><select id="scene-picker"></select>
+      <button type="button" id="review-conflict">查看冲突提示</button>
+      <button type="button" id="review-unexpected">查看无编号回退</button>
+      <a href="gallery.html">状态图册</a><a href="README.md">范围与差异</a>
+    </section>
+    <div id="app"></div>
+    <dialog id="detail-dialog" aria-labelledby="detail-title"></dialog>
+    <dialog id="form-dialog" aria-labelledby="form-title"></dialog>
+    <dialog id="publish-dialog" aria-labelledby="publish-title"></dialog>
+  </body>
+</html>

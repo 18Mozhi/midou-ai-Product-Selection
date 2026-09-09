@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P25页级诊断与保守状态适用性
+
+从干净main/67bbd2e6继续，按AGENTS、Feature Map approvalWorkflow、蓝图M05-02及真实ApprovalWorkspace/QueuePanel核对；使用ui-skills-root/frontend-design/Playwright，复用依赖、无子代理。新增独立approval-diagnostics-direction-c：12永久PNG（summary原生四态、展开、无编号回退，各1440/390）；蓝色提示面区分主提示与辅助编号，不拿资源编号图替代请求编号，不增加复制/trace/业务动作。旧94/64/88/354包不改。
+
+数据检查器AST提取已有UI2-AN04的409响应与真实api/closeDetail，隔离执行失败→关闭保留notice/requestId，Error回退为空编号。错误解析边界用桩，不声称HTTP解析器/真实Vue/服务已验。后到成功覆盖共享requestId但保留旧notice的风险被明确验证且未修；图稿称页面保存的编号，不声称独立弹窗归属。鼠标/Enter/空格切换、焦点保留、无编号入口隐藏、审稿场景清旧诊断节点均检查；场景工具清理不等于运行时并发安全。
+
+检查剩余48代表槽后，四槽补图，10组20个disabled/busy按当前实际按钮/summary无对应属性登记source-unrepresented，既有严格校验器未修改。四个关闭组含原生dialog事件不被既有适用性校验支持，保留8槽；两字段折叠由待审新布局直接展示替代保留12槽；写入disabled3、分页busy1也不错误排除。当前100有图/20源无该状态/24待核对，不是全页完成；动作分母和批准不增加，未恢复旧折叠。
+
+最小smoke8观察/双端通过后，capture12观察及无参数完整12观察通过。原生状态、44px/16px、视口/中心命中、精确文案与编号、不误操作、事实不改/HTTP0/存储空/错误0；目视390展开与1440焦点图。原适用性单测93/93通过，动作审计26页/579源/549组不变，设计审计80包/11292PNG、来源/图漂移0、未登记PNG0，批准页0。verify:docs（153文件/73路由）、verify:runtime-docs、verify:static-analysis（390文件）、format:check及新文件/P25定向Prettier通过。PowerShell路径列表语法及补丁上下文错误均未执行目标写入；纠正后只改当前批文件，未放宽检查。
+
+本轮新增HTML/CSS/JS、12图、图册/证据与两脚本均为永久交付；无一次性文件/日志/新服务，浏览器finally关闭，收尾查询无headless浏览器残留。历史拒绝清理路径仍存在：output/playwright/p16-layout-20260910/.last-run.json，output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts及results/.last-run.json；不重试绕过、不提交。现有缓存/构建产物不动。
+
+生产Vue/CSS、API/OpenAPI、后端/Worker/Python、数据库/迁移、env/配置、权限、依赖和宝塔未改；无新增用户参数，无需重启，未部署，不重复不受影响的构建/生产E2E。打开新图册或交互稿可直接审阅诊断细节。具体P25布局/按钮审核、24槽与更多真实变体、实际实现和73路由全站部署签收仍未完成；P16仅整体布局批准不外推。
+
 ## 2026-09-10 · P25页面入口、导航与关闭逐态
 
 上一轮fcbf2518交付88字段/关闭图，为实际进展。本轮从干净main继续，读取AGENTS/Feature Map approvalWorkflow/蓝图M05-02及当前ApprovalQueuePanel/ApprovalWorkspace入口，使用ui-skills-root、frontend-design、Playwright及fixing-accessibility，无子代理。新增独立approval-navigation-direction-c组合：41变体（36既有入口+5阅读目录）原生四态双端328PNG，11逻辑选中双端22，分页禁用双端4，共354；17既有语义组及19额外变体显式映射，新增65代表槽，余48。

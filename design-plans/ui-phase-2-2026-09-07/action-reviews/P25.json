@@ -109,13 +109,33 @@
           "scene": "empty-template-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "showTemplate=true，不清本地templateForm",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
+          "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
+          "apps/web/src/components/ApprovalQueuePanel.vue#3f91c4917c0bca2a.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
+          "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
+          "apps/web/src/components/ApprovalQueuePanel.vue#3f91c4917c0bca2a.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -243,13 +263,31 @@
           "scene": "request-empty-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "showRequest=true，保留本地requestForm",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
+          "apps/web/src/components/ApprovalQueuePanel.vue#64616041c6d5fc5e.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
+          "apps/web/src/components/ApprovalQueuePanel.vue#64616041c6d5fc5e.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -317,17 +355,78 @@
         {
           "package": "approval-direction-c",
           "scene": "error"
+        },
+        {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-default"
+        },
+        {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-hover"
+        },
+        {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-focus"
+        },
+        {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-pressed"
+        },
+        {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-expanded"
+        },
+        {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-no-id"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "原生details只展示requestId",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177"
+        }
+      },
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "visualStateReferences": {
+        "default": {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-default",
+          "selector": "#request-summary"
+        },
+        "hover": {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-hover",
+          "selector": "#request-summary"
+        },
+        "focus": {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-focus",
+          "selector": "#request-summary"
+        },
+        "pressed": {
+          "package": "approval-diagnostics-direction-c",
+          "scene": "request-pressed",
+          "selector": "#request-summary"
+        }
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-diagnostics-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -451,13 +550,24 @@
           "scene": "reload-version_conflict-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "load并行队列/模板，canManage才读成员；之后按approval深链读取详情",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -599,13 +709,24 @@
           "scene": "dismiss-detail_missing-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "仅detailNotice=''，不重试/关闭业务审批",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -1464,13 +1585,24 @@
           "scene": "technical-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "原生details展示审批/资源/节点ID及active_approver_id",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -1814,13 +1946,24 @@
           "scene": "publish-open-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "openPublish(t)设置目标并清publishReason",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -2426,13 +2569,30 @@
           "scene": "queue-requested-selected"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "emit queue→setQueue，清详情/page并replace view，再load",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ApprovalQueuePanel.vue#6880c779fd5e9fc3.1",
+          "apps/web/src/components/ApprovalQueuePanel.vue#216e8feb5a6089d0.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ApprovalQueuePanel.vue#6880c779fd5e9fc3.1",
+          "apps/web/src/components/ApprovalQueuePanel.vue#216e8feb5a6089d0.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -2586,13 +2746,24 @@
           "scene": "filter-all-selected"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "emit filter→setFilter；pending/approved/rejected/全部；全部写undefined导致刷新回pending",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalQueuePanel.vue#473bb9f13020ffe6.1"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalQueuePanel.vue#473bb9f13020ffe6.1"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
@@ -2714,13 +2885,24 @@
           "scene": "row-pressed"
         }
       ],
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "全部所列源按钮/summary无disabled、aria-disabled、aria-busy、busy、loading、inert或动态v-bind；条件显隐及父区域读取状态不等于控件禁用/忙碌。",
+        "handlerBoundary": "emit open→open(item)→openById；selected由GET返回设置，URL同步",
+        "sourceCandidateIds": ["apps/web/src/components/ApprovalQueuePanel.vue#134055fa33da350e.1"],
+        "renderedControlIds": ["apps/web/src/components/ApprovalQueuePanel.vue#134055fa33da350e.1"],
+        "sourceHashes": {
+          "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+        }
+      },
       "visualStates": {
         "default": "scene-reference-not-acceptance",
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
       "testReferences": [
         {
