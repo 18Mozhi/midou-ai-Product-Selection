@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P24任务详情逐项核对
+
+从干净main/87369638继续，按AGENTS/Feature Map/M05-01、实际TaskWorkspace/TaskDetailPanel、路由surfaceProps及详情CSS核对；使用ui-skills-root/frontend-design，不启动子代理。新增TASK-DETAIL-SEMANTIC-REVIEW.md、P24.json及永久verify-ui-phase2-task-detail-review.mjs。48源位置归33组（28动作、4关联、1隐藏外层排除），5父模型/8结构/18关联；三原生窗为编辑窗create/edit、delete、五单项共8业务变体，常驻aside和四form不重复计窗。
+
+相对P23的重要差异：TaskWorkspace共享DOM仍含头部/列表/批量/导出/分页，但详情CSS隐藏其实际入口；旧合同头部存在不代表可见。首次create=1仍可开快捷新建，不能遗漏该窗。view=exports且report:read时load优先读导出而非详情，初次selected为空、导出区又被CSS隐藏；有源证据但未实测浏览器空白，不修改URL/业务合同。无report:read则零API转business意图，未模拟后续watch。既有GET active/归属/read-key/Abort保护未改，不泛化为读生命周期无隔离。
+
+新增8组检查通过：正常详情→成员且无列表/summary；三直接动作、五开窗、complete两种评分反馈；五精确body/version及独立转交权限；在途修改说明不进入已发送body，成功关窗/失败保留当前草稿；编辑PATCH保留负责人/版本/原因及空期限null；评论原文提交/成功清空/失败保留；删除当前详情成功返回from；转交无终态predicate、字段/返回无busy禁用与CSS范围。全部为真实函数提取+惰性边界或源呈现检查，不是浏览器/SQL/鉴权/持久化验证；删除在途关闭空引用继续复用P23已验证证据，未修。缺陷预期在获审修复时需同步更新。
+
+动作审计通过：25局部审核页、537独立源位置、519逐页组、余48页；P24仍有164代表视觉槽未逐selector映射。既有共享60PNG未改/重拍，复用前批同源浏览器结果，不声称本轮新生成图或重新运行浏览器。全图完整性审计76包/10774PNG/844独立来源/1453绑定/8942链接、源与PNG漂移0；仅更新P24规格hash。docs73路由/60保护/6角色/153文档、runtime-docs、390源static-analysis、format及diff检查通过。生产与依赖输入未变，不重复build/生产E2E。
+
+仅审核脚本、清单、报告及直接相关规格/计划/Feature Map/生成审计改变。API/OpenAPI、实际Vue/CSS、后端/Worker/Python、数据库/迁移、env/配置、依赖、权限和宝塔未改；无部署/重启/新配置要求。脚本无参数只读源码/内存，清单链接可直接审核；具体P24及P16按钮审核、全字段/状态/主题/真实实现/最终部署仍待。下一P25，不把当前审核批称为全站重构完成。
+
+无新一次性文件/截图/日志/服务或浏览器进程，永久验证器和文档保留。只读确认历史3路径仍存在：output/playwright/p16-layout-20260910/.last-run.json，output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts及results/.last-run.json。前次工具拒绝删除，本轮不重试或绕过、不提交；既有依赖和构建缓存不动。
+
 ## 2026-09-10 · P23全部任务逐项核对
 
 上一轮779d0390提交P22清单与测试，属于实际进展。本轮从干净main继续P23，按AGENTS/Feature Map/蓝图M05-01及实际TaskWorkspace、TaskListPanel、TaskBatchActions、模态钩子核对，使用ui-skills-root/frontend-design及Playwright，未启动子代理。新增TASK-LIST-SEMANTIC-REVIEW.md、P23.json：48共享源位置归39组（33动作、5关联、1P24排除），6模型/7结构/15变体关联。原P13排除的4个业务/导出切换和报表导航来源在P23恢复；独立源分母不增加，不能将同一源码多次审阅当新增按钮。

@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应24页/510源位置/486组；其中路由动作414组，转发/容器关联49组，其余明确排除。其余49页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应25页/537源位置/519组；其中路由动作442组，转发/容器关联53组，其余明确排除。其余48页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -35,7 +35,7 @@
 | [P21 供应链与利润](page-specs/P21.md) | 90 | [38组](action-reviews/P21.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P22 费用与利润规则](page-specs/P22.md) | 66 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 111 | [39组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P24 任务详情](page-specs/P24.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P24 任务详情](page-specs/P24.md) | 111 | [33组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P25 审批中心](page-specs/P25.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P26 通知中心](page-specs/P26.md) | 59 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2003,6 +2003,109 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - TaskListPanel状态summary不是全工作区列表总量；TaskBatchActions五类资格/原因/日期/真实成员分别验；选中本页不是选中全部结果。
 - 6模型以外还有排序/checkbox/批量三字段的事件控制。P24详情/编辑/评论排除，导出视图4源位置在P23可达且无相应C图。
 - useModalDialog无统一busy守卫；原生cancel可清目标，删除返回后空引用已在源组合测试复现。实际键盘/焦点与真实API待验。
+
+## P24 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P24.json)：48个局部源位置 → 33组；7类写入，28组路由动作，4组转发/容器关联不重复计动作。5个本地v-model，8处调用/内嵌容器，18个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有164个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| detail.hidden-list-shell 详情CSS隐藏的列表/导出外层 / excluded | 9处；隐藏头部新建、隐藏业务/导出Tab、隐藏列表事件、隐藏批量事件、隐藏导出导航、隐藏分页 | ；其余见JSON | 原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。?create=1仍可开新建窗；?view=exports仍可触发读取优先分支，此异常不可按按钮可达归属，待获审实施修复。 |
+| read.retry 重新加载 / read | 1处；error、not_found、forbidden、expired、rate_limited | [error · 1440](design/task-direction-c-forms/1440-error.png) / [error · 390](design/task-direction-c-forms/390-error.png)、[not_found · 1440](design/task-direction-c-forms/1440-not_found.png) / [not_found · 390](design/task-direction-c-forms/390-not_found.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| editor.close 关闭新建/编辑 / local | 2处；新建、编辑、Escape、取消 | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)、[edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png)；其余见JSON | 在途关闭与成功晚到对新草稿影响待验证；清快捷query不取消已发写入。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| editor.submit 新建/编辑提交 / write | 2处；快捷query新建、编辑 | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)、[edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png)；其余见JSON | 普通详情无可见新建按钮，但首次create=1可开窗。四字段无busy禁用，Escape可关闭；成功清form并load当前分支。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| delete.close 取消删除 / local | 2处；取消、Escape | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | P23源测试已复现等待关闭→成功空引用，未修；P24正常删除成功返回来源，新脚本覆盖。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| delete.submit 确认删除 / write | 2处；普通成功、错误保留、在途关闭风险 | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 不硬删历史审计；原生Escape仍存在已知晚到空引用，未实施修复。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.return 关闭详情返回 / navigation | 1处；有有效from、回退 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.collection.open 查看关联采集任务 / navigation | 1处；有关联、无关联隐藏 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 不为本页推断平台权限；关联有无与真实目标拒绝仍需独立图和运行证明。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.technical.toggle 技术详情 / local | 1处；收起、展开 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 当前无busy/disabled表示，仍待明确适用性，不编造禁用图。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.start 开始 / write | 1处；start、提交中、失败保留 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 不新增原因/确认弹窗。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.resume 继续 / write | 1处；resume、提交中、失败保留 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 不新增原因/确认弹窗。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.complete 完成 / write | 1处；complete、提交中、失败保留 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 按auto_score_status区分入队、无活动规则；不把完成等同评分已完成。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.progress.open 更新进度 / local | 1处；progress | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.pause.open 暂停 / local | 1处；pause | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.delay.open 调整期限 / local | 1处；delay | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.transfer.open 转交负责人 / local | 1处；transfer | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.cancel.open 取消任务 / local | 1处；cancel | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.more.toggle 更多任务操作 / local | 1处；收起、展开 | [more · 1440](design/task-direction-c/1440-more.png) / [more · 390](design/task-direction-c/390-more.png)；其余见JSON | 需覆盖只分配权与终态菜单，不从固定in_progress样本推全状态。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| editor.edit.open 编辑任务 / local | 1处；打开编辑、终态编辑 | [edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| delete.open 删除任务 / local | 1处；打开删除、终态删除 | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| comment.submit 添加评论 / write | 2处；可提交、提交中、失败保留 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 评论字段缺显式关联label的可访问性需补；原型活动区不是完整评论六态/版本冲突图。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| comment.change 评论输入 / local | 1处；草稿、空白、长文 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.action.close 返回或Escape关闭单项表单 / local | 2处；pause、cancel、delay、transfer、progress | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)、[cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 源返回/字段仍可操作与原型忙碌表现不能等同；提交中关闭策略待具体获审，焦点/晚到结果须实测。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.action.submit 确认单项操作 / write | 2处；pause、cancel、delay、transfer、progress | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)、[cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 原因trim、期限ISO、转交真实成员、进度Number/说明trim；在途字段修改不进入已发送body，成功仍关窗、失败保留当前草稿，待改善提示/锁定策略。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.transfer.assignee.change 接收成员 / local | 1处；成员目录、目录不可用 | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.delay.due.change 新截止时间 / local | 1处；本地时间、必填校验 | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.progress.percent.change 完成进度 / local | 1处；0、100、越界 | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png)、[progress-error · 1440](design/task-direction-c-forms/1440-progress-error.png) / [progress-error · 390](design/task-direction-c-forms/390-progress-error.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.progress.note.change 进展说明 / local | 1处；草稿、校验 | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png)、[progress-error · 1440](design/task-direction-c-forms/1440-progress-error.png) / [progress-error · 390](design/task-direction-c-forms/390-progress-error.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.action.reason.change 操作原因 / local | 1处；pause、cancel、delay、transfer | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)、[cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| editor.definition 任务编辑窗定义 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| delete.definition 删除窗定义 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.action.definition 五单项表单定义 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.parent.forward 详情父级事件转发 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| editor.definition | 容器定义，无额外事件 | editor.submit、editor.close |
+| delete.definition | 容器定义，无额外事件 | delete.submit、delete.close |
+| detail.action.definition | 容器定义，无额外事件 | detail.action.submit、detail.action.close |
+| detail.parent.forward | @action / action | detail.start、detail.resume、detail.complete、detail.pause.open、detail.cancel.open、detail.delay.open、detail.transfer.open、detail.progress.open |
+| detail.parent.forward | @edit / editTask | editor.edit.open |
+| detail.parent.forward | @remove / askRemove | delete.open |
+| detail.parent.forward | @submit-action / submitTaskAction | detail.action.submit |
+| detail.parent.forward | @close-action / taskActionEditor = null | detail.action.close |
+| detail.parent.forward | @add-comment / addComment | comment.submit |
+| detail.parent.forward | @update:comment / comment = $event | comment.change |
+| detail.parent.forward | @update:action-form / taskActionForm = $event | detail.transfer.assignee.change、detail.delay.due.change、detail.progress.percent.change、detail.progress.note.change、detail.action.reason.change |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| TaskWorkspace.vue / form.title | 新建/编辑标题，required/max200 | 五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。 |
+| TaskWorkspace.vue / form.description | 新建/编辑说明，max5000 | 五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。 |
+| TaskWorkspace.vue / form.priority | low/normal/high/critical | 五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。 |
+| TaskWorkspace.vue / form.due_at | 可选本地时间，提交ISO/null | 五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。 |
+| TaskWorkspace.vue / deleteReason | 删除必填原因，max500，提交trim | 五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| TaskWorkspace.vue / dialog.1 / create | native-dialog / matching-dialog-scene | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskWorkspace.vue / dialog.1 / edit | native-dialog / matching-dialog-scene | [edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskWorkspace.vue / form.1 / create | form-container / related-scene-only | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskWorkspace.vue / form.1 / edit | form-container / related-scene-only | [edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskWorkspace.vue / dialog.2 / delete | native-dialog / matching-dialog-scene | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskWorkspace.vue / form.2 / delete | form-container / related-scene-only | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / aside.1 / detail | inline-aside / related-scene-only | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / form.1 / comment | form-container / related-scene-only | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / dialog.1 / pause | native-dialog / matching-dialog-scene | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / dialog.1 / cancel | native-dialog / matching-dialog-scene | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / dialog.1 / delay | native-dialog / matching-dialog-scene | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / dialog.1 / transfer | native-dialog / matching-dialog-scene | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / dialog.1 / progress | native-dialog / matching-dialog-scene | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / form.2 / pause | form-container / related-scene-only | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / form.2 / cancel | form-container / related-scene-only | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / form.2 / delay | form-container / related-scene-only | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / form.2 / transfer | form-container / related-scene-only | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskDetailPanel.vue / form.2 / progress | form-container / related-scene-only | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+
+### 明确保留的边界
+
+- 普通P24隐藏头部/列表/批量/导出/分页；原合同关于头部可在详情存在只反映共享DOM，不是当前可见入口。
+- UNFIXED: ?view=exports有report:read时优先读取导出，初次详情selected为空且导出区被CSS隐藏；无权限回business只改变路由意图。需真实浏览器确认呈现。
+- ?create=1允许首次详情快捷新建，虽无可见头部按钮；正式设计需涵盖此真实入口而非凭空新增按钮。
+- 开始/继续/完成直接写入，不新增原因/确认弹窗。转交独立task:assign，无本地终态限制，不套用批量资格。
+- 在途可编辑五字段与返回；请求body已捕获，成功关窗/失败留当前草稿；提交快照、错误可发现性、关闭焦点与晚到风险待具体交互批准。
+- 主题/密度/长任务名/多活动/关联与无关联/只分配权/终态/版本冲突/成员目录失败/全部按钮六态缺完整图；不能用固定in_progress样本抵扣。
+- P13/P23列表/批量消费者不计本页可见控件；CSS隐藏不等于卸载，原生dialog和quick-create query仍需单独归属。
+- 读取已有active/route/read-key/Abort保护；本批隔离边界不重复证明完整GET生命周期，写请求不随切页取消。
+- 既有60PNG是P23/P24/board共享总数，没有新增或重拍，图存在不表示真实Vue/服务或用户批准。
 
 ## P54 局部动作与共享消费者
 

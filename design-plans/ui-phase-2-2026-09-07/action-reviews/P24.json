@@ -1,0 +1,1647 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P24",
+  "route": "/tasks/:taskId",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+    "apps/web/src/components/TaskDetailPanel.vue": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "三处native dialog，编辑窗create/edit两变体、delete一变体、五单项共八业务变体；aside和四form不是额外弹窗。"
+  },
+  "inputs": {
+    "TaskWorkspace.vue": [
+      "form.title",
+      "form.description",
+      "form.priority",
+      "form.due_at",
+      "deleteReason"
+    ],
+    "TaskDetailPanel.vue": []
+  },
+  "actions": [
+    {
+      "actionId": "detail.hidden-list-shell",
+      "label": "详情CSS隐藏的列表/导出外层",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
+        "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1",
+        "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1",
+        "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+        "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
+        "apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1",
+        "apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1",
+        "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1",
+        "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1"
+      ],
+      "sourceContractKeys": [
+        "list.create.open：canCreate，showCreate=true；同壳头入口可在详情存在",
+        "view.business：setView，清status/page，保留query/sort",
+        "view.exports：mode=all且report:read；GET /report-exports",
+        "batch.{x}.open/submit/close，batch.field.change：子组件事件中转，不是独立控件",
+        "list.select/status/search/reset/create.open/delete.open：子组件事件中转，不是独立控件",
+        "export.manage：跳/reports",
+        "export.open：跳/reports?report=report_type，不是文件下载",
+        "list.page.previous：页>1可用；清选择、URL更新",
+        "list.page.next：页<pageCount可用；清选择、URL更新"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "taskId使.task-detail-route子级除详情/dialog/状态/notice外display:none；源DOM仍存在。",
+      "handler": "头部创建、视图切换、列表/批量中转、报表链接和分页在普通详情不可见；不是删除功能。",
+      "variants": [
+        "隐藏头部新建",
+        "隐藏业务/导出Tab",
+        "隐藏列表事件",
+        "隐藏批量事件",
+        "隐藏导出导航",
+        "隐藏分页"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。?create=1仍可开新建窗；?view=exports仍可触发读取优先分支，此异常不可按按钮可达归属，待获审实施修复。"
+    },
+    {
+      "actionId": "read.retry",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1"],
+      "sourceContractKeys": ["read.retry：错误区load；列表/详情/导出按当前分支重读"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "loading之外五错误状态可见",
+      "handler": "load；普通taskId读详情与成员，exports query异常分支另见报告",
+      "variants": ["error", "not_found", "forbidden", "expired", "rate_limited"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "error"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "not_found"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "forbidden"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "expired"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "rate_limited"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "editor.close",
+      "label": "关闭新建/编辑",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1",
+        "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1"
+      ],
+      "sourceContractKeys": [
+        "editor.close：原生cancel→handleCreateCancel→closeTaskEditor",
+        "editor.close：取消按钮；busy禁用；清快捷创建query"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "原生cancel不受busy守卫；取消按钮busy禁用",
+      "handler": "useModalDialog→closeTaskEditor；清showCreate/editing及快捷query",
+      "variants": ["新建", "编辑", "Escape", "取消"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "create"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "edit"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "在途关闭与成功晚到对新草稿影响待验证；清快捷query不取消已发写入。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "editor.submit",
+      "label": "新建/编辑提交",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#e394f71c3c789c95.1",
+        "apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1"
+      ],
+      "sourceContractKeys": [
+        "editor.{create,edit}.submit：表单submit→create函数，按editing选择POST/PATCH",
+        "editor.{create,edit}.submit：表单提交按钮；busy禁用，不另算业务动作"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "create需task:create，edit需task:update；busy守卫；原生标题required",
+      "handler": "create：无editing POST /tasks；editing PATCH /tasks/id，保留原assignee/version/reason，due本地时间转ISO/null",
+      "variants": ["快捷query新建", "编辑"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "create"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "edit"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "普通详情无可见新建按钮，但首次create=1可开窗。四字段无busy禁用，Escape可关闭；成功清form并load当前分支。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "delete.close",
+      "label": "取消删除",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#184beea2f6fd5456.1",
+        "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1"
+      ],
+      "sourceContractKeys": [
+        "delete.close：原生cancel→清目标及原因",
+        "delete.close：取消按钮，busy禁用"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "取消按钮busy禁用，原生cancel无busy守卫",
+      "handler": "closeDeleteDialog清deleting/deleteReason，不撤回DELETE",
+      "variants": ["取消", "Escape"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delete"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "P23源测试已复现等待关闭→成功空引用，未修；P24正常删除成功返回来源，新脚本覆盖。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "delete.submit",
+      "label": "确认删除",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#a7d1ecc8ced537b9.1",
+        "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1"
+      ],
+      "sourceContractKeys": [
+        "delete.submit：表单submit→removeTask",
+        "delete.submit：确认按钮，busy禁用"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update、deleting存在、原因trim非空，busy守卫",
+      "handler": "DELETE /tasks/id带目标version/reason；若删当前详情则router.replace(returnPath)",
+      "variants": ["普通成功", "错误保留", "在途关闭风险"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delete"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "不硬删历史审计；原生Escape仍存在已知晚到空引用，未实施修复。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.return",
+      "label": "关闭详情返回",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#0513954362e80472.1"],
+      "sourceContractKeys": ["detail.return：只接受/work、/tasks及其query，否则/tasks"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "详情可见",
+      "handler": "RouterLink returnPath只接受/work或/tasks及其query，否则/tasks",
+      "variants": ["有有效from", "回退"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.collection.open",
+      "label": "查看关联采集任务",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#a450361745c05a56.1"],
+      "sourceContractKeys": [
+        "detail.collection.open：有collection_task_id，跳平台采集页；权限由目标裁决"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task.collection_task_id存在",
+      "handler": "RouterLink /platform-admin/collection?task=id，权限由目标路由/服务裁决",
+      "variants": ["有关联", "无关联隐藏"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "不为本页推断平台权限；关联有无与真实目标拒绝仍需独立图和运行证明。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.technical.toggle",
+      "label": "技术详情",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#1c008f867673db60.1"],
+      "sourceContractKeys": ["detail.technical.toggle：原生details，账号/任务编号渐进展示"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "详情可见",
+      "handler": "原生details/summary只展示任务/负责人ID",
+      "variants": ["收起", "展开"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前无busy/disabled表示，仍待明确适用性，不编造禁用图。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.start",
+      "label": "开始",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#f293cf86b53f5f82.1"],
+      "sourceContractKeys": ["detail.start：canUpdate+todo；直接POST动作，无原因弹窗"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且todo；按钮busy禁用，action函数另守卫busy/capability",
+      "handler": "action直接POST /tasks/id/actions，action/expected_version；成功openById原ID并成员刷新",
+      "variants": ["start", "提交中", "失败保留"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "不新增原因/确认弹窗。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.resume",
+      "label": "继续",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#86ef5792f91935ac.1"],
+      "sourceContractKeys": ["detail.resume：canUpdate+paused；直接POST动作"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且paused；按钮busy禁用，action函数另守卫busy/capability",
+      "handler": "action直接POST /tasks/id/actions，action/expected_version；成功openById原ID并成员刷新",
+      "variants": ["resume", "提交中", "失败保留"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "不新增原因/确认弹窗。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.complete",
+      "label": "完成",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#41b7ff02cd9481cd.1"],
+      "sourceContractKeys": ["detail.complete：canUpdate+todo/in_progress/paused；直接POST动作"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且todo/in_progress/paused；按钮busy禁用，action函数另守卫busy/capability",
+      "handler": "action直接POST /tasks/id/actions，action/expected_version；成功openById原ID并成员刷新",
+      "variants": ["complete", "提交中", "失败保留"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "按auto_score_status区分入队、无活动规则；不把完成等同评分已完成。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.progress.open",
+      "label": "更新进度",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#d15fb86b9a1883f9.1"],
+      "sourceContractKeys": ["detail.progress.open：canUpdate且未结束；预填进度及说明"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且非终态；按钮busy禁用",
+      "handler": "action('progress')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
+      "variants": ["progress"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.pause.open",
+      "label": "暂停",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#5f5bf5a382300046.1"],
+      "sourceContractKeys": ["detail.pause.open：canUpdate+in_progress"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且in_progress；按钮busy禁用",
+      "handler": "action('pause')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
+      "variants": ["pause"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "pause"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.delay.open",
+      "label": "调整期限",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#8a192d8df4bae23e.1"],
+      "sourceContractKeys": ["detail.delay.open：canUpdate且未结束"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且非终态；按钮busy禁用",
+      "handler": "action('delay')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
+      "variants": ["delay"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delay"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.transfer.open",
+      "label": "转交负责人",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#b841d884628a5445.1"],
+      "sourceContractKeys": ["detail.transfer.open：canAssign，不自行附加终态限制"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:assign独立，源码未加终态限制；按钮busy禁用",
+      "handler": "action('transfer')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
+      "variants": ["transfer"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "transfer"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.cancel.open",
+      "label": "取消任务",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#a6808a15ac396ea9.1"],
+      "sourceContractKeys": ["detail.cancel.open：canUpdate且未结束"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update且非终态；按钮busy禁用",
+      "handler": "action('cancel')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
+      "variants": ["cancel"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "cancel"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.more.toggle",
+      "label": "更多任务操作",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#d0b869ee32723b5a.1"],
+      "sourceContractKeys": ["detail.more.toggle：canUpdate或canAssign，原生details"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "canUpdate或canAssign",
+      "handler": "原生details，收起隐藏暂停/期限/转交/编辑/取消/删除",
+      "variants": ["收起", "展开"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "more"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "需覆盖只分配权与终态菜单，不从固定in_progress样本推全状态。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "editor.edit.open",
+      "label": "编辑任务",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#be1075cbce90c814.1"],
+      "sourceContractKeys": ["editor.edit.open：canUpdate，预填selected事实"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update；busy禁用；不额外排除终态",
+      "handler": "editTask预填selected标题/说明/优先级/期限，保留负责人/版本供PATCH",
+      "variants": ["打开编辑", "终态编辑"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "edit"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "delete.open",
+      "label": "删除任务",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#7ac1d2b58faaa7e3.1"],
+      "sourceContractKeys": ["delete.open：canUpdate，目标为selected"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update；busy禁用；不额外排除终态",
+      "handler": "askRemove(task)设置真实目标并清删除原因",
+      "variants": ["打开删除", "终态删除"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delete"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "comment.submit",
+      "label": "添加评论",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskDetailPanel.vue#ed8efea9c40be3fa.1",
+        "apps/web/src/components/TaskDetailPanel.vue#3b0242c6256a5a86.1"
+      ],
+      "sourceContractKeys": [
+        "comment.submit：canUpdate；POST comments，非空、最多2000",
+        "comment.submit：与D212同一表单提交，busy禁用"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update；busy、非空trim守卫；原生required/max2000",
+      "handler": "addComment POST /tasks/id/comments，body原文不trim；成功清评论并刷新原taskId",
+      "variants": ["可提交", "提交中", "失败保留"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "评论字段缺显式关联label的可访问性需补；原型活动区不是完整评论六态/版本冲突图。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "comment.change",
+      "label": "评论输入",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#164700beea75a50a.1"],
+      "sourceContractKeys": ["comment.change：本地草稿input，busy禁用；不落浏览器存储"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "task:update；textarea busy禁用",
+      "handler": "emit update:comment→父comment，本地草稿，不持久化浏览器存储",
+      "variants": ["草稿", "空白", "长文"],
+      "scenes": [
+        {
+          "package": "task-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.action.close",
+      "label": "返回或Escape关闭单项表单",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskDetailPanel.vue#46e431fb8f9cec9e.1",
+        "apps/web/src/components/TaskDetailPanel.vue#fbcbfc84994eaf3e.1"
+      ],
+      "sourceContractKeys": [
+        "detail.{x}.close：原生cancel→closeAction，五变体共用",
+        "detail.{x}.close：返回按钮，无写入；不同于取消任务动作"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "五变体共用；返回无disabled，原生cancel无busy守卫",
+      "handler": "closeAction→父taskActionEditor=null，不撤销已发请求",
+      "variants": ["pause", "cancel", "delay", "transfer", "progress"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "pause"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "cancel"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delay"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "transfer"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源返回/字段仍可操作与原型忙碌表现不能等同；提交中关闭策略待具体获审，焦点/晚到结果须实测。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.action.submit",
+      "label": "确认单项操作",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskDetailPanel.vue#950c1a9d40721d87.1",
+        "apps/web/src/components/TaskDetailPanel.vue#c74a96fead2d3bc1.1"
+      ],
+      "sourceContractKeys": [
+        "detail.{x}.submit：submitTaskAction，五变体按action构造字段",
+        "detail.{x}.submit：与D231同一表单提交，busy禁用"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "transfer用canAssign；其他用canUpdate；busy/selected/editor守卫，原生字段校验",
+      "handler": "submitTaskAction：POST /tasks/id/actions，五变体按原action/version及字段构造",
+      "variants": ["pause", "cancel", "delay", "transfer", "progress"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "pause"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "cancel"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delay"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "transfer"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "原因trim、期限ISO、转交真实成员、进度Number/说明trim；在途字段修改不进入已发送body，成功仍关窗、失败保留当前草稿，待改善提示/锁定策略。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.transfer.assignee.change",
+      "label": "接收成员",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#fd868cd01ff93343.1"],
+      "sourceContractKeys": ["detail.transfer.assignee.change：成员目录select→本地模型"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "transfer",
+      "handler": "select→updateActionForm('assignee_id')，真实member-options",
+      "variants": ["成员目录", "目录不可用"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "transfer"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.delay.due.change",
+      "label": "新截止时间",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#5223264cc91ca9cd.1"],
+      "sourceContractKeys": ["detail.delay.due.change：datetime-local→本地模型"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "delay",
+      "handler": "datetime-local→due_at；提交时ISO",
+      "variants": ["本地时间", "必填校验"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delay"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.progress.percent.change",
+      "label": "完成进度",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#d5c7036343c5823b.1"],
+      "sourceContractKeys": ["detail.progress.percent.change：数字0–100，整数步进"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "progress",
+      "handler": "Number(input.value)，min0/max100/step1/required",
+      "variants": ["0", "100", "越界"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress-error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.progress.note.change",
+      "label": "进展说明",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#9548ae8bcbbf6e9e.1"],
+      "sourceContractKeys": ["detail.progress.note.change：必填说明，最多500"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "progress",
+      "handler": "updateActionForm('progress_note')，required/max500",
+      "variants": ["草稿", "校验"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "progress-error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "detail.action.reason.change",
+      "label": "操作原因",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#3d37f15c32bb38a7.1"],
+      "sourceContractKeys": [
+        "detail.{pause,cancel,delay,transfer}.reason.change：必填原因，最多500"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "pause/cancel/delay/transfer",
+      "handler": "updateActionForm('reason')，required/max500",
+      "variants": ["pause", "cancel", "delay", "transfer"],
+      "scenes": [
+        {
+          "package": "task-direction-c-forms",
+          "scene": "pause"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "cancel"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "delay"
+        },
+        {
+          "package": "task-direction-c-forms",
+          "scene": "transfer"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+    },
+    {
+      "actionId": "editor.definition",
+      "label": "任务编辑窗定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1"],
+      "sourceContractKeys": ["task.editor.create / task.editor.edit（2变体）"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "共享定义/事件转发，不计新业务动作",
+      "handler": "现有emit/父级handler关联",
+      "variants": ["P24局部消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。",
+      "forwardsTo": ["editor.submit", "editor.close"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "delete.definition",
+      "label": "删除窗定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"],
+      "sourceContractKeys": ["task.delete（1变体）"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "共享定义/事件转发，不计新业务动作",
+      "handler": "现有emit/父级handler关联",
+      "variants": ["P24局部消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。",
+      "forwardsTo": ["delete.submit", "delete.close"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "detail.action.definition",
+      "label": "五单项表单定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/TaskDetailPanel.vue#dfce0d7d3dc167b7.1"],
+      "sourceContractKeys": ["task.action.progress / pause / cancel / delay / transfer（5变体）"],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "共享定义/事件转发，不计新业务动作",
+      "handler": "现有emit/父级handler关联",
+      "variants": ["P24局部消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。",
+      "forwardsTo": ["detail.action.submit", "detail.action.close"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "detail.parent.forward",
+      "label": "详情父级事件转发",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1"],
+      "sourceContractKeys": [
+        "detail.{x}，editor.edit.open，delete.open，comment.submit：详情事件中转，field更新只是本地模型"
+      ],
+      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "condition": "共享定义/事件转发，不计新业务动作",
+      "handler": "现有emit/父级handler关联",
+      "variants": ["P24局部消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。",
+      "forwardsTo": [
+        "detail.start",
+        "detail.resume",
+        "detail.complete",
+        "detail.pause.open",
+        "detail.cancel.open",
+        "detail.delay.open",
+        "detail.transfer.open",
+        "detail.progress.open",
+        "editor.edit.open",
+        "delete.open",
+        "detail.action.submit",
+        "detail.action.close",
+        "comment.submit",
+        "comment.change",
+        "detail.transfer.assignee.change",
+        "detail.delay.due.change",
+        "detail.progress.percent.change",
+        "detail.progress.note.change",
+        "detail.action.reason.change"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@action",
+          "handler": "action",
+          "targets": [
+            "detail.start",
+            "detail.resume",
+            "detail.complete",
+            "detail.pause.open",
+            "detail.cancel.open",
+            "detail.delay.open",
+            "detail.transfer.open",
+            "detail.progress.open"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@edit",
+          "handler": "editTask",
+          "targets": ["editor.edit.open"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@remove",
+          "handler": "askRemove",
+          "targets": ["delete.open"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@submit-action",
+          "handler": "submitTaskAction",
+          "targets": ["detail.action.submit"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@close-action",
+          "handler": "taskActionEditor = null",
+          "targets": ["detail.action.close"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@add-comment",
+          "handler": "addComment",
+          "targets": ["comment.submit"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@update:comment",
+          "handler": "comment = $event",
+          "targets": ["comment.change"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "event": "@update:action-form",
+          "handler": "taskActionForm = $event",
+          "targets": [
+            "detail.transfer.assignee.change",
+            "detail.delay.due.change",
+            "detail.progress.percent.change",
+            "detail.progress.note.change",
+            "detail.action.reason.change"
+          ]
+        }
+      ]
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": [
+      "apps/web/src/components/TaskWorkspace.vue",
+      "apps/web/src/components/TaskDetailPanel.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+      "apps/web/src/components/TaskDetailPanel.vue": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/components/task-workspace-types.ts": "72d4c541f6a09e9c4c05643f88fe7a8fdfc467ae1a07b605244fdff46e1e2b2e",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "binding": "form.title",
+        "meaning": "新建/编辑标题，required/max200",
+        "remaining": "五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。"
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "binding": "form.description",
+        "meaning": "新建/编辑说明，max5000",
+        "remaining": "五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。"
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "binding": "form.priority",
+        "meaning": "low/normal/high/critical",
+        "remaining": "五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。"
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "binding": "form.due_at",
+        "meaning": "可选本地时间，提交ISO/null",
+        "remaining": "五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。"
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "binding": "deleteReason",
+        "meaning": "删除必填原因，max500，提交trim",
+        "remaining": "五个父v-model之外，子组件六个受控输入另以事件动作登记；在途策略及全字段视觉未验。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "原生编辑窗/内嵌表单：create仅快捷query可在详情打开；edit来自详情更多。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "create",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "create"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "edit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "edit"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "原生编辑窗/内嵌表单：create仅快捷query可在详情打开；edit来自详情更多。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "create",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "create"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "edit",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "edit"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "删除原生窗/表单，目标来自当前详情；成功返回from，原生关闭晚到风险未修。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "delete",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "delete"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskWorkspace.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "删除原生窗/表单，目标来自当前详情；成功返回from，原生关闭晚到风险未修。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "delete",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "delete"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskDetailPanel.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "独立页常驻aside，不是抽屉弹窗；事实/活动/评论/主次操作。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "detail",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c",
+                "scene": "detail"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskDetailPanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "详情活动内评论表单，canUpdate；当前C详情场景不等于全评论状态图。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "comment",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c",
+                "scene": "detail"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskDetailPanel.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "单个原生dialog的五操作变体；表单不是新增独立弹窗。返回与字段在途可操作。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "pause",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "pause"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "cancel",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "cancel"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "delay",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "delay"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "transfer",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "transfer"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "progress",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "progress"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TaskDetailPanel.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "单个原生dialog的五操作变体；表单不是新增独立弹窗。返回与字段在途可操作。",
+        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
+        "variants": [
+          {
+            "name": "pause",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "pause"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "cancel",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "cancel"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "delay",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "delay"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "transfer",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "transfer"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          },
+          {
+            "name": "progress",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "task-direction-c-forms",
+                "scene": "progress"
+              }
+            ],
+            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "P13/P23列表/批量消费者不计本页可见控件；CSS隐藏不等于卸载，原生dialog和quick-create query仍需单独归属。",
+      "读取已有active/route/read-key/Abort保护；本批隔离边界不重复证明完整GET生命周期，写请求不随切页取消。",
+      "既有60PNG是P23/P24/board共享总数，没有新增或重拍，图存在不表示真实Vue/服务或用户批准。"
+    ]
+  },
+  "compositionGaps": [
+    "普通P24隐藏头部/列表/批量/导出/分页；原合同关于头部可在详情存在只反映共享DOM，不是当前可见入口。",
+    "UNFIXED: ?view=exports有report:read时优先读取导出，初次详情selected为空且导出区被CSS隐藏；无权限回business只改变路由意图。需真实浏览器确认呈现。",
+    "?create=1允许首次详情快捷新建，虽无可见头部按钮；正式设计需涵盖此真实入口而非凭空新增按钮。",
+    "开始/继续/完成直接写入，不新增原因/确认弹窗。转交独立task:assign，无本地终态限制，不套用批量资格。",
+    "在途可编辑五字段与返回；请求body已捕获，成功关窗/失败留当前草稿；提交快照、错误可发现性、关闭焦点与晚到风险待具体交互批准。",
+    "主题/密度/长任务名/多活动/关联与无关联/只分配权/终态/版本冲突/成员目录失败/全部按钮六态缺完整图；不能用固定in_progress样本抵扣。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "仅源码语义与现有提案关联；7写入组不是7个API端点或完整状态机证明。",
+    "测试由实际函数提取到VM，传输/权限/数据库/路由监听等边界用桩；已知问题断言不等于已修复。",
+    "P16布局通过不迁移为P24或全站批准，不改生产或部署。"
+  ]
+}
