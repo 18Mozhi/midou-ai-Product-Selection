@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1478；旧登记1477；新身份16，旧表独有身份15。签名变化不等于增删业务能力。
-- 已具体语义对应16页/341源位置/292组；其中路由动作254组，转发/容器关联22组，其余明确排除。其余57页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应17页/358源位置/327组；其中路由动作281组，转发/容器关联28组，其余明确排除。其余56页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -26,7 +26,7 @@
 | [P12 今日行动](page-specs/P12.md) | 56 | [14组](action-reviews/P12.json) | 84个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 111 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 107 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 158 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P15 选品机会](page-specs/P15.md) | 158 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 46 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P17 评分规则](page-specs/P17.md) | 64 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P18 机会详情](page-specs/P18.md) | 158 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -933,6 +933,153 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - MonitoringReadinessStrip只展示事实；外层NavigationShell另审。UiStatePanel两个primary消费者已列，secondary未监听，不能宣称恢复链接真实可用。
 - ResponsiveFilterDrawer的show/close/遮罩/Tab/Escape由共享组件实现，当前只审一个调用；本页业务role div不复用它，不自动继承模态能力。
 - 父/trends为reset_on_scope且提供组织/工作区；局部read/watch没有任务页active/代次保护不等于父无scope隔离。晚到读写结果和缓存激活仍需真实Vue/范围测试。
+
+## P15 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P15.json)：67个局部源位置 → 35组；4类写入，27组路由动作，6组转发/容器关联不重复计动作。20个本地v-model，17处调用/内嵌容器，35个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有162个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OP-JOURNEY-NAV 创建选品入口 / navigation | 1处；recommended、rule_candidates、evidence_pending、all | [recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)、[all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)；其余见JSON | P16向导合同及冲突另审；未批准合并入口。 |
+| OP-TREND-RULES-NAV 管理选品规则 / navigation | 1处；all、non-all | [recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)、[all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)；其余见JSON | 目标P14加载/权限与返回不由本地离线导航证明。 |
+| OP-ERP-OPEN 打开ERP导入 / local | 1处；first-open、reopen、readonly-hidden | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | ERP弹窗重开与进行中请求属于独立生命周期，不能承诺重新打开即新任务。 |
+| OP-CREATE-OPEN 打开手工添加 / local | 1处；button、initial-create-query、initial-topic-query、reopen | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)；其余见JSON | 初始深链与已缓存页后续query需分开验；不能改为每次query都自动创建。 |
+| OP-VIEW 切换四队列 / local | 1处；recommended、rule_candidates、evidence_pending、all | [recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)、[rule-candidates · 1440](design/opportunity-direction-c/1440-rule-candidates.png) / [rule-candidates · 390](design/opportunity-direction-c/390-rule-candidates.png)；其余见JSON | 实际syncListRoute仍接纳非all深链decision_status；可见筛选与请求条件不一致待处理，不扩展业务规则。 |
+| OP-FILTER-APPLY 应用七字段筛选 / read | 2处；draft、same-query-reload、changed-query、non-all-hidden-decision | [filter-open · 1440](design/opportunity-direction-c/1440-filter-open.png) / [filter-open · 390](design/opportunity-direction-c/390-filter-open.png)、[filter-edited · 1440](design/opportunity-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/opportunity-direction-c/390-filter-edited.png)；其余见JSON | activeFilterCount读取可变草稿，不是已应用数；隐藏decision_status仍可参与请求；C稿分离草稿仅提案。 |
+| OP-FILTER-RESET 重置筛选 / read | 1处；filtered、already-empty、hidden-selection | [filtered · 1440](design/opportunity-direction-c/1440-filtered.png) / [filtered · 390](design/opportunity-direction-c/390-filtered.png)、[empty-filtered · 1440](design/opportunity-direction-c/1440-empty-filtered.png) / [empty-filtered · 390](design/opportunity-direction-c/390-empty-filtered.png)；其余见JSON | 重置不是清空选择或删除数据；移动筛选关闭由共享submit捕获，reset本身不submit。 |
+| OP-RECOVER 状态面板主次行动 / local | 1处；empty-filtered、empty-all、empty-recommended、empty-candidates、empty-pending、empty-readonly、error、expired、forbidden、blocked | [empty-filtered · 1440](design/opportunity-direction-c/1440-empty-filtered.png) / [empty-filtered · 390](design/opportunity-direction-c/390-empty-filtered.png)、[empty-all · 1440](design/opportunity-direction-c/1440-empty-all.png) / [empty-all · 390](design/opportunity-direction-c/390-empty-all.png)；其余见JSON | 一个复合消费者含两个实际事件，不省略secondary；异常primary沿共享文案（重新登录/返回工作台等）但实际apply，secondary明确标返回机会列表而实际reset，并非history back。原型恢复导航不冒充真实接线。 |
+| OP-SELECT 逐行选择 / local | 1处；checked、unchecked、cross-page、hidden-selection | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[selected · 1440](design/opportunity-direction-c/1440-selected.png) / [selected · 390](design/opportunity-direction-c/390-selected.png)；其余见JSON | 当前提交仅items交集，源显示selectedIds总数；不承诺跨页全部写入，禁止用图中有效范围保护冒充源已修。 |
+| OP-DETAIL-NAV 查看机会详情 / navigation | 1处；recommended、rule_candidates、evidence_pending、all、readonly | [recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)、[rule-candidates · 1440](design/opportunity-direction-c/1440-rule-candidates.png) / [rule-candidates · 390](design/opportunity-direction-c/390-rule-candidates.png)；其余见JSON | 目标详情权限/质量门/P18十分区另审；列表缺图/坏图、长名称、null评分与事实保留。 |
+| OP-PAGE-PREV 上一页 / local | 1处；first-disabled、later-page | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[page-two · 1440](design/opportunity-direction-c/1440-page-two.png) / [page-two · 390](design/opportunity-direction-c/390-page-two.png)；其余见JSON | 忙碌和晚到读结果无局部代次保障；实际Vue跨页继续验。 |
+| OP-PAGE-NEXT 下一页 / local | 1处；last-disabled、next-page | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[page-two · 1440](design/opportunity-direction-c/1440-page-two.png) / [page-two · 390](design/opportunity-direction-c/390-page-two.png)；其余见JSON | 图稿合成总量不证明真实全页数据；跨页选中数与写入范围分别核对。 |
+| OP-SETUP-NEXT 配置下一步 / navigation | 1处；missing-step、all-ready-hidden、unavailable-hidden | [recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)、[setup-open · 1440](design/opportunity-direction-c/1440-setup-open.png) / [setup-open · 390](design/opportunity-direction-c/390-setup-open.png)；其余见JSON | 五项配置、特定amazon phone_case成本条件不得泛化为所有商品自动评估已就绪。 |
+| OP-SCORE-RULES 配置未知时查看规则 / navigation | 1处；unavailable | [setup-unknown · 1440](design/opportunity-direction-c/1440-setup-unknown.png) / [setup-unknown · 390](design/opportunity-direction-c/390-setup-unknown.png)；其余见JSON | 任何readiness依赖失败合成未知，不是全部未配置；错误不等于真实空。 |
+| OP-SETUP-DETAILS 展开配置检查 / local | 1处；collapsed、expanded、all-ready | [recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)、[setup-open · 1440](design/opportunity-direction-c/1440-setup-open.png) / [setup-open · 390](design/opportunity-direction-c/390-setup-open.png)；其余见JSON | details非业务弹窗；展开图未覆盖每个动态步骤的按钮六态。 |
+| OP-SETUP-STEP 逐项配置链接 / navigation | 1处；each-missing-step、ready-no-link | [setup-open · 1440](design/opportunity-direction-c/1440-setup-open.png) / [setup-open · 390](design/opportunity-direction-c/390-setup-open.png)；其余见JSON | 实际五步骤路径分别保留；成员能力在目标页校验，不用此链接存在证明有写权限。 |
+| OP-BATCH-OPEN.assign 打开批量指派 / local | 1处；open、reopen、cross-page、busy-reopen | [assign-open · 1440](design/opportunity-direction-c/1440-assign-open.png) / [assign-open · 390](design/opportunity-direction-c/390-assign-open.png)、[assign-edited · 1440](design/opportunity-direction-c/1440-assign-edited.png) / [assign-edited · 390](design/opportunity-direction-c/390-assign-edited.png)；其余见JSON | 打开不写；按钮显示记忆数，实际body只取当前页交集；重新打开不取消之前请求。 |
+| OP-BATCH-OPEN.review 打开批量复核 / local | 1处；open、reopen、cross-page、busy-reopen | [review-open · 1440](design/opportunity-direction-c/1440-review-open.png) / [review-open · 390](design/opportunity-direction-c/390-review-open.png)、[review-edited · 1440](design/opportunity-direction-c/1440-review-edited.png) / [review-edited · 390](design/opportunity-direction-c/390-review-edited.png)；其余见JSON | 打开不写；按钮显示记忆数，实际body只取当前页交集；重新打开不取消之前请求。 |
+| OP-BATCH-OPEN.archive 打开批量归档 / local | 1处；open、reopen、cross-page、busy-reopen | [archive-open · 1440](design/opportunity-direction-c/1440-archive-open.png) / [archive-open · 390](design/opportunity-direction-c/390-archive-open.png)、[archive-edited · 1440](design/opportunity-direction-c/1440-archive-edited.png) / [archive-edited · 390](design/opportunity-direction-c/390-archive-edited.png)；其余见JSON | 打开不写；按钮显示记忆数，实际body只取当前页交集；重新打开不取消之前请求。 |
+| OP-BATCH-CANCEL 关闭批量弹窗 / local | 2处；assign、review、archive、escape、busy-close | [assign-open · 1440](design/opportunity-direction-c/1440-assign-open.png) / [assign-open · 390](design/opportunity-direction-c/390-assign-open.png)、[review-open · 1440](design/opportunity-direction-c/1440-review-open.png) / [review-open · 390](design/opportunity-direction-c/390-review-open.png)；其余见JSON | useModalDialog归还焦点不等于请求取消；本轮惰性VM证实旧成功可关闭新窗并清新选择，源未修。 |
+| OP-BATCH-SUBMIT 提交当前有效批量范围 / write | 2处；assign、review、archive、empty-effective-selection、failed、late-success | [assign-edited · 1440](design/opportunity-direction-c/1440-assign-edited.png) / [assign-edited · 390](design/opportunity-direction-c/390-assign-edited.png)、[review-edited · 1440](design/opportunity-direction-c/1440-review-edited.png) / [review-edited · 390](design/opportunity-direction-c/390-review-edited.png)；其余见JSON | 与P13逐项循环不同：旧body稳定；问题是await后写共享showBatch/selectedIds。1–50/版本/权限/事务由后端另验；不扩大跨页写规则。 |
+| OP-ERP-CLOSE 关闭ERP导入 / local | 3处；close、cancel、escape、busy-close | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)、[erp-closed-busy · 1440](design/opportunity-direction-c/1440-erp-closed-busy.png) / [erp-closed-busy · 390](design/opportunity-direction-c/390-erp-closed-busy.png)；其余见JSON | 保持请求归属与可恢复状态待真实Vue实现验收；不能将关闭文案写成取消导入。 |
+| OP-ERP-BROWSER 从浏览器读取ERP并导入 / write | 2处；open、edited、busy、login-opened、login-required、helper-missing、failed、saved | [erp-edited · 1440](design/opportunity-direction-c/1440-erp-edited.png) / [erp-edited · 390](design/opportunity-direction-c/390-erp-edited.png)、[erp-busy · 1440](design/opportunity-direction-c/1440-erp-busy.png) / [erp-busy · 390](design/opportunity-direction-c/390-erp-busy.png)；其余见JSON | 没有真实助手/ERP/权限/幂等校验；接收结果或导入计数不等于已确认采购成本；超时不证明服务器没写。 |
+| OP-ERP-FILE 选择JSON立即导入 / write | 1处；array、list、cancel-file-picker、invalid、failed、saved | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)、[erp-file-invalid · 1440](design/opportunity-direction-c/1440-erp-file-invalid.png) / [erp-file-invalid · 390](design/opportunity-direction-c/390-erp-file-invalid.png)；其余见JSON | 源未显式校验parsed.list数组及文件busy；原型结构保护待迁入；不得用用户真实敏感文件验证，不打印payload秘密。 |
+| OP-HELPER-DOWNLOAD 下载浏览器助手 / navigation | 1处；link-only | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)、[erp-helper-missing · 1440](design/opportunity-direction-c/1440-erp-helper-missing.png) / [erp-helper-missing · 390](design/opportunity-direction-c/390-erp-helper-missing.png)；其余见JSON | 本轮无真实下载或扩展安装；不能把链接点击当助手已连接。 |
+| OP-CREATE-CLOSE 关闭手工添加 / local | 3处；close、cancel、escape、busy-close | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png)；其余见JSON | 初焦点是关闭按钮；取消返回与请求后成功导航需实际Vue验证。 |
+| OP-CREATE-SUBMIT 保存手工候选 / write | 2处；empty-required、edited、busy、failed、saved | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png)；其余见JSON | 客户端不trim四字段；后端规范化/UUID/scope另验；未知write文案未写入任何状态不是事务证据。 |
+| OP-P18-EXCLUDED 详情读取、十分区与AI操作排除 / excluded | 18处；detail、analysis-tabs、AI-reason | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 共享父组件仍需真实缓存/跨路由残留测试；排除指正常入口，不宣称任何show ref均按路由清空。 |
+| OP-DECISION-EXCLUDED 三种人工决定原因排除 / excluded | 6处；adopt、observe、reject | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png)、[observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 正常路由排除，不抵扣P18具体图审/权限/五质量门验收。 |
+| OP-LIST-WIRING 消费者/容器关联 / wiring | 1处；source-forwarding | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
+| OP-DIALOGS-WIRING 消费者/容器关联 / wiring | 2处；source-forwarding | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
+| OP-BATCH-DEFINITION 消费者/容器关联 / wiring | 1处；source-forwarding | [assign-open · 1440](design/opportunity-direction-c/1440-assign-open.png) / [assign-open · 390](design/opportunity-direction-c/390-assign-open.png)、[review-open · 1440](design/opportunity-direction-c/1440-review-open.png) / [review-open · 390](design/opportunity-direction-c/390-review-open.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
+| OP-ERP-DEFINITION 消费者/容器关联 / wiring | 1处；source-forwarding | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
+| OP-CREATE-DEFINITION 消费者/容器关联 / wiring | 1处；source-forwarding | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
+| OP-FILTER-CALLER 消费者/容器关联 / wiring | 1处；source-forwarding | [filter-open · 1440](design/opportunity-direction-c/1440-filter-open.png) / [filter-open · 390](design/opportunity-direction-c/390-filter-open.png)、[filter-edited · 1440](design/opportunity-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/opportunity-direction-c/390-filter-edited.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| OP-LIST-WIRING | @apply / applyListFilters | OP-FILTER-APPLY |
+| OP-LIST-WIRING | @batch / openBatch | OP-BATCH-OPEN.assign、OP-BATCH-OPEN.review、OP-BATCH-OPEN.archive |
+| OP-LIST-WIRING | @create / showCreate = true | OP-CREATE-OPEN |
+| OP-LIST-WIRING | @manage-setup / router.push($event) | OP-SETUP-NEXT |
+| OP-LIST-WIRING | @page / goListPage | OP-PAGE-PREV、OP-PAGE-NEXT |
+| OP-LIST-WIRING | @reset / resetListFilters | OP-FILTER-RESET |
+| OP-LIST-WIRING | @view / setSelectionView | OP-VIEW |
+| OP-LIST-WIRING | @update:selected-ids / selectedOpportunityIds = $event | OP-SELECT |
+| OP-DIALOGS-WIRING | @create / create | OP-CREATE-SUBMIT |
+| OP-DIALOGS-WIRING | @decide / decide | OP-DECISION-EXCLUDED |
+| OP-DIALOGS-WIRING | @import-browser / importFromErpBrowser | OP-ERP-BROWSER |
+| OP-DIALOGS-WIRING | @import-file / importErpFile | OP-ERP-FILE |
+| OP-DIALOGS-WIRING | @create / create | OP-CREATE-SUBMIT |
+| OP-DIALOGS-WIRING | @decide / decide | OP-DECISION-EXCLUDED |
+| OP-DIALOGS-WIRING | @import-browser / importFromErpBrowser | OP-ERP-BROWSER |
+| OP-DIALOGS-WIRING | @import-file / importErpFile | OP-ERP-FILE |
+| OP-BATCH-DEFINITION | 容器定义，无额外事件 | OP-BATCH-CANCEL、OP-BATCH-SUBMIT |
+| OP-ERP-DEFINITION | 容器定义，无额外事件 | OP-ERP-CLOSE、OP-ERP-BROWSER、OP-ERP-FILE、OP-HELPER-DOWNLOAD |
+| OP-CREATE-DEFINITION | 容器定义，无额外事件 | OP-CREATE-CLOSE、OP-CREATE-SUBMIT |
+| OP-FILTER-CALLER | 容器定义，无额外事件 | OP-FILTER-APPLY、OP-FILTER-RESET |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OpportunityWorkspace.vue / showErpImport | 向Dialogs转发erpImportOpen；UI只关显示，不取消桥接/POST。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspace.vue / showCreate | 转发createOpen；父form仍在，关闭不会重置。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspace.vue / showDecision | 转发decisionOpen；正常P15无详情，本字段按P18排除，不算列表业务输入。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspace.vue / erpImportLimit | ERP数量默认200，子number required min1 max500；父同名转发非第二个独立数量输入。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspace.vue / decisionReason | P18决定原因转发/子输入，正常列表排除；不可当P15批量原因。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspace.vue / batchAssigneeId | assign专属required select，使用memberOptions真实id；打开清空，review/archive body为null。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspace.vue / batchReason | 批量textarea required maxlength1000；提交trim且非空才执行，每次openBatch清空。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspaceDialogs.vue / erpImportLimit | ERP数量默认200，子number required min1 max500；父同名转发非第二个独立数量输入。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspaceDialogs.vue / form.name | 手工名称required maxlength200；父默认空；客户端原值不trim，服务端另验。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspaceDialogs.vue / form.market | 手工市场required maxlength40，默认US；独立于列表filters.market。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspaceDialogs.vue / form.category | 可选分类maxlength80；提交空转null，不trim。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspaceDialogs.vue / form.source_topic_id | 可选主题ID maxlength36；挂载query可预填；提交空转null，合法UUID与范围由服务另验。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityWorkspaceDialogs.vue / decisionReason | P18决定原因转发/子输入，正常列表排除；不可当P15批量原因。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.market | 市场maxlength40草稿，非空入URL/query；不是仅限US枚举。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.decision_status | pending/adopted/observing/rejected，仅all显示；但syncListRoute在所有view读非空URL，load仍发送隐藏值。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.coverage_status | insufficient/partial/complete，空表示无该条件；不得把覆盖完整当可采纳。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.blocking_reason | evidence_insufficient/recommendation_insufficient或空；不新增其他阻断规则。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.lifecycle_status | candidate/validating/ready/adopted/observing/rejected/archived或空；归档可筛查不等于恢复写入。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.owner_id | memberOptions实际id或空；名单失败清空并提示，不宣称零成员。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.q | 关键词maxlength200草稿；apply重建URL，reset清空；activeFilterCount当前读草稿。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / create-open | business-dialog-container / related-scene-only | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / erp-open | business-dialog-container / related-scene-only | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / adopt | business-dialog-container / route-excluded-reference | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / observe | business-dialog-container / route-excluded-reference | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / reject | business-dialog-container / route-excluded-reference | [reject-empty · 1440](design/opportunity-detail-direction-c/1440-reject-empty.png) / [reject-empty · 390](design/opportunity-detail-direction-c/390-reject-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / dialog.1 / assign-open | native-dialog / matching-dialog-scene | [assign-open · 1440](design/opportunity-direction-c/1440-assign-open.png) / [assign-open · 390](design/opportunity-direction-c/390-assign-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / dialog.1 / review-open | native-dialog / matching-dialog-scene | [review-open · 1440](design/opportunity-direction-c/1440-review-open.png) / [review-open · 390](design/opportunity-direction-c/390-review-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / dialog.1 / archive-open | native-dialog / matching-dialog-scene | [archive-open · 1440](design/opportunity-direction-c/1440-archive-open.png) / [archive-open · 390](design/opportunity-direction-c/390-archive-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / form.1 / assign-edited | form-container / matching-dialog-scene | [assign-edited · 1440](design/opportunity-direction-c/1440-assign-edited.png) / [assign-edited · 390](design/opportunity-direction-c/390-assign-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / form.1 / review-edited | form-container / matching-dialog-scene | [review-edited · 1440](design/opportunity-direction-c/1440-review-edited.png) / [review-edited · 390](design/opportunity-direction-c/390-review-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / form.1 / archive-edited | form-container / matching-dialog-scene | [archive-edited · 1440](design/opportunity-direction-c/1440-archive-edited.png) / [archive-edited · 390](design/opportunity-direction-c/390-archive-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / aside.1 / review-open | inline-aside / related-scene-only | [review-open · 1440](design/opportunity-direction-c/1440-review-open.png) / [review-open · 390](design/opportunity-direction-c/390-review-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / aside.2 / archive-open | inline-aside / related-scene-only | [archive-open · 1440](design/opportunity-direction-c/1440-archive-open.png) / [archive-open · 390](design/opportunity-direction-c/390-archive-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / AuditedReasonDialog.1 / AI-approved | native-reason-dialog / route-excluded-reference | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspace.vue / AuditedReasonDialog.1 / AI-rejected | native-reason-dialog / route-excluded-reference | [rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / dialog.1 / erp-open | native-dialog / matching-dialog-scene | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / dialog.1 / erp-closed-busy | native-dialog / related-scene-only | [erp-closed-busy · 1440](design/opportunity-direction-c/1440-erp-closed-busy.png) / [erp-closed-busy · 390](design/opportunity-direction-c/390-erp-closed-busy.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.1 / erp-edited | form-container / matching-dialog-scene | [erp-edited · 1440](design/opportunity-direction-c/1440-erp-edited.png) / [erp-edited · 390](design/opportunity-direction-c/390-erp-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.1 / erp-file-invalid | form-container / matching-dialog-scene | [erp-file-invalid · 1440](design/opportunity-direction-c/1440-erp-file-invalid.png) / [erp-file-invalid · 390](design/opportunity-direction-c/390-erp-file-invalid.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / aside.1 / erp-open | inline-aside / related-scene-only | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / dialog.2 / create-open | native-dialog / matching-dialog-scene | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.2 / create-edited | form-container / matching-dialog-scene | [create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.2 / create-failed | form-container / matching-dialog-scene | [create-failed · 1440](design/opportunity-direction-c/1440-create-failed.png) / [create-failed · 390](design/opportunity-direction-c/390-create-failed.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / aside.2 / create-open | inline-aside / related-scene-only | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / dialog.3 / adopt | native-dialog / route-excluded-reference | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / dialog.3 / observe | native-dialog / route-excluded-reference | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / dialog.3 / reject | native-dialog / route-excluded-reference | [reject-empty · 1440](design/opportunity-detail-direction-c/1440-reject-empty.png) / [reject-empty · 390](design/opportunity-detail-direction-c/390-reject-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.3 / adopt | form-container / route-excluded-reference | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.3 / observe | form-container / route-excluded-reference | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / form.3 / reject | form-container / route-excluded-reference | [reject-empty · 1440](design/opportunity-detail-direction-c/1440-reject-empty.png) / [reject-empty · 390](design/opportunity-detail-direction-c/390-reject-empty.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityWorkspaceDialogs.vue / aside.3 / decision-impact | inline-aside / route-excluded-reference | [observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityListPanel.vue / ResponsiveFilterDrawer.1 / filter-open | responsive-filter / proposal-shape-differs | [filter-open · 1440](design/opportunity-direction-c/1440-filter-open.png) / [filter-open · 390](design/opportunity-direction-c/390-filter-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityListPanel.vue / ResponsiveFilterDrawer.1 / filter-edited | responsive-filter / proposal-shape-differs | [filter-edited · 1440](design/opportunity-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/opportunity-direction-c/390-filter-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityListPanel.vue / form.1 / filter-open | form-container / proposal-shape-differs | [filter-open · 1440](design/opportunity-direction-c/1440-filter-open.png) / [filter-open · 390](design/opportunity-direction-c/390-filter-open.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+| OpportunityListPanel.vue / form.1 / filter-edited | form-container / proposal-shape-differs | [filter-edited · 1440](design/opportunity-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/opportunity-direction-c/390-filter-edited.png) | 结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。 |
+
+### 明确保留的边界
+
+- 27页面动作组的162个代表视觉槽未逐selector映射；现126PNG为60双端主场景+6长窗下部，不是全部控件/动态行/主题覆盖。
+- 确认源记忆两ID但仅提交当前items一条；原型有效范围提示与隐藏选择保护待批准和实现，不新增跨页批量规则。
+- 本轮实际confirmBatch惰性VM：向A提交review后关闭，重开archive并选B；旧结果返回仍关新窗并清B选择，原POST的A/action/reason保持稳定。与P13逐项body变更不同，非挂载Vue或真实事务证据。
+- 非all深链decision_status仍写入filters且load遍历所有非空筛选；字段隐藏不等于条件清空。activeFilterCount读草稿、图片无error handler等提案差异保持未修。
+- ERP浏览器/JSON导入、手工添加与P16创建选品不可合并；实际服务、请求结果核对、真实权限/事务/幂等以及完整具体图审仍待办。
+- 四组件67源位置包含P18正常入口排除，父/Dialogs和P18共50源位置不得重复加到全站独立分母；只有List13/Readiness4为本轮新增全局源位置。
+- 20个v-model位置包含5个父forward和P18原因，不是20个独立用户字段；checkbox/file input/details由动作另审。17结构容器/多场景关联不等于业务弹窗数量。
+- UiStatePanel主次事件均已核对；异常主标签与apply行为分开，次按钮返回机会列表实际reset。ResponsiveFilterDrawer内部按钮/遮罩/Tab/Escape不由单个调用验收。
+- 父opportunity-workspace传opportunityId或undefined及capabilities/common；路由reset_on_scope存在，但局部load缺read代次/Abort。不能从局部缺watch推断整站无范围隔离。
+- useModalDialog处理原生show/close/Escape/焦点归还，未增加busy或请求取消；全部列表→详情/离开/重开/同tick及迟到成功继续待实际Vue验证。
 
 ## P18 局部动作与共享消费者
 

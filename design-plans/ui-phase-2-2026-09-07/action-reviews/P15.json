@@ -1,0 +1,2686 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P15",
+  "route": "/opportunities",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+  "sourceHashes": {
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+    "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "正常P15共六业务面：共享筛选、手工创建、ERP、批量assign/review/archive。四组件扫描包括P18决定/AI排除与form/aside/集合结构，不按候选或容器数计算业务弹窗。"
+  },
+  "inputs": {
+    "local": [
+      "showErpImport",
+      "showCreate",
+      "showDecision",
+      "erpImportLimit",
+      "decisionReason",
+      "batchAssigneeId",
+      "batchReason",
+      "form.name",
+      "form.market",
+      "form.category",
+      "form.source_topic_id",
+      "filters.market",
+      "filters.decision_status",
+      "filters.coverage_status",
+      "filters.blocking_reason",
+      "filters.lifecycle_status",
+      "filters.owner_id",
+      "filters.q"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "OP-JOURNEY-NAV",
+      "label": "创建选品入口",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1"],
+      "sourceContractKeys": ["OP-JOURNEY-NAV"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "无opportunityId且canDecide，四视图均可见",
+      "handler": "RouterLink /opportunities/start；只是P16导航，不执行手工create",
+      "variants": ["recommended", "rule_candidates", "evidence_pending", "all"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "P16向导合同及冲突另审；未批准合并入口。"
+    },
+    {
+      "actionId": "OP-TREND-RULES-NAV",
+      "label": "管理选品规则",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1"],
+      "sourceContractKeys": ["OP-TREND-RULES-NAV"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "列表且canDecide",
+      "handler": "RouterLink /trends?section=rules，非本页建规则或触发采集",
+      "variants": ["all", "non-all"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "目标P14加载/权限与返回不由本地离线导航证明。"
+    },
+    {
+      "actionId": "OP-ERP-OPEN",
+      "label": "打开ERP导入",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1"],
+      "sourceContractKeys": ["OP-ERP-OPEN"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "列表all且canDecide；无busy禁用",
+      "handler": "showErpImport=true；不清limit，默认200",
+      "variants": ["first-open", "reopen", "readonly-hidden"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "ERP弹窗重开与进行中请求属于独立生命周期，不能承诺重新打开即新任务。"
+    },
+    {
+      "actionId": "OP-CREATE-OPEN",
+      "label": "打开手工添加",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1"],
+      "sourceContractKeys": ["OP-CREATE-OPEN"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "可见入口列表all且canDecide；挂载create=1或source_topic_id也可打开",
+      "handler": "showCreate=true；父form取消保留；挂载预填name/market/category/source_topic_id，后续query不重新执行预填",
+      "variants": ["button", "initial-create-query", "initial-topic-query", "reopen"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-edited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "初始深链与已缓存页后续query需分开验；不能改为每次query都自动创建。"
+    },
+    {
+      "actionId": "OP-VIEW",
+      "label": "切换四队列",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#1f137eb293b286d0.1"],
+      "sourceContractKeys": ["OP-VIEW：四实例"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "四实例；相同view早退；切换不以busy禁用",
+      "handler": "setSelectionView清selectedIds，保留其他query，清scope/page；离开all清decision_status，默认recommended省略view",
+      "variants": ["recommended", "rule_candidates", "evidence_pending", "all"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "rule-candidates"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "evidence-pending"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "实际syncListRoute仍接纳非all深链decision_status；可见筛选与请求条件不一致待处理，不扩展业务规则。"
+    },
+    {
+      "actionId": "OP-FILTER-APPLY",
+      "label": "应用七字段筛选",
+      "kind": "read",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityListPanel.vue#ebed9d735d2650ea.1",
+        "apps/web/src/components/OpportunityListPanel.vue#3cacb9b51913365b.1"
+      ],
+      "sourceContractKeys": ["OP-FILTER-APPLY"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "form提交；七字段非空才入query，不受busy统一锁定",
+      "handler": "applyListFilters重建query，保留非默认view，清page和其他query；相同fullPath直接load；保留selectedIds",
+      "variants": ["draft", "same-query-reload", "changed-query", "non-all-hidden-decision"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "filter-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "filter-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "filtered"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "hidden-selection"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "activeFilterCount读取可变草稿，不是已应用数；隐藏decision_status仍可参与请求；C稿分离草稿仅提案。"
+    },
+    {
+      "actionId": "OP-FILTER-RESET",
+      "label": "重置筛选",
+      "kind": "read",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#55d7dcd38e3f0b22.1"],
+      "sourceContractKeys": ["OP-FILTER-RESET"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "type=button，四视图可用",
+      "handler": "七字段置空，query仅非默认view；同URL直接load；selectedIds不清",
+      "variants": ["filtered", "already-empty", "hidden-selection"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "filtered"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-filtered"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "重置不是清空选择或删除数据；移动筛选关闭由共享submit捕获，reset本身不submit。"
+    },
+    {
+      "actionId": "OP-RECOVER",
+      "label": "状态面板主次行动",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#35fbcba5eab1163b.1"],
+      "sourceContractKeys": [
+        "OP-RECOVER/OP-EMPTY-CREATE/OP-SETUP-NEXT/OP-VIEW/OP-FILTER-RESET转发"
+      ],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "state!=ready；loading共享面板不显示操作；主次由kind/标签控制",
+      "handler": "primary:empty非all去nextSetupPath，empty all可写打开创建，否则apply；secondary:empty有草稿筛选reset，无筛选all则apply、非all去all，其余reset",
+      "variants": [
+        "empty-filtered",
+        "empty-all",
+        "empty-recommended",
+        "empty-candidates",
+        "empty-pending",
+        "empty-readonly",
+        "error",
+        "expired",
+        "forbidden",
+        "blocked"
+      ],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-filtered"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-candidates"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-pending"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "empty-readonly"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "blocked"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "一个复合消费者含两个实际事件，不省略secondary；异常primary沿共享文案（重新登录/返回工作台等）但实际apply，secondary明确标返回机会列表而实际reset，并非history back。原型恢复导航不冒充真实接线。"
+    },
+    {
+      "actionId": "OP-SELECT",
+      "label": "逐行选择",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#bf27afc54dc87ac9.1"],
+      "sourceContractKeys": ["OP-SELECT"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ready all且canDecide；没有全选按钮",
+      "handler": "按selectedIds是否含id切换新数组，非读取event.checked；只内存，翻页/筛选保留，切view清空",
+      "variants": ["checked", "unchecked", "cross-page", "hidden-selection"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "selected"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "cross-page"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "hidden-selection"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前提交仅items交集，源显示selectedIds总数；不承诺跨页全部写入，禁止用图中有效范围保护冒充源已修。"
+    },
+    {
+      "actionId": "OP-DETAIL-NAV",
+      "label": "查看机会详情",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#e16bf068f58122c0.1"],
+      "sourceContractKeys": ["OP-DETAIL-NAV"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "每个可读行；按钮文案依view变化",
+      "handler": "/opportunities/{item.id}?from=route.fullPath；即使文案审阅并采纳也不直接POST",
+      "variants": ["recommended", "rule_candidates", "evidence_pending", "all", "readonly"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "rule-candidates"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "evidence-pending"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "目标详情权限/质量门/P18十分区另审；列表缺图/坏图、长名称、null评分与事实保留。"
+    },
+    {
+      "actionId": "OP-PAGE-PREV",
+      "label": "上一页",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#30387aeecee66240.1"],
+      "sourceContractKeys": ["OP-PAGE-PREV"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ready列表；page<=1禁用",
+      "handler": "goListPage检查1..pageCount；保留query，第一页省略page；不清selectedIds",
+      "variants": ["first-disabled", "later-page"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "page-two"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "忙碌和晚到读结果无局部代次保障；实际Vue跨页继续验。"
+    },
+    {
+      "actionId": "OP-PAGE-NEXT",
+      "label": "下一页",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#7090c56fb876cebe.1"],
+      "sourceContractKeys": ["OP-PAGE-NEXT"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ready列表；page>=pageCount禁用",
+      "handler": "goListPage边界检查并保留query；page_size20，total来自API，不是当前行数",
+      "variants": ["last-disabled", "next-page"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "page-two"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "图稿合成总量不证明真实全页数据；跨页选中数与写入范围分别核对。"
+    },
+    {
+      "actionId": "OP-SETUP-NEXT",
+      "label": "配置下一步",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#0d20f52ad0f021a6.1"
+      ],
+      "sourceContractKeys": ["OP-SETUP-NEXT"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅recommended/rule_candidates显示面板；available且!allReady且nextStep",
+      "handler": "第一项!ready的step.route；是配置缺项，不是单机会质量门",
+      "variants": ["missing-step", "all-ready-hidden", "unavailable-hidden"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "setup-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "setup-ready"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "五项配置、特定amazon phone_case成本条件不得泛化为所有商品自动评估已就绪。"
+    },
+    {
+      "actionId": "OP-SCORE-RULES",
+      "label": "配置未知时查看规则",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#859c5c25e4210185.1"
+      ],
+      "sourceContractKeys": ["OP-SCORE-RULES"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "配置available=false",
+      "handler": "RouterLink /opportunities/scoring-rules，不写规则或重算评分",
+      "variants": ["unavailable"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "setup-unknown"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "任何readiness依赖失败合成未知，不是全部未配置；错误不等于真实空。"
+    },
+    {
+      "actionId": "OP-SETUP-DETAILS",
+      "label": "展开配置检查",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#1581dd93c745443c.1"
+      ],
+      "sourceContractKeys": ["OP-SETUP-DETAILS"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "available时原生details",
+      "handler": "只展开readiness.steps，不触发新GET或modal",
+      "variants": ["collapsed", "expanded", "all-ready"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "setup-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "setup-ready"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "details非业务弹窗；展开图未覆盖每个动态步骤的按钮六态。"
+    },
+    {
+      "actionId": "OP-SETUP-STEP",
+      "label": "逐项配置链接",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#a21355b49f292586.1"
+      ],
+      "sourceContractKeys": ["OP-SETUP-STEP"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "available展开且当前step !ready",
+      "handler": "RouterLink step.route，已ready项无该链接",
+      "variants": ["each-missing-step", "ready-no-link"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "setup-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "实际五步骤路径分别保留；成员能力在目标页校验，不用此链接存在证明有写权限。"
+    },
+    {
+      "actionId": "OP-BATCH-OPEN.assign",
+      "label": "打开批量指派",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#e4d77eb7a4a580f1.1"],
+      "sourceContractKeys": ["OP-BATCH-OPEN.assign"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
+      "handler": "openBatch('assign')清reason/assignee并showBatch=true",
+      "variants": ["open", "reopen", "cross-page", "busy-reopen"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "cross-page"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "打开不写；按钮显示记忆数，实际body只取当前页交集；重新打开不取消之前请求。"
+    },
+    {
+      "actionId": "OP-BATCH-OPEN.review",
+      "label": "打开批量复核",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#08f90a95059f6dac.1"],
+      "sourceContractKeys": ["OP-BATCH-OPEN.review"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
+      "handler": "openBatch('review')清reason/assignee并showBatch=true",
+      "variants": ["open", "reopen", "cross-page", "busy-reopen"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "review-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "review-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "cross-page"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "打开不写；按钮显示记忆数，实际body只取当前页交集；重新打开不取消之前请求。"
+    },
+    {
+      "actionId": "OP-BATCH-OPEN.archive",
+      "label": "打开批量归档",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#120a674bf7e0ed5a.1"],
+      "sourceContractKeys": ["OP-BATCH-OPEN.archive"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
+      "handler": "openBatch('archive')清reason/assignee并showBatch=true",
+      "variants": ["open", "reopen", "cross-page", "busy-reopen"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "archive-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "archive-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "cross-page"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "打开不写；按钮显示记忆数，实际body只取当前页交集；重新打开不取消之前请求。"
+    },
+    {
+      "actionId": "OP-BATCH-CANCEL",
+      "label": "关闭批量弹窗",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1"
+      ],
+      "sourceContractKeys": ["OP-BATCH-CANCEL：Escape", "OP-BATCH-CANCEL"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "canDecide原生dialog；取消/Escape无busy阻止",
+      "handler": "handleBatchCancel→showBatch=false；取消按钮同样关闭，不清选择，不撤销write",
+      "variants": ["assign", "review", "archive", "escape", "busy-close"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "review-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "archive-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "useModalDialog归还焦点不等于请求取消；本轮惰性VM证实旧成功可关闭新窗并清新选择，源未修。"
+    },
+    {
+      "actionId": "OP-BATCH-SUBMIT",
+      "label": "提交当前有效批量范围",
+      "kind": "write",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#44686188d9948fca.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1"
+      ],
+      "sourceContractKeys": ["OP-BATCH-SUBMIT"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "JS当前items交集非空且trim原因非空；assign HTMLrequired负责人；按钮busy禁用但handler无busy早退",
+      "handler": "POST /opportunities/batch，一次构建action/items{id,expected_version}/trim reason/assignee_id(assign为ID否则null)；成功关窗清选择load并显示affected_count",
+      "variants": [
+        "assign",
+        "review",
+        "archive",
+        "empty-effective-selection",
+        "failed",
+        "late-success"
+      ],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "review-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "archive-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-busy"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-failed"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-saved"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "cross-page"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "hidden-selection"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "与P13逐项循环不同：旧body稳定；问题是await后写共享showBatch/selectedIds。1–50/版本/权限/事务由后端另验；不扩大跨页写规则。"
+    },
+    {
+      "actionId": "OP-ERP-CLOSE",
+      "label": "关闭ERP导入",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1"
+      ],
+      "sourceContractKeys": ["OP-ERP-CLOSE：Escape", "OP-ERP-CLOSE"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "标题关闭/取消/Escape均未busy禁用",
+      "handler": "erpImportOpen=false，limit仍保留；不终止120秒bridge监听或已发POST",
+      "variants": ["close", "cancel", "escape", "busy-close"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-closed-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "保持请求归属与可恢复状态待真实Vue实现验收；不能将关闭文案写成取消导入。"
+    },
+    {
+      "actionId": "OP-ERP-BROWSER",
+      "label": "从浏览器读取ERP并导入",
+      "kind": "write",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1"
+      ],
+      "sourceContractKeys": ["OP-ERP-BROWSER"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "数量native required1–500；提交按钮busy禁用；函数无busy早退",
+      "handler": "browserBridge('erp.products.read',{limit:Number(erpImportLimit)})，同window/type/requestId匹配，120000ms超时；再POST /imports/erp-products items/source_url/captured_at/可选total；成功关窗load及返回计数",
+      "variants": [
+        "open",
+        "edited",
+        "busy",
+        "login-opened",
+        "login-required",
+        "helper-missing",
+        "failed",
+        "saved"
+      ],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-busy"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-login-opened"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-login-required"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-helper-missing"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-failed"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "没有真实助手/ERP/权限/幂等校验；接收结果或导入计数不等于已确认采购成本；超时不证明服务器没写。"
+    },
+    {
+      "actionId": "OP-ERP-FILE",
+      "label": "选择JSON立即导入",
+      "kind": "write",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1"
+      ],
+      "sourceContractKeys": ["OP-ERP-FILE"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "accept JSON文件；有首个file即执行；不依赖form数量required或浏览器读取按钮",
+      "handler": "解析数组或parsed.list，persistErpProducts；固定source_url=https://medou.medouai.com/#/ProductList及当前ISO，不带total；无file返回",
+      "variants": ["array", "list", "cancel-file-picker", "invalid", "failed", "saved"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-file-invalid"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-failed"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源未显式校验parsed.list数组及文件busy；原型结构保护待迁入；不得用用户真实敏感文件验证，不打印payload秘密。"
+    },
+    {
+      "actionId": "OP-HELPER-DOWNLOAD",
+      "label": "下载浏览器助手",
+      "kind": "navigation",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1"
+      ],
+      "sourceContractKeys": ["OP-HELPER-DOWNLOAD"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "ERP窗中的独立a；不是submit",
+      "handler": "href /browser-helper/scoutops-browser-helper.zip，无target或download属性",
+      "variants": ["link-only"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-helper-missing"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "本轮无真实下载或扩展安装；不能把链接点击当助手已连接。"
+    },
+    {
+      "actionId": "OP-CREATE-CLOSE",
+      "label": "关闭手工添加",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#364dc8e63849b27f.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1"
+      ],
+      "sourceContractKeys": ["OP-CREATE-CLOSE：Escape", "OP-CREATE-CLOSE"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "关闭/取消/Escape无busy禁用",
+      "handler": "createOpen=false，父form不清；取消不发POST但不取消已经发送的请求",
+      "variants": ["close", "cancel", "escape", "busy-close"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "初焦点是关闭按钮；取消返回与请求后成功导航需实际Vue验证。"
+    },
+    {
+      "actionId": "OP-CREATE-SUBMIT",
+      "label": "保存手工候选",
+      "kind": "write",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#781b6e8e908ba7ac.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1"
+      ],
+      "sourceContractKeys": ["OP-CREATE-SUBMIT"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "native name/market required，按钮busy禁用；函数无busy/capability早退",
+      "handler": "POST /opportunities {name,market,category:空转null,source_topic_id:空转null}；201成功close并push返回id详情；不清form，失败保留",
+      "variants": ["empty-required", "edited", "busy", "failed", "saved"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-edited"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-busy"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-failed"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "客户端不trim四字段；后端规范化/UUID/scope另验；未知write文案未写入任何状态不是事务证据。"
+    },
+    {
+      "actionId": "OP-P18-EXCLUDED",
+      "label": "详情读取、十分区与AI操作排除",
+      "kind": "excluded",
+      "routeApplicability": "P18-normal-entry-excluded-from-P15",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1"
+      ],
+      "sourceContractKeys": [
+        "OP-RETURN",
+        "OP-DETAIL-RETRY",
+        "OP-RUNTIME-DETAILS",
+        "OP-DECISION-OPEN/OP-EVIDENCE-TASK转发",
+        "OP-MANUAL-COLLECTION-DETAILS",
+        "OP-COMPETITOR-DISCOVER",
+        "OP-SUPPLIER-DISCOVER",
+        "OP-SCORE-RULES",
+        "OP-TAB：四主分区",
+        "OP-MORE-ANALYSIS",
+        "OP-TAB：六辅助分区",
+        "竞品/供应采集、评分、下游重读转发",
+        "OP-FEEDBACK-SUBMIT转发",
+        "成本提交/复核/利润重算转发",
+        "AI排队/重读/复核转发",
+        "OP-AI-REASON-SUBMIT/CANCEL转发",
+        "共享原因框组件调用",
+        "AI原因helper调用；通过/驳回"
+      ],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "正常P15无opportunityId，不装配详情；AI原因来自P18复核",
+      "handler": "返回/详情load/决策补数/采集/评分入口/十分区/成本利润/反馈/AI事件与helper另见P18，不继承为P15按钮",
+      "variants": ["detail", "analysis-tabs", "AI-reason"],
+      "scenes": [
+        {
+          "package": "opportunity-detail-direction-c",
+          "scene": "observe-empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "共享父组件仍需真实缓存/跨路由残留测试；排除指正常入口，不宣称任何show ref均按路由清空。"
+    },
+    {
+      "actionId": "OP-DECISION-EXCLUDED",
+      "label": "三种人工决定原因排除",
+      "kind": "excluded",
+      "routeApplicability": "P18-normal-entry-excluded-from-P15",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f3f35ebc7969e030.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1"
+      ],
+      "sourceContractKeys": [
+        "人工决策原生dialog；三变体",
+        "OP-DECISION-CLOSE：Escape",
+        "OP-DECISION-SUBMIT",
+        "OP-DECISION-CLOSE"
+      ],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "useModalDialog requires decisionOpen && hasDetail；列表无详情",
+      "handler": "adopt/observe/reject的原因/submit/cancel仅P18；P15手工创建不等于采纳",
+      "variants": ["adopt", "observe", "reject"],
+      "scenes": [
+        {
+          "package": "opportunity-detail-direction-c",
+          "scene": "adopt-empty"
+        },
+        {
+          "package": "opportunity-detail-direction-c",
+          "scene": "observe-empty"
+        },
+        {
+          "package": "opportunity-detail-direction-c",
+          "scene": "reject-empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "正常路由排除，不抵扣P18具体图审/权限/五质量门验收。"
+    },
+    {
+      "actionId": "OP-LIST-WIRING",
+      "label": "消费者/容器关联",
+      "kind": "wiring",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1"],
+      "sourceContractKeys": ["列表apply/batch/create/setup/page/reset/view/selectedIds转发"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
+      "handler": "List八事件逐一转发；manageSetup路径来自子组件，selectionView/page由父URL管理。",
+      "variants": ["source-forwarding"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "all"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "recommended"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
+      "forwardsTo": [
+        "OP-FILTER-APPLY",
+        "OP-BATCH-OPEN.assign",
+        "OP-BATCH-OPEN.review",
+        "OP-BATCH-OPEN.archive",
+        "OP-CREATE-OPEN",
+        "OP-SETUP-NEXT",
+        "OP-PAGE-PREV",
+        "OP-PAGE-NEXT",
+        "OP-FILTER-RESET",
+        "OP-VIEW",
+        "OP-SELECT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@apply",
+          "handler": "applyListFilters",
+          "targets": ["OP-FILTER-APPLY"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@batch",
+          "handler": "openBatch",
+          "targets": ["OP-BATCH-OPEN.assign", "OP-BATCH-OPEN.review", "OP-BATCH-OPEN.archive"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@create",
+          "handler": "showCreate = true",
+          "targets": ["OP-CREATE-OPEN"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@manage-setup",
+          "handler": "router.push($event)",
+          "targets": ["OP-SETUP-NEXT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@page",
+          "handler": "goListPage",
+          "targets": ["OP-PAGE-PREV", "OP-PAGE-NEXT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@reset",
+          "handler": "resetListFilters",
+          "targets": ["OP-FILTER-RESET"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@view",
+          "handler": "setSelectionView",
+          "targets": ["OP-VIEW"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "event": "@update:selected-ids",
+          "handler": "selectedOpportunityIds = $event",
+          "targets": ["OP-SELECT"]
+        }
+      ]
+    },
+    {
+      "actionId": "OP-DIALOGS-WIRING",
+      "label": "消费者/容器关联",
+      "kind": "wiring",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1"
+      ],
+      "sourceContractKeys": ["创建/决定/ERP浏览器/文件导入转发", "三类业务弹窗集合调用"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
+      "handler": "同一集合两候选保留四事件；decide显式映射排除，model另列。",
+      "variants": ["source-forwarding"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
+      "forwardsTo": ["OP-CREATE-SUBMIT", "OP-DECISION-EXCLUDED", "OP-ERP-BROWSER", "OP-ERP-FILE"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "event": "@create",
+          "handler": "create",
+          "targets": ["OP-CREATE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "event": "@decide",
+          "handler": "decide",
+          "targets": ["OP-DECISION-EXCLUDED"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "event": "@import-browser",
+          "handler": "importFromErpBrowser",
+          "targets": ["OP-ERP-BROWSER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "event": "@import-file",
+          "handler": "importErpFile",
+          "targets": ["OP-ERP-FILE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "event": "@create",
+          "handler": "create",
+          "targets": ["OP-CREATE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "event": "@decide",
+          "handler": "decide",
+          "targets": ["OP-DECISION-EXCLUDED"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "event": "@import-browser",
+          "handler": "importFromErpBrowser",
+          "targets": ["OP-ERP-BROWSER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "event": "@import-file",
+          "handler": "importErpFile",
+          "targets": ["OP-ERP-FILE"]
+        }
+      ]
+    },
+    {
+      "actionId": "OP-BATCH-DEFINITION",
+      "label": "消费者/容器关联",
+      "kind": "wiring",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1"],
+      "sourceContractKeys": ["本地批量原生dialog；三变体"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
+      "handler": "一个原生定义展开三业务变体，不重复算cancel事件/form/aside。",
+      "variants": ["source-forwarding"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "assign-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "review-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "archive-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
+      "forwardsTo": ["OP-BATCH-CANCEL", "OP-BATCH-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "OP-ERP-DEFINITION",
+      "label": "消费者/容器关联",
+      "kind": "wiring",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1"
+      ],
+      "sourceContractKeys": ["ERP导入原生dialog"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
+      "handler": "ERP原生dialog消费者；文件与浏览器读取两不同写入触发。",
+      "variants": ["source-forwarding"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "erp-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
+      "forwardsTo": ["OP-ERP-CLOSE", "OP-ERP-BROWSER", "OP-ERP-FILE", "OP-HELPER-DOWNLOAD"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "OP-CREATE-DEFINITION",
+      "label": "消费者/容器关联",
+      "kind": "wiring",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1"
+      ],
+      "sourceContractKeys": ["机会创建原生dialog"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
+      "handler": "手工原生dialog消费者；父模型取消保留，不替代P16向导。",
+      "variants": ["source-forwarding"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "create-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
+      "forwardsTo": ["OP-CREATE-CLOSE", "OP-CREATE-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "OP-FILTER-CALLER",
+      "label": "消费者/容器关联",
+      "kind": "wiring",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#3b502c874c5bc655.1"],
+      "sourceContractKeys": ["共享筛选抽屉"],
+      "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
+      "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
+      "handler": "ResponsiveFilterDrawer一个调用；760px及以下overlay，桌面group；原型桌面也modal是待审形态差异。",
+      "variants": ["source-forwarding"],
+      "scenes": [
+        {
+          "package": "opportunity-direction-c",
+          "scene": "filter-open"
+        },
+        {
+          "package": "opportunity-direction-c",
+          "scene": "filter-edited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/lib/ui-phase2-opportunity-design-data.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际源函数隔离助手，本次执行与额外迟到结果检查见PROGRESS；零真实HTTP/SQL，不等于Vue验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-opportunity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有离线图稿验证引用；本轮未重复未变化的浏览器测试，引用不授予用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
+      "forwardsTo": ["OP-FILTER-APPLY", "OP-FILTER-RESET"],
+      "forwardBindings": []
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+      "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+      "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
+      "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
+      "apps/web/src/automatic-selection-readiness.ts": "8ee0c2efad0138393a5071a7798560477db812a3463a0f9312c5a4a753b99487",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "showErpImport",
+        "meaning": "向Dialogs转发erpImportOpen；UI只关显示，不取消桥接/POST。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "showCreate",
+        "meaning": "转发createOpen；父form仍在，关闭不会重置。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "showDecision",
+        "meaning": "转发decisionOpen；正常P15无详情，本字段按P18排除，不算列表业务输入。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "erpImportLimit",
+        "meaning": "ERP数量默认200，子number required min1 max500；父同名转发非第二个独立数量输入。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "decisionReason",
+        "meaning": "P18决定原因转发/子输入，正常列表排除；不可当P15批量原因。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "batchAssigneeId",
+        "meaning": "assign专属required select，使用memberOptions真实id；打开清空，review/archive body为null。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "binding": "batchReason",
+        "meaning": "批量textarea required maxlength1000；提交trim且非空才执行，每次openBatch清空。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "erpImportLimit",
+        "meaning": "ERP数量默认200，子number required min1 max500；父同名转发非第二个独立数量输入。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "form.name",
+        "meaning": "手工名称required maxlength200；父默认空；客户端原值不trim，服务端另验。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "form.market",
+        "meaning": "手工市场required maxlength40，默认US；独立于列表filters.market。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "form.category",
+        "meaning": "可选分类maxlength80；提交空转null，不trim。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "form.source_topic_id",
+        "meaning": "可选主题ID maxlength36；挂载query可预填；提交空转null，合法UUID与范围由服务另验。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "decisionReason",
+        "meaning": "P18决定原因转发/子输入，正常列表排除；不可当P15批量原因。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.market",
+        "meaning": "市场maxlength40草稿，非空入URL/query；不是仅限US枚举。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.decision_status",
+        "meaning": "pending/adopted/observing/rejected，仅all显示；但syncListRoute在所有view读非空URL，load仍发送隐藏值。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.coverage_status",
+        "meaning": "insufficient/partial/complete，空表示无该条件；不得把覆盖完整当可采纳。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.blocking_reason",
+        "meaning": "evidence_insufficient/recommendation_insufficient或空；不新增其他阻断规则。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.lifecycle_status",
+        "meaning": "candidate/validating/ready/adopted/observing/rejected/archived或空；归档可筛查不等于恢复写入。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.owner_id",
+        "meaning": "memberOptions实际id或空；名单失败清空并提示，不宣称零成员。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "binding": "filters.q",
+        "meaning": "关键词maxlength200草稿；apply重建URL，reset清空；activeFilterCount当前读草稿。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "tag": "OpportunityWorkspaceDialogs",
+        "ordinal": 1,
+        "shape": "business-dialog-container",
+        "sourceBehavior": "canDecide时集合装配；P15创建/ERP，人工决定还需hasDetail。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "create-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "create-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "erp-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "erp-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "adopt",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "adopt-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "observe",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "observe-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "reject",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "reject-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "批量原生dialog，观察showBatch；单一定义三业务变体。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "assign-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "assign-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "review-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "review-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "archive-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "archive-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "批量form submit.prevent confirmBatch，原因+assign负责人；body一次构建，成功写共享显示/选择状态。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "assign-edited",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "assign-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "review-edited",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "review-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "archive-edited",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "archive-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "batchAction=review内联影响说明：移到validating并建人工复核任务，不改decision。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "review-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "review-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "batchAction=archive内联说明：不删除，仍可按生命周期筛查。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "archive-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "archive-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspace.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "AuditedReasonDialog属于P18 AI复核；P15正常入口排除，不加入六变体。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "AI-approved",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "review-direction-c",
+                "scene": "approved-filled"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "AI-rejected",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "review-direction-c",
+                "scene": "rejected-filled"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "ERP原生dialog；close/Escape只改open，不取消桥接/写入。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "erp-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "erp-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "erp-closed-busy",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "erp-closed-busy"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "ERP form提交走浏览器读取；file change立即导入，数量required不限制文件路径。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "erp-edited",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "erp-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "erp-file-invalid",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "erp-file-invalid"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "ERP三域数据说明aside，没有独立操作或新弹窗。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "erp-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "erp-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "手工create原生dialog；父form取消保留。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "create-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "create-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "手工四字段form；name/market required，submit由父POST并跳返回id。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "create-edited",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "create-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "create-failed",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "create-failed"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "创建后异步刷新说明aside，不等于采纳成功或已完成采集。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "create-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "create-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 3,
+        "shape": "native-dialog",
+        "sourceBehavior": "decisionOpen && hasDetail原生决定窗，三种业务原因属于P18。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "adopt",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "adopt-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "observe",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "observe-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "reject",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "reject-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 3,
+        "shape": "form-container",
+        "sourceBehavior": "P18决定form，required原因与busy确认；不是P15批量form。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "adopt",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "adopt-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "observe",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "observe-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          },
+          {
+            "name": "reject",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "reject-empty"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "P18决定影响说明，不构成P15业务弹窗。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "decision-impact",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "observe-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+            "exclusionReason": "正常列表无详情；此行为入口属于P18，跨路由残留仍需验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "tag": "ResponsiveFilterDrawer",
+        "ordinal": 1,
+        "shape": "responsive-filter",
+        "sourceBehavior": "ResponsiveFilterDrawer:760px及以下overlay，桌面group；C稿桌面亦modal，形态改变待审。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "filter-open",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "filter-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "filter-edited",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "filter-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityListPanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "七筛选内联form置于shared抽屉；apply submit触发capture close，reset按钮不submit。",
+        "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
+        "variants": [
+          {
+            "name": "filter-open",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "filter-open"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          },
+          {
+            "name": "filter-edited",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "filter-edited"
+              }
+            ],
+            "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "四组件67源位置包含P18正常入口排除，父/Dialogs和P18共50源位置不得重复加到全站独立分母；只有List13/Readiness4为本轮新增全局源位置。",
+      "20个v-model位置包含5个父forward和P18原因，不是20个独立用户字段；checkbox/file input/details由动作另审。17结构容器/多场景关联不等于业务弹窗数量。",
+      "UiStatePanel主次事件均已核对；异常主标签与apply行为分开，次按钮返回机会列表实际reset。ResponsiveFilterDrawer内部按钮/遮罩/Tab/Escape不由单个调用验收。",
+      "父opportunity-workspace传opportunityId或undefined及capabilities/common；路由reset_on_scope存在，但局部load缺read代次/Abort。不能从局部缺watch推断整站无范围隔离。",
+      "useModalDialog处理原生show/close/Escape/焦点归还，未增加busy或请求取消；全部列表→详情/离开/重开/同tick及迟到成功继续待实际Vue验证。"
+    ]
+  },
+  "compositionGaps": [
+    "27页面动作组的162个代表视觉槽未逐selector映射；现126PNG为60双端主场景+6长窗下部，不是全部控件/动态行/主题覆盖。",
+    "确认源记忆两ID但仅提交当前items一条；原型有效范围提示与隐藏选择保护待批准和实现，不新增跨页批量规则。",
+    "本轮实际confirmBatch惰性VM：向A提交review后关闭，重开archive并选B；旧结果返回仍关新窗并清B选择，原POST的A/action/reason保持稳定。与P13逐项body变更不同，非挂载Vue或真实事务证据。",
+    "非all深链decision_status仍写入filters且load遍历所有非空筛选；字段隐藏不等于条件清空。activeFilterCount读草稿、图片无error handler等提案差异保持未修。",
+    "ERP浏览器/JSON导入、手工添加与P16创建选品不可合并；实际服务、请求结果核对、真实权限/事务/幂等以及完整具体图审仍待办。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "67局部源位置/35组=27页面动作+6转发/定义+2排除；20模型/17结构容器仅为当前扫描对象，非全站分母。",
+    "源hash/合同别名/原型图引用/离线函数输出不授予具体批准，不证明真实Vue/API/MySQL/ERP/生产部署；C方向选择不等于P15通过。"
+  ]
+}

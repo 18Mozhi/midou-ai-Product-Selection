@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P15机会列表逐项语义
+
+从干净main/55453ceb继续；前轮P14清单为实质进展。requirement-to-implementation/ui-skills-root按地图/蓝图/机会合同核四组件与实际shared筛选、状态、模态、forms/readiness和父参数。新增P15清单与人读审核入口：67局部源位置/35组（27页面动作、6转发定义、2P18排除），20模型/17结构/35消费者场景引用。50位置已与P18共源，全局仅加17唯一位置；六业务面不按结构数重复计。复用126PNG，目检桌面cross-page和手机assign-failed-lower两图，不重采或伪称全部目检。
+
+最小清单检查通过候选/合同别名/全部转发事件及目标/hash/20模型/17结构/35关联；162视觉槽未逐selector映射。buildOpportunityDesignData通过四视图、创建四字段、三批量body、URL四类操作与ERP文件；再验记忆2项仅提交当前items一项。额外惰性VM从真实源码提取confirmBatch/openBatch/syncListRoute：A/review发出后关闭再开archive并选B，旧成功关新窗、清B选择而保留新原因；原body仍A/review/原原因，区别于P13循环变更。view=recommended加decision_status=rejected深链仍保留隐藏filter。仅隔离函数证据，零HTTP/SQL/浏览器写入，未修Vue，不扩展跨页或权限规则。
+
+UiStatePanel两事件真实行为与文案分开；ERP选择文件即导入不等于浏览器form，取消/超时不撤销写入；父reset_on_scope存在，不把局部缺请求代次保护说成全站无范围隔离。初次读取路径错误后按rg实际路径改正；文档补丁因重复目标被拒后合并PLAN两段重新应用，未修改无关文件。没有临时文件或服务。无生产apps/API/OpenAPI/数据库/迁移/权限/env/依赖/配置改变，无部署或重启。下一P16/P17及已有缺口，完整目标和批准门保持。
+
+全量动作报告生成：17页/358唯一源位置/327按页累计组，281页面动作/28转发定义组，56页待同级核对；全站分母未冻结，具体批准0。设计报告生成：76包9364PNG不变，840独立来源文件/1439绑定，来源漂移/PNG漂移/未登记PNG均0、8080 README链接有效。verify:docs（73路由/60保护/6角色/153必需文档）、runtime-docs、390文件静态检查、format:check及新JSON定向Prettier通过。产品与测试工具不变，不重复旧单元/Vue构建/E2E或生产服务测试；本次仅源函数与文档检查，不冒称实际运行验收。
+
+动作/设计报告只读复验、审核入口74条本地链接与git diff --check均通过。未创建临时验证产物、浏览器或服务，没有本轮进程需停用；永久JSON/Markdown为审核交付，不作临时文件删除。
+
 ## 2026-09-09 · P14趋势逐项语义
 
 从干净main/7b331ccc继续；前轮P13清单与批量风险证据为实质进展。requirement-to-implementation/ui-skills-root按map/蓝图/趋势合同追六组件、shared筛选、父传参及refreshScope。新增P14清单与审核入口，65源位置/51组（42页面动作、9转发/定义），18模型、10结构容器/15消费者场景关联；3role定义四业务弹窗，规则调用不重复计数，治理内联与共享筛选分开。复用146PNG，目检1440-detail及390-rule-open-lower，不追加同类图或伪称全图目检。
