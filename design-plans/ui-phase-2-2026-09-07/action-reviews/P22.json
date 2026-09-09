@@ -1,0 +1,1624 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P22",
+  "route": "/sourcing/cost-rules",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "两个原生dialog定义：一个草稿（人工/自动字段），一个操作共七变体；三个form和两个aside不重复计弹窗。"
+  },
+  "inputs": {
+    "CostRuleConsole": [
+      "search",
+      "statusFilter",
+      "form.market",
+      "form.platform",
+      "form.version_code",
+      "form.name",
+      "form.effective_from",
+      "form.platform_fee",
+      "form.payment_fee",
+      "form.tax",
+      "form.fulfillment",
+      "form.currency",
+      "form.logistics",
+      "form.automatic_product_family",
+      "form.conversion_rate",
+      "form.conversion_effective_on",
+      "form.conversion_source_url",
+      "rollbackTargetId",
+      "actionReason"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "SC-R-BACK",
+      "label": "返回找货上下文",
+      "kind": "navigation",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#ae99ecef74f5d4d3.1",
+        "apps/web/src/components/CostRuleConsole.vue#6a49826ecb55d1fd.1"
+      ],
+      "sourceContractKeys": ["SC-R-BACK 安全from", "SC-R-BACK 准备度返回"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "；无自身disabled属性 / state === 'ready'；无自身disabled属性",
+      "handler": "returnPath只允许/sourcing边界内部from，否则回/sourcing；两个入口同一返回合同",
+      "variants": ["directory", "no-active"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "directory"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "no-active"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-CREATE",
+      "label": "打开费用草稿",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#5e3909def7e4baa9.1",
+        "apps/web/src/components/CostRuleConsole.vue#ed4cdadd71405209.1"
+      ],
+      "sourceContractKeys": ["SC-R-CREATE 管理者非ready或active", "SC-R-CREATE ready且无active"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "canManage && (state !== 'ready' || activeCostRule)；无自身disabled属性 / state === 'ready' && canManage && !activeCostRule；无自身disabled属性",
+      "handler": "openCreate按canManage重置initialForm与createError；顶部非ready或有active/准备度ready无active互补，不POST",
+      "variants": ["create-blank", "create-zero", "create-automatic"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-blank"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-zero"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-automatic"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-STATE",
+      "label": "空目录创建、读取恢复和返回",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#b2df3db97280e7e2.1"],
+      "sourceContractKeys": ["SC-R-STATE 首条创建/刷新/返回"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state !== 'ready'；无自身disabled属性",
+      "handler": "primary:empty且canManage打开草稿，否则load；secondary router.push(returnPath)。loading子组件无按钮；rate_limited映射blocked，不伪造自动登录/权限申请",
+      "variants": [
+        "loading",
+        "empty",
+        "error",
+        "expired",
+        "forbidden",
+        "rate-limited",
+        "blocked",
+        "readonly"
+      ],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "rate-limited"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "readonly"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-SEARCH",
+      "label": "本地搜索和状态筛选",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#e4a92ae55317039d.1"],
+      "sourceContractKeys": ["SC-R-SEARCH 表单只阻止提交导航"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready'；无自身disabled属性",
+      "handler": "form仅prevent默认导航，v-model search/statusFilter实际触发computed和watch；搜索name/market/platform/version_code，页码回1，无HTTP",
+      "variants": ["directory", "filter-empty", "page-two"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "directory"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "filter-empty"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "page-two"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-RESET",
+      "label": "清除筛选",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#0aca31814d8e2a23.1"],
+      "sourceContractKeys": ["SC-R-RESET 清筛选"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready'；disabled=!search && statusFilter === 'all'",
+      "handler": "resetFilters清search/statusFilter，无HTTP；不是清规则或回滚",
+      "variants": ["filter-empty", "directory"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "filter-empty"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "directory"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-SELECT",
+      "label": "选择规则版本",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#c4344a6ce7acbca8.1"],
+      "sourceContractKeys": ["SC-R-SELECT 本地选择与URL"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && rule in pagedRules；无自身disabled属性",
+      "handler": "selectRule更新selected并replace合并query.rule，不请求；筛选/分页watch自动选首项不调用selectRule，URL可能保留旧ID",
+      "variants": ["directory", "page-two", "status-active"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "directory"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "page-two"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "status-active"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-PAGE-PREV",
+      "label": "上一页",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#83d11b8719b1c99d.1"],
+      "sourceContractKeys": ["SC-R-PAGE-PREV 页码边界"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && pageCount > 1；disabled=page <= 1",
+      "handler": "page--；每页10条，pageCount>1显示，page<=1禁用",
+      "variants": ["page-two", "directory"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "page-two"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "directory"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-PAGE-NEXT",
+      "label": "下一页",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#bd43d7b540116c32.1"],
+      "sourceContractKeys": ["SC-R-PAGE-NEXT 页码边界"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && pageCount > 1；disabled=page >= pageCount",
+      "handler": "page++；page>=pageCount禁用；可能由watch切换selected，无HTTP",
+      "variants": ["directory", "page-two"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "directory"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "page-two"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-SOURCE",
+      "label": "查看汇率来源",
+      "kind": "navigation",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#9e33896b68e8e4fe.1"],
+      "sourceContractKeys": ["SC-R-SOURCE 已保存来源新窗口"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && selected && selected.conversion_rates.length && rate in selected.conversion_rates；无自身disabled属性",
+      "handler": "现有rate.source_url新窗口，rel=noopener noreferrer；仅已有汇率时显示，不获取实时汇率",
+      "variants": ["exchange-basis"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "exchange-basis"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-SUBMIT",
+      "label": "打开提交审批确认",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#55f48a15788735d1.1"],
+      "sourceContractKeys": ["SC-R-SUBMIT draft"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && selected && canManage && selected.status === 'draft'；disabled=busy",
+      "handler": "beginAction('submit')仅准备原因窗，实际POST由SC-R-ACTION-SUBMIT执行",
+      "variants": ["submit-confirm", "submit-conflict"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-APPROVE",
+      "label": "两角色批准入口",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#ea3ec6b286c61f0c.1",
+        "apps/web/src/components/CostRuleConsole.vue#6ac633aba6b533bd.1"
+      ],
+      "sourceContractKeys": ["SC-R-APPROVE selection_manager", "SC-R-APPROVE organization_admin"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && selected && selected.status === 'pending_approval' && canSelection && !hasApproval('selection_manager')；disabled=busy / state === 'ready' && selected && selected.status === 'pending_approval' && canAdmin && !hasApproval('organization_admin')；disabled=busy",
+      "handler": "pending_approval加真实角色且本人角色未处理；beginAction保存action/approvalRole，未保存规则ID/revision快照",
+      "variants": [
+        "selection-approve-confirm",
+        "admin-approve-confirm",
+        "one-approved",
+        "manager-only"
+      ],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "selection-approve-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "admin-approve-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "one-approved"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "manager-only"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-REJECT",
+      "label": "两角色拒绝入口",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#eac5ef200003454a.1",
+        "apps/web/src/components/CostRuleConsole.vue#5d293fdba6594665.1"
+      ],
+      "sourceContractKeys": ["SC-R-REJECT selection_manager", "SC-R-REJECT organization_admin"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && selected && selected.status === 'pending_approval' && canSelection && !hasApproval('selection_manager')；disabled=busy / state === 'ready' && selected && selected.status === 'pending_approval' && canAdmin && !hasApproval('organization_admin')；disabled=busy",
+      "handler": "同批准的角色/未处理条件；开启reject原因窗，不在入口发POST",
+      "variants": ["selection-reject-confirm", "admin-reject-confirm"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "selection-reject-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "admin-reject-confirm"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-PUBLISH",
+      "label": "打开发布确认",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#513ba8c3e39973c0.1"],
+      "sourceContractKeys": ["SC-R-PUBLISH approved"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && selected && canManage && selected.status === 'approved'；disabled=busy",
+      "handler": "canManage+approved；确认仍须后端双角色/revision校验，不改旧利润快照",
+      "variants": ["publish-confirm", "publish-conflict"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "publish-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "publish-conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-ROLLBACK",
+      "label": "打开回滚确认",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#fab085a093adfa3a.1"],
+      "sourceContractKeys": ["SC-R-ROLLBACK active且有有效目标"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "state === 'ready' && selected && canManage && selected.status === 'active' && rollbackTargets.length；disabled=busy",
+      "handler": "active且同市场/平台approved或retired目标非空；默认首目标，不跨范围",
+      "variants": ["rollback-confirm", "no-rollback", "rollback-conflict"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "rollback-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "no-rollback"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "rollback-conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-CREATE-DEFINITION",
+      "label": "草稿原生窗口定义",
+      "kind": "wiring",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1"],
+      "sourceContractKeys": ["新建草稿、人工/自动成本可选字段"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "showCreate；无自身disabled属性",
+      "handler": "showCreate挂载原生dialog；useModalDialog管理showModal/关闭/回焦，不是额外保存动作",
+      "variants": ["create-blank", "create-automatic"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-blank"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-automatic"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+      "forwardsTo": ["SC-R-CREATE-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "SC-R-CREATE-CLOSE",
+      "label": "关闭或取消草稿",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#8dec9b05190c02c6.1",
+        "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1",
+        "apps/web/src/components/CostRuleConsole.vue#4fa3694ad39564c9.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-CREATE-CLOSE 原生cancel",
+        "SC-R-CREATE-CLOSE X",
+        "SC-R-CREATE-CLOSE 取消"
+      ],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "showCreate；无自身disabled属性 / showCreate；无自身disabled属性 / showCreate；disabled=busy",
+      "handler": "cancelCreate经useModalDialog preventDefault后closeCreate；busy处理器拒绝关闭，底部取消disabled而右上X无disabled。重开重置",
+      "variants": ["create-blank", "create-busy", "create-conflict"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-blank"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-busy"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-CREATE-SUBMIT",
+      "label": "保存草稿",
+      "kind": "write",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#1fcf5a2247b2ad3e.1",
+        "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1"
+      ],
+      "sourceContractKeys": ["SC-R-CREATE-SUBMIT 表单", "SC-R-CREATE-SUBMIT 按钮"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "showCreate；无自身disabled属性 / showCreate；disabled=busy || Boolean(createValidation)",
+      "handler": "form和submit按钮同一次create；POST /cost-rules保留显式0/可选省略；成功选新draft重读，失败保留输入；不自动审批发布",
+      "variants": [
+        "create-zero",
+        "create-automatic",
+        "create-invalid",
+        "create-busy",
+        "create-conflict",
+        "create-saved"
+      ],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-zero"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-automatic"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-invalid"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-busy"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-conflict"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "create-saved"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-ACTION-DEFINITION",
+      "label": "七种版本操作窗口定义",
+      "kind": "wiring",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1"],
+      "sourceContractKeys": ["submit、两角色approve/reject、publish、rollback共七操作变体"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "showAction && selected && pendingAction；无自身disabled属性",
+      "handler": "showAction&&selected&&pendingAction一原生dialog展开七变体；form/aside不重复计窗",
+      "variants": [
+        "submit-confirm",
+        "selection-approve-confirm",
+        "selection-reject-confirm",
+        "admin-approve-confirm",
+        "admin-reject-confirm",
+        "publish-confirm",
+        "rollback-confirm"
+      ],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "selection-approve-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "selection-reject-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "admin-approve-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "admin-reject-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "publish-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "rollback-confirm"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+      "forwardsTo": ["SC-R-ACTION-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "SC-R-ACTION-CLOSE",
+      "label": "关闭或取消版本操作",
+      "kind": "local",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#24b49021258ec509.1",
+        "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1",
+        "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-ACTION-CLOSE 原生cancel",
+        "SC-R-ACTION-CLOSE X",
+        "SC-R-ACTION-CLOSE 取消"
+      ],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "showAction && selected && pendingAction；无自身disabled属性 / showAction && selected && pendingAction；无自身disabled属性 / showAction && selected && pendingAction；disabled=busy",
+      "handler": "原生cancel先preventDefault，再closeAction；busy禁止实际关闭但右上X未disabled；不撤回请求，不自动重放",
+      "variants": ["submit-confirm", "rollback-confirm", "publish-busy"],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "rollback-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "publish-busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    },
+    {
+      "actionId": "SC-R-ACTION-SUBMIT",
+      "label": "确认版本操作",
+      "kind": "write",
+      "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#a8b2803881a9f5ba.1",
+        "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1"
+      ],
+      "sourceContractKeys": ["SC-R-ACTION-SUBMIT 表单", "SC-R-ACTION-SUBMIT 按钮"],
+      "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
+      "condition": "showAction && selected && pendingAction；无自身disabled属性 / showAction && selected && pendingAction；disabled=busy || actionReason.trim().length < 2",
+      "handler": "POST /cost-rules/{当前selected.id}/actions；reason trim、当前revision，按action附role/target。post单飞只到请求结束，后续load不在busy内；打开窗不锁目标",
+      "variants": [
+        "submit-confirm",
+        "selection-approve-confirm",
+        "selection-reject-confirm",
+        "admin-approve-confirm",
+        "admin-reject-confirm",
+        "publish-confirm",
+        "rollback-confirm",
+        "submit-busy",
+        "submit-conflict"
+      ],
+      "scenes": [
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "selection-approve-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "selection-reject-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "admin-approve-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "admin-reject-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "publish-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "rollback-confirm"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-busy"
+        },
+        {
+          "package": "cost-rules-direction-c",
+          "scene": "submit-conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-cost-rules-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": ["apps/web/src/components/CostRuleConsole.vue"],
+    "dependencyHashes": {
+      "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "search",
+        "meaning": "search.trim().toLocaleLowerCase搜索名称/市场/平台/版本；不请求",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "statusFilter",
+        "meaning": "statusFilter枚举来自当前rules，all为全部；不持久化",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.market",
+        "meaning": "市场required≤40，默认US",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.platform",
+        "meaning": "平台required≤80，默认amazon；自动phone_case校验amazon",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.version_code",
+        "meaning": "版本required≤64，提交trim；不自动生成",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.name",
+        "meaning": "名称required≤160，提交trim",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.effective_from",
+        "meaning": "规则生效日期required，默认本地日",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.platform_fee",
+        "meaning": "平台费0–100，初始空，显式0有效",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.payment_fee",
+        "meaning": "支付费0–100，初始空，显式0有效",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.tax",
+        "meaning": "税费0–100，初始空，显式0有效",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.fulfillment",
+        "meaning": "履约成本>=0，初始空，显式0有效",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.currency",
+        "meaning": "币种required三字母，默认USD，发送trim uppercase；ISO合法性由后端验证",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.logistics",
+        "meaning": "物流可选，空省略，0保留；自动phone_case必填",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.automatic_product_family",
+        "meaning": "默认空仅人工，phone_case要求Amazon+物流+汇率依据",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.conversion_rate",
+        "meaning": "正汇率，可选；CNY→表单币种；不得解释为只支持USD",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.conversion_effective_on",
+        "meaning": "汇率日期默认本地日；有数值/URL才要求完整依据，未来日期由后端查",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "form.conversion_source_url",
+        "meaning": "来源URL需HTTPS，本地不等于无凭证/可达证据验证",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "rollbackTargetId",
+        "meaning": "回滚目标同市场平台approved/retired，默认首条；变更不发送请求",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "binding": "actionReason",
+        "meaning": "原因required minlength2 maxlength1000；submit再trim至少2，原生与处理器限制分层",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "本地搜索form只prevent，不是弹窗",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "directory",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "directory"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "filter-empty",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "filter-empty"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "草稿dialog一类，人工/自动字段变体",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "create-blank",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-blank"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "create-zero",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-zero"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "create-automatic",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-automatic"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "create-conflict",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-conflict"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "create-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-busy"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "草稿form实际提交；15字段和原生限制",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "create-blank",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-blank"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "create-zero",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-zero"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "create-automatic",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-automatic"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "草稿发布条件说明aside，不是弹窗",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "create-blank",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "create-blank"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "一个操作dialog展开七业务变体；读取可替换selected导致原因/目标归属待修",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "submit-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "submit-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "selection-approve-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "selection-approve-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "selection-reject-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "selection-reject-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "admin-approve-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "admin-approve-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "admin-reject-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "admin-reject-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "publish-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "publish-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "rollback-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "rollback-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "form",
+        "ordinal": 3,
+        "shape": "form-container",
+        "sourceBehavior": "操作form reason和rollback专属target，和原生dialog同一表面",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "submit-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "submit-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "selection-approve-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "selection-approve-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "selection-reject-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "selection-reject-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "admin-approve-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "admin-approve-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "admin-reject-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "admin-reject-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "publish-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "publish-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "rollback-confirm",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "rollback-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CostRuleConsole.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "审计说明aside，不证明服务事务执行",
+        "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
+        "variants": [
+          {
+            "name": "submit-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "submit-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "selection-approve-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "selection-approve-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "selection-reject-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "selection-reject-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "admin-approve-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "admin-approve-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "admin-reject-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "admin-reject-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "publish-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "publish-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          },
+          {
+            "name": "rollback-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "cost-rules-direction-c",
+                "scene": "rollback-confirm"
+              }
+            ],
+            "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "QualityGateSetupSummary纯展示父投影与slot；首active不等于所有市场或所有机会准备好。",
+      "UiStatePanel的两个按钮显隐来自共享组件；主动作空目录创建/其他重读，副动作返回，不伪造权限申请。",
+      "useModalDialog原生焦点回收与cancel转发已追源码，当前测试不挂载DOM，不能证明完整键盘圈。",
+      "父reset_on_scope缓存key含组织/工作区，不能把局部无GET代次判为服务跨租户泄漏。",
+      "SC-G05读取重排/操作目标/URL关联待真实Vue集成确认；当前仅setup复现。"
+    ]
+  },
+  "compositionGaps": [
+    "30源位置/20语义组/19模型/7结构；166旧图的关联不等于每控件六态或19字段验收。",
+    "UNFIXED:打开A审批后load只返回B，当前selected切B而原因保留A，submit使用B ID/revision；setup组合复现不等于实际用户点击链。",
+    "筛选自动选B可保留query.rule=A；query单独变B无本地watch且load仍优先已选A，父history行为待测。",
+    "关闭X无disabled但busy函数拒绝关闭；草稿字段无统一busy禁用，原型锁定是提案不是现状。",
+    "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "使用既有C方向166PNG，仅建立可追溯映射；不新增批准、业务规则、权限、API/SQL或生产修改。",
+    "source-isolated检查不是实际Vue DOM/端到端、服务审批、发布或回滚证明。"
+  ]
+}

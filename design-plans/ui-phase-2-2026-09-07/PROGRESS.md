@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P22费用规则逐项核对
+
+上一轮1b95992e已提交P16真实按钮图和两处修复，属于实际进展。本轮从干净main继续计划下一P22，读取AGENTS、Feature Map、蓝图M04-04及CostRuleConsole、UiStatePanel、模态钩子、准备度slot和父路由作用域；使用ui-skills-root/frontend-design并复用Playwright依赖，无子代理。新增COST-RULES-SEMANTIC-REVIEW.md和P22.json：30本地源位置/20组（18动作、2窗口定义关联），19模型/7结构/32变体关联。两个原生窗为草稿和七操作变体，表单/aside不重复计窗，七入口与最终确认提交分开；166既有图不改，104视觉槽未映射，不将关联当作验收。
+
+新增永久verify-ui-phase2-cost-rules-review.mjs，复用原9组源测试并补3组实际setup隔离检查，12组通过。复现打开A审批后load返回B，原因保留A但确认使用B ID/revision；筛选自动选B而query仍A；query单独改B无本地watch且load仍优先既有A。均标记未修，setup可达不夸大为正常鼠标序列或生产误审批事件。右上X无disabled但busy处理器拒绝关闭、底部取消显式disabled、表单统一锁仅为原型提案等差异已记录，不自作业务决定。
+
+现有cost-rules-c无capture完整复验通过：74场景/166PNG哈希、双端16类动作、12宽度×4代表面与等效重排、键盘/七操作/错误保留，HTTP及页面错误0。手动查看390-rollback-confirm，未声称全图人工审核。动作审计23页/510独立源位置/447组，余50页同级审阅；docs73路由/60保护/6角色/153必需文档、runtime-docs、390文件static-analysis、format通过。原生产代码/配置/依赖和前批构建结果相关输入未变，不重复build或148单元/生产E2E，不把历史结果报作本轮新测试。
+
+仅新增审核器/清单/说明及直接相关规格/计划/Feature Map和生成审计。没有改生产Vue/CSS、API/OpenAPI、后端/Worker/Python、数据库/迁移、env/配置、依赖、权限、安全或宝塔，无部署/重启要求；新脚本无参数、只读源码及内存数据。下一P23等页面同级核对，P16按钮具体审核仍待，P22整页/全字段/主题/真实生命周期/服务验收与最终部署签收未完成，不提升批准数、全站分母或G0–G5。
+
+本批无新一次性文件/截图/日志/服务，新增代码和文档为永久交付；图册浏览器finally关闭。前批output/playwright/p16-layout-20260910/.last-run.json与output/playwright/ui-phase2-competitor-races-20260909下playwright.config.ts、results/.last-run.json因工具拒绝清理仍保留，本轮不重试绕过，不提交。现有项目构建/依赖缓存不删除。
+
 ## 2026-09-10 · P16真实控件状态与手机按钮命中修复
 
 从干净main/f3b0cc25继续，沿已批准C r2布局细化按钮；使用ui-skills-root/frontend-design与既有Playwright流程，无子代理、新依赖或新方向。实际Vue图册由24扩至114PNG：10个代表控件45状态×桌面1440/手机390共90新增状态图。真实鼠标悬停/按下、键盘焦点及拦截请求在途产生状态，不向DOM注入伪disabled/busy；仅采集当前源码适用状态，恢复期间面板未渲染不冒充按钮禁用。

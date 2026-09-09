@@ -322,6 +322,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "0fac7e896d3a5605b7a660dcaab12877b578cfcbdd07cfef06bd1aa1f6d1d113",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "9468627f44ab4e7caf53ba8b5fbb09a57a3e5eb31471b7fd8eab356e9a8e0a49",
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "e70fb896d36d80252096c5fb9643ca71b7f105fca0c7cce47f57fdf2ff3e72fb",
+    "scripts/verify-ui-phase2-cost-rules-review.mjs": "e48de4ae479273b97cc901647426c810e233b6ed23614f2957741e83d5f148e1",
+    "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -348,7 +351,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "e012300f64510ffb02432530a74ef4d708b3b4345974cc69d240cdec9e34120e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "a112c1004d6f73abb82e09a95a75c8879956e4ba891dbccaf5c2bcd172a9f109",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "f67cf8705375df9ceb52487b0cb2d22565088d0bbecf4021f6eae9992f1ab2d3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "30213312536dbd8f757de6a74016f9005fc38f78a700f2c1105533969583dd0d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "4578ea4aa5f0cf6d22488b0554f93fc4d617b220b0fd4df52407be95ba763f7f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "de4b4f4b1eed60cf7a75057a49782439dd227e7c6f8cee37aea0c78c8d144420",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "8f215d0b9afc2d704c310fa2c3a824d03030c6b07e8654f935b94a4443d6ac9a",
@@ -413,13 +416,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 19,
     "oldOnlyIdentities": 17,
-    "reviewedPages": 22,
-    "explicitlyGroupedSourceSites": 480,
-    "semanticGroups": 427,
-    "routeActions": 363,
-    "wiringGroups": 42,
+    "reviewedPages": 23,
+    "explicitlyGroupedSourceSites": 510,
+    "semanticGroups": 447,
+    "routeActions": 381,
+    "wiringGroups": 44,
     "pagesWithoutExplicitSemanticReview": [
-      "P22",
       "P23",
       "P24",
       "P25",
@@ -1219,13 +1221,36 @@
       "path": "/sourcing/cost-rules",
       "title": "费用与利润规则",
       "oldStaticAssociatedCandidates": 66,
-      "review": null,
+      "review": {
+        "pageId": "P22",
+        "sourceSites": 30,
+        "semanticGroups": 20,
+        "routeActions": 18,
+        "wiringGroups": 2,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
+        "unmappedVisualSlots": 104,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 19,
+          "callerContainers": 7,
+          "consumerVariants": 32,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "cost-rules-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "30源位置/20语义组/19模型/7结构；166旧图的关联不等于每控件六态或19字段验收。",
+        "UNFIXED:打开A审批后load只返回B，当前selected切B而原因保留A，submit使用B ID/revision；setup组合复现不等于实际用户点击链。",
+        "筛选自动选B可保留query.rule=A；query单独变B无本地watch且load仍优先已选A，父history行为待测。",
+        "关闭X无disabled但busy函数拒绝关闭；草稿字段无统一busy禁用，原型锁定是提案不是现状。",
+        "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
+      ]
     },
     {
       "id": "P23",
@@ -2289,6 +2314,24 @@
         "localModelBindings": 25,
         "callerContainers": 12,
         "consumerVariants": 33,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P22",
+      "sourceSites": 30,
+      "semanticGroups": 20,
+      "routeActions": 18,
+      "wiringGroups": 2,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
+      "unmappedVisualSlots": 104,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 19,
+        "callerContainers": 7,
+        "consumerVariants": 32,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -10611,7 +10654,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-BACK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#5e3909def7e4baa9.1",
@@ -10637,7 +10686,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#b2df3db97280e7e2.1",
@@ -10663,7 +10718,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-STATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ed4cdadd71405209.1",
@@ -10693,7 +10754,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#6a49826ecb55d1fd.1",
@@ -10719,7 +10786,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-BACK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#e4a92ae55317039d.1",
@@ -10745,7 +10818,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-SEARCH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#0aca31814d8e2a23.1",
@@ -10771,7 +10850,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#c4344a6ce7acbca8.1",
@@ -10801,7 +10886,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#83d11b8719b1c99d.1",
@@ -10831,7 +10922,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-PAGE-PREV",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#bd43d7b540116c32.1",
@@ -10861,7 +10958,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-PAGE-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#9e33896b68e8e4fe.1",
@@ -10899,7 +11002,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-SOURCE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#55f48a15788735d1.1",
@@ -10933,7 +11042,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-SUBMIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ea3ec6b286c61f0c.1",
@@ -10971,7 +11086,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-APPROVE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#eac5ef200003454a.1",
@@ -11009,7 +11130,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-REJECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#6ac633aba6b533bd.1",
@@ -11047,7 +11174,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-APPROVE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#5d293fdba6594665.1",
@@ -11085,7 +11218,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-REJECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#513ba8c3e39973c0.1",
@@ -11119,7 +11258,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-PUBLISH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#fab085a093adfa3a.1",
@@ -11153,7 +11298,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ROLLBACK",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1",
@@ -11179,7 +11330,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#8dec9b05190c02c6.1",
@@ -11205,7 +11362,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#1fcf5a2247b2ad3e.1",
@@ -11231,7 +11394,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1",
@@ -11257,7 +11426,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#4fa3694ad39564c9.1",
@@ -11283,7 +11458,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1",
@@ -11309,7 +11490,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-CREATE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1",
@@ -11335,7 +11522,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#24b49021258ec509.1",
@@ -11361,7 +11554,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#a8b2803881a9f5ba.1",
@@ -11387,7 +11586,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1",
@@ -11413,7 +11618,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1",
@@ -11439,7 +11650,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1",
@@ -11465,7 +11682,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1",

@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应22页/480源位置/427组；其中路由动作363组，转发/容器关联42组，其余明确排除。其余51页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应23页/510源位置/447组；其中路由动作381组，转发/容器关联44组，其余明确排除。其余50页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -33,7 +33,7 @@
 | [P19 竞品监控](page-specs/P19.md) | 75 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 75 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 90 | [38组](action-reviews/P21.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P22 费用与利润规则](page-specs/P22.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P22 费用与利润规则](page-specs/P22.md) | 66 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P24 任务详情](page-specs/P24.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P25 审批中心](page-specs/P25.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -1782,6 +1782,116 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - PP/RQ复用P18，但P21写入由SC负责URL与机会/review版本；不重复全站独立源位置。
 - SP无交互候选，规格提示及保存时版本语义仍单独审阅。
 - 新稿本地内容tab不是源按钮，不从prototype标记新增业务分母。
+
+## P22 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P22.json)：30个局部源位置 → 20组；2类写入，18组路由动作，2组转发/容器关联不重复计动作。19个本地v-model，7处调用/内嵌容器，32个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有104个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| SC-R-BACK 返回找货上下文 / navigation | 2处；directory、no-active | [directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png)、[no-active · 1440](design/cost-rules-direction-c/1440-no-active.png) / [no-active · 390](design/cost-rules-direction-c/390-no-active.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-CREATE 打开费用草稿 / local | 2处；create-blank、create-zero、create-automatic | [create-blank · 1440](design/cost-rules-direction-c/1440-create-blank.png) / [create-blank · 390](design/cost-rules-direction-c/390-create-blank.png)、[create-zero · 1440](design/cost-rules-direction-c/1440-create-zero.png) / [create-zero · 390](design/cost-rules-direction-c/390-create-zero.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-STATE 空目录创建、读取恢复和返回 / local | 1处；loading、empty、error、expired、forbidden、rate-limited、blocked、readonly | [loading · 1440](design/cost-rules-direction-c/1440-loading.png) / [loading · 390](design/cost-rules-direction-c/390-loading.png)、[empty · 1440](design/cost-rules-direction-c/1440-empty.png) / [empty · 390](design/cost-rules-direction-c/390-empty.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-SEARCH 本地搜索和状态筛选 / local | 1处；directory、filter-empty、page-two | [directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png)、[filter-empty · 1440](design/cost-rules-direction-c/1440-filter-empty.png) / [filter-empty · 390](design/cost-rules-direction-c/390-filter-empty.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-RESET 清除筛选 / local | 1处；filter-empty、directory | [filter-empty · 1440](design/cost-rules-direction-c/1440-filter-empty.png) / [filter-empty · 390](design/cost-rules-direction-c/390-filter-empty.png)、[directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-SELECT 选择规则版本 / local | 1处；directory、page-two、status-active | [directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png)、[page-two · 1440](design/cost-rules-direction-c/1440-page-two.png) / [page-two · 390](design/cost-rules-direction-c/390-page-two.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-PAGE-PREV 上一页 / local | 1处；page-two、directory | [page-two · 1440](design/cost-rules-direction-c/1440-page-two.png) / [page-two · 390](design/cost-rules-direction-c/390-page-two.png)、[directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-PAGE-NEXT 下一页 / local | 1处；directory、page-two | [directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png)、[page-two · 1440](design/cost-rules-direction-c/1440-page-two.png) / [page-two · 390](design/cost-rules-direction-c/390-page-two.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-SOURCE 查看汇率来源 / navigation | 1处；exchange-basis | [exchange-basis · 1440](design/cost-rules-direction-c/1440-exchange-basis.png) / [exchange-basis · 390](design/cost-rules-direction-c/390-exchange-basis.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-SUBMIT 打开提交审批确认 / local | 1处；submit-confirm、submit-conflict | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png)、[submit-conflict · 1440](design/cost-rules-direction-c/1440-submit-conflict.png) / [submit-conflict · 390](design/cost-rules-direction-c/390-submit-conflict.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-APPROVE 两角色批准入口 / local | 2处；selection-approve-confirm、admin-approve-confirm、one-approved、manager-only | [selection-approve-confirm · 1440](design/cost-rules-direction-c/1440-selection-approve-confirm.png) / [selection-approve-confirm · 390](design/cost-rules-direction-c/390-selection-approve-confirm.png)、[admin-approve-confirm · 1440](design/cost-rules-direction-c/1440-admin-approve-confirm.png) / [admin-approve-confirm · 390](design/cost-rules-direction-c/390-admin-approve-confirm.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-REJECT 两角色拒绝入口 / local | 2处；selection-reject-confirm、admin-reject-confirm | [selection-reject-confirm · 1440](design/cost-rules-direction-c/1440-selection-reject-confirm.png) / [selection-reject-confirm · 390](design/cost-rules-direction-c/390-selection-reject-confirm.png)、[admin-reject-confirm · 1440](design/cost-rules-direction-c/1440-admin-reject-confirm.png) / [admin-reject-confirm · 390](design/cost-rules-direction-c/390-admin-reject-confirm.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-PUBLISH 打开发布确认 / local | 1处；publish-confirm、publish-conflict | [publish-confirm · 1440](design/cost-rules-direction-c/1440-publish-confirm.png) / [publish-confirm · 390](design/cost-rules-direction-c/390-publish-confirm.png)、[publish-conflict · 1440](design/cost-rules-direction-c/1440-publish-conflict.png) / [publish-conflict · 390](design/cost-rules-direction-c/390-publish-conflict.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-ROLLBACK 打开回滚确认 / local | 1处；rollback-confirm、no-rollback、rollback-conflict | [rollback-confirm · 1440](design/cost-rules-direction-c/1440-rollback-confirm.png) / [rollback-confirm · 390](design/cost-rules-direction-c/390-rollback-confirm.png)、[no-rollback · 1440](design/cost-rules-direction-c/1440-no-rollback.png) / [no-rollback · 390](design/cost-rules-direction-c/390-no-rollback.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-CREATE-DEFINITION 草稿原生窗口定义 / wiring | 1处；create-blank、create-automatic | [create-blank · 1440](design/cost-rules-direction-c/1440-create-blank.png) / [create-blank · 390](design/cost-rules-direction-c/390-create-blank.png)、[create-automatic · 1440](design/cost-rules-direction-c/1440-create-automatic.png) / [create-automatic · 390](design/cost-rules-direction-c/390-create-automatic.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-CREATE-CLOSE 关闭或取消草稿 / local | 3处；create-blank、create-busy、create-conflict | [create-blank · 1440](design/cost-rules-direction-c/1440-create-blank.png) / [create-blank · 390](design/cost-rules-direction-c/390-create-blank.png)、[create-busy · 1440](design/cost-rules-direction-c/1440-create-busy.png) / [create-busy · 390](design/cost-rules-direction-c/390-create-busy.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-CREATE-SUBMIT 保存草稿 / write | 2处；create-zero、create-automatic、create-invalid、create-busy、create-conflict、create-saved | [create-zero · 1440](design/cost-rules-direction-c/1440-create-zero.png) / [create-zero · 390](design/cost-rules-direction-c/390-create-zero.png)、[create-automatic · 1440](design/cost-rules-direction-c/1440-create-automatic.png) / [create-automatic · 390](design/cost-rules-direction-c/390-create-automatic.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-ACTION-DEFINITION 七种版本操作窗口定义 / wiring | 1处；submit-confirm、selection-approve-confirm、selection-reject-confirm、admin-approve-confirm、admin-reject-confirm、publish-confirm、rollback-confirm | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png)、[selection-approve-confirm · 1440](design/cost-rules-direction-c/1440-selection-approve-confirm.png) / [selection-approve-confirm · 390](design/cost-rules-direction-c/390-selection-approve-confirm.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-ACTION-CLOSE 关闭或取消版本操作 / local | 3处；submit-confirm、rollback-confirm、publish-busy | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png)、[rollback-confirm · 1440](design/cost-rules-direction-c/1440-rollback-confirm.png) / [rollback-confirm · 390](design/cost-rules-direction-c/390-rollback-confirm.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| SC-R-ACTION-SUBMIT 确认版本操作 / write | 2处；submit-confirm、selection-approve-confirm、selection-reject-confirm、admin-approve-confirm、admin-reject-confirm、publish-confirm、rollback-confirm、submit-busy、submit-conflict | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png)、[selection-approve-confirm · 1440](design/cost-rules-direction-c/1440-selection-approve-confirm.png) / [selection-approve-confirm · 390](design/cost-rules-direction-c/390-selection-approve-confirm.png)；其余见JSON | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| SC-R-CREATE-DEFINITION | 容器定义，无额外事件 | SC-R-CREATE-SUBMIT |
+| SC-R-ACTION-DEFINITION | 容器定义，无额外事件 | SC-R-ACTION-SUBMIT |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| CostRuleConsole.vue / search | search.trim().toLocaleLowerCase搜索名称/市场/平台/版本；不请求 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / statusFilter | statusFilter枚举来自当前rules，all为全部；不持久化 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.market | 市场required≤40，默认US | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.platform | 平台required≤80，默认amazon；自动phone_case校验amazon | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.version_code | 版本required≤64，提交trim；不自动生成 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.name | 名称required≤160，提交trim | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.effective_from | 规则生效日期required，默认本地日 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.platform_fee | 平台费0–100，初始空，显式0有效 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.payment_fee | 支付费0–100，初始空，显式0有效 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.tax | 税费0–100，初始空，显式0有效 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.fulfillment | 履约成本>=0，初始空，显式0有效 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.currency | 币种required三字母，默认USD，发送trim uppercase；ISO合法性由后端验证 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.logistics | 物流可选，空省略，0保留；自动phone_case必填 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.automatic_product_family | 默认空仅人工，phone_case要求Amazon+物流+汇率依据 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.conversion_rate | 正汇率，可选；CNY→表单币种；不得解释为只支持USD | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.conversion_effective_on | 汇率日期默认本地日；有数值/URL才要求完整依据，未来日期由后端查 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.conversion_source_url | 来源URL需HTTPS，本地不等于无凭证/可达证据验证 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / rollbackTargetId | 回滚目标同市场平台approved/retired，默认首条；变更不发送请求 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / actionReason | 原因required minlength2 maxlength1000；submit再trim至少2，原生与处理器限制分层 | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| CostRuleConsole.vue / form.1 / directory | form-container / matching-inline-form-scene | [directory · 1440](design/cost-rules-direction-c/1440-directory.png) / [directory · 390](design/cost-rules-direction-c/390-directory.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.1 / filter-empty | form-container / matching-inline-form-scene | [filter-empty · 1440](design/cost-rules-direction-c/1440-filter-empty.png) / [filter-empty · 390](design/cost-rules-direction-c/390-filter-empty.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.1 / create-blank | native-dialog / matching-dialog-scene | [create-blank · 1440](design/cost-rules-direction-c/1440-create-blank.png) / [create-blank · 390](design/cost-rules-direction-c/390-create-blank.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.1 / create-zero | native-dialog / matching-dialog-scene | [create-zero · 1440](design/cost-rules-direction-c/1440-create-zero.png) / [create-zero · 390](design/cost-rules-direction-c/390-create-zero.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.1 / create-automatic | native-dialog / matching-dialog-scene | [create-automatic · 1440](design/cost-rules-direction-c/1440-create-automatic.png) / [create-automatic · 390](design/cost-rules-direction-c/390-create-automatic.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.1 / create-conflict | native-dialog / matching-dialog-scene | [create-conflict · 1440](design/cost-rules-direction-c/1440-create-conflict.png) / [create-conflict · 390](design/cost-rules-direction-c/390-create-conflict.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.1 / create-busy | native-dialog / matching-dialog-scene | [create-busy · 1440](design/cost-rules-direction-c/1440-create-busy.png) / [create-busy · 390](design/cost-rules-direction-c/390-create-busy.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.2 / create-blank | form-container / matching-dialog-scene | [create-blank · 1440](design/cost-rules-direction-c/1440-create-blank.png) / [create-blank · 390](design/cost-rules-direction-c/390-create-blank.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.2 / create-zero | form-container / matching-dialog-scene | [create-zero · 1440](design/cost-rules-direction-c/1440-create-zero.png) / [create-zero · 390](design/cost-rules-direction-c/390-create-zero.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.2 / create-automatic | form-container / matching-dialog-scene | [create-automatic · 1440](design/cost-rules-direction-c/1440-create-automatic.png) / [create-automatic · 390](design/cost-rules-direction-c/390-create-automatic.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.1 / create-blank | inline-aside / related-scene-only | [create-blank · 1440](design/cost-rules-direction-c/1440-create-blank.png) / [create-blank · 390](design/cost-rules-direction-c/390-create-blank.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / submit-confirm | native-dialog / matching-dialog-scene | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / selection-approve-confirm | native-dialog / matching-dialog-scene | [selection-approve-confirm · 1440](design/cost-rules-direction-c/1440-selection-approve-confirm.png) / [selection-approve-confirm · 390](design/cost-rules-direction-c/390-selection-approve-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / selection-reject-confirm | native-dialog / matching-dialog-scene | [selection-reject-confirm · 1440](design/cost-rules-direction-c/1440-selection-reject-confirm.png) / [selection-reject-confirm · 390](design/cost-rules-direction-c/390-selection-reject-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / admin-approve-confirm | native-dialog / matching-dialog-scene | [admin-approve-confirm · 1440](design/cost-rules-direction-c/1440-admin-approve-confirm.png) / [admin-approve-confirm · 390](design/cost-rules-direction-c/390-admin-approve-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / admin-reject-confirm | native-dialog / matching-dialog-scene | [admin-reject-confirm · 1440](design/cost-rules-direction-c/1440-admin-reject-confirm.png) / [admin-reject-confirm · 390](design/cost-rules-direction-c/390-admin-reject-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / publish-confirm | native-dialog / matching-dialog-scene | [publish-confirm · 1440](design/cost-rules-direction-c/1440-publish-confirm.png) / [publish-confirm · 390](design/cost-rules-direction-c/390-publish-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / dialog.2 / rollback-confirm | native-dialog / matching-dialog-scene | [rollback-confirm · 1440](design/cost-rules-direction-c/1440-rollback-confirm.png) / [rollback-confirm · 390](design/cost-rules-direction-c/390-rollback-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / submit-confirm | form-container / matching-dialog-scene | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / selection-approve-confirm | form-container / matching-dialog-scene | [selection-approve-confirm · 1440](design/cost-rules-direction-c/1440-selection-approve-confirm.png) / [selection-approve-confirm · 390](design/cost-rules-direction-c/390-selection-approve-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / selection-reject-confirm | form-container / matching-dialog-scene | [selection-reject-confirm · 1440](design/cost-rules-direction-c/1440-selection-reject-confirm.png) / [selection-reject-confirm · 390](design/cost-rules-direction-c/390-selection-reject-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / admin-approve-confirm | form-container / matching-dialog-scene | [admin-approve-confirm · 1440](design/cost-rules-direction-c/1440-admin-approve-confirm.png) / [admin-approve-confirm · 390](design/cost-rules-direction-c/390-admin-approve-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / admin-reject-confirm | form-container / matching-dialog-scene | [admin-reject-confirm · 1440](design/cost-rules-direction-c/1440-admin-reject-confirm.png) / [admin-reject-confirm · 390](design/cost-rules-direction-c/390-admin-reject-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / publish-confirm | form-container / matching-dialog-scene | [publish-confirm · 1440](design/cost-rules-direction-c/1440-publish-confirm.png) / [publish-confirm · 390](design/cost-rules-direction-c/390-publish-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / form.3 / rollback-confirm | form-container / matching-dialog-scene | [rollback-confirm · 1440](design/cost-rules-direction-c/1440-rollback-confirm.png) / [rollback-confirm · 390](design/cost-rules-direction-c/390-rollback-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / submit-confirm | inline-aside / related-scene-only | [submit-confirm · 1440](design/cost-rules-direction-c/1440-submit-confirm.png) / [submit-confirm · 390](design/cost-rules-direction-c/390-submit-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / selection-approve-confirm | inline-aside / related-scene-only | [selection-approve-confirm · 1440](design/cost-rules-direction-c/1440-selection-approve-confirm.png) / [selection-approve-confirm · 390](design/cost-rules-direction-c/390-selection-approve-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / selection-reject-confirm | inline-aside / related-scene-only | [selection-reject-confirm · 1440](design/cost-rules-direction-c/1440-selection-reject-confirm.png) / [selection-reject-confirm · 390](design/cost-rules-direction-c/390-selection-reject-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / admin-approve-confirm | inline-aside / related-scene-only | [admin-approve-confirm · 1440](design/cost-rules-direction-c/1440-admin-approve-confirm.png) / [admin-approve-confirm · 390](design/cost-rules-direction-c/390-admin-approve-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / admin-reject-confirm | inline-aside / related-scene-only | [admin-reject-confirm · 1440](design/cost-rules-direction-c/1440-admin-reject-confirm.png) / [admin-reject-confirm · 390](design/cost-rules-direction-c/390-admin-reject-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / publish-confirm | inline-aside / related-scene-only | [publish-confirm · 1440](design/cost-rules-direction-c/1440-publish-confirm.png) / [publish-confirm · 390](design/cost-rules-direction-c/390-publish-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+| CostRuleConsole.vue / aside.2 / rollback-confirm | inline-aside / related-scene-only | [rollback-confirm · 1440](design/cost-rules-direction-c/1440-rollback-confirm.png) / [rollback-confirm · 390](design/cost-rules-direction-c/390-rollback-confirm.png) | 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。 |
+
+### 明确保留的边界
+
+- 30源位置/20语义组/19模型/7结构；166旧图的关联不等于每控件六态或19字段验收。
+- UNFIXED:打开A审批后load只返回B，当前selected切B而原因保留A，submit使用B ID/revision；setup组合复现不等于实际用户点击链。
+- 筛选自动选B可保留query.rule=A；query单独变B无本地watch且load仍优先已选A，父history行为待测。
+- 关闭X无disabled但busy函数拒绝关闭；草稿字段无统一busy禁用，原型锁定是提案不是现状。
+- 仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。
+- QualityGateSetupSummary纯展示父投影与slot；首active不等于所有市场或所有机会准备好。
+- UiStatePanel的两个按钮显隐来自共享组件；主动作空目录创建/其他重读，副动作返回，不伪造权限申请。
+- useModalDialog原生焦点回收与cancel转发已追源码，当前测试不挂载DOM，不能证明完整键盘圈。
+- 父reset_on_scope缓存key含组织/工作区，不能把局部无GET代次判为服务跨租户泄漏。
+- SC-G05读取重排/操作目标/URL关联待真实Vue集成确认；当前仅setup复现。
 
 ## P54 局部动作与共享消费者
 
