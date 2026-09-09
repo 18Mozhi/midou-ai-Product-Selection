@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P65 发布证据 · C方向审核稿</title>
+    <link rel="stylesheet" href="release.css" />
+    <script defer src="data.js"></script>
+    <script defer src="source-logic.js"></script>
+    <script defer src="release.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>C / P65 · 离线合成审核稿</span>
+      <details id="review-tools">
+        <summary>审核场景</summary>
+        <label>选择场景<select id="scene"></select></label>
+      </details>
+    </div>
+    <div id="app"></div>
+    <dialog
+      id="detail"
+      aria-labelledby="detail-title"
+      aria-describedby="detail-description"
+    ></dialog>
+  </body>
+</html>
