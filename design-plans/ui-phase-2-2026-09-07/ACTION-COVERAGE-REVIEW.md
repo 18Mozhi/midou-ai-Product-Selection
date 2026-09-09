@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应25页/537源位置/519组；其中路由动作442组，转发/容器关联53组，其余明确排除。其余48页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应26页/579源位置/549组；其中路由动作467组，转发/容器关联58组，其余明确排除。其余47页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -36,7 +36,7 @@
 | [P22 费用与利润规则](page-specs/P22.md) | 66 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 111 | [39组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 111 | [33组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P25 审批中心](page-specs/P25.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P26 通知中心](page-specs/P26.md) | 59 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2106,6 +2106,103 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - P13/P23列表/批量消费者不计本页可见控件；CSS隐藏不等于卸载，原生dialog和quick-create query仍需单独归属。
 - 读取已有active/route/read-key/Abort保护；本批隔离边界不重复证明完整GET生命周期，写请求不随切页取消。
 - 既有60PNG是P23/P24/board共享总数，没有新增或重拍，图存在不表示真实Vue/服务或用户批准。
+
+## P25 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P25.json)：42个局部源位置 → 30组；5类写入，25组路由动作，5组转发/容器关联不重复计动作。11个本地v-model，7处调用/内嵌容器，10个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有144个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| AN-A-TEMPLATE-OPEN 管理/配置审批模板 / local | 3处；管理模板、配置第一个模板、空队列配置 | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[no_templates · 1440](design/approval-direction-c/1440-no_templates.png) / [no_templates · 390](design/approval-direction-c/390-no_templates.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-REQUEST-OPEN 发起审批入口 / local | 2处；头部、空队列 | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[empty · 1440](design/approval-direction-c/1440-empty.png) / [empty · 390](design/approval-direction-c/390-empty.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-TECH-REQUEST 页级请求编号 / local | 1处；收起、展开 | [error · 1440](design/approval-direction-c/1440-error.png) / [error · 390](design/approval-direction-c/390-error.png)；其余见JSON | 页级标识可能随其他并发API覆盖；图稿不能把它当每个窗口独立请求归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-LOAD 刷新最新状态 / read | 1处；error、forbidden、expired、rate_limited、version_conflict | [error · 1440](design/approval-direction-c/1440-error.png) / [error · 390](design/approval-direction-c/390-error.png)、[forbidden · 1440](design/approval-direction-c/1440-forbidden.png) / [forbidden · 390](design/approval-direction-c/390-forbidden.png)；其余见JSON | 成员失败走Promise.all整页失败，不借TaskWorkspace的局部成员退化逻辑。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-NOTICE-CLOSE 关闭详情错误提示 / local | 1处；详情失败、404 | [detail_error · 1440](design/approval-direction-c/1440-detail_error.png) / [detail_error · 390](design/approval-direction-c/390-detail_error.png)、[detail_missing · 1440](design/approval-direction-c/1440-detail_missing.png) / [detail_missing · 390](design/approval-direction-c/390-detail_missing.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-PAGE 审批分页 / read | 2处；上一页、下一页 | [pagination · 1440](design/approval-direction-c/1440-pagination.png) / [pagination · 390](design/approval-direction-c/390-pagination.png)；其余见JSON | page query变更本身没有全筛选watch；分页保留深链可能重开详情，不改为清除。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-CLOSE-FOCUS 关闭审批详情与键盘边界 / local | 2处；关闭按钮、Escape、遮罩、Tab、Shift+Tab | [detail · 1440](design/approval-direction-c/1440-detail.png) / [detail · 390](design/approval-direction-c/390-detail.png)、[decision_busy · 1440](design/approval-direction-c/1440-decision_busy.png) / [decision_busy · 390](design/approval-direction-c/390-decision_busy.png)；其余见JSON | 当前无busy关闭守卫；未模拟在途结果与原生焦点组合，迟到结果问题已有源复现，未修。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-NAV-RESOURCE 查看关联资源 / navigation | 1处；任务、机会决策 | [detail · 1440](design/approval-direction-c/1440-detail.png) / [detail · 390](design/approval-direction-c/390-detail.png)、[task · 1440](design/approval-direction-c/1440-task.png) / [task · 390](design/approval-direction-c/390-task.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-NAV-RETURN 返回通知中心 / navigation | 1处；有效来源、无效来源隐藏 | [detail · 1440](design/approval-direction-c/1440-detail.png) / [detail · 390](design/approval-direction-c/390-detail.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-NAV-EVIDENCE 逐项查看证据 / navigation | 1处；原四项、新增/移除合成、不适用隐藏 | [evidence · 1440](design/approval-direction-c/1440-evidence.png) / [evidence · 390](design/approval-direction-c/390-evidence.png)、[removed · 1440](design/approval-direction-c/1440-removed.png) / [removed · 390](design/approval-direction-c/390-removed.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-DECIDE-REJECT 驳回 / write | 1处；允许、空原因、提交中、409保留原因 | [decision · 1440](design/approval-direction-c/1440-decision.png) / [decision · 390](design/approval-direction-c/390-decision.png)、[decision_error · 1440](design/approval-direction-c/1440-decision_error.png) / [decision_error · 390](design/approval-direction-c/390-decision_error.png)；其余见JSON | 证据缺失仅提示，不添加五门或强制审批门槛；A成功会关闭后来B源问题未修，DOM禁用不冒称函数重入守卫。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-DECIDE-APPROVE 批准并流转 / write | 1处；允许、空原因、提交中、409保留原因 | [decision · 1440](design/approval-direction-c/1440-decision.png) / [decision · 390](design/approval-direction-c/390-decision.png)、[decision_error · 1440](design/approval-direction-c/1440-decision_error.png) / [decision_error · 390](design/approval-direction-c/390-decision_error.png)；其余见JSON | 证据缺失仅提示，不添加五门或强制审批门槛；A成功会关闭后来B源问题未修，DOM禁用不冒称函数重入守卫。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-TECH-RESOURCE 资源与节点编号 / local | 1处；收起、展开 | [technical · 1440](design/approval-direction-c/1440-technical.png) / [technical · 390](design/approval-direction-c/390-technical.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-TEMPLATE-CLOSE 取消模板草稿窗口 / local | 2处；取消、Escape | [template · 1440](design/approval-direction-c/1440-template.png) / [template · 390](design/approval-direction-c/390-template.png)、[template_busy · 1440](design/approval-direction-c/1440-template_busy.png) / [template_busy · 390](design/approval-direction-c/390-template_busy.png)；其余见JSON | 未提交草稿保留，原型统一在途锁定并非当前Vue表现；叠加发布的关闭层级待真实组合验证。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-TEMPLATE-SUBMIT 保存模板草稿与必填定位 / write | 2处；task、opportunity_decision、invalid展开、失败、忙碌 | [template · 1440](design/approval-direction-c/1440-template.png) / [template · 390](design/approval-direction-c/390-template.png)、[template_error · 1440](design/approval-direction-c/1440-template_error.png) / [template_error · 390](design/approval-direction-c/390-template_error.png)；其余见JSON | 成员字段目前折叠，原型直接显示；失败主要notice在页级，图的就近错误尚未迁Vue。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-TEMPLATE-FIELDS 展开审批人与超时接收人 / local | 1处；收起、展开、invalid自动展开 | [template · 1440](design/approval-direction-c/1440-template.png) / [template · 390](design/approval-direction-c/390-template.png)；其余见JSON | C稿把业务必填字段直接展开，这是结构提案，不能当作原生折叠控件六态图。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-PUBLISH-OPEN 发布草稿入口 / local | 1处；每个真实draft模板、模板窗上叠加发布窗 | [template · 1440](design/approval-direction-c/1440-template.png) / [template · 390](design/approval-direction-c/390-template.png)、[publish · 1440](design/approval-direction-c/1440-publish.png) / [publish · 390](design/approval-direction-c/390-publish.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-PUBLISH-CLOSE 返回/取消发布 / local | 2处；返回、Escape | [publish · 1440](design/approval-direction-c/1440-publish.png) / [publish · 390](design/approval-direction-c/390-publish.png)、[publish_busy · 1440](design/approval-direction-c/1440-publish_busy.png) / [publish_busy · 390](design/approval-direction-c/390-publish_busy.png)；其余见JSON | 原合同两种关闭描述不同；本轮源检查确认。下次openPublish会清原因，不声称旧原因被重新带入。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-PUBLISH-SUBMIT 确认发布模板 / write | 2处；发布、失败、处理中 | [publish · 1440](design/approval-direction-c/1440-publish.png) / [publish · 390](design/approval-direction-c/390-publish.png)、[publish_error · 1440](design/approval-direction-c/1440-publish_error.png) / [publish_error · 390](design/approval-direction-c/390-publish_error.png)；其余见JSON | 标题current_version与请求revision不同语义；原独立夹具不能拼成一致版本链。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-REQUEST-CLOSE 取消发起审批 / local | 2处；取消、Escape | [request · 1440](design/approval-direction-c/1440-request.png) / [request · 390](design/approval-direction-c/390-request.png)、[request_busy · 1440](design/approval-direction-c/1440-request_busy.png) / [request_busy · 390](design/approval-direction-c/390-request_busy.png)；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-REQUEST-SUBMIT 发起审批与必填定位 / write | 2处；task、opportunity_decision、invalid展开、失败、处理中 | [request · 1440](design/approval-direction-c/1440-request.png) / [request · 390](design/approval-direction-c/390-request.png)、[request_error · 1440](design/approval-direction-c/1440-request_error.png) / [request_error · 390](design/approval-direction-c/390-request_error.png)；其余见JSON | resource_type由已发布模板watch派生，不加独立字段；服务端验证存在/类型/范围，原型不证明真实发起。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-REQUEST-FIELDS 展开关联资源编号 / local | 1处；收起、展开 | [request · 1440](design/approval-direction-c/1440-request.png) / [request · 390](design/approval-direction-c/390-request.png)；其余见JSON | C稿资源编号直接可见，不用该图充作原折叠控件已审核。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-QUEUE 待我处理/我发起的 / read | 2处；decidable、requested | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[requested · 1440](design/approval-direction-c/1440-requested.png) / [requested · 390](design/approval-direction-c/390-requested.png)；其余见JSON | 当前页mineCount仅本页can_decide数，不画成全组织审批总量。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-FILTER 审批状态筛选 / read | 1处；pending、approved、rejected、全部、cancelled仅URL | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[empty · 1440](design/approval-direction-c/1440-empty.png) / [empty · 390](design/approval-direction-c/390-empty.png)；其余见JSON | 既有VM已证实全部刷新差异，显式空值仅是C原型修订，Vue尚未修；没有cancelled独立按钮。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-DETAIL 读取审批详情 / read | 1处；动态行、读取中、404、失败 | [normal · 1440](design/approval-direction-c/1440-normal.png) / [normal · 390](design/approval-direction-c/390-normal.png)、[detail_loading · 1440](design/approval-direction-c/1440-detail_loading.png) / [detail_loading · 390](design/approval-direction-c/390-detail_loading.png)；其余见JSON | 同实例A/B返回乱序与关闭后回流已复现；parent作用域隔离不等于同页读取归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| AN-A-QUEUE-FORWARD 队列事件转发 / wiring | 1处；P25本地消费者 | ；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| D-AN-APPROVAL 审批详情定义 / wiring | 1处；P25本地消费者 | ；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| D-AN-TEMPLATE 模板草稿定义 / wiring | 1处；P25本地消费者 | ；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| D-AN-PUBLISH 模板发布定义 / wiring | 1处；P25本地消费者 | ；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+| D-AN-REQUEST 发起审批定义 / wiring | 1处；P25本地消费者 | ；其余见JSON | 具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| AN-A-QUEUE-FORWARD | @queue / setQueue | AN-A-QUEUE |
+| AN-A-QUEUE-FORWARD | @filter / setFilter | AN-A-FILTER |
+| AN-A-QUEUE-FORWARD | @open / open | AN-A-DETAIL |
+| AN-A-QUEUE-FORWARD | @create-request / showRequest = true | AN-A-REQUEST-OPEN |
+| AN-A-QUEUE-FORWARD | @manage-templates / showTemplate = true | AN-A-TEMPLATE-OPEN |
+| D-AN-APPROVAL | 容器定义，无额外事件 | AN-A-CLOSE-FOCUS、AN-A-DECIDE-REJECT、AN-A-DECIDE-APPROVE |
+| D-AN-TEMPLATE | 容器定义，无额外事件 | AN-A-TEMPLATE-CLOSE、AN-A-TEMPLATE-SUBMIT、AN-A-PUBLISH-OPEN |
+| D-AN-PUBLISH | 容器定义，无额外事件 | AN-A-PUBLISH-CLOSE、AN-A-PUBLISH-SUBMIT |
+| D-AN-REQUEST | 容器定义，无额外事件 | AN-A-REQUEST-CLOSE、AN-A-REQUEST-SUBMIT |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| ApprovalWorkspace.vue / reason | 批准/驳回原始原因，max1000；trim仅用于判空 | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / templateForm.name | 模板名称，required/max200 | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / templateForm.resource_type | 模板资源类型，task或opportunity_decision | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / templateForm.node_name | 单节点名称，required/max120 | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / templateForm.sla_minutes | SLA分钟number/min1/max43200；服务要求整数 | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / templateForm.approver_id | 当前工作区审批人成员 | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / templateForm.escalation_assignee_id | 当前工作区超时接收人 | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / publishReason | 发布原因，required/max500，提交trim | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / requestForm.template_id | 已发布模板ID，required；watch派生resource_type | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / requestForm.resource_id | 资源ID，required，提交trim | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / requestForm.title | 审批标题，required/max200，提交trim | 当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| ApprovalWorkspace.vue / dialog.1 / detail | native-dialog / matching-dialog-scene | [detail · 1440](design/approval-direction-c/1440-detail.png) / [detail · 390](design/approval-direction-c/390-detail.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / dialog.1 / fallback | native-dialog / matching-dialog-scene | [fallback · 1440](design/approval-direction-c/1440-fallback.png) / [fallback · 390](design/approval-direction-c/390-fallback.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / dialog.1 / task | native-dialog / matching-dialog-scene | [task · 1440](design/approval-direction-c/1440-task.png) / [task · 390](design/approval-direction-c/390-task.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / dialog.1 / detail_readonly | native-dialog / matching-dialog-scene | [detail_readonly · 1440](design/approval-direction-c/1440-detail_readonly.png) / [detail_readonly · 390](design/approval-direction-c/390-detail_readonly.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / dialog.2 / template | native-dialog / matching-dialog-scene | [template · 1440](design/approval-direction-c/1440-template.png) / [template · 390](design/approval-direction-c/390-template.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / form.1 / template | form-container / related-scene-only | [template · 1440](design/approval-direction-c/1440-template.png) / [template · 390](design/approval-direction-c/390-template.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / dialog.3 / publish | native-dialog / matching-dialog-scene | [publish · 1440](design/approval-direction-c/1440-publish.png) / [publish · 390](design/approval-direction-c/390-publish.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / form.2 / publish | form-container / related-scene-only | [publish · 1440](design/approval-direction-c/1440-publish.png) / [publish · 390](design/approval-direction-c/390-publish.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / dialog.4 / request | native-dialog / matching-dialog-scene | [request · 1440](design/approval-direction-c/1440-request.png) / [request · 390](design/approval-direction-c/390-request.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+| ApprovalWorkspace.vue / form.3 / request | form-container / related-scene-only | [request · 1440](design/approval-direction-c/1440-request.png) / [request · 390](design/approval-direction-c/390-request.png) | 仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 |
+
+### 明确保留的边界
+
+- 全部按钮setFilter('')移除status，刷新回pending；原型显式空值修订不等于真实Vue修复。只监听approval，不宣称history同步所有筛选。
+- 读A/B乱序、关闭后旧读回流、A审批成功关闭后来B已源复现；写入body仍为A，不夸大成批准错对象或线上事故。
+- 发布返回清目标但保留原因，Escape清两者；重开总是清原因。模板/发起关闭保留草稿。
+- 模板/请求/发布失败仍主要页级notice；图中窗内错误/统一busy字段锁/直接展开必填只是提案。
+- 单节点UI不改成多节点、证据缺失警告不改成硬门槛、升级不等于自动批准；当前页计数不作全工作区汇总。
+- 144代表视觉槽待具体selector映射；字段、动态行/模板、两个决定、叠加焦点、角色/主题/软键盘和真实链继续验。
+- ApprovalQueuePanel委托保持与父handler对应；P34组织审批与P26通知不合并权限/动作，useModalDialog其他消费者不因此通过。
+- 父壳层有reset_on_scope键规则，但同实例A/B读写晚到并不受此键保护；本批不证明跨组织越权或完整缓存生命周期。
+- 原夹具目录模板v1/详情锁v3、节点无升级而历史升级、同成员不同名等独立响应保留，不拼造一致数据库链。
+- 94图含2非业务控件板，43双端主场景和8下部图；关联不等于全控件六态，具体批准仍待。
 
 ## P54 局部动作与共享消费者
 

@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P25",
+  "route": "/tasks/approvals",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+    "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "4原生业务dialog：详情、模板草稿、模板发布、发起请求；3form不算额外窗口；详情captured/fallback/task/readonly为同窗内容变体。"
+  },
+  "inputs": {
+    "ApprovalWorkspace.vue": [
+      "reason",
+      "templateForm.name",
+      "templateForm.resource_type",
+      "templateForm.node_name",
+      "templateForm.sla_minutes",
+      "templateForm.approver_id",
+      "templateForm.escalation_assignee_id",
+      "publishReason",
+      "requestForm.template_id",
+      "requestForm.resource_id",
+      "requestForm.title"
+    ],
+    "ApprovalQueuePanel.vue": []
+  },
+  "actions": [
+    {
+      "actionId": "AN-A-TEMPLATE-OPEN",
+      "label": "管理/配置审批模板",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
+        "apps/web/src/components/ApprovalQueuePanel.vue#3f91c4917c0bca2a.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-TEMPLATE-OPEN；管理模板",
+        "AN-A-TEMPLATE-OPEN；首模板入口",
+        "AN-A-TEMPLATE-OPEN；空队列无模板"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "canManage=task:assign；有发布模板显示管理、无发布模板显示首模板/空队列配置",
+      "handler": "showTemplate=true，不清本地templateForm",
+      "variants": ["管理模板", "配置第一个模板", "空队列配置"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "no_templates"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "template"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-REQUEST-OPEN",
+      "label": "发起审批入口",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
+        "apps/web/src/components/ApprovalQueuePanel.vue#64616041c6d5fc5e.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-REQUEST-OPEN；已发布模板后发起",
+        "AN-A-REQUEST-OPEN；空队列有模板"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "canManage且published.length；头部或空队列",
+      "handler": "showRequest=true，保留本地requestForm",
+      "variants": ["头部", "空队列"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "request"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-TECH-REQUEST",
+      "label": "页级请求编号",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1"],
+      "sourceContractKeys": ["AN-TECH；页级requestId"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "notice且requestId",
+      "handler": "原生details只展示requestId",
+      "variants": ["收起", "展开"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页级标识可能随其他并发API覆盖；图稿不能把它当每个窗口独立请求归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-LOAD",
+      "label": "刷新最新状态",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1"],
+      "sourceContractKeys": ["AN-A-LOAD；错误重读"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "五错误状态区",
+      "handler": "load并行队列/模板，canManage才读成员；之后按approval深链读取详情",
+      "variants": ["error", "forbidden", "expired", "rate_limited", "version_conflict"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "rate_limited"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "version_conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "成员失败走Promise.all整页失败，不借TaskWorkspace的局部成员退化逻辑。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-NOTICE-CLOSE",
+      "label": "关闭详情错误提示",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1"],
+      "sourceContractKeys": ["AN-A-NOTICE-CLOSE；仅清详情错误"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "detailNotice且!detailBusy",
+      "handler": "仅detailNotice=''，不重试/关闭业务审批",
+      "variants": ["详情失败", "404"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "detail_error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "detail_missing"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-PAGE",
+      "label": "审批分页",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1"
+      ],
+      "sourceContractKeys": ["AN-A-PAGE；上一页", "AN-A-PAGE；下一页"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "total>20，上一页/下一页边界disabled",
+      "handler": "setPage夹取1..pageCount，URL page更新；保留approval并load",
+      "variants": ["上一页", "下一页"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "pagination"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "page query变更本身没有全筛选watch；分页保留深链可能重开详情，不改为清除。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-CLOSE-FOCUS",
+      "label": "关闭审批详情与键盘边界",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-CLOSE/FOCUS；cancel、遮罩边界、Tab循环",
+        "AN-A-CLOSE；关闭详情、清approval"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "selected时原生dialog；关闭/Escape/真实遮罩，Tab仅首尾可见控件循环",
+      "handler": "closeDetail清selected/approval；useModalDialog返焦；click坐标仅框外关闭，keydown非Tab忽略",
+      "variants": ["关闭按钮", "Escape", "遮罩", "Tab", "Shift+Tab"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "decision_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前无busy关闭守卫；未模拟在途结果与原生焦点组合，迟到结果问题已有源复现，未修。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-NAV-RESOURCE",
+      "label": "查看关联资源",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#618d905faa5eb354.1"],
+      "sourceContractKeys": ["AN-A-NAV-RESOURCE；decision_context真实route"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "decision_context.resource存在",
+      "handler": "RouterLink使用实际resource.route，不猜任务/机会ID",
+      "variants": ["任务", "机会决策"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "task"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-NAV-RETURN",
+      "label": "返回通知中心",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#5201b6777ca22abe.1"],
+      "sourceContractKeys": ["AN-A-NAV-RETURN；限定通知返回"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "from为/notifications或/notifications?开头字符串",
+      "handler": "notificationReturn→RouterLink；数组/伪前缀/外站不展示",
+      "variants": ["有效来源", "无效来源隐藏"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-NAV-EVIDENCE",
+      "label": "逐项查看证据",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#861502a87911f91f.1"],
+      "sourceContractKeys": ["AN-A-NAV-EVIDENCE；逐requirement真实route"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "context存在、evidence.applicable；按requirements v-for",
+      "handler": "RouterLink requirement.route，已具备/待补齐只说明事实",
+      "variants": ["原四项", "新增/移除合成", "不适用隐藏"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "evidence"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "removed"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "task"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-DECIDE-REJECT",
+      "label": "驳回",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#86c54779008e879e.1"],
+      "sourceContractKeys": ["AN-A-DECIDE-REJECT；当前版本+原因"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "selected.can_decide&&canManage；按钮busy||!reason.trim禁用；函数只守卫selected/非空原因",
+      "handler": "decide POST /tasks/approvals/id/actions，action/reason原文/expected_version；成功closeDetail并load",
+      "variants": ["允许", "空原因", "提交中", "409保留原因"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "decision"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "decision_error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "decision_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "证据缺失仅提示，不添加五门或强制审批门槛；A成功会关闭后来B源问题未修，DOM禁用不冒称函数重入守卫。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-DECIDE-APPROVE",
+      "label": "批准并流转",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#3cfff8f4c2f74d66.1"],
+      "sourceContractKeys": ["AN-A-DECIDE-APPROVE；当前版本+原因"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "selected.can_decide&&canManage；按钮busy||!reason.trim禁用；函数只守卫selected/非空原因",
+      "handler": "decide POST /tasks/approvals/id/actions，action/reason原文/expected_version；成功closeDetail并load",
+      "variants": ["允许", "空原因", "提交中", "409保留原因"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "decision"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "decision_error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "decision_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "证据缺失仅提示，不添加五门或强制审批门槛；A成功会关闭后来B源问题未修，DOM禁用不冒称函数重入守卫。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-TECH-RESOURCE",
+      "label": "资源与节点编号",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2"],
+      "sourceContractKeys": ["AN-TECH；资源/节点编号"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "selected",
+      "handler": "原生details展示审批/资源/节点ID及active_approver_id",
+      "variants": ["收起", "展开"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-TEMPLATE-CLOSE",
+      "label": "取消模板草稿窗口",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1"
+      ],
+      "sourceContractKeys": ["AN-A-TEMPLATE-CLOSE；Escape", "AN-A-TEMPLATE-CLOSE；取消保留草稿"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "showTemplate；取消和Escape均无busy守卫",
+      "handler": "showTemplate=false；不清templateForm",
+      "variants": ["取消", "Escape"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "template"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "template_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "未提交草稿保留，原型统一在途锁定并非当前Vue表现；叠加发布的关闭层级待真实组合验证。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-TEMPLATE-SUBMIT",
+      "label": "保存模板草稿与必填定位",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-TEMPLATE-SUBMIT/INVALID；POST草稿、展开必填",
+        "AN-A-TEMPLATE-SUBMIT；原生submit"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "按钮busy禁用；原生required/长度/SLA约束；函数无busy重入守卫",
+      "handler": "createTemplate POST name/resource_type/nodes单节点；invalid.capture展开最近details，不绕过原生校验",
+      "variants": ["task", "opportunity_decision", "invalid展开", "失败", "忙碌"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "template"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "template_error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "template_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "成员字段目前折叠，原型直接显示；失败主要notice在页级，图的就近错误尚未迁Vue。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-TEMPLATE-FIELDS",
+      "label": "展开审批人与超时接收人",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1"],
+      "sourceContractKeys": ["AN-A-TEMPLATE-FIELDS；审批人与超时接收人展开"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "模板窗",
+      "handler": "原生details/summary；两个required select成员来自当前工作区",
+      "variants": ["收起", "展开", "invalid自动展开"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "template"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "C稿把业务必填字段直接展开，这是结构提案，不能当作原生折叠控件六态图。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-PUBLISH-OPEN",
+      "label": "发布草稿入口",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1"],
+      "sourceContractKeys": ["AN-A-PUBLISH-OPEN；仅draft条目"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "模板窗内t.status===draft；按钮无busy禁用",
+      "handler": "openPublish(t)设置目标并清publishReason",
+      "variants": ["每个真实draft模板", "模板窗上叠加发布窗"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "template"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "publish"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-PUBLISH-CLOSE",
+      "label": "返回/取消发布",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-PUBLISH-CLOSE；Escape清目标/原因",
+        "AN-A-PUBLISH-CLOSE；返回清目标"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "publishTarget窗口；按钮/Escape无busy守卫",
+      "handler": "返回只publishTarget=null；Escape实际callback清目标和原因",
+      "variants": ["返回", "Escape"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "publish"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "publish_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "原合同两种关闭描述不同；本轮源检查确认。下次openPublish会清原因，不声称旧原因被重新带入。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-PUBLISH-SUBMIT",
+      "label": "确认发布模板",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-PUBLISH-SUBMIT；POST reason/expected_revision",
+        "AN-A-PUBLISH-SUBMIT；原生submit"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "函数busy/target/trim原因守卫，按钮busy禁用；reason required/max500",
+      "handler": "publish捕获target；POST /tasks/approval-templates/id/actions，仅expected_revision/reason.trim，没有额外action",
+      "variants": ["发布", "失败", "处理中"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "publish"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "publish_error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "publish_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "标题current_version与请求revision不同语义；原独立夹具不能拼成一致版本链。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-REQUEST-CLOSE",
+      "label": "取消发起审批",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1"
+      ],
+      "sourceContractKeys": ["AN-A-REQUEST-CLOSE；Escape", "AN-A-REQUEST-CLOSE；取消保留草稿"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "showRequest；按钮/Escape无busy守卫",
+      "handler": "showRequest=false，保留requestForm",
+      "variants": ["取消", "Escape"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "request"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "request_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-REQUEST-SUBMIT",
+      "label": "发起审批与必填定位",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
+        "apps/web/src/components/ApprovalWorkspace.vue#0afc0196f9054ef3.1"
+      ],
+      "sourceContractKeys": [
+        "AN-A-REQUEST-SUBMIT/INVALID；POST、展开必填",
+        "AN-A-REQUEST-SUBMIT；原生submit"
+      ],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "原生required；按钮busy||!published.length禁用；函数无busy守卫",
+      "handler": "createRequest POST template_id/resource_type/resource_id.trim/title.trim；invalid展开最近details",
+      "variants": ["task", "opportunity_decision", "invalid展开", "失败", "处理中"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "request"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "request_error"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "request_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "resource_type由已发布模板watch派生，不加独立字段；服务端验证存在/类型/范围，原型不证明真实发起。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-REQUEST-FIELDS",
+      "label": "展开关联资源编号",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1"],
+      "sourceContractKeys": ["AN-A-REQUEST-FIELDS；资源编号展开"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "发起窗口",
+      "handler": "原生details；required资源编号，invalid捕获展开",
+      "variants": ["收起", "展开"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "request"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "C稿资源编号直接可见，不用该图充作原折叠控件已审核。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-QUEUE",
+      "label": "待我处理/我发起的",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApprovalQueuePanel.vue#6880c779fd5e9fc3.1",
+        "apps/web/src/components/ApprovalQueuePanel.vue#216e8feb5a6089d0.1"
+      ],
+      "sourceContractKeys": ["AN-A-QUEUE；decidable", "AN-A-QUEUE；requested"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "队列ready/empty时",
+      "handler": "emit queue→setQueue，清详情/page并replace view，再load",
+      "variants": ["decidable", "requested"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "requested"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前页mineCount仅本页can_decide数，不画成全组织审批总量。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-FILTER",
+      "label": "审批状态筛选",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalQueuePanel.vue#473bb9f13020ffe6.1"],
+      "sourceContractKeys": ["AN-A-FILTER；四状态按钮"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "statusOptions四按钮，URL可另接受cancelled",
+      "handler": "emit filter→setFilter；pending/approved/rejected/全部；全部写undefined导致刷新回pending",
+      "variants": ["pending", "approved", "rejected", "全部", "cancelled仅URL"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "既有VM已证实全部刷新差异，显式空值仅是C原型修订，Vue尚未修；没有cancelled独立按钮。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-DETAIL",
+      "label": "读取审批详情",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalQueuePanel.vue#134055fa33da350e.1"],
+      "sourceContractKeys": ["AN-A-DETAIL；每个真实审批对象"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "每个队列行；源码无detailBusy禁用",
+      "handler": "emit open→open(item)→openById；selected由GET返回设置，URL同步",
+      "variants": ["动态行", "读取中", "404", "失败"],
+      "scenes": [
+        {
+          "package": "approval-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "detail_loading"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "detail_missing"
+        },
+        {
+          "package": "approval-direction-c",
+          "scene": "detail_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "同实例A/B返回乱序与关闭后回流已复现；parent作用域隔离不等于同页读取归属。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+    },
+    {
+      "actionId": "AN-A-QUEUE-FORWARD",
+      "label": "队列事件转发",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1"],
+      "sourceContractKeys": ["AN-A-QUEUE/FILTER/DETAIL/REQUEST-OPEN/TEMPLATE-OPEN；父委托"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "共享容器/转发，不新增业务写入",
+      "handler": "按原定义/emit逐项委托",
+      "variants": ["P25本地消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。",
+      "forwardsTo": [
+        "AN-A-QUEUE",
+        "AN-A-FILTER",
+        "AN-A-DETAIL",
+        "AN-A-REQUEST-OPEN",
+        "AN-A-TEMPLATE-OPEN"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
+          "event": "@queue",
+          "handler": "setQueue",
+          "targets": ["AN-A-QUEUE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
+          "event": "@filter",
+          "handler": "setFilter",
+          "targets": ["AN-A-FILTER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
+          "event": "@open",
+          "handler": "open",
+          "targets": ["AN-A-DETAIL"]
+        },
+        {
+          "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
+          "event": "@create-request",
+          "handler": "showRequest = true",
+          "targets": ["AN-A-REQUEST-OPEN"]
+        },
+        {
+          "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
+          "event": "@manage-templates",
+          "handler": "showTemplate = true",
+          "targets": ["AN-A-TEMPLATE-OPEN"]
+        }
+      ]
+    },
+    {
+      "actionId": "D-AN-APPROVAL",
+      "label": "审批详情定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#1e3aa75fca121f17.1"],
+      "sourceContractKeys": ["D-AN-APPROVAL；详情原生模态"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "共享容器/转发，不新增业务写入",
+      "handler": "按原定义/emit逐项委托",
+      "variants": ["P25本地消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。",
+      "forwardsTo": ["AN-A-CLOSE-FOCUS", "AN-A-DECIDE-REJECT", "AN-A-DECIDE-APPROVE"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "D-AN-TEMPLATE",
+      "label": "模板草稿定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#21471c244422699b.1"],
+      "sourceContractKeys": ["D-AN-TEMPLATE；模板草稿"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "共享容器/转发，不新增业务写入",
+      "handler": "按原定义/emit逐项委托",
+      "variants": ["P25本地消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。",
+      "forwardsTo": ["AN-A-TEMPLATE-CLOSE", "AN-A-TEMPLATE-SUBMIT", "AN-A-PUBLISH-OPEN"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "D-AN-PUBLISH",
+      "label": "模板发布定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#e6808d6bed4a59f1.1"],
+      "sourceContractKeys": ["D-AN-PUBLISH；版本与原因"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "共享容器/转发，不新增业务写入",
+      "handler": "按原定义/emit逐项委托",
+      "variants": ["P25本地消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。",
+      "forwardsTo": ["AN-A-PUBLISH-CLOSE", "AN-A-PUBLISH-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "D-AN-REQUEST",
+      "label": "发起审批定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1"],
+      "sourceContractKeys": ["D-AN-REQUEST；发起审批"],
+      "contractAliasReason": "按原AN合同完整末列定位；同语义入口/原生提交合并，技术详情与分页等独立语义明确限定，不推断新增业务动作。",
+      "condition": "共享容器/转发，不新增业务写入",
+      "handler": "按原定义/emit逐项委托",
+      "variants": ["P25本地消费者"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。",
+      "forwardsTo": ["AN-A-REQUEST-CLOSE", "AN-A-REQUEST-SUBMIT"],
+      "forwardBindings": []
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": [
+      "apps/web/src/components/ApprovalWorkspace.vue",
+      "apps/web/src/components/ApprovalQueuePanel.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
+      "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "reason",
+        "meaning": "批准/驳回原始原因，max1000；trim仅用于判空",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "templateForm.name",
+        "meaning": "模板名称，required/max200",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "templateForm.resource_type",
+        "meaning": "模板资源类型，task或opportunity_decision",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "templateForm.node_name",
+        "meaning": "单节点名称，required/max120",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "templateForm.sla_minutes",
+        "meaning": "SLA分钟number/min1/max43200；服务要求整数",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "templateForm.approver_id",
+        "meaning": "当前工作区审批人成员",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "templateForm.escalation_assignee_id",
+        "meaning": "当前工作区超时接收人",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "publishReason",
+        "meaning": "发布原因，required/max500，提交trim",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "requestForm.template_id",
+        "meaning": "已发布模板ID，required；watch派生resource_type",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "requestForm.resource_id",
+        "meaning": "资源ID，required，提交trim",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "binding": "requestForm.title",
+        "meaning": "审批标题，required/max200，提交trim",
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "原生审批详情dialog，允许关闭/Escape/遮罩，常驻原因区包含批准/驳回，非新增决定确认窗。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "detail",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "detail"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          },
+          {
+            "name": "fallback",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "fallback"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          },
+          {
+            "name": "task",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "task"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          },
+          {
+            "name": "detail_readonly",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "detail_readonly"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "新建单节点模板草稿原生dialog及内嵌form，成员required当前在details；窗口还列已有模板。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "template",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "template"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "新建单节点模板草稿原生dialog及内嵌form，成员required当前在details；窗口还列已有模板。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "template",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "template"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 3,
+        "shape": "native-dialog",
+        "sourceBehavior": "模板之上独立原生发布dialog，expected_revision/reason；返回与Escape清理不同。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "publish",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "publish"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "模板之上独立原生发布dialog，expected_revision/reason；返回与Escape清理不同。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "publish",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "publish"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "dialog",
+        "ordinal": 4,
+        "shape": "native-dialog",
+        "sourceBehavior": "发起审批原生dialog及form，已发布模板锁定类型；资源编号required在details。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "request",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "request"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ApprovalWorkspace.vue",
+        "tag": "form",
+        "ordinal": 3,
+        "shape": "form-container",
+        "sourceBehavior": "发起审批原生dialog及form，已发布模板锁定类型；资源编号required在details。",
+        "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。",
+        "variants": [
+          {
+            "name": "request",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "approval-direction-c",
+                "scene": "request"
+              }
+            ],
+            "remaining": "仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "ApprovalQueuePanel委托保持与父handler对应；P34组织审批与P26通知不合并权限/动作，useModalDialog其他消费者不因此通过。",
+      "父壳层有reset_on_scope键规则，但同实例A/B读写晚到并不受此键保护；本批不证明跨组织越权或完整缓存生命周期。",
+      "原夹具目录模板v1/详情锁v3、节点无升级而历史升级、同成员不同名等独立响应保留，不拼造一致数据库链。",
+      "94图含2非业务控件板，43双端主场景和8下部图；关联不等于全控件六态，具体批准仍待。"
+    ]
+  },
+  "compositionGaps": [
+    "全部按钮setFilter('')移除status，刷新回pending；原型显式空值修订不等于真实Vue修复。只监听approval，不宣称history同步所有筛选。",
+    "读A/B乱序、关闭后旧读回流、A审批成功关闭后来B已源复现；写入body仍为A，不夸大成批准错对象或线上事故。",
+    "发布返回清目标但保留原因，Escape清两者；重开总是清原因。模板/发起关闭保留草稿。",
+    "模板/请求/发布失败仍主要页级notice；图中窗内错误/统一busy字段锁/直接展开必填只是提案。",
+    "单节点UI不改成多节点、证据缺失警告不改成硬门槛、升级不等于自动批准；当前页计数不作全工作区汇总。",
+    "144代表视觉槽待具体selector映射；字段、动态行/模板、两个决定、叠加焦点、角色/主题/软键盘和真实链继续验。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "5写入组是模板创建/发布、发起、批准、驳回；不是5个额外端点或整套状态机验证。",
+    "新源码检查惰性传输/route/refs；旧helper执行验证器/compare/SQL构造，均非实际数据库和权限验证。",
+    "全站方向已选不表示P25获批；本轮发出APPROVAL-C-r1整体布局审核问题，未答前保持pending，不升级任何批准门。"
+  ]
+}

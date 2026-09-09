@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P25审批逐项核对与布局审核入口
+
+上一轮5bf62e18交付P24清单及源证据，属于实际进展。本轮从干净main继续，按AGENTS→Feature Map approvalWorkflow→蓝图M05-02→真实ApprovalWorkspace/ApprovalQueuePanel/模态钩子与路由缓存核对；使用ui-skills-root/frontend-design，Playwright复用既有原型验证器，无子代理。新增APPROVAL-SEMANTIC-REVIEW.md、P25.json：42源位置/30组（25动作、5关联、5写入），11模型/7结构/10内容关联，四业务窗不被内容变体膨胀。静态全局import超集不当页内运行分母。
+
+新增永久verify-ui-phase2-approval-review.mjs，复用5写入body/4路由/2范围SQL构造、字段验证器和diff，再加5类源检查：A/B读乱序晚成功覆盖B/晚失败清B，pending read关闭后回流，A批准成功关闭后来B（请求始终A/原版本/原原因），发布返回与Escape清理不同，函数与DOM busy守卫分开。检查通过，问题标未修，不称浏览器双击、真实服务错审或跨工作区泄露。父壳reset_on_scope包含组织/工作区，但不替代同实例结果归属。原全部刷新回pending、窗内错误与字段锁提案仍待实际实现。
+
+Playwright无capture复验通过：43场景×1440/390，94PNG哈希与5请求预览、字段/草稿/焦点/安全导航及既有多断点，HTTP/存储/控制台错误0。未新增或重拍图，94含2非业务控件板、86主图及8下部。目检1440-detail与390-detail并向用户展示，异步询问APPROVAL-C-r1仅整体布局，未答前pending；不自动批准其他窗/按钮或真实功能。下一优先细化P25代表按钮/字段/叠加窗口状态并处理布局意见，再继续P26；不能持续只增加语义清单而替代全站视觉/实际重构。
+
+动作审计26局部审核页/579独立源位置/549逐页组，余47页；P25为144待映射代表视觉槽，不是缺144张图。全图完整性76包/10774PNG/844独立来源/1453绑定/8942链接，源/图漂移0。首次定向Prettier发现新JSON排版问题，格式化后复检通过才继续完整门；docs73路由/60保护/6角色/153文档、runtime-docs、390文件static-analysis、format及diff检查通过。生产/依赖未变，不重复build/生产E2E；不将隔离验证当实际MySQL/审批事务/Worker/权限/主题或生产证明。
+
+修改仅审核器/清单/文档、页面规格/计划/Feature Map及生成审计；API/OpenAPI、真实Vue/CSS、后端/Worker/Python、数据库/迁移、env/配置、依赖、权限与宝塔未改。无部署/重启/新配置，新脚本无参数只读源码和内存。无新一次性文件/截图/日志/服务，浏览器finally关闭且headless_shell=0；永久验证器和文档保留。只读确认历史output/playwright/p16-layout-20260910/.last-run.json及output/playwright/ui-phase2-competitor-races-20260909下playwright.config.ts、results/.last-run.json仍存在，前次工具拒绝删除，不重试绕过、不提交。全站重构、具体审核与宝塔最终签收仍未完成。
+
 ## 2026-09-10 · P24任务详情逐项核对
 
 从干净main/87369638继续，按AGENTS/Feature Map/M05-01、实际TaskWorkspace/TaskDetailPanel、路由surfaceProps及详情CSS核对；使用ui-skills-root/frontend-design，不启动子代理。新增TASK-DETAIL-SEMANTIC-REVIEW.md、P24.json及永久verify-ui-phase2-task-detail-review.mjs。48源位置归33组（28动作、4关联、1隐藏外层排除），5父模型/8结构/18关联；三原生窗为编辑窗create/edit、delete、五单项共8业务变体，常驻aside和四form不重复计窗。
