@@ -1789,61 +1789,171 @@
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.name",
         "meaning": "名称required/max200",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#name",
+          "states": {
+            "default": "name-default",
+            "focus": "name-focus",
+            "busy": "name-busy",
+            "missing": "name-missing",
+            "maxlength": "name-maxlength"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.trigger_event_type",
         "meaning": "触发器四项；task.created循环保护",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#trigger_event_type",
+          "states": {
+            "default": "trigger_event_type-default",
+            "focus": "trigger_event_type-focus",
+            "busy": "trigger_event_type-busy"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.condition_severity",
         "meaning": "严重程度any/info/warning/critical",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#condition_severity",
+          "states": {
+            "default": "condition_severity-default",
+            "focus": "condition_severity-focus",
+            "busy": "condition_severity-busy"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.action_type",
         "meaning": "notify_owner/create_task；任务触发仅前者",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#action_type",
+          "states": {
+            "default": "action_type-default",
+            "focus": "action_type-focus",
+            "busy": "action_type-busy"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.owner_id",
         "meaning": "当前范围成员required",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#owner_id",
+          "states": {
+            "default": "owner_id-default",
+            "focus": "owner_id-focus",
+            "busy": "owner_id-busy",
+            "missing": "owner_id-missing"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.action_assignee_id",
         "meaning": "create_task条件下成员required",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#action_assignee_id",
+          "states": {
+            "default": "action_assignee_id-default",
+            "focus": "action_assignee_id-focus",
+            "busy": "action_assignee_id-busy",
+            "missing": "action_assignee_id-missing"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.action_title",
         "meaning": "动作标题required/max200",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#action_title",
+          "states": {
+            "default": "action_title-default",
+            "focus": "action_title-focus",
+            "busy": "action_title-busy",
+            "missing": "action_title-missing",
+            "maxlength": "action_title-maxlength"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "editReason",
         "meaning": "仅编辑required；UI500，服务1000不擅自统一",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#reason",
+          "states": {
+            "default": "reason-default",
+            "focus": "reason-focus",
+            "busy": "reason-busy",
+            "missing": "reason-missing",
+            "maxlength": "reason-maxlength"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.rate_limit_count",
         "meaning": "number required/min1/max1000；默认20",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#rate_limit_count",
+          "states": {
+            "default": "rate_limit_count-default",
+            "focus": "rate_limit_count-focus",
+            "busy": "rate_limit_count-busy",
+            "missing": "rate_limit_count-missing",
+            "min": "rate_limit_count-min",
+            "max": "rate_limit_count-max",
+            "below": "rate_limit_count-below",
+            "above": "rate_limit_count-above",
+            "fraction": "rate_limit_count-fraction"
+          }
+        }
       },
       {
         "file": "apps/web/src/components/AutomationRuleCenter.vue",
         "binding": "form.rate_limit_window_minutes",
         "meaning": "number required/min1/max1440；默认60",
-        "remaining": "存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。"
+        "remaining": "本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。",
+        "fieldStateEvidence": {
+          "package": "automation-forms-direction-c",
+          "selector": "#rate_limit_window_minutes",
+          "states": {
+            "default": "rate_limit_window_minutes-default",
+            "focus": "rate_limit_window_minutes-focus",
+            "busy": "rate_limit_window_minutes-busy",
+            "missing": "rate_limit_window_minutes-missing",
+            "min": "rate_limit_window_minutes-min",
+            "max": "rate_limit_window_minutes-max",
+            "below": "rate_limit_window_minutes-below",
+            "above": "rate_limit_window_minutes-above",
+            "fraction": "rate_limit_window_minutes-fraction"
+          }
+        }
       }
     ],
     "containers": [

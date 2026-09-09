@@ -2325,16 +2325,16 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 本地字段 | 含义 | 未验事项 |
 | --- | --- | --- |
-| AutomationRuleCenter.vue / form.name | 名称required/max200 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.trigger_event_type | 触发器四项；task.created循环保护 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.condition_severity | 严重程度any/info/warning/critical | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.action_type | notify_owner/create_task；任务触发仅前者 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.owner_id | 当前范围成员required | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.action_assignee_id | create_task条件下成员required | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.action_title | 动作标题required/max200 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / editReason | 仅编辑required；UI500，服务1000不擅自统一 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.rate_limit_count | number required/min1/max1000；默认20 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
-| AutomationRuleCenter.vue / form.rate_limit_window_minutes | number required/min1/max1440；默认60 | 存在字段图与源合同；全部状态/组合/辅助技术/真实成员范围验证仍待。 |
+| AutomationRuleCenter.vue / form.name | 名称required/max200 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.trigger_event_type | 触发器四项；task.created循环保护 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.condition_severity | 严重程度any/info/warning/critical | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.action_type | notify_owner/create_task；任务触发仅前者 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.owner_id | 当前范围成员required | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.action_assignee_id | create_task条件下成员required | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.action_title | 动作标题required/max200 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / editReason | 仅编辑required；UI500，服务1000不擅自统一 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.rate_limit_count | number required/min1/max1000；默认20 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
+| AutomationRuleCenter.vue / form.rate_limit_window_minutes | number required/min1/max1440；默认60 | 本批只覆盖逐字段适用状态及7个离线组合；并非真实Vue、辅助技术、全部触发/成员/主题/窗口生命周期或用户批准。成员夹具仅一人，在途未代验切换其他成员。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 

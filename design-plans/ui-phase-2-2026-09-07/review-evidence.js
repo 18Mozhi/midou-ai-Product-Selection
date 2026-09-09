@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "b5e89da3aa446b1310bd2083924a590cc8735c0a65da3cb3758e3061c4427021",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "1c9270011010bdddba94d47f2eced016c13752ede730a5036fc8d3d93a6bba2a",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -17,6 +17,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/approval-navigation-direction-c/evidence.json": "fb71732f2130662eb9a5f6b19b48f3e137024ea380a83ca6116c70f3b2e7a17d",
     "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "3c3b84d34e6d27d86e5923eb321ac6d1783508a4550480bf0944af3833bac4fb",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "662c58080dd8a5189f315ee7dfcf3b419f88e7d4c982266c8baf285ea6962d65",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-forms-direction-c/evidence.json": "834c9b626cece0cca018b13127b90ec7e87d7d2c6321759e7566abe5e9bba629",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json": "aeb78fc5f72cedbb944eb6871b0b06b2a56c773d121086861e78459ecea10595",
     "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json": "d28b7a421dcd2d12d66a21444097b8e6c4da2c47d1b51ecc49241d647202a502",
     "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/evidence.json": "a914119d5419e7b1a342252e53c994994361a92b6ff8d6b49013c3f4ff28d112",
@@ -118,7 +119,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "f0a25e68f8096db8f1536fd1a8f5c535ce6025d9f0403bf173e3fa8b69a61505",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "f269dfc1fcf5ae18549b7ff6ec5bed2f99c2fae491913de347844eaec77a46bb",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "9a2a84e9043d1eeb1f8c26c2402af259e393497217fd02d1d910fe457e477791",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -127,16 +128,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 86,
+    "packages": 87,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 894,
-    "sourceBindings": 1668,
+    "uniqueBoundFiles": 900,
+    "sourceBindings": 1688,
     "sourceDrift": 0,
-    "pngs": 11933,
+    "pngs": 12047,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 9204,
+    "readmeLinksChecked": 9234,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -401,6 +402,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P27",
       "spec": "page-specs/P27.md",
       "packages": [
+        "automation-forms-direction-c",
         "automation-controls-direction-c",
         "automation-direction-c"
       ],
@@ -896,6 +898,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/automation-direction-c/evidence.json",
       "prototype": "design/automation-direction-c/index.html",
       "gallery": null
+    },
+    "automation-forms-direction-c": {
+      "id": "automation-forms-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 114,
+      "readme": "design/automation-forms-direction-c/README.md",
+      "evidence": "design/automation-forms-direction-c/evidence.json",
+      "prototype": "design/automation-forms-direction-c/index.html",
+      "gallery": "design/automation-forms-direction-c/gallery.html"
     },
     "backup-recovery-direction-c": {
       "id": "backup-recovery-direction-c",

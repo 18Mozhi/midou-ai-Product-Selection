@@ -1,0 +1,27 @@
+#editor :is(input, select, textarea) {
+  border-color: #7a8ba8;
+}
+#editor .field-hint {
+  color: #52647e;
+  line-height: 1.55;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+#editor .field-error {
+  display: block;
+  padding-left: 10px;
+  border-left: 3px solid #a32d30;
+  color: #a32d30;
+  font-size: 14px;
+  line-height: 1.55;
+}
+#editor [aria-invalid="true"] {
+  border-color: #a32d30;
+}
+#editor #editor-result {
+  font-size: 16px;
+}
+#editor :is(input, select, textarea):focus-visible {
+  outline: 3px solid #254a9c;
+  outline-offset: 3px;
+}

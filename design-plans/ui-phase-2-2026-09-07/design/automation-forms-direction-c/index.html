@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P27 自动化规则 · 字段状态待审</title>
+    <link rel="stylesheet" href="../automation-direction-c/automation.css" />
+    <link rel="stylesheet" href="forms.css" />
+    <script defer src="../automation-direction-c/data.js"></script>
+    <script defer src="../automation-direction-c/automation.js"></script>
+    <script defer src="fields.js"></script>
+    <script defer src="forms.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <dialog id="editor" aria-labelledby="editor-title"></dialog>
+    <dialog id="execution" aria-labelledby="execution-title"></dialog>
+    <section class="workspace" aria-label="字段审核工具">
+      <h2>P27 字段状态 · 独立待审图稿</h2>
+      <p>
+        沿用 C 蓝色目录与白色分区编辑器。此工具仅选择审核样例，不是产品功能；未连接
+        API，不保存真实规则。
+      </p>
+      <label>目标字段<select id="field-select"></select></label>
+      <button id="show-field" type="button">显示字段</button>
+      <p>
+        请直接输入、切换动作、试运行或提交以核对约束。保存期间可继续编辑，但已记录请求不随草稿改变。
+      </p>
+      <a href="gallery.html">打开双端字段图册</a>
+    </section>
+  </body>
+</html>
