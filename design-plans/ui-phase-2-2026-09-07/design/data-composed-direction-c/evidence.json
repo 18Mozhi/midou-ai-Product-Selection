@@ -1,0 +1,6230 @@
+{
+  "version": "DATA-COMPOSED-C-r1",
+  "approval": "pending",
+  "kind": "persistent-scoped-components-offline-proposal",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
+    "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
+    "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "scripts/lib/ui-phase2-data-records-design-data.mjs": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
+    "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/index.html": "c5ccf39bac61f7cf67b281ad5fda93e629f4152ed4df8f0fb34be9a0dc9cc3a3",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.css": "4559c4182eeb6e1198b7a4928628e08f40a0ad6c805a14785281fd07513ab330",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js": "ee46acbc06c4791043fca60b6a76d2cc0c3d9162768ceae5b7e23c623a53dfea",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json": "f788c244f691fdfd4dbecad616933e689cf85cd7a78fdf85e77df05de0314a0a",
+    "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/api/src/data-quality-service.ts": "39bcb82436d7b520e4597bbe8e1bc8e2930e260f564050cd17790c943659a6fc",
+    "apps/api/src/data-quality-routes.ts": "b937aae166ac5f0993b967643dc18e68eef8c2422123aa15cf6ea78e3e3d806c",
+    "apps/api/src/mysql-data-quality-repository.ts": "43e62fdd3a08b3866a66c1e4e7d6c528365edbf2db72716d596e91323b414cd2",
+    "tests/e2e/m03-06-evidence-data-quality.spec.ts": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+    "scripts/lib/ui-phase2-data-quality-design-data.mjs": "91fdcbbadc6f12c20f8d6ebea9f72b7dee390ccca618324d0e0c4b709157462a",
+    "scripts/verify-ui-phase2-data-quality-c.mjs": "34b233ff77fc83e61fe1aa3ad8223e5459bdc134ac756d33d8436ff299d80f82",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/index.html": "2af5828081d89f747203e122b29304a0546b7425043ae058593ec6cf6f13e353",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.js": "0793b418175c3d5eb91026f50be7e8843d174fb03db7b4ff208b223e84aa7b44",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/data.js": "8ebe001d26c1ce7531734f2aabb33c2ca18f8f5ec6d990409154d1094b20584e",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/source-logic.js": "d5aaedb1e113d8bc31ccd6a4f38238c084a63acc63b531a4d1ca6b033eaf9689",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json": "afb5b2e1cfb4fb838ced20a00729790c9d5d9dd9582b211944f5e98c623c48bf",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/index.html": "a97a6fa58eb47c984ea69db28ddea63afd7f83b6481aa2af92ad612dec4aa280",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/composed.js": "053cac6c693b6403864a1c6d0d8081cbde2b727481e3a612ed923f18917f43e7",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/composed.css": "a2c54d819341b7804f6861c01758ecf00ded6be5e1e9164f3abd8ede66199fb4",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/component-overrides.css": "e139f82f70560dc6970cd8264dc49d6d9762f4cab16eba04e582e10aad355edd",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/records-scoped.js": "921351f5315bc3af52abe0dfc86b5a6812c44c47ae25c63ecd9941ff47f5512b",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/records-scoped.css": "d40ea59d13ce1bf79e4bdb1be06ad5120f98f02942be223a0a70aeff055bcd9a",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/quality-scoped.js": "09b3ea1dfa6be4b2ed09f46cf8325140ca4413ab2bdffe0b3d2e0749d33f1a76",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/quality-scoped.css": "f460873c45dd6bec5c3b9d99eb3382d66b86edafd7f0c9d3626feb9102018618",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/templates.js": "e616da2e907a97b0653b0920d163a337103aefd6c9eab2bb73b1e3b1b088d598",
+    "scripts/build-ui-phase2-data-composed-c.mjs": "fa65b87cc8878a5bbd3a5288e52d9fe10365bcf1024cbabfc3f62a9ff2d71fc2",
+    "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879"
+  },
+  "boundary": "Same document, no iframe. No Vue mount, history traversal, deep-link restore, SQL, grant, audit, or deployment acceptance. Existing independent operation contracts remain proposals. Scoped ID uniqueness does not require globally unique IDs across shadow roots.",
+  "screenshots": [
+    {
+      "file": "1440-continuity-record-draft.png",
+      "scene": "continuity-record-draft",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "230e74131eae395408f397352405dafbf0ce90dab801249612f7556641b725d5"
+    },
+    {
+      "file": "1440-continuity-hidden-quality-selection.png",
+      "scene": "continuity-hidden-quality-selection",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 14,
+        "textNodesChecked": 67,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f238d5a15d08f324f83beb4664380ae9e009d3d833f2ef32c4d4ed9d1c4b1c6e"
+    },
+    {
+      "file": "1440-continuity-record-response.png",
+      "scene": "continuity-record-response",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "cfa19b384bc6af13dbfbfce1516ca762320341d572440780666cbad6b4a9d642"
+    },
+    {
+      "file": "1440-continuity-hidden-export-unknown.png",
+      "scene": "continuity-hidden-export-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 78,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f24e09a0002884652dc0e75b4b74171d595fbaae51d3900af45bb51dd55968f2"
+    },
+    {
+      "file": "1440-continuity-export-unknown-return.png",
+      "scene": "continuity-export-unknown-return",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 71,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "636f64f46e885bea2e17e829559590945911fb6798c68e6349c85a18b6de6dca"
+    },
+    {
+      "file": "1440-continuity-quality-page-failed.png",
+      "scene": "continuity-quality-page-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 72,
+        "textNodesChecked": 287,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "cb49eb275c1f0ec4d04de88f16aea2b0490016e28f2d8c8af9958830b2f63845"
+    },
+    {
+      "file": "1440-continuity-quality-page-return.png",
+      "scene": "continuity-quality-page-return",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ac4e661e589c9b5f6ae22d75dede6430253dd8cf2af1ace2fc0a107e0d562b6e"
+    },
+    {
+      "file": "1440-continuity-quality-write-read-failed.png",
+      "scene": "continuity-quality-write-read-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 83,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "09a91c6db71fd8d43e66b948adffd7ec1ab710d690dd1c50a18c4ff66cf7defd"
+    },
+    {
+      "file": "1440-records-default.png",
+      "scene": "records:default",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "067e3a958d7a66f143d11d819647a855abb4368a59d73eeabababb882f1e3caa"
+    },
+    {
+      "file": "1440-records-original-supplier.png",
+      "scene": "records:original-supplier",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ba65d2bdedf80a5c7a1985ba97595d647e468d8237e8f38f984f206eca74ac66"
+    },
+    {
+      "file": "1440-records-trends.png",
+      "scene": "records:trends",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 25,
+        "textNodesChecked": 109,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3be733d158b01e0a04fcec080fadb59cd56e8d47a572b92c61bf7aa9ec9798cd"
+    },
+    {
+      "file": "1440-records-opportunities.png",
+      "scene": "records:opportunities",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 25,
+        "textNodesChecked": 109,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3e5a529e80862b63ef926cb65924ae017ffdc63bc1b4eb258bd662d5d6b61a8a"
+    },
+    {
+      "file": "1440-records-competitors.png",
+      "scene": "records:competitors",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 23,
+        "textNodesChecked": 83,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ad440325ac9b563d7d8c4d1ea6ffc1ae49e8f1680e7e6cbcb7277e5a43803488"
+    },
+    {
+      "file": "1440-records-suppliers.png",
+      "scene": "records:suppliers",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 24,
+        "textNodesChecked": 96,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6c2caf91649c022eb0423c624b3c424a0e443a63440b1d4a83152c723607e7c5"
+    },
+    {
+      "file": "1440-records-empty.png",
+      "scene": "records:empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 38,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b23b023b5f445b8d0d7cd1405d5de80c554fd11e11b6d534a577202f1bf10e45"
+    },
+    {
+      "file": "1440-records-loading.png",
+      "scene": "records:loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 38,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a90bda5d23d54401028bef335d278bdbd5d7557d97844fadd4c6fd2b0084bf25"
+    },
+    {
+      "file": "1440-records-expired.png",
+      "scene": "records:expired",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 36,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "888661d03695c88c507c120c64d7e3f50f829409a69d10a3df03f2ebb98afbd0"
+    },
+    {
+      "file": "1440-records-forbidden.png",
+      "scene": "records:forbidden",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 36,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f2ad1f8b478a4767dd6aef5582fe21fb40b67cd5307221111ed469f255a65b63"
+    },
+    {
+      "file": "1440-records-blocked.png",
+      "scene": "records:blocked",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 36,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3b6c5ffa9a4189dc9eb974b9a60ec5db90c6036c06dbfab40155a8c9a6b2767a"
+    },
+    {
+      "file": "1440-records-error.png",
+      "scene": "records:error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 36,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ee6754f464c1bc930b26cb8a8c8e7368fe2e508142f8a20f6bc5c0605bdc4249"
+    },
+    {
+      "file": "1440-records-refreshing.png",
+      "scene": "records:refreshing",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 71,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4a11dc68bd49a442af70f37a641c41eef0baae4790e953858353a9e0678f3db5"
+    },
+    {
+      "file": "1440-records-refresh-error.png",
+      "scene": "records:refresh-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "28d886af65b5bad2da1c39b55217daf7d7c339fc06e73020dcaaa960dd9eedd9"
+    },
+    {
+      "file": "1440-records-refresh-timeout.png",
+      "scene": "records:refresh-timeout",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d4a1c34c2dabc66bdbe7130f6c0908d958b406bba9ebf890f6c37fa39c09c68a"
+    },
+    {
+      "file": "1440-records-scope-pending.png",
+      "scene": "records:scope-pending",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 71,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d0b421470f36b7bbafb8a997b05fc5b6b9fdd67e4c68d90d10438486175f9034"
+    },
+    {
+      "file": "1440-records-scope-error.png",
+      "scene": "records:scope-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "dac8839434657b0c45270d5b819b8dd41ab7478a55903320001939d7621a2c18"
+    },
+    {
+      "file": "1440-records-query-draft.png",
+      "scene": "records:query-draft",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "229d71fa1e69d022893ef51ae80deeb667db8281912475a6d8f451265c243f27"
+    },
+    {
+      "file": "1440-records-query-max.png",
+      "scene": "records:query-max",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "59ee3a154032fc60a1d43335d9237a750d1cf610c0a1b90bd4357ba0d9624101"
+    },
+    {
+      "file": "1440-records-filtered.png",
+      "scene": "records:filtered",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "626859ca17fd9400038043131a5b2b293c9461c00eb7897799a52fb27a04d211"
+    },
+    {
+      "file": "1440-records-page-21.png",
+      "scene": "records:page-21",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 41,
+        "textNodesChecked": 278,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "8f04b7096ed9dd2c5e0efdbbfb71a4de3b695f4bd084342a12e27b95d60fe168"
+    },
+    {
+      "file": "1440-records-page-two.png",
+      "scene": "records:page-two",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "190a7b9ae910f3c9e9aee596eb9528ed94621112325f6ce641caf98ede584fb7"
+    },
+    {
+      "file": "1440-records-limit-100.png",
+      "scene": "records:limit-100",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 41,
+        "textNodesChecked": 278,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "2fa9b9f765ace7d9ced2f4027deb95f52fb313850fb9943f61d150530057399b"
+    },
+    {
+      "file": "1440-records-export-page-two.png",
+      "scene": "records:export-page-two",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 10,
+        "minText": 16,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "a4e78330dbf1bef8b866e84be9a1b370b85c327a569cd261f93313b3d6edc137"
+    },
+    {
+      "file": "1440-records-filter.png",
+      "scene": "records:filter",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 7,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "b0091795bd1721316a6964b982742ea54d7c4ce36a39c8635882fc030caec86b"
+    },
+    {
+      "file": "1440-records-detail.png",
+      "scene": "records:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5828dbe7263c9347f4e752ddb802efb3ab17cfcf9fa52ff22c6de46a5ccff90e"
+    },
+    {
+      "file": "1440-records-long-detail.png",
+      "scene": "records:long-detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "c9e1693e091e16186b242b7a1b8ccd3e7a799323942121d2b32c7c25c8139f64"
+    },
+    {
+      "file": "1440-records-export.png",
+      "scene": "records:export",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 10,
+        "minText": 16,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "bfc572c6a50b9cff8f131c32c1a4c44721ab0f3df09f04707242b45b9dd6b3dd"
+    },
+    {
+      "file": "1440-records-export-empty.png",
+      "scene": "records:export-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "102e659911fd770cd102e288c6dfbf4ab1f4da3034e5055aa92ab10dd18f3ce5"
+    },
+    {
+      "file": "1440-records-export-short.png",
+      "scene": "records:export-short",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "11af5f467bb7552191cabb0acfb2cdafe4303441f3044c1e21a150bd53611434"
+    },
+    {
+      "file": "1440-records-export-max.png",
+      "scene": "records:export-max",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "e6b63420914943ae9d9975f8475a4516f7de3ca3dd94b4b9fa467b9dee5711bf"
+    },
+    {
+      "file": "1440-records-export-over.png",
+      "scene": "records:export-over",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "59dfb439398c5cdfb826de76b74912076521af4782c937c5ea9012efb2be501f"
+    },
+    {
+      "file": "1440-records-export-running.png",
+      "scene": "records:export-running",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 71,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6cb3f92b7eaa2179d37b742e0a8d15f3dd00eefde4e84db367e6fa8faec5aa9d"
+    },
+    {
+      "file": "1440-records-export-success.png",
+      "scene": "records:export-success",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "8c2f482dac388985214b0996c92644f9fc969a36867c8a9ab539cf29739331a4"
+    },
+    {
+      "file": "1440-records-export-error.png",
+      "scene": "records:export-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c9d87f4630ba77e5e9adf9851e0a64e878bd8f3aa3f39ffcd00593f50af37751"
+    },
+    {
+      "file": "1440-records-export-unknown.png",
+      "scene": "records:export-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 71,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "9d52056ad2e45d198439ec5320e8a6a49ac95771733f3386679852e356d45499"
+    },
+    {
+      "file": "1440-records-columns.png",
+      "scene": "records:columns",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ceb684a2b7cd665e948d800a3a190d8da747f9fc77a12dafd10d2985e3d0b8c5"
+    },
+    {
+      "file": "1440-records-compact.png",
+      "scene": "records:compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "791eea71cd3ada10c0f3419c81d3f2523b6c83add045044116e7af5b593f939b"
+    },
+    {
+      "file": "1440-records-technical.png",
+      "scene": "records:technical",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "1f9504e6a01f4a8dadae266fc7958767edd5bcc33397937087db2a473832bb07"
+    },
+    {
+      "file": "1440-records-copy-failed.png",
+      "scene": "records:copy-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "250f428bbf2bea37295434fc581c7fc6cfbd6f2e1213a06aca997e02642c2239"
+    },
+    {
+      "file": "1440-records-hover.png",
+      "scene": "records:hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a7f3ca52fd9bd7143c45a64a709a001d12a56fe6220a6d142e821522e0eb1ef3"
+    },
+    {
+      "file": "1440-records-pressed.png",
+      "scene": "records:pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7467e88fc7b5d09af142fba1ff4862d71980de256e9c0914247c3758bd82dfcb"
+    },
+    {
+      "file": "1440-records-focus.png",
+      "scene": "records:focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7d0c2d3554097ebdb82444e5cdb3c15f20215027688c4509fd4992b75e033751"
+    },
+    {
+      "file": "1440-records-trends-active.png",
+      "scene": "records:trends-active",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "42f010c064d3342fc60873f40387c57c219b20984052b7d25d1a758ee2196f26"
+    },
+    {
+      "file": "1440-records-trends-irrelevant.png",
+      "scene": "records:trends-irrelevant",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "cf6e02ba20a4617feb496411675a4ff45e85bdfa228cddfb459805a68666fa28"
+    },
+    {
+      "file": "1440-records-trends-stale.png",
+      "scene": "records:trends-stale",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3f03c5d10bee222e5c42fe238ed49c6480aeec3e6c636c82910e7acb95eefe6d"
+    },
+    {
+      "file": "1440-records-trends-archived.png",
+      "scene": "records:trends-archived",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "69c44a3ea6c5b4dd3394eded2a7f09175cb932c2aae2ef3f3c77c220a37fff3b"
+    },
+    {
+      "file": "1440-records-opportunities-pending.png",
+      "scene": "records:opportunities-pending",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "47a2a8abe9e01fa9afdc6415e3cec1e27c749112ecf038dc3148e0074ed3a4cb"
+    },
+    {
+      "file": "1440-records-opportunities-adopted.png",
+      "scene": "records:opportunities-adopted",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f3f049e5cec501c20c40f67574b9aed084957d07b77b0dceae0a6da8addf3afe"
+    },
+    {
+      "file": "1440-records-opportunities-observing.png",
+      "scene": "records:opportunities-observing",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "e4169414172fe14ad534cefa89f0fcc71f10a858a7df64dfc1212661e1a02669"
+    },
+    {
+      "file": "1440-records-opportunities-rejected.png",
+      "scene": "records:opportunities-rejected",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "14f391c59e6dbc3ff22ea4f2162d15b71831d121e568f772f8e76a43e56165ac"
+    },
+    {
+      "file": "1440-records-competitors-active.png",
+      "scene": "records:competitors-active",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a081008f73876ea0ddcf4a0d0ca7549b3e5de10e8cf30d9a89dea7b37756e504"
+    },
+    {
+      "file": "1440-records-competitors-paused.png",
+      "scene": "records:competitors-paused",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "9b66587c5ccbbfc1be1328b7a015bd232ebac0b5a18d790530fbdaa9581dcf54"
+    },
+    {
+      "file": "1440-records-suppliers-incomplete.png",
+      "scene": "records:suppliers-incomplete",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 70,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3fbdb8db76ede1f9b4e57e05b05fd40048dcd673dc77361eebe696475653f33c"
+    },
+    {
+      "file": "1440-records-suppliers-ready.png",
+      "scene": "records:suppliers-ready",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6ff8f142cac2de28f5de85b9ad8747c68713bf28f2b2e1736c6f5d89fe09940e"
+    },
+    {
+      "file": "1440-records-suppliers-quarantined.png",
+      "scene": "records:suppliers-quarantined",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f36b32008ff82d7005eed6959ed8fd2b176fd801874593816a4527ef2db1f777"
+    },
+    {
+      "file": "1440-quality-default.png",
+      "scene": "quality:default",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4a5197699fc6efffd59f576021c44d47f1f0b310c994df421be86dafb9e7dadd"
+    },
+    {
+      "file": "1440-quality-issues.png",
+      "scene": "quality:issues",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 81,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "fe7c69b947ed8ffa78c02ee18cd647f3d131426f32a2c679979b3ad1da946f4d"
+    },
+    {
+      "file": "1440-quality-runs.png",
+      "scene": "quality:runs",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "2e193585059e0e3ecd17cfc054f8cec9a99250a26eb4f8aa4e8ec74d6ea7d1a6"
+    },
+    {
+      "file": "1440-quality-metrics-mixed.png",
+      "scene": "quality:metrics-mixed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 89,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b2c193b6fa586eacdbef5e02200f8dd77cfed8a130404404b2a255c54ab0e6ad"
+    },
+    {
+      "file": "1440-quality-metrics-empty.png",
+      "scene": "quality:metrics-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 75,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "664b9381303b076aa7272f50eb67603df93c4b81597e3f92d3c8b3aa5ed694d3"
+    },
+    {
+      "file": "1440-quality-risk-expired.png",
+      "scene": "quality:risk-expired",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "cd2ed2105c311997e5d8e53a9a10ecbc4be365aa2b6d2aacf1cb43ee5f05dc4a"
+    },
+    {
+      "file": "1440-quality-risk-unknown.png",
+      "scene": "quality:risk-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "73d5cdb403956592636f6c4f686f8cb9662772cfd08e15b3cb249745111bba9c"
+    },
+    {
+      "file": "1440-quality-local-empty.png",
+      "scene": "quality:local-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 12,
+        "textNodesChecked": 63,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "8e246686d57d739bc60b49ade848dc73f4d45280f88973db1436c1f64083e3f2"
+    },
+    {
+      "file": "1440-quality-run-empty.png",
+      "scene": "quality:run-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4863dffba0d87a495e762049ee7917012e21a672306c8726b6ab17971c79d0ea"
+    },
+    {
+      "file": "1440-quality-run-match.png",
+      "scene": "quality:run-match",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 83,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d51f3573aaa7369c87314782a239d944f4797b6b9a61e24f13b5b4ab8920bf17"
+    },
+    {
+      "file": "1440-quality-selection-hidden.png",
+      "scene": "quality:selection-hidden",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 14,
+        "textNodesChecked": 67,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c9f676f6633c1891a4b39eceffbc7055df993ae7d79b4c3ef825ca080d8ad6a7"
+    },
+    {
+      "file": "1440-quality-issue-resolved.png",
+      "scene": "quality:issue-resolved",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "dd091132d12a9f88f45b1024249ca352d31f317c409a9de3da3b6e02a4bcaccf"
+    },
+    {
+      "file": "1440-quality-issue-null.png",
+      "scene": "quality:issue-null",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 26,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "182172e1f7168f7f6b05721b70fb75b5446b3a5a0c90ed897d871520b20227a2"
+    },
+    {
+      "file": "1440-quality-evidence-detail.png",
+      "scene": "quality:evidence-detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 35,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f4833dd7024c2e86742c2dbdc7917de1ebe3281047916264a7c723c37790edc5"
+    },
+    {
+      "file": "1440-quality-lineage.png",
+      "scene": "quality:lineage",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "cec701c048d2aa2529130bf0fb566f67aab99119f0ac37b7ba0036182732c22b"
+    },
+    {
+      "file": "1440-quality-lineage-technical.png",
+      "scene": "quality:lineage-technical",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "e301b74e81d990cbdb76309a9277d8272c4e4d808e7ab48be76bda9bea899f47"
+    },
+    {
+      "file": "1440-quality-issue-technical.png",
+      "scene": "quality:issue-technical",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "d7cc90881705e1f001f0546961dd53e9d38a697dd635c85672c11b31a544c5e2"
+    },
+    {
+      "file": "1440-quality-copy-failed.png",
+      "scene": "quality:copy-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 54,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "e301b74e81d990cbdb76309a9277d8272c4e4d808e7ab48be76bda9bea899f47"
+    },
+    {
+      "file": "1440-quality-lineage-loading.png",
+      "scene": "quality:lineage-loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 8,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8f15bf06dcb3239ccc342f5aba0d673245f6b4130c616937eb9be02bcc0ca653"
+    },
+    {
+      "file": "1440-quality-lineage-error.png",
+      "scene": "quality:lineage-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 8,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "043f29f5e163cb21af07737a8e6781829422b114ef085e26f404e04125ba50fb"
+    },
+    {
+      "file": "1440-quality-long-lineage.png",
+      "scene": "quality:long-lineage",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "3d2f93eba60f5ab2a0553ed4d2f48687ccc289dcdee1ee15ba23f284d0b7a852"
+    },
+    {
+      "file": "1440-quality-issue-detail.png",
+      "scene": "quality:issue-detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "4b1a8d9be267c07cb60228ef2fdc430e1b836af71ad58af99e298169427a7554"
+    },
+    {
+      "file": "1440-quality-download-ready.png",
+      "scene": "quality:download-ready",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "832abbfbdddacb2ed3ecf93393d6d94e46a1e9d6e348ca298adea459fad2b4b5"
+    },
+    {
+      "file": "1440-quality-download-busy.png",
+      "scene": "quality:download-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 19,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "0cda767aa56a04ad43227c835d7c919af8be47f04531c9067790264762f6e3db"
+    },
+    {
+      "file": "1440-quality-download-success.png",
+      "scene": "quality:download-success",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "b27981204fe5845f0fc540d2e223389a7658ec12dbf457cb38275421e6da3bf6"
+    },
+    {
+      "file": "1440-quality-download-unknown.png",
+      "scene": "quality:download-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8a4a5b91113a16fc9865da7bdf4d0d630f7ea4ae5be1738f2678a0959a507b7a"
+    },
+    {
+      "file": "1440-quality-download-error.png",
+      "scene": "quality:download-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "e9117494bdada492679d1068a990ec3d46bc0778a14764d70a84123715df2ee0"
+    },
+    {
+      "file": "1440-quality-download-expired.png",
+      "scene": "quality:download-expired",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f3d57013d05f693cc5dd9a4d61c152879b799f22474c27067dce3c6117025e8b"
+    },
+    {
+      "file": "1440-quality-download-missing.png",
+      "scene": "quality:download-missing",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "62a2a8aa0ed8a35e2a9d2e63c11664695ff097a204999ac44f46014afc6b1d69"
+    },
+    {
+      "file": "1440-quality-download-integrity.png",
+      "scene": "quality:download-integrity",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5b7bcc3ecaa61226579385a91ab95c3680bd37b6b379327cbf19dbb293784932"
+    },
+    {
+      "file": "1440-quality-download-no-key.png",
+      "scene": "quality:download-no-key",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "2ba94cd2c0d2cf86a75464e726c5e8e2f03e575b64a1dd17c3eea0f8e880dd04"
+    },
+    {
+      "file": "1440-quality-resolve-empty.png",
+      "scene": "quality:resolve-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 14,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8f9841e9472baf60c8bad87de7baf147873d197ceaaf1be16a4aead28c3e098e"
+    },
+    {
+      "file": "1440-quality-resolve-short.png",
+      "scene": "quality:resolve-short",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "37605e40954589fb39783cc428d9a761af0d10f8d3332f8c0e8dc5302f2546ba"
+    },
+    {
+      "file": "1440-quality-resolve-valid.png",
+      "scene": "quality:resolve-valid",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "94da30c7d5e1063180de9a9dbbbc2c8fc846b4b1dfaeb91b200a8d1e7b35c49d"
+    },
+    {
+      "file": "1440-quality-resolve-limit.png",
+      "scene": "quality:resolve-limit",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5acba5c34892155a725e747c48c64599d3968609ac9d825d22fa0527f083b604"
+    },
+    {
+      "file": "1440-quality-resolve-confirm.png",
+      "scene": "quality:resolve-confirm",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "bc8dd2e0789c63894cd2788d4aed85db09ba2f8e6eb511b02bb7960f0cb74b0c"
+    },
+    {
+      "file": "1440-quality-resolve-ready.png",
+      "scene": "quality:resolve-ready",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "ec91974aebe88c7b6a2d10295b574c4d05a48065eeb6430fc753df5b24dab57f"
+    },
+    {
+      "file": "1440-quality-resolve-busy.png",
+      "scene": "quality:resolve-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "3e9f424acfc486774372971100b9347aea8da3459fef389c823c5ecb5eaa4f7e"
+    },
+    {
+      "file": "1440-quality-resolve-conflict.png",
+      "scene": "quality:resolve-conflict",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "ba0fe67d17f9bf0c09a57b3422f4a2a8b2264963d1c48bfb49e5aeda84380e3a"
+    },
+    {
+      "file": "1440-quality-resolve-unknown.png",
+      "scene": "quality:resolve-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 23,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "50189be77789f97fe79055dbd364cef0676b6b39012961b6928ecaa9a4bb874f"
+    },
+    {
+      "file": "1440-quality-resolve-read-failed.png",
+      "scene": "quality:resolve-read-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "68304791388130e24f97b2663964e49720ecd89400cab7c5b02019ca76552f20"
+    },
+    {
+      "file": "1440-quality-resolve-success.png",
+      "scene": "quality:resolve-success",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "0d1d58b8fe17d68cae2bed4d16c512b489559824cd80f8a4cc63169353086eb6"
+    },
+    {
+      "file": "1440-quality-batch-attribute.png",
+      "scene": "quality:batch-attribute",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "ef0b24de6f8c2810dfd8eceb600df9fe1c3814200b4585fba63ca6f94e86e72a"
+    },
+    {
+      "file": "1440-quality-batch-assign.png",
+      "scene": "quality:batch-assign",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "05d2b8681f17954ea8a84f677a74557f5455d5c1f118d869f7af0ec6b69a08be"
+    },
+    {
+      "file": "1440-quality-batch-assign-confirm.png",
+      "scene": "quality:batch-assign-confirm",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "a6d1ee0a9ddcc9434aca955905e3f02720d4f72da7406892d44bc3ff196e0247"
+    },
+    {
+      "file": "1440-quality-batch-no-member.png",
+      "scene": "quality:batch-no-member",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8529b5a1c97fd2829cac59226e711b24b4ba9a03eadbe2334aca3674c2d96980"
+    },
+    {
+      "file": "1440-quality-batch-close.png",
+      "scene": "quality:batch-close",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "e807d4f961f89ac0d9ae744e9ffa750ce991b7820a295c1f01a0ac81c3b3581e"
+    },
+    {
+      "file": "1440-quality-batch-close-confirm.png",
+      "scene": "quality:batch-close-confirm",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "4b549874fbfc96d5537583fdb12e98e81ff0dab1de3de53e725eb9acb8a90f98"
+    },
+    {
+      "file": "1440-quality-batch-confirm.png",
+      "scene": "quality:batch-confirm",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "ad78e58803fa3ded4d1b93817206580a194ba4ef1ee9c48cb2b7546d84650d30"
+    },
+    {
+      "file": "1440-quality-batch-ready.png",
+      "scene": "quality:batch-ready",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8685e916a7ffda9b3ba699b340cd67de5c396e1100306f8411531dc27fbd4920"
+    },
+    {
+      "file": "1440-quality-batch-busy.png",
+      "scene": "quality:batch-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "1869d855ab4d22edb712373afd48dcf35ab52865a38a64b17e2e3ed1c62b82d1"
+    },
+    {
+      "file": "1440-quality-batch-conflict.png",
+      "scene": "quality:batch-conflict",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "688bfa18d411335ce47172133334637ddfc8bd3c1500f24eb38261fa3f1dcd6e"
+    },
+    {
+      "file": "1440-quality-batch-unknown.png",
+      "scene": "quality:batch-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 23,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "d1a62dfba68ccb21aa1c831a7ad1fecbc70c2d0300f78e6b1fa872a087ff4254"
+    },
+    {
+      "file": "1440-quality-batch-read-failed.png",
+      "scene": "quality:batch-read-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "0e9b58e5cc093445299154309d5c83e1e3bcc6979bd656a36e116c25a849065b"
+    },
+    {
+      "file": "1440-quality-batch-success.png",
+      "scene": "quality:batch-success",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "a57c10698b0d419a359160b3d9421193bb7ae9bf6d76a5400e17403c60efd771"
+    },
+    {
+      "file": "1440-quality-page-first.png",
+      "scene": "quality:page-first",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 72,
+        "textNodesChecked": 286,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d1013590f8f482d8267bb22efbe37cb29f866cef11f3a1c6c7262811af024863"
+    },
+    {
+      "file": "1440-quality-page-last.png",
+      "scene": "quality:page-last",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7f5190eed978cd52eff0616f9cfff846d32a7032d6f898b043e8674ae7111f0a"
+    },
+    {
+      "file": "1440-quality-page-wait.png",
+      "scene": "quality:page-wait",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 72,
+        "textNodesChecked": 288,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c3ff3789137307e613e4cf15951dbba80d1892d2b51901a2155b6dbc07171ac7"
+    },
+    {
+      "file": "1440-quality-page-failed.png",
+      "scene": "quality:page-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 72,
+        "textNodesChecked": 287,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "85ac3d80010544e684cd128ba8059b06b339af3c284f35b25defbb04b6c4a668"
+    },
+    {
+      "file": "1440-quality-settings.png",
+      "scene": "quality:settings",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 13,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f2a8088aa5356800af5e7c32caba089fb1c515d41d8f487ab49ccf70b0209210"
+    },
+    {
+      "file": "1440-quality-compact.png",
+      "scene": "quality:compact",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "08e0f65863980533fa401cf9708fae1051bdacbb5bf709a4e031e7857acb3acf"
+    },
+    {
+      "file": "1440-quality-dark.png",
+      "scene": "quality:dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "9636b83bc0ddeca04e21601e9ddba7623d141538c469a9d43ff482774731efdb"
+    },
+    {
+      "file": "1440-quality-contrast.png",
+      "scene": "quality:contrast",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7eea33445c1d716202174aeb4a79fa4f15e674541545222abeadf9c39215e3d3"
+    },
+    {
+      "file": "1440-quality-loading.png",
+      "scene": "quality:loading",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "863495780c4f12fe4f74e0e6d180648afd0c8f6aa7e813edcadddfb409d0d603"
+    },
+    {
+      "file": "1440-quality-empty.png",
+      "scene": "quality:empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "0c3b19ec47aa9f0c23fa9689e4a8b779e2eaf74620c189c565a9727054669bb7"
+    },
+    {
+      "file": "1440-quality-expired.png",
+      "scene": "quality:expired",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "1eb3bf40d2ac6d91c9335621101bd03ce9204a2136802c21ebb1ab027e595692"
+    },
+    {
+      "file": "1440-quality-forbidden.png",
+      "scene": "quality:forbidden",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b5db57a016ed81e064cbf1a9d7721ec8ad17889b8e8327adcd21e5e2263032f6"
+    },
+    {
+      "file": "1440-quality-blocked.png",
+      "scene": "quality:blocked",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "5b3e9edf4c651108d20d84f60673c34bd4a91185ebbd0d7312458ad3495e78ee"
+    },
+    {
+      "file": "1440-quality-error.png",
+      "scene": "quality:error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "92159c0fd389c91fc3c16c85194ccdc8da16ff4efc50aaf8881577b2faa20ae9"
+    },
+    {
+      "file": "1440-quality-hover.png",
+      "scene": "quality:hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "5142933d224a91c439d93263505367f296711f7fa4bfbbb625249bbc943816b4"
+    },
+    {
+      "file": "1440-quality-focus.png",
+      "scene": "quality:focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "5142933d224a91c439d93263505367f296711f7fa4bfbbb625249bbc943816b4"
+    },
+    {
+      "file": "1440-quality-pressed.png",
+      "scene": "quality:pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ad64af999131504a5a5ac674f98b69f9df0388950bb917eac6ac41974c044f84"
+    },
+    {
+      "file": "1440-records-long-detail-footer.png",
+      "scene": "records:long-detail-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "c9e1693e091e16186b242b7a1b8ccd3e7a799323942121d2b32c7c25c8139f64"
+    },
+    {
+      "file": "1440-records-export-max-footer.png",
+      "scene": "records:export-max-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "e6b63420914943ae9d9975f8475a4516f7de3ca3dd94b4b9fa467b9dee5711bf"
+    },
+    {
+      "file": "1440-quality-long-lineage-footer.png",
+      "scene": "quality:long-lineage-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "c3cec1706031f44ea2d7bd1f5a583bbe7a26d646ddc9785451c44d94a2e45082"
+    },
+    {
+      "file": "1440-quality-resolve-limit-footer.png",
+      "scene": "quality:resolve-limit-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5acba5c34892155a725e747c48c64599d3968609ac9d825d22fa0527f083b604"
+    },
+    {
+      "file": "1440-quality-batch-assign-confirm-footer.png",
+      "scene": "quality:batch-assign-confirm-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "a6d1ee0a9ddcc9434aca955905e3f02720d4f72da7406892d44bc3ff196e0247"
+    },
+    {
+      "file": "1440-workspace-records-hover.png",
+      "scene": "workspace-records-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a7b3bfcc69d344afdf501a4bf1fd31d14efd6a7c18688b816fa731aa99bbb687"
+    },
+    {
+      "file": "1440-workspace-records-focus.png",
+      "scene": "workspace-records-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6a523da826bdc0270da8d769cc1bba48b93d65e6d3f4358fb74ce97ebc269672"
+    },
+    {
+      "file": "1440-workspace-records-pressed.png",
+      "scene": "workspace-records-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 22,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "53518da4a0ae3ec6bac289c849983bd7bb137262c703d89ae41c68138a8770e2"
+    },
+    {
+      "file": "1440-workspace-quality-hover.png",
+      "scene": "workspace-quality-hover",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f171fc9b22a544dcab705cdb78af270895d125c0af3f7249be2456edb7516c8d"
+    },
+    {
+      "file": "1440-workspace-quality-focus.png",
+      "scene": "workspace-quality-focus",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3433a0dafdbc45258acfd7e2ff502995da46d87d32f67515ba8e9d405ea86187"
+    },
+    {
+      "file": "1440-workspace-quality-pressed.png",
+      "scene": "workspace-quality-pressed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "e83b5dfc04ed7c9cac198f028fc3c5397a62dd9aa9d9a6e5c4a96316b81c0095"
+    },
+    {
+      "file": "390-continuity-record-draft.png",
+      "scene": "continuity-record-draft",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b5a2f32061128d4bdd8523d218ff97b882ff84638e17ea172680dbcf5133c7cf"
+    },
+    {
+      "file": "390-continuity-hidden-quality-selection.png",
+      "scene": "continuity-hidden-quality-selection",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 14,
+        "textNodesChecked": 67,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "861b99faf4207d6172bb5c4c329a952690dacc04cc494429ac904acfa67be4ff"
+    },
+    {
+      "file": "390-continuity-record-response.png",
+      "scene": "continuity-record-response",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c4d73fcee348ed4c25ae63d860b7fb8d4136191ccc09ae13a7d6231299dd7a8a"
+    },
+    {
+      "file": "390-continuity-hidden-export-unknown.png",
+      "scene": "continuity-hidden-export-unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 66,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6a10730ad94744efe81f8cc6642130c196778b5ad19b32230e649e84881dbd30"
+    },
+    {
+      "file": "390-continuity-export-unknown-return.png",
+      "scene": "continuity-export-unknown-return",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 44,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "73b2e8e10271773c60f412b9040589e81b00916372ceb959cdbb3c41fba0f437"
+    },
+    {
+      "file": "390-continuity-quality-page-failed.png",
+      "scene": "continuity-quality-page-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 32,
+        "textNodesChecked": 142,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4ab755f83668342eaa3f87d2dbb6a54fc75776f2e681c15412fadd24b66b4f84"
+    },
+    {
+      "file": "390-continuity-quality-page-return.png",
+      "scene": "continuity-quality-page-return",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "46b2b8ec53cf323d9bb97d574d0a1028db3905ebf0b857bc79ad61f147c13f15"
+    },
+    {
+      "file": "390-continuity-quality-write-read-failed.png",
+      "scene": "continuity-quality-write-read-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 73,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "de4764e03a69666dd1b8e9627a9cdb0119857e1d30e6adb2b3d6f985060c15fd"
+    },
+    {
+      "file": "390-records-default.png",
+      "scene": "records:default",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3f20d027afa51817563ff1c9ae58f7b3c7218910f9f86ca7312037d7bd420458"
+    },
+    {
+      "file": "390-records-original-supplier.png",
+      "scene": "records:original-supplier",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4535ac7ccb653661d57f0f6dd3b6a9ad7114015fbf373b81990db23a12ce2ff3"
+    },
+    {
+      "file": "390-records-trends.png",
+      "scene": "records:trends",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 20,
+        "textNodesChecked": 60,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d8ce398a373fc424d43bc09516ec208be818b293deeda3faf847e186273d571a"
+    },
+    {
+      "file": "390-records-opportunities.png",
+      "scene": "records:opportunities",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 20,
+        "textNodesChecked": 60,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "03ebe75bd317d7f08f28770465ab3c7ca8a9c7fc289e65d7a3cb94fb5e1be1e5"
+    },
+    {
+      "file": "390-records-competitors.png",
+      "scene": "records:competitors",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 18,
+        "textNodesChecked": 48,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a25b041fe7c5e3471fb73bff3834387d5ca808bf450646df88648e0228a226dc"
+    },
+    {
+      "file": "390-records-suppliers.png",
+      "scene": "records:suppliers",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 19,
+        "textNodesChecked": 54,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f71fa38dd408966bdf009eeb0fa81039335b6aecdc47c10edbd41b0241794b1a"
+    },
+    {
+      "file": "390-records-empty.png",
+      "scene": "records:empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 35,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a786629520caa442ec23a8a3339d2472f9e532ba23df96cf8ab7bb998a00974b"
+    },
+    {
+      "file": "390-records-loading.png",
+      "scene": "records:loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 35,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "9f29362faa6f8b538a34742d6211f61f5d155ce5ca5a0c50a99290ea38f15159"
+    },
+    {
+      "file": "390-records-expired.png",
+      "scene": "records:expired",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 33,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "5ce5f222fd35c5a345031e61fa511d2ccf605634938364ca74409b2b8b8acd7e"
+    },
+    {
+      "file": "390-records-forbidden.png",
+      "scene": "records:forbidden",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 33,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "63f41038a76c1d48435a588897b7ff866420e289a20319750fe5f805822c72cf"
+    },
+    {
+      "file": "390-records-blocked.png",
+      "scene": "records:blocked",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 33,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a8ae7ebcb27caf31333144922a5bdde70dbce87e7aed546e590cce74247023b4"
+    },
+    {
+      "file": "390-records-error.png",
+      "scene": "records:error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 33,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b164741080e50ffadfe586cf6ab16dd7769025e49eb751e2b663bab3e20b63ee"
+    },
+    {
+      "file": "390-records-refreshing.png",
+      "scene": "records:refreshing",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 44,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f2ff657f5a2263accead78596d92c4fc3fb9ccf2eec3486ebd386f250864d740"
+    },
+    {
+      "file": "390-records-refresh-error.png",
+      "scene": "records:refresh-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c297549c84be29db9cefe3d06cfad79a1278f4eccc616a9074564400a9c29614"
+    },
+    {
+      "file": "390-records-refresh-timeout.png",
+      "scene": "records:refresh-timeout",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7aca4f7073d06c8a59d45878f4d0d2e6515684f3bd38d2f4427f7b48d9a58077"
+    },
+    {
+      "file": "390-records-scope-pending.png",
+      "scene": "records:scope-pending",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 44,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "5ae2695fd96d74c07f53e191b82d082456207b2b25000c9aa7aa80b7ec1ff90c"
+    },
+    {
+      "file": "390-records-scope-error.png",
+      "scene": "records:scope-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ceffe05c52996351563fa88a162c02d37d412cc5adc85670a3877b7121b10bfe"
+    },
+    {
+      "file": "390-records-query-draft.png",
+      "scene": "records:query-draft",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3f20d027afa51817563ff1c9ae58f7b3c7218910f9f86ca7312037d7bd420458"
+    },
+    {
+      "file": "390-records-query-max.png",
+      "scene": "records:query-max",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3f20d027afa51817563ff1c9ae58f7b3c7218910f9f86ca7312037d7bd420458"
+    },
+    {
+      "file": "390-records-filtered.png",
+      "scene": "records:filtered",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a3d4b50f288018033aae3b211c6d0e87386f01d71e3e0f7efb1a1dad81f66822"
+    },
+    {
+      "file": "390-records-page-21.png",
+      "scene": "records:page-21",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 36,
+        "textNodesChecked": 118,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "eed4b2fc5f3b21eb595e1014eb9c1d5724c7eeeed75a8bf07e819cd1f86bc3a1"
+    },
+    {
+      "file": "390-records-page-two.png",
+      "scene": "records:page-two",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c9197350c5b1772cf517fdabadb37e96a9926a5d3f70d294ff8ea5bb9e4034e2"
+    },
+    {
+      "file": "390-records-limit-100.png",
+      "scene": "records:limit-100",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 36,
+        "textNodesChecked": 118,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "ef366df116c4ef6d62de8bbf06873cda33fed5384b7619951e8539a7aa6b6d65"
+    },
+    {
+      "file": "390-records-export-page-two.png",
+      "scene": "records:export-page-two",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 10,
+        "minText": 16,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "3631dcaac18b2a7e37539532797cfe16e6da12761473f9b6389dba8fb621ad36"
+    },
+    {
+      "file": "390-records-filter.png",
+      "scene": "records:filter",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 7,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f37adb8ffe4bab51fe387e5ba9605fa69be34a0e43f107f59b16e87c812f5ff8"
+    },
+    {
+      "file": "390-records-detail.png",
+      "scene": "records:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "20326413f249b4ebc5e48f6d4490f236fed036299dfcd5d5008366ab281d7756"
+    },
+    {
+      "file": "390-records-long-detail.png",
+      "scene": "records:long-detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "6c604129f48a19502c3becba22d3a45a86171d51303663f89558a6db3d7c165c"
+    },
+    {
+      "file": "390-records-export.png",
+      "scene": "records:export",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 10,
+        "minText": 16,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "3106f7f636d4c214b566af39cbd7f23dfce06f91413929260b228c586986cbe1"
+    },
+    {
+      "file": "390-records-export-empty.png",
+      "scene": "records:export-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5cf2a0bd1a84ca58463a5b87ab50d60271f0b1e9da1216d15fde40ab2c3f7e05"
+    },
+    {
+      "file": "390-records-export-short.png",
+      "scene": "records:export-short",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f27800989d73faa04dd2084f9c17a0e34bd08105adc64cb4c1529f1dc877edd5"
+    },
+    {
+      "file": "390-records-export-max.png",
+      "scene": "records:export-max",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8d88e047486097840848f6b6b05a815be2175221b2770576c1080c80be1bef26"
+    },
+    {
+      "file": "390-records-export-over.png",
+      "scene": "records:export-over",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "beeac65eca4124be5f23ef65231e7d6ee533679ff6f9a3cd8735c754eb2fe4c0"
+    },
+    {
+      "file": "390-records-export-running.png",
+      "scene": "records:export-running",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 44,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c02d48ad647385352509b6f792da317234a723865b29a7776d4b4bc2e2e1283b"
+    },
+    {
+      "file": "390-records-export-success.png",
+      "scene": "records:export-success",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "bb52991ffe522f5d9e66ac3289ff95198cdab0b13ef4b6a0568076bf717d6f1a"
+    },
+    {
+      "file": "390-records-export-error.png",
+      "scene": "records:export-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3c87d969f2aaf7d3a3275a244c6e723f6599cc76baceb1f25559fcb3659d3259"
+    },
+    {
+      "file": "390-records-export-unknown.png",
+      "scene": "records:export-unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 44,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6f13373bd993c93d11357b540237f551931dff67f1f7f834790c12879d363137"
+    },
+    {
+      "file": "390-records-columns.png",
+      "scene": "records:columns",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3f20d027afa51817563ff1c9ae58f7b3c7218910f9f86ca7312037d7bd420458"
+    },
+    {
+      "file": "390-records-compact.png",
+      "scene": "records:compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3f20d027afa51817563ff1c9ae58f7b3c7218910f9f86ca7312037d7bd420458"
+    },
+    {
+      "file": "390-records-technical.png",
+      "scene": "records:technical",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "e609a6bcb05c25491e6ecc45379e369f18c5752073062e58c26ec01b7512ce04"
+    },
+    {
+      "file": "390-records-copy-failed.png",
+      "scene": "records:copy-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 43,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "725b82549265d2a39fce0e6f3600110a99732b879dbe513a7a5abec745d2fdd8"
+    },
+    {
+      "file": "390-records-hover.png",
+      "scene": "records:hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7dc0bb6bc0380de31b1ebb44360e69a6d2c7a30b247e47b0147acce403529121"
+    },
+    {
+      "file": "390-records-pressed.png",
+      "scene": "records:pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "fbb92ac26204b6b31e21a42ae93d81816fef0739da063b6ca6c4e7cb7fea3f4c"
+    },
+    {
+      "file": "390-records-focus.png",
+      "scene": "records:focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "fe011d8cae31ba940347786887b81f0d919d35aeda3c41e22250772bf6bfa561"
+    },
+    {
+      "file": "390-records-trends-active.png",
+      "scene": "records:trends-active",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c4e6412d02c11f335b989be94ff3b10e166b477a42f10488e6374e82d22d2666"
+    },
+    {
+      "file": "390-records-trends-irrelevant.png",
+      "scene": "records:trends-irrelevant",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "5b969136de99c4c48ee79159de851883ce1fca8b1b10476c98688d4f6e60d367"
+    },
+    {
+      "file": "390-records-trends-stale.png",
+      "scene": "records:trends-stale",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "e86e6a6b57904384d0ac25a03928c55f7bc649c2b6018451f2099f0af51311bc"
+    },
+    {
+      "file": "390-records-trends-archived.png",
+      "scene": "records:trends-archived",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d57181893f3c8a84a15aacf43b92debabc293e3df13af842821df46365b4c174"
+    },
+    {
+      "file": "390-records-opportunities-pending.png",
+      "scene": "records:opportunities-pending",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "39727c1feef09e44766d41585b3809ed80ac07cedd559e5b02f692e27361cc99"
+    },
+    {
+      "file": "390-records-opportunities-adopted.png",
+      "scene": "records:opportunities-adopted",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4a6fd9cc9eab229af514eff213cc34bde4173df6676f13cebc44fcc0caff07bc"
+    },
+    {
+      "file": "390-records-opportunities-observing.png",
+      "scene": "records:opportunities-observing",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "7fd663444605fc6f84980764c0e857eaeadb43b71d7a7d2b3fbc4c0d8fc92dbe"
+    },
+    {
+      "file": "390-records-opportunities-rejected.png",
+      "scene": "records:opportunities-rejected",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "1f4e058465dfca77ac4a16287ae711586aab535518b437c1ea02b9cffe0b22a2"
+    },
+    {
+      "file": "390-records-competitors-active.png",
+      "scene": "records:competitors-active",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "95ffc47e452b5852aad1178441f7790bcc0362501c64de35bc63d58fa0caf7d7"
+    },
+    {
+      "file": "390-records-competitors-paused.png",
+      "scene": "records:competitors-paused",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d1f92c57ae981258daa13f2e63430fa05e14d402f4fedc21078a937c8a0791ba"
+    },
+    {
+      "file": "390-records-suppliers-incomplete.png",
+      "scene": "records:suppliers-incomplete",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "9b10ad6082a8d740859cfa1aa93631815161da7f47029d5e75e6eb13293ffc3a"
+    },
+    {
+      "file": "390-records-suppliers-ready.png",
+      "scene": "records:suppliers-ready",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "bc02b6648bec1a7b2515965ccb3b9b293bba064dc4f46dfdf20c8341ab5059e0"
+    },
+    {
+      "file": "390-records-suppliers-quarantined.png",
+      "scene": "records:suppliers-quarantined",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "da1c22f6ceb797dbbda2af81ad02220a360cb6482d58ba9cb5c396a3168b9f45"
+    },
+    {
+      "file": "390-quality-default.png",
+      "scene": "quality:default",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "643d2d4dcbfc337962252166bbce0257d651c251c255952dc160d5e3ccef6527"
+    },
+    {
+      "file": "390-quality-issues.png",
+      "scene": "quality:issues",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 71,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c272331eb5d235c130276a1abc2b98bc92382fca8489e585a4ae6031bb71fde0"
+    },
+    {
+      "file": "390-quality-runs.png",
+      "scene": "quality:runs",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "357e437b85cde3b9c0fff25a4ea2a3fa72726daa7b967e8505b946a5088a96da"
+    },
+    {
+      "file": "390-quality-metrics-mixed.png",
+      "scene": "quality:metrics-mixed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 77,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "1f0cab02a4f524b4ae9a50cdb1e14a7ce19428a431cd89e8de55a6c17255acff"
+    },
+    {
+      "file": "390-quality-metrics-empty.png",
+      "scene": "quality:metrics-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 63,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "45118b90a9c55492d654eff8150127f9e1d206cc2758559e9e45e59a84582c6b"
+    },
+    {
+      "file": "390-quality-risk-expired.png",
+      "scene": "quality:risk-expired",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c598177a8a6de880d3b760aab2d601ce49183e73f1d16bbae929e077da094d87"
+    },
+    {
+      "file": "390-quality-risk-unknown.png",
+      "scene": "quality:risk-unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "9e062207bcf0bfe6598cc20208d065337064c155fe88d2314d412c4a3f1c0813"
+    },
+    {
+      "file": "390-quality-local-empty.png",
+      "scene": "quality:local-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 12,
+        "textNodesChecked": 63,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a71d0dbc43550eaff74d58f23933eecddd8ecedcaa72d3ced8919eedafae5cb0"
+    },
+    {
+      "file": "390-quality-run-empty.png",
+      "scene": "quality:run-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 15,
+        "textNodesChecked": 69,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "0204e35e09638bd01e38e7577cde7ebb73c2f14accc41cafab5774ac72d5c943"
+    },
+    {
+      "file": "390-quality-run-match.png",
+      "scene": "quality:run-match",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 73,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "0ab815e9778560e2acb75f32a9a21491fb75e6a8f3814bc4cc371fb5e16ca212"
+    },
+    {
+      "file": "390-quality-selection-hidden.png",
+      "scene": "quality:selection-hidden",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 14,
+        "textNodesChecked": 67,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "c2dbef19839d87170e06421c6a28769581753fa5ef922902664677ac564718a7"
+    },
+    {
+      "file": "390-quality-issue-resolved.png",
+      "scene": "quality:issue-resolved",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "3c803393082b4c610e2d3304d0e735f53032b82f48a7f11d0dfc26c5c41f1926"
+    },
+    {
+      "file": "390-quality-issue-null.png",
+      "scene": "quality:issue-null",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 26,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "3ab32fec7dcfba695883f0d4080ea80256d112548a385b8bb9562cae76d1e557"
+    },
+    {
+      "file": "390-quality-evidence-detail.png",
+      "scene": "quality:evidence-detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 35,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "c13e3861c98cb2a00f92f7f84a5314d11335ef486be17c80fb3c84ee76b4755a"
+    },
+    {
+      "file": "390-quality-lineage.png",
+      "scene": "quality:lineage",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "bb813a3eabe1baae62001e68eb80509cbed307f91ef42b391e81dbf89d4fff85"
+    },
+    {
+      "file": "390-quality-lineage-technical.png",
+      "scene": "quality:lineage-technical",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "bb813a3eabe1baae62001e68eb80509cbed307f91ef42b391e81dbf89d4fff85"
+    },
+    {
+      "file": "390-quality-issue-technical.png",
+      "scene": "quality:issue-technical",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "958b5b3762f840e33f80eeed7dca7d5fd843a79372991608dea9667147cfb78a"
+    },
+    {
+      "file": "390-quality-copy-failed.png",
+      "scene": "quality:copy-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 54,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "bb813a3eabe1baae62001e68eb80509cbed307f91ef42b391e81dbf89d4fff85"
+    },
+    {
+      "file": "390-quality-lineage-loading.png",
+      "scene": "quality:lineage-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 8,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f8984a37e9ec862ba4dd9cbee4c6b890620c9531acb64e531c006f8dfdd98f39"
+    },
+    {
+      "file": "390-quality-lineage-error.png",
+      "scene": "quality:lineage-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 8,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "516a784f75fca31ef0ef3270dedce5f296ab8039c3016bd79d62fd458a05706b"
+    },
+    {
+      "file": "390-quality-long-lineage.png",
+      "scene": "quality:long-lineage",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "ad7baf35bd74b1227124c803deb38a2edc1761819eee79b8dc419a029e6c6ce4"
+    },
+    {
+      "file": "390-quality-issue-detail.png",
+      "scene": "quality:issue-detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "b8a29438635a3d98bcf50fee8c9a578fe34dd628e3bc53520493e68dd9061fcb"
+    },
+    {
+      "file": "390-quality-download-ready.png",
+      "scene": "quality:download-ready",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "34590deb1c8a0532fff6bc62f430f1a3a5128a83816b5fbc8a0ad2b4f366c4fb"
+    },
+    {
+      "file": "390-quality-download-busy.png",
+      "scene": "quality:download-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 19,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "bb28de8973019bc900fceeba6a466cbd708bb6bc02fdec1bf8d7ae6d251a4f58"
+    },
+    {
+      "file": "390-quality-download-success.png",
+      "scene": "quality:download-success",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "c8fa0c10d589404f34690b35440a90b63440656648e835bbe13054b1ac70bd4f"
+    },
+    {
+      "file": "390-quality-download-unknown.png",
+      "scene": "quality:download-unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "133a1c0dac41868990b12b96d4692430c424385f51b02abdc2492402f7156f67"
+    },
+    {
+      "file": "390-quality-download-error.png",
+      "scene": "quality:download-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "a4301c7c9a3c664734cbc55d1e36c675a3f97a99259576b97bf4d72c109e9ca4"
+    },
+    {
+      "file": "390-quality-download-expired.png",
+      "scene": "quality:download-expired",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "82c2b6f5bb46e9eae962baf50d9ee25720c4588a023f31910252029e2e0ebe6f"
+    },
+    {
+      "file": "390-quality-download-missing.png",
+      "scene": "quality:download-missing",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "6629628edacd37ecf0a8a064a152ef244b34c45a1ea9d71c1b499c76379395a2"
+    },
+    {
+      "file": "390-quality-download-integrity.png",
+      "scene": "quality:download-integrity",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "2f9d5551aba0de0a370227d5e7250123f60b6c13156f19b3075c999207bb82f0"
+    },
+    {
+      "file": "390-quality-download-no-key.png",
+      "scene": "quality:download-no-key",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 3,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "68e2e7be4e2fd880b98a3880c29767e6e8e40f7c7ee99b4ce6f94276d85de4fd"
+    },
+    {
+      "file": "390-quality-resolve-empty.png",
+      "scene": "quality:resolve-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 14,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "1468f1c322a653f5c871319abe8da10d5fb6497f996541b2ed10102d50e5bf4b"
+    },
+    {
+      "file": "390-quality-resolve-short.png",
+      "scene": "quality:resolve-short",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "c0b9ee5520146d16ff2442687ffcae8d70ef092129d75623a668e3ea5b2b78a2"
+    },
+    {
+      "file": "390-quality-resolve-valid.png",
+      "scene": "quality:resolve-valid",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "4d89a223a8b4131a93e98966ffacae6e5ca6fd8afa4f682da9cf6bf2d776e260"
+    },
+    {
+      "file": "390-quality-resolve-limit.png",
+      "scene": "quality:resolve-limit",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "0e4953ed8270b3b2327c409903c2f6be53ae40ffc0ff20c1421e9b2e1ba27728"
+    },
+    {
+      "file": "390-quality-resolve-confirm.png",
+      "scene": "quality:resolve-confirm",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "1341545acac9fe7da4480d27cc392707b5c533dfdd6cc5080a3aef40b0334742"
+    },
+    {
+      "file": "390-quality-resolve-ready.png",
+      "scene": "quality:resolve-ready",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "2370603a12efbc4829ab6a7248ce187c1f4cfdceb1fe38b8ed3a5456c3b9e44e"
+    },
+    {
+      "file": "390-quality-resolve-busy.png",
+      "scene": "quality:resolve-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "7e59d277fb15ea29052fdb839dec66ad1a63050dd580e70307d8bd6903c3766d"
+    },
+    {
+      "file": "390-quality-resolve-conflict.png",
+      "scene": "quality:resolve-conflict",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "afc4cb0f6c63342288ef653d954d3d63d12ebb255aee000abda9a51d781d7222"
+    },
+    {
+      "file": "390-quality-resolve-unknown.png",
+      "scene": "quality:resolve-unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 23,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "b1cf6d74eff0c410f200805a446fe036dd1568f24198a25c78091b4c4ae5d3ac"
+    },
+    {
+      "file": "390-quality-resolve-read-failed.png",
+      "scene": "quality:resolve-read-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "d4a01b1c2f69697c432ee917eed6cb0c2a74d843356e498db541dc9a4ee96836"
+    },
+    {
+      "file": "390-quality-resolve-success.png",
+      "scene": "quality:resolve-success",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "02d03645fc56d6de50627a8e7955cdc8960d3c4c985cd8ec40fc2f5f3d292fa4"
+    },
+    {
+      "file": "390-quality-batch-attribute.png",
+      "scene": "quality:batch-attribute",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5c87660c619274cc3e3707f7271c13718b4e096391566f88569503bf4bf78a36"
+    },
+    {
+      "file": "390-quality-batch-assign.png",
+      "scene": "quality:batch-assign",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "5b5d9f9146ded6bfeb710804e15fa7be5e005aec4dc26b75451ea4efb78bf6ef"
+    },
+    {
+      "file": "390-quality-batch-assign-confirm.png",
+      "scene": "quality:batch-assign-confirm",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "946f5daf75d7e3c8fd474c98f6a83cb0929b2078fda66e407c6adbfaebffa902"
+    },
+    {
+      "file": "390-quality-batch-no-member.png",
+      "scene": "quality:batch-no-member",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "38a2c90921ce4a9405d25c8c1d18b107a8ee43517ea969a9bcf68cd2ef581233"
+    },
+    {
+      "file": "390-quality-batch-close.png",
+      "scene": "quality:batch-close",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 16,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "397d77a151c76e80c728da972948295d56123cbc1492f54ecfc371f97ee7978d"
+    },
+    {
+      "file": "390-quality-batch-close-confirm.png",
+      "scene": "quality:batch-close-confirm",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "17c99ff2e5f44eca03a593622a9436c6070ea8e5ff8be052923b9854f6131e7c"
+    },
+    {
+      "file": "390-quality-batch-confirm.png",
+      "scene": "quality:batch-confirm",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "97afa38b8a9bb26a1b39dbf0c46570a86ce66fe9320d3d24524db7abada699a7"
+    },
+    {
+      "file": "390-quality-batch-ready.png",
+      "scene": "quality:batch-ready",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "af693ea49c73cd91ff777ce72ed4e6638228a3aa88722470c8e05614b9d39b02"
+    },
+    {
+      "file": "390-quality-batch-busy.png",
+      "scene": "quality:batch-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 27,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "f35a2dca9181f28db17174354e45b17b65fdc9425c6876127f1430fd9f68e46f"
+    },
+    {
+      "file": "390-quality-batch-conflict.png",
+      "scene": "quality:batch-conflict",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "4a52be6628141aebd1042893e07c38385ca539c8482cbca7b61097d5dd87ce70"
+    },
+    {
+      "file": "390-quality-batch-unknown.png",
+      "scene": "quality:batch-unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 23,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "da4880746cbc5950660758cc816491cd08401c06c7bee9c9cdf4a51b8d5bf022"
+    },
+    {
+      "file": "390-quality-batch-read-failed.png",
+      "scene": "quality:batch-read-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "99da830b77b1a1530963c4d913ec711b90dfa388d68b6fa383b77ecc4ce2cceb"
+    },
+    {
+      "file": "390-quality-batch-success.png",
+      "scene": "quality:batch-success",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 24,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "674fa46b5a5390ee1fc098f4fd9cd78c9d2131282b3ac3ffddb7f292eb6f8aeb"
+    },
+    {
+      "file": "390-quality-page-first.png",
+      "scene": "quality:page-first",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 32,
+        "textNodesChecked": 141,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "09ddeba51de6e173b3335137880f6e456e1b817bdb1c2f67f712c2ee67c4f331"
+    },
+    {
+      "file": "390-quality-page-last.png",
+      "scene": "quality:page-last",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "4a0bc70525304a3685148a9e31316d883a4fe1c65acba98d2d0266ee13e2464b"
+    },
+    {
+      "file": "390-quality-page-wait.png",
+      "scene": "quality:page-wait",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 32,
+        "textNodesChecked": 143,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f108c355e2e9fa3a7eb4bedf864a9edf9fd128735546dc5367a60d54906f7dd1"
+    },
+    {
+      "file": "390-quality-page-failed.png",
+      "scene": "quality:page-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 32,
+        "textNodesChecked": 142,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "3e951f2903a3f76654d70e78bedbfe34e3b361706f052a6396270f33b3c5e940"
+    },
+    {
+      "file": "390-quality-settings.png",
+      "scene": "quality:settings",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 13,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "fb438069c5d5a69e4f6bc4525dd6dc13ceb78cfe54906b49fcbee4fe2379c310"
+    },
+    {
+      "file": "390-quality-compact.png",
+      "scene": "quality:compact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "643d2d4dcbfc337962252166bbce0257d651c251c255952dc160d5e3ccef6527"
+    },
+    {
+      "file": "390-quality-dark.png",
+      "scene": "quality:dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f780a13d0bf60e6b0ac74b45bb344682a20004d63009f4ebba58f2a1b8ff6641"
+    },
+    {
+      "file": "390-quality-contrast.png",
+      "scene": "quality:contrast",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b58005552933fe8073ed5a9b8bc648dfbaa441c79a802532efa1265ed35c8a1b"
+    },
+    {
+      "file": "390-quality-loading.png",
+      "scene": "quality:loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "53931fdbbfa4bfc418dd06c47e6f7bce512935365a72f0bf3bd319e300636e58"
+    },
+    {
+      "file": "390-quality-empty.png",
+      "scene": "quality:empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "d9ac46e96d9046f2e879b3fe80b0e4b22a1ebe4a232353ba4e23f49d93960194"
+    },
+    {
+      "file": "390-quality-expired.png",
+      "scene": "quality:expired",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "62e017c63c3d6eb23f9b0e4ece88f913fdb934e74fbae6439d8d890a4eb9f50d"
+    },
+    {
+      "file": "390-quality-forbidden.png",
+      "scene": "quality:forbidden",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "8d21f00acb0dfa0c92ce567ad23b0ccf13a7190815f2984d81e9e4eedb4cb667"
+    },
+    {
+      "file": "390-quality-blocked.png",
+      "scene": "quality:blocked",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "6086d2812ea44f23e851e6061d54d4738a09126bca5238e86589f30bdd8c42c9"
+    },
+    {
+      "file": "390-quality-error.png",
+      "scene": "quality:error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 29,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "aa6e12640ac0b37fc6ec3b1627d1552e159e08141d9b380da50e81a6fe834b0a"
+    },
+    {
+      "file": "390-quality-hover.png",
+      "scene": "quality:hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "f45c9cd22e7fcd1a66a0d61ced8c287f5066b6d628b2968785c97c5a82c66f42"
+    },
+    {
+      "file": "390-quality-focus.png",
+      "scene": "quality:focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "643d2d4dcbfc337962252166bbce0257d651c251c255952dc160d5e3ccef6527"
+    },
+    {
+      "file": "390-quality-pressed.png",
+      "scene": "quality:pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "118e8ded35bb32416b3eac7bb3bec10c288ac09ab03003e10a62bf14510c580e"
+    },
+    {
+      "file": "390-records-long-detail-footer.png",
+      "scene": "records:long-detail-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 2,
+        "textNodesChecked": 18,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "cf595f50ed0c52f9370a2b2e2ea3dac6bf685de3cb395705a8f0cec5deb5dc8d"
+    },
+    {
+      "file": "390-records-export-max-footer.png",
+      "scene": "records:export-max-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 11,
+        "minText": 14,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "8d88e047486097840848f6b6b05a815be2175221b2770576c1080c80be1bef26"
+    },
+    {
+      "file": "390-quality-long-lineage-footer.png",
+      "scene": "quality:long-lineage-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 53,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "6b36c004a3e6f49a35264d53e6ccee0e0b1f7d6ea39782070576e5d6d8966f86"
+    },
+    {
+      "file": "390-quality-resolve-limit-footer.png",
+      "scene": "quality:resolve-limit-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 4,
+        "textNodesChecked": 15,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "0e4953ed8270b3b2327c409903c2f6be53ae40ffc0ff20c1421e9b2e1ba27728"
+    },
+    {
+      "file": "390-quality-batch-assign-confirm-footer.png",
+      "scene": "quality:batch-assign-confirm-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 5,
+        "textNodesChecked": 22,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 1
+      },
+      "sha256": "7f27f336320490b69dfe5ab9de3be9f6acca498379ac691ac951e9c8be841952"
+    },
+    {
+      "file": "390-workspace-records-hover.png",
+      "scene": "workspace-records-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b5a2f32061128d4bdd8523d218ff97b882ff84638e17ea172680dbcf5133c7cf"
+    },
+    {
+      "file": "390-workspace-records-focus.png",
+      "scene": "workspace-records-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "b788905382426178d1946d48aeb5182fef19f76185906ad9dee791fee6908491"
+    },
+    {
+      "file": "390-workspace-records-pressed.png",
+      "scene": "workspace-records-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 42,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "a3a84fa89f5dd36c8ba64c67cd00f3540cda76d28100a8ec025f02ab7a2ad542"
+    },
+    {
+      "file": "390-workspace-quality-hover.png",
+      "scene": "workspace-quality-hover",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "56f20ea2bbf1f9786c780bcd54842d8bb6f28e091adecea349b1c97e3b0c2d60"
+    },
+    {
+      "file": "390-workspace-quality-focus.png",
+      "scene": "workspace-quality-focus",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "90742d36a1a1e191406e8714d473faa45036c8dfbba45fca966a913db63f7ab5"
+    },
+    {
+      "file": "390-workspace-quality-pressed.png",
+      "scene": "workspace-quality-pressed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 13,
+        "textNodesChecked": 65,
+        "minText": 13,
+        "violations": [],
+        "duplicateIds": [],
+        "references": [],
+        "overflow": false,
+        "openDialogs": 0
+      },
+      "sha256": "52797e9f6fefdd83806eb73b79fd731cb2f03d627276451d5a17be588d62a60a"
+    }
+  ]
+}

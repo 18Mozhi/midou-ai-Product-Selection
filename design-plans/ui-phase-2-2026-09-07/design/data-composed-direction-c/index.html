@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P54 数据中心 · C 连续审核稿</title>
+    <link rel="stylesheet" href="composed.css" />
+    <script defer src="../data-records-direction-c/data.js"></script>
+    <script defer src="../data-records-direction-c/source-logic.js"></script>
+    <script defer src="../data-quality-direction-c/data.js"></script>
+    <script defer src="templates.js"></script>
+    <script defer src="records-scoped.js"></script>
+    <script defer src="quality-scoped.js"></script>
+    <script defer src="composed.js"></script>
+  </head>
+  <body>
+    <header class="page-head">
+      <div class="identity"><span>SCOUTOPS / 平台管理</span><span>C 方向 · 具体页面待审</span></div>
+      <div class="title-line">
+        <h1>数据中心</h1>
+        <p>业务记录与证据核验，分域连续工作。</p>
+      </div>
+      <nav aria-label="数据中心工作区">
+        <button id="records-view" data-view="records" aria-controls="records-pane">
+          近期业务记录
+        </button>
+        <button id="quality-view" data-view="quality" aria-controls="quality-pane">
+          证据与质量
+        </button>
+      </nav>
+      <p class="scope-note">平台范围 · 两区筛选与统计独立，不把近期记录数量加到质量总量。</p>
+      <p id="continuity" role="status"></p>
+    </header>
+    <section id="records-pane" aria-labelledby="records-view"></section>
+    <section id="quality-pane" aria-labelledby="quality-view" hidden></section>
+    <footer class="review-note">
+      离线待审提案：切区保留内存状态，刷新页面不保留。实际 Vue
+      质量区目前切离会卸载；本稿没有修复或部署生产。
+      <a href="gallery.html">查看完整图册</a>
+    </footer>
+    <details class="review-controls">
+      <summary>组合审核工具（非业务界面）</summary>
+      <label>工作区场景<select id="combined-scene"></select></label>
+      <p>切换场景会重置两区演示数据；切换上方工作区不会。只有合成与既有隔离夹具，无实时数据。</p>
+      <button id="finish-read">返回当前区读取失败（模拟）</button>
+      <p>深链接初始化、浏览器前进后退及 Vue KeepAlive 待后续真实实现验收；本稿不声称覆盖。</p>
+    </details>
+  </body>
+</html>

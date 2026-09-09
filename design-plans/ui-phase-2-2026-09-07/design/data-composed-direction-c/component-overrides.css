@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+[data-component-body] {
+  color: var(--ink);
+  background: var(--bg);
+}
+.appbar,
+.views,
+.disclaimer,
+.sidebar,
+.header .review {
+  display: none;
+}
+.shell {
+  display: block;
+  min-height: 0;
+}
+.data-layout {
+  min-height: 0;
+}
+.data-directory h1,
+.data-directory > p:not(.directory-note) {
+  display: none;
+}
+.data-directory h2 {
+  margin-top: 0;
+}
+.data-directory {
+  border-radius: 0 0 14px 0;
+}
+.header h1 {
+  font-size: 26px;
+}
+main {
+  max-width: 1680px;
+  margin: auto;
+}
+.skip {
+  display: none;
+}
+#composed-outcome {
+  border-top: 1px dashed var(--line);
+  padding-top: 16px;
+  margin-top: 20px;
+}
+#composed-outcome button {
+  margin: 6px 6px 6px 0;
+}
+@media (max-width: 760px) {
+  .sidebar {
+    display: none;
+  }
+  .data-directory {
+    padding: 16px;
+    border-radius: 0;
+  }
+  .data-directory h2 {
+    margin-bottom: 10px;
+  }
+  .data-directory .directory-note {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+}

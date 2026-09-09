@@ -216,6 +216,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json": "da8e1396af7ceb615d3954213160500ded8ccbd60f3a68524593bd5e704a98f6",
     "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/evidence.json": "61d0c73a4e8c8bc1e7d6e4a4d50029db73cd2a351befa0b076bcf455748444f2",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json": "5130e8b205448f830a2ef0ba82cd8bee02b3dd2ea6d16f35fbca353139dcb982",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/evidence.json": "31977684528e63fd0f13c9651a9c64190285675b300abc8f035839325bba707d",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json": "afb5b2e1cfb4fb838ced20a00729790c9d5d9dd9582b211944f5e98c623c48bf",
     "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json": "f788c244f691fdfd4dbecad616933e689cf85cd7a78fdf85e77df05de0314a0a",
     "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/evidence.json": "5750aa2d34f04fbca51134c98c52e44b576376150278653dbe00b01039194deb",
@@ -328,7 +329,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "bcfa6bd4dd8c5d831769fa14fd991b00c9e3f7a08daec274631ec154328895bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "e98b7eb614a5532f3ac79699ad26778dfb7ea508a6b66203d4bf8b6dc49f68bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "20e7fe16fa7c42c34649a66c02ec978177a28985a365e96c5e5b3f38c96a5932",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "b5f9fdae2799c5232ef3eecfc2ab9db2e4f70515cf813a7b6be5803a3332f080",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "397e32cd4c736058c778946befbf41fc75b31be90388f7fab30c08e33de303ee",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "800b95f470b6952af3216f865ab21aa98a28cb1f9b3e9622eeafdda05072065c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "1cc811fdf1816743e04201ef863e020d02fa9e353cc892ab171c237fdc6c280c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "39a00a2556456cabad8cfad9ca70709c6340925523417b387fec792da25e029c",
@@ -1161,6 +1162,7 @@
       "oldStaticAssociatedCandidates": 104,
       "review": null,
       "proposalPackages": [
+        "data-composed-direction-c",
         "data-records-direction-c",
         "data-quality-direction-c"
       ],

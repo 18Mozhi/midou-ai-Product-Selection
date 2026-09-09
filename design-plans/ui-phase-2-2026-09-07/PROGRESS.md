@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P54同页工作区 / DATA-COMPOSED-C-r1
+
+最终门禁：补模态视口/五长窗操作区/两切区按钮状态后，294PNG最终capture与无参指纹/双端DOM复验通过；人工看桌面两区与手机导出、批量指派底部。全站只读审计73包/8876PNG/1312源绑定（826独立文件）/8061README链接，源/图漂移和未登记PNG均0；动作对账通过但显式语义审核仍仅P11，分母未冻结。verify:docs（73/60/6/153）、runtime-docs、static-analysis（390）、定向Prettier、format:check和git diff --check通过。不重复执行未变更63项旧UI2单元、生产构建或SQL验收。无chrome-headless-shell残留；templates.js为永久生成模板而非临时文件，没有需删除的一次性产物。
+
+从干净main/6aade172接续，按ui-skills-root/frontend-design与现有Playwright流程；读P54规格/实际PlatformDataCenter与DataQualityCenter及图片参考。用作用域组件组合既有两段原控制器，不造虚假记录↔证据关联，不改历史稿件。新包294正式PNG：128有效原场景（去掉旧质量占位）＋8连续状态＋5长窗操作区＋6新切区按钮状态，各1440/390。普通页全页，模态视口，避免长背景掩盖操作区。
+
+最小双端检查已通过：记录草稿、质量未trim搜索及隐藏选择跨区保留；隐藏区读/导出回调不覆盖当前URL/快照，未知导出禁重发，质量翻页失败保留与第二页恢复，写入/读取结果独立。原生模态禁止切区，Tab/Shift+Tab/Escape和焦点返回；窗内审核工具能返回明确模拟结果，不需控制台解锁。正式capture/无参复验和全站/文档收尾结果将在提交前核对。
+
+本轮只改设计交付与其文档/映射。真实质量区v-if卸载、导出范围漂移和写读竞争未修；全源语义、全部主题密度、深链接/历史/KeepAlive/权限/SQL/生产仍待验。API/OpenAPI/数据库/Python/env/依赖/生产不动，无重启。旧coverage、用户批准、G0–G5与全73页目标不提升。正式图稿保留，浏览器finally关闭，无一次性文件/测试服务；下一P18/P54源动作语义及缺口映射。
+
 ## 2026-09-09 · P18自适应和长原因 / DETAIL-ADAPTIVE-C-r1
 
 收尾门禁：补上复盘busy/非法输入/长度断言及长窗两个底部按钮命中测试后，最终capture与无参复验双端通过；审核工具只允许完成真实本地挂起操作，静态pending示意禁用。全站图稿只读审计72包/8582PNG/1266来源绑定/8052链接，源/图漂移及未登记PNG均0；动作对账只读复验通过。verify:docs（73/60/6/153）、verify:runtime-docs、verify:static-analysis（390）、定向Prettier、format:check及git diff --check通过。未重跑未变更的63项UI2旧单元/生产构建/数据库测试，不将旧结果冒称本轮运行。进程检查无chrome-headless-shell残留，无一次性文件需要删除。
