@@ -1,5 +1,11 @@
 # B3b · 运行拓扑与Redis/MySQL/文件韧性合同复核
 
+## 2026-09-09 P69设计补充 · FILES-C-r1（未实施）
+
+[图册](design/files-direction-c/README.md)与verify-ui-phase2-files-c交66场景138PNG。RS-G05源隔离复现三根access/statfs失败占位、索引仍保留、temp固定零、证据优先占满名额不读导出、无效路径/缺失/不一致及真实SHA256对内存流。service未知10000与负比例/used归零、evaluator最高水位不求和、零样本仍ready、恢复过期warning/取整未来年龄/空证据、固定公网false与暴露finding并存明确呈现。两根/零根、共享/备用、verified空年龄与长值标明评估或布局边界，不伪称正常探针输出。
+
+五组源检查覆盖Vue真实脚本读取与空ID、service向probe传signal、仓储惰性三插入提交/回滚释放、真实route handler惰性授权顺序/14秒race/依赖503/finish；八相关历史hash保持。不代表实文件/SQL/权限/审计、流或SQL真实即时取消、恢复或生产验证。三请求ID披露及模拟复制拒绝、progress与双端断点/缩放属于原型证据；RS-G05生产表达/第三根验证、RS-G06保活及真实事务取消、RS-G07共享复制/主题密度仍未关闭。固定标记不替代ACL/Nginx alias/符号链接或公网探测；不改旧manifest两根或冒充新增生产证据。本稿待审，无清理/下载/恢复动作，不部署/重启；下一P70。
+
 ## 2026-09-09 P68设计补充 · MYSQL-C-r1（未实施）
 
 [图册](design/mysql-direction-c/README.md)与verify-ui-phase2-mysql-c交70场景145PNG。RS-G04用真实probe/evaluator/service惰性输入复现最小一分钟与无历史uptime分母、累计下降归0、零requests回退10000、资源未知10000占位、恢复固定15/240/90及运行policy二次判断。最近20条/同备份full与binlog副本条件、缺失/未隔离、未来年龄归0、90.001天显示取整90但stale、null中间数值判定与返回null、负恢复值仍可能ready分别保留并标明。探针实际返回available=true或抛错；available=false只是评估器边界样例，不伪称失败回退。

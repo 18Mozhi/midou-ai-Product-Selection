@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · W08 P69文件存储 / FILES-C-r1
+
+提交前复验：最终66场景138PNG指纹、42数据集、140图册链接与双端交互通过；无HTTP/浏览器错误或存储。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）通过；修正验证器格式后重新capture/verify，format:check（496生产文件/51仓储模块/最长640）及七文件Prettier通过，git diff --check通过。进程复核无本验证器或Playwright临时浏览器残留；无一次性临时产物，正式图和永久脚本保留。
+
+从干净main/fb8dc04c接续。[图册](design/files-direction-c/README.md)由frontend-design技能改为目录双口径清单：蓝色运行边界、白色文件系统水位/资产索引并排、独立样本与恢复。41组合成源输出与原始E2E共42数据集，66场景132双端主图加6手机近图，共138PNG。无有效容量10000不画实测满额，源负比例不画有效条；temp零索引不冒充无文件，同盘不求和，零样本ready不画100%通过，过期warning不改成MySQL阻断，固定公网false不覆盖暴露finding。
+
+五组源证据：实际probe惰性SQL/access/statfs与内存SHA256流的三根/失败占位/保留索引/证据优先剩余样本/无效路径/缺失和不一致/前置及流中signal；恢复最近20条与两类副本、隔离、取整未来年龄和evaluator/service最高水位/空样本/双层policy/DTO；Vue脚本单飞/精确GET和IDs/15秒/null/授权清除/其他保留/异常空ID/卸载及目录名称/用途/百分比源函数；service向probe传signal及惰性repository三插入/提交/失败回滚释放；真实route handler惰性权限顺序、14秒race/abort、依赖503、IDs及finish清理。八相关B3b旧hash保持。不是实际文件系统/SQL/事务/权限/审计/恢复、公网ACL/alias/符号链接扫描或真实Vue/保活/共享剪贴板证明。
+
+首轮capture通过66场景138PNG和140图册链接，实看桌面总览与手机失败根、负比例、零样本近图；将“读取的样本”改为“纳入的样本”，因为无效路径也进入样本分母。六断点与200%缩放、三条原生progress名称和值、全部读取/重试/登录/三详情键盘及模拟复制拒绝已验；HTTP/浏览器错误/Cookie/本地与会话存储为0。最终capture/verify与项目门禁在提交前记录。
+
+只改本页正式图稿、两个永久验证脚本和六份文档地图；无生产Vue/API/OpenAPI/环境/依赖/数据库/Worker/Python/权限修改，不部署、不清理业务文件、不恢复、不重启。历史manifest只列两根，未伪造第三根生产证据；正式PNG及数据/脚本保留，无一次性临时文件或常驻服务，浏览器finally关闭。具体稿审核、RS-G05/06/07真实实现、全主题密度和全73页实施部署签收待办；下一P70采集调度。
+
 ## 2026-09-09 · W08 P68 MySQL运行 / MYSQL-C-r1
 
 提交前门禁：verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（496生产文件/51仓储模块/最长640）、七文件Prettier和git diff --check通过。进程复核无本验证器或Playwright临时浏览器残留；无一次性临时产物，正式145PNG及永久数据/脚本保留。
