@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "12afe09ffa3231987c12ed30df578949a81fbbf13c3a07fe958dfc8651e1542b",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "ebce20d2617dce67733b79b84e37cf09215b5d043e01b44facc5d600588c3fd8",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -71,6 +71,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/recovery-direction-c/evidence.json": "5cdc96a665ad092eb2e0b1220bfa406548c793b142b1524aab6186f9aa94f3ea",
     "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/evidence.json": "1674f5a5bb408e4401d0b4cc2c66dc80ee129b3b18e677f08b9162cca083b0f2",
     "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/evidence.json": "123d79524f9fa01ff24409e538e2cc59d508ba4e072bead8d4d7a976ce73b833",
+    "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/evidence.json": "8f458d3f565d0b5871eb98d9756d1b2c6122e4fe826768d6131ebaf4712e0de4",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/evidence.json": "addcd08eb53a3e3c9143a5fcdc0daba9474bce2069430773d3ea6dc36c26da72",
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "600c1743f86d66f5840f4b9813966e74df2cbc231fc3b0e0fff6328c440a6bf6",
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "8c71c415389c058bae9bd567f2c83f2ad92f6ee34fc4d79a6428ed287f876db3",
@@ -120,6 +121,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "f0a25e68f8096db8f1536fd1a8f5c535ce6025d9f0403bf173e3fa8b69a61505",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "873cc1947c923bc7269b767b29bb8002d8d27cfc38494cde1a6125b8be82b255",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "6feb6bf6de051e414ba7b6d51a5e37f81d3238f025f84169ceab57d20b26d653",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -128,16 +130,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 87,
+    "packages": 88,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 900,
-    "sourceBindings": 1688,
+    "uniqueBoundFiles": 904,
+    "sourceBindings": 1705,
     "sourceDrift": 0,
-    "pngs": 12047,
+    "pngs": 12255,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 9234,
+    "readmeLinksChecked": 9448,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -412,6 +414,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P28",
       "spec": "page-specs/P28.md",
       "packages": [
+        "report-controls-direction-c",
         "report-direction-c"
       ],
       "actualVue": []
@@ -1384,6 +1387,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/release-direction-c/evidence.json",
       "prototype": "design/release-direction-c/index.html",
       "gallery": null
+    },
+    "report-controls-direction-c": {
+      "id": "report-controls-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 208,
+      "readme": "design/report-controls-direction-c/README.md",
+      "evidence": "design/report-controls-direction-c/evidence.json",
+      "prototype": "design/report-controls-direction-c/index.html",
+      "gallery": "design/report-controls-direction-c/gallery.html"
     },
     "report-direction-c": {
       "id": "report-direction-c",

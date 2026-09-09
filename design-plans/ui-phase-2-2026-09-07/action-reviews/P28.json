@@ -1,0 +1,1817 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P28",
+  "route": "/reports",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "1原生dialog；无form或自定义日期输入；17关联状态不是17个窗口。"
+  },
+  "inputs": {
+    "ReportCenter.vue": []
+  },
+  "actions": [
+    {
+      "actionId": "RP-CREATE",
+      "label": "导出当前报表 CSV",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#97351e6d4fd4cc45.1"
+      ],
+      "sourceContractKeys": [
+        "RP-CREATE；CSV入队"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "busy禁用按钮；空报表仍可导出",
+      "handler": "createExport：POST /report-exports，{report_type:type,format:csv}；202只确认入队，不确认文件可用；现函数无busy早退",
+      "variants": [
+        "opportunity",
+        "trend",
+        "team",
+        "empty",
+        "create_busy",
+        "create_error"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "opportunity"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "trend"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "team"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "create_busy"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "create_error"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-pending"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-trend-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-trend-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-trend-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-trend-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-trend-busy"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-team-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-team-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-team-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-team-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "create-team-busy"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "create-default",
+          "selector": "[data-create]"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "create-hover",
+          "selector": "[data-create]"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "create-focus",
+          "selector": "[data-create]"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "create-pressed",
+          "selector": "[data-create]"
+        },
+        "disabled": {
+          "package": "report-controls-direction-c",
+          "scene": "create-pending",
+          "selector": "[data-create]"
+        },
+        "busy": {
+          "package": "report-controls-direction-c",
+          "scene": "create-pending",
+          "selector": "[data-create]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P28-create-trend",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-create]",
+          "states": {
+            "default": "create-trend-default",
+            "hover": "create-trend-hover",
+            "focus": "create-trend-focus",
+            "pressed": "create-trend-pressed",
+            "busy": "create-trend-busy"
+          }
+        },
+        {
+          "key": "P28-create-team",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-create]",
+          "states": {
+            "default": "create-team-default",
+            "hover": "create-team-hover",
+            "focus": "create-team-focus",
+            "pressed": "create-team-pressed",
+            "busy": "create-team-busy"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "RP-TYPE",
+      "label": "切换报表类型",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#333b03bc402fcd48.1"
+      ],
+      "sourceContractKeys": [
+        "RP-TYPE；三类报表URL"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "三种类型；aria-pressed表示当前选择，不是禁用",
+      "handler": "choose：相同类型早退；不同类型更新report query后监听load；机会默认省略参数，无日期参数",
+      "variants": [
+        "opportunity",
+        "trend",
+        "team"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "opportunity"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "trend"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "team"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-selected-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-selected-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-selected-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-selected-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-selected-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-selected-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-selected-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-trend-selected-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-selected-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-selected-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-selected-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "type-team-selected-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-default",
+          "selector": "[data-type='opportunity']"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-hover",
+          "selector": "[data-type='opportunity']"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-focus",
+          "selector": "[data-type='opportunity']"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "type-opportunity-pressed",
+          "selector": "[data-type='opportunity']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P28-type-trend",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-type='trend']",
+          "states": {
+            "default": "type-trend-default",
+            "hover": "type-trend-hover",
+            "focus": "type-trend-focus",
+            "pressed": "type-trend-pressed"
+          }
+        },
+        {
+          "key": "P28-type-team",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-type='team']",
+          "states": {
+            "default": "type-team-default",
+            "hover": "type-team-hover",
+            "focus": "type-team-focus",
+            "pressed": "type-team-pressed"
+          }
+        },
+        {
+          "key": "P28-type-opportunity-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-type='opportunity']",
+          "states": {
+            "default": "type-opportunity-selected-default",
+            "hover": "type-opportunity-selected-hover",
+            "focus": "type-opportunity-selected-focus",
+            "pressed": "type-opportunity-selected-pressed"
+          }
+        },
+        {
+          "key": "P28-type-trend-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-type='trend']",
+          "states": {
+            "default": "type-trend-selected-default",
+            "hover": "type-trend-selected-hover",
+            "focus": "type-trend-selected-focus",
+            "pressed": "type-trend-selected-pressed"
+          }
+        },
+        {
+          "key": "P28-type-team-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-type='team']",
+          "states": {
+            "default": "type-team-selected-default",
+            "hover": "type-team-selected-hover",
+            "focus": "type-team-selected-focus",
+            "pressed": "type-team-selected-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "RP-TECH",
+      "label": "技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/ReportCenter.vue#1c008f867673db60.2"
+      ],
+      "sourceContractKeys": [
+        "RP-TECH；请求关联标识",
+        "RP-TECH；导出错误码"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "页面notice且requestId，或详情last_error_code",
+      "handler": "原生details/summary展开，不产生HTTP；页面和详情是两个源位置",
+      "variants": [
+        "download_error",
+        "technical",
+        "detail_dead"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "download_error"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "technical"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_dead"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-detail-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-detail-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-detail-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "technical-detail-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-default",
+          "selector": "#workspace .notice summary"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-hover",
+          "selector": "#workspace .notice summary"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-focus",
+          "selector": "#workspace .notice summary"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "technical-page-pressed",
+          "selector": "#workspace .notice summary"
+        }
+      },
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": [
+          "disabled",
+          "busy"
+        ],
+        "reason": "上述源button/summary无disabled/aria-busy/loading属性；不补造在途禁用图。",
+        "handlerBoundary": "原生details/summary展开，不产生HTTP；页面和详情是两个源位置",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ReportCenter.vue#1c008f867673db60.1",
+          "apps/web/src/components/ReportCenter.vue#1c008f867673db60.2"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ReportCenter.vue#1c008f867673db60.1",
+          "apps/web/src/components/ReportCenter.vue#1c008f867673db60.2"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P28-technical-detail",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "#detail-content > details summary",
+          "states": {
+            "default": "technical-detail-default",
+            "hover": "technical-detail-hover",
+            "focus": "technical-detail-focus",
+            "pressed": "technical-detail-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "RP-LOAD",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sourceContractKeys": [
+        "RP-LOAD；错误重读"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "error/expired/forbidden/rate_limited/blocked",
+      "handler": "load()并发报表与导出GET；序号只保护外层结果，内部诊断和详情回执归属尚未完备",
+      "variants": [
+        "error",
+        "expired",
+        "forbidden",
+        "rate_limited",
+        "blocked"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "rate_limited"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-expired-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-expired-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-expired-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-expired-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-forbidden-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-forbidden-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-forbidden-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-forbidden-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-rate_limited-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-rate_limited-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-rate_limited-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-rate_limited-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-blocked-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-blocked-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-blocked-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "reload-blocked-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "reload-default",
+          "selector": "[data-load]"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "reload-hover",
+          "selector": "[data-load]"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "reload-focus",
+          "selector": "[data-load]"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "reload-pressed",
+          "selector": "[data-load]"
+        }
+      },
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": [
+          "disabled",
+          "busy"
+        ],
+        "reason": "上述源button/summary无disabled/aria-busy/loading属性；不补造在途禁用图。",
+        "handlerBoundary": "load()并发报表与导出GET；序号只保护外层结果，内部诊断和详情回执归属尚未完备",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ReportCenter.vue#97ed4772fb320d6c.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ReportCenter.vue#97ed4772fb320d6c.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P28-reload-expired",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-load]",
+          "states": {
+            "default": "reload-expired-default",
+            "hover": "reload-expired-hover",
+            "focus": "reload-expired-focus",
+            "pressed": "reload-expired-pressed"
+          }
+        },
+        {
+          "key": "P28-reload-forbidden",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-load]",
+          "states": {
+            "default": "reload-forbidden-default",
+            "hover": "reload-forbidden-hover",
+            "focus": "reload-forbidden-focus",
+            "pressed": "reload-forbidden-pressed"
+          }
+        },
+        {
+          "key": "P28-reload-rate_limited",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-load]",
+          "states": {
+            "default": "reload-rate_limited-default",
+            "hover": "reload-rate_limited-hover",
+            "focus": "reload-rate_limited-focus",
+            "pressed": "reload-rate_limited-pressed"
+          }
+        },
+        {
+          "key": "P28-reload-blocked",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "[data-load]",
+          "states": {
+            "default": "reload-blocked-default",
+            "hover": "reload-blocked-hover",
+            "focus": "reload-blocked-focus",
+            "pressed": "reload-blocked-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "RP-REFRESH",
+      "label": "刷新状态",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#aa7c04ce54cf7cb5.1"
+      ],
+      "sourceContractKeys": [
+        "RP-REFRESH；后台保留显示"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "refreshing禁用按钮并显示正在刷新",
+      "handler": "refresh设置refreshing，load(true)保留报告；finally清除，重入/旧finally保护仍待",
+      "variants": [
+        "opportunity",
+        "refreshing",
+        "refresh_error"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "opportunity"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "refreshing"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "refresh_error"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-default",
+          "selector": "[data-refresh]"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-hover",
+          "selector": "[data-refresh]"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-focus",
+          "selector": "[data-refresh]"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-pressed",
+          "selector": "[data-refresh]"
+        },
+        "disabled": {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-pending",
+          "selector": "[data-refresh]"
+        },
+        "busy": {
+          "package": "report-controls-direction-c",
+          "scene": "refresh-pending",
+          "selector": "[data-refresh]"
+        }
+      }
+    },
+    {
+      "actionId": "RP-TASKS",
+      "label": "在任务中心查看",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#48c7e8b38910554f.1"
+      ],
+      "sourceContractKeys": [
+        "RP-TASKS；导出任务视图"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "固定站内导航，无禁用状态",
+      "handler": "RouterLink /tasks?view=exports；不写入业务tasks表",
+      "variants": [
+        "opportunity"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "opportunity"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-default",
+          "selector": "[data-tasks]"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-hover",
+          "selector": "[data-tasks]"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-focus",
+          "selector": "[data-tasks]"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "tasks-pressed",
+          "selector": "[data-tasks]"
+        }
+      }
+    },
+    {
+      "actionId": "RP-DOWNLOAD",
+      "label": "下载文件",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#6008f8ab717efc14.1"
+      ],
+      "sourceContractKeys": [
+        "RP-DOWNLOAD；有效文件GET"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "列表succeeded且未到期；仅本行下载按钮禁用，但函数会拦截任一在途下载",
+      "handler": "download：带请求/追踪ID和Accept的GET原始字节，blob/object URL/filename/click/revoke；非导出创建事务",
+      "variants": [
+        "opportunity",
+        "download_busy",
+        "download_error",
+        "download_409",
+        "download_410",
+        "download_503"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "opportunity"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "download_busy"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "download_error"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "download_409"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "download_410"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "download_503"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "download-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "download-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "download-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "download-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "download-pending"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "download-default",
+          "selector": "[data-download='00000000-0000-4000-8000-000000000563']"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "download-hover",
+          "selector": "[data-download='00000000-0000-4000-8000-000000000563']"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "download-focus",
+          "selector": "[data-download='00000000-0000-4000-8000-000000000563']"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "download-pressed",
+          "selector": "[data-download='00000000-0000-4000-8000-000000000563']"
+        },
+        "disabled": {
+          "package": "report-controls-direction-c",
+          "scene": "download-pending",
+          "selector": "[data-download='00000000-0000-4000-8000-000000000563']"
+        },
+        "busy": {
+          "package": "report-controls-direction-c",
+          "scene": "download-pending",
+          "selector": "[data-download='00000000-0000-4000-8000-000000000563']"
+        }
+      }
+    },
+    {
+      "actionId": "RP-REGENERATE",
+      "label": "重新生成",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#2c6e73d043155b49.1",
+        "apps/web/src/components/ReportCenter.vue#7ca6d136d071985b.1"
+      ],
+      "sourceContractKeys": [
+        "RP-REGENERATE；列表重建",
+        "RP-REGENERATE；详情重建"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "列表和详情按canRegenerate；expired标签/时间到期或dead_letter；同ID按钮禁用，函数无重入保护",
+      "handler": "regenerate：bodyless POST后load，再replace export为replacement.id；旧记录不覆盖；服务仅时间到期或最终失败允许，状态过期但时间未到仍拒绝",
+      "variants": [
+        "detail_expired",
+        "detail_dead",
+        "detail_boundary",
+        "detail_status_mismatch",
+        "regenerate_busy",
+        "regenerate_error",
+        "regenerated"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "detail_expired"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_dead"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_boundary"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_status_mismatch"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "regenerate_busy"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "regenerate_error"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "regenerated"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-pending"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-detail-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-detail-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-detail-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-detail-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-detail-busy"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-dead-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-dead-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-dead-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-dead-pressed"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-dead-busy"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-default",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-hover",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-focus",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-pressed",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']"
+        },
+        "disabled": {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-pending",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']"
+        },
+        "busy": {
+          "package": "report-controls-direction-c",
+          "scene": "regenerate-list-pending",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P28-regenerate-detail",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": "#detail-footer [data-regenerate]",
+          "states": {
+            "default": "regenerate-detail-default",
+            "hover": "regenerate-detail-hover",
+            "focus": "regenerate-detail-focus",
+            "pressed": "regenerate-detail-pressed",
+            "busy": "regenerate-detail-busy"
+          }
+        },
+        {
+          "key": "P28-regenerate-list-dead",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "report-controls-direction-c",
+          "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+          "states": {
+            "default": "regenerate-list-dead-default",
+            "hover": "regenerate-list-dead-hover",
+            "focus": "regenerate-list-dead-focus",
+            "pressed": "regenerate-list-dead-pressed",
+            "busy": "regenerate-list-dead-busy"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "RP-DETAIL",
+      "label": "查看详情",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#9455978516828e94.1"
+      ],
+      "sourceContractKeys": [
+        "RP-DETAIL；export深链"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "导出列表每条记录；无busy禁用",
+      "handler": "openDetail写export query，监听syncDetailFromRoute GET；错误清选中/参数，404特定提示；晚到/跨页保护仍待",
+      "variants": [
+        "detail_succeeded",
+        "detail_queued",
+        "detail_not_found",
+        "detail_forbidden"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "detail_succeeded"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_queued"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_not_found"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_forbidden"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "detail-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "detail-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "detail-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "detail-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "detail-default",
+          "selector": "[data-detail='00000000-0000-4000-8000-000000000563']"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "detail-hover",
+          "selector": "[data-detail='00000000-0000-4000-8000-000000000563']"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "detail-focus",
+          "selector": "[data-detail='00000000-0000-4000-8000-000000000563']"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "detail-pressed",
+          "selector": "[data-detail='00000000-0000-4000-8000-000000000563']"
+        }
+      },
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": [
+          "disabled",
+          "busy"
+        ],
+        "reason": "上述源button/summary无disabled/aria-busy/loading属性；不补造在途禁用图。",
+        "handlerBoundary": "openDetail写export query，监听syncDetailFromRoute GET；错误清选中/参数，404特定提示；晚到/跨页保护仍待",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ReportCenter.vue#9455978516828e94.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ReportCenter.vue#9455978516828e94.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+        }
+      }
+    },
+    {
+      "actionId": "RP-CLOSE",
+      "label": "关闭导出详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#ec6fb3ba685c67a6.1"
+      ],
+      "sourceContractKeys": [
+        "RP-CLOSE；关闭按钮"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "详情打开时；按钮与Escape归同一关闭动作",
+      "handler": "closeDetail清selectedExport及export query，保留report和其他query；不取消已发送事务",
+      "variants": [
+        "detail_succeeded",
+        "detail_expired"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "detail_succeeded"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_expired"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "close-default"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "close-hover"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "close-focus"
+        },
+        {
+          "package": "report-controls-direction-c",
+          "scene": "close-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "report-controls-direction-c",
+          "scene": "close-default",
+          "selector": "#detail-close"
+        },
+        "hover": {
+          "package": "report-controls-direction-c",
+          "scene": "close-hover",
+          "selector": "#detail-close"
+        },
+        "focus": {
+          "package": "report-controls-direction-c",
+          "scene": "close-focus",
+          "selector": "#detail-close"
+        },
+        "pressed": {
+          "package": "report-controls-direction-c",
+          "scene": "close-pressed",
+          "selector": "#detail-close"
+        }
+      },
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": [
+          "disabled",
+          "busy"
+        ],
+        "reason": "上述源button/summary无disabled/aria-busy/loading属性；不补造在途禁用图。",
+        "handlerBoundary": "closeDetail清selectedExport及export query，保留report和其他query；不取消已发送事务",
+        "sourceCandidateIds": [
+          "apps/web/src/components/ReportCenter.vue#ec6fb3ba685c67a6.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/ReportCenter.vue#ec6fb3ba685c67a6.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+        }
+      }
+    },
+    {
+      "actionId": "D-RP-EXPORT",
+      "label": "导出详情模态接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReportCenter.vue#771186d2cb192900.1",
+        "apps/web/src/components/ReportCenter.vue#92b76ba5cca9c487.1"
+      ],
+      "sourceContractKeys": [
+        "D-RP-EXPORT；导出生命周期",
+        "RP-CLOSE；Escape"
+      ],
+      "contractAliasReason": "沿用F03合同完整末列；列表/详情同义动作显式合并，dialog定义与cancel另列接线。",
+      "condition": "selectedExport时唯一原生dialog",
+      "handler": "@cancel=handleDetailCancel，经useModalDialog到closeDetail；定义与事件不计两个窗口或写动作",
+      "variants": [
+        "detail_succeeded",
+        "detail_queued",
+        "detail_expired"
+      ],
+      "scenes": [
+        {
+          "package": "report-direction-c",
+          "scene": "detail_succeeded"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_queued"
+        },
+        {
+          "package": "report-direction-c",
+          "scene": "detail_expired"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-report-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-report-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+      "forwardsTo": [
+        "RP-CLOSE"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/ReportCenter.vue#92b76ba5cca9c487.1",
+          "event": "@cancel",
+          "handler": "handleDetailCancel",
+          "targets": [
+            "RP-CLOSE"
+          ]
+        }
+      ]
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/ReportCenter.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a"
+    },
+    "inputs": [],
+    "containers": [
+      {
+        "file": "apps/web/src/components/ReportCenter.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "selectedExport唯一生命周期窗；再生成/技术区条件显示，没有详情下载按钮。",
+        "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。",
+        "variants": [
+          {
+            "name": "detail_succeeded",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_succeeded"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_queued",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_queued"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_leased",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_leased"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_retry",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_retry"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_no_sample",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_no_sample"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_expired",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_expired"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_dead",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_dead"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_unknown",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_unknown"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_zero",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_zero"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_boundary",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_boundary"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_status_mismatch",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_status_mismatch"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "regenerate_busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "regenerate_busy"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "regenerate_error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "regenerate_error"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "regenerated",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "regenerated"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "technical",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "technical"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_not_found",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "源读取错误清selectedExport与export query，以页面notice反馈，没有记录窗。",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_not_found"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          },
+          {
+            "name": "detail_forbidden",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "源读取错误清selectedExport与export query，以页面notice反馈，没有记录窗。",
+            "scenes": [
+              {
+                "package": "report-direction-c",
+                "scene": "detail_forbidden"
+              }
+            ],
+            "remaining": "仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "useModalDialog仅此调用方接线核对，不是全部焦点/跨缓存生命周期验收。",
+      "RP-G01–G04和F03-G05仍待；全部输入为空不代表统计口径、文件或权限已获准。"
+    ]
+  },
+  "compositionGaps": [
+    "当前全新图与真实Vue未整合；业务接口、SQL口径及既有回执缺口未改。",
+    "208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "只有C总体方向已选择，P28未获得整页或按钮批准。",
+    "实际下载字节、Worker/数据库与宝塔部署另验，不将原型请求意图当成功。"
+  ]
+}

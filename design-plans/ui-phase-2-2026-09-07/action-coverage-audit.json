@@ -266,6 +266,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/recovery-direction-c/evidence.json": "5cdc96a665ad092eb2e0b1220bfa406548c793b142b1524aab6186f9aa94f3ea",
     "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/evidence.json": "1674f5a5bb408e4401d0b4cc2c66dc80ee129b3b18e677f08b9162cca083b0f2",
     "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/evidence.json": "123d79524f9fa01ff24409e538e2cc59d508ba4e072bead8d4d7a976ce73b833",
+    "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/evidence.json": "8f458d3f565d0b5871eb98d9756d1b2c6122e4fe826768d6131ebaf4712e0de4",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/evidence.json": "addcd08eb53a3e3c9143a5fcdc0daba9474bce2069430773d3ea6dc36c26da72",
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "600c1743f86d66f5840f4b9813966e74df2cbc231fc3b0e0fff6328c440a6bf6",
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "8c71c415389c058bae9bd567f2c83f2ad92f6ee34fc4d79a6428ed287f876db3",
@@ -356,6 +357,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "873cc1947c923bc7269b767b29bb8002d8d27cfc38494cde1a6125b8be82b255",
     "scripts/verify-ui-phase2-automation-c.mjs": "17747ad0d99c6fad3b5a306eed966fd3e3214e6560b4f1f3a61eb0087ad9a732",
     "scripts/verify-ui-phase2-automation-controls-c.mjs": "392d5bc43d7c6a072a16c8ad63a4b289eb85c827641c28e65b9a55994d0eefdc",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "6feb6bf6de051e414ba7b6d51a5e37f81d3238f025f84169ceab57d20b26d653",
+    "scripts/verify-ui-phase2-report-c.mjs": "63c52224823743579af6909fbed606a9bc2ae2765de6f7fe887cc98f4102dbdb",
+    "scripts/verify-ui-phase2-report-controls-c.mjs": "9e464c9d0749bb96bb7bdde89a09e24975e8a087ae4ad2b3b706afd7d86439e7",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -388,7 +392,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "d93c743efbdf2bf78c739ce9ccd338cec0a9e0800907ab146be6f8c1d61b386b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "273c67843540265c6205717e4e14b340a29c730cfc8f4cb063e6976dc9aabd28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "d99d66fec022fe8eabceaccaa52683e8de640190857b28da49b0940edade1549",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "b8751b41f0c2178c1a14e80656c8e2af8bb89ad1e102c3c05acb89e55620840f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "41c7fb274a5ed920637e740f4da5d4d2a9876ac7518b04f9872074d354b7d280",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "de61b5675bef2700f82fe82c4390fa5d08fe1312677cb6928571d7eb9dcc6620",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8bb99072f3db70e0687adb08c5596ac3bae9129d975d2f1fe472224956734247",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "96faebd57a156fffedf3a60f1feddb8be4644b8851100b6b64bb5f26d8c9a5e2",
@@ -447,13 +451,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 19,
     "oldOnlyIdentities": 17,
-    "reviewedPages": 28,
-    "explicitlyGroupedSourceSites": 621,
-    "semanticGroups": 584,
-    "routeActions": 498,
-    "wiringGroups": 62,
+    "reviewedPages": 29,
+    "explicitlyGroupedSourceSites": 635,
+    "semanticGroups": 595,
+    "routeActions": 508,
+    "wiringGroups": 63,
     "pagesWithoutExplicitSemanticReview": [
-      "P28",
       "P29",
       "P30",
       "P31",
@@ -1480,13 +1483,34 @@
       "path": "/reports",
       "title": "报表与导出",
       "oldStaticAssociatedCandidates": 50,
-      "review": null,
+      "review": {
+        "pageId": "P28",
+        "sourceSites": 14,
+        "semanticGroups": 11,
+        "routeActions": 10,
+        "wiringGroups": 1,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "sourceInapplicableVisualSlots": 8,
+        "unmappedVisualSlots": 0,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "callerContainers": 1,
+          "consumerVariants": 17,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
+        "report-controls-direction-c",
         "report-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "当前全新图与真实Vue未整合；业务接口、SQL口径及既有回执缺口未改。",
+        "208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。"
+      ]
     },
     {
       "id": "P29",
@@ -2578,6 +2602,24 @@
         "localModelBindings": 10,
         "callerContainers": 3,
         "consumerVariants": 32,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P28",
+      "sourceSites": 14,
+      "semanticGroups": 11,
+      "routeActions": 10,
+      "wiringGroups": 1,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "sourceInapplicableVisualSlots": 8,
+      "unmappedVisualSlots": 0,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "callerContainers": 1,
+        "consumerVariants": 17,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -41316,7 +41358,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#333b03bc402fcd48.1",
@@ -41342,7 +41390,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-TYPE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#1c008f867673db60.1",
@@ -41372,7 +41426,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#97ed4772fb320d6c.1",
@@ -41398,7 +41458,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#aa7c04ce54cf7cb5.1",
@@ -41419,7 +41485,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-REFRESH",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#48c7e8b38910554f.1",
@@ -41440,7 +41512,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-TASKS",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#6008f8ab717efc14.1",
@@ -41474,7 +41552,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-DOWNLOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#2c6e73d043155b49.1",
@@ -41508,7 +41592,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-REGENERATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#9455978516828e94.1",
@@ -41538,7 +41628,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#771186d2cb192900.1",
@@ -41564,7 +41660,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "D-RP-EXPORT",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#92b76ba5cca9c487.1",
@@ -41590,7 +41692,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "D-RP-EXPORT",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#ec6fb3ba685c67a6.1",
@@ -41616,7 +41724,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#7ca6d136d071985b.1",
@@ -41646,7 +41760,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-REGENERATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#1c008f867673db60.2",
@@ -41676,7 +41796,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P28",
+          "actionId": "RP-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ResourceGrantCenter.vue#07db575ab56f90da.1",

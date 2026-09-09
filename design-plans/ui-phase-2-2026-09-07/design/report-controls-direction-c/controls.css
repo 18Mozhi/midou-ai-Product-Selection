@@ -1,0 +1,20 @@
+/* Technical disclosure is an actionable control, not passive supporting text. */
+.technical summary {
+  font-size: 16px;
+}
+.control-review {
+  margin: 24px;
+  padding: 24px;
+  background: white;
+  color: #202c3d;
+}
+.control-review label {
+  display: block;
+  margin: 16px 0;
+}
+.control-review select {
+  display: block;
+  width: min(100%, 640px);
+  min-height: 44px;
+  font: inherit;
+}

@@ -1,0 +1,5761 @@
+{
+  "version": "REPORT-CONTROLS-C-r1",
+  "scope": "offline-proposal-not-runtime-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/index.html": "bff8531084b6c3951224a680b61dc651101138498730684dd2f5ba7ca328faaf",
+    "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/report.css": "1b37b4fa50811af79e5e86daf2bc624ae4fe95a795889f5aee8b934ff90e000a",
+    "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/report.js": "3a57f626a430a7f798fb7bdbef739199225faf3a1216b54200ca3b0fde3fc232",
+    "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/data.js": "6b8e8b329515af2281adddaadf0b8b897a7a6d7dc3273f8af455891a32c31855",
+    "apps/web/src/components/ReportCenter.vue": "51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/api/src/report-service.ts": "6303c6aa73caa347d5aa11c5bb67e9fdc66ae352eca240c407ba370569a74184",
+    "apps/api/src/report-routes.ts": "762c3d53c128ec887b0b22e54a9ee023fa0b0273a35271dba78ce21cea58507a",
+    "apps/api/src/mysql-report-repository.ts": "966acdd83d77d8d3753921e0283408a5d06617bb62be212b45c032591e2b2e2d",
+    "tests/e2e/m05-06-reports.spec.ts": "37690a6d491678ee56e196bbd67473e545904e2f020719e21419bb7615eac94b",
+    "scripts/lib/ui-phase2-report-design-data.mjs": "fe50460ac81a74a102ed5dbac5db40b8aea6b47267fe4dbea56a953a9475a9e1",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-report-c.mjs": "63c52224823743579af6909fbed606a9bc2ae2765de6f7fe887cc98f4102dbdb",
+    "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/index.html": "6f8e9bcc037890e131a87cd157a9bca5d61050dc7cf3db51b189e0762e46338f",
+    "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/controls.js": "97aa528ffa7613b335ea726f6cea542e48ce4a86e774e6b23065982909026a42",
+    "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/controls.css": "30662ca266d9f54374d6ef5cd31ba5033643120cc86c3548c9d0ed79c9a1f888",
+    "scripts/verify-ui-phase2-report-controls-c.mjs": "9e464c9d0749bb96bb7bdde89a09e24975e8a087ae4ad2b3b706afd7d86439e7"
+  },
+  "actionVisualReferences": {
+    "RP-CREATE": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-create]",
+      "states": {
+        "default": "create-default",
+        "hover": "create-hover",
+        "focus": "create-focus",
+        "pressed": "create-pressed",
+        "disabled": "create-pending",
+        "busy": "create-pending"
+      }
+    },
+    "RP-TYPE": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-type='opportunity']",
+      "states": {
+        "default": "type-opportunity-default",
+        "hover": "type-opportunity-hover",
+        "focus": "type-opportunity-focus",
+        "pressed": "type-opportunity-pressed"
+      }
+    },
+    "RP-TECH": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#workspace .notice summary",
+      "states": {
+        "default": "technical-page-default",
+        "hover": "technical-page-hover",
+        "focus": "technical-page-focus",
+        "pressed": "technical-page-pressed"
+      }
+    },
+    "RP-LOAD": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-load]",
+      "states": {
+        "default": "reload-default",
+        "hover": "reload-hover",
+        "focus": "reload-focus",
+        "pressed": "reload-pressed"
+      }
+    },
+    "RP-REFRESH": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-refresh]",
+      "states": {
+        "default": "refresh-default",
+        "hover": "refresh-hover",
+        "focus": "refresh-focus",
+        "pressed": "refresh-pressed",
+        "disabled": "refresh-pending",
+        "busy": "refresh-pending"
+      }
+    },
+    "RP-TASKS": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-tasks]",
+      "states": {
+        "default": "tasks-default",
+        "hover": "tasks-hover",
+        "focus": "tasks-focus",
+        "pressed": "tasks-pressed"
+      }
+    },
+    "RP-DOWNLOAD": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+      "states": {
+        "default": "download-default",
+        "hover": "download-hover",
+        "focus": "download-focus",
+        "pressed": "download-pressed",
+        "disabled": "download-pending",
+        "busy": "download-pending"
+      }
+    },
+    "RP-REGENERATE": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+      "states": {
+        "default": "regenerate-list-default",
+        "hover": "regenerate-list-hover",
+        "focus": "regenerate-list-focus",
+        "pressed": "regenerate-list-pressed",
+        "disabled": "regenerate-list-pending",
+        "busy": "regenerate-list-pending"
+      }
+    },
+    "RP-DETAIL": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+      "states": {
+        "default": "detail-default",
+        "hover": "detail-hover",
+        "focus": "detail-focus",
+        "pressed": "detail-pressed"
+      }
+    },
+    "RP-CLOSE": {
+      "pageId": "P28",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#detail-close",
+      "states": {
+        "default": "close-default",
+        "hover": "close-hover",
+        "focus": "close-focus",
+        "pressed": "close-pressed"
+      }
+    }
+  },
+  "controlVariantReferences": {
+    "P28-type-trend": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-TYPE",
+      "selector": "[data-type='trend']",
+      "states": {
+        "default": "type-trend-default",
+        "hover": "type-trend-hover",
+        "focus": "type-trend-focus",
+        "pressed": "type-trend-pressed"
+      }
+    },
+    "P28-type-team": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-TYPE",
+      "selector": "[data-type='team']",
+      "states": {
+        "default": "type-team-default",
+        "hover": "type-team-hover",
+        "focus": "type-team-focus",
+        "pressed": "type-team-pressed"
+      }
+    },
+    "P28-type-opportunity-selected": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-TYPE",
+      "selector": "[data-type='opportunity']",
+      "states": {
+        "default": "type-opportunity-selected-default",
+        "hover": "type-opportunity-selected-hover",
+        "focus": "type-opportunity-selected-focus",
+        "pressed": "type-opportunity-selected-pressed"
+      }
+    },
+    "P28-type-trend-selected": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-TYPE",
+      "selector": "[data-type='trend']",
+      "states": {
+        "default": "type-trend-selected-default",
+        "hover": "type-trend-selected-hover",
+        "focus": "type-trend-selected-focus",
+        "pressed": "type-trend-selected-pressed"
+      }
+    },
+    "P28-type-team-selected": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-TYPE",
+      "selector": "[data-type='team']",
+      "states": {
+        "default": "type-team-selected-default",
+        "hover": "type-team-selected-hover",
+        "focus": "type-team-selected-focus",
+        "pressed": "type-team-selected-pressed"
+      }
+    },
+    "P28-technical-detail": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-TECH",
+      "selector": "#detail-content > details summary",
+      "states": {
+        "default": "technical-detail-default",
+        "hover": "technical-detail-hover",
+        "focus": "technical-detail-focus",
+        "pressed": "technical-detail-pressed"
+      }
+    },
+    "P28-regenerate-detail": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-REGENERATE",
+      "selector": "#detail-footer [data-regenerate]",
+      "states": {
+        "default": "regenerate-detail-default",
+        "hover": "regenerate-detail-hover",
+        "focus": "regenerate-detail-focus",
+        "pressed": "regenerate-detail-pressed",
+        "busy": "regenerate-detail-busy"
+      }
+    },
+    "P28-regenerate-list-dead": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-REGENERATE",
+      "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+      "states": {
+        "default": "regenerate-list-dead-default",
+        "hover": "regenerate-list-dead-hover",
+        "focus": "regenerate-list-dead-focus",
+        "pressed": "regenerate-list-dead-pressed",
+        "busy": "regenerate-list-dead-busy"
+      }
+    },
+    "P28-reload-expired": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-LOAD",
+      "selector": "[data-load]",
+      "states": {
+        "default": "reload-expired-default",
+        "hover": "reload-expired-hover",
+        "focus": "reload-expired-focus",
+        "pressed": "reload-expired-pressed"
+      }
+    },
+    "P28-reload-forbidden": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-LOAD",
+      "selector": "[data-load]",
+      "states": {
+        "default": "reload-forbidden-default",
+        "hover": "reload-forbidden-hover",
+        "focus": "reload-forbidden-focus",
+        "pressed": "reload-forbidden-pressed"
+      }
+    },
+    "P28-reload-rate_limited": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-LOAD",
+      "selector": "[data-load]",
+      "states": {
+        "default": "reload-rate_limited-default",
+        "hover": "reload-rate_limited-hover",
+        "focus": "reload-rate_limited-focus",
+        "pressed": "reload-rate_limited-pressed"
+      }
+    },
+    "P28-reload-blocked": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-LOAD",
+      "selector": "[data-load]",
+      "states": {
+        "default": "reload-blocked-default",
+        "hover": "reload-blocked-hover",
+        "focus": "reload-blocked-focus",
+        "pressed": "reload-blocked-pressed"
+      }
+    },
+    "P28-create-trend": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-CREATE",
+      "selector": "[data-create]",
+      "states": {
+        "default": "create-trend-default",
+        "hover": "create-trend-hover",
+        "focus": "create-trend-focus",
+        "pressed": "create-trend-pressed",
+        "busy": "create-trend-busy"
+      }
+    },
+    "P28-create-team": {
+      "pageId": "P28",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "RP-CREATE",
+      "selector": "[data-create]",
+      "states": {
+        "default": "create-team-default",
+        "hover": "create-team-hover",
+        "focus": "create-team-focus",
+        "pressed": "create-team-pressed",
+        "busy": "create-team-busy"
+      }
+    }
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "state": "default",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "state": "hover",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "state": "focus",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "state": "pending",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "state": "default",
+      "metrics": {
+        "width": 1092,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "state": "hover",
+      "metrics": {
+        "width": 1092,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "state": "focus",
+      "metrics": {
+        "width": 1092,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "state": "pressed",
+      "metrics": {
+        "width": 1092,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REFRESH",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REFRESH",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REFRESH",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REFRESH",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REFRESH",
+      "state": "pending",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TASKS",
+      "state": "default",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TASKS",
+      "state": "hover",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TASKS",
+      "state": "focus",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TASKS",
+      "state": "pressed",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DOWNLOAD",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DOWNLOAD",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DOWNLOAD",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DOWNLOAD",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DOWNLOAD",
+      "state": "pending",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "state": "pending",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DETAIL",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DETAIL",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DETAIL",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-DETAIL",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CLOSE",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CLOSE",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CLOSE",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CLOSE",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 51.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "default",
+      "metrics": {
+        "width": 704,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "hover",
+      "metrics": {
+        "width": 704,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "focus",
+      "metrics": {
+        "width": 704,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "pressed",
+      "metrics": {
+        "width": 704,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "busy",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "busy",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "default",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "hover",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "focus",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "pressed",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "busy",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "default",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "hover",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "focus",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "pressed",
+      "metrics": {
+        "width": 163.5,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "busy",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "state": "default",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "state": "hover",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "state": "focus",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "state": "pending",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REFRESH",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REFRESH",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REFRESH",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REFRESH",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REFRESH",
+      "state": "pending",
+      "metrics": {
+        "width": 109.015625,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TASKS",
+      "state": "default",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TASKS",
+      "state": "hover",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TASKS",
+      "state": "focus",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TASKS",
+      "state": "pressed",
+      "metrics": {
+        "width": 112,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DOWNLOAD",
+      "state": "default",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DOWNLOAD",
+      "state": "hover",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DOWNLOAD",
+      "state": "focus",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DOWNLOAD",
+      "state": "pressed",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DOWNLOAD",
+      "state": "pending",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "state": "default",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "state": "hover",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "state": "focus",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "state": "pressed",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "state": "pending",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DETAIL",
+      "state": "default",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DETAIL",
+      "state": "hover",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DETAIL",
+      "state": "focus",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-DETAIL",
+      "state": "pressed",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CLOSE",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CLOSE",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CLOSE",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CLOSE",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "default",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "hover",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "focus",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend",
+      "state": "pressed",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team",
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-opportunity-selected",
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "default",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "hover",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "focus",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-trend-selected",
+      "state": "pressed",
+      "metrics": {
+        "width": 115.34375,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TYPE",
+      "variantKey": "P28-type-team-selected",
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "default",
+      "metrics": {
+        "width": 316,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "hover",
+      "metrics": {
+        "width": 316,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "focus",
+      "metrics": {
+        "width": 316,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-TECH",
+      "variantKey": "P28-technical-detail",
+      "state": "pressed",
+      "metrics": {
+        "width": 316,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "default",
+      "metrics": {
+        "width": 316,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "hover",
+      "metrics": {
+        "width": 316,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "focus",
+      "metrics": {
+        "width": 316,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "pressed",
+      "metrics": {
+        "width": 316,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-detail",
+      "state": "busy",
+      "metrics": {
+        "width": 316,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "default",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "hover",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "focus",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "pressed",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-REGENERATE",
+      "variantKey": "P28-regenerate-list-dead",
+      "state": "busy",
+      "metrics": {
+        "width": 156,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-expired",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-forbidden",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-rate_limited",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-LOAD",
+      "variantKey": "P28-reload-blocked",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "default",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "hover",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "focus",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "pressed",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-trend",
+      "state": "busy",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "default",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "hover",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "focus",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "pressed",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "RP-CREATE",
+      "variantKey": "P28-create-team",
+      "state": "busy",
+      "metrics": {
+        "width": 358,
+        "height": 45.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    }
+  ],
+  "screenshots": [
+    {
+      "scene": "create-default",
+      "width": 1440,
+      "file": "create-default-1440.png",
+      "sha256": "06cccc460f88eab931e2625cc41dbfd7a03f020bffdf59a4ec81d32e8a571beb",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "create-hover",
+      "width": 1440,
+      "file": "create-hover-1440.png",
+      "sha256": "83a40aa214826d8019ba22b2259ec01704bb8510a4d02b69d10a8884263f608e",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "create-focus",
+      "width": 1440,
+      "file": "create-focus-1440.png",
+      "sha256": "203a5c1b94de8b1ad45e6851de47892935d4136f43f6e3351fb56f258063d70d",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "create-pressed",
+      "width": 1440,
+      "file": "create-pressed-1440.png",
+      "sha256": "a585036557867515ea56053af0491283a401fe290713284730fe16bb923f7fa2",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "create-pending",
+      "width": 1440,
+      "file": "create-pending-1440.png",
+      "sha256": "3403e31d6fe675aea134e8da9c5a6f32c1c1ccc4b8c57cb2aeff2a3b2f49d5ba",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "type-opportunity-default",
+      "width": 1440,
+      "file": "type-opportunity-default-1440.png",
+      "sha256": "e88e03e376a316ef693ea2b8231628e42ebc31e6701741fad61be9acbfa51ca8",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "type-opportunity-hover",
+      "width": 1440,
+      "file": "type-opportunity-hover-1440.png",
+      "sha256": "bef2655a713623a4aaa7a91454f7a4f5df7ee424b0eeb54bc221cd51bfdfdfa6",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "type-opportunity-focus",
+      "width": 1440,
+      "file": "type-opportunity-focus-1440.png",
+      "sha256": "057fc59e42f7af903327c22c8d79e48c1d8194e9b73f8481be1e35df1ad883b3",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "type-opportunity-pressed",
+      "width": 1440,
+      "file": "type-opportunity-pressed-1440.png",
+      "sha256": "bef2655a713623a4aaa7a91454f7a4f5df7ee424b0eeb54bc221cd51bfdfdfa6",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-page-default",
+      "width": 1440,
+      "file": "technical-page-default-1440.png",
+      "sha256": "bd9557835a5ce303b06d524a4e6462cf571dc640477d39aa0142729bc83ffe60",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-page-hover",
+      "width": 1440,
+      "file": "technical-page-hover-1440.png",
+      "sha256": "bd9557835a5ce303b06d524a4e6462cf571dc640477d39aa0142729bc83ffe60",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-page-focus",
+      "width": 1440,
+      "file": "technical-page-focus-1440.png",
+      "sha256": "841c34baa9e93f8a2bf34e79ddef7cf7af55c60d2e66988a4502b39efa4c8ca5",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-page-pressed",
+      "width": 1440,
+      "file": "technical-page-pressed-1440.png",
+      "sha256": "bd9557835a5ce303b06d524a4e6462cf571dc640477d39aa0142729bc83ffe60",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "reload-default",
+      "width": 1440,
+      "file": "reload-default-1440.png",
+      "sha256": "58dc0610ac1bbd363c98e60baf5e68ada032463fea035448f0e3df0001455b1e",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "reload-hover",
+      "width": 1440,
+      "file": "reload-hover-1440.png",
+      "sha256": "fa1ffe0160e856651d2f72f40272e76075b353aba28f037679a0b3821ff360aa",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "reload-focus",
+      "width": 1440,
+      "file": "reload-focus-1440.png",
+      "sha256": "8400a09be3a3bd77319490581180640f80e877b45ba0fd47121e4b2858d11fff",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "reload-pressed",
+      "width": 1440,
+      "file": "reload-pressed-1440.png",
+      "sha256": "fa1ffe0160e856651d2f72f40272e76075b353aba28f037679a0b3821ff360aa",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "refresh-default",
+      "width": 1440,
+      "file": "refresh-default-1440.png",
+      "sha256": "2c74c27f318a313a1c76c2b23b95289f24f7d95be7fb1b445b3740826d95331b",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "refresh-hover",
+      "width": 1440,
+      "file": "refresh-hover-1440.png",
+      "sha256": "b2cc776527fb46d8f23839526f13f34ba47c1cef185580ab1eb69a8b0f907b64",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "refresh-focus",
+      "width": 1440,
+      "file": "refresh-focus-1440.png",
+      "sha256": "769886cbd345d2fb527e2da3c6908750ffa84096c239413d581bec8b91a7e098",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "refresh-pressed",
+      "width": 1440,
+      "file": "refresh-pressed-1440.png",
+      "sha256": "b2cc776527fb46d8f23839526f13f34ba47c1cef185580ab1eb69a8b0f907b64",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "refresh-pending",
+      "width": 1440,
+      "file": "refresh-pending-1440.png",
+      "sha256": "730de7dda4d729faade19f12c31b987afd5525e705945466808b5d54352d3e7e",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "tasks-default",
+      "width": 1440,
+      "file": "tasks-default-1440.png",
+      "sha256": "2c74c27f318a313a1c76c2b23b95289f24f7d95be7fb1b445b3740826d95331b",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "tasks-hover",
+      "width": 1440,
+      "file": "tasks-hover-1440.png",
+      "sha256": "2c74c27f318a313a1c76c2b23b95289f24f7d95be7fb1b445b3740826d95331b",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "tasks-focus",
+      "width": 1440,
+      "file": "tasks-focus-1440.png",
+      "sha256": "968034b3f36db72802875118739560c0db43ec3388ec38892aa456fab9da1e98",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "tasks-pressed",
+      "width": 1440,
+      "file": "tasks-pressed-1440.png",
+      "sha256": "2c74c27f318a313a1c76c2b23b95289f24f7d95be7fb1b445b3740826d95331b",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "download-default",
+      "width": 1440,
+      "file": "download-default-1440.png",
+      "sha256": "074958ecf94735dc79866a7fa6eff3c09abae1a338f8ec1c55bc05a1e4caafd5",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "download-hover",
+      "width": 1440,
+      "file": "download-hover-1440.png",
+      "sha256": "057636bff72d418e5dd7f25ccb813eaf2ea16d5089bf68f0106d5508b9ff7891",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "download-focus",
+      "width": 1440,
+      "file": "download-focus-1440.png",
+      "sha256": "6804b3a42010739c1c35b91b9dd042f195abf6f12f21d2104852243fdd5e1529",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "download-pressed",
+      "width": 1440,
+      "file": "download-pressed-1440.png",
+      "sha256": "057636bff72d418e5dd7f25ccb813eaf2ea16d5089bf68f0106d5508b9ff7891",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "download-pending",
+      "width": 1440,
+      "file": "download-pending-1440.png",
+      "sha256": "97365be9565d523f7ea3a878db1d53333c3ae0e1bf682ea243c461c6bda0727f",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "regenerate-list-default",
+      "width": 1440,
+      "file": "regenerate-list-default-1440.png",
+      "sha256": "403fae2923294e51084aa28247f818e7aac98806aadf6cd2b0d95c9772686650",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "regenerate-list-hover",
+      "width": 1440,
+      "file": "regenerate-list-hover-1440.png",
+      "sha256": "860a50cece574a430670612845c95781977b34f181e868202bb973d4ab24b6dd",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "regenerate-list-focus",
+      "width": 1440,
+      "file": "regenerate-list-focus-1440.png",
+      "sha256": "4ab36491e0cf94adc67c9772dd2814527407e7e432d6561d6864eb70d241ca89",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "regenerate-list-pressed",
+      "width": 1440,
+      "file": "regenerate-list-pressed-1440.png",
+      "sha256": "860a50cece574a430670612845c95781977b34f181e868202bb973d4ab24b6dd",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "regenerate-list-pending",
+      "width": 1440,
+      "file": "regenerate-list-pending-1440.png",
+      "sha256": "17963b674a6fc1a6e9aa64dd8a6316d6569ee71f102ce45ab52e77140ece32d5",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "detail-default",
+      "width": 1440,
+      "file": "detail-default-1440.png",
+      "sha256": "074958ecf94735dc79866a7fa6eff3c09abae1a338f8ec1c55bc05a1e4caafd5",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "detail-hover",
+      "width": 1440,
+      "file": "detail-hover-1440.png",
+      "sha256": "755863cac870e1f5b25e60d28bc33c8bd162e16b187f013749665838054bd0db",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "detail-focus",
+      "width": 1440,
+      "file": "detail-focus-1440.png",
+      "sha256": "675d17fd86846e9c9d81a4961f621511067a4826dd79c6e077223cef49e37259",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "detail-pressed",
+      "width": 1440,
+      "file": "detail-pressed-1440.png",
+      "sha256": "755863cac870e1f5b25e60d28bc33c8bd162e16b187f013749665838054bd0db",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "close-default",
+      "width": 1440,
+      "file": "close-default-1440.png",
+      "sha256": "8ff0340b9beb733d32d1e7804fc532bf33b99b454c3b7078b04fc8676eb4f92a",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "close-hover",
+      "width": 1440,
+      "file": "close-hover-1440.png",
+      "sha256": "a85e84f96a12dda2c1b172d8753a04890d361beaa95b4d670dad3ded9ace7f92",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "close-focus",
+      "width": 1440,
+      "file": "close-focus-1440.png",
+      "sha256": "38602aa9100f24e8538df6843f7c99857a49cd3a2879ca65ab15b754d7f6496f",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "close-pressed",
+      "width": 1440,
+      "file": "close-pressed-1440.png",
+      "sha256": "26e12f86e7be019c7eb59053ad09e2b2c40a05bb92363cb3e00121c9e413d463",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "type-trend-default",
+      "width": 1440,
+      "file": "type-trend-default-1440.png",
+      "sha256": "ef2c9220936ce81643d5189e0ec01977aa724b8c83b09ea05db3d7fc0c77d05d",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-trend-hover",
+      "width": 1440,
+      "file": "type-trend-hover-1440.png",
+      "sha256": "fbd3966c05e3ab26a2a32cae39d2d2334c05d3e09bd7fc696ced0459dea018c4",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-trend-focus",
+      "width": 1440,
+      "file": "type-trend-focus-1440.png",
+      "sha256": "007fccb1e0a8d9055554dd6598b55b79f96c8862d70cee00896e75409caa36ca",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-trend-pressed",
+      "width": 1440,
+      "file": "type-trend-pressed-1440.png",
+      "sha256": "fbd3966c05e3ab26a2a32cae39d2d2334c05d3e09bd7fc696ced0459dea018c4",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-team-default",
+      "width": 1440,
+      "file": "type-team-default-1440.png",
+      "sha256": "ef2c9220936ce81643d5189e0ec01977aa724b8c83b09ea05db3d7fc0c77d05d",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-team-hover",
+      "width": 1440,
+      "file": "type-team-hover-1440.png",
+      "sha256": "788c0945a5935936dfbc8fb7f23cee45850cf4b481d9c46fb50511922371fd22",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-team-focus",
+      "width": 1440,
+      "file": "type-team-focus-1440.png",
+      "sha256": "1a343715cf9ccbecdb0877536205a1f4d1744247cdc9d334d92c1f240e4cefc4",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-team-pressed",
+      "width": 1440,
+      "file": "type-team-pressed-1440.png",
+      "sha256": "788c0945a5935936dfbc8fb7f23cee45850cf4b481d9c46fb50511922371fd22",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-default",
+      "width": 1440,
+      "file": "type-opportunity-selected-default-1440.png",
+      "sha256": "ef2c9220936ce81643d5189e0ec01977aa724b8c83b09ea05db3d7fc0c77d05d",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-hover",
+      "width": 1440,
+      "file": "type-opportunity-selected-hover-1440.png",
+      "sha256": "e1ebcf01f6722f70473171694220d1c3c90272a303def149c6e5bf919f6c77e9",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-focus",
+      "width": 1440,
+      "file": "type-opportunity-selected-focus-1440.png",
+      "sha256": "983356d0e74484b7ff9a4559913d8e37f1604417e0e61453f46c49f73d896ac5",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-pressed",
+      "width": 1440,
+      "file": "type-opportunity-selected-pressed-1440.png",
+      "sha256": "e1ebcf01f6722f70473171694220d1c3c90272a303def149c6e5bf919f6c77e9",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-default",
+      "width": 1440,
+      "file": "type-trend-selected-default-1440.png",
+      "sha256": "c865ef673a274ff7453c21daf5373df87bf5f55cb579c766cc3b11a67673c62f",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-hover",
+      "width": 1440,
+      "file": "type-trend-selected-hover-1440.png",
+      "sha256": "86f7f1c380c85f865bfb50168507f2f57dca6fe1f1d20ce23796d3eb6a91bf45",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-focus",
+      "width": 1440,
+      "file": "type-trend-selected-focus-1440.png",
+      "sha256": "285e6015324f80c66c0fda13a4b0432ee13d7af579291f522f194d5253945a91",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-pressed",
+      "width": 1440,
+      "file": "type-trend-selected-pressed-1440.png",
+      "sha256": "86f7f1c380c85f865bfb50168507f2f57dca6fe1f1d20ce23796d3eb6a91bf45",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-default",
+      "width": 1440,
+      "file": "type-team-selected-default-1440.png",
+      "sha256": "b9386cb04662be7ae37c7030e82092380d1e89d97dbf104bb5437d8458eabc9e",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-hover",
+      "width": 1440,
+      "file": "type-team-selected-hover-1440.png",
+      "sha256": "2872d776c03d27614cacc7d7c21927a8fc38340cacec4c0249ede4eeea9cd7d4",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-focus",
+      "width": 1440,
+      "file": "type-team-selected-focus-1440.png",
+      "sha256": "ef41dc878a1f10d001bb46fa9d032274a41140c7e4c77947b19827d41ccc6d53",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-pressed",
+      "width": 1440,
+      "file": "type-team-selected-pressed-1440.png",
+      "sha256": "2872d776c03d27614cacc7d7c21927a8fc38340cacec4c0249ede4eeea9cd7d4",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "technical-detail-default",
+      "width": 1440,
+      "file": "technical-detail-default-1440.png",
+      "sha256": "e12ceadfae832d0c1375407c3a6dc0a851ef41680f1f6b4564991852d9175343",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "default",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "technical-detail-hover",
+      "width": 1440,
+      "file": "technical-detail-hover-1440.png",
+      "sha256": "e12ceadfae832d0c1375407c3a6dc0a851ef41680f1f6b4564991852d9175343",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "hover",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "technical-detail-focus",
+      "width": 1440,
+      "file": "technical-detail-focus-1440.png",
+      "sha256": "bee7377273298e86c179bbd19be0902d1d7c8d4e51fc05410ec4c99290e61990",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "focus",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "technical-detail-pressed",
+      "width": 1440,
+      "file": "technical-detail-pressed-1440.png",
+      "sha256": "e12ceadfae832d0c1375407c3a6dc0a851ef41680f1f6b4564991852d9175343",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "pressed",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-default",
+      "width": 1440,
+      "file": "regenerate-detail-default-1440.png",
+      "sha256": "8c981579642742854c998810160760a3a761db9d0d48c38ddb7751bda877572c",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "default",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-hover",
+      "width": 1440,
+      "file": "regenerate-detail-hover-1440.png",
+      "sha256": "e1a96804b4e2261449ee09ac54783310919e135d6b5bd133cae22ec21636d02e",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "hover",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-focus",
+      "width": 1440,
+      "file": "regenerate-detail-focus-1440.png",
+      "sha256": "0de51738f73a75a49fe2ce630e2304404ae091287e7e78a058eaff0c44ad2023",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "focus",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-pressed",
+      "width": 1440,
+      "file": "regenerate-detail-pressed-1440.png",
+      "sha256": "e1a96804b4e2261449ee09ac54783310919e135d6b5bd133cae22ec21636d02e",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "pressed",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-busy",
+      "width": 1440,
+      "file": "regenerate-detail-busy-1440.png",
+      "sha256": "37284d139c113128bbe64b3d0a0dc185b9bbfe255cd24105ad77a7d6d8761a09",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "busy",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-default",
+      "width": 1440,
+      "file": "regenerate-list-dead-default-1440.png",
+      "sha256": "c6ed42b6fce601ab219b11e8717da91af417936ca2613ebb751c14c0aea5506a",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "default",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-hover",
+      "width": 1440,
+      "file": "regenerate-list-dead-hover-1440.png",
+      "sha256": "bbb81aa73a3c303db8b7d1025c051d5ab9ff54913a4f41577b0cf56b37f2a139",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "hover",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-focus",
+      "width": 1440,
+      "file": "regenerate-list-dead-focus-1440.png",
+      "sha256": "864a1d69fa13d64342069d93485caf0f8b2fa5651878c2bcf71815f1a57bb06d",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "focus",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-pressed",
+      "width": 1440,
+      "file": "regenerate-list-dead-pressed-1440.png",
+      "sha256": "bbb81aa73a3c303db8b7d1025c051d5ab9ff54913a4f41577b0cf56b37f2a139",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "pressed",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-busy",
+      "width": 1440,
+      "file": "regenerate-list-dead-busy-1440.png",
+      "sha256": "69521552452e34ef9cdbc4c12b00dc39d05d1a4e9bc5850018fce74d18c9842d",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "busy",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "reload-expired-default",
+      "width": 1440,
+      "file": "reload-expired-default-1440.png",
+      "sha256": "48510becededb20e107364b6dc860e3a973e6305553b0f6c593e4433759bf2d7",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-hover",
+      "width": 1440,
+      "file": "reload-expired-hover-1440.png",
+      "sha256": "db65a7112ec0fc8539a4592b009fbec2d2223e38cbecbf652772fc3fedfbc837",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-focus",
+      "width": 1440,
+      "file": "reload-expired-focus-1440.png",
+      "sha256": "b1550d2948ac37d894e1e035cde668b3a23d802aaa65140110443ad83f6f41a1",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-pressed",
+      "width": 1440,
+      "file": "reload-expired-pressed-1440.png",
+      "sha256": "2dc5326b9eff83f6137a2de6f48c4c66ec0e6d2bac1bda0c40fbd9a9ecec17cd",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-forbidden-default",
+      "width": 1440,
+      "file": "reload-forbidden-default-1440.png",
+      "sha256": "4fad855997f98f695e9c1eb9883c5979a56adb95c62d59439a51a0352e73a429",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-hover",
+      "width": 1440,
+      "file": "reload-forbidden-hover-1440.png",
+      "sha256": "6afe1767e5f4498f8e5c61d32e8b91ae7b01eccb853dca2f0fd2b09c8e1e5faf",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-focus",
+      "width": 1440,
+      "file": "reload-forbidden-focus-1440.png",
+      "sha256": "9cc0ea2470f4e8b5f102483984380e2d3e59e9a59bf6966708e5cc45d6562d55",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-pressed",
+      "width": 1440,
+      "file": "reload-forbidden-pressed-1440.png",
+      "sha256": "6afe1767e5f4498f8e5c61d32e8b91ae7b01eccb853dca2f0fd2b09c8e1e5faf",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-default",
+      "width": 1440,
+      "file": "reload-rate_limited-default-1440.png",
+      "sha256": "c1ecf356ee18d6eb33f75610ad523c35aeba65ef704c0475337464802f692581",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-hover",
+      "width": 1440,
+      "file": "reload-rate_limited-hover-1440.png",
+      "sha256": "c00a05a3bbffa9bbe7e417cb500163ace26cadac2ae84d555d7ea860861b9620",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-focus",
+      "width": 1440,
+      "file": "reload-rate_limited-focus-1440.png",
+      "sha256": "76f85a0f47f33bcaa07bc49c999afadbf15474c32f927dd749fd3759a1dd5a44",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-pressed",
+      "width": 1440,
+      "file": "reload-rate_limited-pressed-1440.png",
+      "sha256": "c00a05a3bbffa9bbe7e417cb500163ace26cadac2ae84d555d7ea860861b9620",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-blocked-default",
+      "width": 1440,
+      "file": "reload-blocked-default-1440.png",
+      "sha256": "58dc0610ac1bbd363c98e60baf5e68ada032463fea035448f0e3df0001455b1e",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-hover",
+      "width": 1440,
+      "file": "reload-blocked-hover-1440.png",
+      "sha256": "fa1ffe0160e856651d2f72f40272e76075b353aba28f037679a0b3821ff360aa",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-focus",
+      "width": 1440,
+      "file": "reload-blocked-focus-1440.png",
+      "sha256": "8400a09be3a3bd77319490581180640f80e877b45ba0fd47121e4b2858d11fff",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-pressed",
+      "width": 1440,
+      "file": "reload-blocked-pressed-1440.png",
+      "sha256": "fa1ffe0160e856651d2f72f40272e76075b353aba28f037679a0b3821ff360aa",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "create-trend-default",
+      "width": 1440,
+      "file": "create-trend-default-1440.png",
+      "sha256": "c865ef673a274ff7453c21daf5373df87bf5f55cb579c766cc3b11a67673c62f",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "default",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-hover",
+      "width": 1440,
+      "file": "create-trend-hover-1440.png",
+      "sha256": "00813391a62f4e7cc981faf7bc4839906fa566a6f10d1e3bbf679ebdc90495f4",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "hover",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-focus",
+      "width": 1440,
+      "file": "create-trend-focus-1440.png",
+      "sha256": "da0ccc0a3b55c3f213528b34cb8515cc5de009b9fcd74f604b8ca4d4b5b7b964",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "focus",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-pressed",
+      "width": 1440,
+      "file": "create-trend-pressed-1440.png",
+      "sha256": "8a184ece4b57e31c70fbf904a69715fcfcf0b7d78a8e49caa3e48f81d5d82b20",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pressed",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-busy",
+      "width": 1440,
+      "file": "create-trend-busy-1440.png",
+      "sha256": "bc941645df932c2627d96f155d72c9d8c3c6e6ef3771e5b3c47a541472f3d37c",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "busy",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-team-default",
+      "width": 1440,
+      "file": "create-team-default-1440.png",
+      "sha256": "b9386cb04662be7ae37c7030e82092380d1e89d97dbf104bb5437d8458eabc9e",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "default",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-hover",
+      "width": 1440,
+      "file": "create-team-hover-1440.png",
+      "sha256": "2c1cb79f23e978b2b6486474180bfde01667dec069bcdb5e14d9520caa5a1b0f",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "hover",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-focus",
+      "width": 1440,
+      "file": "create-team-focus-1440.png",
+      "sha256": "a6a03f2b84687f7ad33e00753eaaf95839905a6ac667f12fe4251d06e43cdc39",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "focus",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-pressed",
+      "width": 1440,
+      "file": "create-team-pressed-1440.png",
+      "sha256": "dfc928c837e74ea609a18603e280ad1b5353f17fd8f6dbbf1e7e440382a7c966",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pressed",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-busy",
+      "width": 1440,
+      "file": "create-team-busy-1440.png",
+      "sha256": "bc51e204bba6c8ea8aafb93c16f6a7603dd20049525ae693e2bd70d3e783fd0e",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "busy",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-default",
+      "width": 390,
+      "file": "create-default-390.png",
+      "sha256": "39e96e41f33ea2679be7c0f2baffe09b6225d3996d838dc2948c2f07b39bf390",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "create-hover",
+      "width": 390,
+      "file": "create-hover-390.png",
+      "sha256": "deb6733f743b0d9b3d2a7d25eaa81bc7ae3ffb59f80ec13e27b07b409f5b869f",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "create-focus",
+      "width": 390,
+      "file": "create-focus-390.png",
+      "sha256": "e2119811a3602f2470fcd827307f55a38bd70b41f49b3ebecf4f1c7deb223041",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "create-pressed",
+      "width": 390,
+      "file": "create-pressed-390.png",
+      "sha256": "0cc0259c0b00c543c12f130f9517051f792a1888d07b29841c11fd4562aab73b",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "create-pending",
+      "width": 390,
+      "file": "create-pending-390.png",
+      "sha256": "260e9f76be9661733bb99369212765902e59ca60bd35244e6c1aacb6e345f3b0",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "type-opportunity-default",
+      "width": 390,
+      "file": "type-opportunity-default-390.png",
+      "sha256": "c1ce1b5f66e5d8cc49e10d34b6d101cf454048fa4c20fda9240a3dd8d84d4951",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "type-opportunity-hover",
+      "width": 390,
+      "file": "type-opportunity-hover-390.png",
+      "sha256": "25d0494f5dd47811b883991abc6f7a707ddc8fd931a45dffff05da2b6855e1e8",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "type-opportunity-focus",
+      "width": 390,
+      "file": "type-opportunity-focus-390.png",
+      "sha256": "3f21c482320be1eb136f15af70fcef91f8ce73dd904f54c7e9e5ac430ba010b0",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "type-opportunity-pressed",
+      "width": 390,
+      "file": "type-opportunity-pressed-390.png",
+      "sha256": "fd10f412263b58710dd504fbdf9392a8f284295cdbb035138453c96f1da6fcfe",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-page-default",
+      "width": 390,
+      "file": "technical-page-default-390.png",
+      "sha256": "032ea05df1b1e8e992851f0ddcd9873c204884fafb1a71645227f4db0235a660",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-page-hover",
+      "width": 390,
+      "file": "technical-page-hover-390.png",
+      "sha256": "459c62a6a85a5828f8381aea039d8edbd7e6fc998c0215ab87e0d2c9545a3e67",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-page-focus",
+      "width": 390,
+      "file": "technical-page-focus-390.png",
+      "sha256": "4ae68bcd4d84929b0d62e24bd6ba406fdadcba2cda8e99b859f58150f0d31e10",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-page-pressed",
+      "width": 390,
+      "file": "technical-page-pressed-390.png",
+      "sha256": "459c62a6a85a5828f8381aea039d8edbd7e6fc998c0215ab87e0d2c9545a3e67",
+      "control": {
+        "selector": "#workspace .notice summary",
+        "actionId": "RP-TECH",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "reload-default",
+      "width": 390,
+      "file": "reload-default-390.png",
+      "sha256": "eddba049073fd062b3585ecc943ba83aa26cf1a2b2b0d9e19461d1ff07c9e7e0",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "reload-hover",
+      "width": 390,
+      "file": "reload-hover-390.png",
+      "sha256": "a0e56f2a454c8b648528a3dff83e7fb8735c646239a800a41ac8f30ca2059457",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "reload-focus",
+      "width": 390,
+      "file": "reload-focus-390.png",
+      "sha256": "048068b78e480fda9a44e1f930f9d86b1797201ad7c02f8ff53db7840a1b1e46",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "reload-pressed",
+      "width": 390,
+      "file": "reload-pressed-390.png",
+      "sha256": "3342ef68b1fe0351e54d78432195d836fa84703f16232a10950cb747d83af0a9",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "refresh-default",
+      "width": 390,
+      "file": "refresh-default-390.png",
+      "sha256": "1cb0b363e3edecfd044eb73dfb69466084cf477ce5aa3fee1a2016a1ffdc96a7",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "refresh-hover",
+      "width": 390,
+      "file": "refresh-hover-390.png",
+      "sha256": "b56cdd50b15f11a270f8dfc16adfb53e79ea13e60b38678ef0fe73df5c842f26",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "refresh-focus",
+      "width": 390,
+      "file": "refresh-focus-390.png",
+      "sha256": "ce9a7e2b0c15ae77be1dade3f67ab7f4c4f5b38d1983edfb8598578ad426fbe5",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "refresh-pressed",
+      "width": 390,
+      "file": "refresh-pressed-390.png",
+      "sha256": "b56cdd50b15f11a270f8dfc16adfb53e79ea13e60b38678ef0fe73df5c842f26",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "refresh-pending",
+      "width": 390,
+      "file": "refresh-pending-390.png",
+      "sha256": "5d4c370db0d7c5a6f8000098b465a2688b2a6fac884e0bf177a4a9235039daae",
+      "control": {
+        "selector": "[data-refresh]",
+        "actionId": "RP-REFRESH",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "tasks-default",
+      "width": 390,
+      "file": "tasks-default-390.png",
+      "sha256": "5017b0a7906537c3856eb1f7eebb7dbe5d841dc910daecb3dc00fd3d94a535eb",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "tasks-hover",
+      "width": 390,
+      "file": "tasks-hover-390.png",
+      "sha256": "5017b0a7906537c3856eb1f7eebb7dbe5d841dc910daecb3dc00fd3d94a535eb",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "tasks-focus",
+      "width": 390,
+      "file": "tasks-focus-390.png",
+      "sha256": "66b3350d330984d9465cc59e9c3444cd4aa6bdc1ed394bfb9f82639cb29d2ddc",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "tasks-pressed",
+      "width": 390,
+      "file": "tasks-pressed-390.png",
+      "sha256": "5017b0a7906537c3856eb1f7eebb7dbe5d841dc910daecb3dc00fd3d94a535eb",
+      "control": {
+        "selector": "[data-tasks]",
+        "actionId": "RP-TASKS",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "download-default",
+      "width": 390,
+      "file": "download-default-390.png",
+      "sha256": "fb93bd42b739c86d372cdabcfdcd05f2108a56c0dcc58d29617ab5f5829014b2",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "download-hover",
+      "width": 390,
+      "file": "download-hover-390.png",
+      "sha256": "be065012a5a1c2d74d6d70ca40eddb3b9705de38fb9218018f7d15e96ce38b02",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "download-focus",
+      "width": 390,
+      "file": "download-focus-390.png",
+      "sha256": "a6a7de639bfe12c213082cd5619684f11ec6e2b119e9cc254fb6240b099a9af7",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "download-pressed",
+      "width": 390,
+      "file": "download-pressed-390.png",
+      "sha256": "be065012a5a1c2d74d6d70ca40eddb3b9705de38fb9218018f7d15e96ce38b02",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "download-pending",
+      "width": 390,
+      "file": "download-pending-390.png",
+      "sha256": "9ec1e18d5d53873a410ccf7a189999b5d380a76406d978e09e7bba3325f4d7c5",
+      "control": {
+        "selector": "[data-download='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DOWNLOAD",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "regenerate-list-default",
+      "width": 390,
+      "file": "regenerate-list-default-390.png",
+      "sha256": "2607f45d4114faf41da4e13b10af4f9c660dfbe287d3ba5b54051032157860d4",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "regenerate-list-hover",
+      "width": 390,
+      "file": "regenerate-list-hover-390.png",
+      "sha256": "0f499658382a8408ad68899fefc11a2175ac1c61431731f9249ead92b6e44111",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "regenerate-list-focus",
+      "width": 390,
+      "file": "regenerate-list-focus-390.png",
+      "sha256": "f94c1b2ebe9c0e2bdf08d170ea8bd4b56949df49ef5d901f4775a79ce87c2d04",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "regenerate-list-pressed",
+      "width": 390,
+      "file": "regenerate-list-pressed-390.png",
+      "sha256": "0f499658382a8408ad68899fefc11a2175ac1c61431731f9249ead92b6e44111",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "regenerate-list-pending",
+      "width": 390,
+      "file": "regenerate-list-pending-390.png",
+      "sha256": "c79b43001504b5b119ca3caacd7aeeaff8740e34351feba7a735ad34117977c8",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000565']",
+        "actionId": "RP-REGENERATE",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "detail-default",
+      "width": 390,
+      "file": "detail-default-390.png",
+      "sha256": "fb93bd42b739c86d372cdabcfdcd05f2108a56c0dcc58d29617ab5f5829014b2",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "detail-hover",
+      "width": 390,
+      "file": "detail-hover-390.png",
+      "sha256": "c97879af3054e0c149585df323b1451b2c2a20b5ea87311228019ebbb7da52a4",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "detail-focus",
+      "width": 390,
+      "file": "detail-focus-390.png",
+      "sha256": "70ba7e3ec6f2d722293dd1f092c216a5f001fb03664054d74f6a75dda5624970",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "detail-pressed",
+      "width": 390,
+      "file": "detail-pressed-390.png",
+      "sha256": "c97879af3054e0c149585df323b1451b2c2a20b5ea87311228019ebbb7da52a4",
+      "control": {
+        "selector": "[data-detail='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-DETAIL",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "close-default",
+      "width": 390,
+      "file": "close-default-390.png",
+      "sha256": "7e70ec06dac6083e71df215215031748e82a8367e7f1ba50cb6e20a9666da6dc",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "close-hover",
+      "width": 390,
+      "file": "close-hover-390.png",
+      "sha256": "8c0b4e86c11902f911415fa0f5d0cd0b04d7cefff4d7907863c7c869892790ec",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "close-focus",
+      "width": 390,
+      "file": "close-focus-390.png",
+      "sha256": "80c83fb62fd0e1efa7909936fbfc1fb424ee7d23612e2c07f3b37206a93c2ff9",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "close-pressed",
+      "width": 390,
+      "file": "close-pressed-390.png",
+      "sha256": "ec3ac1bf8e10596ad4d7e0c2fe0b8916641fa07945412d3e4f3a30e39361bb22",
+      "control": {
+        "selector": "#detail-close",
+        "actionId": "RP-CLOSE",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "type-trend-default",
+      "width": 390,
+      "file": "type-trend-default-390.png",
+      "sha256": "95fc41f130edee19ba6031f6e1d62e8f65c9b7f1b51c3f77c17fee8b83548107",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-trend-hover",
+      "width": 390,
+      "file": "type-trend-hover-390.png",
+      "sha256": "2746a83eb9d2bcc008aa7fef26a76a30a2b59b703bb42100708089928b006152",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-trend-focus",
+      "width": 390,
+      "file": "type-trend-focus-390.png",
+      "sha256": "3c9a57f18d3b9eddcbc4c9db8b6accb99bc17dfaffe9befca2fc4b825a9f6e34",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-trend-pressed",
+      "width": 390,
+      "file": "type-trend-pressed-390.png",
+      "sha256": "2746a83eb9d2bcc008aa7fef26a76a30a2b59b703bb42100708089928b006152",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-trend"
+      }
+    },
+    {
+      "scene": "type-team-default",
+      "width": 390,
+      "file": "type-team-default-390.png",
+      "sha256": "95fc41f130edee19ba6031f6e1d62e8f65c9b7f1b51c3f77c17fee8b83548107",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-team-hover",
+      "width": 390,
+      "file": "type-team-hover-390.png",
+      "sha256": "a1fe8ab93372c0ebb6c076e3791737d18bfb255391bf07ea3cc1269d9d59ca97",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-team-focus",
+      "width": 390,
+      "file": "type-team-focus-390.png",
+      "sha256": "6b1a2d5b405a3d8c93cd69e7b8e0af613cd4e5ae766efdaf20bd0dd83eb3fc53",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-team-pressed",
+      "width": 390,
+      "file": "type-team-pressed-390.png",
+      "sha256": "6ab1509bb9d5f5f25b863404d4a36528f42e37a742a3d64870edc3fdafc28899",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-team"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-default",
+      "width": 390,
+      "file": "type-opportunity-selected-default-390.png",
+      "sha256": "bfe57b5784aa7ea4144567c8e912ec9eaf6614a130c27608e13673ac87d23335",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-hover",
+      "width": 390,
+      "file": "type-opportunity-selected-hover-390.png",
+      "sha256": "0cb5b13cf8341bd421d647087ce67eba5fb66d725467f6aafcb143efe6db7d24",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-focus",
+      "width": 390,
+      "file": "type-opportunity-selected-focus-390.png",
+      "sha256": "f0af31bc21bb4846c96a4c12ee5393844f10e1b9e0c604a8f5331ce04565db0f",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-opportunity-selected-pressed",
+      "width": 390,
+      "file": "type-opportunity-selected-pressed-390.png",
+      "sha256": "bdfeda4a851c17bf9c1f805ba96e296841bd7c2b3f385ebf434e08bd8d4e35e2",
+      "control": {
+        "selector": "[data-type='opportunity']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-opportunity-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-default",
+      "width": 390,
+      "file": "type-trend-selected-default-390.png",
+      "sha256": "07ca23ee86feeb0686f241f0051ea093d6592d9697cad5e7dc2a14e7733ca05c",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-hover",
+      "width": 390,
+      "file": "type-trend-selected-hover-390.png",
+      "sha256": "61d14192e3380b1a60502ccd32edb05fb6ad894704c8e778b78477384cc484c5",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-focus",
+      "width": 390,
+      "file": "type-trend-selected-focus-390.png",
+      "sha256": "0d38a1d93b5ee26d40bc80ea89793c298ad3be40489a49b7022f79d7e42215bd",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-trend-selected-pressed",
+      "width": 390,
+      "file": "type-trend-selected-pressed-390.png",
+      "sha256": "61d14192e3380b1a60502ccd32edb05fb6ad894704c8e778b78477384cc484c5",
+      "control": {
+        "selector": "[data-type='trend']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-trend-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-default",
+      "width": 390,
+      "file": "type-team-selected-default-390.png",
+      "sha256": "635f961775c199df0f580cbc22b518d044fa7474a3ba21141df6d11d68d3f68b",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "default",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-hover",
+      "width": 390,
+      "file": "type-team-selected-hover-390.png",
+      "sha256": "b1797b0a307cd34bde86214c7c9a8beb6c3aaf55b176b2d7d866dcf189642e3a",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "hover",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-focus",
+      "width": 390,
+      "file": "type-team-selected-focus-390.png",
+      "sha256": "ce16045e9f301caec13d6a02ff735a5d524af0daac2c3da2642b95648ceb6e1e",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "focus",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "type-team-selected-pressed",
+      "width": 390,
+      "file": "type-team-selected-pressed-390.png",
+      "sha256": "33d79ec3f1ed7201cee2ad71d5afae7be53e9c7ae28c1bb6d3e19db038488ebe",
+      "control": {
+        "selector": "[data-type='team']",
+        "actionId": "RP-TYPE",
+        "state": "pressed",
+        "key": "P28-type-team-selected"
+      }
+    },
+    {
+      "scene": "technical-detail-default",
+      "width": 390,
+      "file": "technical-detail-default-390.png",
+      "sha256": "eda993a17a760927068ba572ef232721917610de7cce9ad09b49df0d7dff80f6",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "default",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "technical-detail-hover",
+      "width": 390,
+      "file": "technical-detail-hover-390.png",
+      "sha256": "d29598ef32893817d1931983be45b7f6ffe0a8838130355536650038fa46a541",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "hover",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "technical-detail-focus",
+      "width": 390,
+      "file": "technical-detail-focus-390.png",
+      "sha256": "0f9dc0fcc9f3d38af460fc22dc489027861c18a39253345f405f208d03a74191",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "focus",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "technical-detail-pressed",
+      "width": 390,
+      "file": "technical-detail-pressed-390.png",
+      "sha256": "b9f7d130ad919686a1acf23b803987b9b34385b34145091d02d5aeee555fd946",
+      "control": {
+        "selector": "#detail-content > details summary",
+        "actionId": "RP-TECH",
+        "state": "pressed",
+        "key": "P28-technical-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-default",
+      "width": 390,
+      "file": "regenerate-detail-default-390.png",
+      "sha256": "8ea8e207467485c7587502dcf78ea9f4c52fbbda3e1ead368bdc032c6197071b",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "default",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-hover",
+      "width": 390,
+      "file": "regenerate-detail-hover-390.png",
+      "sha256": "cf228ff7f5605eea20866713331a23d82ade11652ec32f3dda81e338a5bbab76",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "hover",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-focus",
+      "width": 390,
+      "file": "regenerate-detail-focus-390.png",
+      "sha256": "79e2fc627e95857f7054af6173718feaa86b7e922db7987a41094d8e981dadc6",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "focus",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-pressed",
+      "width": 390,
+      "file": "regenerate-detail-pressed-390.png",
+      "sha256": "cf228ff7f5605eea20866713331a23d82ade11652ec32f3dda81e338a5bbab76",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "pressed",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-detail-busy",
+      "width": 390,
+      "file": "regenerate-detail-busy-390.png",
+      "sha256": "eee00d456e0216f57c50cb8fe6246e8281e57b6115797927a7c6a409244f0700",
+      "control": {
+        "selector": "#detail-footer [data-regenerate]",
+        "actionId": "RP-REGENERATE",
+        "state": "busy",
+        "key": "P28-regenerate-detail"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-default",
+      "width": 390,
+      "file": "regenerate-list-dead-default-390.png",
+      "sha256": "ebd836fb9b8c7cf742cf66aca947862ae38218a7ea453cac3a0546915b28ad13",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "default",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-hover",
+      "width": 390,
+      "file": "regenerate-list-dead-hover-390.png",
+      "sha256": "b490d440c63a39dc1aed8aa3240e7a6eafb01b7525c60414f828f4700da90fa8",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "hover",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-focus",
+      "width": 390,
+      "file": "regenerate-list-dead-focus-390.png",
+      "sha256": "5bb580e1cabeeddb74f334fcb6196725667cb33f93bbc0343a93359055841212",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "focus",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-pressed",
+      "width": 390,
+      "file": "regenerate-list-dead-pressed-390.png",
+      "sha256": "b490d440c63a39dc1aed8aa3240e7a6eafb01b7525c60414f828f4700da90fa8",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "pressed",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "regenerate-list-dead-busy",
+      "width": 390,
+      "file": "regenerate-list-dead-busy-390.png",
+      "sha256": "20359f952995d8730da90b8a59470343f3b33d1714e7d6b100d1911ff970a423",
+      "control": {
+        "selector": ".export-row [data-regenerate='00000000-0000-4000-8000-000000000563']",
+        "actionId": "RP-REGENERATE",
+        "state": "busy",
+        "key": "P28-regenerate-list-dead"
+      }
+    },
+    {
+      "scene": "reload-expired-default",
+      "width": 390,
+      "file": "reload-expired-default-390.png",
+      "sha256": "2e294cda2da6e421db72686b3af335c03cfe750de49c83adb4f921e07110c59f",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-hover",
+      "width": 390,
+      "file": "reload-expired-hover-390.png",
+      "sha256": "b3b330a3858d7d6d0b25149369470458edfc1dd92751876086266cf0f9b73c0c",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-focus",
+      "width": 390,
+      "file": "reload-expired-focus-390.png",
+      "sha256": "19f47eb681687c25122b6a3f755980ba995dc44a3d8746e55316247935336154",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-pressed",
+      "width": 390,
+      "file": "reload-expired-pressed-390.png",
+      "sha256": "10c62ab2caa962a435a7eda75dab64e887328631759ecb2d8aa28a542a0f61fb",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-forbidden-default",
+      "width": 390,
+      "file": "reload-forbidden-default-390.png",
+      "sha256": "c83fb4ed18d02eb832655409ff91c51e9687a58356e9efc98057b6c51f3a6fc2",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-hover",
+      "width": 390,
+      "file": "reload-forbidden-hover-390.png",
+      "sha256": "e49e425f2a61058c59644b22a28c6f71e5a488dcb7ba76dc55832b3bd7b13116",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-focus",
+      "width": 390,
+      "file": "reload-forbidden-focus-390.png",
+      "sha256": "4423f2679b4ad7b597ed13ac43a7f51ad56853c908f0043d2c3bda5d36d5d03d",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-pressed",
+      "width": 390,
+      "file": "reload-forbidden-pressed-390.png",
+      "sha256": "e49e425f2a61058c59644b22a28c6f71e5a488dcb7ba76dc55832b3bd7b13116",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-default",
+      "width": 390,
+      "file": "reload-rate_limited-default-390.png",
+      "sha256": "a1a873d5e4d17db24a8a0b613cb904fa2b83c63d10b20f50737b765d28c9174f",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-hover",
+      "width": 390,
+      "file": "reload-rate_limited-hover-390.png",
+      "sha256": "e4eb59070dc02db2c73da869df8bf277ca8f3af469176445aeeef3a2eed393ae",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-focus",
+      "width": 390,
+      "file": "reload-rate_limited-focus-390.png",
+      "sha256": "b6a12a08b490c3c0954385da5dd9c8ab692672eb8b8bdfbd52f7494f314d140c",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-pressed",
+      "width": 390,
+      "file": "reload-rate_limited-pressed-390.png",
+      "sha256": "e4eb59070dc02db2c73da869df8bf277ca8f3af469176445aeeef3a2eed393ae",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-blocked-default",
+      "width": 390,
+      "file": "reload-blocked-default-390.png",
+      "sha256": "ee9107ef45f18d7df03dbb1aff71605368b6f09462c246109abca8bbace3e1c4",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "default",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-hover",
+      "width": 390,
+      "file": "reload-blocked-hover-390.png",
+      "sha256": "3342ef68b1fe0351e54d78432195d836fa84703f16232a10950cb747d83af0a9",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "hover",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-focus",
+      "width": 390,
+      "file": "reload-blocked-focus-390.png",
+      "sha256": "048068b78e480fda9a44e1f930f9d86b1797201ad7c02f8ff53db7840a1b1e46",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "focus",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-pressed",
+      "width": 390,
+      "file": "reload-blocked-pressed-390.png",
+      "sha256": "3342ef68b1fe0351e54d78432195d836fa84703f16232a10950cb747d83af0a9",
+      "control": {
+        "selector": "[data-load]",
+        "actionId": "RP-LOAD",
+        "state": "pressed",
+        "key": "P28-reload-blocked"
+      }
+    },
+    {
+      "scene": "create-trend-default",
+      "width": 390,
+      "file": "create-trend-default-390.png",
+      "sha256": "559509e12e3792e4b369e02b80917f3ed34c18821b1442640d23675ab3c65a8f",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "default",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-hover",
+      "width": 390,
+      "file": "create-trend-hover-390.png",
+      "sha256": "21986704ee2bf00cec2e08c23af4763dbf5f12c78a35273a294ff33a9da02e70",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "hover",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-focus",
+      "width": 390,
+      "file": "create-trend-focus-390.png",
+      "sha256": "332ca9c7565450f6605811bccb4f430c45a4ba79168958ad54cfde230a4115c0",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "focus",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-pressed",
+      "width": 390,
+      "file": "create-trend-pressed-390.png",
+      "sha256": "8f367268c03fe71e45188b350e0947d6164734eacbfc93a7932ef3a2656b1735",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pressed",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-trend-busy",
+      "width": 390,
+      "file": "create-trend-busy-390.png",
+      "sha256": "cdd84680a8379d7b3ac6798d4c5dadab8cbfd5cf0d17ccc1c38c1a460110cd35",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "busy",
+        "key": "P28-create-trend"
+      }
+    },
+    {
+      "scene": "create-team-default",
+      "width": 390,
+      "file": "create-team-default-390.png",
+      "sha256": "635f961775c199df0f580cbc22b518d044fa7474a3ba21141df6d11d68d3f68b",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "default",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-hover",
+      "width": 390,
+      "file": "create-team-hover-390.png",
+      "sha256": "fe16613f8182c3ee7d09c6830780ac5e50ddd4fafe063734d599f6a1bd02a9a4",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "hover",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-focus",
+      "width": 390,
+      "file": "create-team-focus-390.png",
+      "sha256": "44f69136c3e6ae1813e3e3cbbf1a251bb16a216f0323725ec8130bfaae67f72b",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "focus",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-pressed",
+      "width": 390,
+      "file": "create-team-pressed-390.png",
+      "sha256": "40b407983499557ae3380a41d938178d75c125bca32c4c2d6a71c23285f385be",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "pressed",
+        "key": "P28-create-team"
+      }
+    },
+    {
+      "scene": "create-team-busy",
+      "width": 390,
+      "file": "create-team-busy-390.png",
+      "sha256": "b17ca127f0add1c790d851a1941ff480818e5059e93cb74da4f753aeb22658ef",
+      "control": {
+        "selector": "[data-create]",
+        "actionId": "RP-CREATE",
+        "state": "busy",
+        "key": "P28-create-team"
+      }
+    }
+  ]
+}

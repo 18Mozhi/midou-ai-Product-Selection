@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P28 报表与导出 · 逐按钮状态待审</title>
+    <link rel="stylesheet" href="../report-direction-c/report.css" />
+    <link rel="stylesheet" href="controls.css" />
+    <script defer src="../report-direction-c/data.js"></script>
+    <script defer src="../report-direction-c/report.js"></script>
+    <script defer src="controls.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>设计审核稿 · P28 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-controls" hidden aria-label="审核工具">
+      <label for="scene-picker">切换场景（非业务筛选）</label
+      ><select id="scene-picker"></select>
+      <p id="scene-note"></p>
+      <pre id="intent-log">尚未触发动作。所有动作仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="app">
+      <aside class="directory">
+        <div class="brand">ScoutOps</div>
+        <p>分析与协作</p>
+        <h1>报表与导出</h1>
+        <nav id="types" aria-label="报表类型"></nav>
+        <div class="directory-note">以已落库事实为准<br />不推测缺失数据</div>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="export-detail" aria-labelledby="detail-title">
+      <header class="dialog-header">
+        <div>
+          <span>CSV 导出记录</span>
+          <h2 id="detail-title">导出详情</h2>
+        </div>
+        <button id="detail-close" aria-label="关闭导出详情">关闭</button>
+      </header>
+      <div id="detail-content"></div>
+      <footer id="detail-footer"></footer>
+    </dialog>
+    <section class="control-review" aria-label="逐按钮审核工具">
+      <h2>逐按钮状态 · 独立待审图稿</h2>
+      <p>沿用 REPORT-C-r1 蓝色类型目录与独立导出队列。下面只选择审核图，不是新增产品功能。</p>
+      <label>目标控件<select id="control-select"></select></label>
+      <label
+        >场景<select id="control-mode">
+          <option value="default">可用场景</option>
+          <option value="busy">在途场景（仅源码已有状态）</option>
+        </select></label
+      >
+      <button id="show-control">显示控件所在场景</button>
+      <p id="control-note" role="status"></p>
+      <a href="gallery.html">打开双端逐态图册</a>
+    </section>
+  </body>
+</html>

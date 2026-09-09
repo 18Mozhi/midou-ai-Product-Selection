@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应28页/621源位置/584组；其中路由动作498组，转发/容器关联62组，其余明确排除。其余45页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应29页/635源位置/595组；其中路由动作508组，转发/容器关联63组，其余明确排除。其余44页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -39,7 +39,7 @@
 | [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P28 报表与导出](page-specs/P28.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P29 治理概览](page-specs/P29.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P30 成员与邀请](page-specs/P30.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P31 角色与权限](page-specs/P31.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2382,6 +2382,68 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - r2追加恢复、编辑保存、另两模板、五类错误重载及编辑取消10变体/84图；42条扩展状态引用不增加业务动作。目录/分区/额外关闭按钮等提案新增控件、字段全态及真实生命周期仍待。
 - useModalDialog开关/焦点仅此调用方接线核对，不是所有消费方生命周期或无障碍验收。
 - AR-G01–G03仍待：窗内错误、读取/详情/写后刷新归属、跨范围缓存、成员/版本/所有规则组合；本次不修改业务。
+
+## P28 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P28.json)：14个局部源位置 → 11组；2类写入，10组路由动作，1组转发/容器关联不重复计动作。0个本地v-model，1处调用/内嵌容器，17个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+另有8个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| RP-CREATE 导出当前报表 CSV / write | 1处；opportunity、trend、team、empty、create_busy、create_error | [opportunity · 1440](design/report-direction-c/1440-opportunity.png) / [opportunity · 390](design/report-direction-c/390-opportunity.png)、[trend · 1440](design/report-direction-c/1440-trend.png) / [trend · 390](design/report-direction-c/390-trend.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-TYPE 切换报表类型 / navigation | 1处；opportunity、trend、team | [opportunity · 1440](design/report-direction-c/1440-opportunity.png) / [opportunity · 390](design/report-direction-c/390-opportunity.png)、[trend · 1440](design/report-direction-c/1440-trend.png) / [trend · 390](design/report-direction-c/390-trend.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-TECH 技术详情 / local | 2处；download_error、technical、detail_dead | [download_error · 1440](design/report-direction-c/1440-download_error.png) / [download_error · 390](design/report-direction-c/390-download_error.png)、[technical · 1440](design/report-direction-c/1440-technical.png) / [technical · 390](design/report-direction-c/390-technical.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-LOAD 重新加载 / read | 1处；error、expired、forbidden、rate_limited、blocked | [error · 1440](design/report-direction-c/1440-error.png) / [error · 390](design/report-direction-c/390-error.png)、[expired · 1440](design/report-direction-c/1440-expired.png) / [expired · 390](design/report-direction-c/390-expired.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-REFRESH 刷新状态 / read | 1处；opportunity、refreshing、refresh_error | [opportunity · 1440](design/report-direction-c/1440-opportunity.png) / [opportunity · 390](design/report-direction-c/390-opportunity.png)、[refreshing · 1440](design/report-direction-c/1440-refreshing.png) / [refreshing · 390](design/report-direction-c/390-refreshing.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-TASKS 在任务中心查看 / navigation | 1处；opportunity | [opportunity · 1440](design/report-direction-c/1440-opportunity.png) / [opportunity · 390](design/report-direction-c/390-opportunity.png)、[tasks-default · 1440](design/report-controls-direction-c/tasks-default-1440.png) / [tasks-default · 390](design/report-controls-direction-c/tasks-default-390.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-DOWNLOAD 下载文件 / read | 1处；opportunity、download_busy、download_error、download_409、download_410、download_503 | [opportunity · 1440](design/report-direction-c/1440-opportunity.png) / [opportunity · 390](design/report-direction-c/390-opportunity.png)、[download_busy · 1440](design/report-direction-c/1440-download_busy.png) / [download_busy · 390](design/report-direction-c/390-download_busy.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-REGENERATE 重新生成 / write | 2处；detail_expired、detail_dead、detail_boundary、detail_status_mismatch、regenerate_busy、regenerate_error、regenerated | [detail_expired · 1440](design/report-direction-c/1440-detail_expired.png) / [detail_expired · 390](design/report-direction-c/390-detail_expired.png)、[detail_dead · 1440](design/report-direction-c/1440-detail_dead.png) / [detail_dead · 390](design/report-direction-c/390-detail_dead.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-DETAIL 查看详情 / read | 1处；detail_succeeded、detail_queued、detail_not_found、detail_forbidden | [detail_succeeded · 1440](design/report-direction-c/1440-detail_succeeded.png) / [detail_succeeded · 390](design/report-direction-c/390-detail_succeeded.png)、[detail_queued · 1440](design/report-direction-c/1440-detail_queued.png) / [detail_queued · 390](design/report-direction-c/390-detail_queued.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| RP-CLOSE 关闭导出详情 / local | 1处；detail_succeeded、detail_expired | [detail_succeeded · 1440](design/report-direction-c/1440-detail_succeeded.png) / [detail_succeeded · 390](design/report-direction-c/390-detail_succeeded.png)、[detail_expired · 1440](design/report-direction-c/1440-detail_expired.png) / [detail_expired · 390](design/report-direction-c/390-detail_expired.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| D-RP-EXPORT 导出详情模态接线 / wiring | 2处；detail_succeeded、detail_queued、detail_expired | [detail_succeeded · 1440](design/report-direction-c/1440-detail_succeeded.png) / [detail_succeeded · 390](design/report-direction-c/390-detail_succeeded.png)、[detail_queued · 1440](design/report-direction-c/1440-detail_queued.png) / [detail_queued · 390](design/report-direction-c/390-detail_queued.png)；其余见JSON | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| D-RP-EXPORT | @cancel / handleDetailCancel | RP-CLOSE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| ReportCenter.vue / dialog.1 / detail_succeeded | native-dialog / matching-dialog-scene | [detail_succeeded · 1440](design/report-direction-c/1440-detail_succeeded.png) / [detail_succeeded · 390](design/report-direction-c/390-detail_succeeded.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_queued | native-dialog / matching-dialog-scene | [detail_queued · 1440](design/report-direction-c/1440-detail_queued.png) / [detail_queued · 390](design/report-direction-c/390-detail_queued.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_leased | native-dialog / matching-dialog-scene | [detail_leased · 1440](design/report-direction-c/1440-detail_leased.png) / [detail_leased · 390](design/report-direction-c/390-detail_leased.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_retry | native-dialog / matching-dialog-scene | [detail_retry · 1440](design/report-direction-c/1440-detail_retry.png) / [detail_retry · 390](design/report-direction-c/390-detail_retry.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_no_sample | native-dialog / matching-dialog-scene | [detail_no_sample · 1440](design/report-direction-c/1440-detail_no_sample.png) / [detail_no_sample · 390](design/report-direction-c/390-detail_no_sample.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_expired | native-dialog / matching-dialog-scene | [detail_expired · 1440](design/report-direction-c/1440-detail_expired.png) / [detail_expired · 390](design/report-direction-c/390-detail_expired.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_dead | native-dialog / matching-dialog-scene | [detail_dead · 1440](design/report-direction-c/1440-detail_dead.png) / [detail_dead · 390](design/report-direction-c/390-detail_dead.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_unknown | native-dialog / matching-dialog-scene | [detail_unknown · 1440](design/report-direction-c/1440-detail_unknown.png) / [detail_unknown · 390](design/report-direction-c/390-detail_unknown.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_zero | native-dialog / matching-dialog-scene | [detail_zero · 1440](design/report-direction-c/1440-detail_zero.png) / [detail_zero · 390](design/report-direction-c/390-detail_zero.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_boundary | native-dialog / matching-dialog-scene | [detail_boundary · 1440](design/report-direction-c/1440-detail_boundary.png) / [detail_boundary · 390](design/report-direction-c/390-detail_boundary.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_status_mismatch | native-dialog / matching-dialog-scene | [detail_status_mismatch · 1440](design/report-direction-c/1440-detail_status_mismatch.png) / [detail_status_mismatch · 390](design/report-direction-c/390-detail_status_mismatch.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / regenerate_busy | native-dialog / matching-dialog-scene | [regenerate_busy · 1440](design/report-direction-c/1440-regenerate_busy.png) / [regenerate_busy · 390](design/report-direction-c/390-regenerate_busy.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / regenerate_error | native-dialog / matching-dialog-scene | [regenerate_error · 1440](design/report-direction-c/1440-regenerate_error.png) / [regenerate_error · 390](design/report-direction-c/390-regenerate_error.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / regenerated | native-dialog / matching-dialog-scene | [regenerated · 1440](design/report-direction-c/1440-regenerated.png) / [regenerated · 390](design/report-direction-c/390-regenerated.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / technical | native-dialog / matching-dialog-scene | [technical · 1440](design/report-direction-c/1440-technical.png) / [technical · 390](design/report-direction-c/390-technical.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_not_found | native-dialog / route-excluded-reference | [detail_not_found · 1440](design/report-direction-c/1440-detail_not_found.png) / [detail_not_found · 390](design/report-direction-c/390-detail_not_found.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+| ReportCenter.vue / dialog.1 / detail_forbidden | native-dialog / route-excluded-reference | [detail_forbidden · 1440](design/report-direction-c/1440-detail_forbidden.png) / [detail_forbidden · 390](design/report-direction-c/390-detail_forbidden.png) | 仅独立图稿及当前源码核对；完整组合、真实Vue生命周期/服务/下载字节、主题密度、用户批准和生产验收未完成。 |
+
+### 明确保留的边界
+
+- 当前全新图与真实Vue未整合；业务接口、SQL口径及既有回执缺口未改。
+- 208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。
+- useModalDialog仅此调用方接线核对，不是全部焦点/跨缓存生命周期验收。
+- RP-G01–G04和F03-G05仍待；全部输入为空不代表统计口径、文件或权限已获准。
 
 ## P54 局部动作与共享消费者
 
