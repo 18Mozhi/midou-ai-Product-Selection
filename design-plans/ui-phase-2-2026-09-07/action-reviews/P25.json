@@ -322,12 +322,20 @@
         {
           "package": "approval-direction-c",
           "scene": "decision_busy"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "approve-close-focus"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "approve-reopened"
         }
       ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
-        "focus": "not-mapped",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -340,9 +348,20 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前无busy关闭守卫；未模拟在途结果与原生焦点组合，迟到结果问题已有源复现，未修。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "当前无busy关闭守卫；未模拟在途结果与原生焦点组合，迟到结果问题已有源复现，未修。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "visualStateReferences": {
+        "focus": {
+          "package": "approval-forms-direction-c",
+          "scene": "approve-close-focus",
+          "selector": "#detail-close"
+        }
+      }
     },
     {
       "actionId": "AN-A-NAV-RESOURCE",
@@ -737,12 +756,20 @@
         {
           "package": "approval-direction-c",
           "scene": "template_busy"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "template-close-focus"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "template-reopened"
         }
       ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
-        "focus": "not-mapped",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -755,9 +782,20 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "未提交草稿保留，原型统一在途锁定并非当前Vue表现；叠加发布的关闭层级待真实组合验证。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "未提交草稿保留，原型统一在途锁定并非当前Vue表现；叠加发布的关闭层级待真实组合验证。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "visualStateReferences": {
+        "focus": {
+          "package": "approval-forms-direction-c",
+          "scene": "template-close-focus",
+          "selector": "#form-close"
+        }
+      }
     },
     {
       "actionId": "AN-A-TEMPLATE-SUBMIT",
@@ -964,12 +1002,20 @@
         {
           "package": "approval-direction-c",
           "scene": "publish_busy"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "publish-close-focus"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "publish-reopened"
         }
       ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
-        "focus": "not-mapped",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -982,9 +1028,20 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "原合同两种关闭描述不同；本轮源检查确认。下次openPublish会清原因，不声称旧原因被重新带入。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "原合同两种关闭描述不同；本轮源检查确认。下次openPublish会清原因，不声称旧原因被重新带入。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "visualStateReferences": {
+        "focus": {
+          "package": "approval-forms-direction-c",
+          "scene": "publish-close-focus",
+          "selector": "#publish-close"
+        }
+      }
     },
     {
       "actionId": "AN-A-PUBLISH-SUBMIT",
@@ -1112,12 +1169,20 @@
         {
           "package": "approval-direction-c",
           "scene": "request_busy"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "request-close-focus"
+        },
+        {
+          "package": "approval-forms-direction-c",
+          "scene": "request-reopened"
         }
       ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
-        "focus": "not-mapped",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -1130,9 +1195,20 @@
         {
           "file": "scripts/verify-ui-phase2-approval-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-approval-forms-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。"
+      "remaining": "具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10表单包补代表关闭按钮focus、空闲关闭/重开图；新增顶部关闭与非详情遮罩沿待审提案，发布返回清原因与源内存规则不同。仅已列控件，不据此签收源Vue、其余六态或在途关闭归属。",
+      "visualStateReferences": {
+        "focus": {
+          "package": "approval-forms-direction-c",
+          "scene": "request-close-focus",
+          "selector": "#form-close"
+        }
+      }
     },
     {
       "actionId": "AN-A-REQUEST-SUBMIT",
@@ -1629,67 +1705,67 @@
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "reason",
         "meaning": "批准/驳回原始原因，max1000；trim仅用于判空",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "templateForm.name",
         "meaning": "模板名称，required/max200",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "templateForm.resource_type",
         "meaning": "模板资源类型，task或opportunity_decision",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "templateForm.node_name",
         "meaning": "单节点名称，required/max120",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "templateForm.sla_minutes",
         "meaning": "SLA分钟number/min1/max43200；服务要求整数",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "templateForm.approver_id",
         "meaning": "当前工作区审批人成员",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "templateForm.escalation_assignee_id",
         "meaning": "当前工作区超时接收人",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "publishReason",
         "meaning": "发布原因，required/max500，提交trim",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "requestForm.template_id",
         "meaning": "已发布模板ID，required；watch派生resource_type",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "requestForm.resource_id",
         "meaning": "资源ID，required，提交trim",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       },
       {
         "file": "apps/web/src/components/ApprovalWorkspace.vue",
         "binding": "requestForm.title",
         "meaning": "审批标题，required/max200，提交trim",
-        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。"
+        "remaining": "当前字段未统一busy锁；原型直接展开必填及窗内错误是提案，不是现有Vue已改。仅当前消费者关联；全按钮/字段、角色、主题、在途关闭/错误和真实Vue/API仍未验收。 2026-09-10 APPROVAL-FORMS-C-r1按当前Vue AST核对本字段原生约束，11字段焦点/标签/说明、适用必填/范围/长度图见包README；不代表所有输入变体或真实服务获批。"
       }
     ],
     "containers": [
@@ -1887,7 +1963,8 @@
     "发布返回清目标但保留原因，Escape清两者；重开总是清原因。模板/发起关闭保留草稿。",
     "模板/请求/发布失败仍主要页级notice；图中窗内错误/统一busy字段锁/直接展开必填只是提案。",
     "单节点UI不改成多节点、证据缺失警告不改成硬门槛、升级不等于自动批准；当前页计数不作全工作区汇总。",
-    "新增5写入代表控件64PNG，27视觉槽已有明确selector映射，117代表槽未映射；字段、动态行/模板、叠加焦点、角色/主题/软键盘和真实链继续验。关闭再重开期间pending归属未完整实现/验收。"
+    "新增5写入代表控件64PNG，27视觉槽已有明确selector映射，117代表槽未映射；字段、动态行/模板、叠加焦点、角色/主题/软键盘和真实链继续验。关闭再重开期间pending归属未完整实现/验收。",
+    "2026-09-10表单包新增88PNG，11字段、4关闭focus代表槽及空闲重开图；累计31视觉槽映射、113未映射。表单直接展开、中文字段错误和非详情遮罩关闭为提案；在途归属/真实Vue与服务仍待。旧条目117为前批历史。"
   ],
   "approval": "pending-user-review",
   "limits": [

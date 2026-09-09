@@ -1,5 +1,7 @@
 # P25 审批中心：逐项审核与状态细化基线
 
+2026-09-10字段增量：[88图与交互](design/approval-forms-direction-c/README.md)按11源字段核对标签/原生约束、错误、字符/SLA边界与4窗关闭焦点/重开；30检查只覆盖空闲窗口，不是源Vue全路径一致或pending归属。4关闭focus代表槽新增映射，未映射117→113。非详情遮罩、发布返回内存清理、必填折叠和空格校验的源/提案差异均明示；本包修复旧原型发布空格校正后请求reason丢失。具体审核、生产/服务仍待。下方是此前批次。
+
 2026-09-10增量：[五类写入按钮逐态包](design/approval-controls-direction-c/README.md) / [64图册](design/approval-controls-direction-c/gallery.html)。旧94图保持；27代表视觉槽已绑定实际selector，未映射144→117，另5失败保留场景不计六态槽。新原型控制器在离线请求预览后锁本窗字段、只更新触发按钮的等待标签，并演示失败后同body重试；不是生产修复或真实审批成功。模板/发布不编空字段禁用，发起无发布模板变体仍未采。整体布局与控件待审，跨窗pending归属/全部字段/主题及真实服务仍未验收。以下保留前批来源审阅与发现。
 
 2026-09-10，基线main/5bf62e18。沿已选C方向，使用ui-skills-root/frontend-design按真实ApprovalWorkspace、ApprovalQueuePanel、模态钩子与路由归属核对；没有重新选择风格，没有将P16布局批准迁移到审批页。

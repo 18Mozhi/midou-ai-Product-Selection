@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P25字段校验、键盘与空闲关闭
+
+上一轮c69ce082的64按钮图为实际进展。从干净main继续，按AGENTS/Feature Map approvalWorkflow/蓝图M05-02/当前ApprovalWorkspace与useModalDialog核对，使用ui-skills-root、frontend-design、fixing-accessibility及Playwright，无子代理。新增approval-forms-direction-c包，保留旧94布局图和前批64按钮图；当前Vue AST的11字段约束与新DOM比对，补关联帮助/错误、字符计数、首错聚焦和滚动保留标题。44场景双端88PNG，4关闭代表focus映射，余113槽；其余布局批准、所有变体和全站实现/部署不据此通过。
+
+本轮先跑smoke；追加发布空格→纠正的真实事件回归，复现旧原型validText覆盖oninput后DOM正确而请求reason为空。只在新包保存并复用原同步处理器，复测精确reason.trim/expected_revision。目视发现原生气泡压住中文提示，改为只抑制气泡、不绕过原生校验，并将帮助/错误移到label外避免可访问名称重复。增加5字段同时为空的首错/汇总零提交检查。未改生产Vue、API/OpenAPI/数据库/env/依赖/权限/Worker/Python/宝塔，无重启；源发布返回与Escape差异、非详情无遮罩处理、空格原生required差异均明示而非冒称修复。
+
+最终smoke32观察/30关闭、capture88观察/30关闭、无参数88观察/30关闭均通过，双端HTTP/存储/控制台错误0，验证结束finally关闭浏览器。曾有固定标题图层未完整绘制，核对DOM命中后在滚动采图前增加两帧绘制等待和标题可见/命中断言；重新最小→capture→完整验证通过，目视390整数错误/发布失败/模板选择与1440关闭焦点图正常。四窗重开按模板/请求保留草稿、详情/发布清原因，关闭返回原入口且发布保留下层窗；非详情遮罩和发布内存清理沿旧提案，不宣称真实Vue等价。在途关闭/读取竞态、所有字段变体/主题/软键盘与真实服务仍未验。
+
+动作审计26页/579独立源/549组/467动作/58关联，余47页同级核对；设计审计78包/10926PNG、来源/图片漂移0、未登记图片0、具体批准页0，分母与全站验收门不提升。verify:docs、verify:runtime-docs、verify:static-analysis、format:check通过；新原型与验证器定向格式、提交前差异检查也纳入收尾。
+
+本批新目录全部为永久审核交付，新脚本为永久回归；无一次性文件/日志/服务或新依赖。历史拒绝清理的output/playwright/p16-layout-20260910/.last-run.json与output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts、results/.last-run.json保留不重试，不提交。继续其他按钮/导航/分页与具体审核，整体第二阶段目标未完成。
+
 ## 2026-09-10 · P25五类写入按钮逐态图
 
 从干净main/c67d02f2继续，使用ui-skills-root/frontend-design细化C按钮语言、Playwright原生采图，不使用子代理。独立approval-controls-direction-c包复用原94图的事实、请求预览控制器和样式；新增主动作/危险动作hover/pressed、键盘focus、可读忙碌及失败保留演示。27适用代表槽双端54PNG，另5失败场景双端10PNG，共64永久图；P25五组明确selector映射，未映射144→117，其余组/审批/实际来源不变。模板/发布不编造空字段禁用，发起无发布模板变体待补。

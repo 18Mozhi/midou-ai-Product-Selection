@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P25 审批表单与关闭 · C方向待审</title>
+    <link rel="stylesheet" href="../approval-direction-c/approval.css" />
+    <link rel="stylesheet" href="../approval-controls-direction-c/controls.css" />
+    <link rel="stylesheet" href="fields.css" />
+    <script src="../approval-direction-c/data.js" defer></script>
+    <script src="../approval-direction-c/approval.js" defer></script>
+    <script src="../approval-controls-direction-c/controls.js" defer></script>
+    <script src="fields.js" defer></script>
+  </head>
+  <body>
+    <header class="identity"><b>ScoutOps · 人工审批</b><span>C方向 · 表单待审提案</span></header>
+    <section class="review" aria-label="独立审稿工具">
+      <label for="scene-picker">原场景</label
+      ><select id="scene-picker"></select>
+      <label for="control-picker">写入按钮</label
+      ><select id="control-picker"></select>
+      <button id="open-control" type="button">查看表单</button>
+      <button id="simulate-failure" type="button">返回模拟失败</button>
+      <a href="gallery.html">表单与关闭图册</a><a href="README.md">范围与差异</a>
+    </section>
+    <div id="app"></div>
+    <dialog id="detail-dialog" aria-labelledby="detail-title"></dialog>
+    <dialog id="form-dialog" aria-labelledby="form-title"></dialog>
+    <dialog id="publish-dialog" aria-labelledby="publish-title"></dialog>
+  </body>
+</html>

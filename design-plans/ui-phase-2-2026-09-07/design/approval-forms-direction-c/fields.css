@@ -1,0 +1,60 @@
+/* Local C form proposal: no source constraints or production CSS are changed. */
+.field-cluster {
+  margin: 18px 0;
+  min-width: 0;
+}
+.field-cluster > .field {
+  margin: 0;
+}
+.pair > .field-cluster {
+  margin: 0;
+}
+dialog input:focus-visible,
+dialog select:focus-visible,
+dialog textarea:focus-visible {
+  outline: 3px solid #b76a05;
+  outline-offset: 3px;
+}
+.field-guidance,
+.field-error {
+  display: block;
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.field-guidance {
+  color: #415879;
+}
+.field-error {
+  color: #92322b;
+}
+.field-error[hidden],
+.field-summary[hidden] {
+  display: none;
+}
+dialog [aria-invalid="true"] {
+  border: 2px solid #92322b;
+  background: #fff9f8;
+}
+.field-summary {
+  padding: 12px 16px;
+  margin: 12px 0 20px;
+  border-left: 4px solid #92322b;
+  color: #772720;
+  background: #fff0ee;
+}
+dialog input,
+dialog select,
+dialog textarea {
+  scroll-margin-block: 110px 80px;
+}
+.form-heading {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: white;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}

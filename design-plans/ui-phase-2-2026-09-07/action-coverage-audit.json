@@ -206,6 +206,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/evidence.json": "05109682b313e1d53239758847cb4744f219a42de3b36b2f65110d45213e6b8e",
     "design-plans/ui-phase-2-2026-09-07/design/approval-controls-direction-c/evidence.json": "23437267607d27634273695c7d56b16428d8d5022e53236f755a89dcf01185a1",
     "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/evidence.json": "5275c7e5589860d4fa317a44f81c0c7f21cdd9e2fec220e89db0476d8f16a155",
+    "design-plans/ui-phase-2-2026-09-07/design/approval-forms-direction-c/evidence.json": "1dd2fc9e01f32bfecfe2e91e2b53b7504821968f051cc9115e728bcea4ae6b5c",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "662c58080dd8a5189f315ee7dfcf3b419f88e7d4c982266c8baf285ea6962d65",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json": "aeb78fc5f72cedbb944eb6871b0b06b2a56c773d121086861e78459ecea10595",
     "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json": "d28b7a421dcd2d12d66a21444097b8e6c4da2c47d1b51ecc49241d647202a502",
@@ -330,9 +331,10 @@
     "scripts/verify-ui-phase2-task-list-review.mjs": "0fe0bdbbdc2f396728e21fcd801ee16e1a0689f8f8b3f2d7561e55cff5863448",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "scripts/verify-ui-phase2-task-detail-review.mjs": "2246b8b70f2d7c1d2e34aab6290da4adb85ff55fde6985befbb860c39249c6b0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "acb4ee094d3cca8fa06c9ae01e08ab2dcd2c1b380cd4edf9f0436160f0a9d723",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "f9c4d2b481be7990cac03ab7f9a6dd34f6422c538aae4ad884c740b67b3a7b36",
     "scripts/verify-ui-phase2-approval-review.mjs": "3943d8f26a3de728e8fea5d2925f3d803e4360dcdd2244310814de341984b486",
     "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
+    "scripts/verify-ui-phase2-approval-forms-c.mjs": "1aba43d70ecd0d52490c6922c3e681c38b004d8c5d98175bafad956b9333c1c3",
     "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
@@ -363,7 +365,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "4578ea4aa5f0cf6d22488b0554f93fc4d617b220b0fd4df52407be95ba763f7f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "358cfe6df07413897bc1dfca66c0ad5c1950a7f191ea094fae6a38b4af2f96d5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "0b277cd2bdd62208be739abdf8b40ab64b5459396e160bb598dc4df57369332e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "0818a38f21591705908bb974fbbac225c9d83211e2355ced57817d06998faba8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "2f98c32f69742b9b52459f2ea088757fd69a49bf3f7ba159aadf62e149fdad9e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "1700e155c7106f2da247fa8fe9838a2a65d3666489d00651ff99fd9edc55e878",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "4c1c0e0e04256cb6c0c3af1377fc223f6c672d80f11eb520bd83259d26c67877",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "b8751b41f0c2178c1a14e80656c8e2af8bb89ad1e102c3c05acb89e55620840f",
@@ -1347,7 +1349,7 @@
         "excludedGroups": 0,
         "writeActions": 5,
         "sourceInapplicableVisualSlots": 0,
-        "unmappedVisualSlots": 117,
+        "unmappedVisualSlots": 113,
         "surfaces": {
           "callerFiles": 2,
           "localModelBindings": 11,
@@ -1357,6 +1359,7 @@
         }
       },
       "proposalPackages": [
+        "approval-forms-direction-c",
         "approval-controls-direction-c",
         "approval-direction-c"
       ],
@@ -1368,7 +1371,8 @@
         "发布返回清目标但保留原因，Escape清两者；重开总是清原因。模板/发起关闭保留草稿。",
         "模板/请求/发布失败仍主要页级notice；图中窗内错误/统一busy字段锁/直接展开必填只是提案。",
         "单节点UI不改成多节点、证据缺失警告不改成硬门槛、升级不等于自动批准；当前页计数不作全工作区汇总。",
-        "新增5写入代表控件64PNG，27视觉槽已有明确selector映射，117代表槽未映射；字段、动态行/模板、叠加焦点、角色/主题/软键盘和真实链继续验。关闭再重开期间pending归属未完整实现/验收。"
+        "新增5写入代表控件64PNG，27视觉槽已有明确selector映射，117代表槽未映射；字段、动态行/模板、叠加焦点、角色/主题/软键盘和真实链继续验。关闭再重开期间pending归属未完整实现/验收。",
+        "2026-09-10表单包新增88PNG，11字段、4关闭focus代表槽及空闲重开图；累计31视觉槽映射、113未映射。表单直接展开、中文字段错误和非详情遮罩关闭为提案；在途归属/真实Vue与服务仍待。旧条目117为前批历史。"
       ]
     },
     {
@@ -2458,7 +2462,7 @@
       "excludedGroups": 0,
       "writeActions": 5,
       "sourceInapplicableVisualSlots": 0,
-      "unmappedVisualSlots": 117,
+      "unmappedVisualSlots": 113,
       "surfaces": {
         "callerFiles": 2,
         "localModelBindings": 11,
