@@ -320,6 +320,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "eb924e76f9086e195e8f10ab1ce450df8e402a133e30409141cb7c77c2869f4c",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "0fac7e896d3a5605b7a660dcaab12877b578cfcbdd07cfef06bd1aa1f6d1d113",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "31d1fa143fdee1418e67d882f44abd2be2d2b647fbeee8fdff84b6b6ad87f997",
+    "scripts/verify-ui-phase2-sourcing-c.mjs": "af56294aafdd2aa27bf66439a6cfe076f7549409ec57bddc8e5339e8a6da3799",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -411,13 +413,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 17,
     "oldOnlyIdentities": 16,
-    "reviewedPages": 21,
-    "explicitlyGroupedSourceSites": 435,
-    "semanticGroups": 388,
-    "routeActions": 331,
-    "wiringGroups": 35,
+    "reviewedPages": 22,
+    "explicitlyGroupedSourceSites": 479,
+    "semanticGroups": 426,
+    "routeActions": 362,
+    "wiringGroups": 42,
     "pagesWithoutExplicitSemanticReview": [
-      "P21",
       "P22",
       "P23",
       "P24",
@@ -1161,13 +1162,34 @@
       "path": "/sourcing",
       "title": "供应链与利润",
       "oldStaticAssociatedCandidates": 90,
-      "review": null,
+      "review": {
+        "pageId": "P21",
+        "sourceSites": 54,
+        "semanticGroups": 38,
+        "routeActions": 31,
+        "wiringGroups": 7,
+        "excludedGroups": 0,
+        "writeActions": 9,
+        "unmappedVisualSlots": 170,
+        "surfaces": {
+          "callerFiles": 6,
+          "localModelBindings": 25,
+          "callerContainers": 12,
+          "consumerVariants": 33,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "sourcing-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "31路由动作170代表槽均未逐selector映射；145整页/弹窗图和通用hover/focus不充当全部按钮状态。",
+        "恢复主次完整矩阵、完整字段与错误、主题/密度、async写入归属/KeepAlive/权限与实际浏览器history未验。",
+        "源比较历史失败阻断列表；新稿独立降级只为提案，SC-G01–08未关闭。",
+        "P21按实际既有能力细化，P22单独处理；C方向选择/P16布局批准不授予本页批准。"
+      ]
     },
     {
       "id": "P22",
@@ -2205,6 +2227,23 @@
         "localModelBindings": 10,
         "callerContainers": 7,
         "consumerVariants": 22,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P21",
+      "sourceSites": 54,
+      "semanticGroups": 38,
+      "routeActions": 31,
+      "wiringGroups": 7,
+      "excludedGroups": 0,
+      "writeActions": 9,
+      "unmappedVisualSlots": 170,
+      "surfaces": {
+        "callerFiles": 6,
+        "localModelBindings": 25,
+        "callerContainers": 12,
+        "consumerVariants": 33,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -21286,6 +21325,11 @@
           "pageId": "P18",
           "actionId": "OP-COST-REVIEW-OPEN.rejected",
           "kind": "local"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-REVIEW-OPEN",
+          "kind": "local"
         }
       ]
     },
@@ -21328,6 +21372,11 @@
         {
           "pageId": "P18",
           "actionId": "OP-COST-REVIEW-OPEN.approved",
+          "kind": "local"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-REVIEW-OPEN",
           "kind": "local"
         }
       ]
@@ -21372,6 +21421,11 @@
           "pageId": "P18",
           "actionId": "OP-COST-REVIEW-SUBMIT",
           "kind": "write"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-REVIEW-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -21415,6 +21469,11 @@
           "pageId": "P18",
           "actionId": "OP-COST-REVIEW-CANCEL",
           "kind": "local"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-REVIEW-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -21457,6 +21516,11 @@
         {
           "pageId": "P18",
           "actionId": "OP-COST-REVIEW-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-REVIEW-SUBMIT",
           "kind": "write"
         }
       ]
@@ -23117,6 +23181,11 @@
           "pageId": "P18",
           "actionId": "OP-COST-RULES",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-NAV-PROFIT-RULES",
+          "kind": "navigation"
         }
       ]
     },
@@ -23150,6 +23219,11 @@
         {
           "pageId": "P18",
           "actionId": "OP-WIRING-COST",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-REVIEW-WIRING",
           "kind": "wiring"
         }
       ]
@@ -23190,6 +23264,11 @@
           "pageId": "P18",
           "actionId": "OP-COST-SUBMIT",
           "kind": "write"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -23229,6 +23308,11 @@
           "pageId": "P18",
           "actionId": "OP-COST-SUBMIT",
           "kind": "write"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -23267,6 +23351,11 @@
         {
           "pageId": "P18",
           "actionId": "OP-PROFIT-QUEUE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-RECALCULATE",
           "kind": "write"
         }
       ]
@@ -44215,7 +44304,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-NAV-OPPORTUNITY",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
@@ -44236,7 +44331,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-COST-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1",
@@ -44257,7 +44358,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-NAV-SELF",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1",
@@ -44278,7 +44385,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-NAV-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1",
@@ -44304,7 +44417,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1",
@@ -44330,7 +44449,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-STATE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1",
@@ -44356,7 +44481,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-SEARCH-RECOVERY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1",
@@ -44386,7 +44517,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1",
@@ -44420,7 +44557,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-REFRESH",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1",
@@ -44450,7 +44593,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-NAV-RULES-CONTEXT",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1",
@@ -44484,7 +44633,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1",
@@ -44522,7 +44677,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-NAV-COLLECTION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1",
@@ -44556,7 +44717,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-ERP",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1",
@@ -44594,7 +44761,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1",
@@ -44628,7 +44801,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-SOURCE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1",
@@ -44666,7 +44845,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1",
@@ -44704,7 +44889,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1",
@@ -44730,7 +44921,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-COMPARE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
@@ -44756,7 +44953,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DIALOG-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
@@ -44782,7 +44985,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DIALOG-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1",
@@ -44808,7 +45017,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-DIALOG",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a19bece849d5a46.1",
@@ -44834,7 +45049,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d3c4c7748af92501.1",
@@ -44860,7 +45081,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#e3badf15ec2af147.1",
@@ -44886,7 +45113,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#62730beed005a395.1",
@@ -44912,7 +45145,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#7a0fba6035dcdf87.1",
@@ -44938,7 +45177,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-S-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1",
@@ -44964,7 +45209,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-DIALOG",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#97f60206694e3a7d.1",
@@ -44990,7 +45241,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#eaa2e41b5101f1f5.1",
@@ -45016,7 +45273,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#bbe2d6bcbbb332dc.1",
@@ -45042,7 +45305,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#830881852f5cf052.1",
@@ -45068,7 +45337,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#6d422d5b42df032c.1",
@@ -45094,7 +45369,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-QUOTE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1",
@@ -45120,7 +45401,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-DIALOG",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#a203a4a623d55db8.1",
@@ -45146,7 +45433,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#986c3be67ec5d768.1",
@@ -45172,7 +45465,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#9ce7604ffb1d3c16.1",
@@ -45198,7 +45497,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#23fa0ead54c8b92d.1",
@@ -45224,7 +45529,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#bead229bf1acdb7a.1",
@@ -45250,7 +45561,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-PURCHASE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1",
@@ -45276,7 +45593,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-DIALOG",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#18d830ea30c66eed.1",
@@ -45302,7 +45625,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#c5ce1f450e932172.1",
@@ -45328,7 +45657,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#c748a332b4a8b069.1",
@@ -45354,7 +45689,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a71f3799436c08c.1",
@@ -45380,7 +45721,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#9d23c498e72940a2.1",
@@ -45406,7 +45753,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-DELETE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/TableViewControls.vue#e2fd0d02cbd9f684.1",

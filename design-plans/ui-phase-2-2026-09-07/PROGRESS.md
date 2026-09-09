@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P21真实动作与既有图稿对账
+
+从干净main/dc45d95d继续，使用ui-skills-root/frontend-design和既有Playwright工作流，按AGENTS、Feature Map、蓝图3.6追踪SW/SD/SP/SC及共享PP/RQ六组件。新增SOURCING-SEMANTIC-REVIEW.md与action-reviews/P21.json：54局部位置归38组（31动作/7装配关联），25输入/12结构/4自定义窗口；共享10源位置去重，全站新增44独立位置，现22页/479位置/426语义组。51页同级审核、全站冻结分母和批准仍未完成。
+
+关联既有62场景145PNG但未更改图片；170代表状态槽仍未逐selector映射。四窗源是自定义div，原生模态/焦点圈/在途关闭锁和独立降级保留为提案。找货写入与成本确认权限分开，复核依每条can_review；成本机会version与复核条目version不混用。输入事件关联删除payload所有者不等于调用DELETE。expired/forbidden仍按真实load恢复，无定时GET，不从其他页借登录/首页或轮询行为。SC-G01–08未修，未提升任何页面批准。
+
+最小验证：verify-ui-phase2-sourcing-source九组实际setup隔离检查通过；verify-ui-phase2-sourcing-c只读验证62场景/145PNG、9源码组/28离线DOM动作、双端/多屏宽与重排、HTTP及页面错误0。未capture、未重新目检全部图片、未重跑历史真实Vue E2E。动作审计通过；审核文档80链接全存在；docs（73路由/60保护/6角色/153必需文档）、runtime-docs、390文件static-analysis、format:check及diff检查通过。设计审计76包/10224PNG、844独立来源/1451绑定、8387 README链接，源码和PNG漂移/未登记图0；全页完成未证明，批准0，G0进行中/G1–G5待验。
+
+只改审核清单、计划、页面规格、Feature Map和生成审计。生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/配置、依赖/权限及部署均未改，无使用参数或重启变化。无新临时文件或服务；验证浏览器finally关闭，结束检查无headless_shell。既有清理被拒目录output/playwright/ui-phase2-competitor-races-20260909的playwright.config.ts与results/.last-run.json仍保留，不绕过删除策略。下一细化P21逐控件与P22独立来源，等待具体稿审核后再迁入真实UI。
+
 ## 2026-09-09 · 创建入口和P20单create直达弹窗
 
 收口：完整capture生成682PNG，通过536双端控件实例、9源码组/5边界组、原有交互及12屏宽×5代表场景；HTTP/页面错误0，文字对比最低5.33419。只目检390-rules-create-busy及1440-rule-open-empty-focus，未宣称全部人工审阅；原两张待审采集busy/删除focus与2a27160e逐字节一致。审核文档101链接均存在。

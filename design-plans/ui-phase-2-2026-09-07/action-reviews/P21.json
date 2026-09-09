@@ -1,0 +1,2594 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P21",
+  "route": "/sourcing",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+    "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+    "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "SW仅调用一套SD四个div role=dialog；四个form不重算弹窗，成本与复核为内联。不是原生模态实现或已验辅助技术。",
+    "definitions": [
+      {
+        "dialogId": "SC-S",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1",
+        "applicability": "parent-canManage-and-corresponding-flag",
+        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+      },
+      {
+        "dialogId": "SC-QUOTE",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1",
+        "applicability": "parent-canManage-and-corresponding-flag",
+        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+      },
+      {
+        "dialogId": "SC-PURCHASE",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1",
+        "applicability": "parent-canManage-and-corresponding-flag",
+        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+      },
+      {
+        "dialogId": "SC-DELETE",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1",
+        "applicability": "parent-canManage-and-corresponding-flag",
+        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+      }
+    ]
+  },
+  "inputs": {
+    "SourcingWorkspace": ["query"],
+    "SourcingWorkspaceDialogs": [
+      "searchForm.input_type",
+      "searchForm.input_ref",
+      "quote.specification",
+      "quote.moq",
+      "quote.lead_time_days",
+      "quote.location",
+      "quote.confidence_value",
+      "quote.stability_status",
+      "quote.risk_level",
+      "quote.observed_at",
+      "quote.evidence_id",
+      "purchaseForm.quantity",
+      "purchaseForm.reason",
+      "deleteReasonModel"
+    ],
+    "SourcingComparisonPanel": [],
+    "SourcingCostConfirmationPanel": [],
+    "OpportunityProfitPanel": [
+      "costForm.platform",
+      "costForm.input_type",
+      "costForm.amount_value",
+      "costForm.currency",
+      "costForm.source_type",
+      "costForm.source_ref_id",
+      "costForm.evidence_id",
+      "costForm.observed_at",
+      "costForm.reviewer_id"
+    ],
+    "OpportunityCostReviewQueue": ["review.reason"]
+  },
+  "actions": [
+    {
+      "actionId": "SC-NAV-SELF",
+      "label": "供应商找货页签",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1"],
+      "sourceContractKeys": ["SC-NAV sourcing"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "本地无条件；适用父层条件见routeApplicability",
+      "handler": "RouterLink /sourcing，不强制保留q/record",
+      "variants": ["SC-NAV sourcing"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "workspace"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-NAV-RULES",
+      "label": "费用规则页签",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1"],
+      "sourceContractKeys": ["SC-NAV cost-rules"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "本地无条件；适用父层条件见routeApplicability",
+      "handler": "RouterLink /sourcing/cost-rules；不带from",
+      "variants": ["SC-NAV cost-rules"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "workspace"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-S-OPEN",
+      "label": "发起找货",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"],
+      "sourceContractKeys": ["SC-S-OPEN 管理者创建"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:canManage",
+      "handler": "openSearch只检查canManage并showSearch=true/replace create=1；不重置form",
+      "variants": ["SC-S-OPEN 管理者创建"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-keyword"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-image"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-opportunity"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-product_url"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-STATE",
+      "label": "整页状态主次操作",
+      "kind": "read",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1"],
+      "sourceContractKeys": ["SC-STATE 主/次恢复或创建"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:state !== 'ready'",
+      "handler": "primary empty+manager打开搜索，其余load；secondary empty清query，其余load；expired/forbidden不跳登录或home",
+      "variants": ["SC-STATE 主/次恢复或创建"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "rate-limited"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "共享默认文案与实际去向可能不一致；loading无footer，状态主次矩阵还缺精确控件图。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-SEARCH-RECOVERY",
+      "label": "空筛选恢复",
+      "kind": "read",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1"],
+      "sourceContractKeys": ["SC-SEARCH-CLEAR / 空筛选次动作"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else-if:!filteredItems.length",
+      "handler": "primary resetQuery；secondary manager openSearch否则load",
+      "variants": ["SC-SEARCH-CLEAR / 空筛选次动作"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "只读空筛选次按钮尚无独立图，不借只读目录抵扣。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-DETAIL",
+      "label": "选择找货记录",
+      "kind": "read",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"],
+      "sourceContractKeys": ["SC-DETAIL 读对象并同步record"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-for:item in filteredItems",
+      "handler": "切对象先清selectedQuotes；GET /sourcing/searches/:id，成功replace record并清create",
+      "variants": ["SC-DETAIL 读对象并同步record"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "workspace"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "keyword-record"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "detail-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "无读代次/abort，迟到响应归属未修复；query可隐藏深链记录。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-REFRESH",
+      "label": "重新采集",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1"],
+      "sourceContractKeys": ["SC-REFRESH 管理者POST当前对象"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-if:canManage",
+      "handler": "POST /sourcing/searches/:id/refresh {}，成功只排队；notice后load会清空",
+      "variants": ["SC-REFRESH 管理者POST当前对象"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "workspace"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "queued"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "running"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "busy仅按钮禁用，函数无独立busy早退；不宣称自动轮询或恢复完成。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-NAV-RULES-CONTEXT",
+      "label": "当前找货费用规则",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1"],
+      "sourceContractKeys": ["SC-NAV cost-rules含from"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected",
+      "handler": "RouterLink /sourcing/cost-rules?from=route.fullPath",
+      "variants": ["SC-NAV cost-rules含from"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "workspace"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-missing"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-DELETE-OPEN",
+      "label": "打开删除确认",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"],
+      "sourceContractKeys": ["SC-DELETE-OPEN 管理者选中目标"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-if:canManage",
+      "handler": "deleting=selected；此入口不重置旧deleteReason，不发DELETE",
+      "variants": ["SC-DELETE-OPEN 管理者选中目标"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "删除原因保留与目标切换须单独验，非自动永久删除。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-NAV-COLLECTION",
+      "label": "受权采集明细",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1"],
+      "sourceContractKeys": ["SC-NAV 受权采集明细"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-if:selected.collection_progress && v-if:canInspectCollection",
+      "handler": "仅collection_progress且canInspectCollection；/platform-admin/collection?task=collection_task_id",
+      "variants": ["SC-NAV 受权采集明细"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "platform-inspect"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-ERP",
+      "label": "ERP原页面",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1"],
+      "sourceContractKeys": ["SC-ERP 原始ERP新窗口"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-if:selected.erp_reference",
+      "handler": "selected.erp_reference.source_url新窗口noopener noreferrer，不当作确认报价",
+      "variants": ["SC-ERP 原始ERP新窗口"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "erp"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-SELECT",
+      "label": "选择报价对比",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"],
+      "sourceContractKeys": ["SC-SELECT 勾选与实际最多五项同步"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-for:item in candidates && v-if:canManage && item.quote",
+      "handler": "只接受有quote的候选；最多五个quote.id，取消选择；原生checked同步实际集合",
+      "variants": ["SC-SELECT 勾选与实际最多五项同步"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "select-one"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "select-two"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "select-five"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "函数不校验服务端当前版本/跨范围；第六框已有局部同步修复，不等于全生命周期完成。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-SOURCE",
+      "label": "原始商品页",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1"],
+      "sourceContractKeys": ["SC-SOURCE 原始商品新窗口"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-for:item in candidates",
+      "handler": "item.original_url新窗口noopener noreferrer；来源事实不是报价提交",
+      "variants": ["SC-SOURCE 原始商品新窗口"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "workspace"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "missing-quote"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-QUOTE-OPEN",
+      "label": "打开报价确认",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"],
+      "sourceContractKeys": ["SC-QUOTE-OPEN 管理者无quote"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-for:item in candidates && v-if:canManage && !item.quote",
+      "handler": "openQuote依候选预填，缺MOQ/交期/可信度用1/7/80；时间按本地时区转换；无quote才显示",
+      "variants": ["SC-QUOTE-OPEN 管理者无quote"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-defaults"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "默认值是现状而非采集事实；variable标签错误保持SC-G01。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-PURCHASE-OPEN",
+      "label": "打开采购任务",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"],
+      "sourceContractKeys": ["SC-PURCHASE-OPEN 管理者已有quote"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-else: && v-if:selected && v-for:item in candidates && v-else-if:canManage",
+      "handler": "已有quote才可打开；锁定candidate.quote，重置MOQ数量和默认原因",
+      "variants": ["SC-PURCHASE-OPEN 管理者已有quote"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "采购数量不猜利润/支付或外部订单行为。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COMPARE",
+      "label": "保存报价对比",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1"],
+      "sourceContractKeys": ["SC-COMPARE 至少2项且非busy"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:canManage && selectedQuotes.length",
+      "handler": "POST /sourcing/comparisons {name,quote_ids}；按钮>=2且非busy；成功清选择并load",
+      "variants": ["SC-COMPARE 至少2项且非busy"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "select-one"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "select-two"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "select-five"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "comparison"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源函数自身没有数量/busy早退，最终有效版本及范围由后端校验。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-DIALOG-WIRING",
+      "label": "四窗调用与事件装配",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+        "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1"
+      ],
+      "sourceContractKeys": [
+        "SD九个事件转发、删除原因更新",
+        "四窗共享调用，不另外计为第五个业务窗"
+      ],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:canManage；v-if:canManage",
+      "handler": "SW传递四窗props；八动作事件转发，update-delete-reason仅编辑本地输入，不触发删除提交",
+      "variants": ["SD九个事件转发、删除原因更新", "四窗共享调用，不另外计为第五个业务窗"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-keyword"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": [
+        "SC-S-CLOSE",
+        "SC-S-SUBMIT",
+        "SC-QUOTE-CLOSE",
+        "SC-QUOTE-SUBMIT",
+        "SC-PURCHASE-CLOSE",
+        "SC-PURCHASE-SUBMIT",
+        "SC-DELETE-CLOSE",
+        "SC-DELETE-SUBMIT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@close-search",
+          "handler": "closeSearch",
+          "targets": ["SC-S-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@create",
+          "handler": "create",
+          "targets": ["SC-S-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@close-quote",
+          "handler": "quoteCandidate = null",
+          "targets": ["SC-QUOTE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@confirm-quote",
+          "handler": "confirm",
+          "targets": ["SC-QUOTE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@close-purchase",
+          "handler": "purchaseCandidate = null",
+          "targets": ["SC-PURCHASE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@purchase",
+          "handler": "purchase",
+          "targets": ["SC-PURCHASE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@close-delete",
+          "handler": "deleting = null",
+          "targets": ["SC-DELETE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@remove-search",
+          "handler": "removeSearch",
+          "targets": ["SC-DELETE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
+          "event": "@update-delete-reason",
+          "handler": "deleteReason = $event",
+          "targets": ["SC-DELETE-SUBMIT"],
+          "association": "input-owner-only-not-submit-call"
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@close-search",
+          "handler": "closeSearch",
+          "targets": ["SC-S-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@create",
+          "handler": "create",
+          "targets": ["SC-S-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@close-quote",
+          "handler": "quoteCandidate = null",
+          "targets": ["SC-QUOTE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@confirm-quote",
+          "handler": "confirm",
+          "targets": ["SC-QUOTE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@close-purchase",
+          "handler": "purchaseCandidate = null",
+          "targets": ["SC-PURCHASE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@purchase",
+          "handler": "purchase",
+          "targets": ["SC-PURCHASE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@close-delete",
+          "handler": "deleting = null",
+          "targets": ["SC-DELETE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@remove-search",
+          "handler": "removeSearch",
+          "targets": ["SC-DELETE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
+          "event": "@update-delete-reason",
+          "handler": "deleteReason = $event",
+          "targets": ["SC-DELETE-SUBMIT"],
+          "association": "input-owner-only-not-submit-call"
+        }
+      ]
+    },
+    {
+      "actionId": "SC-S-DIALOG",
+      "label": "找货窗口定义",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1"
+      ],
+      "sourceContractKeys": ["搜索四类输入，字段标签随类型变"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:showSearch",
+      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "variants": ["搜索四类输入，字段标签随类型变"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-keyword"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-image"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-opportunity"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-product_url"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": ["SC-S-CLOSE", "SC-S-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "SC-S-CLOSE",
+      "label": "找货关闭/Escape/取消",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a19bece849d5a46.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#e3badf15ec2af147.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#62730beed005a395.1"
+      ],
+      "sourceContractKeys": ["SC-S-CLOSE Escape", "SC-S-CLOSE X", "SC-S-CLOSE 取消"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:showSearch；v-if:showSearch；v-if:showSearch",
+      "handler": "closeSearch隐藏并清create；草稿保留；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "variants": ["SC-S-CLOSE Escape", "SC-S-CLOSE X", "SC-S-CLOSE 取消"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-keyword"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-image"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-opportunity"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-product_url"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-S-SUBMIT",
+      "label": "找货最终提交",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d3c4c7748af92501.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#7a0fba6035dcdf87.1"
+      ],
+      "sourceContractKeys": ["SC-S-SUBMIT 表单", "SC-S-SUBMIT 按钮"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:showSearch；v-if:showSearch",
+      "handler": "form/create与submit同一提交；POST /sourcing/searches仅input_type/input_ref原值；源shared post无函数级busy守卫，真实幂等/异步归属待验",
+      "variants": ["SC-S-SUBMIT 表单", "SC-S-SUBMIT 按钮"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-keyword"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-image"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-opportunity"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-product_url"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "search-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-QUOTE-DIALOG",
+      "label": "报价窗口定义",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1"
+      ],
+      "sourceContractKeys": ["报价证据确认"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:quoteCandidate",
+      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "variants": ["报价证据确认"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-defaults"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": ["SC-QUOTE-CLOSE", "SC-QUOTE-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "SC-QUOTE-CLOSE",
+      "label": "报价关闭/Escape/取消",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#97f60206694e3a7d.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#bbe2d6bcbbb332dc.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#830881852f5cf052.1"
+      ],
+      "sourceContractKeys": ["SC-QUOTE-CLOSE Escape", "SC-QUOTE-CLOSE X", "SC-QUOTE-CLOSE 取消"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:quoteCandidate；v-if:quoteCandidate；v-if:quoteCandidate",
+      "handler": "quoteCandidate=null；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "variants": ["SC-QUOTE-CLOSE Escape", "SC-QUOTE-CLOSE X", "SC-QUOTE-CLOSE 取消"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-defaults"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-QUOTE-SUBMIT",
+      "label": "报价最终提交",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#eaa2e41b5101f1f5.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#6d422d5b42df032c.1"
+      ],
+      "sourceContractKeys": ["SC-QUOTE-SUBMIT 表单", "SC-QUOTE-SUBMIT 按钮"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:quoteCandidate；v-if:quoteCandidate",
+      "handler": "candidate_id及九个quote字段，observed_at转UTC；不发送原始price/currency修改；源shared post无函数级busy守卫，真实幂等/异步归属待验",
+      "variants": ["SC-QUOTE-SUBMIT 表单", "SC-QUOTE-SUBMIT 按钮"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-defaults"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "quote-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-PURCHASE-DIALOG",
+      "label": "采购窗口定义",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1"
+      ],
+      "sourceContractKeys": ["采购MOQ/原因"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:purchaseCandidate",
+      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "variants": ["采购MOQ/原因"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": ["SC-PURCHASE-CLOSE", "SC-PURCHASE-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "SC-PURCHASE-CLOSE",
+      "label": "采购关闭/Escape/取消",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#a203a4a623d55db8.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#9ce7604ffb1d3c16.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#23fa0ead54c8b92d.1"
+      ],
+      "sourceContractKeys": [
+        "SC-PURCHASE-CLOSE Escape",
+        "SC-PURCHASE-CLOSE X",
+        "SC-PURCHASE-CLOSE 取消"
+      ],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:purchaseCandidate；v-if:purchaseCandidate；v-if:purchaseCandidate",
+      "handler": "purchaseCandidate=null；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "variants": ["SC-PURCHASE-CLOSE Escape", "SC-PURCHASE-CLOSE X", "SC-PURCHASE-CLOSE 取消"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-PURCHASE-SUBMIT",
+      "label": "采购最终提交",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#986c3be67ec5d768.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#bead229bf1acdb7a.1"
+      ],
+      "sourceContractKeys": ["SC-PURCHASE-SUBMIT 表单", "SC-PURCHASE-SUBMIT 按钮"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:purchaseCandidate；v-if:purchaseCandidate",
+      "handler": "POST /sourcing/purchase-tasks {quote_id,quantity:Number,reason:trim}；数量>=MOQ且trim原因至少2字按钮才可提交；源shared post无函数级busy守卫，真实幂等/异步归属待验",
+      "variants": ["SC-PURCHASE-SUBMIT 表单", "SC-PURCHASE-SUBMIT 按钮"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "purchase-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-DELETE-DIALOG",
+      "label": "删除窗口定义",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1"
+      ],
+      "sourceContractKeys": ["记录原因软删"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:deleting",
+      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "variants": ["记录原因软删"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": ["SC-DELETE-CLOSE", "SC-DELETE-SUBMIT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "SC-DELETE-CLOSE",
+      "label": "删除关闭/Escape/取消",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#18d830ea30c66eed.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#c748a332b4a8b069.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a71f3799436c08c.1"
+      ],
+      "sourceContractKeys": ["SC-DELETE-CLOSE Escape", "SC-DELETE-CLOSE X", "SC-DELETE-CLOSE 取消"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:deleting；v-if:deleting；v-if:deleting",
+      "handler": "deleting=null，原因未清空；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "variants": ["SC-DELETE-CLOSE Escape", "SC-DELETE-CLOSE X", "SC-DELETE-CLOSE 取消"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-DELETE-SUBMIT",
+      "label": "删除最终提交",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#c5ce1f450e932172.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#9d23c498e72940a2.1"
+      ],
+      "sourceContractKeys": ["SC-DELETE-SUBMIT 表单", "SC-DELETE-SUBMIT 按钮"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:deleting；v-if:deleting",
+      "handler": "DELETE /sourcing/searches/:id仅trim原因；不编revision，trim为空handler早退；源shared post无函数级busy守卫，真实幂等/异步归属待验",
+      "variants": ["SC-DELETE-SUBMIT 表单", "SC-DELETE-SUBMIT 按钮"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete-error"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "delete-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-NAV-OPPORTUNITY",
+      "label": "机会利润详情",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingCostConfirmationPanel.vue#bb5d5e072948baa9.1"
+      ],
+      "sourceContractKeys": ["SC-NAV 机会利润详情"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "本地无条件；适用父层条件见routeApplicability",
+      "handler": "/opportunities/:id?tab=profit&from=/sourcing；不保留record",
+      "variants": ["SC-NAV 机会利润详情"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-missing"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-calculated"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COST-WIRING",
+      "label": "P21机会成本父处理器",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1"
+      ],
+      "sourceContractKeys": ["成本提交/复核/重算三个事件转发"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "本地无条件；适用父层条件见routeApplicability",
+      "handler": "SC负责cost-inputs/profit-runs及cost-input-reviews/actions真实URL，机会与review版本分别使用",
+      "variants": ["成本提交/复核/重算三个事件转发"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-missing"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-approved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": ["SC-COST-SUBMIT", "SC-COST-REVIEW-SUBMIT", "SC-COST-RECALCULATE"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
+          "event": "@confirm-cost",
+          "handler": "submitCost",
+          "targets": ["SC-COST-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
+          "event": "@review-cost",
+          "handler": "reviewCost",
+          "targets": ["SC-COST-REVIEW-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
+          "event": "@queue-profit",
+          "handler": "queueProfit",
+          "targets": ["SC-COST-RECALCULATE"]
+        }
+      ]
+    },
+    {
+      "actionId": "SC-NAV-PROFIT-RULES",
+      "label": "利润面板费用规则",
+      "kind": "navigation",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityProfitPanel.vue#2bab3ff056a52675.1"
+      ],
+      "sourceContractKeys": ["SC-NAV 管理费用规则"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "本地无条件；适用父层条件见routeApplicability",
+      "handler": "固定/sourcing/cost-rules，不带from；只在机会成本面板装配时出现",
+      "variants": ["SC-NAV 管理费用规则"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-missing"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COST-REVIEW-WIRING",
+      "label": "共享复核事件上送",
+      "kind": "wiring",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1"
+      ],
+      "sourceContractKeys": ["SC-COST-REVIEW 转发"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "本地无条件；适用父层条件见routeApplicability",
+      "handler": "PP仅透传RQ的reviewCost payload，P21由SC.reviewCost处理，不套用P18父层",
+      "variants": ["SC-COST-REVIEW 转发"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-approved"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-rejected"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
+      "forwardsTo": ["SC-COST-REVIEW-SUBMIT"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
+          "event": "@review-cost",
+          "handler": "$emit('reviewCost', $event)",
+          "targets": ["SC-COST-REVIEW-SUBMIT"]
+        }
+      ]
+    },
+    {
+      "actionId": "SC-COST-SUBMIT",
+      "label": "提交双人成本复核",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityProfitPanel.vue#fcdcabfef1ea3474.1",
+        "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1"
+      ],
+      "sourceContractKeys": ["SC-COST-SUBMIT 表单", "SC-COST-SUBMIT 指定复核人且非busy"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:canConfirmCost；v-if:canConfirmCost",
+      "handler": "canConfirmCost控制form，busy或reviewer空禁用；costForm九字段+expected_version=机会version；提交后未立即成为当前成本",
+      "variants": ["SC-COST-SUBMIT 表单", "SC-COST-SUBMIT 指定复核人且非busy"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-missing"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-reviewers-empty"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-submit-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "source成本时间默认UTC截断供datetime-local；无新值时未证明本地时刻正确。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COST-RECALCULATE",
+      "label": "利润重算排队",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityProfitPanel.vue#aff5d679009764bc.1"
+      ],
+      "sourceContractKeys": ["SC-COST-RECALCULATE 排队"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-if:canConfirmCost",
+      "handler": "canConfirmCost且非busy按钮；SC只POST {platform,expected_version:机会version}到profit-runs",
+      "variants": ["SC-COST-RECALCULATE 排队"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-recalculating"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-missing"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "成功message随后被load清空仍未修；不得浏览器自己计算ROI。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "label": "通过/驳回内联表单",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+      ],
+      "sourceContractKeys": ["SC-COST-REVIEW rejected打开", "SC-COST-REVIEW approved打开"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-for:item in reviews && v-if:item.can_review；v-for:item in reviews && v-if:item.can_review",
+      "handler": "item.can_review控制两个入口；beginReview写id/decision并清reason，不立即审批",
+      "variants": ["SC-COST-REVIEW rejected打开", "SC-COST-REVIEW approved打开"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-approved"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-rejected"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-overdue"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "can_review与canConfirmCost是不同入口条件；不把24小时超时自动通过。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "label": "提交复核结论",
+      "kind": "write",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#dcb42c2584efb46b.1",
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#8c06fd5c1d000db0.1"
+      ],
+      "sourceContractKeys": ["SC-COST-REVIEW 表单提交", "SC-COST-REVIEW 提交按钮"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-for:item in reviews && v-if:review.id === item.id；v-for:item in reviews && v-if:review.id === item.id",
+      "handler": "reason.trim长度>=2；payload reviewId/decision/trim reason/expectedVersion=item.version；SC映射expected_version到review动作API",
+      "variants": ["SC-COST-REVIEW 表单提交", "SC-COST-REVIEW 提交按钮"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-approved"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-rejected"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "表单显示只看review.id匹配，不再次检查can_review；busy只禁按钮，函数无早退。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    },
+    {
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "label": "取消内联复核",
+      "kind": "local",
+      "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+      ],
+      "sourceContractKeys": ["SC-COST-REVIEW-CANCEL"],
+      "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
+      "condition": "v-for:item in reviews && v-if:review.id === item.id",
+      "handler": "只清review.id，不发请求，不保证旧在途响应不会影响新表单",
+      "variants": ["SC-COST-REVIEW-CANCEL"],
+      "scenes": [
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-approved"
+        },
+        {
+          "package": "sourcing-direction-c",
+          "scene": "cost-review-rejected"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有62场景145PNG及离线DOM/内存意图检查；不代表该动作全状态或真实Vue/API通过。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "apps/web/src/components/SourcingComparisonPanel.vue",
+      "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+      "apps/web/src/components/OpportunityProfitPanel.vue",
+      "apps/web/src/components/OpportunityCostReviewQueue.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+      "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+      "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+      "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+      "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/SourcingWorkspace.vue",
+        "binding": "query",
+        "meaning": "按找货显示名/input_ref/status本地筛选；同步URL q，移除create",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "searchForm.input_type",
+        "meaning": "keyword/image/opportunity/product_url四种既有类型，不上传图片",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "searchForm.input_ref",
+        "meaning": "对应类型原文，required/max2048；仅inputmode变化，不凭空增加URL解析",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.specification",
+        "meaning": "证据支持的规格文本，不判断单位或语义等价",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.moq",
+        "meaning": "最小起订量>=1；缺失时源默认1是表单值不是事实",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.lead_time_days",
+        "meaning": "交期>=0；缺失时默认7需人工核对",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.location",
+        "meaning": "必填所在地，来自候选或人工证据确认",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.confidence_value",
+        "meaning": "0–100，0保留；缺失默认80不是采集事实",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.stability_status",
+        "meaning": "stable/variable/unknown原枚举，unknown允许不自行收紧",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.risk_level",
+        "meaning": "low/medium/high/unknown原枚举",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.observed_at",
+        "meaning": "datetime-local按报价原时刻转换，提交转UTC",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "quote.evidence_id",
+        "meaning": "datalist建议候选/ERP证据，仍允许任意文本；真实归属由后端",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "purchaseForm.quantity",
+        "meaning": "整数且>=当前MOQ，锁定当前quote_id",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "purchaseForm.reason",
+        "meaning": "trim后至少2字，最长1000",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "binding": "deleteReasonModel",
+        "meaning": "双向computed转发updateDeleteReason，仅改输入；required/max500，trim空不删",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.platform",
+        "meaning": "机会成本平台，初始amazon，max80",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.input_type",
+        "meaning": "sale_price/purchase_price/logistics成本类别",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.amount_value",
+        "meaning": "非负金额，显式0有效，提交转Number",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.currency",
+        "meaning": "币种文本max3；不从报价币种自动替换",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.source_type",
+        "meaning": "来源类型原文本，初始supplier_quote",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.source_ref_id",
+        "meaning": "成本来源引用max255",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.evidence_id",
+        "meaning": "成本证据ID max36；前端不证明归属",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.observed_at",
+        "meaning": "成本datetime-local；源UTC截断默认时间问题未修",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "binding": "costForm.reviewer_id",
+        "meaning": "指定另一名成本确认人；列表按canConfirmCost读取",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+        "binding": "review.reason",
+        "meaning": "通过/驳回理由；trim至少2/max1000，review版本独立",
+        "remaining": "仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/SourcingWorkspace.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "找货记录目录；不是抽屉或额外弹窗",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "workspace",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "workspace"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "keyword-record",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "keyword-record"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspace.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "selectedQuotes非空且canManage才显示的对比托盘",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "select-one",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "select-one"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "select-two",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "select-two"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "select-five",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "select-five"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "四类找货输入共享同一表单，parent canManage装配",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "search-keyword",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-keyword"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "search-image",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-image"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "search-opportunity",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-opportunity"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "search-product_url",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-product_url"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "search-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-error"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "search-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-busy"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "找货说明文本，不是动作或新字段",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "search-keyword",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-keyword"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "报价确认九字段，不可编辑原始价格和币种",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "quote",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "quote-defaults",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote-defaults"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "quote-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote-error"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "quote-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote-busy"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 3,
+        "shape": "form-container",
+        "sourceBehavior": "采购数量原因表单，锁quote/MOQ",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "purchase",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "purchase"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "purchase-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "purchase-error"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "purchase-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "purchase-busy"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "form",
+        "ordinal": 4,
+        "shape": "form-container",
+        "sourceBehavior": "原因软删表单，非永久删除历史",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "delete",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "delete"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "delete-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "delete-error"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "delete-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "delete-busy"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "纯呈现规格差异提示，无按钮，不判断单位等价",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "comparison",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "comparison"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "spec-format",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "spec-format"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "spec-different",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "spec-different"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "缺利润运行/insufficient_data事实提示，不能按0呈现ROI",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "cost-missing",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-missing"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "canConfirmCost控制成本提交和重算内联表单，不是弹窗",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "cost-missing",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-missing"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "cost-reviewers-empty",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-reviewers-empty"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "cost-submit-error",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-submit-error"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "cost-recalculating",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-recalculating"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "无canConfirmCost的只读解释，不隐藏can_review复核队列",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "cost-readonly",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-readonly"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "按review.id开启的内联通过/驳回表单；非第五弹窗",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "cost-review-approved",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-review-approved"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          },
+          {
+            "name": "cost-review-rejected",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-review-rejected"
+              }
+            ],
+            "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "UiStatePanel默认文案须对照SW实际primary/secondary，不继承P19登录/home行为。",
+      "PP/RQ复用P18，但P21写入由SC负责URL与机会/review版本；不重复全站独立源位置。",
+      "SP无交互候选，规格提示及保存时版本语义仍单独审阅。",
+      "新稿本地内容tab不是源按钮，不从prototype标记新增业务分母。"
+    ]
+  },
+  "modeReachability": {
+    "initialMode": "mounted读取create/q/opportunity_id并load；源无固定内容tab",
+    "reachableModes": [
+      "source-list/detail",
+      "search-four-input-kinds",
+      "quote",
+      "purchase",
+      "delete",
+      "opportunity-inline-cost/review"
+    ],
+    "excludedModes": [
+      "P22-cost-rule-lifecycle-actions",
+      "blocked_login-renewal",
+      "upload-image",
+      "browser-profit-calculation"
+    ],
+    "automaticActions": [
+      {
+        "actionId": "SC-MOUNT",
+        "trigger": "初挂showSearch=create=1未查canManage，但SD父组件canManage门阻断只读弹窗；watch create另查canManage"
+      },
+      {
+        "actionId": "SC-RESTORE",
+        "trigger": "load先列表再比较历史；record/当前/首个确定selected；detail成功按syncRoute决定替换query"
+      },
+      {
+        "actionId": "SC-WATCH",
+        "trigger": "query同步q并删create；无record/q反向监听，无定时GET；机会成本监听opportunityId，草稿未重置"
+      }
+    ]
+  },
+  "runtimeEvidence": {
+    "files": [
+      "scripts/verify-ui-phase2-sourcing-source.mjs",
+      "scripts/verify-ui-phase2-sourcing-c.mjs",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "scope": "本轮九组真实setup隔离检查及145旧图只读DOM复验；E2E只作历史合同来源，未重跑或宣称本轮真实Vue通过。"
+  },
+  "compositionGaps": [
+    "31路由动作170代表槽均未逐selector映射；145整页/弹窗图和通用hover/focus不充当全部按钮状态。",
+    "恢复主次完整矩阵、完整字段与错误、主题/密度、async写入归属/KeepAlive/权限与实际浏览器history未验。",
+    "源比较历史失败阻断列表；新稿独立降级只为提案，SC-G01–08未关闭。",
+    "P21按实际既有能力细化，P22单独处理；C方向选择/P16布局批准不授予本页批准。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "54局部源位置归38组（31动作/7装配关联），共有源位置跨页去重，不是全站冻结分母。",
+    "25模型、12结构容器与4自定义弹窗分开；字段和事件转发不是额外业务写入。",
+    "输入同步到删除提交组仅为payload所有者关联，不表示updateDeleteReason会发DELETE。",
+    "没有更改图/代码/配置/数据库或生产状态，方案与真实源码差异保留待决策。"
+  ]
+}

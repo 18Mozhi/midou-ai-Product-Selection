@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1478；旧登记1477；新身份17，旧表独有身份16。签名变化不等于增删业务能力。
-- 已具体语义对应21页/435源位置/388组；其中路由动作331组，转发/容器关联35组，其余明确排除。其余52页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应22页/479源位置/426组；其中路由动作362组，转发/容器关联42组，其余明确排除。其余51页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -32,7 +32,7 @@
 | [P18 机会详情](page-specs/P18.md) | 158 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 75 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 75 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 90 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P21 供应链与利润](page-specs/P21.md) | 90 | [38组](action-reviews/P21.json) | 170个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P22 费用与利润规则](page-specs/P22.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P23 全部任务](page-specs/P23.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P24 任务详情](page-specs/P24.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -1611,6 +1611,169 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 十个v-model和七个结构容器是共享源位置；实际可见字段受route/step/metric/权限控制，不乘成所有分支验收。
 - CP-B02/B03在54948dd8已局部修复并通过46个双端隔离Vue例；这里只复用未变化证据，不声称本轮重跑Vue或真实SQL/来源采集。
 - CP-B01双query并窗、CP-B04删除回调、CP-B05规则重入及CP-G01焦点、CP-G02事实呈现、CP-G03窗口、KeepAlive/scope/history仍未闭环。
+
+## P21 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P21.json)：54个局部源位置 → 38组；9类写入，31组路由动作，7组转发/容器关联不重复计动作。25个本地v-model，12处调用/内嵌容器，33个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有170个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| SC-NAV-SELF 供应商找货页签 / navigation | 1处；SC-NAV sourcing | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-NAV-RULES 费用规则页签 / navigation | 1处；SC-NAV cost-rules | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-S-OPEN 发起找货 / local | 1处；SC-S-OPEN 管理者创建 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-STATE 整页状态主次操作 / read | 1处；SC-STATE 主/次恢复或创建 | [empty · 1440](design/sourcing-direction-c/1440-empty.png) / [empty · 390](design/sourcing-direction-c/390-empty.png)、[loading · 1440](design/sourcing-direction-c/1440-loading.png) / [loading · 390](design/sourcing-direction-c/390-loading.png)；其余见JSON | 共享默认文案与实际去向可能不一致；loading无footer，状态主次矩阵还缺精确控件图。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-SEARCH-RECOVERY 空筛选恢复 / read | 1处；SC-SEARCH-CLEAR / 空筛选次动作 | [search-empty · 1440](design/sourcing-direction-c/1440-search-empty.png) / [search-empty · 390](design/sourcing-direction-c/390-search-empty.png)；其余见JSON | 只读空筛选次按钮尚无独立图，不借只读目录抵扣。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-DETAIL 选择找货记录 / read | 1处；SC-DETAIL 读对象并同步record | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png)、[keyword-record · 1440](design/sourcing-direction-c/1440-keyword-record.png) / [keyword-record · 390](design/sourcing-direction-c/390-keyword-record.png)；其余见JSON | 无读代次/abort，迟到响应归属未修复；query可隐藏深链记录。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-REFRESH 重新采集 / write | 1处；SC-REFRESH 管理者POST当前对象 | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png)、[queued · 1440](design/sourcing-direction-c/1440-queued.png) / [queued · 390](design/sourcing-direction-c/390-queued.png)；其余见JSON | busy仅按钮禁用，函数无独立busy早退；不宣称自动轮询或恢复完成。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-NAV-RULES-CONTEXT 当前找货费用规则 / navigation | 1处；SC-NAV cost-rules含from | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png)、[cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-DELETE-OPEN 打开删除确认 / local | 1处；SC-DELETE-OPEN 管理者选中目标 | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png)；其余见JSON | 删除原因保留与目标切换须单独验，非自动永久删除。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-NAV-COLLECTION 受权采集明细 / navigation | 1处；SC-NAV 受权采集明细 | [platform-inspect · 1440](design/sourcing-direction-c/1440-platform-inspect.png) / [platform-inspect · 390](design/sourcing-direction-c/390-platform-inspect.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-ERP ERP原页面 / navigation | 1处；SC-ERP 原始ERP新窗口 | [erp · 1440](design/sourcing-direction-c/1440-erp.png) / [erp · 390](design/sourcing-direction-c/390-erp.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-SELECT 选择报价对比 / local | 1处；SC-SELECT 勾选与实际最多五项同步 | [select-one · 1440](design/sourcing-direction-c/1440-select-one.png) / [select-one · 390](design/sourcing-direction-c/390-select-one.png)、[select-two · 1440](design/sourcing-direction-c/1440-select-two.png) / [select-two · 390](design/sourcing-direction-c/390-select-two.png)；其余见JSON | 函数不校验服务端当前版本/跨范围；第六框已有局部同步修复，不等于全生命周期完成。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-SOURCE 原始商品页 / navigation | 1处；SC-SOURCE 原始商品新窗口 | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png)、[missing-quote · 1440](design/sourcing-direction-c/1440-missing-quote.png) / [missing-quote · 390](design/sourcing-direction-c/390-missing-quote.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-QUOTE-OPEN 打开报价确认 / local | 1处；SC-QUOTE-OPEN 管理者无quote | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)、[quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png)；其余见JSON | 默认值是现状而非采集事实；variable标签错误保持SC-G01。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-PURCHASE-OPEN 打开采购任务 / local | 1处；SC-PURCHASE-OPEN 管理者已有quote | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png)；其余见JSON | 采购数量不猜利润/支付或外部订单行为。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COMPARE 保存报价对比 / write | 1处；SC-COMPARE 至少2项且非busy | [select-one · 1440](design/sourcing-direction-c/1440-select-one.png) / [select-one · 390](design/sourcing-direction-c/390-select-one.png)、[select-two · 1440](design/sourcing-direction-c/1440-select-two.png) / [select-two · 390](design/sourcing-direction-c/390-select-two.png)；其余见JSON | 源函数自身没有数量/busy早退，最终有效版本及范围由后端校验。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-DIALOG-WIRING 四窗调用与事件装配 / wiring | 2处；SD九个事件转发、删除原因更新、四窗共享调用，不另外计为第五个业务窗 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-S-DIALOG 找货窗口定义 / wiring | 1处；搜索四类输入，字段标签随类型变 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-S-CLOSE 找货关闭/Escape/取消 / local | 3处；SC-S-CLOSE Escape、SC-S-CLOSE X、SC-S-CLOSE 取消 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-S-SUBMIT 找货最终提交 / write | 2处；SC-S-SUBMIT 表单、SC-S-SUBMIT 按钮 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-QUOTE-DIALOG 报价窗口定义 / wiring | 1处；报价证据确认 | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)、[quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-QUOTE-CLOSE 报价关闭/Escape/取消 / local | 3处；SC-QUOTE-CLOSE Escape、SC-QUOTE-CLOSE X、SC-QUOTE-CLOSE 取消 | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)、[quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-QUOTE-SUBMIT 报价最终提交 / write | 2处；SC-QUOTE-SUBMIT 表单、SC-QUOTE-SUBMIT 按钮 | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)、[quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-PURCHASE-DIALOG 采购窗口定义 / wiring | 1处；采购MOQ/原因 | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png)、[purchase-error · 1440](design/sourcing-direction-c/1440-purchase-error.png) / [purchase-error · 390](design/sourcing-direction-c/390-purchase-error.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-PURCHASE-CLOSE 采购关闭/Escape/取消 / local | 3处；SC-PURCHASE-CLOSE Escape、SC-PURCHASE-CLOSE X、SC-PURCHASE-CLOSE 取消 | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png)、[purchase-error · 1440](design/sourcing-direction-c/1440-purchase-error.png) / [purchase-error · 390](design/sourcing-direction-c/390-purchase-error.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-PURCHASE-SUBMIT 采购最终提交 / write | 2处；SC-PURCHASE-SUBMIT 表单、SC-PURCHASE-SUBMIT 按钮 | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png)、[purchase-error · 1440](design/sourcing-direction-c/1440-purchase-error.png) / [purchase-error · 390](design/sourcing-direction-c/390-purchase-error.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-DELETE-DIALOG 删除窗口定义 / wiring | 1处；记录原因软删 | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png)、[delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-DELETE-CLOSE 删除关闭/Escape/取消 / local | 3处；SC-DELETE-CLOSE Escape、SC-DELETE-CLOSE X、SC-DELETE-CLOSE 取消 | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png)、[delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-DELETE-SUBMIT 删除最终提交 / write | 2处；SC-DELETE-SUBMIT 表单、SC-DELETE-SUBMIT 按钮 | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png)、[delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-NAV-OPPORTUNITY 机会利润详情 / navigation | 1处；SC-NAV 机会利润详情 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-calculated · 1440](design/sourcing-direction-c/1440-cost-calculated.png) / [cost-calculated · 390](design/sourcing-direction-c/390-cost-calculated.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-WIRING P21机会成本父处理器 / wiring | 1处；成本提交/复核/重算三个事件转发 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-NAV-PROFIT-RULES 利润面板费用规则 / navigation | 1处；SC-NAV 管理费用规则 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-REVIEW-WIRING 共享复核事件上送 / wiring | 1处；SC-COST-REVIEW 转发 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-SUBMIT 提交双人成本复核 / write | 2处；SC-COST-SUBMIT 表单、SC-COST-SUBMIT 指定复核人且非busy | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-reviewers-empty · 1440](design/sourcing-direction-c/1440-cost-reviewers-empty.png) / [cost-reviewers-empty · 390](design/sourcing-direction-c/390-cost-reviewers-empty.png)；其余见JSON | source成本时间默认UTC截断供datetime-local；无新值时未证明本地时刻正确。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-RECALCULATE 利润重算排队 / write | 1处；SC-COST-RECALCULATE 排队 | [cost-recalculating · 1440](design/sourcing-direction-c/1440-cost-recalculating.png) / [cost-recalculating · 390](design/sourcing-direction-c/390-cost-recalculating.png)、[cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)；其余见JSON | 成功message随后被load清空仍未修；不得浏览器自己计算ROI。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-REVIEW-OPEN 通过/驳回内联表单 / local | 2处；SC-COST-REVIEW rejected打开、SC-COST-REVIEW approved打开 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON | can_review与canConfirmCost是不同入口条件；不把24小时超时自动通过。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-REVIEW-SUBMIT 提交复核结论 / write | 2处；SC-COST-REVIEW 表单提交、SC-COST-REVIEW 提交按钮 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON | 表单显示只看review.id匹配，不再次检查can_review；busy只禁按钮，函数无早退。 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-COST-REVIEW-CANCEL 取消内联复核 / local | 1处；SC-COST-REVIEW-CANCEL | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| SC-DIALOG-WIRING | @close-search / closeSearch | SC-S-CLOSE |
+| SC-DIALOG-WIRING | @create / create | SC-S-SUBMIT |
+| SC-DIALOG-WIRING | @close-quote / quoteCandidate = null | SC-QUOTE-CLOSE |
+| SC-DIALOG-WIRING | @confirm-quote / confirm | SC-QUOTE-SUBMIT |
+| SC-DIALOG-WIRING | @close-purchase / purchaseCandidate = null | SC-PURCHASE-CLOSE |
+| SC-DIALOG-WIRING | @purchase / purchase | SC-PURCHASE-SUBMIT |
+| SC-DIALOG-WIRING | @close-delete / deleting = null | SC-DELETE-CLOSE |
+| SC-DIALOG-WIRING | @remove-search / removeSearch | SC-DELETE-SUBMIT |
+| SC-DIALOG-WIRING | @update-delete-reason / deleteReason = $event | SC-DELETE-SUBMIT |
+| SC-DIALOG-WIRING | @close-search / closeSearch | SC-S-CLOSE |
+| SC-DIALOG-WIRING | @create / create | SC-S-SUBMIT |
+| SC-DIALOG-WIRING | @close-quote / quoteCandidate = null | SC-QUOTE-CLOSE |
+| SC-DIALOG-WIRING | @confirm-quote / confirm | SC-QUOTE-SUBMIT |
+| SC-DIALOG-WIRING | @close-purchase / purchaseCandidate = null | SC-PURCHASE-CLOSE |
+| SC-DIALOG-WIRING | @purchase / purchase | SC-PURCHASE-SUBMIT |
+| SC-DIALOG-WIRING | @close-delete / deleting = null | SC-DELETE-CLOSE |
+| SC-DIALOG-WIRING | @remove-search / removeSearch | SC-DELETE-SUBMIT |
+| SC-DIALOG-WIRING | @update-delete-reason / deleteReason = $event | SC-DELETE-SUBMIT |
+| SC-S-DIALOG | 容器定义，无额外事件 | SC-S-CLOSE、SC-S-SUBMIT |
+| SC-QUOTE-DIALOG | 容器定义，无额外事件 | SC-QUOTE-CLOSE、SC-QUOTE-SUBMIT |
+| SC-PURCHASE-DIALOG | 容器定义，无额外事件 | SC-PURCHASE-CLOSE、SC-PURCHASE-SUBMIT |
+| SC-DELETE-DIALOG | 容器定义，无额外事件 | SC-DELETE-CLOSE、SC-DELETE-SUBMIT |
+| SC-COST-WIRING | @confirm-cost / submitCost | SC-COST-SUBMIT |
+| SC-COST-WIRING | @review-cost / reviewCost | SC-COST-REVIEW-SUBMIT |
+| SC-COST-WIRING | @queue-profit / queueProfit | SC-COST-RECALCULATE |
+| SC-COST-REVIEW-WIRING | @review-cost / $emit('reviewCost', $event) | SC-COST-REVIEW-SUBMIT |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| SourcingWorkspace.vue / query | 按找货显示名/input_ref/status本地筛选；同步URL q，移除create | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / searchForm.input_type | keyword/image/opportunity/product_url四种既有类型，不上传图片 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / searchForm.input_ref | 对应类型原文，required/max2048；仅inputmode变化，不凭空增加URL解析 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.specification | 证据支持的规格文本，不判断单位或语义等价 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.moq | 最小起订量>=1；缺失时源默认1是表单值不是事实 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.lead_time_days | 交期>=0；缺失时默认7需人工核对 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.location | 必填所在地，来自候选或人工证据确认 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.confidence_value | 0–100，0保留；缺失默认80不是采集事实 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.stability_status | stable/variable/unknown原枚举，unknown允许不自行收紧 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.risk_level | low/medium/high/unknown原枚举 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.observed_at | datetime-local按报价原时刻转换，提交转UTC | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / quote.evidence_id | datalist建议候选/ERP证据，仍允许任意文本；真实归属由后端 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / purchaseForm.quantity | 整数且>=当前MOQ，锁定当前quote_id | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / purchaseForm.reason | trim后至少2字，最长1000 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| SourcingWorkspaceDialogs.vue / deleteReasonModel | 双向computed转发updateDeleteReason，仅改输入；required/max500，trim空不删 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.platform | 机会成本平台，初始amazon，max80 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.input_type | sale_price/purchase_price/logistics成本类别 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.amount_value | 非负金额，显式0有效，提交转Number | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.currency | 币种文本max3；不从报价币种自动替换 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.source_type | 来源类型原文本，初始supplier_quote | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.source_ref_id | 成本来源引用max255 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.evidence_id | 成本证据ID max36；前端不证明归属 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.observed_at | 成本datetime-local；源UTC截断默认时间问题未修 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityProfitPanel.vue / costForm.reviewer_id | 指定另一名成本确认人；列表按canConfirmCost读取 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+| OpportunityCostReviewQueue.vue / review.reason | 通过/驳回理由；trim至少2/max1000，review版本独立 | 仅输入语义与来源核对；逐字段状态、错误关联、时区/角色/主题及真实Vue仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| SourcingWorkspace.vue / aside.1 / workspace | inline-aside / proposal-shape-differs | [workspace · 1440](design/sourcing-direction-c/1440-workspace.png) / [workspace · 390](design/sourcing-direction-c/390-workspace.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspace.vue / aside.1 / keyword-record | inline-aside / proposal-shape-differs | [keyword-record · 1440](design/sourcing-direction-c/1440-keyword-record.png) / [keyword-record · 390](design/sourcing-direction-c/390-keyword-record.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspace.vue / aside.2 / select-one | inline-aside / related-scene-only | [select-one · 1440](design/sourcing-direction-c/1440-select-one.png) / [select-one · 390](design/sourcing-direction-c/390-select-one.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspace.vue / aside.2 / select-two | inline-aside / related-scene-only | [select-two · 1440](design/sourcing-direction-c/1440-select-two.png) / [select-two · 390](design/sourcing-direction-c/390-select-two.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspace.vue / aside.2 / select-five | inline-aside / related-scene-only | [select-five · 1440](design/sourcing-direction-c/1440-select-five.png) / [select-five · 390](design/sourcing-direction-c/390-select-five.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.1 / search-keyword | form-container / matching-dialog-scene | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.1 / search-image | form-container / matching-dialog-scene | [search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.1 / search-opportunity | form-container / matching-dialog-scene | [search-opportunity · 1440](design/sourcing-direction-c/1440-search-opportunity.png) / [search-opportunity · 390](design/sourcing-direction-c/390-search-opportunity.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.1 / search-product_url | form-container / matching-dialog-scene | [search-product_url · 1440](design/sourcing-direction-c/1440-search-product_url.png) / [search-product_url · 390](design/sourcing-direction-c/390-search-product_url.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.1 / search-error | form-container / matching-dialog-scene | [search-error · 1440](design/sourcing-direction-c/1440-search-error.png) / [search-error · 390](design/sourcing-direction-c/390-search-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.1 / search-busy | form-container / matching-dialog-scene | [search-busy · 1440](design/sourcing-direction-c/1440-search-busy.png) / [search-busy · 390](design/sourcing-direction-c/390-search-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / aside.1 / search-keyword | inline-aside / related-scene-only | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.2 / quote | form-container / matching-dialog-scene | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.2 / quote-defaults | form-container / matching-dialog-scene | [quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.2 / quote-error | form-container / matching-dialog-scene | [quote-error · 1440](design/sourcing-direction-c/1440-quote-error.png) / [quote-error · 390](design/sourcing-direction-c/390-quote-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.2 / quote-busy | form-container / matching-dialog-scene | [quote-busy · 1440](design/sourcing-direction-c/1440-quote-busy.png) / [quote-busy · 390](design/sourcing-direction-c/390-quote-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.3 / purchase | form-container / matching-dialog-scene | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.3 / purchase-error | form-container / matching-dialog-scene | [purchase-error · 1440](design/sourcing-direction-c/1440-purchase-error.png) / [purchase-error · 390](design/sourcing-direction-c/390-purchase-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.3 / purchase-busy | form-container / matching-dialog-scene | [purchase-busy · 1440](design/sourcing-direction-c/1440-purchase-busy.png) / [purchase-busy · 390](design/sourcing-direction-c/390-purchase-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.4 / delete | form-container / matching-dialog-scene | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.4 / delete-error | form-container / matching-dialog-scene | [delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / form.4 / delete-busy | form-container / matching-dialog-scene | [delete-busy · 1440](design/sourcing-direction-c/1440-delete-busy.png) / [delete-busy · 390](design/sourcing-direction-c/390-delete-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingComparisonPanel.vue / aside.1 / comparison | inline-aside / related-scene-only | [comparison · 1440](design/sourcing-direction-c/1440-comparison.png) / [comparison · 390](design/sourcing-direction-c/390-comparison.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingComparisonPanel.vue / aside.1 / spec-format | inline-aside / related-scene-only | [spec-format · 1440](design/sourcing-direction-c/1440-spec-format.png) / [spec-format · 390](design/sourcing-direction-c/390-spec-format.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingComparisonPanel.vue / aside.1 / spec-different | inline-aside / related-scene-only | [spec-different · 1440](design/sourcing-direction-c/1440-spec-different.png) / [spec-different · 390](design/sourcing-direction-c/390-spec-different.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / aside.1 / cost-missing | inline-aside / related-scene-only | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / form.1 / cost-missing | form-container / matching-inline-form-scene | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / form.1 / cost-reviewers-empty | form-container / matching-inline-form-scene | [cost-reviewers-empty · 1440](design/sourcing-direction-c/1440-cost-reviewers-empty.png) / [cost-reviewers-empty · 390](design/sourcing-direction-c/390-cost-reviewers-empty.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / form.1 / cost-submit-error | form-container / matching-inline-form-scene | [cost-submit-error · 1440](design/sourcing-direction-c/1440-cost-submit-error.png) / [cost-submit-error · 390](design/sourcing-direction-c/390-cost-submit-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / form.1 / cost-recalculating | form-container / matching-inline-form-scene | [cost-recalculating · 1440](design/sourcing-direction-c/1440-cost-recalculating.png) / [cost-recalculating · 390](design/sourcing-direction-c/390-cost-recalculating.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / aside.2 / cost-readonly | inline-aside / related-scene-only | [cost-readonly · 1440](design/sourcing-direction-c/1440-cost-readonly.png) / [cost-readonly · 390](design/sourcing-direction-c/390-cost-readonly.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityCostReviewQueue.vue / form.1 / cost-review-approved | form-container / matching-inline-form-scene | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityCostReviewQueue.vue / form.1 / cost-review-rejected | form-container / matching-inline-form-scene | [cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+
+### 路径与局部模式
+
+初始mode=mounted读取create/q/opportunity_id并load；源无固定内容tab；局部模式族：source-list/detail、search-four-input-kinds、quote、purchase、delete、opportunity-inline-cost/review。排除：P22-cost-rule-lifecycle-actions、blocked_login-renewal、upload-image、browser-profit-calculation。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：SC-MOUNT / 初挂showSearch=create=1未查canManage，但SD父组件canManage门阻断只读弹窗；watch create另查canManage；SC-RESTORE / load先列表再比较历史；record/当前/首个确定selected；detail成功按syncRoute决定替换query；SC-WATCH / query同步q并删create；无record/q反向监听，无定时GET；机会成本监听opportunityId，草稿未重置。不登记为按钮。
+
+### 明确保留的边界
+
+- 31路由动作170代表槽均未逐selector映射；145整页/弹窗图和通用hover/focus不充当全部按钮状态。
+- 恢复主次完整矩阵、完整字段与错误、主题/密度、async写入归属/KeepAlive/权限与实际浏览器history未验。
+- 源比较历史失败阻断列表；新稿独立降级只为提案，SC-G01–08未关闭。
+- P21按实际既有能力细化，P22单独处理；C方向选择/P16布局批准不授予本页批准。
+- UiStatePanel默认文案须对照SW实际primary/secondary，不继承P19登录/home行为。
+- PP/RQ复用P18，但P21写入由SC负责URL与机会/review版本；不重复全站独立源位置。
+- SP无交互候选，规格提示及保存时版本语义仍单独审阅。
+- 新稿本地内容tab不是源按钮，不从prototype标记新增业务分母。
 
 ## P54 局部动作与共享消费者
 
