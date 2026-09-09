@@ -7,8 +7,8 @@
 - 真实路由与规格：73/73。
 - 有明确整页或分段稿关联：73条；这不是73页全部完成。
 - 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
-- C稿包82个：含1个方向研究包、3个共享表面包；正式清单内PNG共11406张。
-- 1593条来源绑定 / 875个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8966个本地链接已核对。
+- C稿包83个：含1个方向研究包、3个共享表面包；正式清单内PNG共11415张。
+- 1610条来源绑定 / 879个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8979个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
@@ -38,7 +38,7 @@
 | P13 | 今日工作 · `/work` | [规格](page-specs/P13.md) | [work](design/work-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P14 | 热点趋势 · `/trends` | [规格](page-specs/P14.md) | [trend](design/trend-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P15 | 选品机会 · `/opportunities` | [规格](page-specs/P15.md) | [opportunity](design/opportunity-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P16 | 创建选品 · `/opportunities/start` | [规格](page-specs/P16.md) | [journey](design/journey-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P16 | 创建选品 · `/opportunities/start` | [规格](page-specs/P16.md) | [shell-journey](design/shell-journey-direction-c/README.md) · [journey](design/journey-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P17 | 评分规则 · `/opportunities/scoring-rules` | [规格](page-specs/P17.md) | [scoring](design/scoring-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P18 | 机会详情 · `/opportunities/:opportunityId` | [规格](page-specs/P18.md) | [detail-cost-context](design/detail-cost-context-direction-c/README.md) · [detail-adaptive](design/detail-adaptive-direction-c/README.md) · [detail-assembly](design/detail-assembly-direction-c/README.md) · [review](design/review-direction-c/README.md) · [insights](design/insights-direction-c/README.md) · [profit](design/profit-direction-c/README.md) · [opportunity-detail](design/opportunity-detail-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P19 | 竞品监控 · `/competitors` | [规格](page-specs/P19.md) | [competitor](design/competitor-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑82个包的浏览器测试，也没有重新人工审核11406张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑83个包的浏览器测试，也没有重新人工审核11415张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。

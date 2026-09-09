@@ -225,7 +225,7 @@
         element("p", `${item.screenshots} 张包内图 · 待具体审核`, "meta"),
         evidenceLink("图册与范围说明", item.readme),
       );
-      if (item.prototype) card.append(evidenceLink("交互预览 / 场景选择", item.prototype));
+      if (item.prototype) card.append(evidenceLink("打开图册 / 预览入口", item.prototype));
       if (item.gallery) card.append(evidenceLink("打开状态截图图册", item.gallery));
       card.append(evidenceLink("源与截图清单", item.evidence));
       proposals.append(card);

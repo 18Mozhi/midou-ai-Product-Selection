@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "37fac7a5f483cbfdedd93908196a922531f3cb001e66185b552c448398ab76fd",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "f9ddb3f71c6d5a8aab8a33795afcb353355616d8df1338b095cdceaf3e5a99d9",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -74,6 +74,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/evidence.json": "998193f09224c3d87029ede4094856bc00c8407ea7d1374d275c23a3d986aa2d",
     "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json": "5f401727b28f442e07177f471b5450b41d9dc360e42f4dfd3cb401374972ee22",
     "design-plans/ui-phase-2-2026-09-07/design/shell-direction-c/evidence.json": "dedbecc6794dd51e17a14056467cfa22ecb0791556f27d217b8e22a32a0763e6",
+    "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/evidence.json": "f410bd9011156cf5949553d5450be8c7b165dd7b11f1bb430c28f01ffc57bbb6",
     "design-plans/ui-phase-2-2026-09-07/design/source-channels-direction-c/evidence.json": "357333e977b967fc29364aae6d722f6be28c025b23b9b3e0e4070e5ecd4d00b4",
     "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/evidence.json": "f92aca17cba561cd36d79e97e2eae77ed821c004f2cfc1a5402e13d0f194f682",
     "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/evidence.json": "e55c94edb2bc36a9b53661ba6f1ba423fd20cb98c55c10893318426febaf327c",
@@ -121,16 +122,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 82,
+    "packages": 83,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 875,
-    "sourceBindings": 1593,
+    "uniqueBoundFiles": 879,
+    "sourceBindings": 1610,
     "sourceDrift": 0,
-    "pngs": 11406,
+    "pngs": 11415,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 8966,
+    "readmeLinksChecked": 8979,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -273,6 +274,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P16",
       "spec": "page-specs/P16.md",
       "packages": [
+        "shell-journey-direction-c",
         "journey-direction-c"
       ],
       "actualVue": [
@@ -1398,6 +1400,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "readme": "design/shell-direction-c/README.md",
       "evidence": "design/shell-direction-c/evidence.json",
       "prototype": "design/shell-direction-c/index.html",
+      "gallery": null
+    },
+    "shell-journey-direction-c": {
+      "id": "shell-journey-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 9,
+      "readme": "design/shell-journey-direction-c/README.md",
+      "evidence": "design/shell-journey-direction-c/evidence.json",
+      "prototype": "design/shell-journey-direction-c/index.html",
       "gallery": null
     },
     "source-channels-direction-c": {

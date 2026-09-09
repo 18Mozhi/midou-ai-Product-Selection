@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · 成员导航与P16真实工作面组合
+
+上一轮ee592b87统一审核入口为实际进展，本轮干净main继续全局壳层与真实页面的组合缺口。读AGENTS/Feature Map/蓝图及计划后确认具体壳层稿未获审，不直接替换生产NavigationShell。使用ui-skills-root/frontend-design设计C组合，fixing-accessibility处理原生模态与焦点，Playwright沿用本地永久验证器。新增shell-journey-direction-c的专用审核Preview.vue/CSS，直接挂载未修改的SelectionJourney；全球目录左置、页面阶段顶部横排、一次范围披露，桌面候选/决策双区和手机导航同屏。新横排不扩大原P16独立布局批准，组合问题已异步发出，未收到明确批准不提升状态。
+
+首次权限断言发现原M02-03 member样本无opportunity:decide，不能装配P16；改用AST提取现有P16测试的四个guard数组，浏览器实际执行authorizedNavigation/canOpenRoute/shellRoleSummary，未拼能力或扩权限。该样本菜单只有1项，不称生产成员完整菜单。候选/五门复用既有助手。真实RouterLink目的为机会列表，验证修正了误写成tasks的期望；返回使用审核宿主KeepAlive，不冒充全局壳层缓存/范围验收。
+
+13项最小smoke通过后，目视修正专用CSS的阶段圆点压窄、桌面导航开关意外显示、单入口手机底栏空列。原生弹窗Escape恢复触发者，跨桌面断点关闭后恢复到可见品牌；滚动末端最终操作可命中，区别于scrollIntoViewIfNeeded对已在视口但被固定栏覆盖的目标不再滚动。最终capture与无参数43检查通过、9张永久组合图；真实P16候选与五门、草稿返回、宽度1440/390与768/1024/1280、底栏/原生模态/零POST/零未登记网络/零页面错误有定向证据。主题/搜索/快捷创建只有明确待装配提示，不算已完成；其它角色、所有状态/主题/密度、真实后端/鉴权/生产均待。
+
+新包关联P16规格并接入review.html，入口文案改为图册/预览通用语义，不把新静态图册称可交互。复用两张审核工具图更新证据，旧P16 114图/24字段图与原壳层50图未修改。最终全图审计83包/11415PNG，879独立来源/1610绑定，源与图漂移0/未列PNG0；全页批准仍0，G0/G1–G5不变。生成器--check及双端审核工具回归、3项原task-study单测、verify:docs（153/73）、verify:runtime-docs、verify:static-analysis（390）通过。格式检查先发现新增生成HTML行776>640，拆行后重拍和再审，格式终态见工具记录；不手改证据指纹。
+
+仅审核资产、永久验证器和直接相关规格/Feature Map/计划改动。apps/packages、API/OpenAPI、env、数据库、依赖、权限和宝塔服务未改；无需生产重启，未部署，产品build不因纯审核宿主重复。使用本包README三种验证命令或打开index.html图册，待用户给出组合布局意见后再推进获审范围实现。现有完整73页目标、所有具体审稿/状态分母、真实实现及生产签收继续。
+
+本批9PNG、Preview.vue/CSS、index/evidence/README是永久交付，最初创建的shell-journey-composed-c经精确路径校验重命名为统一审计识别的shell-journey-direction-c，旧临时名称已不存在。Vite5175/隔离浏览器finally关闭、端口无监听；审核工具临时下载路径逐次打印后delete，其临时目录已随浏览器清理，测试存储只在隔离上下文清除。历史p16-layout-20260910/.last-run.json、ui-phase2-competitor-races-20260909/playwright.config.ts及results/.last-run.json均未重试清理、不绕过、不暂存。
+
 ## 2026-09-10 · C方向统一逐页审核入口
 
 从干净main/7beac32e继续，修正真实review.html仍用纸色红色衬线、主要显示历史研究并硬编码设计未交付的问题。ui-skills-root/frontend-design用于C蓝白目录与材料区，fixing-accessibility保留命名、44px目标、键盘焦点和原生弹窗，Playwright沿用仓库永久验证器。仅本地审核工具变化，未修改产品Vue/业务规则、API/OpenAPI/env/DB/迁移/依赖/权限、后端/Worker/Python或生产服务。

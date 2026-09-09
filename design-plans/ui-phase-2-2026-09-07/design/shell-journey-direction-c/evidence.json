@@ -1,0 +1,258 @@
+{
+  "kind": "review-only-shell-with-real-P16-and-intercepted-data",
+  "approval": "pending-composed-layout-review",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/Preview.vue": "782b19831ba5f0d6d81503380d0397c24390f497d9e33fca2f47610a110dfedd",
+    "design-plans/ui-phase-2-2026-09-07/design/shell-journey-direction-c/composition.css": "5e4599d7ce2fe8d0818a784c1917c4a79268331fa238d6736db1742abcafaf75",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+    "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/ui/status-labels.ts": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
+    "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
+    "scripts/verify-ui-phase2-shell-journey-c.mjs": "ccc6e4d7bc6110d460c7f28884354d2aab754519cbced424fab2ecb384d4e419"
+  },
+  "screenshots": [
+    {
+      "file": "1440-input.png",
+      "scene": "input",
+      "width": 1440,
+      "sha256": "8c7b0c5cc72923fa46e9c788d622f1ec7477133ca1ea622a92f71c8522537a67"
+    },
+    {
+      "file": "1440-return-draft.png",
+      "scene": "return-draft",
+      "width": 1440,
+      "sha256": "a7e2dff11c3d687ec5d88f5476e3356daf4e239dbf15c721b21d03d432951c06"
+    },
+    {
+      "file": "1440-candidate-unselected.png",
+      "scene": "candidate-unselected",
+      "width": 1440,
+      "sha256": "64c3caf922e48a990896d4352e6fb964ad504985b7312e035070677daa1b6102"
+    },
+    {
+      "file": "1440-five-gates.png",
+      "scene": "five-gates",
+      "width": 1440,
+      "sha256": "f6c79ff8c5ecee40019211c9a7535d2877d334d2f054fd2dd9fc3c1c24becb7f"
+    },
+    {
+      "file": "390-input.png",
+      "scene": "input",
+      "width": 390,
+      "sha256": "40aabca3ee6973c32c7b97a679cb4cf789dc7d3e06da92990f2ae9094254e777"
+    },
+    {
+      "file": "390-return-draft.png",
+      "scene": "return-draft",
+      "width": 390,
+      "sha256": "aefb6e8cd4ffaae6ce3edb397f0a2a67bb442f32f105bf7cfdf46e2805b3f6ce"
+    },
+    {
+      "file": "390-candidate-unselected.png",
+      "scene": "candidate-unselected",
+      "width": 390,
+      "sha256": "05005e98587fd0494cac06214322bdb5a7e0bc2563b44d8fc6db0b10ca55f7b4"
+    },
+    {
+      "file": "390-five-gates.png",
+      "scene": "five-gates",
+      "width": 390,
+      "sha256": "89305540f32c6faf84be1f0a8336a655b92f56bdcd0884c458eafc2e9b4ab454"
+    },
+    {
+      "file": "390-navigation-open.png",
+      "scene": "navigation-open",
+      "width": 390,
+      "sha256": "47a5996de403ecb8154bc1e6c586ff92f3224c6861bc5047c52e350e50467307"
+    }
+  ],
+  "checks": [
+    {
+      "width": 1440,
+      "name": "mobile opener matches breakpoint"
+    },
+    {
+      "width": 1440,
+      "name": "stage circles stay square"
+    },
+    {
+      "width": 1440,
+      "name": "real P16 with four source stages"
+    },
+    {
+      "width": 1440,
+      "name": "source-derived member menu"
+    },
+    {
+      "width": 1440,
+      "name": "input no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "real router target is opportunities"
+    },
+    {
+      "width": 1440,
+      "name": "KeepAlive return retains P16 input"
+    },
+    {
+      "width": 1440,
+      "name": "return-draft no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "candidate-unselected no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "five actual source gate rows"
+    },
+    {
+      "width": 1440,
+      "name": "five-gates no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "navigation disclosure preserves P16 facts"
+    },
+    {
+      "width": 1440,
+      "name": "1024 assembled overflow"
+    },
+    {
+      "width": 1440,
+      "name": "1024 footer hit"
+    },
+    {
+      "width": 1440,
+      "name": "768 assembled overflow"
+    },
+    {
+      "width": 1440,
+      "name": "768 footer hit"
+    },
+    {
+      "width": 1440,
+      "name": "1280 assembled overflow"
+    },
+    {
+      "width": 1440,
+      "name": "1280 footer hit"
+    },
+    {
+      "width": 1440,
+      "name": "no write or unexpected network"
+    },
+    {
+      "width": 1440,
+      "name": "no page errors"
+    },
+    {
+      "width": 390,
+      "name": "mobile opener matches breakpoint"
+    },
+    {
+      "width": 390,
+      "name": "stage circles stay square"
+    },
+    {
+      "width": 390,
+      "name": "bottom menu has no empty columns"
+    },
+    {
+      "width": 390,
+      "name": "real P16 with four source stages"
+    },
+    {
+      "width": 390,
+      "name": "source-derived member menu"
+    },
+    {
+      "width": 390,
+      "name": "input no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "real router target is opportunities"
+    },
+    {
+      "width": 390,
+      "name": "KeepAlive return retains P16 input"
+    },
+    {
+      "width": 390,
+      "name": "return-draft no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "candidate-unselected no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "five actual source gate rows"
+    },
+    {
+      "width": 390,
+      "name": "five-gates no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "native modal open"
+    },
+    {
+      "width": 390,
+      "name": "navigation-open no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "modal focus loop"
+    },
+    {
+      "width": 390,
+      "name": "Escape restores opener"
+    },
+    {
+      "width": 390,
+      "name": "desktop transition closes native modal"
+    },
+    {
+      "width": 390,
+      "name": "desktop transition restores visible brand focus"
+    },
+    {
+      "width": 390,
+      "name": "navigation disclosure preserves P16 facts"
+    },
+    {
+      "width": 390,
+      "name": "390 assembled overflow"
+    },
+    {
+      "width": 390,
+      "name": "390 footer hit"
+    },
+    {
+      "width": 390,
+      "name": "no write or unexpected network"
+    },
+    {
+      "width": 390,
+      "name": "no page errors"
+    }
+  ],
+  "limits": [
+    "Shell is review Vue, not production NavigationShell",
+    "No real authorization, backend, production or full shell overlay acceptance",
+    "Horizontal local stage layout is a new composition proposal, not previously approved"
+  ]
+}

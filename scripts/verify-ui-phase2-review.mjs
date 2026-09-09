@@ -66,7 +66,13 @@ try {
       73,
     );
     await page.locator("#page-search").fill("P16");
-    assert.equal(await page.locator(".proposal-materials .material-card").count(), 1);
+    assert.equal(await page.locator(".proposal-materials .material-card").count(), 2);
+    assert.equal(
+      await page
+        .locator('.proposal-materials a[href="design/shell-journey-direction-c/index.html"]')
+        .count(),
+      1,
+    );
     assert.equal(await page.locator(".vue-materials .material-card").count(), 2);
     const vueLinks = await page
       .locator(".vue-materials a")
