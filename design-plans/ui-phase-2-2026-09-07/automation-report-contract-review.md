@@ -1,5 +1,7 @@
 # F03 自动化与报表局部交互合同
 
+2026-09-10 P27写入回执保护：[窗口归属与重复提交](P27-WRITE-OWNERSHIP-REVIEW.md)。23项新增源码测试与30项真实Vue双端场景通过；旧新建/编辑/启停成功和错误不再改后来窗口，导航结束不再关闭新窗，沿用busy拦截重复写。只改script与内部事实刷新方式，原接口/字段/布局不变，122/208/114图随源码复核。保存期间同窗继续修改的处理策略已询问，仍待决定；完整C视觉/跨范围/审核/全站部署未完成，未部署。
+
 2026-09-10 P27真实读取修复：[列表、详情与草稿归属](P27-READ-OWNERSHIP-REVIEW.md)。同批首错即失效，旧回包不覆盖新列表/详情/诊断，刷新不重置后来草稿，销毁后只读回包不再落地；初次深链仍正常。22项源码测试、18项真实Vue双端场景，旧122/208/114图随源码复核，不新增视觉批准。只改组件script，接口与写入流程不变；写回执/跨范围/完整视觉与全站部署继续待，未部署。
 
 2026-09-08报表增量：[P28 REPORT-C-r1](design/report-direction-c/README.md)90PNG，41场景双端加8长窗底部；蓝色类型目录、白报表与独立导出队列、唯一详情窗。源Vue脚本惰性执行验证三个CSV body、无body重建、新ID/query/null/0/到期，真实SQL与服务经惰性依赖验证团队口径和409/410/503顺序。不是挂载Vue、真实DB/Worker/文件或生产证明。原团队汇总/明细及旧ETA差异保留；status=expired但时间未到的UI允许/API拒绝差异显式演示，不改合同。窗内错误与读数层级仅提案；RP-G01–G04、F03-G05仍待办。下文“P28尚未出稿”为上一批历史状态，当前已有独立稿但未获审。
@@ -93,7 +95,7 @@ UTF-8、LF标准化SHA-256；源改变后必须重新扫描本表及重验相关
 
 | 文件（apps/web/src/） | LF SHA-256 |
 | --- | --- |
-| components/AutomationRuleCenter.vue | 6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4 |
+| components/AutomationRuleCenter.vue | 7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840 |
 | components/ReportCenter.vue | 51f40d277f36a2a21810167b18bdd0fa91949bee7074398a646399f2c958251a |
 | automation-rules.css | c006390dfdc5cc15371067d6f713ff18a2503c86693aa37e0e2a320cf5dd31f2 |
 | report-center.css | 5c6b36025fbfed41a243557ac4d73b463fc1dd71d8b895c14f91c7506b49b8c1 |

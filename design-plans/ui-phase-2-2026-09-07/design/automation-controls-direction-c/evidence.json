@@ -6,7 +6,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.css": "ca86b91076416ef1d3999e6843ac77c7f3346dbc02ea141a9ac54f7149213859",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.js": "699aefa49bbb853149ca41b8ffbf766a5f80eba20f4771bebaa0637ee4aeda84",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/data.js": "743c138d7b853ebb34a26a6ce558c5d5a735dd6640bf6b0f3708561d6a0613e4",
-    "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4",
+    "apps/web/src/components/AutomationRuleCenter.vue": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/api/src/automation-service.ts": "44bc9a30971af6a7eb3cc8f4a14830c5b699bc58d0d75ea34e2fd38f6f837ce0",
     "apps/api/src/automation-routes.ts": "d1dafd3ff2fa9a565aa774cdd377ad79574326d3a3c69693a43bf7eddacf1f15",
@@ -3822,7 +3822,7 @@
       "scene": "sample-focus",
       "width": 1440,
       "file": "sample-focus-1440.png",
-      "sha256": "88a03e0ed2d4c2d515d5454693320ecbc1213b92edb7ed1a17e0d325c772600e",
+      "sha256": "ca87371ebb203407a8e7299a5c6ea04503a6ad704b0c17a3ec13ece4b22a7b3b",
       "control": {
         "selector": "[data-preview-link]",
         "actionId": "AR-SAMPLE",
@@ -3866,7 +3866,7 @@
       "scene": "cancel-focus",
       "width": 1440,
       "file": "cancel-focus-1440.png",
-      "sha256": "ab99aa730b3411752cd2633acbd9998b7c68c4a09b6d8630c5b390d17a093572",
+      "sha256": "d6193841e0e912f7d8752837d7fbec16be86e788535ba848fef70dad6336ce33",
       "control": {
         "selector": "#cancel",
         "actionId": "AR-EDITOR-CLOSE",
@@ -3965,7 +3965,7 @@
       "scene": "save-focus",
       "width": 1440,
       "file": "save-focus-1440.png",
-      "sha256": "27f72ce05697295cce456858916be21f514ca8ce379563e06184fb6b1427fe21",
+      "sha256": "4db120c968fb929afc046501d6c5b7b9eeeb605bb46adafc099165999eb721b0",
       "control": {
         "selector": "#save",
         "actionId": "AR-SAVE",
@@ -5376,7 +5376,7 @@
       "scene": "template-rejected-focus",
       "width": 390,
       "file": "template-rejected-focus-390.png",
-      "sha256": "b5335e3a5362535614d78e8e3a348c873d61f393ee94d68458139fd378743c2e",
+      "sha256": "62b771be38dc5836b96d9e47ac5445a807b0a4fd8320c60f2f5feab2d0b977ae",
       "control": {
         "selector": "[data-template='2']",
         "actionId": "AR-TEMPLATE",

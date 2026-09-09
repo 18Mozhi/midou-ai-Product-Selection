@@ -149,7 +149,7 @@ async function api(
     throw error;
   }
 }
-async function load() {
+async function load(replayRoute: boolean | Event = true) {
   if (disposed) return;
   const generation = ++loadGeneration;
   const view = ++viewGeneration;
@@ -175,6 +175,7 @@ async function load() {
     routeSyncReady.value = true;
     // Refresh facts without reopening/resetting a view or draft changed during this read.
     if (
+      replayRoute &&
       view === viewGeneration &&
       ownerPath === route.path &&
       draft === JSON.stringify([form.value, editReason.value])
@@ -211,33 +212,45 @@ async function open(rule: Rule, syncRoute = true) {
   }
 }
 async function create() {
+  if (disposed || busy.value) return;
+  const view = viewGeneration;
+  const ownerPath = route.fullPath;
+  const owner = {
+    current: () => !disposed && view === viewGeneration && ownerPath === route.fullPath,
+  };
+  const wasEditing = Boolean(editing.value);
   busy.value = true;
   try {
-    await api(editing.value ? `/automations/${editing.value.id}` : "/automations", {
-      method: editing.value ? "PATCH" : "POST",
-      body: JSON.stringify({
-        ...form.value,
-        ...(editing.value
-          ? {
-              expected_version: editing.value.version,
-              reason: editReason.value,
-            }
-          : {}),
-        action_assignee_id:
-          form.value.action_type === "create_task" ? form.value.action_assignee_id : null,
-      }),
-    });
-    await clearRuleQuery(true);
+    await api(
+      editing.value ? `/automations/${editing.value.id}` : "/automations",
+      {
+        method: editing.value ? "PATCH" : "POST",
+        body: JSON.stringify({
+          ...form.value,
+          ...(editing.value
+            ? {
+                expected_version: editing.value.version,
+                reason: editReason.value,
+              }
+            : {}),
+          action_assignee_id:
+            form.value.action_type === "create_task" ? form.value.action_assignee_id : null,
+        }),
+      },
+      owner,
+    );
+    if (!owner.current()) return;
     showCreate.value = false;
-    notice.value = editing.value
+    notice.value = wasEditing
       ? "自动化规则已更新并保留审计记录。"
       : "自动化规则已启用；动作仍需人工处理。";
     editing.value = null;
-    await load();
+    // Close only the submitting view before navigation; no late continuation may close a new one.
+    await Promise.all([clearRuleQuery(true), load(false)]);
   } catch (error) {
     rethrowUnexpectedError(error);
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 function edit(rule: Rule, syncRoute = true) {
@@ -361,23 +374,34 @@ async function runPreview() {
   }
 }
 async function status(rule: Rule) {
+  if (disposed || busy.value) return;
+  const view = viewGeneration;
+  const ownerPath = route.fullPath;
+  const owner = {
+    current: () => !disposed && view === viewGeneration && ownerPath === route.fullPath,
+  };
   busy.value = true;
   try {
-    await api(`/automations/${rule.id}/actions`, {
-      method: "POST",
-      body: JSON.stringify({
-        action: rule.status === "active" ? "pause" : "resume",
-        expected_version: rule.version,
-        reason: rule.status === "active" ? "由规则管理页人工暂停" : "由规则管理页人工恢复",
-      }),
-    });
+    await api(
+      `/automations/${rule.id}/actions`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          action: rule.status === "active" ? "pause" : "resume",
+          expected_version: rule.version,
+          reason: rule.status === "active" ? "由规则管理页人工暂停" : "由规则管理页人工恢复",
+        }),
+      },
+      owner,
+    );
+    if (!owner.current()) return;
     notice.value = rule.status === "active" ? "规则已人工暂停。" : "规则已恢复。";
     selected.value = null;
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 const trigger = (v: string) =>

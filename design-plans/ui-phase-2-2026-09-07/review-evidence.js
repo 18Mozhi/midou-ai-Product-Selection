@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "bf58cc06c6b706d978a042934122143fd337d70945a38003fd45b19e3884a488",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "12afe09ffa3231987c12ed30df578949a81fbbf13c3a07fe958dfc8651e1542b",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -15,9 +15,9 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/approval-forms-direction-c/evidence.json": "1dd2fc9e01f32bfecfe2e91e2b53b7504821968f051cc9115e728bcea4ae6b5c",
     "design-plans/ui-phase-2-2026-09-07/design/approval-lifecycle-direction-c/evidence.json": "843c88b51ebfa016112217f93e4f7ac569f0a84e8c5ddc78b39652a437d33531",
     "design-plans/ui-phase-2-2026-09-07/design/approval-navigation-direction-c/evidence.json": "fb71732f2130662eb9a5f6b19b48f3e137024ea380a83ca6116c70f3b2e7a17d",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "650aad462925c075680640030949329ab7ea6aeb9ccaa1272bd73e47a4db8407",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "ee2b6981fa60f2689f8e59c51abec02e7986621251568db0a8ad4e480626b0f4",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-forms-direction-c/evidence.json": "619b72ea95576f74951ac80cd072ae20050b91fd0ee8e5a747186a277fe5c497",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "6aed31203cd524d26dc4f6d60f5fe5d6e4e1dc87d513e1882f1ffeabe90ca3e5",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "2f129dd522fc17247d751dcbb8880a6ad71b23855121f066e0b64e5ac99cf6dd",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-forms-direction-c/evidence.json": "625264c59782e953e1bd43ee0ef71256649339a678ce493856b83aac04db6399",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json": "aeb78fc5f72cedbb944eb6871b0b06b2a56c773d121086861e78459ecea10595",
     "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json": "d28b7a421dcd2d12d66a21444097b8e6c4da2c47d1b51ecc49241d647202a502",
     "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/evidence.json": "a914119d5419e7b1a342252e53c994994361a92b6ff8d6b49013c3f4ff28d112",
@@ -119,7 +119,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "f0a25e68f8096db8f1536fd1a8f5c535ce6025d9f0403bf173e3fa8b69a61505",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "a559b7b9f008067afb4c2dd0d3718e20edd2cf5c2387378c8ae694bd9420eca8",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "873cc1947c923bc7269b767b29bb8002d8d27cfc38494cde1a6125b8be82b255",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {

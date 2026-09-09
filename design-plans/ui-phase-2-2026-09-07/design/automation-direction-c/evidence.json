@@ -6,7 +6,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.css": "ca86b91076416ef1d3999e6843ac77c7f3346dbc02ea141a9ac54f7149213859",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.js": "699aefa49bbb853149ca41b8ffbf766a5f80eba20f4771bebaa0637ee4aeda84",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/data.js": "743c138d7b853ebb34a26a6ce558c5d5a735dd6640bf6b0f3708561d6a0613e4",
-    "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4",
+    "apps/web/src/components/AutomationRuleCenter.vue": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/api/src/automation-service.ts": "44bc9a30971af6a7eb3cc8f4a14830c5b699bc58d0d75ea34e2fd38f6f837ce0",
     "apps/api/src/automation-routes.ts": "d1dafd3ff2fa9a565aa774cdd377ad79574326d3a3c69693a43bf7eddacf1f15",
