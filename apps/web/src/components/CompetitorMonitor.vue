@@ -102,7 +102,10 @@ const props = withDefaults(
   deleteDialog = ref<HTMLElement | null>(null),
   validationTasks = ref<Record<string, string>>({});
 let collectionRefreshTimer: ReturnType<typeof setTimeout> | null = null;
-let pendingCollectionTask: { competitorId: string; taskId: string } | null = null;
+const pendingCollections = new Map<string, CollectionAttempt>();
+let readVersion = 0;
+let disposed = false;
+const currentRead = (version: number) => !disposed && version === readVersion;
 const form = reactive({
     market: "US",
     product_url: "",
@@ -121,19 +124,7 @@ const rulesPage = computed(() => props.mode === "rules"),
   canCreateTask = computed(() => props.capabilities.includes("task:create")),
   latest = computed(() => selected.value?.latest_snapshot ?? null),
   latestCollection = computed(() => selected.value?.latest_collection ?? null),
-  collectionPending = computed(() =>
-    [
-      "draft",
-      "scheduled",
-      "queued",
-      "leased",
-      "running",
-      "parsing",
-      "validating",
-      "persisted",
-      "retry_scheduled",
-    ].includes(latestCollection.value?.status ?? ""),
-  ),
+  collectionPending = computed(() => isCollectionPending(latestCollection.value)),
   baseline = computed(() => {
     const snapshots = selected.value?.snapshots ?? [];
     return snapshots.length ? (snapshots[snapshots.length - 1] ?? null) : latest.value;
@@ -300,6 +291,29 @@ const statusText = (value: string) =>
     item.competitor_id
       ? items.value.find((row) => row.id === item.competitor_id)?.title || "竞品已移除"
       : "全部竞品";
+function isCollectionPending(collection?: CollectionAttempt | null) {
+  return [
+    "draft",
+    "scheduled",
+    "queued",
+    "leased",
+    "running",
+    "parsing",
+    "validating",
+    "persisted",
+    "retry_scheduled",
+  ].includes(collection?.status ?? "");
+}
+function withPendingCollection(item: Competitor): Competitor {
+  const pending = pendingCollections.get(item.id);
+  if (!pending) return item;
+  if (item.latest_collection?.task_id !== pending.task_id)
+    return { ...item, latest_collection: pending };
+  if (isCollectionPending(item.latest_collection))
+    pendingCollections.set(item.id, item.latest_collection);
+  else pendingCollections.delete(item.id);
+  return item;
+}
 function clearCollectionRefresh() {
   if (collectionRefreshTimer) clearTimeout(collectionRefreshTimer);
   collectionRefreshTimer = null;
@@ -314,18 +328,23 @@ function scheduleCollectionRefresh() {
   }, 2000);
 }
 async function load() {
+  if (disposed) return;
+  const version = ++readVersion;
   clearCollectionRefresh();
   state.value = "loading";
   notice.value = "";
   try {
     const response = await request<Competitor[]>("/competitors");
+    if (!currentRead(version)) return;
     requestId.value = response.request_id;
-    items.value = response.data;
+    items.value = response.data.map(withPendingCollection);
     try {
       const ruleResponse = await request<Rule[]>("/competitor-monitor-rules");
+      if (!currentRead(version)) return;
       rules.value = ruleResponse.data;
       if (rulesPage.value) requestId.value = ruleResponse.request_id;
     } catch (error) {
+      if (!currentRead(version)) return;
       if (rulesPage.value) throw error;
       rules.value = [];
     }
@@ -340,6 +359,7 @@ async function load() {
     state.value = rulesPage.value ? "ready" : items.value.length ? "ready" : "empty";
     if (selected.value) await detail(selected.value, false);
   } catch (error) {
+    if (!currentRead(version)) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
@@ -348,41 +368,38 @@ async function load() {
   }
 }
 async function detail(item: Competitor, syncRoute = true) {
+  if (disposed) return;
+  const version = ++readVersion;
   clearCollectionRefresh();
   if (syncRoute) notice.value = "";
-  selected.value = item;
+  selected.value = withPendingCollection(item);
   try {
     const response = await request<Competitor>(`/competitors/${item.id}`);
+    if (!currentRead(version)) return;
     requestId.value = response.request_id;
-    const pendingMatches = pendingCollectionTask?.competitorId === item.id,
-      collectionMatches =
-        pendingMatches &&
-        response.data.latest_collection?.task_id === pendingCollectionTask?.taskId,
-      next =
-        pendingMatches && !collectionMatches
-          ? { ...response.data, latest_collection: selected.value?.latest_collection ?? null }
-          : response.data;
+    const next = withPendingCollection(response.data);
     selected.value = next;
-    if (collectionMatches && !collectionPending.value) pendingCollectionTask = null;
     items.value = items.value.map((row) => (row.id === next.id ? next : row));
     if (syncRoute)
       await router.replace({ query: { ...route.query, competitor: item.id, create: undefined } });
-    scheduleCollectionRefresh();
+    if (currentRead(version)) scheduleCollectionRefresh();
   } catch (error) {
+    if (!currentRead(version)) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
     } else notice.value = "详情暂不可用，列表数据未被覆盖。";
   }
 }
-async function post(path: string, body: unknown) {
+async function post(path: string, body: unknown, canPresent = () => !disposed) {
   busy.value = true;
-  notice.value = "";
+  if (canPresent()) notice.value = "";
   try {
     const response = await request<any>(path, { method: "POST", body });
-    requestId.value = response.request_id;
+    if (canPresent()) requestId.value = response.request_id;
     return response.data;
   } catch (error) {
+    if (!canPresent()) return null;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
@@ -447,10 +464,20 @@ function closeRule() {
   void router.replace({ query: { ...route.query, competitor: undefined } });
 }
 async function collect() {
-  if (!selected.value || !canManage.value || selected.value.status !== "active") return;
-  const result = await post(`/competitors/${selected.value.id}/collect`, {});
-  if (result) {
-    notice.value = `已开始重新采集，任务编号 ${result.task_id}。`;
+  if (
+    disposed ||
+    busy.value ||
+    collectionPending.value ||
+    !selected.value ||
+    !canManage.value ||
+    selected.value.status !== "active"
+  )
+    return;
+  const competitorId = selected.value.id;
+  const canPresent = () => !disposed && selected.value?.id === competitorId;
+  const result = await post(`/competitors/${competitorId}/collect`, {}, canPresent);
+  if (result && !disposed) {
+    if (canPresent()) notice.value = `已开始重新采集，任务编号 ${result.task_id}。`;
     const pendingCollection: CollectionAttempt = {
       task_id: result.task_id,
       status: result.status ?? "scheduled",
@@ -459,12 +486,14 @@ async function collect() {
       available_result_count: 0,
       updated_at: new Date().toISOString(),
     };
-    pendingCollectionTask = { competitorId: selected.value.id, taskId: result.task_id };
-    selected.value = { ...selected.value, latest_collection: pendingCollection };
+    pendingCollections.set(competitorId, pendingCollection);
     items.value = items.value.map((item) =>
-      item.id === selected.value?.id ? { ...item, latest_collection: pendingCollection } : item,
+      item.id === competitorId ? { ...item, latest_collection: pendingCollection } : item,
     );
-    scheduleCollectionRefresh();
+    if (selected.value?.id === competitorId) {
+      selected.value = { ...selected.value, latest_collection: pendingCollection };
+      scheduleCollectionRefresh();
+    }
   }
 }
 async function createValidationTask(change: NonNullable<Competitor["changes"]>[number]) {
@@ -577,6 +606,9 @@ onMounted(() => {
   void load();
 });
 onUnmounted(() => {
+  disposed = true;
+  readVersion += 1;
+  pendingCollections.clear();
   clearCollectionRefresh();
   window.removeEventListener("keydown", handleEscape);
 });

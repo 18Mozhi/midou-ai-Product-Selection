@@ -30,7 +30,7 @@
     "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
     "apps/web/src/components/CollectionTaskCenter.vue": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
     "apps/web/src/components/CommercialOperationsCenter.vue": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-    "apps/web/src/components/CompetitorMonitor.vue": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7",
+    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
@@ -176,7 +176,7 @@
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "ab0126ce1ada2b323c48a7528648e4f14989062d43b99d3a578e316389d7c4e2",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "34bcb7500816bfbc3e1a1038fefc3b67abef8e60238842d78599a955574eeca5",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "12f45d0ca0790ba78548e9e727ac2eb8e1fad0826a587baf906ac58eae5dc25a",
-    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "dc09dd79de038281f0dd143e1193f137e15bd35dd6416ef627b147a498f25519",
+    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5d214840f0d5cafd16a9950426df836b3c2ba9b5dc211baea435075a27bbb920",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "fd326b3be323ced9b5c2e28b902bc86e189b9f13aa8e9e58fb0aa1030eca3aaa",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b3d6ae6546cedabcbf0f606ad238894a18880ccdc33f5ea22437ce6033ce281c",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "5ac68a4b12a31c45c97a103338ee6be97b7bdecc8f81eb5199f5dd470cbc34ab",
@@ -212,7 +212,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json": "0e3f660c2183fe58464112c5d9899417503efa7e2d24f4fe46efb7dc005f09ae",
     "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/evidence.json": "27712019f5a053e3d04b4e62c1f1b6afb306756bd585ca93252b11c5956b229b",
     "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/evidence.json": "d67da4d14f515bf59f59da74a4a4a82e47eafc6851138acc3dbfe158aa3a034a",
-    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json": "14b8027d0a005893d5f2e241e31cfeb9b3914b8a4ef637d29319e0ce8d43eafa",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json": "0577507732ddbb4d22ad9d8afd3acd31549ff3ad2b8e65b47b58a12f0e415623",
     "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json": "da8e1396af7ceb615d3954213160500ded8ccbd60f3a68524593bd5e704a98f6",
     "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/evidence.json": "61d0c73a4e8c8bc1e7d6e4a4d50029db73cd2a351befa0b076bcf455748444f2",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json": "5130e8b205448f830a2ef0ba82cd8bee02b3dd2ea6d16f35fbca353139dcb982",
@@ -340,8 +340,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "50fde16f8bccaf38e70435ae7fe8476085053b43f6ae7cfd6f17598e97cbdd92",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d4a8313f981c4035717dbf48c2a839dc07e5224f0df32dbb4a2cd7f863a575c3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "6ec2d3eef594e6054b667e8ea0ef9e81bd9112b3909c0c8d80c6960be0787af9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "747eb2f788361d32a9876e2c63d1eade97fbe549b568eac9982306dbd979c84f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "a540f45274bb5ee5d7db6db807353a7050f7bbb261ea6c49d7fe745fe1dec8cf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "2764973e6fb3b82c4f012e7997c17058f72db91ffc3ba17459717312e1fe04bb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "30213312536dbd8f757de6a74016f9005fc38f78a700f2c1105533969583dd0d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
@@ -8573,7 +8573,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 619,
+      "line": 651,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"新建监控规则\" : \"配置第一条阈值\" }}",
       "conditions": [
@@ -8595,7 +8595,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 17,
+          "line": 19,
           "jsonPointer": null
         }
       ],
@@ -8604,7 +8604,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 622,
+      "line": 654,
       "kind": "control",
       "label": "返回竞品列表",
       "conditions": [
@@ -8622,7 +8622,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 18,
+          "line": 20,
           "jsonPointer": null
         }
       ],
@@ -8631,7 +8631,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 625,
+      "line": 657,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -8653,7 +8653,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 19,
+          "line": 21,
           "jsonPointer": null
         }
       ],
@@ -8662,7 +8662,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 656,
+      "line": 688,
       "kind": "control",
       "label": "创建第一条规则",
       "conditions": [
@@ -8692,7 +8692,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 20,
+          "line": 22,
           "jsonPointer": null
         }
       ],
@@ -8701,7 +8701,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 669,
+      "line": 701,
       "kind": "control",
       "label": "配置监控阈值",
       "conditions": [
@@ -8723,7 +8723,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 21,
+          "line": 23,
           "jsonPointer": null
         }
       ],
@@ -8732,7 +8732,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 677,
+      "line": 709,
       "kind": "control",
       "label": "添加竞品监控",
       "conditions": [
@@ -8754,7 +8754,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 22,
+          "line": 24,
           "jsonPointer": null
         }
       ],
@@ -8763,7 +8763,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 680,
+      "line": 712,
       "kind": "control",
       "label": "添加竞品",
       "conditions": [
@@ -8785,7 +8785,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 23,
+          "line": 25,
           "jsonPointer": null
         }
       ],
@@ -8794,7 +8794,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 683,
+      "line": 715,
       "kind": "control",
       "label": "查看监控规则",
       "conditions": [
@@ -8812,7 +8812,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 24,
+          "line": 26,
           "jsonPointer": null
         }
       ],
@@ -8821,7 +8821,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 700,
+      "line": 732,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -8843,7 +8843,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 25,
+          "line": 27,
           "jsonPointer": null
         }
       ],
@@ -8852,7 +8852,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 709,
+      "line": 741,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -8874,7 +8874,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 26,
+          "line": 28,
           "jsonPointer": null
         }
       ],
@@ -8883,7 +8883,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0832ce1b3b353933.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 721,
+      "line": 753,
       "kind": "control",
       "label": "{{ item.title }} {{ item.source_site }} · {{ item.market }} {{ snapshotPrice(item.latest_snapshot) }} 等待首次采集 {{ statusTe",
       "conditions": [
@@ -8909,7 +8909,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 27,
+          "line": 29,
           "jsonPointer": null
         }
       ],
@@ -8918,83 +8918,9 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e39ead97fb52b914.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 741,
+      "line": 773,
       "kind": "control",
       "label": "打开外部来源商品（新窗口）",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-if",
-          "expression": "selected"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 28,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 746,
-      "kind": "control",
-      "label": "{{ selected.status !== \"active\" ? \"恢复后可采集\" : collectionPending ? \"采集中…\" : latest ? \"立即采集\" : \"重新尝试首次采集\" }}",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-if",
-          "expression": "selected"
-        },
-        {
-          "directive": "v-if",
-          "expression": "canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 29,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 761,
-      "kind": "control",
-      "label": "当前竞品规则",
       "conditions": [
         {
           "directive": "v-else",
@@ -9025,11 +8951,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 763,
+      "line": 778,
       "kind": "control",
-      "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
+      "label": "{{ selected.status !== \"active\" ? \"恢复后可采集\" : collectionPending ? \"采集中…\" : latest ? \"立即采集\" : \"重新尝试首次采集\" }}",
       "conditions": [
         {
           "directive": "v-else",
@@ -9064,11 +8990,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 765,
+      "line": 793,
       "kind": "control",
-      "label": "删除竞品监控",
+      "label": "当前竞品规则",
       "conditions": [
         {
           "directive": "v-else",
@@ -9081,10 +9007,6 @@
         {
           "directive": "v-if",
           "expression": "selected"
-        },
-        {
-          "directive": "v-if",
-          "expression": "canManage"
         }
       ],
       "staticRouteIds": [
@@ -9103,11 +9025,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 770,
+      "line": 795,
       "kind": "control",
-      "label": "更多操作",
+      "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
       "conditions": [
         {
           "directive": "v-else",
@@ -9142,11 +9064,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 771,
+      "line": 797,
       "kind": "control",
-      "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
+      "label": "删除竞品监控",
       "conditions": [
         {
           "directive": "v-else",
@@ -9181,11 +9103,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 773,
+      "line": 802,
       "kind": "control",
-      "label": "删除竞品监控",
+      "label": "更多操作",
       "conditions": [
         {
           "directive": "v-else",
@@ -9220,9 +9142,87 @@
       "semanticReviews": []
     },
     {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 803,
+      "kind": "control",
+      "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 36,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 805,
+      "kind": "control",
+      "label": "删除竞品监控",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 37,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c14a7d89545c4bbd.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 826,
+      "line": 858,
       "kind": "control",
       "label": "打开外部 Amazon 商品页（新窗口）",
       "conditions": [
@@ -9252,7 +9252,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 36,
+          "line": 38,
           "jsonPointer": null
         }
       ],
@@ -9261,7 +9261,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3edcc1c1730d78dd.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 885,
+      "line": 917,
       "kind": "control",
       "label": "打开验证任务",
       "conditions": [
@@ -9295,7 +9295,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 37,
+          "line": 39,
           "jsonPointer": null
         }
       ],
@@ -9304,7 +9304,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9f03a53fb65e7c6b.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 889,
+      "line": 921,
       "kind": "control",
       "label": "生成验证任务",
       "conditions": [
@@ -9338,7 +9338,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 38,
+          "line": 40,
           "jsonPointer": null
         }
       ],
@@ -9347,94 +9347,13 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9deedc4f8d67733e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 920,
+      "line": 952,
       "kind": "control",
       "label": "帮助：竞品监控如何工作",
       "conditions": [
         {
           "directive": "v-else",
           "expression": ""
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 39,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 929,
-      "kind": "dialog-definition",
-      "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showCreate && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 62,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 937,
-      "kind": "form-event",
-      "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showCreate && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 40,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 943,
-      "kind": "control",
-      "label": "关闭新建竞品",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showCreate && canManage"
         }
       ],
       "staticRouteIds": [
@@ -9453,9 +9372,90 @@
       "semanticReviews": []
     },
     {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 961,
+      "kind": "dialog-definition",
+      "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 64,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 969,
+      "kind": "form-event",
+      "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 42,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 975,
+      "kind": "control",
+      "label": "关闭新建竞品",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 43,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1009,
+      "line": 1041,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -9477,7 +9477,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 42,
+          "line": 44,
           "jsonPointer": null
         }
       ],
@@ -9486,7 +9486,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1011,
+      "line": 1043,
       "kind": "control",
       "label": "上一步",
       "conditions": [
@@ -9508,7 +9508,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 43,
+          "line": 45,
           "jsonPointer": null
         }
       ],
@@ -9517,94 +9517,13 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1012,
+      "line": 1044,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : createStep === 3 ? \"确认并开始采集\" : \"下一步\" }}",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "showCreate && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 44,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1018,
-      "kind": "dialog-definition",
-      "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showRule && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 63,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1026,
-      "kind": "form-event",
-      "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showRule && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 45,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1032,
-      "kind": "control",
-      "label": "关闭告警规则",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showRule && canManage"
         }
       ],
       "staticRouteIds": [
@@ -9623,11 +9542,38 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1075,
-      "kind": "control",
-      "label": "取消",
+      "line": 1050,
+      "kind": "dialog-definition",
+      "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showRule && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 65,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1058,
+      "kind": "form-event",
+      "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
         {
           "directive": "v-if",
@@ -9650,11 +9596,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1076,
+      "line": 1064,
       "kind": "control",
-      "label": "启用规则",
+      "label": "关闭告警规则",
       "conditions": [
         {
           "directive": "v-if",
@@ -9677,42 +9623,15 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1080,
-      "kind": "dialog-definition",
-      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
+      "line": 1107,
+      "kind": "control",
+      "label": "取消",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "deleting && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 64,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1087,
-      "kind": "form-event",
-      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "deleting && canManage"
+          "expression": "showRule && canManage"
         }
       ],
       "staticRouteIds": [
@@ -9731,15 +9650,15 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1093,
+      "line": 1108,
       "kind": "control",
-      "label": "关闭删除确认",
+      "label": "启用规则",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "deleting && canManage"
+          "expression": "showRule && canManage"
         }
       ],
       "staticRouteIds": [
@@ -9758,11 +9677,38 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1115,
-      "kind": "control",
-      "label": "取消",
+      "line": 1112,
+      "kind": "dialog-definition",
+      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 66,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1119,
+      "kind": "form-event",
+      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
       "conditions": [
         {
           "directive": "v-if",
@@ -9785,9 +9731,63 @@
       "semanticReviews": []
     },
     {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1125,
+      "kind": "control",
+      "label": "关闭删除确认",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 52,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1147,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [
+        "P19",
+        "P20"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 53,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1116,
+      "line": 1148,
       "kind": "control",
       "label": "确认删除",
       "conditions": [
@@ -9805,7 +9805,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 52,
+          "line": 54,
           "jsonPointer": null
         }
       ],

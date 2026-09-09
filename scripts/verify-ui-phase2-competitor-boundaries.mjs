@@ -6,8 +6,8 @@ import path from "node:path";
 import ts from "typescript";
 import { computed, effectScope, nextTick, reactive, ref, watch } from "vue";
 
-// Characterize known source gaps before redesign. A passing UNFIXED assertion is
-// a reproduction, never the desired product behavior, mounted Vue or server proof.
+// Regress fixed ownership boundaries and characterize remaining source gaps.
+// UNFIXED assertions are reproductions, never the desired product behavior.
 export async function verifyCompetitorBoundaries() {
   const file = "apps/web/src/components/CompetitorMonitor.vue";
   const source = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
@@ -174,13 +174,21 @@ export async function verifyCompetitorBoundaries() {
     assert.equal(s.selected.value.id, b.id);
     late.resolve(response(a));
     await firstRead;
-    assert.equal(s.selected.value.id, a.id);
-    assert.equal(s.routes.at(-1).query.competitor, a.id);
+    assert.equal(s.selected.value.id, b.id);
+    assert.equal(s.routes.at(-1).query.competitor, b.id);
+    late = deferred();
+    s.replies.push(late.promise, response(b));
+    const failedRead = s.detail(a);
+    await s.detail(b);
+    late.resolve(new Error("late A failure"));
+    await failedRead;
+    assert.equal(s.selected.value.id, b.id);
+    assert.equal(s.notice.value, "");
     checks.push({
       id: "CP-B02",
-      status: "UNFIXED-reproduced",
+      status: "fixed-source-regression",
       result:
-        "Late A detail replaces already-read B selection and competitor query; no read generation/abort guard.",
+        "Late A detail success/failure cannot replace newer B selection/query/feedback; read generation enforced.",
     });
 
     s = setup();
@@ -196,20 +204,36 @@ export async function verifyCompetitorBoundaries() {
     assert.equal(s.calls[0].url, "/competitors/object-a/collect");
     assert.deepEqual(s.calls[0].options.body, {});
     assert.equal(s.selected.value.id, b.id);
-    assert.equal(s.selected.value.latest_collection.task_id, "task-for-a");
+    assert.equal(s.selected.value.latest_collection, null);
+    assert.equal(s.notice.value, "");
     assert.equal(
-      s.items.value.find((row) => row.id === b.id).latest_collection.task_id,
+      s.items.value.find((row) => row.id === a.id).latest_collection.task_id,
       "task-for-a",
     );
-    assert.equal(s.items.value.find((row) => row.id === a.id).latest_collection, null);
+    assert.equal(s.items.value.find((row) => row.id === b.id).latest_collection, null);
+    assert.equal(s.timers.size, 0);
+    s.replies.push(response({ task_id: "task-for-b", status: "queued" }));
+    await s.collect();
+    s.replies.push(response(a));
+    await s.detail(a);
+    assert.equal(s.selected.value.latest_collection.task_id, "task-for-a");
+    s.replies.push(
+      response({ ...a, latest_collection: { task_id: "task-for-a", status: "succeeded" } }),
+    );
+    await s.detail(a);
+    assert.equal(s.selected.value.latest_collection.status, "succeeded");
+    assert.equal(s.timers.size, 0);
+    s.replies.push(response(b));
+    await s.detail(b);
+    assert.equal(s.selected.value.latest_collection.task_id, "task-for-b");
     assert.equal(s.timers.size, 1);
     s.unmounts.forEach((fn) => fn());
     assert.equal(s.timers.size, 0);
     checks.push({
       id: "CP-B03",
-      status: "UNFIXED-reproduced",
+      status: "fixed-source-regression",
       result:
-        "Collect POST remains bound to A, but after selection B its result is attached to B and schedules an inert poll; not server collection of B.",
+        "Collect A updates only A, without B feedback/poll; A and B pending tasks survive independent stale details, exact terminal A clears only A, unmount clears inert timer.",
     });
 
     s = setup();

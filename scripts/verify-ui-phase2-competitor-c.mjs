@@ -5,6 +5,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import { verifyCompetitorSource } from "./verify-ui-phase2-competitor-source.mjs";
+import { verifyCompetitorBoundaries } from "./verify-ui-phase2-competitor-boundaries.mjs";
 
 const root = "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c";
 const capture = process.argv.includes("--capture");
@@ -18,9 +19,11 @@ const files = [
   "apps/api/src/mysql-competitor-repository.ts",
   "apps/worker/src/competitor-monitor-worker.ts",
   "tests/e2e/m04-05-competitors.spec.ts",
+  "tests/e2e/ui-phase2-competitor-races.spec.ts",
   "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md",
   "scripts/verify-ui-phase2-competitor-source.mjs",
+  "scripts/verify-ui-phase2-competitor-boundaries.mjs",
   "scripts/verify-ui-phase2-competitor-c.mjs",
   ...["index.html", "competitor.css", "competitor.js"].map((f) => root + "/" + f),
 ];
@@ -30,6 +33,7 @@ const sourceHashes = Object.fromEntries(
   ),
 );
 const sourceProof = await verifyCompetitorSource();
+const boundaryProof = await verifyCompetitorBoundaries();
 let old;
 if (!capture) {
   old = JSON.parse(await readFile(root + "/evidence.json", "utf8"));
@@ -328,6 +332,7 @@ try {
       baselineRevision: "7e589620ee9b321c489754afa739fba109c302f1",
       sourceHashes,
       sourceProof,
+      boundaryProof,
       scenes,
       screenshots,
       actionIds: [...actions].sort(),
@@ -336,7 +341,7 @@ try {
       http,
       limits: [
         "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
-        "Current source gaps are reproduced or cited, not fixed. No global action/dialog denominator or approval promotion.",
+        "CP-B02/B03 ownership is locally fixed and source-regressed; other source gaps remain. No global action/dialog denominator or approval promotion.",
         "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
         "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",
       ],

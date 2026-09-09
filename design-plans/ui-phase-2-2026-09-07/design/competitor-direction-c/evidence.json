@@ -4,17 +4,19 @@
   "approval": "pending-user-review",
   "baselineRevision": "7e589620ee9b321c489754afa739fba109c302f1",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7",
+    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
     "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
     "apps/api/src/competitor-service.ts": "b825619a4d97d11cdf07ea1fa147f4bf72ac9380454eaa2a3255bf2dd13a432e",
     "apps/api/src/competitor-routes.ts": "e2b3ba66db6d383b3ef062dab75653d9c47c2e573a6774b6a711644738c26b1d",
     "apps/api/src/mysql-competitor-repository.ts": "0d45027d3b6e0e5b6ebd7faf8bf6926713f21f833d81ff7d64259bc544f1e509",
     "apps/worker/src/competitor-monitor-worker.ts": "861ded5eab7f8a2046fedeb300f7d58023963e22793cfae055f5a584aafb044c",
     "tests/e2e/m04-05-competitors.spec.ts": "6ac9a2c24edbd0cfdf8e3f6f38f0904109aff1742d1aa1c8253273a6e8675023",
-    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "dc09dd79de038281f0dd143e1193f137e15bd35dd6416ef627b147a498f25519",
+    "tests/e2e/ui-phase2-competitor-races.spec.ts": "48ebbdbd7a03d61b04bb982d251f206c45bba45d88c9ac4c28d79d6384a0ca28",
+    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5d214840f0d5cafd16a9950426df836b3c2ba9b5dc211baea435075a27bbb920",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "scripts/verify-ui-phase2-competitor-source.mjs": "66f247271940138c9ce44b476c693acc67731d908e902d0205b40aab382aeeb5",
-    "scripts/verify-ui-phase2-competitor-c.mjs": "6ff4ca64478349a2691dd38364e6f6fdbe4968f537ed72fa0527f0548145729c",
+    "scripts/verify-ui-phase2-competitor-boundaries.mjs": "2125382dd972924c4ba00da4c20abd75048ab0a1ee9b4467b9b12cca598a1df7",
+    "scripts/verify-ui-phase2-competitor-c.mjs": "04c90a0ac709e9da2638b5fcea8489f0257d2cf3e5c3d7c4e7a529e23ba3d18c",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/index.html": "694070719fadf31f425cbd08c8afedbec8b3cb485d274f86bca10e6b6e0c9aa2",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css": "a6096ebdf724d5ff35e3adae67aaf8ee3c910f732b38a1c880e36ee526d2a3ac",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "95e62209d921b3b6fd8925e9f92a4f402c54d9cbbbde75dc298865882f31727d"
@@ -32,6 +34,38 @@
       "deep-linked selected item remains visible despite search; new search clears competitor/create query"
     ],
     "limits": "Real setup functions only; readiness helper inert, no template mount, HTTP, authorization, SQL, worker, notification, history lifecycle or race closure."
+  },
+  "boundaryProof": {
+    "source": "apps/web/src/components/CompetitorMonitor.vue",
+    "sourceSha256": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+    "checks": [
+      {
+        "id": "CP-B01",
+        "status": "UNFIXED-reproduced",
+        "result": "P20 manager create+competitor query opens both flags; Escape closes rule then create. P19 only create. Read-only opens neither; no writes."
+      },
+      {
+        "id": "CP-B02",
+        "status": "fixed-source-regression",
+        "result": "Late A detail success/failure cannot replace newer B selection/query/feedback; read generation enforced."
+      },
+      {
+        "id": "CP-B03",
+        "status": "fixed-source-regression",
+        "result": "Collect A updates only A, without B feedback/poll; A and B pending tasks survive independent stale details, exact terminal A clears only A, unmount clears inert timer."
+      },
+      {
+        "id": "CP-B04",
+        "status": "UNFIXED-reproduced",
+        "result": "Function-level A delete completion clears a newer B dialog/draft and reload clears success notice. Only A DELETE intended; DOM reachability/SQL unproven."
+      },
+      {
+        "id": "CP-B05",
+        "status": "UNFIXED-reproduced",
+        "result": "Direct re-entry of createRule issues two request intents despite busy; disabled button, actual Enter/double-click and server idempotency are not tested."
+      }
+    ],
+    "limits": "Actual setup with inert router/transport/timers; no Vue mount, real permission/HTTP/idempotency/SQL/Worker/production assertion. UNFIXED assertions must be replaced by desired-behavior regressions when implementing fixes."
   },
   "scenes": [
     {
@@ -1064,7 +1098,7 @@
   "http": [],
   "limits": [
     "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
-    "Current source gaps are reproduced or cited, not fixed. No global action/dialog denominator or approval promotion.",
+    "CP-B02/B03 ownership is locally fixed and source-regressed; other source gaps remain. No global action/dialog denominator or approval promotion.",
     "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
     "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination."
   ]

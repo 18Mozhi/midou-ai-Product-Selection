@@ -1,5 +1,17 @@
 # P19/P20：按钮、弹窗与异步结果归属核对
 
+## 当前实施：CP-B02/B03结果归属修复
+
+本地Vue已增加读取代次：旧列表/规则读取和旧详情的成功、失败均不得覆盖新读取；卸载后丢弃晚到结果。采集提交时固定competitorId，待确认任务改为按竞品ID分别保存；响应只更新原对象，在其他对象上不显示该请求的成功/失败提示，也不启动该对象的轮询。只在返回相同task_id的终态时清除对应待确认项，A/B不能互相覆盖。采集函数增加与原按钮相同的busy/pending早退条件。
+
+新增`tests/e2e/ui-phase2-competitor-races.spec.ts`使用真实Vue/路由和隔离响应。旧版本先失败证明晚到成功覆盖B、旧错误显示在B，以及采集结果误挂B；修复后做双端回归。完整结果见[PROGRESS](PROGRESS.md)。源验证器CP-B02/B03已改为`fixed-source-regression`，不再把错误行为当通过条件；CP-B01/B04/B05仍明确UNFIXED。
+
+本次没有改template/CSS、后端API请求或响应、权限、幂等、数据库/迁移、配置和依赖。已受理任务不会因切页被撤销；未显示对象的本地待确认项不是新的持久化数据。KeepAlive停用/重入、scope切换、history反向同步及另外三组问题尚未关闭，不宣称CP-G04/05整体完成。旧图仍待用户审核，局部行为修复不是C重设计上线。
+
+使用不增加设置：用户照常切换竞品即可。当前没有部署；后续仅随前端静态运行包发布，发布后刷新浏览器加载新资源；本次无Node/Worker/Python配置变更或重启要求。可复验`node scripts/verify-ui-phase2-competitor-boundaries.mjs`及`npm run test:e2e -- tests/e2e/ui-phase2-competitor-races.spec.ts`；标准E2E会管理本地测试服务，不连接生产。
+
+## f0ed5f2f首次复现记录（以下为改前证据）
+
 2026-09-09；起点 main/8aca14b5。使用 requirement-to-implementation 将设计动作追到真实函数，不改现有视觉或业务行为。P16整体布局批准仍只适用于该页布局，不能转授给本页。
 
 ## 本轮交付与审核入口

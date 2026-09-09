@@ -1,5 +1,7 @@
 # P19/P20 竞品目录与监控规则 · C 方向
 
+2026-09-09增量复验：真实Vue的CP-B02/B03读/采集归属已局部修复，新增双端竞态回归；不改变本包HTML/CSS/JS或用户批准。旧来源基准见Git f0ed5f2f，Vue旧LF SHA256为49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7；本次按实际源码和永久回归重跑原型验证/108图采集后记录新来源，而非把旧图哈希冒充当前执行。boundaryProof区分两项fixed-source-regression和三项UNFIXED；旧“未修复”文字仅对应尚未关闭项，完整结果见../../PROGRESS.md。
+
 版本 COMPETITOR-C-r1；起始基线 7e589620；状态：具体图稿待审。用户选择C只确定方向，不代表批准本包、允许上线或完成73页。
 
 [打开交互原型](index.html) · [打开全部图片图册](gallery.html) · [源与图片证据](evidence.json)

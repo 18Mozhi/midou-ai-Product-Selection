@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · CP-B02/B03真实Vue结果归属修复
+
+从干净main/f0ed5f2f继续，前轮为实质证据进展。按requirement-to-implementation、ui-skills-root及项目既有永久测试交付要求推进实际Vue修复；AGENTS→Feature Map→蓝图3.5→路由装配→组件/API客户端已核对。没有迁入待审C布局。CompetitorMonitor增加列表/详情共用读代次及卸载作废；采集固定提交对象ID，待确认任务按对象分别保存，只有匹配task_id终态清除本对象。旧采集成功/失败不在新对象显示提示，不给新对象挂任务或启动轮询；与原DOM一致的busy/pending在函数入口也早退。template与改前逐字LF对比相同，CSS未改，当前Vue LF SHA256为85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657。
+
+新增tests/e2e/ui-phase2-competitor-races.spec.ts，真实Vue/路由与隔离响应。改前桌面先复现晚到详情成功把B切A、采集结果误挂B；初始503错误例因共享GET自动重试而过早通过，不计有效证明。改404最终错误后单独重跑，正确失败于旧错误仍显示在B。临时配置首次defineConfig合并保留了原webServer数组，改为对象覆盖；随后发现直接命令以临时配置目录启动，显式设置repo cwd后恢复。没有更改全局Playwright配置或安装依赖。修复后首批6个双端例通过；补采集失败及A→B→A读代次4例通过；最后新5实例+原18实例×双端共46例全部通过（35.1s）。它们不连接实际采集、SQL、真实RBAC/幂等或生产。
+
+源九组既有检查通过；边界五组中CP-B02/B03改为fixed-source-regression，额外验证A/B两个待确认任务互不覆盖、旧详情保留受理状态、A匹配终态只清A。CP-B01双query弹窗、CP-B04删除结果/新草稿、CP-B05规则函数重入仍UNFIXED，不用绿色测试关闭它们。KeepAlive停用/重入、scope切换及history反向同步也未完整验收，CP-G04/05不整体关闭。
+
+build:web包含vue-tsc、Vite（408模块）和浏览器辅助包构建通过，frontend-budget、verify:docs、runtime-docs、390文件static-analysis及format:check通过。competitor-c原型重新执行47场景/108PNG、双端交互及12屏宽×5代表场景，HTTP/errors均0。108图与f0ed5f2f原图SHA逐项完全相同；只更新本包来源证据，新增永久竞态测试及边界验证器绑定并写入boundaryProof。旧Vue hash/原始证据可由Git f0ed5f2f追溯，README明确这次重验，不静默以改前证据冒充当前执行。
+
+没有改API/OpenAPI字段、请求方法、同源/幂等/权限、后端/Worker/Python、数据库/迁移、env/配置/依赖；OpenAPI无需虚构字段更新。报告同步操作与运维：照常切换对象，无新设置；未部署，未来随前端静态包发布后刷新浏览器即可，本次无后台重启要求。新测试/验证器与报告是永久交付，不删除；临时目录仅output/playwright/ui-phase2-competitor-races-20260909，创建前不存在。46例和图稿浏览器均已退出，4101/5173无监听；清理结果及最终审计另记下段。全站语义仍19页，逐页批准/完整C实施/宝塔部署签收继续进行。
+
+收口审计：动作19页/396源位置/354组不变，1478当前候选均有引用；源行移动使报告定位刷新，不新增业务动作。设计76包9650PNG、842独立来源/1447绑定，漂移及未登记图均0。差异检查通过，原108PNG字节不变、无多余图暂存。清理命令在执行前被策略拒绝，未重试或换工具绕过；随后只读核实临时目录中仅playwright.config.ts（859字节）和results/.last-run.json（45字节），另1个results子目录，均非ReparsePoint。两文件仍留在D:\项目工程文件\vue\curson\工具\智能选品\output\playwright\ui-phase2-competitor-races-20260909，忽略且不提交，需在允许的环境手动清理；没有实际删除，也不声称清理完成。
+
 ## 2026-09-09 · P19/P20异步与弹窗边界复现
 
 从干净main/8aca14b5继续；P16布局已通过，具体按钮/字段/外观仍待审核。ui-skills-root用于路由技能；读取improve-ui后发现保留旧身份的约束不适合彻底重构，明确不采用，改用requirement-to-implementation追实际业务与测试。读取AGENTS、Feature Map、蓝图3.5、真实route装配、CompetitorMonitor、UiStatePanel、MonitoringReadinessStrip及既有合同/两页规格/验证器。
