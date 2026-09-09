@@ -567,6 +567,30 @@
         {
           "package": "competitor-direction-c",
           "scene": "rule-busy"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-default"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-hover"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-focus"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-pressed"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-busy"
         }
       ],
       "testReferences": [
@@ -577,14 +601,46 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "CP-B05函数重入仍未修；不添加币种/版本字段或规则编辑能力；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+      "remaining": "已补本页代表控件六态的双端实拍与逐selector关联，待用户审核，不是全部变体或实际Vue通过。代表工作区价格规则；disabled与busy共用原busy条件。指定竞品/其他指标/库存/字段/主题仍待；函数重入源风险没有因离线忙碌守卫关闭。",
+      "visualStateReferences": {
+        "default": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-default",
+          "selector": "[data-action=\"CP-RULE-SUBMIT\"]"
+        },
+        "hover": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-hover",
+          "selector": "[data-action=\"CP-RULE-SUBMIT\"]"
+        },
+        "focus": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-focus",
+          "selector": "[data-action=\"CP-RULE-SUBMIT\"]"
+        },
+        "pressed": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-pressed",
+          "selector": "[data-action=\"CP-RULE-SUBMIT\"]"
+        },
+        "disabled": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-disabled",
+          "selector": "[data-action=\"CP-RULE-SUBMIT\"]"
+        },
+        "busy": {
+          "package": "competitor-direction-c",
+          "scene": "control-rule-busy",
+          "selector": "[data-action=\"CP-RULE-SUBMIT\"]"
+        }
+      }
     },
     {
       "actionId": "CP-RULE-CLOSE",

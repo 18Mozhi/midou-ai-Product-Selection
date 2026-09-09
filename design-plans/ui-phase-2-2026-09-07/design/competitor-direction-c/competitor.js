@@ -10,6 +10,7 @@
     ["directory", "P19", "竞品目录与证据"],
     ["partial", "P19", "字段缺失与币种未知"],
     ["pending", "P19", "首次采集排队"],
+    ["collect-busy", "P19", "采集请求提交中"],
     ["running", "P19", "采集进行中"],
     ["blocked-captcha", "P19", "验证码阻塞"],
     ["terminal", "P19", "采集失败无快照"],
@@ -121,6 +122,7 @@
     step = 1,
     opener,
     busy = false,
+    collectionSubmitting = false,
     feedback = "",
     formError = "",
     taskCreated = {};
@@ -128,8 +130,8 @@
     ruleForm,
     reason = "";
   const intents = [];
-  const button = (id, text, cls = "", disabled = false) =>
-    `<button type="button" data-action="${id}" class="${cls}" ${disabled ? "disabled" : ""}>${text}</button>`;
+  const button = (id, text, cls = "", disabled = false, submitting = false) =>
+    `<button type="button" data-action="${id}" class="${cls}" ${disabled ? "disabled" : ""} ${submitting ? 'aria-busy="true"' : ""}>${text}</button>`;
   const link = (id, text, href) => `<a data-action="${id}" class="link" href="${href}">${text}</a>`;
   const badge = (text, good = false) => `<span class="badge ${good ? "good" : ""}">${text}</span>`;
   const is = (...ids) => ids.includes(current.id);
@@ -147,6 +149,7 @@
     deep = is("deep-link");
     modalKind = "";
     busy = false;
+    collectionSubmitting = is("collect-busy");
     feedback = "";
     formError = "";
     taskCreated = {};
@@ -246,7 +249,7 @@
       }[current.id];
       status = note(text[0], text[1] + "<br><code>任务 synthetic-collection-19</code>");
     }
-    return `<div class="detail-head"><div><p class="meta">${selected.market} · ${selected.source_site} / ${selected.external_id}</p><h2>${esc(selected.title)}</h2><a class="source" data-action="CP-SOURCE" href="${sourceUrl}" target="_blank" rel="noopener noreferrer">打开来源商品 ↗ <span class="meta">（新窗口）</span></a></div>${badge(selected.status, selected.status === "监控中")}</div><div class="actions">${manager() ? button("CP-COLLECT", selected.status === "已暂停" ? "恢复后可采集" : pending ? "采集中…" : noSnapshot ? "重新尝试首次采集" : "立即采集", "primary", pending || selected.status === "已暂停") : ""}${link("CP-RULE-NAV-CURRENT", "当前竞品规则", "/competitors/monitoring-rules?competitor=" + selected.id)}${manager() ? `<details data-action="CP-MORE"><summary>更多操作</summary><div class="menu">${button("CP-TOGGLE", selected.status === "已暂停" ? "恢复监控" : "暂停监控")}${button("CP-DELETE-OPEN", "删除竞品监控", "danger")}</div></details>` : ""}</div>${status}${is("detail-error") ? note("详情暂不可用", "目录信息保留；不把旧详情标成刚刚更新。", "error") + button("CP-DETAIL-RETRY", "重读当前详情") : ""}${noSnapshot ? emptyPanel("等待第一个真实快照", "价格、排名、评论、评分和库存尚未采到，不用示例值补齐。") : `<section class="evidence" aria-label="当前快照"><p class="meta">当前快照 / 原始采集事实</p><p class="price">${partial ? "价格未采到" : esc(selected.price)}</p><div class="facts"><div><small>排名</small><b>${partial ? "未采到" : "#126"}</b></div><div><small>评论 / 评分</small><b>${partial ? "0 / 未采到" : "86 / 4.3"}</b></div><div><small>库存</small><b>${partial ? "未知" : "有货"}</b></div></div><footer><span class="meta">${partial ? "来源异常 · 时效未知 · 币种未采到" : "来源正常 · 新鲜"} · 2026-09-09 08:00</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></footer></section><section aria-label="变化与提醒"><div class="section-heading"><h3>最近变化</h3><small>事实、提醒与任务分别展示</small></div><article class="event"><div class="event-title"><strong>价格变化</strong><time class="meta">09-09 08:00</time></div><p class="delta">${partial ? "币种未采到" : second ? "GBP" : "USD"} ${second ? "35.00 → 32.50" : "30.00 → 28.00"}</p><p>影响说明：记录到价格下降，需结合原始证据复核。</p><div class="status-line">${badge(is("alerts-mixed") ? "系统通知：发送失败" : "系统通知：待发送")}${badge(is("alerts-mixed") ? "系统任务：已创建" : "系统任务：待创建")}</div><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code>${taskCreated[selected.id + ":price"] ? link("CP-TASK-LINK", "打开验证任务", "/tasks?task=" + taskId) : taskPermission() ? button("CP-TASK-CREATE", "生成验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article><article class="event"><div class="event-title"><strong>评论数变化</strong><time class="meta">09-08 16:00</time></div><p>85 → 86</p><p class="meta">说明：评论数增加 1；未匹配到触发提醒记录。</p>${badge("无关联提醒 · 不声称已通知")}<code>证据 synthetic-evidence-18</code>${taskCreated[selected.id + ":review"] ? link("CP-TASK-LINK", "打开评论验证任务", "/tasks?task=" + taskId) : taskPermission() ? button("CP-TASK-CREATE-REVIEW", "生成评论验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article></section>`}<section class="history" aria-label="采集快照"><div class="section-heading"><h3>采集快照</h3><small>${is("history-window") ? "返回窗口 100 条 / 最多 100 条" : noSnapshot ? "尚无快照" : "样本返回 2 条 / 最多 100 条"}</small></div>${noSnapshot ? "<p class='meta'>首次真实快照尚未形成。</p>" : `<div class="snapshot"><strong>${partial ? "价格未采到" : esc(selected.price)}</strong><time class="meta">2026-09-09 08:00</time><span>${partial ? "库存未知" : "有货"} · 评分 ${partial ? "未采到" : "4.3"} · 评论 ${partial ? "0" : "86"}</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></div><div class="snapshot"><strong>${second ? "GBP 35.00" : "USD 30.00"}</strong><time class="meta">2026-09-08 08:00</time><span>有货 · 评分 4.3 · 评论 85</span><code>证据 synthetic-evidence-18</code></div><p class="meta">${is("history-window") ? "中间 98 条在本静态图中省略，不是完整长列表验证。" : ""}返回窗口最早快照，不一定是全历史首次基线。变化最多返回 200 条、提醒最多 100 条。</p>`}</section>`;
+    return `<div class="detail-head"><div><p class="meta">${selected.market} · ${selected.source_site} / ${selected.external_id}</p><h2>${esc(selected.title)}</h2><a class="source" data-action="CP-SOURCE" href="${sourceUrl}" target="_blank" rel="noopener noreferrer">打开来源商品 ↗ <span class="meta">（新窗口）</span></a></div>${badge(selected.status, selected.status === "监控中")}</div><div class="actions">${manager() ? button("CP-COLLECT", collectionSubmitting ? "正在提交采集…" : selected.status === "已暂停" ? "恢复后可采集" : pending ? "采集中…" : noSnapshot ? "重新尝试首次采集" : "立即采集", "primary", collectionSubmitting || pending || selected.status === "已暂停", collectionSubmitting) : ""}${link("CP-RULE-NAV-CURRENT", "当前竞品规则", "/competitors/monitoring-rules?competitor=" + selected.id)}${manager() ? `<details data-action="CP-MORE"><summary>更多操作</summary><div class="menu">${button("CP-TOGGLE", selected.status === "已暂停" ? "恢复监控" : "暂停监控")}${button("CP-DELETE-OPEN", "删除竞品监控", "danger")}</div></details>` : ""}</div>${status}${is("detail-error") ? note("详情暂不可用", "目录信息保留；不把旧详情标成刚刚更新。", "error") + button("CP-DETAIL-RETRY", "重读当前详情") : ""}${noSnapshot ? emptyPanel("等待第一个真实快照", "价格、排名、评论、评分和库存尚未采到，不用示例值补齐。") : `<section class="evidence" aria-label="当前快照"><p class="meta">当前快照 / 原始采集事实</p><p class="price">${partial ? "价格未采到" : esc(selected.price)}</p><div class="facts"><div><small>排名</small><b>${partial ? "未采到" : "#126"}</b></div><div><small>评论 / 评分</small><b>${partial ? "0 / 未采到" : "86 / 4.3"}</b></div><div><small>库存</small><b>${partial ? "未知" : "有货"}</b></div></div><footer><span class="meta">${partial ? "来源异常 · 时效未知 · 币种未采到" : "来源正常 · 新鲜"} · 2026-09-09 08:00</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></footer></section><section aria-label="变化与提醒"><div class="section-heading"><h3>最近变化</h3><small>事实、提醒与任务分别展示</small></div><article class="event"><div class="event-title"><strong>价格变化</strong><time class="meta">09-09 08:00</time></div><p class="delta">${partial ? "币种未采到" : second ? "GBP" : "USD"} ${second ? "35.00 → 32.50" : "30.00 → 28.00"}</p><p>影响说明：记录到价格下降，需结合原始证据复核。</p><div class="status-line">${badge(is("alerts-mixed") ? "系统通知：发送失败" : "系统通知：待发送")}${badge(is("alerts-mixed") ? "系统任务：已创建" : "系统任务：待创建")}</div><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code>${taskCreated[selected.id + ":price"] ? link("CP-TASK-LINK", "打开验证任务", "/tasks?task=" + taskId) : taskPermission() ? button("CP-TASK-CREATE", "生成验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article><article class="event"><div class="event-title"><strong>评论数变化</strong><time class="meta">09-08 16:00</time></div><p>85 → 86</p><p class="meta">说明：评论数增加 1；未匹配到触发提醒记录。</p>${badge("无关联提醒 · 不声称已通知")}<code>证据 synthetic-evidence-18</code>${taskCreated[selected.id + ":review"] ? link("CP-TASK-LINK", "打开评论验证任务", "/tasks?task=" + taskId) : taskPermission() ? button("CP-TASK-CREATE-REVIEW", "生成评论验证任务") : "<p class='meta'>只读：无创建任务权限</p>"}</article></section>`}<section class="history" aria-label="采集快照"><div class="section-heading"><h3>采集快照</h3><small>${is("history-window") ? "返回窗口 100 条 / 最多 100 条" : noSnapshot ? "尚无快照" : "样本返回 2 条 / 最多 100 条"}</small></div>${noSnapshot ? "<p class='meta'>首次真实快照尚未形成。</p>" : `<div class="snapshot"><strong>${partial ? "价格未采到" : esc(selected.price)}</strong><time class="meta">2026-09-09 08:00</time><span>${partial ? "库存未知" : "有货"} · 评分 ${partial ? "未采到" : "4.3"} · 评论 ${partial ? "0" : "86"}</span><code>证据 synthetic-evidence-${second ? "uk" : "us"}-19</code></div><div class="snapshot"><strong>${second ? "GBP 35.00" : "USD 30.00"}</strong><time class="meta">2026-09-08 08:00</time><span>有货 · 评分 4.3 · 评论 85</span><code>证据 synthetic-evidence-18</code></div><p class="meta">${is("history-window") ? "中间 98 条在本静态图中省略，不是完整长列表验证。" : ""}返回窗口最早快照，不一定是全历史首次基线。变化最多返回 200 条、提醒最多 100 条。</p>`}</section>`;
   }
   function ruleDirectory() {
     const rows = is("rules-empty") ? [] : is("rules-disabled") ? [rules[2]] : rules;
@@ -339,7 +342,7 @@
     } else
       body = `${note("停止监控，保留历史", `删除“${esc(selected.title)}”后不再继续监控；已有快照与审计记录保留。`, "error")}<p class="meta">当前版本 7 · 不永久删除历史证据</p><label>删除原因<textarea name="reason" required maxlength="500" ${busy ? "disabled" : ""}>${esc(reason)}</textarea></label>`;
     $("#modal").innerHTML =
-      `<form><header><div><p class="eyebrow">${create ? "建立观察对象" : rule ? "明确范围与阈值" : "危险操作 / 保留审计"}</p><h2 id="dialog-title">${create ? "添加竞品监控" : rule ? "新建监控规则" : "删除竞品监控"}</h2></div>${button(id + "-CLOSE", "×", "", busy)}</header>${body}${formError ? `<div class="notice error" role="alert">${esc(formError)}<br><code>synthetic-request-19</code></div>` : ""}<footer>${create && step > 1 ? button("CP-CREATE-PREVIOUS", "上一步", "", busy) : button(id + "-CLOSE", "取消", "", busy)}<button type="submit" data-action="${id}-SUBMIT" class="primary ${!create && !rule ? "danger" : ""}" ${busy ? "disabled" : ""}>${busy ? "提交中…" : create ? (step === 3 ? "确认并开始采集" : "下一步") : rule ? "启用规则" : "确认删除"}</button></footer></form>`;
+      `<form ${busy ? 'aria-busy="true"' : ""}><header><div><p class="eyebrow">${create ? "建立观察对象" : rule ? "明确范围与阈值" : "危险操作 / 保留审计"}</p><h2 id="dialog-title">${create ? "添加竞品监控" : rule ? "新建监控规则" : "删除竞品监控"}</h2></div>${button(id + "-CLOSE", "×", "", busy)}</header>${body}${formError ? `<div class="notice error" role="alert">${esc(formError)}<br><code>synthetic-request-19</code></div>` : ""}<footer>${create && step > 1 ? button("CP-CREATE-PREVIOUS", "上一步", "", busy) : button(id + "-CLOSE", "取消", "", busy)}<button type="submit" data-action="${id}-SUBMIT" class="primary ${!create && !rule ? "danger" : ""}" ${busy ? 'disabled aria-busy="true"' : ""}>${busy ? (create ? "正在添加…" : rule ? "正在启用…" : "正在删除…") : create ? (step === 3 ? "确认并开始采集" : "下一步") : rule ? "启用规则" : "确认删除"}</button></footer></form>`;
     $("#modal header button").setAttribute("aria-label", "关闭" + $("#dialog-title").textContent);
   }
   function intent(path, method, body) {
@@ -442,6 +445,11 @@
         expected_revision: 7,
         reason: reason.trim(),
       });
+    if (window.competitorReview.outcome === "pending") {
+      busy = true;
+      renderModal();
+      return;
+    }
     if (window.competitorReview.outcome === "error") {
       formError = "隔离失败样本：输入已保留，没有实际发送请求。";
       renderModal();
@@ -479,7 +487,13 @@
       render();
       $("#search").focus();
     } else if (id === "CP-COLLECT") {
+      if (collectionSubmitting) return;
       intent("/competitors/" + selected.id + "/collect", "POST", {});
+      if (window.competitorReview.outcome === "pending") {
+        collectionSubmitting = true;
+        render();
+        return;
+      }
       feedback = "隔离受理演示：采集请求排队，不代表已采集成功。";
       render();
     } else if (id === "CP-TOGGLE") {

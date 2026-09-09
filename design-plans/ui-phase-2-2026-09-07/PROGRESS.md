@@ -1,5 +1,21 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P19/P20四个关键提交按钮六态图
+
+从干净main/ce1adebc继续；前轮动作映射为实质进展。使用ui-skills-root/frontend-design沿用户C方向，Playwright复用既有本地脚本/依赖，未新建测试框架或安装依赖。读取AGENTS、Feature Map、蓝图3.5、C方向决策、实际CompetitorMonitor忙碌/采集/表单条件与两个动作清单。
+
+本包增加可读灰底禁用、深蓝3px焦点、按下内阴影、危险按钮深红悬停；busy文字和aria-busy/进度符号不只依赖颜色或动画。新增collect-busy场景分离POST在途与已受理pending/running；离线点击支持outcome=pending后真实进入busy，重入不增加内存意图。三个弹窗disabled与busy共用既有busy条件，不新增业务校验禁用；关闭/字段锁定仍是原待审提案，未改真实Vue。
+
+四控件为P19采集、创建第三步、最终删除及P20工作区价格启用；24代表状态×1440/390＝48新图，加采集POST在途全页双端2图。本包现在48全页场景、158PNG，旧图因CSS及忙碌文字改变重验重拍；旧来源与图可从ce1adebc追溯。两动作JSON逐selector指向evidence.actionVisualReferences；P19未映射槽84、P20 40，共124，24有图不等于批准，也不抵扣P20异常创建背景或其他字段/指标/主题。
+
+先--smoke通过48控件实例，再--capture完整生成158图并通过现有场景交互、12屏宽×5代表场景、实际hover/focus/press/禁用零误提交、离线提交pending及显式事件重入检查。四控件文字/背景对比最低5.33419；减少动态效果时符号animationName=none。HTTP/页面错误均0。仅人工目检390采集busy和1440删除focus，未宣称158张全部人工审阅或真实Vue/数据库/采集/幂等通过。
+
+新增COMPETITOR-CONTROL-STATE-REVIEW审核表，51个链接全部存在；PLAN、两页规格、语义清单、Feature Map和README同步。verify:docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check、git diff --check通过。生产代码/依赖未变，不重复未受影响的Vue构建和真实Vue46例；全站审计最终结果另记。
+
+本轮没有改生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、安全、env或依赖，不部署、不重启；新增--smoke只属永久本地图稿验证器并已文档化。所有新图/文档/脚本为永久交付；没有创建临时文件、服务，浏览器finally关闭且未见headless-shell残留。前轮被拒清理的output/playwright/ui-phase2-competitor-races-20260909仍不绕过处理。P16布局批准不扩大；控件审核、全站同级细化、真实实施及宝塔签收继续进行。
+
+收口审计：动作仍21页/435独立源位置/388语义组，新增逐控件图不增加源动作分母。设计仍76包，图片增至9700PNG、842独立来源/1447绑定、8382 README链接；来源漂移、PNG漂移及未登记图均0，完整页面批准仍0。已向用户发起仅针对390采集busy及1440删除focus两张代表图的审核，未收到批准前保持待审。
+
 ## 2026-09-09 · P19/P20逐动作与弹窗语义映射
 
 从干净main/54948dd8继续，使用ui-skills-root及requirement-to-implementation回到逐页设计交付。按AGENTS、Feature Map、蓝图3.5、真实路由与组件追踪，新增P19/P20动作清单及COMPETITOR-SEMANTIC-REVIEW审核入口；不把P16整体布局批准扩为控件或其他页批准。

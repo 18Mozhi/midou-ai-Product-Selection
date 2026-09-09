@@ -1,5 +1,7 @@
 # P19/P20 竞品目录与监控规则 · C 方向
 
+2026-09-09控件增量：[四个关键提交按钮六态](../../COMPETITOR-CONTROL-STATE-REVIEW.md)。本次有意修改图稿CSS的hover/active/focus/disabled反馈及忙碌语义、离线提交pending模拟；旧图按新来源重拍，旧版在Git ce1adebc可追溯。新增24状态双端48图及collect-busy双端2图，当前48整页场景/158PNG；具体控件/页面仍待审。下面108图的归属复验段落为前一批历史。
+
 2026-09-09增量复验：真实Vue的CP-B02/B03读/采集归属已局部修复，新增双端竞态回归；不改变本包HTML/CSS/JS或用户批准。旧来源基准见Git f0ed5f2f，Vue旧LF SHA256为49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7；本次按实际源码和永久回归重跑原型验证/108图采集后记录新来源，而非把旧图哈希冒充当前执行。boundaryProof区分两项fixed-source-regression和三项UNFIXED；旧“未修复”文字仅对应尚未关闭项，完整结果见../../PROGRESS.md。
 
 版本 COMPETITOR-C-r1；起始基线 7e589620；状态：具体图稿待审。用户选择C只确定方向，不代表批准本包、允许上线或完成73页。
@@ -14,7 +16,7 @@
 
 ## 本包覆盖与依据
 
-- 47场景、108PNG：1440/390双端94张，更多菜单/空白删除原因/非法URL/按钮焦点与悬停10张，768/1024代表页4张。
+- 当前48场景、158PNG：1440/390双端96张，四个精确提交控件24代表状态双端48张，更多菜单/空白删除原因/非法URL/按钮焦点与悬停10张，768/1024代表页4张。四控件只是代表变体，不是全部动作/字段通过。
 - 页面字段与动作来自CompetitorMonitor.vue、P19/P20规格及competitor-contract-review；服务/路由/仓储和Worker约束已绑定来源指纹。旧E2E文件只是本批参考来源，未在本轮重跑，不把绑定文件数当测试数。
 - 九组真实setup函数隔离验证：变化按change_id关联提醒；价格按evidence_id取币种；创建精确可选字段；规则null目标/库存省阈值/数值0/重置；删除trim/revision；任务权限独立；采集受理与当前行轮询保留新任务；卸载清理；深链优先与新搜索清query。
 - 真实源码仍存在：停用规则进入applicableRules、全局规则借当前币种、P19规则GET失败静默置空。这些已在函数隔离中复现；本包只改设计呈现，不改源码。窗口最早快照并非全历史基线。
@@ -46,17 +48,18 @@ CP-G01–07不关闭。局部原型单次提交与取消验证不是所有异步
 
 ## 如何复验与收尾
 
-- 最小源检查：`node scripts/verify-ui-phase2-competitor-source.mjs`。
+- 最小源检查：`node scripts/verify-ui-phase2-competitor-source.mjs`。本批最小控件验证：`node scripts/verify-ui-phase2-competitor-c.mjs --smoke`，只读，不与capture同时使用。
 - 只读复验：`node scripts/verify-ui-phase2-competitor-c.mjs`；先比较来源/PNG指纹，再跑离线浏览器。不会重画旧图。
 - 有意重生成本包：`node scripts/verify-ui-phase2-competitor-c.mjs --capture`。只写本目录正式PNG、evidence.json和gallery.html；先审源码变化，不能借此消除未解释漂移。
 - 标准门禁：verify:docs、verify:runtime-docs、verify:static-analysis、format:check及全站审计；准确结果见../../PROGRESS.md。
-- 本包文件/两永久验证器/108PNG是正式交付物，全部保留；没有一次性临时产物、dev server或远程服务。浏览器在finally中关闭。
+- 本包文件/永久验证器/158PNG是正式交付物，全部保留；没有一次性临时产物、dev server或远程服务。浏览器在finally中关闭。
 - 审核请注明“P19或P20 / COMPETITOR-C-r1 / 场景 / 通过或修改意见”。逐页批准后再实施对应Vue。全站P21/P22缺页仍需补稿，本轮不宣布全站完成。
 
 ## 逐场景图片
 
 | 页面 / 场景 | 桌面 1440 | 手机 390 |
 | --- | --- | --- |
+| P19 · 采集请求提交中（不是已受理任务执行中） | [查看](1440-collect-busy.png) | [查看](390-collect-busy.png) |
 | P19 · 竞品目录与证据 | [查看](1440-directory.png) | [查看](390-directory.png) |
 | P19 · 字段缺失与币种未知 | [查看](1440-partial.png) | [查看](390-partial.png) |
 | P19 · 首次采集排队 | [查看](1440-pending.png) | [查看](390-pending.png) |

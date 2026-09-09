@@ -9,7 +9,45 @@ import { verifyCompetitorBoundaries } from "./verify-ui-phase2-competitor-bounda
 
 const root = "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c";
 const capture = process.argv.includes("--capture");
-assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
+const smoke = process.argv.includes("--smoke");
+assert.ok(process.argv.slice(2).every((v) => ["--capture", "--smoke"].includes(v)));
+assert.ok(!(capture && smoke), "smoke is read-only");
+const controlStates = [];
+const states = ["default", "hover", "focus", "pressed", "disabled", "busy"];
+const controls = [
+  {
+    key: "collect",
+    actionId: "CP-COLLECT",
+    pageId: "P19",
+    ready: "directory",
+    disabled: "paused",
+    busy: "collect-busy",
+  },
+  {
+    key: "create",
+    actionId: "CP-CREATE-SUBMIT",
+    pageId: "P19",
+    ready: "create-confirm",
+    disabled: "create-busy",
+    busy: "create-busy",
+  },
+  {
+    key: "rule",
+    actionId: "CP-RULE-SUBMIT",
+    pageId: "P20",
+    ready: "rule-global",
+    disabled: "rule-busy",
+    busy: "rule-busy",
+  },
+  {
+    key: "delete",
+    actionId: "CP-DELETE-SUBMIT",
+    pageId: "P19",
+    ready: "delete",
+    disabled: "delete-busy",
+    busy: "delete-busy",
+  },
+].map((control) => ({ ...control, selector: `[data-action="${control.actionId}"]` }));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const files = [
   "apps/web/src/components/CompetitorMonitor.vue",
@@ -35,7 +73,7 @@ const sourceHashes = Object.fromEntries(
 const sourceProof = await verifyCompetitorSource();
 const boundaryProof = await verifyCompetitorBoundaries();
 let old;
-if (!capture) {
+if (!capture && !smoke) {
   old = JSON.parse(await readFile(root + "/evidence.json", "utf8"));
   assert.deepEqual(old.sourceHashes, sourceHashes);
   for (const s of old.screenshots)
@@ -79,12 +117,12 @@ async function layout(page, label) {
     assert.ok(await page.getByRole("dialog").getAttribute("aria-labelledby"));
   }
 }
-async function shot(page, width, scene, pageId) {
+async function shot(page, width, scene, pageId, control) {
   const file = `${width}-${scene}.png`;
   if (capture) {
     await page.screenshot({
       path: root + "/" + file,
-      fullPage: !(await page.locator("dialog[open]").count()),
+      fullPage: !control && !(await page.locator("dialog[open]").count()),
       animations: "disabled",
     });
     screenshots.push({
@@ -92,13 +130,135 @@ async function shot(page, width, scene, pageId) {
       width,
       pageId,
       scene,
+      ...(control ? { control, captureScope: "viewport-with-control-context" } : {}),
       sha256: hash(await readFile(root + "/" + file)),
     });
-  } else
+  } else if (!smoke)
     assert.ok(
       old.screenshots.some((s) => s.file === file),
       file,
     );
+}
+function contrast(foreground, background) {
+  const luminance = (rgb) => {
+    const values = rgb
+      .match(/[\d.]+/g)
+      .slice(0, 3)
+      .map(Number)
+      .map((v) => {
+        const n = v / 255;
+        return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+      });
+    return values[0] * 0.2126 + values[1] * 0.7152 + values[2] * 0.0722;
+  };
+  const a = luminance(foreground),
+    b = luminance(background);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+async function verifyControls(page, width) {
+  const count = () => page.evaluate(() => window.competitorReview.intents.length);
+  const choose = (id) =>
+    page.evaluate((scene) => {
+      window.competitorReview.outcome = "success";
+      window.competitorReview.choose(scene);
+    }, id);
+  for (const control of controls) {
+    for (const state of states) {
+      const baseScene = control[state] || control.ready;
+      await page.mouse.move(0, 0);
+      await choose(baseScene);
+      const target = page.locator(control.selector);
+      assert.equal(await target.count(), 1);
+      await target.scrollIntoViewIfNeeded();
+      await page.evaluate(() => document.activeElement?.blur());
+      const before = await count();
+      assert.equal(await target.isDisabled(), ["disabled", "busy"].includes(state));
+      if (["hover", "pressed"].includes(state)) {
+        await target.hover();
+        assert.ok(await target.evaluate((el) => el.matches(":hover")));
+      }
+      if (state === "focus") {
+        await page.keyboard.press("Tab");
+        await target.focus();
+        assert.ok(await target.evaluate((el) => el.matches(":focus-visible")));
+        assert.equal(await target.evaluate((el) => getComputedStyle(el).outlineWidth), "3px");
+      }
+      if (state === "pressed") {
+        await page.mouse.down();
+        assert.ok(await target.evaluate((el) => el.matches(":active")));
+        assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
+      }
+      if (state === "busy") {
+        assert.equal(await target.getAttribute("aria-busy"), "true");
+        assert.match(await target.innerText(), /正在/);
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el, "::before").animationName),
+          "none",
+        );
+      }
+      if (state === "disabled") {
+        const bg = await target.evaluate((el) => getComputedStyle(el).backgroundColor);
+        await target.hover({ force: true });
+        assert.equal(await target.evaluate((el) => getComputedStyle(el).backgroundColor), bg);
+        await page.mouse.move(0, 0);
+      }
+      const colors = await target.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { foreground: s.color, background: s.backgroundColor };
+      });
+      const ratio = contrast(colors.foreground, colors.background);
+      assert.ok(ratio >= 4.5, control.key + "/" + state + " text contrast " + ratio);
+      await layout(page, `control-${control.key}-${state}/${width}`);
+      const record = {
+        key: control.key,
+        actionId: control.actionId,
+        state,
+        baseScene,
+        selector: control.selector,
+        scene: `control-${control.key}-${state}`,
+        width,
+        contrast: ratio,
+      };
+      controlStates.push(record);
+      await shot(page, width, record.scene, control.pageId, record);
+      if (state === "pressed") {
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+      if (["disabled", "busy"].includes(state)) {
+        const rect = await target.boundingBox();
+        await page.mouse.click(rect.x + rect.width / 2, rect.y + rect.height / 2);
+      }
+      assert.equal(await count(), before, "preview must not submit " + control.key + "/" + state);
+    }
+    // Exercise the real offline click/submit path, not just a forced busy CSS class.
+    await choose(control.ready);
+    await page.evaluate(() => {
+      window.competitorReview.outcome = "pending";
+    });
+    const before = await count();
+    await page.locator(control.selector).click();
+    assert.equal(await count(), before + 1);
+    const target = page.locator(control.selector);
+    assert.equal(await target.isDisabled(), true);
+    assert.equal(await target.getAttribute("aria-busy"), "true");
+    await target.dispatchEvent("click");
+    if (control.key !== "collect") {
+      await page.locator("#modal form").dispatchEvent("submit");
+      await page.keyboard.press("Escape");
+      assert.equal(await page.locator("dialog[open]").count(), 1);
+    }
+    assert.equal(await count(), before + 1, "pending reentry must not add intent");
+    await page.evaluate(() => {
+      window.competitorReview.outcome = "success";
+    });
+  }
+  await choose("pending");
+  assert.equal(await page.locator('[data-action="CP-COLLECT"]').getAttribute("aria-busy"), null);
+  assert.match(await page.locator('[data-action="CP-COLLECT"]').innerText(), /采集中/);
+  checks.push(
+    `${width}: four exact primary selectors x six representative states; native hover/focus/press, disabled no-click, contrast >=4.5, reduced motion, actual offline submit-to-pending and explicit event reentry guard; collection POST pending != accepted task running; not real Vue`,
+  );
 }
 try {
   for (const width of [1440, 390]) {
@@ -117,6 +277,8 @@ try {
       await page.goto(pathToFileURL(path.resolve(root, "index.html")).href);
       await page.evaluate(() => document.body.classList.add("capture"));
       scenes = await page.evaluate(() => window.competitorReview.scenes);
+      await verifyControls(page, width);
+      if (smoke) continue;
       const choose = async (id) => {
         await page.evaluate((v) => window.competitorReview.choose(v), id);
         await layout(page, width + ":" + id);
@@ -280,47 +442,49 @@ try {
       await context.close();
     }
   }
-  const context = await browser.newContext({
-    viewport: { width: 768, height: 1000 },
-    reducedMotion: "reduce",
-  });
-  try {
-    await context.route(/^https?:/, (r) => {
-      http.push(r.request().url());
-      return r.abort();
+  if (!smoke) {
+    const context = await browser.newContext({
+      viewport: { width: 768, height: 1000 },
+      reducedMotion: "reduce",
     });
-    const page = await context.newPage();
-    page.on("pageerror", (e) => errors.push(e.message));
-    await page.goto(pathToFileURL(path.resolve(root, "index.html")).href);
-    await page.evaluate(() => document.body.classList.add("capture"));
-    for (const width of [320, 519, 520, 521, 619, 620, 621, 768, 819, 820, 821, 1024]) {
-      await page.setViewportSize({ width, height: 1000 });
-      for (const id of [
-        "directory",
-        "rules",
-        "create-market",
-        "rule-availability",
-        "delete-error",
-      ]) {
-        await page.evaluate((v) => window.competitorReview.choose(v), id);
-        await layout(page, width + ":" + id);
+    try {
+      await context.route(/^https?:/, (r) => {
+        http.push(r.request().url());
+        return r.abort();
+      });
+      const page = await context.newPage();
+      page.on("pageerror", (e) => errors.push(e.message));
+      await page.goto(pathToFileURL(path.resolve(root, "index.html")).href);
+      await page.evaluate(() => document.body.classList.add("capture"));
+      for (const width of [320, 519, 520, 521, 619, 620, 621, 768, 819, 820, 821, 1024]) {
+        await page.setViewportSize({ width, height: 1000 });
+        for (const id of [
+          "directory",
+          "rules",
+          "create-market",
+          "rule-availability",
+          "delete-error",
+        ]) {
+          await page.evaluate((v) => window.competitorReview.choose(v), id);
+          await layout(page, width + ":" + id);
+        }
       }
-    }
-    for (const width of [768, 1024]) {
-      await page.setViewportSize({ width, height: 1000 });
-      for (const id of ["directory", "rules"]) {
-        await page.evaluate((v) => window.competitorReview.choose(v), id);
-        await shot(page, width, id, id === "rules" ? "P20" : "P19");
+      for (const width of [768, 1024]) {
+        await page.setViewportSize({ width, height: 1000 });
+        for (const id of ["directory", "rules"]) {
+          await page.evaluate((v) => window.competitorReview.choose(v), id);
+          await shot(page, width, id, id === "rules" ? "P20" : "P19");
+        }
       }
+      await page.setViewportSize({ width: 720, height: 500 });
+      await page.evaluate(() => window.competitorReview.choose("rule-target"));
+      await layout(page, "200%-equivalent-reflow");
+      checks.push(
+        "12 widths x5 representative scenes; 720x500 CSS-pixel reflow equivalent only, not actual browser zoom/assistive technology",
+      );
+    } finally {
+      await context.close();
     }
-    await page.setViewportSize({ width: 720, height: 500 });
-    await page.evaluate(() => window.competitorReview.choose("rule-target"));
-    await layout(page, "200%-equivalent-reflow");
-    checks.push(
-      "12 widths x5 representative scenes; 720x500 CSS-pixel reflow equivalent only, not actual browser zoom/assistive technology",
-    );
-  } finally {
-    await context.close();
   }
   assert.deepEqual(errors, []);
   assert.deepEqual(http, []);
@@ -335,6 +499,24 @@ try {
       boundaryProof,
       scenes,
       screenshots,
+      controlStates,
+      actionVisualReferences: Object.fromEntries(
+        controls.map((control) => [
+          control.actionId,
+          {
+            selector: control.selector,
+            scope: "representative-control-only-not-all-variants-or-Vue",
+            pageId: control.pageId,
+            states: Object.fromEntries(
+              states.map((state) => [state, `control-${control.key}-${state}`]),
+            ),
+            limitation:
+              control.key === "collect"
+                ? "paused represents disabled; POST in-flight differs from accepted queued/running task"
+                : "disabled and busy use the same source busy condition; no invented independent business blocker; create is final step, rule is global price, delete is populated reason",
+          },
+        ]),
+      ),
       actionIds: [...actions].sort(),
       checks,
       errors,
@@ -344,6 +526,7 @@ try {
         "CP-B02/B03 ownership is locally fixed and source-regressed; other source gaps remain. No global action/dialog denominator or approval promotion.",
         "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
         "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",
+        "Four primary controls have 24 representative states at two widths; dialog disabled and busy share one real busy condition. Not all control variants/fields/themes or P20 create-query background.",
       ],
     };
     await writeFile(root + "/evidence.json", JSON.stringify(evidence, null, 2) + "\n");
@@ -359,9 +542,10 @@ a{color:#254a9c}figcaption{overflow-wrap:anywhere}</style>
   }
   console.log(
     JSON.stringify({
-      mode: capture ? "capture" : "check",
+      mode: capture ? "capture" : smoke ? "smoke" : "check",
       scenes: scenes.length,
-      screenshots: capture ? screenshots.length : old.screenshots.length,
+      screenshots: capture ? screenshots.length : smoke ? 0 : old.screenshots.length,
+      controlStates: controlStates.length,
       sourceChecks: sourceProof.checks.length,
       actions: actions.size,
       checks,
