@@ -1,0 +1,1132 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P20",
+  "route": "/competitors/monitoring-rules",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "共享源有三个自定义role=dialog，不是三个原生dialog；本页可达/排除分别记录，内嵌form/aside不重复计数。",
+    "definitions": [
+      {
+        "dialogId": "CP-CREATE",
+        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
+        "applicability": "initial-create-query-only",
+        "remaining": "现创建图是P19背景，仅相关参考；双query背景/层叠专图缺失"
+      },
+      {
+        "dialogId": "CP-RULE",
+        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
+        "applicability": "normal-entry-and-competitor-query",
+        "remaining": "工作区/对象×数值/库存×错误/busy/权限/主题组合并非现图全覆盖"
+      },
+      {
+        "dialogId": "CP-DELETE",
+        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+        "applicability": "excluded-in-fixed-rules-mode",
+        "remaining": "原因/版本/关闭/重开/失败与回调归属需分开验证"
+      }
+    ]
+  },
+  "inputs": {
+    "local": [
+      "query",
+      "form.product_url",
+      "form.market",
+      "form.opportunity_id",
+      "form.title",
+      "rule.competitor_id",
+      "rule.metric",
+      "rule.direction",
+      "rule.threshold_value",
+      "deleteReason"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "CP-RULE-OPEN",
+      "label": "新建 / 第一条监控规则",
+      "kind": "local",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",
+        "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1"
+      ],
+      "sourceContractKeys": ["管理者页首新建/首条规则", "真空规则列表的新建入口"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "P20 manager；页首按enabled切标签，规则空列表另有入口",
+      "handler": "openRule重置目标空/price/decrease/1，showRule并聚焦select",
+      "variants": ["页首新增", "没有启用规则", "规则数组为空"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-empty"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-disabled"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-global"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "ready+规则空不是state=empty；不增加规则编辑/停用按钮；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-RULE-BACK",
+      "label": "返回竞品列表",
+      "kind": "navigation",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1"],
+      "sourceContractKeys": ["RouterLink /competitors"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "P20所有可读身份",
+      "handler": "RouterLink /competitors，不自带q或competitor",
+      "variants": ["管理者", "只读者"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-readonly"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-not-disabled-in-source"
+      },
+      "remaining": "不承诺返回恢复某对象；浏览器history/缓存另验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-STATE-RECOVERY",
+      "label": "规则页异常主次恢复",
+      "kind": "read",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1"],
+      "sourceContractKeys": ["按状态恢复或导航，两个事件分别验"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "P20 state!=ready；loading无footer；空规则实际ready",
+      "handler": "primary expired登录/forbidden home/其余load；secondary error back/其余home；state empty管理者分支为源潜在分支",
+      "variants": [
+        "loading无按钮",
+        "读取错误",
+        "expired",
+        "forbidden",
+        "blocked",
+        "empty分支非正常规则空态"
+      ],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-loading"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rules-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "只有规则loading/error图；不能借P19会话/权限稿填成P20专用异常图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-LIST-REGION-EXCLUDED",
+      "label": "P19列表/详情操作区排除",
+      "kind": "excluded",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1",
+        "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1",
+        "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1",
+        "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
+        "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
+        "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
+        "apps/web/src/components/CompetitorMonitor.vue#0832ce1b3b353933.1",
+        "apps/web/src/components/CompetitorMonitor.vue#e39ead97fb52b914.1",
+        "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
+        "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
+        "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
+        "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
+        "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
+        "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
+        "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
+        "apps/web/src/components/CompetitorMonitor.vue#c14a7d89545c4bbd.1",
+        "apps/web/src/components/CompetitorMonitor.vue#3edcc1c1730d78dd.1",
+        "apps/web/src/components/CompetitorMonitor.vue#9f03a53fb65e7c6b.1",
+        "apps/web/src/components/CompetitorMonitor.vue#9deedc4f8d67733e.1"
+      ],
+      "sourceContractKeys": [
+        "无启用规则且manager时进入P20",
+        "有启用规则的页首创建",
+        "无启用规则的次级创建",
+        "包含只读者的规则入口",
+        "空态manager创建，其他恢复/导航",
+        "清搜索；manager创建或只读刷新",
+        "v-for实际对象逐项读取、选中及URL",
+        "新窗口打开真实商品URL",
+        "管理者、active、无busy/pending可执行",
+        "带当前competitor进入P20",
+        "status/revision启停",
+        "选择删除对象并清原因",
+        "原生details开合",
+        "与桌面同一合同，独立可达性",
+        "同上，不能漏移动入口",
+        "无快照时外部来源补充入口",
+        "本次已建任务/tasks?task=id",
+        "task:create，按变化建验证任务",
+        "原生帮助details开合"
+      ],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "P20固定rules模式，P19的v-else区不渲染",
+      "handler": "P19创建入口/搜索/对象/采集/启停/删除入口/任务/帮助不在P20主体",
+      "variants": [
+        "P19页首与恢复",
+        "P19对象详情",
+        "P19外部来源",
+        "P19采集启停",
+        "P19验证任务",
+        "P19更多帮助"
+      ],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "directory"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "more-open"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "不据静态导入把对象操作乘以2；下方独立创建窗因query可达不能一起排除；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-CREATE-CONTAINER",
+      "label": "创建竞品弹窗定义",
+      "kind": "wiring",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1"],
+      "sourceContractKeys": [
+        "三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留"
+      ],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "showCreate && canManage；无mode条件",
+      "handler": "role=dialog自定义div，包含三步form，不新增一次业务动作",
+      "variants": ["步骤1链接", "步骤2市场/机会/名称", "步骤3确认", "失败保留", "busy"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-link"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-market"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-confirm"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "P20仅初挂create=1可达；图的P19背景不能当P20异常双弹窗图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。",
+      "forwardsTo": ["CP-CREATE-SUBMIT", "CP-CREATE-CLOSE", "CP-CREATE-PREVIOUS"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "CP-CREATE-SUBMIT",
+      "label": "下一步 / 确认并开始采集",
+      "kind": "write",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
+        "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1"
+      ],
+      "sourceContractKeys": ["前两步本地，第三步POST", "submit按钮，表单handler驱动"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "manager且创建窗；submit按钮disabled=busy；原生约束先于submit事件",
+      "handler": "submitCreateStep：step<3仅本地+1，否则create→POST /competitors；form与submit合一",
+      "variants": [
+        "链接下一步零写入",
+        "市场下一步零写入",
+        "确认提交",
+        "字段非法",
+        "失败保留确认步",
+        "busy"
+      ],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-link"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-market"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-confirm"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-invalid"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "准确market/product_url/title；opportunity_id仅非空发送；不把前两步计成POST，不补provider等字段；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-CREATE-CLOSE",
+      "label": "关闭 / 取消创建",
+      "kind": "local",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
+        "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1"
+      ],
+      "sourceContractKeys": ["关闭、step归1、去create query", "第一步取消"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "创建窗可见；取消只在第1步，右上关闭各步可见，原源不禁busy",
+      "handler": "closeCreate→step=1/showCreate=false/清create query；保留实例字段",
+      "variants": ["右上关闭", "第1步取消", "第2/3步关闭", "busy关闭风险"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-link"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-market"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-confirm"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "关闭不取消已经发出的POST；P20双窗时Escape先关规则再创建；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-CREATE-PREVIOUS",
+      "label": "创建上一步",
+      "kind": "local",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1"],
+      "sourceContractKeys": ["第2/3步本地回退"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "创建第2/3步；v-else按钮，原源不禁busy",
+      "handler": "createStep -= 1，无请求",
+      "variants": ["市场回链接", "确认回市场", "busy仍可回退的源差异"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-market"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-confirm"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "C稿锁busy只是提案，不据图声称Vue已锁步骤；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-RULE-CONTAINER",
+      "label": "新规则弹窗定义",
+      "kind": "wiring",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1"],
+      "sourceContractKeys": [
+        "全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认"
+      ],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "showRule&&canManage；P20入口或首次competitor字符串query",
+      "handler": "role=dialog自定义div，包含规则form，不另增写入",
+      "variants": ["工作区数值", "对象数值", "库存", "错误保留", "busy", "双query异常"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-global"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-target"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-availability"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "双query并存尚无专用图/优先级决定；Tab/归还真实Vue未闭环；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。",
+      "forwardsTo": ["CP-RULE-SUBMIT", "CP-RULE-CLOSE"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "CP-RULE-SUBMIT",
+      "label": "启用新规则",
+      "kind": "write",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
+        "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1"
+      ],
+      "sourceContractKeys": ["POST明确阈值", "busy禁用的submit"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "manager/showRule；数值约束必填/min0/step0.000001，DOM disabled=busy",
+      "handler": "createRule→POST competitor_id/null、metric、direction；仅非库存附Number(threshold_value)",
+      "variants": [
+        "全局数值0",
+        "指定对象数值",
+        "库存change",
+        "库存became_unavailable",
+        "busy",
+        "冲突保留"
+      ],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-global"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-target"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-availability"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "CP-B05函数重入仍未修；不添加币种/版本字段或规则编辑能力；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-RULE-CLOSE",
+      "label": "关闭 / 取消规则",
+      "kind": "local",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
+        "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1"
+      ],
+      "sourceContractKeys": ["关闭且去competitor query", "取消同合同"],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "规则窗可见；原源busy仍可关闭",
+      "handler": "closeRule隐藏并去competitor query；下次openRule才重置默认",
+      "variants": ["右上关闭", "取消", "Escape", "busy关闭"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-global"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-error"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "rule-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "与创建窗保留草稿不同；关闭不取消在途POST；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    },
+    {
+      "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+      "label": "P20删除弹窗排除",
+      "kind": "excluded",
+      "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+        "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
+        "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
+        "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
+        "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1"
+      ],
+      "sourceContractKeys": [
+        "原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；现缺可访问名称",
+        "DELETE + trim原因/revision",
+        "删除选择归null，无DELETE",
+        "取消同合同",
+        "busy禁用的submit"
+      ],
+      "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
+      "condition": "P20没有openDelete可达UI，query不设deleting",
+      "handler": "角色div和删除form仍在共享源，但本页无启用路径",
+      "variants": ["删除定义", "提交与submit", "取消与关闭"],
+      "scenes": [
+        {
+          "package": "competitor-direction-c",
+          "scene": "delete"
+        },
+        {
+          "package": "competitor-direction-c",
+          "scene": "delete-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-competitor-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "仅同源离线原型场景/交互证据，不替代实际Vue或本动作全状态。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "源函数测试可以直接设置不等于P20页面可删竞品；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/CompetitorMonitor.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
+      "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "query",
+        "meaning": "搜索query；仅P19显示，初始读取q、修改后清competitor/create；匹配已加载title/external_id/source_site，不是远程搜索。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "form.product_url",
+        "meaning": "创建商品URL；必填type=url、maxlength2048；P20仅create=1异常深链显示，不增加provider输入。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "form.market",
+        "meaning": "创建市场；必填maxlength40、pattern=[A-Za-z0-9._-]+；保留US初值，不推导市场。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "form.opportunity_id",
+        "meaning": "创建关联机会ID；可选maxlength36、UUID pattern；为空时省略请求字段，不自动关联。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "form.title",
+        "meaning": "创建监控名称；必填maxlength500，关闭保留本实例；不是浏览器持久化草稿。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "rule.competitor_id",
+        "meaning": "规则目标；仅P20规则窗，选择真实items.id或空表示当前工作区全部，POST明确null。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "rule.metric",
+        "meaning": "规则指标；price/rank/review_count/availability；切换会纠正不兼容direction。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "rule.direction",
+        "meaning": "规则方向；数值increase/decrease/change，库存change/became_unavailable；不是四种一律可用。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "rule.threshold_value",
+        "meaning": "规则阈值；v-model.number，非库存才显示required/min0/step0.000001；库存省略请求字段，不编币种。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "binding": "deleteReason",
+        "meaning": "删除原因；P19删除窗required maxlength500，提交trim；取消不写，重开清空，冲突保留。",
+        "remaining": "逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "P19的对象目录aside，选中对象按钮在内部；不是模态或额外业务弹窗。",
+        "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。",
+        "variants": [
+          {
+            "name": "directory",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "directory"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          },
+          {
+            "name": "readonly",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "readonly"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          },
+          {
+            "name": "deep-link",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "deep-link"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "三步创建form；step1 URL、step2市场/机会/名称、step3确认，submit统一handler。P20只有初挂create=1可达。",
+        "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。",
+        "variants": [
+          {
+            "name": "create-link",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-link"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          },
+          {
+            "name": "create-market",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-market"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          },
+          {
+            "name": "create-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-confirm"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          },
+          {
+            "name": "create-error",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-error"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          },
+          {
+            "name": "create-busy",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-busy"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          },
+          {
+            "name": "create-invalid",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-invalid"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "创建步骤1的公开链接说明aside，只读说明，不额外开窗。",
+        "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。",
+        "variants": [
+          {
+            "name": "create-link",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-link"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "创建步骤3的采集说明aside；不能把排队说明当真实快照成功。",
+        "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。",
+        "variants": [
+          {
+            "name": "create-confirm",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "create-confirm"
+              }
+            ],
+            "remaining": "P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "规则form，目标/指标/方向及数值阈值；库存不呈现阈值，四模型位置不等于所有组合。",
+        "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。",
+        "variants": [
+          {
+            "name": "rule-global",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-global"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          },
+          {
+            "name": "rule-target",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-target"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          },
+          {
+            "name": "rule-availability",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-availability"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          },
+          {
+            "name": "rule-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-error"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          },
+          {
+            "name": "rule-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-busy"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "aside",
+        "ordinal": 4,
+        "shape": "inline-aside",
+        "sourceBehavior": "规则form内已启用计数与明确阈值说明aside；只读，不新增质量门或通知写入。",
+        "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。",
+        "variants": [
+          {
+            "name": "rule-global",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-global"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          },
+          {
+            "name": "rule-availability",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "rule-availability"
+              }
+            ],
+            "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "form",
+        "ordinal": 3,
+        "shape": "form-container",
+        "sourceBehavior": "删除form，trim原因与expected_revision；所在role=dialog无可访问标题，旧回调/新草稿问题仍在。",
+        "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。",
+        "variants": [
+          {
+            "name": "delete",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "delete"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          },
+          {
+            "name": "delete-error",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "delete-error"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          },
+          {
+            "name": "delete-busy",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "delete-busy"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          },
+          {
+            "name": "delete-required",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [
+              {
+                "package": "competitor-direction-c",
+                "scene": "delete-required"
+              }
+            ],
+            "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "只审核本地调用方，UiStatePanel/MonitoringReadinessStrip以依赖hash绑定，不把共享源按钮逐路由相乘；条目/模式由真实父props和route.name缓存键决定。",
+      "UiStatePanel loading无footer，expired无secondary，forbidden/blocked的副按钮当前均由父回/home；不能按文案臆造申请权限或影响详情功能。",
+      "角色隐藏写入口是前端分支，不等于服务端权限/RBAC/租户隔离证明。task:create与competitor:manage独立。",
+      "十个v-model和七个结构容器是共享源位置；实际可见字段受route/step/metric/权限控制，不乘成所有分支验收。",
+      "CP-B02/B03在54948dd8已局部修复并通过46个双端隔离Vue例；这里只复用未变化证据，不声称本轮重跑Vue或真实SQL/来源采集。",
+      "CP-B01双query并窗、CP-B04删除回调、CP-B05规则重入及CP-G01焦点、CP-G02事实呈现、CP-G03窗口、KeepAlive/scope/history仍未闭环。"
+    ]
+  },
+  "modeReachability": {
+    "initialMode": "rules",
+    "reachableModes": [
+      "rules",
+      "rule-global/target-numeric/availability",
+      "create-step-1/2/3-via-query"
+    ],
+    "excludedModes": ["list-page-region", "delete-dialog-in-rules"],
+    "automaticActions": [
+      {
+        "actionId": "CP-MOUNT-READ",
+        "trigger": "onMounted读取list/rules/selected detail；不是按钮或新API"
+      },
+      {
+        "actionId": "CP-QUERY-OPEN",
+        "trigger": "manager初挂create=1与competitor字符串可同时开启两窗；优先级未批准"
+      },
+      {
+        "actionId": "CP-WATCHERS",
+        "trigger": "query修改同步URL；metric纠正direction；失去manage关闭三个窗，不证明在途写入取消"
+      }
+    ]
+  },
+  "runtimeEvidence": {
+    "commit": "54948dd85999fffcf5ad092ff7a0e2f42fe1ee6d",
+    "files": [
+      "tests/e2e/ui-phase2-competitor-races.spec.ts",
+      "tests/e2e/m04-05-competitors.spec.ts"
+    ],
+    "scope": "既有46个双端实际Vue隔离例，覆盖所列行为/调用，不是全控件六态、真实鉴权、SQL或生产；本轮不因JSON映射重跑未变测试。"
+  },
+  "compositionGaps": [
+    "没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。",
+    "P20缺专用expired/forbidden/blocked、create=1与双query背景/焦点/冲突场景、长规则与全部主题密度组合；不能拿P19背景当等价。",
+    "状态面primary/secondary按实际分支合为本地恢复组，form/submit合为提交组；此数不是全站固定业务动作分母。",
+    "本轮不改运行代码/图稿或合同门；P16布局通过不转授P19/P20，完整页面批准保持待审。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "按固定路由从同一39源位置核对；跨两页重复引用不增加全站唯一源位置。",
+    "三个role定义与七结构容器、十模型分开；表单状态图不是产品验收。",
+    "代码修复/已有隔离测试与设计全状态、辅助技术和生产签收分开。"
+  ]
+}

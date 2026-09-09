@@ -317,6 +317,9 @@
     "scripts/verify-ui-phase2-detail-cost-context-c.mjs": "9083d39ac582b9220f261d5b96ffc3a4a4ca987836c2e29b0fefe107de2c4260",
     "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5",
     "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "0d6b869e114db3bd7f16a7ff78a1eca5f29324a5b9e980702679671ffbea1cc7",
+    "scripts/verify-ui-phase2-competitor-c.mjs": "04c90a0ac709e9da2638b5fcea8489f0257d2cf3e5c3d7c4e7a529e23ba3d18c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "16c660ec2659f61046245b4352d7b57992d5061258c37b89fcf2cc9eb8bbed7d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -340,8 +343,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "50fde16f8bccaf38e70435ae7fe8476085053b43f6ae7cfd6f17598e97cbdd92",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "747eb2f788361d32a9876e2c63d1eade97fbe549b568eac9982306dbd979c84f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "a540f45274bb5ee5d7db6db807353a7050f7bbb261ea6c49d7fe745fe1dec8cf",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "44c906efb8a8dd4394afc5c8b40a2f7e474ae941529b124662eee84307bb683d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "b5a24160d54982a4f4a889cdfd9f3071eb7fafc2ce4a3c92f129f7294791eb13",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "2764973e6fb3b82c4f012e7997c17058f72db91ffc3ba17459717312e1fe04bb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "30213312536dbd8f757de6a74016f9005fc38f78a700f2c1105533969583dd0d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
@@ -408,14 +411,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 17,
     "oldOnlyIdentities": 16,
-    "reviewedPages": 19,
-    "explicitlyGroupedSourceSites": 396,
-    "semanticGroups": 354,
-    "routeActions": 305,
-    "wiringGroups": 31,
+    "reviewedPages": 21,
+    "explicitlyGroupedSourceSites": 435,
+    "semanticGroups": 388,
+    "routeActions": 331,
+    "wiringGroups": 35,
     "pagesWithoutExplicitSemanticReview": [
-      "P19",
-      "P20",
       "P21",
       "P22",
       "P23",
@@ -1092,26 +1093,68 @@
       "path": "/competitors",
       "title": "竞品监控",
       "oldStaticAssociatedCandidates": 75,
-      "review": null,
+      "review": {
+        "pageId": "P19",
+        "sourceSites": 39,
+        "semanticGroups": 22,
+        "routeActions": 18,
+        "wiringGroups": 2,
+        "excludedGroups": 2,
+        "writeActions": 5,
+        "unmappedVisualSlots": 102,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 10,
+          "callerContainers": 7,
+          "consumerVariants": 22,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "competitor-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。",
+        "缺完整所有采集终态/操作失败与成功、帮助展开、生成任务后链接、多对象/长历史/全部主题密度状态组合。",
+        "状态面primary/secondary按实际分支合为本地恢复组，form/submit合为提交组；此数不是全站固定业务动作分母。",
+        "本轮不改运行代码/图稿或合同门；P16布局通过不转授P19/P20，完整页面批准保持待审。"
+      ]
     },
     {
       "id": "P20",
       "path": "/competitors/monitoring-rules",
       "title": "竞品监控规则",
       "oldStaticAssociatedCandidates": 75,
-      "review": null,
+      "review": {
+        "pageId": "P20",
+        "sourceSites": 39,
+        "semanticGroups": 12,
+        "routeActions": 8,
+        "wiringGroups": 2,
+        "excludedGroups": 2,
+        "writeActions": 2,
+        "unmappedVisualSlots": 46,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 10,
+          "callerContainers": 7,
+          "consumerVariants": 22,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "competitor-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。",
+        "P20缺专用expired/forbidden/blocked、create=1与双query背景/焦点/冲突场景、长规则与全部主题密度组合；不能拿P19背景当等价。",
+        "状态面primary/secondary按实际分支合为本地恢复组，form/submit合为提交组；此数不是全站固定业务动作分母。",
+        "本轮不改运行代码/图稿或合同门；P16布局通过不转授P19/P20，完整页面批准保持待审。"
+      ]
     },
     {
       "id": "P21",
@@ -2128,6 +2171,40 @@
         "localModelBindings": 34,
         "callerContainers": 23,
         "consumerVariants": 38,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P19",
+      "sourceSites": 39,
+      "semanticGroups": 22,
+      "routeActions": 18,
+      "wiringGroups": 2,
+      "excludedGroups": 2,
+      "writeActions": 5,
+      "unmappedVisualSlots": 102,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 10,
+        "callerContainers": 7,
+        "consumerVariants": 22,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P20",
+      "sourceSites": 39,
+      "semanticGroups": 12,
+      "routeActions": 8,
+      "wiringGroups": 2,
+      "excludedGroups": 2,
+      "writeActions": 2,
+      "unmappedVisualSlots": 46,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 10,
+        "callerContainers": 7,
+        "consumerVariants": 22,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -8599,7 +8676,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-P20-REGION-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1",
@@ -8626,7 +8714,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-P20-REGION-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-BACK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1",
@@ -8657,7 +8756,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-P20-REGION-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-STATE-RECOVERY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1",
@@ -8696,7 +8806,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-P20-REGION-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1",
@@ -8727,7 +8848,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-NAV",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1",
@@ -8758,7 +8890,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-OPEN",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1",
@@ -8789,7 +8932,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-OPEN",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
@@ -8816,7 +8970,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-NAV",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
@@ -8847,7 +9012,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-STATE-RECOVERY",
+          "kind": "read"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
@@ -8878,7 +9054,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-SEARCH-RECOVERY",
+          "kind": "read"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0832ce1b3b353933.1",
@@ -8913,7 +9100,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DETAIL",
+          "kind": "read"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e39ead97fb52b914.1",
@@ -8948,7 +9146,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-SOURCE",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
@@ -8987,7 +9196,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-COLLECT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
@@ -9022,7 +9242,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-NAV",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
@@ -9061,7 +9292,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-TOGGLE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
@@ -9100,7 +9342,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-OPEN",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
@@ -9139,7 +9392,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-MORE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
@@ -9178,7 +9442,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-TOGGLE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
@@ -9217,7 +9492,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-OPEN",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c14a7d89545c4bbd.1",
@@ -9256,7 +9542,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-SOURCE",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3edcc1c1730d78dd.1",
@@ -9299,7 +9596,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-TASK-LINK",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9f03a53fb65e7c6b.1",
@@ -9342,7 +9650,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-TASK-CREATE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9deedc4f8d67733e.1",
@@ -9369,7 +9688,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-HELP",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-LIST-REGION-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
@@ -9396,7 +9726,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-CONTAINER",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-CONTAINER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
@@ -9423,7 +9764,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
@@ -9450,7 +9802,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1",
@@ -9481,7 +9844,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1",
@@ -9512,7 +9886,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-PREVIOUS",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-PREVIOUS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1",
@@ -9539,7 +9924,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
@@ -9566,7 +9962,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-CONTAINER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
@@ -9593,7 +10000,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
@@ -9620,7 +10038,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
@@ -9647,7 +10076,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
@@ -9674,7 +10114,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
@@ -9701,7 +10152,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-CONTAINER",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
@@ -9728,7 +10190,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
@@ -9755,7 +10228,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
@@ -9782,7 +10266,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1",
@@ -9809,7 +10304,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#0f50ae650a1895b3.1",

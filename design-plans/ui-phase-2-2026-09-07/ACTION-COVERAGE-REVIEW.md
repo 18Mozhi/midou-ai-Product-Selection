@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1478；旧登记1477；新身份17，旧表独有身份16。签名变化不等于增删业务能力。
-- 已具体语义对应19页/396源位置/354组；其中路由动作305组，转发/容器关联31组，其余明确排除。其余54页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应21页/435源位置/388组；其中路由动作331组，转发/容器关联35组，其余明确排除。其余52页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -30,8 +30,8 @@
 | [P16 创建选品](page-specs/P16.md) | 45 | [8组](action-reviews/P16.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 64 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 158 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P19 竞品监控](page-specs/P19.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P20 竞品监控规则](page-specs/P20.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P19 竞品监控](page-specs/P19.md) | 75 | [22组](action-reviews/P19.json) | 102个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P20 竞品监控规则](page-specs/P20.md) | 75 | [12组](action-reviews/P20.json) | 46个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 90 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P22 费用与利润规则](page-specs/P22.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P23 全部任务](page-specs/P23.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -1423,6 +1423,194 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - UiStatePanel默认空/无权/过期主标签与P18统一load处理不一致；默认次按钮未监听。该共享源所有控件必须另行纳入全局分母，不只看一个primary候选。
 - useModalDialog仅native showModal/close/归还，不证明所有tab/soft keyboard/关闭忙碌；AI共享组件有Tab圈定，但两个业务消费者仍需独立验收。
 - P15入口排除不等于跨ID残留不可达；OpportunityWorkspace watch ID未清三个列表show标志及决定动作草稿；不据此更改权限/生命周期规则。
+
+## P19 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P19.json)：39个局部源位置 → 22组；5类写入，18组路由动作，2组转发/容器关联不重复计动作。10个本地v-model，7处调用/内嵌容器，22个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有102个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CP-P20-REGION-EXCLUDED P20规则目录区域排除 / excluded | 4处；P20页首、P20返回、P20恢复事件、P20规则空入口 | [rules · 1440](design/competitor-direction-c/1440-rules.png) / [rules · 390](design/competitor-direction-c/390-rules.png)、[rules-empty · 1440](design/competitor-direction-c/1440-rules-empty.png) / [rules-empty · 390](design/competitor-direction-c/390-rules-empty.png)；其余见JSON | 只排除该固定路由内正常区域；不删除共享源；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-RULE-NAV 查看规则 / 配置阈值 / 当前竞品规则 / navigation | 3处；无启用规则manager、只读查看全部、当前竞品管理者、当前竞品只读 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[readonly · 1440](design/competitor-direction-c/1440-readonly.png) / [readonly · 390](design/competitor-direction-c/390-readonly.png)；其余见JSON | 不同目标分别保留；只读导航不代表可创建规则；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-OPEN 添加竞品入口 / local | 2处；有规则页首、无规则次级、打开后继续已有实例字段 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[empty · 1440](design/competitor-direction-c/1440-empty.png) / [empty · 390](design/competitor-direction-c/390-empty.png)；其余见JSON | empty主按钮来自另一状态事件组，不漏掉也不重复登记本控件；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-STATE-RECOVERY 列表异常状态主次恢复 / read | 1处；loading无按钮、empty管理者/只读、error重试/返回、expired仅登录、forbidden主次到home、blocked重读/回home | [loading · 1440](design/competitor-direction-c/1440-loading.png) / [loading · 390](design/competitor-direction-c/390-loading.png)、[empty · 1440](design/competitor-direction-c/1440-empty.png) / [empty · 390](design/competitor-direction-c/390-empty.png)；其余见JSON | 一个源事件调用含primary/secondary两个分支，不是单一请求；全分支标签/路由与六态待验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-SEARCH-RECOVERY 无匹配结果主次操作 / read | 1处；清空搜索、管理者添加、只读刷新 | [search-empty · 1440](design/competitor-direction-c/1440-search-empty.png) / [search-empty · 390](design/competitor-direction-c/390-search-empty.png)、[create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)；其余见JSON | query watcher清competitor/create；标题/ASIN/站点匹配不扩展成服务器搜索；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-DETAIL 选择并读取竞品详情 / read | 1处；普通行、当前行重复点击、深链被搜索排除时保留、部分字段、旧读取成功/失败 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[deep-link · 1440](design/competitor-direction-c/1440-deep-link.png) / [deep-link · 390](design/competitor-direction-c/390-deep-link.png)；其余见JSON | CP-B02已局部修复，不能提升为KeepAlive/history/scope全验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-SOURCE 打开外部商品来源 / navigation | 2处；详情头来源、首采无快照来源 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[terminal · 1440](design/competitor-direction-c/1440-terminal.png) / [terminal · 390](design/competitor-direction-c/390-terminal.png)；其余见JSON | 两入口相同真实URL；没有代替外部站点访问/条款验收；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-COLLECT 立即采集 / 首次采集重试 / write | 1处；有快照立即采集、无快照重试、pending禁用、paused禁用、采集受阻、切对象晚到成功/失败 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[terminal · 1440](design/competitor-direction-c/1440-terminal.png) / [terminal · 390](design/competitor-direction-c/390-terminal.png)；其余见JSON | CP-B03已局部修复；完整采集状态、真实来源/任务生命周期与所有禁用文案仍待验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-TOGGLE 暂停 / 恢复监控 / write | 2处；桌面暂停、桌面恢复、移动暂停、移动恢复、busy、冲突 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[paused · 1440](design/competitor-direction-c/1440-paused.png) / [paused · 390](design/competitor-direction-c/390-paused.png)；其余见JSON | 没有两套业务动作；旧成功后的完整反馈归属未随采集修复；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-DELETE-OPEN 打开删除确认 / local | 2处；桌面删除入口、移动更多删除入口、重开清原因 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[more-open · 1440](design/competitor-direction-c/1440-more-open.png) / [more-open · 390](design/competitor-direction-c/390-more-open.png)；其余见JSON | 原生更多开合和删除开窗分别核对；不把函数可重入当DOM必然可达；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-MORE 移动更多操作 / local | 1处；关闭、展开、键盘展开 | [more-open · 1440](design/competitor-direction-c/1440-more-open.png) / [more-open · 390](design/competitor-direction-c/390-more-open.png)；其余见JSON | 完整焦点路径、菜单外点击行为/所有断点未验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-TASK-LINK 打开本次验证任务 / navigation | 1处；单条变化已建任务、多个变化分别链接 | [alerts-mixed · 1440](design/competitor-direction-c/1440-alerts-mixed.png) / [alerts-mixed · 390](design/competitor-direction-c/390-alerts-mixed.png)、[task-only · 1440](design/competitor-direction-c/1440-task-only.png) / [task-only · 390](design/competitor-direction-c/390-task-only.png)；其余见JSON | 现图是时间轴相关场景，不等于已建链接状态已画齐或真实任务页可达；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-TASK-CREATE 按变化生成验证任务 / write | 1处；管理者、仅task:create、busy、成功转任务链接、失败 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[task-only · 1440](design/competitor-direction-c/1440-task-only.png) / [task-only · 390](design/competitor-direction-c/390-task-only.png)；其余见JSON | 创建手动验证任务不等于系统告警任务；源回调与全部失败态仍待验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-HELP 展开工作流帮助 / local | 1处；收起、展开、键盘 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)；其余见JSON | 现整页关联不是展开态专用图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-CONTAINER 创建竞品弹窗定义 / wiring | 1处；步骤1链接、步骤2市场/机会/名称、步骤3确认、失败保留、busy | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | 关闭可在busy中发生；焦点循环/归还尚非真实Vue闭环；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-SUBMIT 下一步 / 确认并开始采集 / write | 2处；链接下一步零写入、市场下一步零写入、确认提交、字段非法、失败保留确认步、busy | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | 准确market/product_url/title；opportunity_id仅非空发送；不把前两步计成POST，不补provider等字段；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-CLOSE 关闭 / 取消创建 / local | 2处；右上关闭、第1步取消、第2/3步关闭、busy关闭风险 | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | 关闭不取消已经发出的POST；P20双窗时Escape先关规则再创建；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-PREVIOUS 创建上一步 / local | 1处；市场回链接、确认回市场、busy仍可回退的源差异 | [create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)、[create-confirm · 1440](design/competitor-direction-c/1440-create-confirm.png) / [create-confirm · 390](design/competitor-direction-c/390-create-confirm.png)；其余见JSON | C稿锁busy只是提案，不据图声称Vue已锁步骤；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-RULE-DIALOG-EXCLUDED P19规则表单排除 / excluded | 5处；规则定义、提交与submit、取消与关闭 | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png)、[rule-availability · 1440](design/competitor-direction-c/1440-rule-availability.png) / [rule-availability · 390](design/competitor-direction-c/390-rule-availability.png)；其余见JSON | 保留静态来源但不计P19本地规则写入；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-DELETE-CONTAINER 删除竞品弹窗定义 / wiring | 1处；原因空白、有效原因、版本冲突、busy | [delete · 1440](design/competitor-direction-c/1440-delete.png) / [delete · 390](design/competitor-direction-c/390-delete.png)、[delete-required · 1440](design/competitor-direction-c/1440-delete-required.png) / [delete-required · 390](design/competitor-direction-c/390-delete-required.png)；其余见JSON | 来源缺可访问名称与完整焦点约束；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-DELETE-SUBMIT 确认删除监控 / write | 2处；空白无写入、有效原因、409保留输入、busy、成功后刷新 | [delete-required · 1440](design/competitor-direction-c/1440-delete-required.png) / [delete-required · 390](design/competitor-direction-c/390-delete-required.png)、[delete · 1440](design/competitor-direction-c/1440-delete.png) / [delete · 390](design/competitor-direction-c/390-delete.png)；其余见JSON | 仅软删除并保留历史；CP-B04旧完成清新窗/提示仍未修，真实成功/读取失败链待验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-DELETE-CLOSE 取消 / 关闭删除 / local | 2处；右上关闭、取消、Escape、busy关闭 | [delete · 1440](design/competitor-direction-c/1440-delete.png) / [delete · 390](design/competitor-direction-c/390-delete.png)、[delete-error · 1440](design/competitor-direction-c/1440-delete-error.png) / [delete-error · 390](design/competitor-direction-c/390-delete-error.png)；其余见JSON | 未发起写入的取消与在途关闭分开，不能宣传关闭等于撤销删除；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| CP-CREATE-CONTAINER | 容器定义，无额外事件 | CP-CREATE-SUBMIT、CP-CREATE-CLOSE、CP-CREATE-PREVIOUS |
+| CP-DELETE-CONTAINER | 容器定义，无额外事件 | CP-DELETE-SUBMIT、CP-DELETE-CLOSE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| CompetitorMonitor.vue / query | 搜索query；仅P19显示，初始读取q、修改后清competitor/create；匹配已加载title/external_id/source_site，不是远程搜索。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.product_url | 创建商品URL；必填type=url、maxlength2048；P20仅create=1异常深链显示，不增加provider输入。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.market | 创建市场；必填maxlength40、pattern=[A-Za-z0-9._-]+；保留US初值，不推导市场。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.opportunity_id | 创建关联机会ID；可选maxlength36、UUID pattern；为空时省略请求字段，不自动关联。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.title | 创建监控名称；必填maxlength500，关闭保留本实例；不是浏览器持久化草稿。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.competitor_id | 规则目标；仅P20规则窗，选择真实items.id或空表示当前工作区全部，POST明确null。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.metric | 规则指标；price/rank/review_count/availability；切换会纠正不兼容direction。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.direction | 规则方向；数值increase/decrease/change，库存change/became_unavailable；不是四种一律可用。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.threshold_value | 规则阈值；v-model.number，非库存才显示required/min0/step0.000001；库存省略请求字段，不编币种。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / deleteReason | 删除原因；P19删除窗required maxlength500，提交trim；取消不写，重开清空，冲突保留。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| CompetitorMonitor.vue / aside.1 / directory | inline-aside / related-scene-only | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / aside.1 / readonly | inline-aside / related-scene-only | [readonly · 1440](design/competitor-direction-c/1440-readonly.png) / [readonly · 390](design/competitor-direction-c/390-readonly.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / aside.1 / deep-link | inline-aside / related-scene-only | [deep-link · 1440](design/competitor-direction-c/1440-deep-link.png) / [deep-link · 390](design/competitor-direction-c/390-deep-link.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.1 / create-link | form-container / matching-dialog-scene | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.1 / create-market | form-container / matching-dialog-scene | [create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.1 / create-confirm | form-container / matching-dialog-scene | [create-confirm · 1440](design/competitor-direction-c/1440-create-confirm.png) / [create-confirm · 390](design/competitor-direction-c/390-create-confirm.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.1 / create-error | form-container / matching-dialog-scene | [create-error · 1440](design/competitor-direction-c/1440-create-error.png) / [create-error · 390](design/competitor-direction-c/390-create-error.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.1 / create-busy | form-container / matching-dialog-scene | [create-busy · 1440](design/competitor-direction-c/1440-create-busy.png) / [create-busy · 390](design/competitor-direction-c/390-create-busy.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.1 / create-invalid | form-container / matching-dialog-scene | [create-invalid · 1440](design/competitor-direction-c/1440-create-invalid.png) / [create-invalid · 390](design/competitor-direction-c/390-create-invalid.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / aside.2 / create-link | inline-aside / related-scene-only | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / aside.3 / create-confirm | inline-aside / related-scene-only | [create-confirm · 1440](design/competitor-direction-c/1440-create-confirm.png) / [create-confirm · 390](design/competitor-direction-c/390-create-confirm.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.2 / rule-global | form-container / route-excluded-reference | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.2 / rule-target | form-container / route-excluded-reference | [rule-target · 1440](design/competitor-direction-c/1440-rule-target.png) / [rule-target · 390](design/competitor-direction-c/390-rule-target.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.2 / rule-availability | form-container / route-excluded-reference | [rule-availability · 1440](design/competitor-direction-c/1440-rule-availability.png) / [rule-availability · 390](design/competitor-direction-c/390-rule-availability.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.2 / rule-error | form-container / route-excluded-reference | [rule-error · 1440](design/competitor-direction-c/1440-rule-error.png) / [rule-error · 390](design/competitor-direction-c/390-rule-error.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.2 / rule-busy | form-container / route-excluded-reference | [rule-busy · 1440](design/competitor-direction-c/1440-rule-busy.png) / [rule-busy · 390](design/competitor-direction-c/390-rule-busy.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / aside.4 / rule-global | inline-aside / route-excluded-reference | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / aside.4 / rule-availability | inline-aside / route-excluded-reference | [rule-availability · 1440](design/competitor-direction-c/1440-rule-availability.png) / [rule-availability · 390](design/competitor-direction-c/390-rule-availability.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.3 / delete | form-container / matching-dialog-scene | [delete · 1440](design/competitor-direction-c/1440-delete.png) / [delete · 390](design/competitor-direction-c/390-delete.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.3 / delete-error | form-container / matching-dialog-scene | [delete-error · 1440](design/competitor-direction-c/1440-delete-error.png) / [delete-error · 390](design/competitor-direction-c/390-delete-error.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.3 / delete-busy | form-container / matching-dialog-scene | [delete-busy · 1440](design/competitor-direction-c/1440-delete-busy.png) / [delete-busy · 390](design/competitor-direction-c/390-delete-busy.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.3 / delete-required | form-container / matching-dialog-scene | [delete-required · 1440](design/competitor-direction-c/1440-delete-required.png) / [delete-required · 390](design/competitor-direction-c/390-delete-required.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+
+### 路径与局部模式
+
+初始mode=list；局部模式族：list、create-step-1/2/3、delete。排除：rules-page-region、rule-dialog-in-list。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：CP-MOUNT-READ / onMounted读取list/rules/selected detail；不是按钮或新API；CP-QUERY-OPEN / manager初挂create=1开启创建；competitor深链参与详情恢复；CP-WATCHERS / query修改同步URL；metric纠正direction；失去manage关闭三个窗，不证明在途写入取消。不登记为按钮。
+
+### 明确保留的边界
+
+- 没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。
+- 缺完整所有采集终态/操作失败与成功、帮助展开、生成任务后链接、多对象/长历史/全部主题密度状态组合。
+- 状态面primary/secondary按实际分支合为本地恢复组，form/submit合为提交组；此数不是全站固定业务动作分母。
+- 本轮不改运行代码/图稿或合同门；P16布局通过不转授P19/P20，完整页面批准保持待审。
+- 只审核本地调用方，UiStatePanel/MonitoringReadinessStrip以依赖hash绑定，不把共享源按钮逐路由相乘；条目/模式由真实父props和route.name缓存键决定。
+- UiStatePanel loading无footer，expired无secondary，forbidden/blocked的副按钮当前均由父回/home；不能按文案臆造申请权限或影响详情功能。
+- 角色隐藏写入口是前端分支，不等于服务端权限/RBAC/租户隔离证明。task:create与competitor:manage独立。
+- 十个v-model和七个结构容器是共享源位置；实际可见字段受route/step/metric/权限控制，不乘成所有分支验收。
+- CP-B02/B03在54948dd8已局部修复并通过46个双端隔离Vue例；这里只复用未变化证据，不声称本轮重跑Vue或真实SQL/来源采集。
+- CP-B01双query并窗、CP-B04删除回调、CP-B05规则重入及CP-G01焦点、CP-G02事实呈现、CP-G03窗口、KeepAlive/scope/history仍未闭环。
+
+## P20 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P20.json)：39个局部源位置 → 12组；2类写入，8组路由动作，2组转发/容器关联不重复计动作。10个本地v-model，7处调用/内嵌容器，22个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有46个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CP-RULE-OPEN 新建 / 第一条监控规则 / local | 2处；页首新增、没有启用规则、规则数组为空 | [rules · 1440](design/competitor-direction-c/1440-rules.png) / [rules · 390](design/competitor-direction-c/390-rules.png)、[rules-empty · 1440](design/competitor-direction-c/1440-rules-empty.png) / [rules-empty · 390](design/competitor-direction-c/390-rules-empty.png)；其余见JSON | ready+规则空不是state=empty；不增加规则编辑/停用按钮；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-RULE-BACK 返回竞品列表 / navigation | 1处；管理者、只读者 | [rules · 1440](design/competitor-direction-c/1440-rules.png) / [rules · 390](design/competitor-direction-c/390-rules.png)、[rules-readonly · 1440](design/competitor-direction-c/1440-rules-readonly.png) / [rules-readonly · 390](design/competitor-direction-c/390-rules-readonly.png)；其余见JSON | 不承诺返回恢复某对象；浏览器history/缓存另验；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-STATE-RECOVERY 规则页异常主次恢复 / read | 1处；loading无按钮、读取错误、expired、forbidden、blocked、empty分支非正常规则空态 | [rules-loading · 1440](design/competitor-direction-c/1440-rules-loading.png) / [rules-loading · 390](design/competitor-direction-c/390-rules-loading.png)、[rules-error · 1440](design/competitor-direction-c/1440-rules-error.png) / [rules-error · 390](design/competitor-direction-c/390-rules-error.png)；其余见JSON | 只有规则loading/error图；不能借P19会话/权限稿填成P20专用异常图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-LIST-REGION-EXCLUDED P19列表/详情操作区排除 / excluded | 19处；P19页首与恢复、P19对象详情、P19外部来源、P19采集启停、P19验证任务、P19更多帮助 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[more-open · 1440](design/competitor-direction-c/1440-more-open.png) / [more-open · 390](design/competitor-direction-c/390-more-open.png)；其余见JSON | 不据静态导入把对象操作乘以2；下方独立创建窗因query可达不能一起排除；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-CONTAINER 创建竞品弹窗定义 / wiring | 1处；步骤1链接、步骤2市场/机会/名称、步骤3确认、失败保留、busy | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | P20仅初挂create=1可达；图的P19背景不能当P20异常双弹窗图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-SUBMIT 下一步 / 确认并开始采集 / write | 2处；链接下一步零写入、市场下一步零写入、确认提交、字段非法、失败保留确认步、busy | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | 准确market/product_url/title；opportunity_id仅非空发送；不把前两步计成POST，不补provider等字段；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-CLOSE 关闭 / 取消创建 / local | 2处；右上关闭、第1步取消、第2/3步关闭、busy关闭风险 | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | 关闭不取消已经发出的POST；P20双窗时Escape先关规则再创建；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-CREATE-PREVIOUS 创建上一步 / local | 1处；市场回链接、确认回市场、busy仍可回退的源差异 | [create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)、[create-confirm · 1440](design/competitor-direction-c/1440-create-confirm.png) / [create-confirm · 390](design/competitor-direction-c/390-create-confirm.png)；其余见JSON | C稿锁busy只是提案，不据图声称Vue已锁步骤；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-RULE-CONTAINER 新规则弹窗定义 / wiring | 1处；工作区数值、对象数值、库存、错误保留、busy、双query异常 | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png)、[rule-target · 1440](design/competitor-direction-c/1440-rule-target.png) / [rule-target · 390](design/competitor-direction-c/390-rule-target.png)；其余见JSON | 双query并存尚无专用图/优先级决定；Tab/归还真实Vue未闭环；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-RULE-SUBMIT 启用新规则 / write | 2处；全局数值0、指定对象数值、库存change、库存became_unavailable、busy、冲突保留 | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png)、[rule-target · 1440](design/competitor-direction-c/1440-rule-target.png) / [rule-target · 390](design/competitor-direction-c/390-rule-target.png)；其余见JSON | CP-B05函数重入仍未修；不添加币种/版本字段或规则编辑能力；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-RULE-CLOSE 关闭 / 取消规则 / local | 2处；右上关闭、取消、Escape、busy关闭 | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png)、[rule-error · 1440](design/competitor-direction-c/1440-rule-error.png) / [rule-error · 390](design/competitor-direction-c/390-rule-error.png)；其余见JSON | 与创建窗保留草稿不同；关闭不取消在途POST；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-DELETE-DIALOG-EXCLUDED P20删除弹窗排除 / excluded | 5处；删除定义、提交与submit、取消与关闭 | [delete · 1440](design/competitor-direction-c/1440-delete.png) / [delete · 390](design/competitor-direction-c/390-delete.png)、[delete-error · 1440](design/competitor-direction-c/1440-delete-error.png) / [delete-error · 390](design/competitor-direction-c/390-delete-error.png)；其余见JSON | 源函数测试可以直接设置不等于P20页面可删竞品；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| CP-CREATE-CONTAINER | 容器定义，无额外事件 | CP-CREATE-SUBMIT、CP-CREATE-CLOSE、CP-CREATE-PREVIOUS |
+| CP-RULE-CONTAINER | 容器定义，无额外事件 | CP-RULE-SUBMIT、CP-RULE-CLOSE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| CompetitorMonitor.vue / query | 搜索query；仅P19显示，初始读取q、修改后清competitor/create；匹配已加载title/external_id/source_site，不是远程搜索。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.product_url | 创建商品URL；必填type=url、maxlength2048；P20仅create=1异常深链显示，不增加provider输入。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.market | 创建市场；必填maxlength40、pattern=[A-Za-z0-9._-]+；保留US初值，不推导市场。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.opportunity_id | 创建关联机会ID；可选maxlength36、UUID pattern；为空时省略请求字段，不自动关联。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / form.title | 创建监控名称；必填maxlength500，关闭保留本实例；不是浏览器持久化草稿。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.competitor_id | 规则目标；仅P20规则窗，选择真实items.id或空表示当前工作区全部，POST明确null。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.metric | 规则指标；price/rank/review_count/availability；切换会纠正不兼容direction。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.direction | 规则方向；数值increase/decrease/change，库存change/became_unavailable；不是四种一律可用。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / rule.threshold_value | 规则阈值；v-model.number，非库存才显示required/min0/step0.000001；库存省略请求字段，不编币种。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+| CompetitorMonitor.vue / deleteReason | 删除原因；P19删除窗required maxlength500，提交trim；取消不写，重开清空，冲突保留。 | 逐字段默认/编辑/聚焦/校验错误/禁用/busy、长输入/软键盘与主题未完整映射；路由排除不等于移除源绑定。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| CompetitorMonitor.vue / aside.1 / directory | inline-aside / route-excluded-reference | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / aside.1 / readonly | inline-aside / route-excluded-reference | [readonly · 1440](design/competitor-direction-c/1440-readonly.png) / [readonly · 390](design/competitor-direction-c/390-readonly.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / aside.1 / deep-link | inline-aside / route-excluded-reference | [deep-link · 1440](design/competitor-direction-c/1440-deep-link.png) / [deep-link · 390](design/competitor-direction-c/390-deep-link.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.1 / create-link | form-container / related-scene-only | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / form.1 / create-market | form-container / related-scene-only | [create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / form.1 / create-confirm | form-container / related-scene-only | [create-confirm · 1440](design/competitor-direction-c/1440-create-confirm.png) / [create-confirm · 390](design/competitor-direction-c/390-create-confirm.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / form.1 / create-error | form-container / related-scene-only | [create-error · 1440](design/competitor-direction-c/1440-create-error.png) / [create-error · 390](design/competitor-direction-c/390-create-error.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / form.1 / create-busy | form-container / related-scene-only | [create-busy · 1440](design/competitor-direction-c/1440-create-busy.png) / [create-busy · 390](design/competitor-direction-c/390-create-busy.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / form.1 / create-invalid | form-container / related-scene-only | [create-invalid · 1440](design/competitor-direction-c/1440-create-invalid.png) / [create-invalid · 390](design/competitor-direction-c/390-create-invalid.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / aside.2 / create-link | inline-aside / related-scene-only | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / aside.3 / create-confirm | inline-aside / related-scene-only | [create-confirm · 1440](design/competitor-direction-c/1440-create-confirm.png) / [create-confirm · 390](design/competitor-direction-c/390-create-confirm.png) | P20 create=1源可达，但此图为P19创建窗；缺P20异常背景/双窗焦点图。 |
+| CompetitorMonitor.vue / form.2 / rule-global | form-container / matching-dialog-scene | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.2 / rule-target | form-container / matching-dialog-scene | [rule-target · 1440](design/competitor-direction-c/1440-rule-target.png) / [rule-target · 390](design/competitor-direction-c/390-rule-target.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.2 / rule-availability | form-container / matching-dialog-scene | [rule-availability · 1440](design/competitor-direction-c/1440-rule-availability.png) / [rule-availability · 390](design/competitor-direction-c/390-rule-availability.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.2 / rule-error | form-container / matching-dialog-scene | [rule-error · 1440](design/competitor-direction-c/1440-rule-error.png) / [rule-error · 390](design/competitor-direction-c/390-rule-error.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.2 / rule-busy | form-container / matching-dialog-scene | [rule-busy · 1440](design/competitor-direction-c/1440-rule-busy.png) / [rule-busy · 390](design/competitor-direction-c/390-rule-busy.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / aside.4 / rule-global | inline-aside / related-scene-only | [rule-global · 1440](design/competitor-direction-c/1440-rule-global.png) / [rule-global · 390](design/competitor-direction-c/390-rule-global.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / aside.4 / rule-availability | inline-aside / related-scene-only | [rule-availability · 1440](design/competitor-direction-c/1440-rule-availability.png) / [rule-availability · 390](design/competitor-direction-c/390-rule-availability.png) | 本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。 |
+| CompetitorMonitor.vue / form.3 / delete | form-container / route-excluded-reference | [delete · 1440](design/competitor-direction-c/1440-delete.png) / [delete · 390](design/competitor-direction-c/390-delete.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.3 / delete-error | form-container / route-excluded-reference | [delete-error · 1440](design/competitor-direction-c/1440-delete-error.png) / [delete-error · 390](design/competitor-direction-c/390-delete-error.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.3 / delete-busy | form-container / route-excluded-reference | [delete-busy · 1440](design/competitor-direction-c/1440-delete-busy.png) / [delete-busy · 390](design/competitor-direction-c/390-delete-busy.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+| CompetitorMonitor.vue / form.3 / delete-required | form-container / route-excluded-reference | [delete-required · 1440](design/competitor-direction-c/1440-delete-required.png) / [delete-required · 390](design/competitor-direction-c/390-delete-required.png) | 本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。 |
+
+### 路径与局部模式
+
+初始mode=rules；局部模式族：rules、rule-global/target-numeric/availability、create-step-1/2/3-via-query。排除：list-page-region、delete-dialog-in-rules。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：CP-MOUNT-READ / onMounted读取list/rules/selected detail；不是按钮或新API；CP-QUERY-OPEN / manager初挂create=1与competitor字符串可同时开启两窗；优先级未批准；CP-WATCHERS / query修改同步URL；metric纠正direction；失去manage关闭三个窗，不证明在途写入取消。不登记为按钮。
+
+### 明确保留的边界
+
+- 没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。
+- P20缺专用expired/forbidden/blocked、create=1与双query背景/焦点/冲突场景、长规则与全部主题密度组合；不能拿P19背景当等价。
+- 状态面primary/secondary按实际分支合为本地恢复组，form/submit合为提交组；此数不是全站固定业务动作分母。
+- 本轮不改运行代码/图稿或合同门；P16布局通过不转授P19/P20，完整页面批准保持待审。
+- 只审核本地调用方，UiStatePanel/MonitoringReadinessStrip以依赖hash绑定，不把共享源按钮逐路由相乘；条目/模式由真实父props和route.name缓存键决定。
+- UiStatePanel loading无footer，expired无secondary，forbidden/blocked的副按钮当前均由父回/home；不能按文案臆造申请权限或影响详情功能。
+- 角色隐藏写入口是前端分支，不等于服务端权限/RBAC/租户隔离证明。task:create与competitor:manage独立。
+- 十个v-model和七个结构容器是共享源位置；实际可见字段受route/step/metric/权限控制，不乘成所有分支验收。
+- CP-B02/B03在54948dd8已局部修复并通过46个双端隔离Vue例；这里只复用未变化证据，不声称本轮重跑Vue或真实SQL/来源采集。
+- CP-B01双query并窗、CP-B04删除回调、CP-B05规则重入及CP-G01焦点、CP-G02事实呈现、CP-G03窗口、KeepAlive/scope/history仍未闭环。
 
 ## P54 局部动作与共享消费者
 
