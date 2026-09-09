@@ -22,7 +22,7 @@
     "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
     "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
-    "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0",
+    "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4",
     "apps/web/src/components/BackupRecoveryCenter.vue": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
     "apps/web/src/components/CapacityBoundaryCenter.vue": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
     "apps/web/src/components/CollectionOperationsConsole.vue": "0e22a3d1ae404c05b96b321424be8489c6c3bd21f2223e33af09c3eebef3b856",
@@ -173,7 +173,7 @@
     "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "debfb0e251743b3a13957427dd908e12d9036cc2cfbcf129d0cc3a47535b86ce",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "eaea063028c369906d14293338b3a920560cc9c6e9fc78cfb1809d7b4dcf0cb2",
-    "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "ab0126ce1ada2b323c48a7528648e4f14989062d43b99d3a578e316389d7c4e2",
+    "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "9ffa3f26afb46fb8b7967d845d36c5e1c5cdd97bb4849cc57906c0ed528be2aa",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "34bcb7500816bfbc3e1a1038fefc3b67abef8e60238842d78599a955574eeca5",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "12f45d0ca0790ba78548e9e727ac2eb8e1fad0826a587baf906ac58eae5dc25a",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5d214840f0d5cafd16a9950426df836b3c2ba9b5dc211baea435075a27bbb920",
@@ -210,9 +210,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/approval-forms-direction-c/evidence.json": "1dd2fc9e01f32bfecfe2e91e2b53b7504821968f051cc9115e728bcea4ae6b5c",
     "design-plans/ui-phase-2-2026-09-07/design/approval-lifecycle-direction-c/evidence.json": "843c88b51ebfa016112217f93e4f7ac569f0a84e8c5ddc78b39652a437d33531",
     "design-plans/ui-phase-2-2026-09-07/design/approval-navigation-direction-c/evidence.json": "fb71732f2130662eb9a5f6b19b48f3e137024ea380a83ca6116c70f3b2e7a17d",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "3c3b84d34e6d27d86e5923eb321ac6d1783508a4550480bf0944af3833bac4fb",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "662c58080dd8a5189f315ee7dfcf3b419f88e7d4c982266c8baf285ea6962d65",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-forms-direction-c/evidence.json": "834c9b626cece0cca018b13127b90ec7e87d7d2c6321759e7566abe5e9bba629",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/evidence.json": "650aad462925c075680640030949329ab7ea6aeb9ccaa1272bd73e47a4db8407",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "ee2b6981fa60f2689f8e59c51abec02e7986621251568db0a8ad4e480626b0f4",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-forms-direction-c/evidence.json": "619b72ea95576f74951ac80cd072ae20050b91fd0ee8e5a747186a277fe5c497",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json": "aeb78fc5f72cedbb944eb6871b0b06b2a56c773d121086861e78459ecea10595",
     "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json": "d28b7a421dcd2d12d66a21444097b8e6c4da2c47d1b51ecc49241d647202a502",
     "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/evidence.json": "a914119d5419e7b1a342252e53c994994361a92b6ff8d6b49013c3f4ff28d112",
@@ -353,7 +353,7 @@
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
     "scripts/verify-ui-phase2-notification-navigation-c.mjs": "34eb1fc201f8faf92a88ad80713512358cf1e9fb4d7f375c265b3145a164290b",
     "scripts/verify-ui-phase2-notification-forms-c.mjs": "b7953605372e1d185be413e5b43f20b5e92bba04febe82825fd57afb0d41dc71",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "9a2a84e9043d1eeb1f8c26c2402af259e393497217fd02d1d910fe457e477791",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "a559b7b9f008067afb4c2dd0d3718e20edd2cf5c2387378c8ae694bd9420eca8",
     "scripts/verify-ui-phase2-automation-c.mjs": "17747ad0d99c6fad3b5a306eed966fd3e3214e6560b4f1f3a61eb0087ad9a732",
     "scripts/verify-ui-phase2-automation-controls-c.mjs": "392d5bc43d7c6a072a16c8ad63a4b289eb85c827641c28e65b9a55994d0eefdc",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
@@ -387,7 +387,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "0b277cd2bdd62208be739abdf8b40ab64b5459396e160bb598dc4df57369332e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "d93c743efbdf2bf78c739ce9ccd338cec0a9e0800907ab146be6f8c1d61b386b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "273c67843540265c6205717e4e14b340a29c730cfc8f4cb063e6976dc9aabd28",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "350824e4624d20043a6455e545e8299546dca16d6085ae7d8dfa508fafad86ba",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "e565fd925a4a76f007e4afab09ace39506a58f24e96b87e09e18c451aea103c4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "b8751b41f0c2178c1a14e80656c8e2af8bb89ad1e102c3c05acb89e55620840f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "de61b5675bef2700f82fe82c4390fa5d08fe1312677cb6928571d7eb9dcc6620",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8bb99072f3db70e0687adb08c5596ac3bae9129d975d2f1fe472224956734247",
@@ -5244,78 +5244,10 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#d27de6387d58944c.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 393,
+      "line": 450,
       "kind": "control",
       "label": "创建规则",
       "conditions": [],
-      "staticRouteIds": [
-        "P27"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 15,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P27",
-          "actionId": "AR-CREATE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1",
-      "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 423,
-      "kind": "control",
-      "label": "重新加载",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "\n        ['error', 'blocked', 'expired', 'forbidden', 'rate_limited', 'version_conflict'].includes(\n          state,\n        )\n      "
-        }
-      ],
-      "staticRouteIds": [
-        "P27"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 16,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P27",
-          "actionId": "AR-LOAD",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#5b19eec3cd4a60d0.1",
-      "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 468,
-      "kind": "control",
-      "label": "查看详情",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-for",
-          "expression": "rule in rules"
-        }
-      ],
       "staticRouteIds": [
         "P27"
       ],
@@ -5331,25 +5263,21 @@
       "semanticReviews": [
         {
           "pageId": "P27",
-          "actionId": "AR-DETAIL",
-          "kind": "read"
+          "actionId": "AR-CREATE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#110dd4ce491d067b.1",
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 469,
+      "line": 480,
       "kind": "control",
-      "label": "编辑",
+      "label": "重新加载",
       "conditions": [
         {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-for",
-          "expression": "rule in rules"
+          "directive": "v-else-if",
+          "expression": "\n        ['error', 'blocked', 'expired', 'forbidden', 'rate_limited', 'version_conflict'].includes(\n          state,\n        )\n      "
         }
       ],
       "staticRouteIds": [
@@ -5367,17 +5295,17 @@
       "semanticReviews": [
         {
           "pageId": "P27",
-          "actionId": "AR-EDIT",
-          "kind": "local"
+          "actionId": "AR-LOAD",
+          "kind": "read"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#7d3171303da98576.1",
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#5b19eec3cd4a60d0.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 470,
+      "line": 525,
       "kind": "control",
-      "label": "{{ rule.status === \"active\" ? \"暂停\" : \"恢复\" }}",
+      "label": "查看详情",
       "conditions": [
         {
           "directive": "v-else",
@@ -5403,21 +5331,25 @@
       "semanticReviews": [
         {
           "pageId": "P27",
-          "actionId": "AR-STATUS",
-          "kind": "write"
+          "actionId": "AR-DETAIL",
+          "kind": "read"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#08d127ded2ba2429.1",
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#110dd4ce491d067b.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 476,
-      "kind": "dialog-definition",
-      "label": "selected ? `${selected.name}执行记录` : '自动化执行记录'",
+      "line": 526,
+      "kind": "control",
+      "label": "编辑",
       "conditions": [
         {
-          "directive": "v-if",
-          "expression": "selected"
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-for",
+          "expression": "rule in rules"
         }
       ],
       "staticRouteIds": [
@@ -5435,21 +5367,25 @@
       "semanticReviews": [
         {
           "pageId": "P27",
-          "actionId": "D-AR-EXECUTIONS",
-          "kind": "wiring"
+          "actionId": "AR-EDIT",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#ae7f95f10a94c968.1",
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#7d3171303da98576.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 476,
-      "kind": "event-binding",
-      "label": "selected ? `${selected.name}执行记录` : '自动化执行记录'",
+      "line": 527,
+      "kind": "control",
+      "label": "{{ rule.status === \"active\" ? \"暂停\" : \"恢复\" }}",
       "conditions": [
         {
-          "directive": "v-if",
-          "expression": "selected"
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-for",
+          "expression": "rule in rules"
         }
       ],
       "staticRouteIds": [
@@ -5467,17 +5403,17 @@
       "semanticReviews": [
         {
           "pageId": "P27",
-          "actionId": "D-AR-EXECUTIONS",
-          "kind": "wiring"
+          "actionId": "AR-STATUS",
+          "kind": "write"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1",
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#08d127ded2ba2429.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 483,
-      "kind": "control",
-      "label": "关闭执行记录",
+      "line": 533,
+      "kind": "dialog-definition",
+      "label": "selected ? `${selected.name}执行记录` : '自动化执行记录'",
       "conditions": [
         {
           "directive": "v-if",
@@ -5499,6 +5435,70 @@
       "semanticReviews": [
         {
           "pageId": "P27",
+          "actionId": "D-AR-EXECUTIONS",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#ae7f95f10a94c968.1",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "line": 533,
+      "kind": "event-binding",
+      "label": "selected ? `${selected.name}执行记录` : '自动化执行记录'",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P27"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
+          "line": 23,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "D-AR-EXECUTIONS",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "line": 540,
+      "kind": "control",
+      "label": "关闭执行记录",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P27"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
+          "line": 24,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P27",
           "actionId": "AR-DETAIL-CLOSE",
           "kind": "local"
         }
@@ -5507,7 +5507,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#573d41c8d777efee.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 492,
+      "line": 549,
       "kind": "control",
       "label": "查看关联人工任务",
       "conditions": [
@@ -5536,7 +5536,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 23,
+          "line": 25,
           "jsonPointer": null
         }
       ],
@@ -5551,7 +5551,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#eb58830acad203db.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 496,
+      "line": 553,
       "kind": "control",
       "label": "查看触发通知与来源",
       "conditions": [
@@ -5580,7 +5580,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 24,
+          "line": 26,
           "jsonPointer": null
         }
       ],
@@ -5595,7 +5595,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 505,
+      "line": 562,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -5624,7 +5624,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 25,
+          "line": 27,
           "jsonPointer": null
         }
       ],
@@ -5639,63 +5639,9 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#a6561f91cc94ec7b.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 512,
+      "line": 569,
       "kind": "dialog-definition",
       "label": "editing ? '编辑自动化规则' : '创建自动化规则'",
-      "conditions": [],
-      "staticRouteIds": [
-        "P27"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 26,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P27",
-          "actionId": "D-AR-EDITOR",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#35756ebc6c836998.1",
-      "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 512,
-      "kind": "event-binding",
-      "label": "editing ? '编辑自动化规则' : '创建自动化规则'",
-      "conditions": [],
-      "staticRouteIds": [
-        "P27"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 27,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P27",
-          "actionId": "D-AR-EDITOR",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#926c2e079c31814f.1",
-      "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 517,
-      "kind": "form-event",
-      "label": "{{ editing ? \"编辑自动化规则\" : \"创建自动化规则\" }} 从业务模板开始 选择后仍可逐项调整 {{ template.name }} {{ template.description }} 规则名称 当 触发器 审批节点超时",
       "conditions": [],
       "staticRouteIds": [
         "P27"
@@ -5712,6 +5658,60 @@
       "semanticReviews": [
         {
           "pageId": "P27",
+          "actionId": "D-AR-EDITOR",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#35756ebc6c836998.1",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "line": 569,
+      "kind": "event-binding",
+      "label": "editing ? '编辑自动化规则' : '创建自动化规则'",
+      "conditions": [],
+      "staticRouteIds": [
+        "P27"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
+          "line": 29,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P27",
+          "actionId": "D-AR-EDITOR",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#926c2e079c31814f.1",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "line": 574,
+      "kind": "form-event",
+      "label": "{{ editing ? \"编辑自动化规则\" : \"创建自动化规则\" }} 从业务模板开始 选择后仍可逐项调整 {{ template.name }} {{ template.description }} 规则名称 当 触发器 审批节点超时",
+      "conditions": [],
+      "staticRouteIds": [
+        "P27"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
+          "line": 30,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P27",
           "actionId": "AR-SAVE",
           "kind": "write"
         }
@@ -5720,7 +5720,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#742531071607ff73.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 522,
+      "line": 579,
       "kind": "control",
       "label": "{{ template.name }} {{ template.description }}",
       "conditions": [
@@ -5741,7 +5741,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 29,
+          "line": 31,
           "jsonPointer": null
         }
       ],
@@ -5756,7 +5756,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#3e0160425e8092a0.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 631,
+      "line": 688,
       "kind": "control",
       "label": "查看样本",
       "conditions": [
@@ -5781,7 +5781,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 30,
+          "line": 32,
           "jsonPointer": null
         }
       ],
@@ -5796,7 +5796,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#2354c8e95ace6cd1.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 643,
+      "line": 700,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -5808,7 +5808,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 31,
+          "line": 33,
           "jsonPointer": null
         }
       ],
@@ -5823,7 +5823,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#180c3b124eda84e8.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 644,
+      "line": 701,
       "kind": "control",
       "label": "{{ previewing ? \"正在试运行…\" : \"试运行并预览影响\" }}",
       "conditions": [],
@@ -5835,7 +5835,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 32,
+          "line": 34,
           "jsonPointer": null
         }
       ],
@@ -5850,7 +5850,7 @@
     {
       "candidateId": "apps/web/src/components/AutomationRuleCenter.vue#ea72a6477a8776b1.1",
       "file": "apps/web/src/components/AutomationRuleCenter.vue",
-      "line": 646,
+      "line": 703,
       "kind": "control",
       "label": "{{ editing ? \"保存修改\" : \"创建并启用\" }}",
       "conditions": [],
@@ -5862,7 +5862,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 33,
+          "line": 35,
           "jsonPointer": null
         }
       ],
@@ -41312,7 +41312,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 34,
+          "line": 36,
           "jsonPointer": null
         }
       ],
@@ -41338,7 +41338,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 35,
+          "line": 37,
           "jsonPointer": null
         }
       ],
@@ -41368,7 +41368,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 36,
+          "line": 38,
           "jsonPointer": null
         }
       ],
@@ -41394,7 +41394,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 37,
+          "line": 39,
           "jsonPointer": null
         }
       ],
@@ -41415,7 +41415,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 38,
+          "line": 40,
           "jsonPointer": null
         }
       ],
@@ -41436,7 +41436,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 39,
+          "line": 41,
           "jsonPointer": null
         }
       ],
@@ -41470,7 +41470,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 40,
+          "line": 42,
           "jsonPointer": null
         }
       ],
@@ -41504,7 +41504,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 41,
+          "line": 43,
           "jsonPointer": null
         }
       ],
@@ -41534,7 +41534,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 42,
+          "line": 44,
           "jsonPointer": null
         }
       ],
@@ -41560,7 +41560,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 43,
+          "line": 45,
           "jsonPointer": null
         }
       ],
@@ -41586,7 +41586,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 44,
+          "line": 46,
           "jsonPointer": null
         }
       ],
@@ -41612,7 +41612,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 45,
+          "line": 47,
           "jsonPointer": null
         }
       ],
@@ -41642,7 +41642,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 46,
+          "line": 48,
           "jsonPointer": null
         }
       ],
@@ -41672,7 +41672,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
-          "line": 47,
+          "line": 49,
           "jsonPointer": null
         }
       ],

@@ -100,6 +100,7 @@ export async function buildAutomationDesignData(repo) {
         ref: (value) => ({ value }),
         watch: (...args) => watches.push(args),
         onMounted: () => {},
+        onUnmounted: () => {},
         createApiClient: () => request,
         ApiClientError: MockApiError,
         rethrowUnexpectedError: () => {},

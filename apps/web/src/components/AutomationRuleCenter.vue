@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -75,6 +75,15 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   }),
   form = ref(emptyForm());
 let previewSequence = 0;
+let loadGeneration = 0;
+let viewGeneration = 0;
+let disposed = false;
+onUnmounted(() => {
+  disposed = true;
+  loadGeneration++;
+  viewGeneration++;
+  previewSequence++;
+});
 const previewSuccessNotice = "试运行完成；本次只读取历史匹配事实，没有执行动作。";
 watch(
   () => [form.value, showCreate.value, editing.value?.id, route.fullPath],
@@ -120,44 +129,83 @@ const templates: Array<RuleTemplate & { description: string }> = [
     action_title: "审批被驳回，请补充依据",
   },
 ];
-async function api(path: string, init?: RequestInit) {
+async function api(
+  path: string,
+  init?: RequestInit,
+  owner?: { current: () => boolean; failed?: () => void },
+) {
   try {
     const response = await request<any>(path, init ?? {});
-    requestId.value = response.request_id;
+    if (!owner || owner.current()) requestId.value = response.request_id;
     return response.data;
   } catch (error) {
-    const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    state.value = failure?.kind === "conflict" ? "version_conflict" : (failure?.kind ?? "error");
-    notice.value = failure?.actionHint ?? "稍后重试。";
+    if (!owner || owner.current()) {
+      const failure = error instanceof ApiClientError ? error : null;
+      requestId.value = failure?.requestId ?? "";
+      state.value = failure?.kind === "conflict" ? "version_conflict" : (failure?.kind ?? "error");
+      notice.value = failure?.actionHint ?? "稍后重试。";
+      owner?.failed?.();
+    }
     throw error;
   }
 }
 async function load() {
+  if (disposed) return;
+  const generation = ++loadGeneration;
+  const view = ++viewGeneration;
+  const ownerPath = route.path;
+  const draft = JSON.stringify([form.value, editReason.value]);
+  let active = true;
+  const owner = {
+    current: () => !disposed && active && generation === loadGeneration,
+    failed: () => {
+      active = false;
+    },
+  };
   state.value = "loading";
   try {
     const [loadedRules, loadedMembers] = await Promise.all([
-      api("/automations"),
-      api("/tasks/member-options"),
+      api("/automations", undefined, owner),
+      api("/tasks/member-options", undefined, owner),
     ]);
+    if (!owner.current()) return;
     rules.value = loadedRules;
     memberOptions.value = loadedMembers;
     state.value = rules.value.length ? "ready" : "empty";
     routeSyncReady.value = true;
-    await applyRouteState();
+    // Refresh facts without reopening/resetting a view or draft changed during this read.
+    if (
+      view === viewGeneration &&
+      ownerPath === route.path &&
+      draft === JSON.stringify([form.value, editReason.value])
+    )
+      await applyRouteState();
   } catch (error) {
     rethrowUnexpectedError(error);
+  } finally {
+    active = false;
   }
 }
 async function open(rule: Rule, syncRoute = true) {
+  if (disposed) return;
+  const generation = ++viewGeneration;
   if (syncRoute) {
     await navigateToRule(rule);
     return;
   }
+  const ownerPath = route.fullPath;
+  const owner = {
+    current: () =>
+      !disposed &&
+      generation === viewGeneration &&
+      ownerPath === route.fullPath &&
+      !showCreate.value,
+  };
   try {
     showCreate.value = false;
     editing.value = null;
-    selected.value = await api(`/automations/${rule.id}`);
+    const detail = await api(`/automations/${rule.id}`, undefined, owner);
+    if (owner.current()) selected.value = detail;
   } catch (error) {
     rethrowUnexpectedError(error);
   }
@@ -193,6 +241,8 @@ async function create() {
   }
 }
 function edit(rule: Rule, syncRoute = true) {
+  if (disposed) return;
+  viewGeneration++;
   if (syncRoute) {
     void navigateToRule(rule, "edit");
     return;
@@ -215,6 +265,7 @@ function edit(rule: Rule, syncRoute = true) {
   showCreate.value = true;
 }
 function closeEditor() {
+  viewGeneration++;
   showCreate.value = false;
   editing.value = null;
   editReason.value = "";
@@ -222,6 +273,7 @@ function closeEditor() {
   if (route.query.rule) void clearRuleQuery();
 }
 function closeDetail() {
+  viewGeneration++;
   selected.value = null;
   if (route.query.rule) void clearRuleQuery();
 }
@@ -238,6 +290,8 @@ async function navigateToRule(rule: Rule, action?: "edit") {
   await router.push({ query });
 }
 async function applyRouteState() {
+  if (disposed) return;
+  viewGeneration++;
   const ruleId = typeof route.query.rule === "string" ? route.query.rule : "";
   if (!ruleId) {
     selected.value = null;
@@ -257,7 +311,10 @@ async function applyRouteState() {
   else await open(target, false);
 }
 async function openCreator() {
+  if (disposed) return;
+  viewGeneration++;
   if (route.query.rule) await clearRuleQuery(true);
+  if (disposed) return;
   selected.value = null;
   editing.value = null;
   editReason.value = "";
@@ -273,11 +330,11 @@ function applyTemplate(template: RuleTemplate) {
   preview.value = null;
 }
 async function runPreview() {
-  if (previewing.value || !editorFormElement.value?.reportValidity()) return;
+  if (disposed || previewing.value || !editorFormElement.value?.reportValidity()) return;
   const sequence = ++previewSequence;
   const ownerPath = route.fullPath;
   const isCurrent = () =>
-    sequence === previewSequence && showCreate.value && route.fullPath === ownerPath;
+    !disposed && sequence === previewSequence && showCreate.value && route.fullPath === ownerPath;
   previewing.value = true;
   try {
     const response = await request<AutomationPreview>("/automations/preview", {

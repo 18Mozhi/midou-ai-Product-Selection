@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+    "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -289,7 +289,7 @@
           "apps/web/src/components/AutomationRuleCenter.vue#6a22c249121aeb4d.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+          "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
         }
       },
       "visualStateReferences": {
@@ -783,7 +783,7 @@
           "apps/web/src/components/AutomationRuleCenter.vue#aef9c00aea0c46b8.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+          "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
         }
       },
       "visualStateReferences": {
@@ -1024,7 +1024,7 @@
           "apps/web/src/components/AutomationRuleCenter.vue#1c008f867673db60.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+          "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
         }
       },
       "visualStateReferences": {
@@ -1153,7 +1153,7 @@
           "apps/web/src/components/AutomationRuleCenter.vue#742531071607ff73.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+          "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
         }
       },
       "visualStateReferences": {
@@ -1374,7 +1374,7 @@
           "apps/web/src/components/AutomationRuleCenter.vue#2354c8e95ace6cd1.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+          "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
         }
       },
       "visualStateReferences": {
@@ -1782,7 +1782,7 @@
     "files": ["apps/web/src/components/AutomationRuleCenter.vue"],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0"
+      "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4"
     },
     "inputs": [
       {

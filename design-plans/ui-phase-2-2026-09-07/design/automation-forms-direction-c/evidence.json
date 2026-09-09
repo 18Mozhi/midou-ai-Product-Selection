@@ -6,14 +6,14 @@
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.css": "ca86b91076416ef1d3999e6843ac77c7f3346dbc02ea141a9ac54f7149213859",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/automation.js": "699aefa49bbb853149ca41b8ffbf766a5f80eba20f4771bebaa0637ee4aeda84",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/data.js": "743c138d7b853ebb34a26a6ce558c5d5a735dd6640bf6b0f3708561d6a0613e4",
-    "apps/web/src/components/AutomationRuleCenter.vue": "2184a176fca14aa9bbedbdfd15ff8491886ed4fd46e1aa266d0f71c2256d7ce0",
+    "apps/web/src/components/AutomationRuleCenter.vue": "6c86e3399434253686d4257e7ee65eb2bb37da3b405cb89f226ef15002232be4",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/api/src/automation-service.ts": "44bc9a30971af6a7eb3cc8f4a14830c5b699bc58d0d75ea34e2fd38f6f837ce0",
     "apps/api/src/automation-routes.ts": "d1dafd3ff2fa9a565aa774cdd377ad79574326d3a3c69693a43bf7eddacf1f15",
     "apps/api/src/mysql-automation-repository.ts": "42878b0a5550fba0678b023e67d34b8d99f2ed08b77d3897d7228a44f4047500",
     "apps/worker/src/automation-worker.ts": "bfcc31317696e536d32eeaf297768f2f78fceff535a3508f4cd04964535774ac",
     "tests/e2e/m05-05-automation-rules.spec.ts": "f800da394b90038be016595ecc718b78a9d0faf6000e9fcd2442d77b9969cea6",
-    "scripts/lib/ui-phase2-automation-design-data.mjs": "10e0437f7cc7740f3de259c998e4eae70cb5074faa01ba95231ac05bfcb8955e",
+    "scripts/lib/ui-phase2-automation-design-data.mjs": "c38d200e7f1afa4d3b4bd02b7686179573187ca8b595c244bd0d491c5a89ba8f",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-automation-c.mjs": "17747ad0d99c6fad3b5a306eed966fd3e3214e6560b4f1f3a61eb0087ad9a732",
     "design-plans/ui-phase-2-2026-09-07/design/automation-forms-direction-c/index.html": "6e4554a8c01f2da85e2317b4667405ae37a131250d859f4bbb1cdc3ed4acf479",
@@ -1931,7 +1931,7 @@
       "scene": "name-focus",
       "width": 1440,
       "file": "name-focus-1440.png",
-      "sha256": "f0f7fc7773cd82bd59fa7f5156f9d0310b759403070a38ac6339378ed6dcc9e3",
+      "sha256": "bea9e4756f7a31fee672bc9c0d0c61349edff02a4db494f38d62ce4699564402",
       "field": {
         "binding": "form.name",
         "selector": "#name",
@@ -1975,7 +1975,7 @@
       "scene": "trigger_event_type-default",
       "width": 1440,
       "file": "trigger_event_type-default-1440.png",
-      "sha256": "1ac554080305e803b496f79a1a9a5e2eb191e4799cdf445b0b836e62a5dc91f7",
+      "sha256": "2aaa54f62cc3e08bd3ace856be89c8780a888a046557ce0470cf984f2841e271",
       "field": {
         "binding": "form.trigger_event_type",
         "selector": "#trigger_event_type",
@@ -2052,7 +2052,7 @@
       "scene": "action_type-focus",
       "width": 1440,
       "file": "action_type-focus-1440.png",
-      "sha256": "2572fc4a8518ec6bd483148644d6c34a5466972623c9d0f1a4374eb241fa426b",
+      "sha256": "ecf6e4f4477cb70b2428a67b4ba90822a1faf67f240ae7898a892a4d0a240f60",
       "field": {
         "binding": "form.action_type",
         "selector": "#action_type",
@@ -2074,7 +2074,7 @@
       "scene": "owner_id-default",
       "width": 1440,
       "file": "owner_id-default-1440.png",
-      "sha256": "bb1f74c0b585dcd9237dbc55abdfab436269b2843606e62a2d23f23837061417",
+      "sha256": "0579f413b843fe067a3633719e19f7386f6b9bb0e008e3ee0cf2a61f139e8ad4",
       "field": {
         "binding": "form.owner_id",
         "selector": "#owner_id",
@@ -2096,7 +2096,7 @@
       "scene": "owner_id-busy",
       "width": 1440,
       "file": "owner_id-busy-1440.png",
-      "sha256": "cd61902f0cc19553816905d7547481eca07a25252f5403b191190677ca8aeaba",
+      "sha256": "5bfe938b6711594c4d0e2487ea7aa3a4b4c41acb13e4a1ff0c1bd4e641fe9f58",
       "field": {
         "binding": "form.owner_id",
         "selector": "#owner_id",
@@ -2129,7 +2129,7 @@
       "scene": "action_assignee_id-focus",
       "width": 1440,
       "file": "action_assignee_id-focus-1440.png",
-      "sha256": "fd9b4a49823edc48a447315a4b583b661dafb44752674b244ea87283ef67491e",
+      "sha256": "31c91694345dbe5f7f47a7985d7c2d2d963f9b1603eb83315783b730ab43db00",
       "field": {
         "binding": "form.action_assignee_id",
         "selector": "#action_assignee_id",
@@ -2162,7 +2162,7 @@
       "scene": "action_title-default",
       "width": 1440,
       "file": "action_title-default-1440.png",
-      "sha256": "89a966e4e8393d83e2cdd2a603726c0941ecfa7d4d9fd958a59d096de7f19eff",
+      "sha256": "98e42c4b91a3fd437b5ce58b4c9596bb08a9a6e906b1555d1e36b9d8c301b552",
       "field": {
         "binding": "form.action_title",
         "selector": "#action_title",
@@ -2184,7 +2184,7 @@
       "scene": "action_title-busy",
       "width": 1440,
       "file": "action_title-busy-1440.png",
-      "sha256": "c24787025000c2df4214b14f6a803836fe2cc7404e2e663858ce44a8ae8facbf",
+      "sha256": "6541e79c729313fbf0300ff77e9b3eed9fb8bca8abdf8766ee42f1e314a3e9d2",
       "field": {
         "binding": "form.action_title",
         "selector": "#action_title",
@@ -2206,7 +2206,7 @@
       "scene": "action_title-maxlength",
       "width": 1440,
       "file": "action_title-maxlength-1440.png",
-      "sha256": "0ffa0936f2b5a9bbe0dd3fd2a53a1e7758b4c5a030a989866bdb18bd54425ba3",
+      "sha256": "41f7acac215069c955fbb9cdff76c88749a59462fcca50658675c249ee69883f",
       "field": {
         "binding": "form.action_title",
         "selector": "#action_title",
@@ -2217,7 +2217,7 @@
       "scene": "reason-default",
       "width": 1440,
       "file": "reason-default-1440.png",
-      "sha256": "2ea466e98381d3d5c69f0648d780e62ff700722b242ddd32df1ba10e56b7edcc",
+      "sha256": "d8de4938e765508aaa2b79cdfa8e8a81de6af5a9df36be5156b76331bac3b8c4",
       "field": {
         "binding": "editReason",
         "selector": "#reason",
@@ -2305,7 +2305,7 @@
       "scene": "rate_limit_count-missing",
       "width": 1440,
       "file": "rate_limit_count-missing-1440.png",
-      "sha256": "d8c98bda63fa113102dd9ca711c594fc2ba9974e73fc22d651d0784a70650ffc",
+      "sha256": "3f535be8476450b1dd86e210b631013e4008401ed70eba39fda7cd3c5b96552c",
       "field": {
         "binding": "form.rate_limit_count",
         "selector": "#rate_limit_count",
@@ -2316,7 +2316,7 @@
       "scene": "rate_limit_count-min",
       "width": 1440,
       "file": "rate_limit_count-min-1440.png",
-      "sha256": "d6fdffb1860f18a9cf775bef288132e89f02b2e784acf5eb2db5725f2c00e2cb",
+      "sha256": "bf745a736440366421e38c67bf80a349ceab26094e12a9870a9767bacfc865ab",
       "field": {
         "binding": "form.rate_limit_count",
         "selector": "#rate_limit_count",
@@ -2327,7 +2327,7 @@
       "scene": "rate_limit_count-max",
       "width": 1440,
       "file": "rate_limit_count-max-1440.png",
-      "sha256": "933178a0c1e11b667b78c3ef41fe98c47e2a234148ff75a25c099cee003e1725",
+      "sha256": "049b4754a724126d3ef482c3d507c7c7865bac191fee9352de56cbcf89f0a47b",
       "field": {
         "binding": "form.rate_limit_count",
         "selector": "#rate_limit_count",
@@ -2338,7 +2338,7 @@
       "scene": "rate_limit_count-below",
       "width": 1440,
       "file": "rate_limit_count-below-1440.png",
-      "sha256": "af704d2e5f9921e1ff8857157f63dec3d868b65d19712e3485cb527199f5bf57",
+      "sha256": "d8cb0b67cdb03d09f982bcb77069e4d262ae61bf94e2f35b0bdfd6e057caad83",
       "field": {
         "binding": "form.rate_limit_count",
         "selector": "#rate_limit_count",
@@ -2371,7 +2371,7 @@
       "scene": "rate_limit_window_minutes-default",
       "width": 1440,
       "file": "rate_limit_window_minutes-default-1440.png",
-      "sha256": "93ba7124c143388b79bea16b83fd44684e5484c05356f926bc52c97f68cb8467",
+      "sha256": "e531b6ff5a9b138e4accb4695b18ba74b3f11bf31695e071b72d6c2fea9509e9",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2393,7 +2393,7 @@
       "scene": "rate_limit_window_minutes-busy",
       "width": 1440,
       "file": "rate_limit_window_minutes-busy-1440.png",
-      "sha256": "d83e622eb9937382ea8d2e43176f23dcb5d31d13548b866076593063a533d144",
+      "sha256": "e36f6f641be9fe512f5587621f24af046fad6f5b3ffd2341026833c0264081f7",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2404,7 +2404,7 @@
       "scene": "rate_limit_window_minutes-missing",
       "width": 1440,
       "file": "rate_limit_window_minutes-missing-1440.png",
-      "sha256": "cd8b58800ec89d5db8349aae40a609116e156c383ad979ce7a827ba7f3890c2f",
+      "sha256": "bca90dc64f01b75fc72c2392a552f55d9b518c6af02971c341cd42a6785422af",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2415,7 +2415,7 @@
       "scene": "rate_limit_window_minutes-min",
       "width": 1440,
       "file": "rate_limit_window_minutes-min-1440.png",
-      "sha256": "96e1f7737722475324cbde4e6b1e58e75f7dd3311f6c6ffe3f098be01741e558",
+      "sha256": "94689271841169430a74dbebd25dabf695b76cb51cdb99dd2901698417ed9d63",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2426,7 +2426,7 @@
       "scene": "rate_limit_window_minutes-max",
       "width": 1440,
       "file": "rate_limit_window_minutes-max-1440.png",
-      "sha256": "32b9a3a84d08dd86762515aa0c6384288a7589391d2a5bac9b5b0c49ea2a3840",
+      "sha256": "e944a6a2c66828a1b4250ea4192c87f88688e8dd011cc1b57219785fefbf3c6d",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2448,7 +2448,7 @@
       "scene": "rate_limit_window_minutes-above",
       "width": 1440,
       "file": "rate_limit_window_minutes-above-1440.png",
-      "sha256": "7cb6735e60d8c4c331d0011f81527853a4279a6e09813579a19bd9911739892e",
+      "sha256": "c0211eaa5fc2dea8a83cc46cb502ab088a4e0485f9da4e2924d17244b55d712c",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2459,7 +2459,7 @@
       "scene": "rate_limit_window_minutes-fraction",
       "width": 1440,
       "file": "rate_limit_window_minutes-fraction-1440.png",
-      "sha256": "1495bc915bb8ac8193f923fe112e1c9b5128e8dace784f182a1b0044c8f5e02e",
+      "sha256": "d0276ab634da37c5f52639678c81a9e8ebf23fba54d906521805345d8cbd08ba",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -2506,13 +2506,13 @@
       "scene": "edit-conflict",
       "width": 1440,
       "file": "edit-conflict-1440.png",
-      "sha256": "a54b43c45a70b43a23a3346378ecfeb7655e712bc14057125b42413eecfa4187"
+      "sha256": "ca6cce71fcff002548da5756be3f4778c05c8e66ae2afeca470b6e9ca9a506fa"
     },
     {
       "scene": "name-default",
       "width": 390,
       "file": "name-default-390.png",
-      "sha256": "6f7ea19c3d33db7f605411ea1c83d0d9502b673c16aba5c3633723666b3e3f56",
+      "sha256": "6dbc7e054234ff3a3522dd76d4c1a560e70e1390dabfede75ebe564b4c51a39c",
       "field": {
         "binding": "form.name",
         "selector": "#name",
@@ -2523,7 +2523,7 @@
       "scene": "name-focus",
       "width": 390,
       "file": "name-focus-390.png",
-      "sha256": "f9d7bde24c6fad65baf5131646f0d03c9c6481cd8e7a89618d3f7b73ac9a1310",
+      "sha256": "8cfd7ab1f72679df1796f80d9f0d3b5003a81535c50e67a7c95ad84a56d15c25",
       "field": {
         "binding": "form.name",
         "selector": "#name",
@@ -2644,7 +2644,7 @@
       "scene": "action_type-focus",
       "width": 390,
       "file": "action_type-focus-390.png",
-      "sha256": "cc618d42c9798bf94b47605cc24ee8762965b8aa85bb6822411a316dd668e6ac",
+      "sha256": "5f2211c153a697bde8a48866a30acf4671d7458a35a6fa1415d8613243e17461",
       "field": {
         "binding": "form.action_type",
         "selector": "#action_type",
@@ -2677,7 +2677,7 @@
       "scene": "owner_id-focus",
       "width": 390,
       "file": "owner_id-focus-390.png",
-      "sha256": "ec7da076c3332b5c7c8bf2397c1d9d551a5a5b751f295ac943866cbfa60d86de",
+      "sha256": "703dd148fa669e41b623dd457fc0d188a9807d356a162025392f93970a90fe3d",
       "field": {
         "binding": "form.owner_id",
         "selector": "#owner_id",
@@ -2721,7 +2721,7 @@
       "scene": "action_assignee_id-focus",
       "width": 390,
       "file": "action_assignee_id-focus-390.png",
-      "sha256": "72ef28a31ead345a3251f2b037174d95a15002cb1b1081f33e118411a57b5dff",
+      "sha256": "11ea0e00000d40edcc8a0cf04b363558ae6ceb6da69b2730e477ff5fb6cd4ff0",
       "field": {
         "binding": "form.action_assignee_id",
         "selector": "#action_assignee_id",
@@ -2765,7 +2765,7 @@
       "scene": "action_title-focus",
       "width": 390,
       "file": "action_title-focus-390.png",
-      "sha256": "30131df965924cd846b7903eb0489159fa9ca324bf654e65f84e0bd407b8e369",
+      "sha256": "98e53a618220e9bbe844a3d41cf46b7da0de8660f9e32ccd977914864b56584c",
       "field": {
         "binding": "form.action_title",
         "selector": "#action_title",
@@ -2798,7 +2798,7 @@
       "scene": "action_title-maxlength",
       "width": 390,
       "file": "action_title-maxlength-390.png",
-      "sha256": "107d48915e4d24b44686ef28c01b4ade6e2dde150f8c1acec819c934729a44ac",
+      "sha256": "ed6a11b5a50fcac8e8f17c8b085e5a6c604abba2074f8297a162c9119cb0b9f4",
       "field": {
         "binding": "form.action_title",
         "selector": "#action_title",
@@ -2820,7 +2820,7 @@
       "scene": "reason-focus",
       "width": 390,
       "file": "reason-focus-390.png",
-      "sha256": "77a47d2d548d411db1a879201dc7344d672f7aa68fd144e2a978b50c8dc10d33",
+      "sha256": "89c95d6f460f74b453f99c200a20ce664e9d87cabdc71e728ff0b6512a5f7dd1",
       "field": {
         "binding": "editReason",
         "selector": "#reason",
@@ -2853,7 +2853,7 @@
       "scene": "reason-maxlength",
       "width": 390,
       "file": "reason-maxlength-390.png",
-      "sha256": "50e6ddad3ae72390c19a6e043f0d77acc4c2769439f6adcd4c17f1634e3cd268",
+      "sha256": "ff54e6fc2c1c33558eb616b3020fc580216108131939f3b67f8d45eae1be580e",
       "field": {
         "binding": "editReason",
         "selector": "#reason",
@@ -2875,7 +2875,7 @@
       "scene": "rate_limit_count-focus",
       "width": 390,
       "file": "rate_limit_count-focus-390.png",
-      "sha256": "e39baff324049461c86639b6f1a687042c03fc3e406960442ba229b1f0227a5b",
+      "sha256": "840dcc67f0201399c9f5dd6870e0b2128b90da1f05d6253a9a6472249c5c3aa1",
       "field": {
         "binding": "form.rate_limit_count",
         "selector": "#rate_limit_count",
@@ -2919,7 +2919,7 @@
       "scene": "rate_limit_count-max",
       "width": 390,
       "file": "rate_limit_count-max-390.png",
-      "sha256": "d2a63816f60c50f2cb7b3c5645c018f9ff5d39a941a1f31253689fd0e53741c9",
+      "sha256": "f0fc3dbe8a2dcf42f7dde70e69313effb7a4027b185be537887fcd2052b9d5b5",
       "field": {
         "binding": "form.rate_limit_count",
         "selector": "#rate_limit_count",
@@ -2974,7 +2974,7 @@
       "scene": "rate_limit_window_minutes-focus",
       "width": 390,
       "file": "rate_limit_window_minutes-focus-390.png",
-      "sha256": "6b32456ed602c07a5230f3ee2cbaf5a0e88956822fcd27aa84f15ef408edb5be",
+      "sha256": "4ccf909e90da05f8efcb15f0fcd506ecff07a99c2c99c6956f6229c6d5dae7a1",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
@@ -3018,7 +3018,7 @@
       "scene": "rate_limit_window_minutes-max",
       "width": 390,
       "file": "rate_limit_window_minutes-max-390.png",
-      "sha256": "9319a13503d2616b3f5f1e0a165bf62bb35b59ec71bb6e5b4effc2c4e1488101",
+      "sha256": "f253a8a4faf86df2143ada94b4fa703e87062dc1824f1ff5e7c758173722d0cf",
       "field": {
         "binding": "form.rate_limit_window_minutes",
         "selector": "#rate_limit_window_minutes",
