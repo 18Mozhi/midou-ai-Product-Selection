@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P21成本提交、重算与通过／驳回复核
+
+从干净main/e8c7fccc继续，沿AGENTS、Feature Map、蓝图3.6和SC/PP/RQ实际处理链，使用ui-skills-root/frontend-design与现有Playwright脚本；无新依赖、服务或子代理。新增SOURCING-COST-CONTROL-REVIEW.md、8成本／复核控件变体80张双端PNG，包现65主场景695PNG、59控件变体544双端状态实例。五语义组增加26代表槽，P21累计150映射、20待适用性核对；三个驳回额外变体不扩大动作分母。剩余20槽是源码无明确disabled/busy条件的局部／读取动作，不据此编造禁用图。
+
+离线稿改为成本区独立busy，不和找货／采集互锁；自身请求在途才显示aria-busy，同区其他写按钮仅禁用。机会版本7和复核记录版本3各自精确使用；成本九字段、金额0和本地观测时刻保留。原生required与按钮disabled区分，不新增0金额确认规则。取消／换结论依源保持可用，持续提示旧请求尚未确认；输入变动不能改写已记录请求。通过蓝色、驳回红色、取消中性，键盘提交焦点移入区域提示、取消精确回到原结论入口。真实生产旧响应归属、重读／卸载、SC-G01–08未修；没有HTTP或审批生效证明。
+
+源码隔离检查新增RQ原因trim/版本/重开和父组件busy独立两组，总13组通过；smoke及完整capture通过544双端控件实例、精确惰性请求、重复提交拦截、跨区busy独立、取消重开／快照、required区分、44px触控/16px字/可见焦点/内侧命中/对比阈值4.5、九宽度×五代表面和既有时间/等效重排，HTTP及页面错误0。第一次capture后目检发现手机“正在提交驳回”折行，改手机成本／复核底栏纵向排列，并添加不折行断言；定向确认驳回／重算按钮均320×44px后第二次完整capture通过。仅人工查看手机驳回在途（修前修后）和桌面取消焦点两种代表图，未声称全图人工审核。
+
+动作审计通过，83审核链接均存在；docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis及format:check通过。设计审计76包10774PNG、844独立来源/1453绑定、8942 README链接，来源/PNG漂移及未登记图0；源审阅仍22页/479位置/426组，完整页面批准0、分母未冻结、G0进行中/G1–G5待验。
+
+仅改本包离线HTML/CSS/JS、永久验证脚本/PNG/证据/图册和直接相关审核、计划、Feature Map。生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/配置、依赖/安全/权限和宝塔未改，无运行参数或重启变化；未重跑未受影响生产E2E/构建。可打开审核文档或图册；node scripts/verify-ui-phase2-sourcing-c.mjs完整复验，--smoke预检、--capture重生成本包永久交付物。无新临时文件或服务，验证浏览器finally关闭，收尾headless_shell为0；旧output/playwright/ui-phase2-competitor-races-20260909中的playwright.config.ts、results/.last-run.json因此前工具清理拒绝仍保留，本轮只读复核未绕过。下一继续P21适用性／字段与主题、P22等其余51页同级核对；全站具体审核、实际重构、宝塔部署签收未完成。
+
+提交前diff复核发现成本输入／下拉框仍继承原型全局busy，导致采集提交中只能提交预填表单。对照PP真实字段没有busy禁用后，去掉成本字段对采集busy的继承，保留其他弹窗字段既有规则。定向断言改为先开始采集、确认成本字段全可编辑，再填写和提交；重新执行预检和完整capture，更新来源证据后才提交。
+
 ## 2026-09-09 · P21导航、搜索和恢复分支
 
 从干净main/e1a30c35继续，上一轮主操作图与验证提交为实际进展。按AGENTS/Feature Map/蓝图3.6、C方向和真实SW、UiStatePanel/state-contract、SC/PP导航追踪，使用ui-skills-root/frontend-design及现有Playwright脚本，不新增依赖/服务或子代理。新增SOURCING-NAVIGATION-RECOVERY-REVIEW.md、28导航/恢复控件变体双端四态224PNG与只读空目录/只读搜索/依赖受阻3场景6PNG，共230新图；包现65主场景615PNG、51控件变体464双端状态实例。

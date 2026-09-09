@@ -19,11 +19,11 @@
     "tests/e2e/m04-06-sourcing.spec.ts": "923878a13bc8db5f5edff7f693fde8a2e4d4269b91dd45ec760fbfbfb1c1582b",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
-    "scripts/verify-ui-phase2-sourcing-source.mjs": "80f84d3bc8679e45c870a7b372b0e3cff1a7a4da06fe7a73e1e05ae60dddd2bf",
-    "scripts/verify-ui-phase2-sourcing-c.mjs": "c6e690b7497894297ffe287bbeff29a6573c4e032366cc1bef32f14c5d48d41b",
+    "scripts/verify-ui-phase2-sourcing-source.mjs": "7b60125a79fa1e1ee3d598166db7cdda744f14a79878e7e44fc6301573622f8d",
+    "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
     "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/index.html": "a7590f66142c3bce8f896c6c627cefd858c63af53c8b10bce4f557ba1954f7f4",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "a3d22720f1a03ca58e45bdca8cbaf42293141b2b243aa707505c1392eff34f34",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "65860f10e4b34d9da436212129c952bd0d7d8c7b52d9a892c60cd188ea795338"
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "553edaf12bd951498232aa8ed847226f8eaab5f913d4e748683970845b2fd264",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "e7ad1fd396db5f594913e31692feb95dc20b9625ed50b8dea42396a4bb4cdbbc"
   },
   "sourceProof": {
     "checks": [
@@ -37,7 +37,9 @@
       "delete only trimmed reason, no invented revision; refresh success notice erased by reload remains UNFIXED",
       "actual comparison normalizes formatting only, not units/semantic equivalence",
       "SC cost read Promise.all fails atomically on reviewer error; no invented ready snapshot/reviewer count",
-      "cost submission uses opportunity version; review uses independent review version; recalculation queues platform/version only"
+      "cost submission uses opportunity version; review uses independent review version; recalculation queues platform/version only",
+      "actual review queue resets reason for each decision, trims/requires two characters, emits item version; busy is a template-only submit guard, not a beginReview/submitReview function guard",
+      "cost and sourcing owners have independent busy refs; failed cost write releases only cost owner, not a production async ownership or successful reload proof"
     ],
     "limits": "Actual setup functions with inert transport/router and checkbox class; no DOM mount, SQL, RBAC, worker, quote validity, asynchronous ownership or actual timezone matrix proof."
   },
@@ -402,7 +404,7 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-only",
-      "sha256": "947a8ce6296f3ca8881ab5295540a25ba61e801212d80a69260a54e9f8dcefcd"
+      "sha256": "2f411e493a100bd6795dde4b5727bfa290f85a03c5d11bf53e79e03acd798e5a"
     },
     {
       "file": "1440-platform-inspect.png",
@@ -654,14 +656,14 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-error",
-      "sha256": "58703c6ae2af56b1e96f8137ac1e7e25179aa7942708a48a801be0537d9280d9"
+      "sha256": "3ba4ed9cf2ab39e4ee369b402ef16f4222d7785b6acd142ff1dcefddbe672896"
     },
     {
       "file": "1440-quote-error-lower.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-error-lower",
-      "sha256": "5dcdbc73a706030404dcd131d01f9bfb52c61c8836a4fa9d9a5479e1c1da0483"
+      "sha256": "e2fab2042553c75a516134e0e86431d6899c58aa827e712240f4bbab53b89e6d"
     },
     {
       "file": "1440-quote-busy.png",
@@ -710,7 +712,7 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "delete-error",
-      "sha256": "2c527665b3e0982635b9549c7c65636091f689181c466debf3c3b916fda6fe02"
+      "sha256": "a00ad717881cf94f0ac407b58ee3da770911956ddbf62b892103b07bbe6feaca"
     },
     {
       "file": "1440-delete-busy.png",
@@ -724,42 +726,42 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-missing",
-      "sha256": "885789b007d45cffd301310aa1091efb3a08584f91226d1c5c54819bf2a6dbed"
+      "sha256": "0c542a2261dc9ed8e1914489f64d0a9062c113c955f6e9d0b6e71a068de65804"
     },
     {
       "file": "1440-cost-calculated.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-calculated",
-      "sha256": "dfcc8073cdbc11937df8c6d929e8e4c26a59c2a202ddc7a9aeeefe539d26f6de"
+      "sha256": "8d5fda8a4974694f3fdecdfe8a4c779bee4a9eb4dda257f3d6a358407f12b21c"
     },
     {
       "file": "1440-cost-pending.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-pending",
-      "sha256": "8a12ff5a27fbf871df3286ac12b840fed2037ff23e492b0b7c8818ae113d0c70"
+      "sha256": "fbcf6f712cb8d3edd5f1bddbfb9d7bc7a5fe349c5d1d1c6bf73ed0cca48a00fb"
     },
     {
       "file": "1440-cost-overdue.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-overdue",
-      "sha256": "68ee809d44f08a58de4a637033f5871c7c4c600aee3cb898a3495355337e19a6"
+      "sha256": "4e6cdda6cf9fecf8d1c05871465522abe651121206fe8c8d04a424f10db445b4"
     },
     {
       "file": "1440-cost-approved.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-approved",
-      "sha256": "c673943afd6b78a5f63846845031d20aca620115ab6d48118ea93e89c9a096ca"
+      "sha256": "09c5be28344e32a7a6c4e709f752b9d8032a5cc7d5de18c3e963721fb028e97b"
     },
     {
       "file": "1440-cost-rejected.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-rejected",
-      "sha256": "637bdc622eda42673baf948eb2791bb60018f0e9782e5925030660c6b57a7d21"
+      "sha256": "dbdccd9935e0932bf092d7b2c31e3ec19c647eade98ff658b640dadb85766f93"
     },
     {
       "file": "1440-cost-readonly.png",
@@ -773,14 +775,14 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-review-approved",
-      "sha256": "c930a0c9c35a6908ad3cd62ce80b83c96bb3715b09a7d8a1e9d0cdf342d2b0eb"
+      "sha256": "704dff5b9297fe453a24e3eca6b89910a1711e7e69ab281e6eb00a38f3606253"
     },
     {
       "file": "1440-cost-review-rejected.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-review-rejected",
-      "sha256": "4866b05b6b6ad15d935e1342f6d4edb58b5340873b379b0ee08f90331ffc2f5c"
+      "sha256": "2465502d923fa7ef54f1cc63b8dc9a9ef0f36ea745eb81bc388e25f1d305692c"
     },
     {
       "file": "1440-cost-error.png",
@@ -794,21 +796,21 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-reviewers-empty",
-      "sha256": "aef8b4763edcd8a92468964bcb59ab8da5fcbfa5fa43a899bd6dc2ec683bf236"
+      "sha256": "c5665a54e33282f219eb1bd24d49b73aa462b08c2b6c074065350e631274d656"
     },
     {
       "file": "1440-cost-submit-error.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-submit-error",
-      "sha256": "ea7ec04b706315e7dd408dd1c3e9331ba8b3743849b4e1063a8d02d9e7d0a6de"
+      "sha256": "34f9a669a4dc4ffa82a5dfd748cb6c2beafe3c2c6c54abf5d10ef2fc33a9f788"
     },
     {
       "file": "1440-cost-recalculating.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "cost-recalculating",
-      "sha256": "4f627e78e82e80d8cc68100a7eb1a9cbdbf77b690616759a93d1db77ec882f46"
+      "sha256": "818092da430b055962b5bdd3cf0d52791ddbb66bd61761a98067cd47ee3aa1e3"
     },
     {
       "file": "1440-deep-ocean-standard.png",
@@ -938,7 +940,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "f119ab836971a2eb817457188030989f0d842a618824b198ae15fff3a4a77368"
+      "sha256": "7f079719cf6f691c161397c4a1b6b2f3a61695961ef2dc293efe1328dc094cae"
     },
     {
       "file": "1440-control-search-pressed.png",
@@ -1078,7 +1080,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "64ce8e3f22995cb953c60f024f5b4c8ec0971e9b30c1a9f644bb16d78ed761a3"
+      "sha256": "d55ad607636f220eba52a5e28bd6301751f14c811649bbbf26c3079b0aa1a483"
     },
     {
       "file": "1440-control-quote-disabled.png",
@@ -1098,7 +1100,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "59d91749b636619a0a75149de3f654dc872bc91550e5840f560ae7b30d10fffb"
+      "sha256": "1bfe6e35b52f8d321fcc93dbc2ad1845904ead0ecb7b02c7a3e99c0ef265e9aa"
     },
     {
       "file": "1440-control-quote-busy.png",
@@ -1238,7 +1240,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "f5579acf12645f08ed33dbaefd3558e6de227a62b8bc27050c0011df46cf6493"
+      "sha256": "53a8337ebea067141e07832df899c3ebe5dab3e42765068fae35d0eaf74baa4f"
     },
     {
       "file": "1440-control-delete-default.png",
@@ -1438,7 +1440,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "9f92894a9a890c4276a2c8ddc8ebec784d3d36bbdd212bd8655a547c004376b9"
+      "sha256": "ab0889774ca480d628d3308df15adb8b99b4c8d014d3215a4c230e225c813559"
     },
     {
       "file": "1440-control-search-close-disabled.png",
@@ -1638,7 +1640,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "c7ee9e285ed9f9cc07c2eb1797826c14601c1cb0261b7340cbd3143d6cd3f3dd"
+      "sha256": "886debd6a3e9efbc7528d26f799448835787c31b7a62d218b24c2689adf32a47"
     },
     {
       "file": "1440-control-quote-close-focus.png",
@@ -1678,7 +1680,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "eae0dd65bff5dc691d35573ab8a2738751616add1ae9e52e5111ecebf670ba55"
+      "sha256": "dbb01b6bd014047ca64684ec48e2e26b65f0c7cf2c7bed0a99db1487f3d8f39a"
     },
     {
       "file": "1440-control-quote-close-disabled.png",
@@ -1698,7 +1700,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "59d91749b636619a0a75149de3f654dc872bc91550e5840f560ae7b30d10fffb"
+      "sha256": "1bfe6e35b52f8d321fcc93dbc2ad1845904ead0ecb7b02c7a3e99c0ef265e9aa"
     },
     {
       "file": "1440-control-quote-close-busy.png",
@@ -1738,7 +1740,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "2f8c1c56fd2fb6b48eb4f06830ee20aba6cc732e6fbd81ab130ec779d455cf9b"
+      "sha256": "1918ccebaf73fc302620b12e864db770c17243d764b0a97c7215ac9ffd689ac1"
     },
     {
       "file": "1440-control-quote-cancel-hover.png",
@@ -1758,7 +1760,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "a3838ba1afe733f9e3e0bf8181768f278bf3c81bf553aa0c5c368675ea7024ec"
+      "sha256": "52e589777f86e7533ca39763061d6b413c770186a868c108ab9725a185c7f11d"
     },
     {
       "file": "1440-control-quote-cancel-focus.png",
@@ -2918,7 +2920,7 @@
         "condition": "request-in-flight-not-task-running"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "57b53ea0baa9a97f0d4ed21e7233c7221d0a46559b4c131929a3a45e779d2220"
+      "sha256": "e4f837d75cd68ad7456bcd032b240df31157620e7198f30df782d50abfe2ffd8"
     },
     {
       "file": "1440-control-main-refresh-default.png",
@@ -5521,6 +5523,806 @@
       "sha256": "535a79aafc5c5deb64bd91af53e007232b0be9c599de1a41187c52e6d749bc88"
     },
     {
+      "file": "1440-control-cost-submit-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-submit-default",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "default",
+        "scene": "control-cost-submit-default",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f31c58823cb82022d127c2bb3649ef9aa7ffd287dc0d83c7ce93544dc35f2307"
+    },
+    {
+      "file": "1440-control-cost-submit-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-submit-hover",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "hover",
+        "scene": "control-cost-submit-hover",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ad280f1288c738954a6b3552ed132ea8e843b9731081f70fb2b133d0e0f42c66"
+    },
+    {
+      "file": "1440-control-cost-submit-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-submit-focus",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "focus",
+        "scene": "control-cost-submit-focus",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7caacffc847278ba0741c2b588a9e0860aaa8f1d9b5e09f9af426310a2df40d1"
+    },
+    {
+      "file": "1440-control-cost-submit-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-submit-pressed",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "pressed",
+        "scene": "control-cost-submit-pressed",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "603d0f3457fb7679c0974b9deb86830e3c9e1e37f54ac9950af9205a84ecebc8"
+    },
+    {
+      "file": "1440-control-cost-submit-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-submit-disabled",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "disabled",
+        "scene": "control-cost-submit-disabled",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "reviewer-not-selected"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c3419129cc8a47401f58884e41113899a761250c74dda79affd0be3bb28fe936"
+    },
+    {
+      "file": "1440-control-cost-submit-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-submit-busy",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "busy",
+        "scene": "control-cost-submit-busy",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c44733cadd3eec303a2ae1a7699c4a094ffe7b6632767dd0fe38e92d40255862"
+    },
+    {
+      "file": "1440-control-cost-recalculate-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-recalculate-default",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "default",
+        "scene": "control-cost-recalculate-default",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c3419129cc8a47401f58884e41113899a761250c74dda79affd0be3bb28fe936"
+    },
+    {
+      "file": "1440-control-cost-recalculate-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-recalculate-hover",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "hover",
+        "scene": "control-cost-recalculate-hover",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "32e91eb6eb9bc2a01c3435062f9035a40e331f3f4a419c3993520adef34c6aa7"
+    },
+    {
+      "file": "1440-control-cost-recalculate-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-recalculate-focus",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "focus",
+        "scene": "control-cost-recalculate-focus",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f1884e042cf0187c3562e38e80adfa5995506254cfb43657624251d878a1fc9c"
+    },
+    {
+      "file": "1440-control-cost-recalculate-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-recalculate-pressed",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "pressed",
+        "scene": "control-cost-recalculate-pressed",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f51ddd5311abbb869796223bd1f1cac6df3f3c941b83ed3d3902779b95ec0093"
+    },
+    {
+      "file": "1440-control-cost-recalculate-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-recalculate-disabled",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "disabled",
+        "scene": "control-cost-recalculate-disabled",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "72a6d14f1f3d54ca8d5a0b7cc0c5f7e240d5600b8ba6ba44de229f4b3b3eb9fd"
+    },
+    {
+      "file": "1440-control-cost-recalculate-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-recalculate-busy",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "busy",
+        "scene": "control-cost-recalculate-busy",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "72a6d14f1f3d54ca8d5a0b7cc0c5f7e240d5600b8ba6ba44de229f4b3b3eb9fd"
+    },
+    {
+      "file": "1440-control-cost-open-approved-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-approved-default",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "default",
+        "scene": "control-cost-open-approved-default",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "780d0363cc66e3bc46a4210d453504e2c1d0dd399fed95fc10e984bf51d78d7a"
+    },
+    {
+      "file": "1440-control-cost-open-approved-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-approved-hover",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "hover",
+        "scene": "control-cost-open-approved-hover",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ddf9ebbd2dcfaa49e253d59c31189b79706b519f0e4eaaefbdf89a4ad9adf6bb"
+    },
+    {
+      "file": "1440-control-cost-open-approved-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-approved-focus",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "focus",
+        "scene": "control-cost-open-approved-focus",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1014595b1352ca9f8c415f71e95c0897ec64b7998d02dccf1b9af4ec3b2d592d"
+    },
+    {
+      "file": "1440-control-cost-open-approved-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-approved-pressed",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "pressed",
+        "scene": "control-cost-open-approved-pressed",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0631de439f564157c605aa075ad13d37683918b5dfd705e5ad4efd35bf5f2b5f"
+    },
+    {
+      "file": "1440-control-cost-review-approved-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-approved-default",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "default",
+        "scene": "control-cost-review-approved-default",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cfe164f73df261155f7d9b489467b212f9ca94f7b71a1171d6fcae0cd4097db0"
+    },
+    {
+      "file": "1440-control-cost-review-approved-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-approved-hover",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "hover",
+        "scene": "control-cost-review-approved-hover",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1c3936f1f58318e3695decf60d71e487fa49957afd2475cbdcdd5d599fb8c8d1"
+    },
+    {
+      "file": "1440-control-cost-review-approved-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-approved-focus",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "focus",
+        "scene": "control-cost-review-approved-focus",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "aa7d11b5316c27bd7c8576b1e7e9ddcefc43861f142ba65aca7caa82160bb2ba"
+    },
+    {
+      "file": "1440-control-cost-review-approved-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-approved-pressed",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "pressed",
+        "scene": "control-cost-review-approved-pressed",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "17365a46beac0fbca0b99a50beefa7850584286863a5af5bef173dc11dbcafd9"
+    },
+    {
+      "file": "1440-control-cost-review-approved-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-approved-disabled",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "disabled",
+        "scene": "control-cost-review-approved-disabled",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "trimmed-reason-too-short"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8fdf3477457f0f1eefe4075d15669672176e673c801d3f25ee78cde44d00d3cd"
+    },
+    {
+      "file": "1440-control-cost-review-approved-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-approved-busy",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "busy",
+        "scene": "control-cost-review-approved-busy",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9b639c698f981ed6dedfe7de81eb7774f96d2666bbef84b2e6ed72b26e4d9a33"
+    },
+    {
+      "file": "1440-control-cost-cancel-approved-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-approved-default",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "default",
+        "scene": "control-cost-cancel-approved-default",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cfe164f73df261155f7d9b489467b212f9ca94f7b71a1171d6fcae0cd4097db0"
+    },
+    {
+      "file": "1440-control-cost-cancel-approved-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-approved-hover",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "hover",
+        "scene": "control-cost-cancel-approved-hover",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "edeb3ca22ca05ac804704549b3780348aa24d28ea551ccace87a2a7e88f8f36e"
+    },
+    {
+      "file": "1440-control-cost-cancel-approved-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-approved-focus",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "focus",
+        "scene": "control-cost-cancel-approved-focus",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9122f80e94c4ce0ea02be4d45048c05da7ce4aa6c815c38e55c409bf4e2fa5a7"
+    },
+    {
+      "file": "1440-control-cost-cancel-approved-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-approved-pressed",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "pressed",
+        "scene": "control-cost-cancel-approved-pressed",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1fc7682ed46a4e31abb8bae6325b8917a8e691613663648b49556cb2c3b4dc41"
+    },
+    {
+      "file": "1440-control-cost-open-rejected-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-rejected-default",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "default",
+        "scene": "control-cost-open-rejected-default",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "780d0363cc66e3bc46a4210d453504e2c1d0dd399fed95fc10e984bf51d78d7a"
+    },
+    {
+      "file": "1440-control-cost-open-rejected-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-rejected-hover",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "hover",
+        "scene": "control-cost-open-rejected-hover",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.328246391024151,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6c52f12323e24346d4b393c746f3346f3a2b1952c425b8827cf57026e2914c82"
+    },
+    {
+      "file": "1440-control-cost-open-rejected-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-rejected-focus",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "focus",
+        "scene": "control-cost-open-rejected-focus",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "bf05dbbd8c99a3ebefaadc15c5c79b0aa8e607bf5d3dc6326ed7884469493ca8"
+    },
+    {
+      "file": "1440-control-cost-open-rejected-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-open-rejected-pressed",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "pressed",
+        "scene": "control-cost-open-rejected-pressed",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.328246391024151,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a5990199cde31ebfb249ce8f41946db54c2677c1b42fdb9ba3c5bff32d84f782"
+    },
+    {
+      "file": "1440-control-cost-review-rejected-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-rejected-default",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "default",
+        "scene": "control-cost-review-rejected-default",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e82499e4c9edecae4729599c3dfc8f5dd74c595bef11e4d73b8731c63aea18b6"
+    },
+    {
+      "file": "1440-control-cost-review-rejected-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-rejected-hover",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "hover",
+        "scene": "control-cost-review-rejected-hover",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e82499e4c9edecae4729599c3dfc8f5dd74c595bef11e4d73b8731c63aea18b6"
+    },
+    {
+      "file": "1440-control-cost-review-rejected-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-rejected-focus",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "focus",
+        "scene": "control-cost-review-rejected-focus",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2a02e0d95752f18937add5293ec054b18e6f01861d5ce4fcd1ddfd9b8921cc9b"
+    },
+    {
+      "file": "1440-control-cost-review-rejected-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-rejected-pressed",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "pressed",
+        "scene": "control-cost-review-rejected-pressed",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3ef90bc0ac46a21303cb49054b43382f99223dbdb4ba884e53f7a9c9afe4560f"
+    },
+    {
+      "file": "1440-control-cost-review-rejected-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-rejected-disabled",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "disabled",
+        "scene": "control-cost-review-rejected-disabled",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "trimmed-reason-too-short"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2221bb1de2eb451149f62834801a71d67be1fd7ee710168a5151974b766098f2"
+    },
+    {
+      "file": "1440-control-cost-review-rejected-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-review-rejected-busy",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "busy",
+        "scene": "control-cost-review-rejected-busy",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f80c3a69e13a10b662ee3148a6c79b52fc682d81320e0d106d5f39ff81074882"
+    },
+    {
+      "file": "1440-control-cost-cancel-rejected-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-rejected-default",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "default",
+        "scene": "control-cost-cancel-rejected-default",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e82499e4c9edecae4729599c3dfc8f5dd74c595bef11e4d73b8731c63aea18b6"
+    },
+    {
+      "file": "1440-control-cost-cancel-rejected-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-rejected-hover",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "hover",
+        "scene": "control-cost-cancel-rejected-hover",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "5695fdec2403a85e7172697ee3de4f87bc7cfdff86c39ef2cf7503efb8b0702c"
+    },
+    {
+      "file": "1440-control-cost-cancel-rejected-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-rejected-focus",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "focus",
+        "scene": "control-cost-cancel-rejected-focus",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "20d28994916f38acbf1f3196f38b7d90e6847edcf0cbae0c613046562602c0f4"
+    },
+    {
+      "file": "1440-control-cost-cancel-rejected-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-cost-cancel-rejected-pressed",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "pressed",
+        "scene": "control-cost-cancel-rejected-pressed",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 1440,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4b866a65a0c6fadc3db572f4fa5122d7bf0a831e8a137ba11a485ce93e1e4f43"
+    },
+    {
       "file": "390-workspace.png",
       "pageId": "P21",
       "width": 390,
@@ -5553,7 +6355,7 @@
       "pageId": "P21",
       "width": 390,
       "scene": "cost-only",
-      "sha256": "a291622701be4c64b13b0f6c26a04da63519d780e3c1b1e333feb73323fd6312"
+      "sha256": "52736aa09b85abfdb3c6017c45f792dcd621363c4ab53d1f1fe709d0aca7e648"
     },
     {
       "file": "390-platform-inspect.png",
@@ -5882,42 +6684,42 @@
       "pageId": "P21",
       "width": 390,
       "scene": "cost-missing",
-      "sha256": "556d963d3d2932d5f925922fb3635cbce7bfcda49234de31d95d478399a455c3"
+      "sha256": "e686f3cbc977a174726d5dbf3d353e82cd6c8f894eb053f3d91cfc5f0de0f197"
     },
     {
       "file": "390-cost-calculated.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-calculated",
-      "sha256": "736ef0f00e4883647e4def38c31e3da8845dacc0e21dee910f5993772d0cf396"
+      "sha256": "91c6baa27e299ecc66b0c1489629b080a55b1ebcfaa6fa337c0edd6e2900ea66"
     },
     {
       "file": "390-cost-pending.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-pending",
-      "sha256": "1180a85f0fd537b60b6c6d79487399fa20b0cdcc97223783b4dab841f3ff6c1c"
+      "sha256": "f0e2ee1b95848248e211570239c68d6c905e09c318dde604d2f550996d7ff2ec"
     },
     {
       "file": "390-cost-overdue.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-overdue",
-      "sha256": "80fa1b5291851b3a96998a18394392e3462e39433b787cc9a9f57f98aeba4513"
+      "sha256": "d29afd4876a4f12c157dcf2901c69c221af6e91967372f189a337987d8ca0f5f"
     },
     {
       "file": "390-cost-approved.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-approved",
-      "sha256": "a41379bbee549e977e5c9cf0b4b34495ac22823d87d5ef3b981c80133a79de7e"
+      "sha256": "7fe592f4d665ee301e651b440a1592e9f06961df36026707a79c472286dc4106"
     },
     {
       "file": "390-cost-rejected.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-rejected",
-      "sha256": "ad4ba0d25fe0928dfc43baea9432460a361327c73526433ac645da96af21c79a"
+      "sha256": "691874be093d1aafcdbd40f1ace8e396dd3df55e679abf1617d7274915e8024f"
     },
     {
       "file": "390-cost-readonly.png",
@@ -5931,14 +6733,14 @@
       "pageId": "P21",
       "width": 390,
       "scene": "cost-review-approved",
-      "sha256": "93ad2dd71b02a9b6be780436df0fd37cfc29eed18f0f2ebf013c5429921aeb4a"
+      "sha256": "2704d03dc873fde494e134056fef43253313985e2f31129caa4b83c777a6ab8d"
     },
     {
       "file": "390-cost-review-rejected.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-review-rejected",
-      "sha256": "731d75bc776b3ef79f05e228ed98b2f139f9f4586ec94b3a0159d1f70c57b4c5"
+      "sha256": "aa58024c6d567449308b9d01358be420c54a6eed4d40e890eac86639924cbfd1"
     },
     {
       "file": "390-cost-error.png",
@@ -5952,21 +6754,21 @@
       "pageId": "P21",
       "width": 390,
       "scene": "cost-reviewers-empty",
-      "sha256": "889e7b16561fe0e31a8ce9b0d96593e383507e7b263ec30b17686291a03c222b"
+      "sha256": "ba94d280f470100b0840f52ed139e16b5502eb5ff449233f6fa0bc6ca6503d76"
     },
     {
       "file": "390-cost-submit-error.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-submit-error",
-      "sha256": "2fd41f08f0e2560a49bfe7d631b23def12619e7ad3db457c1dc20751cfc0833c"
+      "sha256": "6cf0b18a1461fbe88ec60b691fdb1c7a9cabe8c8dce9e5aaa8a607111424dc48"
     },
     {
       "file": "390-cost-recalculating.png",
       "pageId": "P21",
       "width": 390,
       "scene": "cost-recalculating",
-      "sha256": "6ed8e08655a6d3cdd309533ab57c357e7c47f47ad9dc91aae262758d32d443a1"
+      "sha256": "0b9f6a571a7381a651349548387c577c9c4c11b7a2ad1b2440e8494266ed36cb"
     },
     {
       "file": "390-deep-ocean-standard.png",
@@ -10679,6 +11481,806 @@
       "sha256": "f47055607d0cda406aca18e17fa365f9826268a18967193800a034153a3c11d4"
     },
     {
+      "file": "390-control-cost-submit-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-submit-default",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "default",
+        "scene": "control-cost-submit-default",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b71acd909eda9707d475f4ac7a1ba8e4cec8271cefcb395fcc847b444e7b6eff"
+    },
+    {
+      "file": "390-control-cost-submit-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-submit-hover",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "hover",
+        "scene": "control-cost-submit-hover",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8a4a92671d38a6743b4ff8144d12d943cdb2f21cafd5f57bfab8d79e370cd859"
+    },
+    {
+      "file": "390-control-cost-submit-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-submit-focus",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "focus",
+        "scene": "control-cost-submit-focus",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "99f67e03b6873798fd5a5394e902ac34ee5649bdf493cc631e1d07760446d8ea"
+    },
+    {
+      "file": "390-control-cost-submit-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-submit-pressed",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "pressed",
+        "scene": "control-cost-submit-pressed",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "161491682182853a521f20226817af1ef04d85560a49b771629c8a4858689b11"
+    },
+    {
+      "file": "390-control-cost-submit-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-submit-disabled",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "disabled",
+        "scene": "control-cost-submit-disabled",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "reviewer-not-selected"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "46fcf79c3bf2cd275a2ed99356be5777e1aa165cc996afba3147dc8af89498b0"
+    },
+    {
+      "file": "390-control-cost-submit-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-submit-busy",
+      "control": {
+        "key": "cost-submit",
+        "actionId": "SC-COST-SUBMIT",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "state": "busy",
+        "scene": "control-cost-submit-busy",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "66e97b7767c9751fae0c08f726999f5f491a97f04d48a95fa8d614ae30337246"
+    },
+    {
+      "file": "390-control-cost-recalculate-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-recalculate-default",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "default",
+        "scene": "control-cost-recalculate-default",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "46fcf79c3bf2cd275a2ed99356be5777e1aa165cc996afba3147dc8af89498b0"
+    },
+    {
+      "file": "390-control-cost-recalculate-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-recalculate-hover",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "hover",
+        "scene": "control-cost-recalculate-hover",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "974f11c3d73b88de30eda9424f2d59a2782d83d6c592746a97afd8aace4584c3"
+    },
+    {
+      "file": "390-control-cost-recalculate-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-recalculate-focus",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "focus",
+        "scene": "control-cost-recalculate-focus",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "df7f313df143af05dbb19ce9bc48f927a6a8270bfe600a48d4ba6354d12becae"
+    },
+    {
+      "file": "390-control-cost-recalculate-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-recalculate-pressed",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "pressed",
+        "scene": "control-cost-recalculate-pressed",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "18346072c6ccd91c1b0c267fc1946c91bf3634fadc3bfc700054f75142b03e75"
+    },
+    {
+      "file": "390-control-cost-recalculate-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-recalculate-disabled",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "disabled",
+        "scene": "control-cost-recalculate-disabled",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2a4ee2e7ca85621e584ec04daeec8259cd6e170510f8e2542c9adcc3974c74e1"
+    },
+    {
+      "file": "390-control-cost-recalculate-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-recalculate-busy",
+      "control": {
+        "key": "cost-recalculate",
+        "actionId": "SC-COST-RECALCULATE",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "state": "busy",
+        "scene": "control-cost-recalculate-busy",
+        "baseScene": "cost-missing",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2a4ee2e7ca85621e584ec04daeec8259cd6e170510f8e2542c9adcc3974c74e1"
+    },
+    {
+      "file": "390-control-cost-open-approved-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-approved-default",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "default",
+        "scene": "control-cost-open-approved-default",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ca6484ed5f646c038adc9a06b8c01f7d87819068a91f47445648a54559b4634b"
+    },
+    {
+      "file": "390-control-cost-open-approved-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-approved-hover",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "hover",
+        "scene": "control-cost-open-approved-hover",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4692ca4fbe14646c4157a973f6e35890f9342eb7358b0af178dc247b7ebf63f6"
+    },
+    {
+      "file": "390-control-cost-open-approved-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-approved-focus",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "focus",
+        "scene": "control-cost-open-approved-focus",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "934b5703ae64484cb384bdffb5de4fd4436c021a98e6773179e4a57287b45a2c"
+    },
+    {
+      "file": "390-control-cost-open-approved-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-approved-pressed",
+      "control": {
+        "key": "cost-open-approved",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "state": "pressed",
+        "scene": "control-cost-open-approved-pressed",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9d8a2cb6c51936489ff749b9004871db8998d283589ae03d047ecb0d8538e741"
+    },
+    {
+      "file": "390-control-cost-review-approved-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-approved-default",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "default",
+        "scene": "control-cost-review-approved-default",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c66ba7a6884c925c9505f727daab9c861ba47d22a51b2522ab69b3b4c197c3b1"
+    },
+    {
+      "file": "390-control-cost-review-approved-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-approved-hover",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "hover",
+        "scene": "control-cost-review-approved-hover",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "49c593dddd02d053451b4fb26b2a08ba58dc5d2d1bbdca636fcdfe520cc16caa"
+    },
+    {
+      "file": "390-control-cost-review-approved-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-approved-focus",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "focus",
+        "scene": "control-cost-review-approved-focus",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 8.273466608002094,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "69503cb08a180e2b86e1ad406f572c61ccc8553fcf2326197f417137064ab0c9"
+    },
+    {
+      "file": "390-control-cost-review-approved-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-approved-pressed",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "pressed",
+        "scene": "control-cost-review-approved-pressed",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 10.613441575513296,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7ee3cae2c6512f6a38bb1a86999c39041fcefc8d55ea8594f1115c2e5a8e0971"
+    },
+    {
+      "file": "390-control-cost-review-approved-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-approved-disabled",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "disabled",
+        "scene": "control-cost-review-approved-disabled",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "trimmed-reason-too-short"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "46b2824c7d13933f5ca8324dd61edb1f6a11eec05530b5e9b4b109606d8cbf5a"
+    },
+    {
+      "file": "390-control-cost-review-approved-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-approved-busy",
+      "control": {
+        "key": "cost-review-approved",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "busy",
+        "scene": "control-cost-review-approved-busy",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "145349ec9447a2cf21b7dc4523e17e18aeae1be19a06c08d28144c551035e222"
+    },
+    {
+      "file": "390-control-cost-cancel-approved-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-approved-default",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "default",
+        "scene": "control-cost-cancel-approved-default",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e1d711a7d361bc0079340a0a223d8a16dab7a7ea1aa7888e264d3ec822ad88d7"
+    },
+    {
+      "file": "390-control-cost-cancel-approved-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-approved-hover",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "hover",
+        "scene": "control-cost-cancel-approved-hover",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "348fdbfb4533cdd58dedfa5f3a4184b9cea309ae8e5e84cfcbb2883316af8f92"
+    },
+    {
+      "file": "390-control-cost-cancel-approved-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-approved-focus",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "focus",
+        "scene": "control-cost-cancel-approved-focus",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "677d014e02dc0b505d66ecfe6b8afdbc3a2087db1521b9db57d2309cda1829aa"
+    },
+    {
+      "file": "390-control-cost-cancel-approved-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-approved-pressed",
+      "control": {
+        "key": "cost-cancel-approved",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "pressed",
+        "scene": "control-cost-cancel-approved-pressed",
+        "baseScene": "cost-review-approved",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2e91214dc77828849844d8532a2f00eabd8b4e27dc573f077ff0e548be5d76fa"
+    },
+    {
+      "file": "390-control-cost-open-rejected-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-rejected-default",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "default",
+        "scene": "control-cost-open-rejected-default",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ca6484ed5f646c038adc9a06b8c01f7d87819068a91f47445648a54559b4634b"
+    },
+    {
+      "file": "390-control-cost-open-rejected-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-rejected-hover",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "hover",
+        "scene": "control-cost-open-rejected-hover",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.328246391024151,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "20f30ab291b63cb21c6e32d2d9558e4a6c22a955de168f41380c705781913c7b"
+    },
+    {
+      "file": "390-control-cost-open-rejected-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-rejected-focus",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "focus",
+        "scene": "control-cost-open-rejected-focus",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0e41b0d73c68f162ac8d57ed34842f0b12535d9a82ee90ec02a236c1676443d4"
+    },
+    {
+      "file": "390-control-cost-open-rejected-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-open-rejected-pressed",
+      "control": {
+        "key": "cost-open-rejected",
+        "actionId": "SC-COST-REVIEW-OPEN",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+        "state": "pressed",
+        "scene": "control-cost-open-rejected-pressed",
+        "baseScene": "cost-overdue",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.328246391024151,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0fc9c24a5258bf317e7e8a5735178b290e66613b8b87967240b4a97ade792d92"
+    },
+    {
+      "file": "390-control-cost-review-rejected-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-rejected-default",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "default",
+        "scene": "control-cost-review-rejected-default",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1b31c3383196255385b071585f427030da4c5117658b139369d78d7b0a1046d3"
+    },
+    {
+      "file": "390-control-cost-review-rejected-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-rejected-hover",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "hover",
+        "scene": "control-cost-review-rejected-hover",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1b31c3383196255385b071585f427030da4c5117658b139369d78d7b0a1046d3"
+    },
+    {
+      "file": "390-control-cost-review-rejected-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-rejected-focus",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "focus",
+        "scene": "control-cost-review-rejected-focus",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3be26d5bfd522035cd490f0b5664807a968b05a71027cd39bc5159c8475bcbee"
+    },
+    {
+      "file": "390-control-cost-review-rejected-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-rejected-pressed",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "pressed",
+        "scene": "control-cost-review-rejected-pressed",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 7.04437716623466,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "bb4afc1388b2b84fa9fca9179be0577cacaf963374b6574ce3a1206731b7303d"
+    },
+    {
+      "file": "390-control-cost-review-rejected-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-rejected-disabled",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "disabled",
+        "scene": "control-cost-review-rejected-disabled",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "trimmed-reason-too-short"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "347efe263a45160d4d900dc1d061379ff6815b60975f6071ed1290e5dbed8980"
+    },
+    {
+      "file": "390-control-cost-review-rejected-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-review-rejected-busy",
+      "control": {
+        "key": "cost-review-rejected",
+        "actionId": "SC-COST-REVIEW-SUBMIT",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "state": "busy",
+        "scene": "control-cost-review-rejected-busy",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 6.355026273093729,
+        "condition": "cost-request-in-flight-not-effective-result"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "08ef4dc09d2a0fcb7b459db14627ca6962a88094dfe92c99966b74c00b2571c8"
+    },
+    {
+      "file": "390-control-cost-cancel-rejected-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-rejected-default",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "default",
+        "scene": "control-cost-cancel-rejected-default",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7e96533a504159b1ccddf53f7447333a2459994b6b6ef0dedc4c6bea621cf3a7"
+    },
+    {
+      "file": "390-control-cost-cancel-rejected-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-rejected-hover",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "hover",
+        "scene": "control-cost-cancel-rejected-hover",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "24e2836cf5ec4ef82a43a493ba9ea56a375761b482e36446e0fe4df73e1fc299"
+    },
+    {
+      "file": "390-control-cost-cancel-rejected-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-rejected-focus",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "focus",
+        "scene": "control-cost-cancel-rejected-focus",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 14.102738944447992,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0e66990f6a810eb33934d8eeebfd9c2bb287d96f248969e822c998e2c33c3746"
+    },
+    {
+      "file": "390-control-cost-cancel-rejected-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-cost-cancel-rejected-pressed",
+      "control": {
+        "key": "cost-cancel-rejected",
+        "actionId": "SC-COST-REVIEW-CANCEL",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "state": "pressed",
+        "scene": "control-cost-cancel-rejected-pressed",
+        "baseScene": "cost-review-rejected",
+        "pageId": "P21",
+        "width": 390,
+        "contrast": 12.669055719579259,
+        "condition": "available-source-condition"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fc6d116802a88eaef5879a5f5bf15f3309c6a20c80cd863761ae040b20cf38aa"
+    },
+    {
       "file": "768-workspace.png",
       "pageId": "P21",
       "width": 768,
@@ -10690,7 +12292,7 @@
       "pageId": "P21",
       "width": 768,
       "scene": "cost-calculated",
-      "sha256": "6ad9459dc09b3e9519e8d716c7721632dde575c2a9a4a42997601854a6145cdb"
+      "sha256": "26966a55c196df327e5fba520c1e9a0e22ffc7d7e77e3c1854e6a12db431b708"
     },
     {
       "file": "1024-workspace.png",
@@ -10704,7 +12306,7 @@
       "pageId": "P21",
       "width": 1024,
       "scene": "cost-calculated",
-      "sha256": "08e12cd5956ad2399bf50723f6d5b8c9b952fbfb654057264dc83ea69c9ba639"
+      "sha256": "5efac490446b8c8d72430aa6d8d4fa9bd96b9b82884279ee8710f09d50e3088a"
     }
   ],
   "controlStates": [
@@ -13493,6 +15095,486 @@
       "condition": "source-navigation-or-recovery-no-disabled-busy"
     },
     {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "default",
+      "scene": "control-cost-submit-default",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "hover",
+      "scene": "control-cost-submit-hover",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "focus",
+      "scene": "control-cost-submit-focus",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "pressed",
+      "scene": "control-cost-submit-pressed",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "disabled",
+      "scene": "control-cost-submit-disabled",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "reviewer-not-selected"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "busy",
+      "scene": "control-cost-submit-busy",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "default",
+      "scene": "control-cost-recalculate-default",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "hover",
+      "scene": "control-cost-recalculate-hover",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "focus",
+      "scene": "control-cost-recalculate-focus",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "pressed",
+      "scene": "control-cost-recalculate-pressed",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "disabled",
+      "scene": "control-cost-recalculate-disabled",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "busy",
+      "scene": "control-cost-recalculate-busy",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "default",
+      "scene": "control-cost-open-approved-default",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "hover",
+      "scene": "control-cost-open-approved-hover",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "focus",
+      "scene": "control-cost-open-approved-focus",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "pressed",
+      "scene": "control-cost-open-approved-pressed",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "default",
+      "scene": "control-cost-review-approved-default",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "hover",
+      "scene": "control-cost-review-approved-hover",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "focus",
+      "scene": "control-cost-review-approved-focus",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "pressed",
+      "scene": "control-cost-review-approved-pressed",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "disabled",
+      "scene": "control-cost-review-approved-disabled",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "trimmed-reason-too-short"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "busy",
+      "scene": "control-cost-review-approved-busy",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "default",
+      "scene": "control-cost-cancel-approved-default",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "hover",
+      "scene": "control-cost-cancel-approved-hover",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "focus",
+      "scene": "control-cost-cancel-approved-focus",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "pressed",
+      "scene": "control-cost-cancel-approved-pressed",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "default",
+      "scene": "control-cost-open-rejected-default",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "hover",
+      "scene": "control-cost-open-rejected-hover",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.328246391024151,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "focus",
+      "scene": "control-cost-open-rejected-focus",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "pressed",
+      "scene": "control-cost-open-rejected-pressed",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.328246391024151,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "default",
+      "scene": "control-cost-review-rejected-default",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "hover",
+      "scene": "control-cost-review-rejected-hover",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "focus",
+      "scene": "control-cost-review-rejected-focus",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "pressed",
+      "scene": "control-cost-review-rejected-pressed",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "disabled",
+      "scene": "control-cost-review-rejected-disabled",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "trimmed-reason-too-short"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "busy",
+      "scene": "control-cost-review-rejected-busy",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "default",
+      "scene": "control-cost-cancel-rejected-default",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "hover",
+      "scene": "control-cost-cancel-rejected-hover",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "focus",
+      "scene": "control-cost-cancel-rejected-focus",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "pressed",
+      "scene": "control-cost-cancel-rejected-pressed",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 1440,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
       "key": "search",
       "actionId": "SC-S-SUBMIT",
       "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
@@ -16275,6 +18357,486 @@
       "width": 390,
       "contrast": 12.669055719579259,
       "condition": "source-navigation-or-recovery-no-disabled-busy"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "default",
+      "scene": "control-cost-submit-default",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "hover",
+      "scene": "control-cost-submit-hover",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "focus",
+      "scene": "control-cost-submit-focus",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "pressed",
+      "scene": "control-cost-submit-pressed",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "disabled",
+      "scene": "control-cost-submit-disabled",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "reviewer-not-selected"
+    },
+    {
+      "key": "cost-submit",
+      "actionId": "SC-COST-SUBMIT",
+      "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+      "state": "busy",
+      "scene": "control-cost-submit-busy",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "default",
+      "scene": "control-cost-recalculate-default",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "hover",
+      "scene": "control-cost-recalculate-hover",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "focus",
+      "scene": "control-cost-recalculate-focus",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "pressed",
+      "scene": "control-cost-recalculate-pressed",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "disabled",
+      "scene": "control-cost-recalculate-disabled",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-recalculate",
+      "actionId": "SC-COST-RECALCULATE",
+      "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+      "state": "busy",
+      "scene": "control-cost-recalculate-busy",
+      "baseScene": "cost-missing",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "default",
+      "scene": "control-cost-open-approved-default",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "hover",
+      "scene": "control-cost-open-approved-hover",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "focus",
+      "scene": "control-cost-open-approved-focus",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-approved",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+      "state": "pressed",
+      "scene": "control-cost-open-approved-pressed",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "default",
+      "scene": "control-cost-review-approved-default",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "hover",
+      "scene": "control-cost-review-approved-hover",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "focus",
+      "scene": "control-cost-review-approved-focus",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 8.273466608002094,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "pressed",
+      "scene": "control-cost-review-approved-pressed",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 10.613441575513296,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "disabled",
+      "scene": "control-cost-review-approved-disabled",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "trimmed-reason-too-short"
+    },
+    {
+      "key": "cost-review-approved",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "busy",
+      "scene": "control-cost-review-approved-busy",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "default",
+      "scene": "control-cost-cancel-approved-default",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "hover",
+      "scene": "control-cost-cancel-approved-hover",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "focus",
+      "scene": "control-cost-cancel-approved-focus",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-approved",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "pressed",
+      "scene": "control-cost-cancel-approved-pressed",
+      "baseScene": "cost-review-approved",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "default",
+      "scene": "control-cost-open-rejected-default",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "hover",
+      "scene": "control-cost-open-rejected-hover",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.328246391024151,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "focus",
+      "scene": "control-cost-open-rejected-focus",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-open-rejected",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "state": "pressed",
+      "scene": "control-cost-open-rejected-pressed",
+      "baseScene": "cost-overdue",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.328246391024151,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "default",
+      "scene": "control-cost-review-rejected-default",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "hover",
+      "scene": "control-cost-review-rejected-hover",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "focus",
+      "scene": "control-cost-review-rejected-focus",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "pressed",
+      "scene": "control-cost-review-rejected-pressed",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 7.04437716623466,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "disabled",
+      "scene": "control-cost-review-rejected-disabled",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "trimmed-reason-too-short"
+    },
+    {
+      "key": "cost-review-rejected",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "state": "busy",
+      "scene": "control-cost-review-rejected-busy",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 6.355026273093729,
+      "condition": "cost-request-in-flight-not-effective-result"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "default",
+      "scene": "control-cost-cancel-rejected-default",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "hover",
+      "scene": "control-cost-cancel-rejected-hover",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "focus",
+      "scene": "control-cost-cancel-rejected-focus",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 14.102738944447992,
+      "condition": "available-source-condition"
+    },
+    {
+      "key": "cost-cancel-rejected",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "state": "pressed",
+      "scene": "control-cost-cancel-rejected-pressed",
+      "baseScene": "cost-review-rejected",
+      "pageId": "P21",
+      "width": 390,
+      "contrast": 12.669055719579259,
+      "condition": "available-source-condition"
     }
   ],
   "pageActionVisualReferences": {
@@ -16608,6 +19170,72 @@
           "hover": "control-recovery-search-primary-hover",
           "focus": "control-recovery-search-primary-focus",
           "pressed": "control-recovery-search-primary-pressed"
+        },
+        "limitation": "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
+      },
+      "SC-COST-SUBMIT": {
+        "pageId": "P21",
+        "selector": "#cost-form [data-action=SC-COST-SUBMIT]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-cost-submit-default",
+          "hover": "control-cost-submit-hover",
+          "focus": "control-cost-submit-focus",
+          "pressed": "control-cost-submit-pressed",
+          "disabled": "control-cost-submit-disabled",
+          "busy": "control-cost-submit-busy"
+        },
+        "limitation": "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
+      },
+      "SC-COST-RECALCULATE": {
+        "pageId": "P21",
+        "selector": "#cost-form [data-action=SC-COST-RECALCULATE]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-cost-recalculate-default",
+          "hover": "control-cost-recalculate-hover",
+          "focus": "control-cost-recalculate-focus",
+          "pressed": "control-cost-recalculate-pressed",
+          "disabled": "control-cost-recalculate-disabled",
+          "busy": "control-cost-recalculate-busy"
+        },
+        "limitation": "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
+      },
+      "SC-COST-REVIEW-OPEN": {
+        "pageId": "P21",
+        "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"approved\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-cost-open-approved-default",
+          "hover": "control-cost-open-approved-hover",
+          "focus": "control-cost-open-approved-focus",
+          "pressed": "control-cost-open-approved-pressed"
+        },
+        "limitation": "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
+      },
+      "SC-COST-REVIEW-SUBMIT": {
+        "pageId": "P21",
+        "selector": "#review-form [data-action=SC-COST-REVIEW]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-cost-review-approved-default",
+          "hover": "control-cost-review-approved-hover",
+          "focus": "control-cost-review-approved-focus",
+          "pressed": "control-cost-review-approved-pressed",
+          "disabled": "control-cost-review-approved-disabled",
+          "busy": "control-cost-review-approved-busy"
+        },
+        "limitation": "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
+      },
+      "SC-COST-REVIEW-CANCEL": {
+        "pageId": "P21",
+        "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-cost-cancel-approved-default",
+          "hover": "control-cost-cancel-approved-hover",
+          "focus": "control-cost-cancel-approved-focus",
+          "pressed": "control-cost-cancel-approved-pressed"
         },
         "limitation": "Representative source-derived control only; navigation/recovery/local/read/checkbox do not invent disabled/busy. Destinations and inert requests are not router/server acceptance or resolved lifecycle."
       }
@@ -16946,6 +19574,47 @@
         "pressed": "control-recovery-search-readonly-secondary-pressed"
       },
       "limitation": "Additional source/selection variant of the same semantic action, not a new action or runtime acceptance."
+    },
+    "cost-open-rejected": {
+      "pageId": "P21",
+      "actionId": "SC-COST-REVIEW-OPEN",
+      "selector": "#cost-panel [data-action=SC-REVIEW-OPEN][data-decision=\"rejected\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-cost-open-rejected-default",
+        "hover": "control-cost-open-rejected-hover",
+        "focus": "control-cost-open-rejected-focus",
+        "pressed": "control-cost-open-rejected-pressed"
+      },
+      "limitation": "Additional source/selection variant of the same semantic action, not a new action or runtime acceptance."
+    },
+    "cost-review-rejected": {
+      "pageId": "P21",
+      "actionId": "SC-COST-REVIEW-SUBMIT",
+      "selector": "#review-form [data-action=SC-COST-REVIEW]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-cost-review-rejected-default",
+        "hover": "control-cost-review-rejected-hover",
+        "focus": "control-cost-review-rejected-focus",
+        "pressed": "control-cost-review-rejected-pressed",
+        "disabled": "control-cost-review-rejected-disabled",
+        "busy": "control-cost-review-rejected-busy"
+      },
+      "limitation": "Additional source/selection variant of the same semantic action, not a new action or runtime acceptance."
+    },
+    "cost-cancel-rejected": {
+      "pageId": "P21",
+      "actionId": "SC-COST-REVIEW-CANCEL",
+      "selector": "#review-form [data-action=SC-REVIEW-CANCEL]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-cost-cancel-rejected-default",
+        "hover": "control-cost-cancel-rejected-hover",
+        "focus": "control-cost-cancel-rejected-focus",
+        "pressed": "control-cost-cancel-rejected-pressed"
+      },
+      "limitation": "Additional source/selection variant of the same semantic action, not a new action or runtime acceptance."
     }
   },
   "actionIds": [
@@ -16983,11 +19652,13 @@
   ],
   "checks": [
     "1440: exact navigation destinations and external rel/target; recovery source branches, role-specific empty/search, local clear, loading hides actions/data without inventing disabled/busy; no real router/network/recovery success",
+    "1440: cost/review controls use independent busy, own pending versus sibling lock, exact opportunity/review versions and zero amount, native required versus disabled, immutable pending payload, cancel/reopen cannot withdraw sent intent; not production async acceptance",
     "1440: main entry/record/checkbox/write controls; exact opening identity and GET/POST intent, current record retains selection, changed record clears, Space toggles only local state, comparison submission snapshot survives changed checkboxes; no task completion proof",
     "1440: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions",
     "1440: four dialog close/cancel pairs x six states; parent in-flight lock only, no cancel-request spinner; keyboard close/Escape return to exact opener including second purchase button; search/delete draft retained and quote/purchase reprefilled; no close/reopen write",
     "1440: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
     "390: exact navigation destinations and external rel/target; recovery source branches, role-specific empty/search, local clear, loading hides actions/data without inventing disabled/busy; no real router/network/recovery success",
+    "390: cost/review controls use independent busy, own pending versus sibling lock, exact opportunity/review versions and zero amount, native required versus disabled, immutable pending payload, cancel/reopen cannot withdraw sent intent; not production async acceptance",
     "390: main entry/record/checkbox/write controls; exact opening identity and GET/POST intent, current record retains selection, changed record clears, Space toggles only local state, comparison submission snapshot survives changed checkboxes; no task completion proof",
     "390: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions",
     "390: four dialog close/cancel pairs x six states; parent in-flight lock only, no cancel-request spinner; keyboard close/Escape return to exact opener including second purchase button; search/delete draft retained and quote/purchase reprefilled; no close/reopen write",

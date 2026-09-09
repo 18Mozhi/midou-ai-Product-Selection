@@ -277,7 +277,83 @@ const recoveryControls = [
   selector: '#app .empty [data-recovery="' + control.variant + '"]',
 }));
 const navigationRecoveryControls = [...navigationControls, ...recoveryControls];
-const visualControls = [...allControls, ...mainControls, ...navigationRecoveryControls];
+const costControls = [
+  {
+    key: "cost-submit",
+    actionId: "SC-COST-SUBMIT",
+    selector: "#cost-form [data-action=SC-COST-SUBMIT]",
+    operation: "input",
+    ready: "cost-missing",
+    states,
+  },
+  {
+    key: "cost-recalculate",
+    actionId: "SC-COST-RECALCULATE",
+    selector: "#cost-form [data-action=SC-COST-RECALCULATE]",
+    operation: "recalculate",
+    ready: "cost-missing",
+    states,
+  },
+  {
+    key: "cost-open-approved",
+    actionId: "SC-COST-REVIEW-OPEN",
+    selector: '#cost-panel [data-action=SC-REVIEW-OPEN][data-decision="approved"]',
+    operation: "open",
+    ready: "cost-overdue",
+    decision: "approved",
+  },
+  {
+    key: "cost-review-approved",
+    actionId: "SC-COST-REVIEW-SUBMIT",
+    selector: "#review-form [data-action=SC-COST-REVIEW]",
+    operation: "review",
+    ready: "cost-review-approved",
+    decision: "approved",
+    states,
+  },
+  {
+    key: "cost-cancel-approved",
+    actionId: "SC-COST-REVIEW-CANCEL",
+    selector: "#review-form [data-action=SC-REVIEW-CANCEL]",
+    operation: "cancel",
+    ready: "cost-review-approved",
+    decision: "approved",
+  },
+  {
+    key: "cost-open-rejected",
+    actionId: "SC-COST-REVIEW-OPEN",
+    selector: '#cost-panel [data-action=SC-REVIEW-OPEN][data-decision="rejected"]',
+    operation: "open",
+    ready: "cost-overdue",
+    decision: "rejected",
+    variantOnly: true,
+  },
+  {
+    key: "cost-review-rejected",
+    actionId: "SC-COST-REVIEW-SUBMIT",
+    selector: "#review-form [data-action=SC-COST-REVIEW]",
+    operation: "review",
+    ready: "cost-review-rejected",
+    decision: "rejected",
+    states,
+    variantOnly: true,
+  },
+  {
+    key: "cost-cancel-rejected",
+    actionId: "SC-COST-REVIEW-CANCEL",
+    selector: "#review-form [data-action=SC-REVIEW-CANCEL]",
+    operation: "cancel",
+    ready: "cost-review-rejected",
+    decision: "rejected",
+    variantOnly: true,
+  },
+].map((control) => ({ kind: "cost", states: states.slice(0, 4), ...control }));
+const visualControls = [
+  ...allControls,
+  ...mainControls,
+  ...navigationRecoveryControls,
+  ...costControls,
+];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const sourcePaths = [
   ...[
@@ -1018,6 +1094,299 @@ async function verifyNavigationRecovery(page, width) {
       ": exact navigation destinations and external rel/target; recovery source branches, role-specific empty/search, local clear, loading hides actions/data without inventing disabled/busy; no real router/network/recovery success",
   );
 }
+async function verifyCostControls(page, width) {
+  const count = () => page.evaluate(() => window.sourcingReview.intents.length);
+  const last = () => page.evaluate(() => window.sourcingReview.intents.at(-1));
+  const choose = async (scene) =>
+    page.evaluate((id) => {
+      window.sourcingReview.outcome = "success";
+      window.sourcingReview.choose(id);
+    }, scene);
+  const validCost = async () => {
+    await page
+      .locator("#cost-form [name=source_ref_id]")
+      .fill("00000000-0000-4000-8000-000000000300");
+    await page
+      .locator("#cost-form [name=evidence_id]")
+      .fill("00000000-0000-4000-8000-000000000200");
+    await page
+      .locator("#cost-form [name=reviewer_id]")
+      .selectOption("00000000-0000-4000-8000-000000000090");
+  };
+  const prepare = async (control, state = "default") => {
+    await choose(control.ready);
+    if (control.operation === "input" && state !== "disabled") await validCost();
+    if (["review", "cancel"].includes(control.operation))
+      await page
+        .locator("#review-form textarea")
+        .fill(state === "disabled" ? " x " : "  原始证据已核对  ");
+  };
+  const expected = (control) => ({
+    path:
+      "/opportunities/00000000-0000-4000-8000-000000000018/" +
+      (control.operation === "input"
+        ? "cost-inputs"
+        : control.operation === "recalculate"
+          ? "profit-runs"
+          : "cost-input-reviews/00000000-0000-4000-8000-000000000081/actions"),
+    method: "POST",
+    body:
+      control.operation === "input"
+        ? {
+            platform: "amazon",
+            input_type: "purchase_price",
+            amount_value: 0,
+            currency: "USD",
+            source_type: "supplier_quote",
+            source_ref_id: "00000000-0000-4000-8000-000000000300",
+            evidence_id: "00000000-0000-4000-8000-000000000200",
+            observed_at: "2026-09-09T00:00:00.000Z",
+            reviewer_id: "00000000-0000-4000-8000-000000000090",
+            expected_version: 7,
+          }
+        : control.operation === "recalculate"
+          ? { platform: "amazon", expected_version: 7 }
+          : { decision: control.decision, reason: "原始证据已核对", expected_version: 3 },
+  });
+  for (const control of costControls) {
+    for (const state of control.states) {
+      await page.mouse.move(0, 0);
+      await prepare(control, state);
+      const target = page.locator(control.selector);
+      const pending =
+        state === "busy" || (state === "disabled" && control.operation === "recalculate");
+      if (pending) {
+        await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+        await target.click();
+        assert.deepEqual(await last(), expected(control));
+      }
+      await target.evaluate((el) => el.scrollIntoView({ block: "center", inline: "nearest" }));
+      await page.evaluate(() => document.activeElement?.blur());
+      const n = await count();
+      assert.equal(await target.isDisabled(), ["disabled", "busy"].includes(state));
+      if (["input", "review", "recalculate"].includes(control.operation))
+        assert.equal(await target.getAttribute("aria-busy"), String(pending));
+      else assert.equal(await target.getAttribute("aria-busy"), null);
+      if (["hover", "pressed"].includes(state)) {
+        await target.hover();
+        assert.ok(await target.evaluate((el) => el.matches(":hover")));
+      }
+      if (state === "focus") {
+        await page.keyboard.press("Tab");
+        await target.focus();
+        assert.ok(await target.evaluate((el) => el.matches(":focus-visible")));
+        assert.equal(await target.evaluate((el) => getComputedStyle(el).outlineWidth), "3px");
+        await target.evaluate((el) => el.scrollIntoView({ block: "center", inline: "nearest" }));
+      }
+      if (state === "pressed") {
+        await page.mouse.down();
+        assert.ok(await target.evaluate((el) => el.matches(":active")));
+        assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
+      }
+      if (pending) {
+        assert.match(await target.innerText(), /正在提交/);
+        assert.ok(
+          await target.evaluate((el) => {
+            const s = getComputedStyle(el);
+            return (
+              el.getBoundingClientRect().height <=
+              parseFloat(s.lineHeight) +
+                parseFloat(s.paddingTop) +
+                parseFloat(s.paddingBottom) +
+                parseFloat(s.borderTopWidth) +
+                parseFloat(s.borderBottomWidth) +
+                1
+            );
+          }),
+          control.key + " pending label stays on one line",
+        );
+        assert.match(await page.locator("#cost-request-status").innerText(), /结果尚未确认/);
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el, "::before").animationName),
+          "none",
+        );
+      }
+      const colors = await target.evaluate((el) => ({
+        foreground: getComputedStyle(el).color,
+        background: getComputedStyle(el).backgroundColor,
+      }));
+      const ratio = contrast(colors.foreground, colors.background);
+      assert.ok(ratio >= 4.5, control.key + "/" + state + " contrast " + ratio);
+      if (["disabled", "busy"].includes(state)) {
+        await target.hover({ force: true });
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el).backgroundColor),
+          colors.background,
+        );
+        await page.mouse.move(0, 0);
+      }
+      await layout(page, control.key + "/" + state);
+      const rect = await target.boundingBox();
+      assert.ok(
+        rect.y >= 6 && rect.y + rect.height <= page.viewportSize().height - 6,
+        control.key + " viewport",
+      );
+      assert.ok(
+        await target.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return [
+            [r.left + 6, r.top + 6],
+            [r.right - 6, r.top + 6],
+            [r.left + 6, r.bottom - 6],
+            [r.right - 6, r.bottom - 6],
+          ].every(([x, y]) => el.contains(document.elementFromPoint(x, y)));
+        }),
+        control.key + " unoccluded",
+      );
+      const record = {
+        key: control.key,
+        actionId: control.actionId,
+        selector: control.selector,
+        state,
+        scene: "control-" + control.key + "-" + state,
+        baseScene: control.ready,
+        pageId: "P21",
+        width,
+        contrast: ratio,
+        condition: pending
+          ? "cost-request-in-flight-not-effective-result"
+          : state === "disabled"
+            ? control.operation === "input"
+              ? "reviewer-not-selected"
+              : "trimmed-reason-too-short"
+            : "available-source-condition",
+      };
+      controlStates.push(record);
+      await shot(page, width, record.scene, record);
+      if (state === "pressed") {
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+      if (["disabled", "busy"].includes(state)) await target.evaluate((el) => el.click());
+      assert.equal(await count(), n, "state preview must not write");
+    }
+    await prepare(control);
+    const n = await count();
+    const target = page.locator(control.selector);
+    if (["open", "cancel"].includes(control.operation)) {
+      if (control.operation === "open") {
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await page.locator("#review-form textarea").inputValue(), "");
+        assert.equal(
+          await page
+            .locator("#review-form textarea")
+            .evaluate((el) => document.activeElement === el),
+          true,
+        );
+        assert.equal(await page.locator("#review-form button[type=submit]").isDisabled(), true);
+        assert.match(
+          await page.locator("#review-form").innerText(),
+          control.decision === "approved" ? /复核说明/ : /驳回原因/,
+        );
+      } else {
+        await target.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await page.locator("#review-form").count(), 0);
+        assert.equal(
+          await page
+            .locator('[data-action=SC-REVIEW-OPEN][data-decision="' + control.decision + '"]')
+            .evaluate((el) => document.activeElement === el),
+          true,
+        );
+      }
+      assert.equal(await count(), n);
+      continue;
+    }
+    await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+    await target.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await count(), n + 1);
+    assert.deepEqual(await last(), expected(control));
+    assert.equal(
+      await page
+        .locator(control.operation === "review" ? "#cost-review-hint" : "#cost-submit-hint")
+        .evaluate((el) => document.activeElement === el),
+      true,
+    );
+    assert.equal(
+      await page.locator("[data-action=SC-REFRESH]").isDisabled(),
+      false,
+      "cost does not own sourcing busy",
+    );
+    const sibling = page.locator(
+      control.operation === "recalculate"
+        ? "[data-action=SC-COST-SUBMIT]"
+        : "[data-action=SC-COST-RECALCULATE]",
+    );
+    assert.equal(await sibling.isDisabled(), true);
+    assert.equal(
+      await sibling.getAttribute("aria-busy"),
+      "false",
+      "shared cost lock is not own submission",
+    );
+    await target.dispatchEvent("click");
+    assert.equal(await count(), n + 1);
+    if (control.operation === "input") {
+      await page.locator("#cost-form [name=amount_value]").fill("18");
+      await page.locator("#cost-form [name=reviewer_id]").selectOption({ index: 1 });
+      assert.equal(await target.isDisabled(), true);
+      assert.deepEqual(await last(), expected(control));
+    } else if (control.operation === "review") {
+      await page.locator("#review-form textarea").fill("另一段未发送原因");
+      assert.equal(await target.isDisabled(), true);
+      assert.deepEqual(await last(), expected(control));
+      const cancel = page.locator("[data-action=SC-REVIEW-CANCEL]");
+      assert.equal(await cancel.isDisabled(), false);
+      await cancel.click();
+      assert.equal(await page.locator("#review-form").count(), 0);
+      assert.equal(await count(), n + 1);
+      assert.match(await page.locator("#cost-request-status").innerText(), /不会改写或撤回/);
+      const opposite = control.decision === "approved" ? "rejected" : "approved";
+      await page.locator('[data-action=SC-REVIEW-OPEN][data-decision="' + opposite + '"]').click();
+      assert.equal(await page.locator("#review-form textarea").inputValue(), "");
+      assert.equal(await page.locator("#review-form button[type=submit]").isDisabled(), true);
+      assert.equal(
+        await page.locator("#review-form button[type=submit]").getAttribute("aria-busy"),
+        "false",
+      );
+      assert.deepEqual(await last(), expected(control));
+    }
+  }
+  await choose("cost-missing");
+  await validCost();
+  await page.locator("#cost-form [name=evidence_id]").fill("");
+  assert.equal(
+    await page.locator("#cost-form button[type=submit]").isDisabled(),
+    false,
+    "required field is native validity, not a new disabled gate",
+  );
+  let n = await count();
+  await page.locator("#cost-form button[type=submit]").click();
+  assert.equal(await count(), n);
+  await choose("cost-missing");
+  await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+  await page.locator("[data-action=SC-REFRESH]").click();
+  assert.equal(
+    await page.locator("#cost-form input:disabled, #cost-form select:disabled").count(),
+    0,
+  );
+  await validCost();
+  assert.equal(await page.locator("[data-action=SC-COST-SUBMIT]").isDisabled(), false);
+  assert.equal(await page.locator("[data-action=SC-COST-RECALCULATE]").isDisabled(), false);
+  n = await count();
+  await page.locator("#cost-form button[type=submit]").click();
+  assert.equal(
+    await count(),
+    n + 1,
+    "sourcing pending must not suppress independent cost submission",
+  );
+  assert.equal((await last()).body.expected_version, 7);
+  checks.push(
+    width +
+      ": cost/review controls use independent busy, own pending versus sibling lock, exact opportunity/review versions and zero amount, native required versus disabled, immutable pending payload, cancel/reopen cannot withdraw sent intent; not production async acceptance",
+  );
+}
 async function verifyCloseBehavior(page, control, count) {
   await page.evaluate(() => {
     window.sourcingReview.outcome = "success";
@@ -1283,6 +1652,7 @@ try {
       await verifyControls(page, width);
       await verifyMainControls(page, width);
       await verifyNavigationRecovery(page, width);
+      await verifyCostControls(page, width);
       checks.push(
         `${width}: main entry/record/checkbox/write controls; exact opening identity and GET/POST intent, current record retains selection, changed record clears, Space toggles only local state, comparison submission snapshot survives changed checkboxes; no task completion proof`,
       );

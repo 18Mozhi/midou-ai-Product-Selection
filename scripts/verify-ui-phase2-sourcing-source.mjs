@@ -22,6 +22,7 @@ export async function verifySourcingSource() {
     for (const n of [...ast.statements].reverse())
       if (ts.isImportDeclaration(n)) script = script.slice(0, n.pos) + script.slice(n.end);
     const calls = [],
+      events = [],
       replies = [],
       routes = [],
       scope = effectScope();
@@ -41,6 +42,8 @@ export async function verifySourcingSource() {
         canConfirmCost: true,
         ...overrides,
       }),
+      defineEmits: () => (name, payload) =>
+        events.push({ name, payload: structuredClone(payload) }),
       withDefaults: (v) => v,
       onMounted: () => {},
       useRoute: () => route,
@@ -64,6 +67,7 @@ export async function verifySourcingSource() {
     return {
       ...scope.run(() => new Function(...Object.keys(env), js)(...Object.values(env))),
       calls,
+      events,
       replies,
       routes,
     };
@@ -71,13 +75,13 @@ export async function verifySourcingSource() {
   const sw = (props) =>
     setup(
       "SourcingWorkspace",
-      "load,detail,items,selected,state,notice,form,showSearch,openSearch,closeSearch,create,quote,quoteCandidate,openQuote,confirm,selectedQuotes,choose,compare,purchaseCandidate,purchaseForm,openPurchase,purchase,deleting,deleteReason,removeSearch,refreshSearch,stabilityText,canManage,canConfirmCost,handleStatePrimary,handleStateSecondary,resetQuery,query,filteredItems",
+      "load,detail,items,selected,state,notice,form,showSearch,openSearch,closeSearch,create,quote,quoteCandidate,openQuote,confirm,selectedQuotes,choose,compare,purchaseCandidate,purchaseForm,openPurchase,purchase,deleting,deleteReason,removeSearch,refreshSearch,stabilityText,canManage,canConfirmCost,busy,handleStatePrimary,handleStateSecondary,resetQuery,query,filteredItems",
       props,
     );
   const sc = (props) =>
     setup(
       "SourcingCostConfirmationPanel",
-      "load,profit,reviewers,opportunityVersion,costForm,message,submitCost,reviewCost,queueProfit",
+      "load,profit,reviewers,opportunityVersion,costForm,message,submitCost,reviewCost,queueProfit,busy",
       props,
     );
   const ok = (data) => ({ data, request_id: "synthetic-response" });
@@ -303,6 +307,43 @@ export async function verifySourcingSource() {
     assert.deepEqual(s.calls.at(-1).options.body, { platform: "amazon", expected_version: 7 });
     checks.push(
       "cost submission uses opportunity version; review uses independent review version; recalculation queues platform/version only",
+    );
+    const reviewQueue = await setup(
+      "OpportunityCostReviewQueue",
+      "review,beginReview,submitReview",
+      { busy: true },
+    );
+    for (const decision of ["approved", "rejected"]) {
+      reviewQueue.review.reason = "旧原因";
+      reviewQueue.beginReview("review-1", decision);
+      assert.equal(reviewQueue.review.reason, "");
+      assert.equal(reviewQueue.review.id, "review-1");
+      reviewQueue.review.reason = " x ";
+      const n = reviewQueue.events.length;
+      reviewQueue.submitReview({ id: "review-1", version: 3 });
+      assert.equal(reviewQueue.events.length, n);
+      reviewQueue.review.reason = "  原始证据已核对  ";
+      reviewQueue.submitReview({ id: "review-1", version: 3 });
+      assert.deepEqual(reviewQueue.events.at(-1), {
+        name: "reviewCost",
+        payload: { reviewId: "review-1", decision, reason: "原始证据已核对", expectedVersion: 3 },
+      });
+    }
+    checks.push(
+      "actual review queue resets reason for each decision, trims/requires two characters, emits item version; busy is a template-only submit guard, not a beginReview/submitReview function guard",
+    );
+    const costOwner = await sc();
+    const sourcingOwner = await sw();
+    let settle;
+    costOwner.replies.push(new Promise((resolve) => (settle = resolve)));
+    const pendingCost = costOwner.queueProfit();
+    assert.equal(costOwner.busy.value, true);
+    assert.equal(sourcingOwner.busy.value, false);
+    settle(new ApiClientError("conflict"));
+    await pendingCost;
+    assert.equal(costOwner.busy.value, false);
+    checks.push(
+      "cost and sourcing owners have independent busy refs; failed cost write releases only cost owner, not a production async ownership or successful reload proof",
     );
     return {
       checks,

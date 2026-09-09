@@ -1,5 +1,35 @@
 # P21 供应链与利润 · C方向整页待审提案
 
+[成本与复核控件审核](../../SOURCING-COST-CONTROL-REVIEW.md)。2026-09-09 P21成本与复核：8控件变体新增80双端图；本包65主场景695PNG、59变体544双端状态实例。五语义组新增26代表槽，累计150映射、20待适用性核对；驳回额外变体不新增动作。成本busy与找货独立，机会/复核版本分别使用，取消/换结论不撤回已发请求；无源禁用条件不编造图。13组源隔离、smoke和完整capture通过，具体批准/真实Vue/部署仍待。
+
+## 成本与复核图直达
+
+### 1440px
+
+| 控件 | 默认 | 悬停 | 键盘焦点 | 按下 | 禁用 | 请求提交中 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 提交双人成本复核 | [查看](1440-control-cost-submit-default.png) | [查看](1440-control-cost-submit-hover.png) | [查看](1440-control-cost-submit-focus.png) | [查看](1440-control-cost-submit-pressed.png) | [查看](1440-control-cost-submit-disabled.png) | [查看](1440-control-cost-submit-busy.png) |
+| 重新计算 | [查看](1440-control-cost-recalculate-default.png) | [查看](1440-control-cost-recalculate-hover.png) | [查看](1440-control-cost-recalculate-focus.png) | [查看](1440-control-cost-recalculate-pressed.png) | [查看](1440-control-cost-recalculate-disabled.png) | [查看](1440-control-cost-recalculate-busy.png) |
+| 打开通过说明 | [查看](1440-control-cost-open-approved-default.png) | [查看](1440-control-cost-open-approved-hover.png) | [查看](1440-control-cost-open-approved-focus.png) | [查看](1440-control-cost-open-approved-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 提交通过结论 | [查看](1440-control-cost-review-approved-default.png) | [查看](1440-control-cost-review-approved-hover.png) | [查看](1440-control-cost-review-approved-focus.png) | [查看](1440-control-cost-review-approved-pressed.png) | [查看](1440-control-cost-review-approved-disabled.png) | [查看](1440-control-cost-review-approved-busy.png) |
+| 取消通过表单 | [查看](1440-control-cost-cancel-approved-default.png) | [查看](1440-control-cost-cancel-approved-hover.png) | [查看](1440-control-cost-cancel-approved-focus.png) | [查看](1440-control-cost-cancel-approved-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 打开驳回原因 | [查看](1440-control-cost-open-rejected-default.png) | [查看](1440-control-cost-open-rejected-hover.png) | [查看](1440-control-cost-open-rejected-focus.png) | [查看](1440-control-cost-open-rejected-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 提交驳回结论 | [查看](1440-control-cost-review-rejected-default.png) | [查看](1440-control-cost-review-rejected-hover.png) | [查看](1440-control-cost-review-rejected-focus.png) | [查看](1440-control-cost-review-rejected-pressed.png) | [查看](1440-control-cost-review-rejected-disabled.png) | [查看](1440-control-cost-review-rejected-busy.png) |
+| 取消驳回表单 | [查看](1440-control-cost-cancel-rejected-default.png) | [查看](1440-control-cost-cancel-rejected-hover.png) | [查看](1440-control-cost-cancel-rejected-focus.png) | [查看](1440-control-cost-cancel-rejected-pressed.png) | 源码无此条件 | 源码无此条件 |
+
+### 390px
+
+| 控件 | 默认 | 悬停 | 键盘焦点 | 按下 | 禁用 | 请求提交中 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 提交双人成本复核 | [查看](390-control-cost-submit-default.png) | [查看](390-control-cost-submit-hover.png) | [查看](390-control-cost-submit-focus.png) | [查看](390-control-cost-submit-pressed.png) | [查看](390-control-cost-submit-disabled.png) | [查看](390-control-cost-submit-busy.png) |
+| 重新计算 | [查看](390-control-cost-recalculate-default.png) | [查看](390-control-cost-recalculate-hover.png) | [查看](390-control-cost-recalculate-focus.png) | [查看](390-control-cost-recalculate-pressed.png) | [查看](390-control-cost-recalculate-disabled.png) | [查看](390-control-cost-recalculate-busy.png) |
+| 打开通过说明 | [查看](390-control-cost-open-approved-default.png) | [查看](390-control-cost-open-approved-hover.png) | [查看](390-control-cost-open-approved-focus.png) | [查看](390-control-cost-open-approved-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 提交通过结论 | [查看](390-control-cost-review-approved-default.png) | [查看](390-control-cost-review-approved-hover.png) | [查看](390-control-cost-review-approved-focus.png) | [查看](390-control-cost-review-approved-pressed.png) | [查看](390-control-cost-review-approved-disabled.png) | [查看](390-control-cost-review-approved-busy.png) |
+| 取消通过表单 | [查看](390-control-cost-cancel-approved-default.png) | [查看](390-control-cost-cancel-approved-hover.png) | [查看](390-control-cost-cancel-approved-focus.png) | [查看](390-control-cost-cancel-approved-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 打开驳回原因 | [查看](390-control-cost-open-rejected-default.png) | [查看](390-control-cost-open-rejected-hover.png) | [查看](390-control-cost-open-rejected-focus.png) | [查看](390-control-cost-open-rejected-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 提交驳回结论 | [查看](390-control-cost-review-rejected-default.png) | [查看](390-control-cost-review-rejected-hover.png) | [查看](390-control-cost-review-rejected-focus.png) | [查看](390-control-cost-review-rejected-pressed.png) | [查看](390-control-cost-review-rejected-disabled.png) | [查看](390-control-cost-review-rejected-busy.png) |
+| 取消驳回表单 | [查看](390-control-cost-cancel-rejected-default.png) | [查看](390-control-cost-cancel-rejected-hover.png) | [查看](390-control-cost-cancel-rejected-focus.png) | [查看](390-control-cost-cancel-rejected-pressed.png) | 源码无此条件 | 源码无此条件 |
+
 [导航、搜索与恢复审核](../../SOURCING-NAVIGATION-RECOVERY-REVIEW.md)。2026-09-09 P21导航与恢复：新增230PNG（28控件变体双端四态224图＋3场景6图），包现65主场景615PNG、51控件变体464双端状态实例。8导航和2恢复代表组新增40槽，累计124已映射、46待补；额外来源、query和角色/主次恢复不增加动作分母。源恢复实际load与通用标签差异已明示，原型不伪造登录/权限/返回能力，加载/失败隐藏旧记录和删除入口。11组源隔离与完整capture通过，具体批准/真实Vue/部署未完成。
 
 ## 导航与恢复图直达

@@ -117,6 +117,8 @@
     purchaseForm,
     deleteReason = "",
     costForm,
+    costBusy,
+    costPending,
     reviewDecision = "",
     reviewReason = "",
     costMessage = "";
@@ -170,6 +172,8 @@
     modalError = "";
     message = "";
     costMessage = "";
+    costBusy = false;
+    costPending = null;
     reviewReason = "";
     reviewDecision = id.startsWith("cost-review-")
       ? id.endsWith("approved")
@@ -347,13 +351,68 @@
         "",
       )}</div><p class="meta">这些是保存时绑定的报价，不承诺今天仍是现行版本。${different ? "不得仅因价格低就忽略规格差异。" : ""}</p></section>`;
   }
-  function input(name, label, attrs = "", value = "") {
-    return `<label>${label}<input name="${name}" ${attrs} value="${esc(value)}" ${busy ? "disabled" : ""}/></label>`;
+  function input(name, label, attrs = "", value = "", locked = busy) {
+    return `<label>${label}<input name="${name}" ${attrs} value="${esc(value)}" ${locked ? "disabled" : ""}/></label>`;
   }
-  function select(name, label, choices, value) {
-    return `<label>${label}<select name="${name}" ${busy ? "disabled" : ""}>${choices.map(([v, t]) => `<option value="${v}" ${v === value ? "selected" : ""}>${t}</option>`).join("")}</select></label>`;
+  function select(name, label, choices, value, locked = busy) {
+    return `<label>${label}<select name="${name}" ${locked ? "disabled" : ""}>${choices.map(([v, t]) => `<option value="${v}" ${v === value ? "selected" : ""}>${t}</option>`).join("")}</select></label>`;
+  }
+  function costRequestHint() {
+    if (!costPending) return "提交前请核对来源与版本；尚未提交的值不会影响利润。";
+    return (
+      {
+        input: "成本复核",
+        recalculate: "利润重算",
+        review: costPending.decision === "approved" ? "通过结论" : "驳回结论",
+      }[costPending.kind] +
+      "请求提交中，结果尚未确认；" +
+      (costPending.kind === "review" ? "复核记录版本 " : "机会版本 ") +
+      costPending.version +
+      "。修改字段、切换结论或取消表单不会改写或撤回已发送请求。"
+    );
+  }
+  function ownCostPending(kind) {
+    return (
+      costBusy &&
+      costPending?.kind === kind &&
+      (kind !== "review" || costPending.decision === reviewDecision)
+    );
+  }
+  function recordCostPending(kind) {
+    if (window.sourcingReview.outcome !== "pending") return;
+    costBusy = true;
+    costPending = {
+      kind,
+      decision: reviewDecision,
+      version: kind === "review" ? 3 : 7,
+      request: structuredClone(intents.at(-1)),
+    };
+  }
+  function renderCostFeedback() {
+    render();
+    if (!costBusy) return;
+    const hint = $(costPending.kind === "review" ? "#cost-review-hint" : "#cost-submit-hint");
+    if (hint) {
+      hint.setAttribute("tabindex", "-1");
+      hint.focus();
+    }
+  }
+  function syncCostControls() {
+    const submit = $("[data-action=SC-COST-SUBMIT]");
+    if (submit) submit.disabled = costBusy || !costForm.reviewer_id;
+    const reviewSubmit = $("[data-action=SC-COST-REVIEW]");
+    if (reviewSubmit) reviewSubmit.disabled = costBusy || reviewReason.trim().length < 2;
+    const hint = $("#cost-submit-hint");
+    if (hint)
+      hint.textContent = costPending
+        ? costRequestHint()
+        : !costForm.reviewer_id
+          ? "请选择另一名活动成本确认人；当前不能提交。"
+          : "提交后仍待指定人员复核，通过前不影响当前成本。";
   }
   function costPanel() {
+    const costInput = (...args) => input(...args, false);
+    const costSelect = (...args) => select(...args, false);
     if (is("cost-error"))
       return empty(
         "机会成本未能读取",
@@ -369,7 +428,7 @@
           : is("cost-overdue")
             ? "已超时 / 仍待复核"
             : "待复核";
-    return `<section class="panel"><div class="panel-title"><div><h2>机会成本与利润</h2><p class="meta">机会版本 7 · 已生效输入与待复核输入分开</p></div>${link("SC-OPPORTUNITY", "打开机会详情", "/opportunities/" + opp + "?tab=profit&from=/sourcing")}</div>${link("SC-PROFIT-RULES", "管理费用规则", "/sourcing/cost-rules")}<p>净利润 = 含税售价 − 采购 − 物流 − 平台费 − 支付手续费 − 税费 − 履约成本</p>${
+    return `<section class="panel" id="cost-panel"><div class="panel-title"><div><h2>机会成本与利润</h2><p class="meta">机会版本 7 · 已生效输入与待复核输入分开</p></div>${link("SC-OPPORTUNITY", "打开机会详情", "/opportunities/" + opp + "?tab=profit&from=/sourcing")}</div>${link("SC-PROFIT-RULES", "管理费用规则", "/sourcing/cost-rules")}<p>净利润 = 含税售价 − 采购 − 物流 − 平台费 − 支付手续费 − 税费 − 履约成本</p>${
       calculated
         ? `<div class="cost-summary"><div class="notice info"><p class="meta">服务端已计算快照 · 规则 SAMPLE-v2</p><strong class="profit-number">USD 20.00</strong><p>净利率 20% · 含税售价 USD 100.00</p><p class="meta">仅展示快照，不在浏览器重算。</p></div><div class="cost-lines">${[
             ["采购", 50],
@@ -386,9 +445,9 @@
             "缺少物流 / 已生效费用版本。提交待复核值不会替换当前成本。",
             "info",
           )
-    }<div class="review-row"><strong>已生效采购价 · USD 8.00</strong><p class="meta">输入 v2 · 人工双人复核 · 来源报价 ${uuid(300)}</p></div><section class="review-row"><div class="panel-title"><h3>成本复核队列</h3>${badge(status, is("cost-overdue") ? "warn" : "")}</div><p>采购价 USD 9.00 · 输入 v3 · amazon</p><p class="meta">提交人：采购成员甲 · 指定复核人：采购成员乙<br>期限 2026-09-10 08:00 · 证据 ${uuid(201)}</p><p class="meta">24小时复核；超时提醒和升级，不自动通过。</p>${reviewAllowed() ? `<div class="actions">${action("SC-REVIEW-OPEN", "驳回", "", false, 'data-decision="rejected"')}${action("SC-REVIEW-OPEN", "通过", "", false, 'data-decision="approved"')}</div>` : ""}${reviewDecision ? `<form id="review-form" class="inline-form"><label>${reviewDecision === "approved" ? "复核说明" : "驳回原因"}<textarea name="review_reason" required minlength="2" maxlength="1000">${esc(reviewReason)}</textarea></label><div class="form-footer">${action("SC-REVIEW-CANCEL", "取消")}<button type="submit" data-action="SC-COST-REVIEW" class="primary">提交复核</button></div></form>` : ""}</section>${costMessage ? `<div role="alert" class="notice error">${esc(costMessage)}</div>` : ""}${
+    } ${costPending ? `<p id="cost-request-status" class="notice info" role="status" tabindex="-1">${esc(costRequestHint())}</p>` : ""}<div class="review-row"><strong>已生效采购价 · USD 8.00</strong><p class="meta">输入 v2 · 人工双人复核 · 来源报价 ${uuid(300)}</p></div><section class="review-row"><div class="panel-title"><h3>成本复核队列</h3>${badge(status, is("cost-overdue") ? "warn" : "")}</div><p>采购价 USD 9.00 · 输入 v3 · amazon</p><p class="meta">提交人：采购成员甲 · 指定复核人：采购成员乙<br>期限 2026-09-10 08:00 · 证据 ${uuid(201)}</p><p class="meta">24小时复核；超时提醒和升级，不自动通过。</p>${reviewAllowed() ? `<div class="actions">${action("SC-REVIEW-OPEN", "驳回", "cost-control danger", false, 'data-decision="rejected"')}${action("SC-REVIEW-OPEN", "通过", "cost-control", false, 'data-decision="approved"')}</div>` : ""}${reviewDecision ? `<form id="review-form" class="inline-form"><label>${reviewDecision === "approved" ? "复核说明" : "驳回原因"}<textarea name="review_reason" required minlength="2" maxlength="1000">${esc(reviewReason)}</textarea></label><p id="cost-review-hint" class="control-hint" role="status">${costPending ? esc(costRequestHint()) : "填写至少两个非空白字符；提交使用本条复核记录版本，不使用机会版本。"}</p><div class="form-footer">${action("SC-REVIEW-CANCEL", "取消", "cost-control", false, 'aria-describedby="cost-review-hint"')}<button type="submit" data-action="SC-COST-REVIEW" class="primary cost-control ${reviewDecision === "rejected" ? "danger" : ""}" ${costBusy || reviewReason.trim().length < 2 ? "disabled" : ""} aria-busy="${ownCostPending("review")}" aria-describedby="cost-review-hint">${ownCostPending("review") ? "正在提交" : "提交"}${reviewDecision === "approved" ? "通过" : "驳回"}</button></div></form>` : ""}</section>${costMessage ? `<div role="alert" class="notice error">${esc(costMessage)}</div>` : ""}${
       costAllowed()
-        ? `<form id="cost-form" class="inline-form"><h3>提交成本复核</h3><p class="meta">由另一名活动成本确认人复核，通过前不影响利润。观测时间按本地时区显示。</p><div class="form-grid">${input("platform", "平台", 'required maxlength="80"', costForm.platform)}${select(
+        ? `<form id="cost-form" class="inline-form"><h3>提交成本复核</h3><p class="meta">由另一名活动成本确认人复核，通过前不影响利润。观测时间按本地时区显示。</p><div class="form-grid">${costInput("platform", "平台", 'required maxlength="80"', costForm.platform)}${costSelect(
             "input_type",
             "类型",
             [
@@ -397,7 +456,7 @@
               ["logistics", "物流"],
             ],
             costForm.input_type,
-          )}${input("amount_value", "金额（0需显式确认）", 'type="number" required min="0" step="0.000001"', costForm.amount_value)}${input("currency", "币种", 'required maxlength="3"', costForm.currency)}${input("source_type", "来源类型", 'required maxlength="80"', costForm.source_type)}${input("source_ref_id", "来源标识", 'required maxlength="255"', costForm.source_ref_id)}${input("evidence_id", "证据ID", 'required maxlength="36"', costForm.evidence_id)}${input("observed_at", "观测时间", 'type="datetime-local" required', costForm.observed_at)}${select("reviewer_id", "指定复核人", [["", "请选择另一名成本确认人"], ...(is("cost-reviewers-empty") ? [] : [[uuid(90), "采购成员乙（样本）"]])], costForm.reviewer_id)}</div>${is("cost-reviewers-empty") ? notice("没有可选复核人", "不能提交；请核对另一名活动成员的cost:confirm权限。") : ""}<div class="form-footer"><button type="submit" data-action="SC-COST-SUBMIT" class="primary" ${!costForm.reviewer_id ? "disabled" : ""}>提交双人复核</button>${action("SC-COST-RECALCULATE", "重新计算")}</div></form>`
+          )}${costInput("amount_value", "金额（0需显式确认）", 'type="number" required min="0" step="0.000001"', costForm.amount_value)}${costInput("currency", "币种", 'required maxlength="3"', costForm.currency)}${costInput("source_type", "来源类型", 'required maxlength="80"', costForm.source_type)}${costInput("source_ref_id", "来源标识", 'required maxlength="255"', costForm.source_ref_id)}${costInput("evidence_id", "证据ID", 'required maxlength="36"', costForm.evidence_id)}${costInput("observed_at", "观测时间", 'type="datetime-local" required', costForm.observed_at)}${costSelect("reviewer_id", "指定复核人", [["", "请选择另一名成本确认人"], ...(is("cost-reviewers-empty") ? [] : [[uuid(90), "采购成员乙（样本）"]])], costForm.reviewer_id)}</div>${is("cost-reviewers-empty") ? notice("没有可选复核人", "不能提交；请核对另一名活动成员的cost:confirm权限。") : ""}<p id="cost-submit-hint" class="control-hint" role="status">${costPending ? esc(costRequestHint()) : !costForm.reviewer_id ? "请选择另一名活动成本确认人；当前不能提交。" : "提交后仍待指定人员复核，通过前不影响当前成本。"}</p><div class="form-footer"><button type="submit" data-action="SC-COST-SUBMIT" class="primary cost-control" ${costBusy || !costForm.reviewer_id ? "disabled" : ""} aria-busy="${ownCostPending("input")}" aria-describedby="cost-submit-hint">${ownCostPending("input") ? "正在提交成本" : "提交双人复核"}</button>${action("SC-COST-RECALCULATE", ownCostPending("recalculate") ? "正在提交重算" : "重新计算", "cost-control", costBusy, `aria-busy="${ownCostPending("recalculate")}" aria-describedby="cost-submit-hint"`)}</div></form>`
         : notice("当前为只读成本视图", "成本提交和重算需要独立cost:confirm权限。", "info")
     }</section>`;
   }
@@ -575,8 +634,13 @@
       if (form) form[e.target.name] = e.target.value;
       else deleteReason = e.target.value;
       syncModalSubmit();
-    } else if (e.target.closest("#cost-form")) costForm[e.target.name] = e.target.value;
-    else if (e.target.name === "review_reason") reviewReason = e.target.value;
+    } else if (e.target.closest("#cost-form")) {
+      costForm[e.target.name] = e.target.value;
+      syncCostControls();
+    } else if (e.target.name === "review_reason") {
+      reviewReason = e.target.value;
+      syncCostControls();
+    }
   });
   document.addEventListener("change", (e) => {
     if (e.target.id === "scene") choose(e.target.value);
@@ -586,7 +650,7 @@
       $("#modal [name=input_type]").focus();
     } else if (e.target.name === "reviewer_id") {
       costForm.reviewer_id = e.target.value;
-      $("[data-action=SC-COST-SUBMIT]").disabled = !costForm.reviewer_id;
+      syncCostControls();
     } else if (e.target.dataset.action === "SC-SELECT") {
       const o = offers.find((x) => x.id === e.target.dataset.offer),
         i = selectedQuotes.indexOf(o.quote.id);
@@ -669,21 +733,24 @@
       message = "仅记录机会版本、利润与有权限时的复核人重读意图。";
       render();
     } else if (id === "SC-COST-RECALCULATE") {
+      if (costBusy) return;
       intent("/opportunities/" + opp + "/profit-runs", "POST", {
         platform: costForm.platform,
         expected_version: 7,
       });
-      costMessage = "隔离排队意图已记录；旧利润快照不变。";
-      render();
+      recordCostPending("recalculate");
+      costMessage = costBusy ? "" : "隔离排队意图已记录；旧利润快照不变。";
+      renderCostFeedback();
     } else if (id === "SC-REVIEW-OPEN") {
       reviewDecision = el.dataset.decision;
       reviewReason = "";
       render();
       $("#review-form textarea").focus();
     } else if (id === "SC-REVIEW-CANCEL") {
+      const decision = reviewDecision;
       reviewDecision = "";
       render();
-      $("[data-action=SC-REVIEW-OPEN]")?.focus();
+      $('[data-action=SC-REVIEW-OPEN][data-decision="' + decision + '"]')?.focus();
     }
   });
   document.addEventListener("keydown", (e) => {
@@ -705,31 +772,32 @@
   });
   document.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (busy) return;
     if (e.target.id === "cost-form") {
-      if (!costForm.reviewer_id) return;
+      if (costBusy || !costForm.reviewer_id) return;
       intent("/opportunities/" + opp + "/cost-inputs", "POST", {
         ...costForm,
         amount_value: Number(costForm.amount_value),
         observed_at: new Date(costForm.observed_at).toISOString(),
         expected_version: 7,
       });
-      costMessage = "隔离成本提交意图已记录；待复核，不替换当前成本。";
-      render();
+      recordCostPending("input");
+      costMessage = costBusy ? "" : "隔离成本提交意图已记录；待复核，不替换当前成本。";
+      renderCostFeedback();
       return;
     }
     if (e.target.id === "review-form") {
-      if (reviewReason.trim().length < 2) return;
+      if (costBusy || reviewReason.trim().length < 2) return;
       intent("/opportunities/" + opp + "/cost-input-reviews/" + reviewId + "/actions", "POST", {
         decision: reviewDecision,
         reason: reviewReason.trim(),
         expected_version: 3,
       });
-      costMessage = "隔离复核意图已记录；没有改变真实复核或利润。";
-      render();
+      recordCostPending("review");
+      costMessage = costBusy ? "" : "隔离复核意图已记录；没有改变真实复核或利润。";
+      renderCostFeedback();
       return;
     }
-    if (e.target.id !== "modal-form") return;
+    if (busy || e.target.id !== "modal-form") return;
     if (modalKind === "search") intent("/sourcing/searches", "POST", { ...searchForm });
     else if (modalKind === "quote")
       intent("/sourcing/quotes", "POST", {
