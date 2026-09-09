@@ -102,3 +102,48 @@ test("P27 stale source and pretend approval fail closed", () => {
   approved.approval = "approved";
   assert.throws(() => validateActionReview(approved, context), /cannot grant approval/);
 });
+
+test("P27 ten explicit variants preserve action counts and bind both viewport images", () => {
+  const value = review();
+  const variants = value.actions.flatMap((a) => a.additionalControlVariants ?? []);
+  assert.equal(variants.length, 10);
+  assert.equal(
+    variants.reduce((n, v) => n + Object.keys(v.states).length, 0),
+    42,
+  );
+  assert.deepEqual(
+    variants.map((v) => v.key).sort(),
+    [
+      "P27-resume",
+      "P27-save-edit",
+      "P27-template-competitor",
+      "P27-template-rejected",
+      "P27-reload-blocked",
+      "P27-reload-expired",
+      "P27-reload-forbidden",
+      "P27-reload-rate_limited",
+      "P27-reload-version_conflict",
+      "P27-cancel-edit",
+    ].sort(),
+  );
+  const result = validateActionReview(value, context);
+  assert.equal(result.routeActions, 14);
+  assert.equal(result.writeActions, 2);
+  assert.equal(value.approval, "pending-user-review");
+});
+
+test("P27 variants cannot borrow another selector or a viewport image without its exact variant key", () => {
+  const wrong = review();
+  wrong.actions.find((a) => a.actionId === "AR-STATUS").additionalControlVariants[0].selector =
+    "#save";
+  assert.throws(() => validateActionReview(wrong, context), /variant selector differs/);
+  const brokenPackages = structuredClone(packages);
+  const image = brokenPackages
+    .get("automation-controls-direction-c")
+    .screenshots.find((s) => s.control?.key === "P27-resume" && s.width === 390);
+  image.control.key = "P27-wrong";
+  assert.throws(
+    () => validateActionReview(review(), { ...context, packages: brokenPackages }),
+    /missing exact variant screenshot/,
+  );
+});

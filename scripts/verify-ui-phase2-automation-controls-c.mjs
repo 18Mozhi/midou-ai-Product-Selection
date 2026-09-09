@@ -44,7 +44,8 @@ if (!capture && !smoke) {
 }
 const screenshots = [],
   checks = [],
-  actionVisualReferences = {};
+  actionVisualReferences = {},
+  controlVariantReferences = {};
 const browser = await chromium.launch({ headless: true });
 try {
   for (const width of [1440, 390]) {
@@ -69,19 +70,68 @@ try {
       await page.goto(pathToFileURL(path.join(root, "index.html")).href);
       await page.waitForFunction(() => Boolean(window.AUTOMATION_CONTROLS_C));
       const controls = await page.evaluate(() => window.AUTOMATION_CONTROLS_C.controls);
+      const variants = await page.evaluate(() => window.AUTOMATION_CONTROLS_C.variants);
       assert.equal(controls.length, 14);
-      for (const control of controls) {
+      assert.equal(variants.length, 10);
+      for (const control of [...controls, ...variants]) {
         for (const state of [
           ...(smoke ? ["focus"] : ["default", "hover", "focus", "pressed"]),
-          ...(control.busyScene ? ["pending"] : []),
+          ...(control.busyScene || control.busyClick
+            ? [control.variantKey ? "busy" : "pending"]
+            : []),
         ]) {
+          const inFlight = ["pending", "busy"].includes(state);
           await page.evaluate(({ id, mode }) => window.AUTOMATION_CONTROLS_C.prepare(id, mode), {
             id: control.id,
-            mode: state === "pending" ? "busy" : "default",
+            mode: inFlight ? "busy" : "default",
           });
           const before = await page.evaluate(() => window.AUTOMATION_C.state());
           const target = page.locator(control.selector);
           assert.equal(await target.count(), 1, control.id + " ambiguous representative");
+          if (control.id === "resume") {
+            assert.equal(before.rows[0].status, "paused");
+            assert.equal((await target.textContent()).trim(), "恢复");
+            assert.deepEqual(
+              before.intents,
+              inFlight
+                ? [
+                    {
+                      url: `/automations/${before.rows[0].id}/actions`,
+                      method: "POST",
+                      body: {
+                        action: "resume",
+                        expected_version: before.rows[0].version,
+                        reason: "由规则管理页人工恢复",
+                      },
+                    },
+                  ]
+                : [],
+            );
+          }
+          if (control.id === "save-edit") {
+            assert.ok(before.editing?.id);
+            assert.equal(before.intents.length, 1);
+            assert.equal(before.intents[0].method, "PATCH");
+            assert.equal(before.intents[0].url, `/automations/${before.editing.id}`);
+            assert.equal(before.intents[0].body.expected_version, before.editing.version);
+            assert.equal(before.intents[0].body.reason, before.reason);
+            assert.equal((await target.textContent()).trim(), inFlight ? "提交中…" : "保存修改");
+          }
+          if (control.id.startsWith("template-")) {
+            const index = control.id === "template-competitor" ? 1 : 2;
+            const template = await page.evaluate(
+              (i) => window.AUTOMATION_C_DATA.templates[i],
+              index,
+            );
+            for (const [key, value] of Object.entries(template))
+              assert.equal(before.form[key], value);
+            assert.equal(before.intents.length, 0);
+          }
+          if (control.id.startsWith("reload-")) assert.equal(before.read, control.scene);
+          if (control.id === "cancel-edit") {
+            assert.ok(before.editing?.id);
+            assert.equal(before.reason, "");
+          }
           await page.mouse.move(1, 1);
           if (state === "focus") {
             // Move with real Tab, including when prepare placed initial focus on this target.
@@ -110,7 +160,7 @@ try {
             assert.equal(await target.evaluate((el) => el.matches(":hover")), true);
           if (state === "pressed")
             assert.equal(await target.evaluate((el) => el.matches(":active")), true);
-          if (state === "pending") {
+          if (inFlight) {
             assert.equal(await target.isDisabled(), true, control.id);
             assert.equal(control.id === "preview" ? before.previewing : before.busy, true);
           } else assert.equal(await target.isEnabled(), true, control.id);
@@ -151,22 +201,33 @@ try {
               width,
               file,
               sha256: hash(await readFile(path.join(root, file))),
-              control: { selector: control.selector, actionId: control.actionId, state },
+              control: {
+                selector: control.selector,
+                actionId: control.actionId,
+                state,
+                ...(control.variantKey ? { key: control.variantKey } : {}),
+              },
             });
           }
-          actionVisualReferences[control.actionId] ??= {
+          const references = control.variantKey ? controlVariantReferences : actionVisualReferences;
+          const referenceKey = control.variantKey ?? control.actionId;
+          references[referenceKey] ??= {
             pageId: "P27",
-            scope: "representative-control-only-not-all-variants-or-Vue",
+            scope: control.variantKey
+              ? "additional-control-variant-not-new-action"
+              : "representative-control-only-not-all-variants-or-Vue",
+            ...(control.variantKey ? { actionId: control.actionId } : {}),
             selector: control.selector,
             states: {},
           };
           if (state === "pending") {
-            actionVisualReferences[control.actionId].states.disabled = scene;
-            actionVisualReferences[control.actionId].states.busy = scene;
-          } else actionVisualReferences[control.actionId].states[state] = scene;
+            references[referenceKey].states.disabled = scene;
+            references[referenceKey].states.busy = scene;
+          } else references[referenceKey].states[state] = scene;
           checks.push({
             width,
             actionId: control.actionId,
+            ...(control.variantKey ? { variantKey: control.variantKey } : {}),
             state,
             metrics,
             factsAndIntentsUnchanged: true,
@@ -189,15 +250,16 @@ try {
   await browser.close();
 }
 if (capture) {
-  assert.equal(screenshots.length, 124);
+  assert.equal(screenshots.length, 208);
   await writeFile(
     path.join(root, "evidence.json"),
     JSON.stringify(
       {
-        version: "AUTOMATION-CONTROLS-C-r1",
+        version: "AUTOMATION-CONTROLS-C-r2",
         scope: "offline-proposal-not-runtime-or-user-accepted",
         sourceHashes,
         actionVisualReferences,
+        controlVariantReferences,
         checks,
         screenshots,
       },
@@ -207,7 +269,7 @@ if (capture) {
   );
   await writeFile(
     path.join(root, "gallery.html"),
-    '<!doctype html><html lang="zh-CN"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P27逐按钮状态待审</title><style>body{margin:24px;background:#edf1f6;color:#202c3d;font:16px/1.6 sans-serif}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px}figure{margin:0;padding:16px;background:white}img{width:100%;height:480px;object-fit:contain}a{color:#254a9c}</style><h1>P27 自动化规则 · 逐按钮状态待审</h1><p>14个代表控件，56个常规状态＋6个在途场景，双端124图；不是全变体、真实Vue或用户批准。</p><p><a href="index.html">交互稿</a> · <a href="README.md">范围与未完成项</a></p><main>' +
+    '<!doctype html><html lang="zh-CN"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P27逐按钮状态待审</title><style>body{margin:24px;background:#edf1f6;color:#202c3d;font:16px/1.6 sans-serif}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px}figure{margin:0;padding:16px;background:white}img{width:100%;height:480px;object-fit:contain}a{color:#254a9c}</style><h1>P27 自动化规则 · 逐按钮状态待审</h1><p>14个代表控件＋10个扩展变体，双端208图（本批新增84图）；不是全变体、真实Vue或用户批准。</p><p><a href="index.html">交互稿</a> · <a href="README.md">范围与未完成项</a></p><main>' +
       screenshots
         .map(
           (s) =>
@@ -219,6 +281,7 @@ if (capture) {
 } else if (!smoke) {
   assert.deepEqual(previous.checks, checks);
   assert.deepEqual(previous.actionVisualReferences, actionVisualReferences);
+  assert.deepEqual(previous.controlVariantReferences, controlVariantReferences);
 }
 console.log(
   JSON.stringify({

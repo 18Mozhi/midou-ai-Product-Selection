@@ -1,5 +1,9 @@
 # P27 自动化规则：逐动作、字段与弹窗状态登记
 
+r2收尾：定向登记7/7、最小状态64项、全部208图捕获及无参数208项复验通过；全量单测470/470。新增变体仍归既有14动作，不增加分母；86图包共11933 PNG，源码与PNG漂移0，审核台双端及文档/运行文档/静态检查通过。本轮未改变父包、生产源码、依赖或运行态，复用上一轮父包122图/业务合同验证，不重复构建或启动服务。单测临时fixture及两份审核下载自动清理，浏览器finally关闭，无本轮残留临时文件；208图及其审核材料均为永久交付物。旧轮受限清理路径未触碰。
+
+2026-09-10 P27状态变体r2：[新增84图、累计208图](design/automation-controls-direction-c/README.md)。补恢复/编辑保存/另两模板/五类错误重载/编辑取消10变体，绑定42条扩展状态，不增加14个原动作。原C布局、数据和业务controller不改；r1基础审核与r2新增审核分开。以下“这些变体未补”为r1历史记录；字段/共享提案控件、全组合与真实Vue仍待。
+
 2026-09-10，从干净main/e5a12d05继续。AGENTS → Feature Map automationRules → route-catalog /automations → NavigationShell的automation-rule-center → AutomationRuleCenter.vue，API各读写继续team:manage及组织/工作区范围。当前源码LF hash与既有合同2184a176…完全一致；本轮不改产品源码、接口或规则。
 
 [P27完整C稿122图](design/automation-direction-c/README.md) · [新增逐按钮124图](design/automation-controls-direction-c/README.md) · [机器可核对登记](action-reviews/P27.json)

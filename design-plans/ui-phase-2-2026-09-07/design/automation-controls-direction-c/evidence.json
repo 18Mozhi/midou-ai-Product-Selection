@@ -1,5 +1,5 @@
 {
-  "version": "AUTOMATION-CONTROLS-C-r1",
+  "version": "AUTOMATION-CONTROLS-C-r2",
   "scope": "offline-proposal-not-runtime-or-user-accepted",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/index.html": "f28de36fb15b9ef4b636312398e6b39d228507c4c743e946289de02fd5ad5015",
@@ -16,10 +16,10 @@
     "scripts/lib/ui-phase2-automation-design-data.mjs": "10e0437f7cc7740f3de259c998e4eae70cb5074faa01ba95231ac05bfcb8955e",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-automation-c.mjs": "17747ad0d99c6fad3b5a306eed966fd3e3214e6560b4f1f3a61eb0087ad9a732",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/index.html": "53454211a2663a8c5371029e43c4602dcba003ef6c0fff93bffa8367364746df",
-    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.js": "6f15d6175a1688d996313a07046dae271c5e41db2c67bf3558680fd7867989f4",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/index.html": "09203af6a484eba0464b615b06e5e5fd6f57bf404938c9091c4115af9d3459c9",
+    "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.js": "e4ded3ae9ff9a73b4c42bec429221096680484f253d55e5cb76b3e789b34f4bb",
     "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.css": "9a49ca04ebad70f72cea27770c24d23ce87b6d57e202dbb3eefbf2a0d1df9ac8",
-    "scripts/verify-ui-phase2-automation-controls-c.mjs": "30bba4a25628315f41a3eb239f7796b1ea90efa7e151aab01b70d0d01aaebf77"
+    "scripts/verify-ui-phase2-automation-controls-c.mjs": "392d5bc43d7c6a072a16c8ad63a4b289eb85c827641c28e65b9a55994d0eefdc"
   },
   "actionVisualReferences": {
     "AR-CREATE": {
@@ -186,6 +186,130 @@
         "pressed": "save-pressed",
         "disabled": "save-pending",
         "busy": "save-pending"
+      }
+    }
+  },
+  "controlVariantReferences": {
+    "P27-resume": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-STATUS",
+      "selector": "[data-status]",
+      "states": {
+        "default": "resume-default",
+        "hover": "resume-hover",
+        "focus": "resume-focus",
+        "pressed": "resume-pressed",
+        "busy": "resume-busy"
+      }
+    },
+    "P27-save-edit": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-SAVE",
+      "selector": "#save",
+      "states": {
+        "default": "save-edit-default",
+        "hover": "save-edit-hover",
+        "focus": "save-edit-focus",
+        "pressed": "save-edit-pressed",
+        "busy": "save-edit-busy"
+      }
+    },
+    "P27-template-competitor": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-TEMPLATE",
+      "selector": "[data-template='1']",
+      "states": {
+        "default": "template-competitor-default",
+        "hover": "template-competitor-hover",
+        "focus": "template-competitor-focus",
+        "pressed": "template-competitor-pressed"
+      }
+    },
+    "P27-template-rejected": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-TEMPLATE",
+      "selector": "[data-template='2']",
+      "states": {
+        "default": "template-rejected-default",
+        "hover": "template-rejected-hover",
+        "focus": "template-rejected-focus",
+        "pressed": "template-rejected-pressed"
+      }
+    },
+    "P27-reload-blocked": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-LOAD",
+      "selector": "#retry",
+      "states": {
+        "default": "reload-blocked-default",
+        "hover": "reload-blocked-hover",
+        "focus": "reload-blocked-focus",
+        "pressed": "reload-blocked-pressed"
+      }
+    },
+    "P27-reload-expired": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-LOAD",
+      "selector": "#retry",
+      "states": {
+        "default": "reload-expired-default",
+        "hover": "reload-expired-hover",
+        "focus": "reload-expired-focus",
+        "pressed": "reload-expired-pressed"
+      }
+    },
+    "P27-reload-forbidden": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-LOAD",
+      "selector": "#retry",
+      "states": {
+        "default": "reload-forbidden-default",
+        "hover": "reload-forbidden-hover",
+        "focus": "reload-forbidden-focus",
+        "pressed": "reload-forbidden-pressed"
+      }
+    },
+    "P27-reload-rate_limited": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-LOAD",
+      "selector": "#retry",
+      "states": {
+        "default": "reload-rate_limited-default",
+        "hover": "reload-rate_limited-hover",
+        "focus": "reload-rate_limited-focus",
+        "pressed": "reload-rate_limited-pressed"
+      }
+    },
+    "P27-reload-version_conflict": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-LOAD",
+      "selector": "#retry",
+      "states": {
+        "default": "reload-version_conflict-default",
+        "hover": "reload-version_conflict-hover",
+        "focus": "reload-version_conflict-focus",
+        "pressed": "reload-version_conflict-pressed"
+      }
+    },
+    "P27-cancel-edit": {
+      "pageId": "P27",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "AR-EDITOR-CLOSE",
+      "selector": "#cancel",
+      "states": {
+        "default": "cancel-edit-default",
+        "hover": "cancel-edit-hover",
+        "focus": "cancel-edit-focus",
+        "pressed": "cancel-edit-pressed"
       }
     }
   },
@@ -1059,6 +1183,636 @@
       "factsAndIntentsUnchanged": true
     },
     {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "busy",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "busy",
+      "metrics": {
+        "width": 93.015625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "default",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "hover",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "focus",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "pressed",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "default",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "hover",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "focus",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "pressed",
+      "metrics": {
+        "width": 301,
+        "height": 80.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "default",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "hover",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "focus",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 1440,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "pressed",
+      "metrics": {
+        "width": 64,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
       "width": 390,
       "actionId": "AR-CREATE",
       "state": "default",
@@ -1918,6 +2672,636 @@
       "state": "pending",
       "metrics": {
         "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "default",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "hover",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "focus",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "pressed",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-STATUS",
+      "variantKey": "P27-resume",
+      "state": "busy",
+      "metrics": {
+        "width": 56,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "default",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "hover",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "focus",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "pressed",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-SAVE",
+      "variantKey": "P27-save-edit",
+      "state": "busy",
+      "metrics": {
+        "width": 191.328125,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "default",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "hover",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "focus",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-competitor",
+      "state": "pressed",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "default",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "hover",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "focus",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-TEMPLATE",
+      "variantKey": "P27-template-rejected",
+      "state": "pressed",
+      "metrics": {
+        "width": 328,
+        "height": 72.828125,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-blocked",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-expired",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-forbidden",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-rate_limited",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "default",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "hover",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "focus",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-LOAD",
+      "variantKey": "P27-reload-version_conflict",
+      "state": "pressed",
+      "metrics": {
+        "width": 96,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "default",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "hover",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "focus",
+      "metrics": {
+        "width": 136.65625,
+        "height": 44.390625,
+        "font": 16,
+        "hit": true,
+        "overflow": false,
+        "modalOverflow": false
+      },
+      "factsAndIntentsUnchanged": true
+    },
+    {
+      "width": 390,
+      "actionId": "AR-EDITOR-CLOSE",
+      "variantKey": "P27-cancel-edit",
+      "state": "pressed",
+      "metrics": {
+        "width": 136.65625,
         "height": 44.390625,
         "font": 16,
         "hit": true,
@@ -2438,7 +3822,7 @@
       "scene": "sample-focus",
       "width": 1440,
       "file": "sample-focus-1440.png",
-      "sha256": "88a03e0ed2d4c2d515d5454693320ecbc1213b92edb7ed1a17e0d325c772600e",
+      "sha256": "ca87371ebb203407a8e7299a5c6ea04503a6ad704b0c17a3ec13ece4b22a7b3b",
       "control": {
         "selector": "[data-preview-link]",
         "actionId": "AR-SAMPLE",
@@ -2482,7 +3866,7 @@
       "scene": "cancel-focus",
       "width": 1440,
       "file": "cancel-focus-1440.png",
-      "sha256": "d6193841e0e912f7d8752837d7fbec16be86e788535ba848fef70dad6336ce33",
+      "sha256": "45b82109af7b288263ddd9c8f2d5fe1c12934a3ace3a7963e34d1aa0ae695f58",
       "control": {
         "selector": "#cancel",
         "actionId": "AR-EDITOR-CLOSE",
@@ -2581,7 +3965,7 @@
       "scene": "save-focus",
       "width": 1440,
       "file": "save-focus-1440.png",
-      "sha256": "644533278ce57a61ce30c5b2806cc8b507aa0af1c644e980e8c055ff1e36f67e",
+      "sha256": "41a5f4ede2ef2868603a24e1445c70b98f726036c756f755c6979a012e25178a",
       "control": {
         "selector": "#save",
         "actionId": "AR-SAVE",
@@ -2608,6 +3992,510 @@
         "selector": "#save",
         "actionId": "AR-SAVE",
         "state": "pending"
+      }
+    },
+    {
+      "scene": "resume-default",
+      "width": 1440,
+      "file": "resume-default-1440.png",
+      "sha256": "39dc4ef33a25adf26e57ced370539ebdfe287fe63a7820b2cea3471c0daebc4e",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "default",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-hover",
+      "width": 1440,
+      "file": "resume-hover-1440.png",
+      "sha256": "ebb2a33037e48d79ba4943bf6ef2507194c3851e6bfb5396e084e4f5b14216f3",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "hover",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-focus",
+      "width": 1440,
+      "file": "resume-focus-1440.png",
+      "sha256": "b63a7f9b40962dbdfc8ef76863683e1564a22ef9ffb0ee8d9b083099fec63ab1",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "focus",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-pressed",
+      "width": 1440,
+      "file": "resume-pressed-1440.png",
+      "sha256": "af1ae059615d834cab1d39769024be33f6cb1a094056e24b903aebeaaca4b401",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "pressed",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-busy",
+      "width": 1440,
+      "file": "resume-busy-1440.png",
+      "sha256": "e33122c63b33a8fc22bf7c8b661773a186082b59887f155dd524f11b572c7416",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "busy",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "save-edit-default",
+      "width": 1440,
+      "file": "save-edit-default-1440.png",
+      "sha256": "0dfb7e124e75389e466d28191a1555e03605ad10e0c82cb1adc9fcb848ae44a0",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "default",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-hover",
+      "width": 1440,
+      "file": "save-edit-hover-1440.png",
+      "sha256": "8b5b3bad7c7325dccf7d6a5314a33594e89ac6555303e7856a25e0d32b7fc720",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "hover",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-focus",
+      "width": 1440,
+      "file": "save-edit-focus-1440.png",
+      "sha256": "85dfedd5c07ad517c998cbe944201be040711b668864e3b77dd9cea701ee8864",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "focus",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-pressed",
+      "width": 1440,
+      "file": "save-edit-pressed-1440.png",
+      "sha256": "462f781360ec525ad73a102b4621b8393f1bb06954f155b36c41c32f943e9557",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "pressed",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-busy",
+      "width": 1440,
+      "file": "save-edit-busy-1440.png",
+      "sha256": "023ecd90a7646c9e95c0881a1d96bca0b6f906b251a3d8f24c264b26c6234d7b",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "busy",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "template-competitor-default",
+      "width": 1440,
+      "file": "template-competitor-default-1440.png",
+      "sha256": "2b0e7df276ddcbad29a67a2b9bba7795f83dab2eadad66e7b93439c3d3d701c1",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "default",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-competitor-hover",
+      "width": 1440,
+      "file": "template-competitor-hover-1440.png",
+      "sha256": "bcea82f6664380eda0ba567d35d21c10e1a6009adafdf3a1e099e7f39938bf24",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "hover",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-competitor-focus",
+      "width": 1440,
+      "file": "template-competitor-focus-1440.png",
+      "sha256": "bb40241ad48b1a5637e59477540ebbafaa5249f58a8ce1b5331e02ba533d2134",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "focus",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-competitor-pressed",
+      "width": 1440,
+      "file": "template-competitor-pressed-1440.png",
+      "sha256": "1299d7a7af2f88f51596b4b27420be18eef6346b9ba1c41f6e6c8aef9ac86f83",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "pressed",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-rejected-default",
+      "width": 1440,
+      "file": "template-rejected-default-1440.png",
+      "sha256": "c7110d6899492c31886946304e65e4cac82b0b8166f2dbc3dffdde6d57ceb928",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "default",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "template-rejected-hover",
+      "width": 1440,
+      "file": "template-rejected-hover-1440.png",
+      "sha256": "24f8338bba82984a7f1f81063f88c917f621b701abeb9f1da4990c1aea5dad8d",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "hover",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "template-rejected-focus",
+      "width": 1440,
+      "file": "template-rejected-focus-1440.png",
+      "sha256": "34a531e7067a7de7aae342bbf681e6c09ea176a6ab48dcc361c03ebe6460f7a4",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "focus",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "template-rejected-pressed",
+      "width": 1440,
+      "file": "template-rejected-pressed-1440.png",
+      "sha256": "f3e1b369ac84f49f7784a0b3345f5853c1e2ebf603f477783fdbdd376cd99082",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "pressed",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "reload-blocked-default",
+      "width": 1440,
+      "file": "reload-blocked-default-1440.png",
+      "sha256": "9d67b97f1109fe7354adc8c667bcb9592a4bcf3d1f23d8fd28dcc3dc80f27568",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-hover",
+      "width": 1440,
+      "file": "reload-blocked-hover-1440.png",
+      "sha256": "85c16ab4025ba43ff902a7995400bfddd15b543c7d1373b46dea2cf17d83a59d",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-focus",
+      "width": 1440,
+      "file": "reload-blocked-focus-1440.png",
+      "sha256": "eb259f5c8d6458c3b654fbf0a02fc2dac7faafd5170077900f6928966031b63f",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-pressed",
+      "width": 1440,
+      "file": "reload-blocked-pressed-1440.png",
+      "sha256": "32c270d092b1f7de08eeeb39501801b578f00e622b687f7f1e0375a0e8ce49e0",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-expired-default",
+      "width": 1440,
+      "file": "reload-expired-default-1440.png",
+      "sha256": "559417e6e17e6f0375f1eb3d51027240fb0d97f9496a325b617056996999bfa3",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-hover",
+      "width": 1440,
+      "file": "reload-expired-hover-1440.png",
+      "sha256": "752da49702fe3cefb958d41c3ac4df3fb0a4b6de83aa492085a3037e1a1c9ca1",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-focus",
+      "width": 1440,
+      "file": "reload-expired-focus-1440.png",
+      "sha256": "8c1efb6966cd8df3218e85a7629fd6265fad36708979a0b61933839742be7a22",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-pressed",
+      "width": 1440,
+      "file": "reload-expired-pressed-1440.png",
+      "sha256": "ac7ebd3cf58b0d5c3d509732f39c444aa8bb5129b27b591159c42cb5d3fab969",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-forbidden-default",
+      "width": 1440,
+      "file": "reload-forbidden-default-1440.png",
+      "sha256": "d9d451cab0ae3eef0286f291ddcd98ca45796f2a378d6319132249ede1b03fdf",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-hover",
+      "width": 1440,
+      "file": "reload-forbidden-hover-1440.png",
+      "sha256": "b8e82d0f9782c3dcceb2f19a3cbe5faaaf5cfe0ba26934d0eae52ef741bf04f4",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-focus",
+      "width": 1440,
+      "file": "reload-forbidden-focus-1440.png",
+      "sha256": "f473a94cb1e419ad00a8a3c23d9bb30bd6a143a821161636034dcc3e708f4d80",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-pressed",
+      "width": 1440,
+      "file": "reload-forbidden-pressed-1440.png",
+      "sha256": "144db40a068d18e9c750aef630f282b257060b319b4c97aad8b0f34caf7ff45f",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-default",
+      "width": 1440,
+      "file": "reload-rate_limited-default-1440.png",
+      "sha256": "570036da293137505b4568be010c038b758f7d700daca7ce1912d6eba5d56ae6",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-hover",
+      "width": 1440,
+      "file": "reload-rate_limited-hover-1440.png",
+      "sha256": "bacf457e68c9e15e26bd7faea533646856424fbeab66299abb37f446ce120ca6",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-focus",
+      "width": 1440,
+      "file": "reload-rate_limited-focus-1440.png",
+      "sha256": "247abda5f1faa700480c45d81ef723070f20e451dca666da24ed52c54f72690e",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-pressed",
+      "width": 1440,
+      "file": "reload-rate_limited-pressed-1440.png",
+      "sha256": "987aa83d1430234d69e65a4b83ec38fb976cee5bdf9e64caabbf1236bda3103e",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-default",
+      "width": 1440,
+      "file": "reload-version_conflict-default-1440.png",
+      "sha256": "4fe72255dc23ebc3bb039f4992ece6fe3ec926cafb778011bc43b35b2bbf20ec",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-hover",
+      "width": 1440,
+      "file": "reload-version_conflict-hover-1440.png",
+      "sha256": "571f677bc6185600a99dd1df98c9ddbaee3f9c2e36c8cfec79102679643052b3",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-focus",
+      "width": 1440,
+      "file": "reload-version_conflict-focus-1440.png",
+      "sha256": "a487aa883b7fdd484647727f787f4308a5bfe40d80c05717238849e4b7966ae5",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-pressed",
+      "width": 1440,
+      "file": "reload-version_conflict-pressed-1440.png",
+      "sha256": "c090942f5340062c6eec4d30a1fa0507c26cbf0ba907b2490c0dbfa5ed84298e",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "cancel-edit-default",
+      "width": 1440,
+      "file": "cancel-edit-default-1440.png",
+      "sha256": "d7351a5a7eeb38ef70716cab5f517e971a1990becba37837f7164067db7bf9dc",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "default",
+        "key": "P27-cancel-edit"
+      }
+    },
+    {
+      "scene": "cancel-edit-hover",
+      "width": 1440,
+      "file": "cancel-edit-hover-1440.png",
+      "sha256": "253ba00d29b411b32f93c504aa57ca4514d4ff3a332c16ea5796c99042ebefa5",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "hover",
+        "key": "P27-cancel-edit"
+      }
+    },
+    {
+      "scene": "cancel-edit-focus",
+      "width": 1440,
+      "file": "cancel-edit-focus-1440.png",
+      "sha256": "3dce8d033b54efefacb34d746757b5614731f5437a0157842fd6731008b6d5e8",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "focus",
+        "key": "P27-cancel-edit"
+      }
+    },
+    {
+      "scene": "cancel-edit-pressed",
+      "width": 1440,
+      "file": "cancel-edit-pressed-1440.png",
+      "sha256": "0c720caa6de32bee75ba38d244691e6c4d9f4379ad9aea60b561c1638fbcc88c",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "pressed",
+        "key": "P27-cancel-edit"
       }
     },
     {
@@ -2900,7 +4788,7 @@
       "scene": "detail-close-focus",
       "width": 390,
       "file": "detail-close-focus-390.png",
-      "sha256": "f4f5caa67807c12052fb04b9562c69a60e1fab5d2207bc6cd700f504b594fb51",
+      "sha256": "a9ab0e31c26fba3459758bbe5f75565c5cb597b9709c285bc92f4a6039139cc2",
       "control": {
         "selector": "#execution-close",
         "actionId": "AR-DETAIL-CLOSE",
@@ -3290,6 +5178,510 @@
         "selector": "#save",
         "actionId": "AR-SAVE",
         "state": "pending"
+      }
+    },
+    {
+      "scene": "resume-default",
+      "width": 390,
+      "file": "resume-default-390.png",
+      "sha256": "04586e71aeb97a488b392fa525d3b8c75367de122bc36567ed67f74cfe20416a",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "default",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-hover",
+      "width": 390,
+      "file": "resume-hover-390.png",
+      "sha256": "fd7442327e4b1dc6db38a2f646b552d9ea16966f03e2963911bbd4612c81fec4",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "hover",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-focus",
+      "width": 390,
+      "file": "resume-focus-390.png",
+      "sha256": "895fb54133dd546cee69ff49e0acb7b6ebfa710b81182e26ba82f78219aaa802",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "focus",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-pressed",
+      "width": 390,
+      "file": "resume-pressed-390.png",
+      "sha256": "96b516dd0bebe060d11ed7763a2aaa4a840bc32bb08c99d193dd1aaaf93be547",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "pressed",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "resume-busy",
+      "width": 390,
+      "file": "resume-busy-390.png",
+      "sha256": "8c7602935e3639779faa0672bbbc7a4db48770402aae9450371af220d7845f13",
+      "control": {
+        "selector": "[data-status]",
+        "actionId": "AR-STATUS",
+        "state": "busy",
+        "key": "P27-resume"
+      }
+    },
+    {
+      "scene": "save-edit-default",
+      "width": 390,
+      "file": "save-edit-default-390.png",
+      "sha256": "6fd9897785abb7246396a3d23c98745e6c8ccba53c2e643855525a1ccf434e88",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "default",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-hover",
+      "width": 390,
+      "file": "save-edit-hover-390.png",
+      "sha256": "538fe6d3b935a05009c73532918be9ea7c9f717ea1f1da88efb507e87feedabe",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "hover",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-focus",
+      "width": 390,
+      "file": "save-edit-focus-390.png",
+      "sha256": "1eb198da71bc417c1109010c90e15b3776a63ae6a786a2874b3ce5228c3cfa0c",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "focus",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-pressed",
+      "width": 390,
+      "file": "save-edit-pressed-390.png",
+      "sha256": "698bde55a2fbbe1486e7f549bb9b4826f84e27de052258698607961458b318c8",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "pressed",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "save-edit-busy",
+      "width": 390,
+      "file": "save-edit-busy-390.png",
+      "sha256": "9620b4f80f648d863346c0a95f42c0018be226cada24ca986dec4f5352cbfbc5",
+      "control": {
+        "selector": "#save",
+        "actionId": "AR-SAVE",
+        "state": "busy",
+        "key": "P27-save-edit"
+      }
+    },
+    {
+      "scene": "template-competitor-default",
+      "width": 390,
+      "file": "template-competitor-default-390.png",
+      "sha256": "bc5be0f7dc43006d349f8bd0ee0197b5caf507286b2b11aa3705c29f04a2f7e7",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "default",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-competitor-hover",
+      "width": 390,
+      "file": "template-competitor-hover-390.png",
+      "sha256": "d1276db8715761af2243e83aeeaf882f921c670aaf169b830cc90d82e14ba2db",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "hover",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-competitor-focus",
+      "width": 390,
+      "file": "template-competitor-focus-390.png",
+      "sha256": "36c28840ad46cb962beed9ddf78da65414e938a04a13516dff6ead4fc535f5f7",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "focus",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-competitor-pressed",
+      "width": 390,
+      "file": "template-competitor-pressed-390.png",
+      "sha256": "f4f875854d6fafd5473abb3ca9515806c32641969b5ab04a501110a8fefaea3c",
+      "control": {
+        "selector": "[data-template='1']",
+        "actionId": "AR-TEMPLATE",
+        "state": "pressed",
+        "key": "P27-template-competitor"
+      }
+    },
+    {
+      "scene": "template-rejected-default",
+      "width": 390,
+      "file": "template-rejected-default-390.png",
+      "sha256": "4c40dcacbcced01d37334ed6fd05415fc1a08f423344641fade564db79e5cf70",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "default",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "template-rejected-hover",
+      "width": 390,
+      "file": "template-rejected-hover-390.png",
+      "sha256": "1a01257dbbf888c2fd652ecb1fcb6ce26e43f1f19b626631f6f469fefaf2dc20",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "hover",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "template-rejected-focus",
+      "width": 390,
+      "file": "template-rejected-focus-390.png",
+      "sha256": "b5335e3a5362535614d78e8e3a348c873d61f393ee94d68458139fd378743c2e",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "focus",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "template-rejected-pressed",
+      "width": 390,
+      "file": "template-rejected-pressed-390.png",
+      "sha256": "2606cb4cb0bc76dda20d18f80453c1ee219fe6bf28f061b7a3e51f702ede7148",
+      "control": {
+        "selector": "[data-template='2']",
+        "actionId": "AR-TEMPLATE",
+        "state": "pressed",
+        "key": "P27-template-rejected"
+      }
+    },
+    {
+      "scene": "reload-blocked-default",
+      "width": 390,
+      "file": "reload-blocked-default-390.png",
+      "sha256": "8434b0ed4e215445bec85955240503a341f97e20c1a35460a0644868d8f26979",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-hover",
+      "width": 390,
+      "file": "reload-blocked-hover-390.png",
+      "sha256": "35bb2cf165331ce3ebe81d8fc975eba76ca02b05e817ed86ba23432f482cdad6",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-focus",
+      "width": 390,
+      "file": "reload-blocked-focus-390.png",
+      "sha256": "cc401eab9fcac90f56f86fdaceec944bc24db3ff1acad5c6ae9e4f3e8b4a9dad",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-blocked-pressed",
+      "width": 390,
+      "file": "reload-blocked-pressed-390.png",
+      "sha256": "90ce601cb523b1b0f33800a601b35564bab700e60a6dbcb5ef48fa5e65fad3af",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-blocked"
+      }
+    },
+    {
+      "scene": "reload-expired-default",
+      "width": 390,
+      "file": "reload-expired-default-390.png",
+      "sha256": "293cb9214c405f1976a4eff6a47174595dc31977cd15434abdf479fc107e192b",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-hover",
+      "width": 390,
+      "file": "reload-expired-hover-390.png",
+      "sha256": "c3cbc474b30c92520760a478562ccc88e57afc84cd04056b69aad34fcc0e5b13",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-focus",
+      "width": 390,
+      "file": "reload-expired-focus-390.png",
+      "sha256": "0e14841a3336e6100c52a5f710553008e3e92393cb85ed1d0a3dc590584a4390",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-expired-pressed",
+      "width": 390,
+      "file": "reload-expired-pressed-390.png",
+      "sha256": "148a8da2104f11c895e40914df262c3b66e2cbd27b6981a1ae83691eccb11e8e",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-expired"
+      }
+    },
+    {
+      "scene": "reload-forbidden-default",
+      "width": 390,
+      "file": "reload-forbidden-default-390.png",
+      "sha256": "0ba0a4e43d09c2ec9143a4d3982950b00dc72fa41328f1b11c7bf0d6dccb0ff0",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-hover",
+      "width": 390,
+      "file": "reload-forbidden-hover-390.png",
+      "sha256": "5277089c7c51edebac44fd8f308da5e5e9efd6527e87882d53e41392aafdb902",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-focus",
+      "width": 390,
+      "file": "reload-forbidden-focus-390.png",
+      "sha256": "5db228816112c7a971fa1dd092ac6bff9d0346fecc63df2b01b067ee9a3ac7b3",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-forbidden-pressed",
+      "width": 390,
+      "file": "reload-forbidden-pressed-390.png",
+      "sha256": "a26d58ed89539741dcde7651a2f08119607b5cc534f95e1a1e7abc1b0d5e49ac",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-forbidden"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-default",
+      "width": 390,
+      "file": "reload-rate_limited-default-390.png",
+      "sha256": "7ed08965903ad17162eeeda7e3fc88e261b507c6e9d5f1a6ea6d5b327930944a",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-hover",
+      "width": 390,
+      "file": "reload-rate_limited-hover-390.png",
+      "sha256": "1cca2b34f5a5aded1d24d62c897c95f8547d7bc97bb9d890fe79b03b915dfae9",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-focus",
+      "width": 390,
+      "file": "reload-rate_limited-focus-390.png",
+      "sha256": "80f7024f4b0f90afe2c7162f95f69e24d78fc778188fffb9dde26f04a926575b",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-rate_limited-pressed",
+      "width": 390,
+      "file": "reload-rate_limited-pressed-390.png",
+      "sha256": "c696df779c4db12c5a51cb8e37cd216a3645698702f7d052b9895fe88b489ae1",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-rate_limited"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-default",
+      "width": 390,
+      "file": "reload-version_conflict-default-390.png",
+      "sha256": "d075ac53299f486baed09b888dc17b38d09f32921964965a8c1ab4411b524e63",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "default",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-hover",
+      "width": 390,
+      "file": "reload-version_conflict-hover-390.png",
+      "sha256": "cd0bb4eadef5ed41f5f551f281409edc7a2e1061bfe50ebfd2c7c01437111e33",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "hover",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-focus",
+      "width": 390,
+      "file": "reload-version_conflict-focus-390.png",
+      "sha256": "fde9024bbff856d849ae43dacee96e04577561f03796d90bd22c9dee794bca44",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "focus",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "reload-version_conflict-pressed",
+      "width": 390,
+      "file": "reload-version_conflict-pressed-390.png",
+      "sha256": "c61f400fce469b8842f2bd5b215cd120c50e0b9d132f21768aaeb8f0e35ae13b",
+      "control": {
+        "selector": "#retry",
+        "actionId": "AR-LOAD",
+        "state": "pressed",
+        "key": "P27-reload-version_conflict"
+      }
+    },
+    {
+      "scene": "cancel-edit-default",
+      "width": 390,
+      "file": "cancel-edit-default-390.png",
+      "sha256": "7941e73da8e6eb67e62d1fcc702b5fc15081c15430dcc67c74140833aed776fc",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "default",
+        "key": "P27-cancel-edit"
+      }
+    },
+    {
+      "scene": "cancel-edit-hover",
+      "width": 390,
+      "file": "cancel-edit-hover-390.png",
+      "sha256": "fe430911197ebab61d65c31e57904c5f59defe796efceda7f28ebf6e154343f8",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "hover",
+        "key": "P27-cancel-edit"
+      }
+    },
+    {
+      "scene": "cancel-edit-focus",
+      "width": 390,
+      "file": "cancel-edit-focus-390.png",
+      "sha256": "27d7ddffdd90c173ae478ea1432474f4f6c0578a0137666de154017ec283b1dc",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "focus",
+        "key": "P27-cancel-edit"
+      }
+    },
+    {
+      "scene": "cancel-edit-pressed",
+      "width": 390,
+      "file": "cancel-edit-pressed-390.png",
+      "sha256": "d3dfc61d4355df9626a4e776e13bda87f2ccdfe0b031bdae4b4740a589db98cc",
+      "control": {
+        "selector": "#cancel",
+        "actionId": "AR-EDITOR-CLOSE",
+        "state": "pressed",
+        "key": "P27-cancel-edit"
       }
     }
   ]

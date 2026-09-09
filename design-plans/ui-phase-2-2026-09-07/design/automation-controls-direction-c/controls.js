@@ -100,22 +100,76 @@
       busyScene: "create_busy",
     },
   ];
+  const variants = [
+    {
+      actionId: "AR-STATUS",
+      id: "resume",
+      label: "恢复规则",
+      selector: "[data-status]",
+      scene: "paused",
+      busyClick: true,
+    },
+    {
+      actionId: "AR-SAVE",
+      id: "save-edit",
+      label: "保存修改",
+      selector: "#save",
+      scene: "edit_intent",
+      busyScene: "edit_busy",
+    },
+    {
+      actionId: "AR-TEMPLATE",
+      id: "template-competitor",
+      label: "竞品复核模板",
+      selector: "[data-template='1']",
+      scene: "template_competitor",
+    },
+    {
+      actionId: "AR-TEMPLATE",
+      id: "template-rejected",
+      label: "审批驳回模板",
+      selector: "[data-template='2']",
+      scene: "template_rejected",
+    },
+    ...["blocked", "expired", "forbidden", "rate_limited", "version_conflict"].map((scene) => ({
+      actionId: "AR-LOAD",
+      id: `reload-${scene}`,
+      label: `重载：${window.AUTOMATION_C.scenes[scene]}`,
+      selector: "#retry",
+      scene,
+    })),
+    {
+      actionId: "AR-EDITOR-CLOSE",
+      id: "cancel-edit",
+      label: "取消编辑已有规则",
+      selector: "#cancel",
+      scene: "edit",
+    },
+  ].map((control) => ({ ...control, variantKey: `P27-${control.id}` }));
+  const allControls = [...controls, ...variants];
   const select = document.getElementById("control-select");
-  for (const c of controls) select.add(new Option(c.label, c.id));
+  for (const c of allControls) select.add(new Option(c.label, c.id));
   function prepare(id, mode = "default") {
-    const control = controls.find((c) => c.id === id);
+    const control = allControls.find((c) => c.id === id);
     if (!control) throw new Error("Unknown control");
-    if (mode === "busy" && !control.busyScene) throw new Error("No source busy presentation");
-    window.AUTOMATION_C.scene(mode === "busy" ? control.busyScene : control.scene);
+    if (mode === "busy" && !control.busyScene && !control.busyClick)
+      throw new Error("No source busy presentation");
+    window.AUTOMATION_C.scene(
+      mode === "busy" && control.busyScene ? control.busyScene : control.scene,
+    );
+    if (mode === "busy" && control.busyClick) {
+      window.AUTOMATION_C.setMode("busy");
+      document.querySelector(control.selector).click();
+    }
     select.value = id;
     document.getElementById("control-mode").value = mode;
     document.getElementById("control-note").textContent =
       `${control.label}：${mode === "busy" ? "由既有在途场景呈现；不是新增禁用规则" : "直接核对实际按钮的默认、悬停、键盘焦点和按下"}。本包代表控件，不等于全部规则行、模板、错误状态或真实Vue通过。`;
   }
   document.getElementById("show-control").onclick = () => {
-    const c = controls.find((v) => v.id === select.value);
+    const c = allControls.find((v) => v.id === select.value);
     const mode = document.getElementById("control-mode").value;
-    if (mode === "busy" && !c.busyScene) {
+    if (mode === "busy" && !c.busyScene && !c.busyClick) {
       document.getElementById("control-note").textContent =
         "该控件当前源码没有在途禁用呈现；不补造禁用状态。";
       return;
@@ -123,5 +177,5 @@
     prepare(c.id, mode);
     document.querySelector(c.selector)?.scrollIntoView({ block: "center" });
   };
-  window.AUTOMATION_CONTROLS_C = { controls, prepare };
+  window.AUTOMATION_CONTROLS_C = { controls, variants, prepare };
 })();

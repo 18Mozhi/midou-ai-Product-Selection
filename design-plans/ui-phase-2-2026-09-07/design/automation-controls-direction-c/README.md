@@ -1,6 +1,6 @@
-# P27 自动化规则 · 逐按钮状态 C r1
+# P27 自动化规则 · 逐按钮状态 C r2
 
-AUTOMATION-CONTROLS-C-r1 / 2026-09-10 / **独立图稿待用户审核，未接入真实Vue或生产**。
+AUTOMATION-CONTROLS-C-r2 / 2026-09-10 / **独立图稿待用户审核，未接入真实Vue或生产**。
 
 [双端图册](gallery.html) · [交互稿](index.html) · [原P27完整页面/弹窗122图](../automation-direction-c/README.md) · [精确状态指纹](evidence.json) · [动作登记](../../action-reviews/P27.json)
 
@@ -8,9 +8,9 @@ AUTOMATION-CONTROLS-C-r1 / 2026-09-10 / **独立图稿待用户审核，未接�
 
 延续已选C方向的蓝色规则目录、白色工作面与当/且/则流程，复用原AUTOMATION-C-r1的完整HTML结构、CSS、数据和controller。仅本包技术详情summary改16px，避免将可操作入口当13px辅助文字；父图与真实Vue未改。没有回到旧卡片墙或纸色主题。
 
-14个代表控件，每个默认、真实鼠标悬停、Tab焦点、真实按下四态，共56场景；另6个由真实源码声明busy/previewing禁用的代表控件在途场景，共62场景×双端124PNG。在途一图可同时引用disabled/busy，不为数字重复绘图。对应68条动作/状态引用，10个源无呈现槽和6个导航不禁用槽分列。截图是控件所在完整视口，弹窗按目标位置滚动；不是按钮裁片，也不是全部弹窗的纵向全貌。
+r1的14个代表控件62场景/124图保留；r2增加10个扩展变体42场景/84图，合计104场景×双端208PNG。新增状态包含默认、悬停、Tab焦点、按下；恢复和编辑保存另有在途禁用图。新增在途图以busy引用并同时验证disabled，不额外复制相同图。基础68条代表引用及10个源无呈现槽/6导航槽不变，新增42条变体引用不增加业务动作。
 
-代表范围：暂停而非恢复；创建提交而非编辑；审批超时模板而非另两模板；通用读取失败而非所有失败原因。完整行/模板/编辑/恢复/错误类型组合、10字段全态、目录定位/分区跳转/额外关闭入口等提案新增控件、三主题密度与最终Vue对照仍待。不能把0未映射代表槽称为整页完成。
+本轮已补恢复、编辑保存、竞品与驳回模板、其余五类错误重载、编辑窗口取消。未补范围为完整数据/角色/主题/密度/错误×在途组合、10字段全态、目录定位/分区跳转/额外关闭等提案新增控件、最终Vue同状态对照。0代表槽未映射仍不等于整页完成。
 
 ## 业务和状态边界
 
@@ -87,6 +87,55 @@ AUTOMATION-CONTROLS-C-r1 / 2026-09-10 / **独立图稿待用户审核，未接�
 | 创建并启用或保存修改 · 按下未释放 | [桌面](save-pressed-1440.png) | [手机](save-pressed-390.png) |
 | 创建并启用或保存修改 · 在途禁用 | [桌面](save-pending-1440.png) | [手机](save-pending-390.png) |
 
+## r2 新增84张扩展图
+
+原r1代表按钮审核意见只适用r1基础部分，不自动批准r2新增变体。恢复busy通过已暂停场景的原型按钮触发现有resume意图，验证原version和固定人工原因；编辑保存核对PATCH/原版本/修改原因；两模板核对原对象字段，五错误重载核对各自read状态。场景准备不发API，伪类操作不得改变完整原型状态。
+
+| 扩展控件与状态 | 1440 | 390 |
+| --- | --- | --- |
+| 恢复规则 · 默认 | [桌面](resume-default-1440.png) | [手机](resume-default-390.png) |
+| 恢复规则 · 悬停 | [桌面](resume-hover-1440.png) | [手机](resume-hover-390.png) |
+| 恢复规则 · 键盘焦点 | [桌面](resume-focus-1440.png) | [手机](resume-focus-390.png) |
+| 恢复规则 · 按下 | [桌面](resume-pressed-1440.png) | [手机](resume-pressed-390.png) |
+| 恢复规则 · 在途禁用 | [桌面](resume-busy-1440.png) | [手机](resume-busy-390.png) |
+| 保存修改 · 默认 | [桌面](save-edit-default-1440.png) | [手机](save-edit-default-390.png) |
+| 保存修改 · 悬停 | [桌面](save-edit-hover-1440.png) | [手机](save-edit-hover-390.png) |
+| 保存修改 · 键盘焦点 | [桌面](save-edit-focus-1440.png) | [手机](save-edit-focus-390.png) |
+| 保存修改 · 按下 | [桌面](save-edit-pressed-1440.png) | [手机](save-edit-pressed-390.png) |
+| 保存修改 · 在途禁用 | [桌面](save-edit-busy-1440.png) | [手机](save-edit-busy-390.png) |
+| 竞品复核模板 · 默认 | [桌面](template-competitor-default-1440.png) | [手机](template-competitor-default-390.png) |
+| 竞品复核模板 · 悬停 | [桌面](template-competitor-hover-1440.png) | [手机](template-competitor-hover-390.png) |
+| 竞品复核模板 · 键盘焦点 | [桌面](template-competitor-focus-1440.png) | [手机](template-competitor-focus-390.png) |
+| 竞品复核模板 · 按下 | [桌面](template-competitor-pressed-1440.png) | [手机](template-competitor-pressed-390.png) |
+| 审批驳回模板 · 默认 | [桌面](template-rejected-default-1440.png) | [手机](template-rejected-default-390.png) |
+| 审批驳回模板 · 悬停 | [桌面](template-rejected-hover-1440.png) | [手机](template-rejected-hover-390.png) |
+| 审批驳回模板 · 键盘焦点 | [桌面](template-rejected-focus-1440.png) | [手机](template-rejected-focus-390.png) |
+| 审批驳回模板 · 按下 | [桌面](template-rejected-pressed-1440.png) | [手机](template-rejected-pressed-390.png) |
+| 服务受阻重载 · 默认 | [桌面](reload-blocked-default-1440.png) | [手机](reload-blocked-default-390.png) |
+| 服务受阻重载 · 悬停 | [桌面](reload-blocked-hover-1440.png) | [手机](reload-blocked-hover-390.png) |
+| 服务受阻重载 · 键盘焦点 | [桌面](reload-blocked-focus-1440.png) | [手机](reload-blocked-focus-390.png) |
+| 服务受阻重载 · 按下 | [桌面](reload-blocked-pressed-1440.png) | [手机](reload-blocked-pressed-390.png) |
+| 登录失效重载 · 默认 | [桌面](reload-expired-default-1440.png) | [手机](reload-expired-default-390.png) |
+| 登录失效重载 · 悬停 | [桌面](reload-expired-hover-1440.png) | [手机](reload-expired-hover-390.png) |
+| 登录失效重载 · 键盘焦点 | [桌面](reload-expired-focus-1440.png) | [手机](reload-expired-focus-390.png) |
+| 登录失效重载 · 按下 | [桌面](reload-expired-pressed-1440.png) | [手机](reload-expired-pressed-390.png) |
+| 无权限重载 · 默认 | [桌面](reload-forbidden-default-1440.png) | [手机](reload-forbidden-default-390.png) |
+| 无权限重载 · 悬停 | [桌面](reload-forbidden-hover-1440.png) | [手机](reload-forbidden-hover-390.png) |
+| 无权限重载 · 键盘焦点 | [桌面](reload-forbidden-focus-1440.png) | [手机](reload-forbidden-focus-390.png) |
+| 无权限重载 · 按下 | [桌面](reload-forbidden-pressed-1440.png) | [手机](reload-forbidden-pressed-390.png) |
+| 限流重载 · 默认 | [桌面](reload-rate_limited-default-1440.png) | [手机](reload-rate_limited-default-390.png) |
+| 限流重载 · 悬停 | [桌面](reload-rate_limited-hover-1440.png) | [手机](reload-rate_limited-hover-390.png) |
+| 限流重载 · 键盘焦点 | [桌面](reload-rate_limited-focus-1440.png) | [手机](reload-rate_limited-focus-390.png) |
+| 限流重载 · 按下 | [桌面](reload-rate_limited-pressed-1440.png) | [手机](reload-rate_limited-pressed-390.png) |
+| 版本冲突重载 · 默认 | [桌面](reload-version_conflict-default-1440.png) | [手机](reload-version_conflict-default-390.png) |
+| 版本冲突重载 · 悬停 | [桌面](reload-version_conflict-hover-1440.png) | [手机](reload-version_conflict-hover-390.png) |
+| 版本冲突重载 · 键盘焦点 | [桌面](reload-version_conflict-focus-1440.png) | [手机](reload-version_conflict-focus-390.png) |
+| 版本冲突重载 · 按下 | [桌面](reload-version_conflict-pressed-1440.png) | [手机](reload-version_conflict-pressed-390.png) |
+| 取消编辑 · 默认 | [桌面](cancel-edit-default-1440.png) | [手机](cancel-edit-default-390.png) |
+| 取消编辑 · 悬停 | [桌面](cancel-edit-hover-1440.png) | [手机](cancel-edit-hover-390.png) |
+| 取消编辑 · 键盘焦点 | [桌面](cancel-edit-focus-1440.png) | [手机](cancel-edit-focus-390.png) |
+| 取消编辑 · 按下 | [桌面](cancel-edit-pressed-1440.png) | [手机](cancel-edit-pressed-390.png) |
+
 ## 验证与使用
 
 ```powershell
@@ -97,7 +146,7 @@ node scripts/verify-ui-phase2-automation-c.mjs
 node --test tests/unit/ui-phase2-automation-review.test.mjs
 ```
 
-smoke检查双端焦点及适用在途40项；capture生成124张永久图、evidence和gallery；无参数校验所有来源/PNG指纹，并重跑124项控制状态、>=44px目标、>=16px控件字体、命中与溢出、状态不变。所有HTTP请求拦截、console/page错误、cookies/localStorage/sessionStorage均为0。浏览器/上下文finally关闭，不启动生产或测试服务，不安装依赖。
+smoke检查双端焦点及适用在途64项；capture生成208张永久图、evidence和gallery；无参数校验所有来源/PNG指纹，并重跑208项控制状态、>=44px目标、>=16px控件字体、命中与溢出、状态不变。所有HTTP请求拦截、console/page错误、cookies/localStorage/sessionStorage均为0。浏览器/上下文finally关闭，不启动生产或测试服务，不安装依赖。
 
 首次完整捕获中手机样本链接中心被固定操作栏遮挡；核对后统一将目标滚到可视区域中部，再验证命中点和截图，不使用force，也没有为过测修改业务布局。真实鼠标点击跳转/写入副作用、原型防重入与Vue差异仍以父合同/后续挂载测试为准，不能由伪类图取代。
 

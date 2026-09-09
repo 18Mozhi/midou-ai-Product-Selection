@@ -176,6 +176,86 @@
         {
           "package": "automation-controls-direction-c",
           "scene": "reload-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-blocked-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-blocked-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-blocked-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-blocked-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-expired-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-expired-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-expired-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-expired-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-forbidden-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-forbidden-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-forbidden-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-forbidden-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-rate_limited-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-rate_limited-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-rate_limited-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-rate_limited-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-version_conflict-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-version_conflict-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-version_conflict-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "reload-version_conflict-pressed"
         }
       ],
       "visualStates": {
@@ -196,7 +276,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "remaining": "本批代表控件及已列扩展变体均有逐态图；不代表所有数据/角色/主题/错误与在途组合、提案新增控件或真实Vue通过。",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
         "states": ["disabled", "busy"],
@@ -233,7 +313,69 @@
           "scene": "reload-pressed",
           "selector": "#retry"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P27-reload-blocked",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "reload-blocked-default",
+            "hover": "reload-blocked-hover",
+            "focus": "reload-blocked-focus",
+            "pressed": "reload-blocked-pressed"
+          }
+        },
+        {
+          "key": "P27-reload-expired",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "reload-expired-default",
+            "hover": "reload-expired-hover",
+            "focus": "reload-expired-focus",
+            "pressed": "reload-expired-pressed"
+          }
+        },
+        {
+          "key": "P27-reload-forbidden",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "reload-forbidden-default",
+            "hover": "reload-forbidden-hover",
+            "focus": "reload-forbidden-focus",
+            "pressed": "reload-forbidden-pressed"
+          }
+        },
+        {
+          "key": "P27-reload-rate_limited",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "reload-rate_limited-default",
+            "hover": "reload-rate_limited-hover",
+            "focus": "reload-rate_limited-focus",
+            "pressed": "reload-rate_limited-pressed"
+          }
+        },
+        {
+          "key": "P27-reload-version_conflict",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "reload-version_conflict-default",
+            "hover": "reload-version_conflict-hover",
+            "focus": "reload-version_conflict-focus",
+            "pressed": "reload-version_conflict-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AR-DETAIL",
@@ -485,6 +627,26 @@
         {
           "package": "automation-controls-direction-c",
           "scene": "status-pending"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "resume-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "resume-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "resume-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "resume-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "resume-busy"
         }
       ],
       "visualStates": {
@@ -505,7 +667,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "remaining": "本批代表控件及已列扩展变体均有逐态图；不代表所有数据/角色/主题/错误与在途组合、提案新增控件或真实Vue通过。",
       "visualStateReferences": {
         "default": {
           "package": "automation-controls-direction-c",
@@ -537,7 +699,22 @@
           "scene": "status-pending",
           "selector": "[data-status]"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P27-resume",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "[data-status]",
+          "states": {
+            "default": "resume-default",
+            "hover": "resume-hover",
+            "focus": "resume-focus",
+            "pressed": "resume-pressed",
+            "busy": "resume-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "AR-DETAIL-CLOSE",
@@ -911,6 +1088,38 @@
         {
           "package": "automation-controls-direction-c",
           "scene": "template-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-competitor-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-competitor-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-competitor-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-competitor-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-rejected-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-rejected-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-rejected-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "template-rejected-pressed"
         }
       ],
       "visualStates": {
@@ -931,7 +1140,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "remaining": "本批代表控件及已列扩展变体均有逐态图；不代表所有数据/角色/主题/错误与在途组合、提案新增控件或真实Vue通过。",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
         "states": ["disabled", "busy"],
@@ -968,7 +1177,33 @@
           "scene": "template-pressed",
           "selector": "[data-template='0']"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P27-template-competitor",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "[data-template='1']",
+          "states": {
+            "default": "template-competitor-default",
+            "hover": "template-competitor-hover",
+            "focus": "template-competitor-focus",
+            "pressed": "template-competitor-pressed"
+          }
+        },
+        {
+          "key": "P27-template-rejected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "[data-template='2']",
+          "states": {
+            "default": "template-rejected-default",
+            "hover": "template-rejected-hover",
+            "focus": "template-rejected-focus",
+            "pressed": "template-rejected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AR-SAMPLE",
@@ -1090,6 +1325,22 @@
         {
           "package": "automation-controls-direction-c",
           "scene": "cancel-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-edit-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-edit-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-edit-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "cancel-edit-pressed"
         }
       ],
       "visualStates": {
@@ -1110,7 +1361,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "remaining": "本批代表控件及已列扩展变体均有逐态图；不代表所有数据/角色/主题/错误与在途组合、提案新增控件或真实Vue通过。",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
         "states": ["disabled", "busy"],
@@ -1147,7 +1398,21 @@
           "scene": "cancel-pressed",
           "selector": "#cancel"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P27-cancel-edit",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#cancel",
+          "states": {
+            "default": "cancel-edit-default",
+            "hover": "cancel-edit-hover",
+            "focus": "cancel-edit-focus",
+            "pressed": "cancel-edit-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "AR-PREVIEW",
@@ -1330,6 +1595,26 @@
         {
           "package": "automation-controls-direction-c",
           "scene": "save-pending"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-edit-default"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-edit-hover"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-edit-focus"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-edit-pressed"
+        },
+        {
+          "package": "automation-controls-direction-c",
+          "scene": "save-edit-busy"
         }
       ],
       "visualStates": {
@@ -1350,7 +1635,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "新增124图关联代表控件的实际默认/悬停/Tab焦点/按下及适用在途态；不是所有模板、暂停恢复、创建编辑、错误类重载或共享新增控件/真实Vue/用户批准。",
+      "remaining": "本批代表控件及已列扩展变体均有逐态图；不代表所有数据/角色/主题/错误与在途组合、提案新增控件或真实Vue通过。",
       "visualStateReferences": {
         "default": {
           "package": "automation-controls-direction-c",
@@ -1382,7 +1667,22 @@
           "scene": "save-pending",
           "selector": "#save"
         }
-      }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P27-save-edit",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "automation-controls-direction-c",
+          "selector": "#save",
+          "states": {
+            "default": "save-edit-default",
+            "hover": "save-edit-hover",
+            "focus": "save-edit-focus",
+            "pressed": "save-edit-pressed",
+            "busy": "save-edit-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "D-AR-EXECUTIONS",
@@ -1940,7 +2240,7 @@
     "124新增双端图为14动作提供68条精确selector/状态引用；10源码无禁用/忙碌呈现槽与6导航不禁用槽分列。0代表槽未映射不等于所有业务变体、字段、主题或全页已验收。",
     "编辑/暂停源函数缺少重复提交早退，preview与保存忙碌条件独立；仅记录原语义，不用提案的按钮效果冒充防重入已修。",
     "真实source action_failed仍一律承诺重试；C图稿终态解释已区分，真实Vue文字未改。",
-    "本批代表AR-STATUS暂停、AR-SAVE创建、AR-TEMPLATE审批超时、AR-LOAD通用错误；恢复/编辑/另两模板/其他错误的逐态图，以及目录/分区/额外关闭按钮等提案新增控件仍须单独细化。"
+    "r2追加恢复、编辑保存、另两模板、五类错误重载及编辑取消10变体/84图；42条扩展状态引用不增加业务动作。目录/分区/额外关闭按钮等提案新增控件、字段全态及真实生命周期仍待。"
   ],
   "approval": "pending-user-review",
   "limits": [
