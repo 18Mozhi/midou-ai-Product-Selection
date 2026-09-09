@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P01",
+  "route": "/",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "源无原生dialog或确认调用；aside/form是内联结构，MFA/首次设置/验证结果不冒充弹窗。共享UiStatePanel内部另审。"
+  },
+  "inputs": {
+    "local": []
+  },
+  "actions": [
+    {
+      "actionId": "ID-LANDING-CHECK",
+      "label": "重新确定登录落点",
+      "kind": "read",
+      "routeApplicability": "P01-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/LandingRedirect.vue#0c5f729c6e5f1db6.1"],
+      "condition": "挂载自动读取；blocked才显示primary，loading无按钮",
+      "handler": "resolveLanding -> GET /me/landing -> /home恢复最近成员路径，否则replace；expired回/login",
+      "variants": ["mounted", "blocked-retry"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p01-loading"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p01-blocked"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "共享blocked次按钮有emit却无本页监听；不是影响详情。缺失目标/角色/真实会话、导航与重复读取待验。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/LandingRedirect.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+      "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+      "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+      "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
+    },
+    "inputs": [],
+    "containers": [],
+    "sharedRemaining": [
+      "App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。",
+      "所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。"
+    ]
+  },
+  "compositionGaps": [
+    "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
+    "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"
+  ]
+}

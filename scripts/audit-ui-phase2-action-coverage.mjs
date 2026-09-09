@@ -172,6 +172,7 @@ const output = {
   reviews: reviewSummaries,
   ...result,
   limits: [
+    "Semantic/route-action groups are summed per reviewed page; shared source repeated across routes is not a unique global business-action denominator.",
     "Exact source identities are not deduplicated semantic actions. Old-only identities are not deletion candidates.",
     "Historical static import route sets are a superset, not dynamic reachability; new source sites are not guessed onto routes.",
     "Scene/viewport presence and verifier references are not user approval, full button states, mounted Vue, SQL or production proof.",
@@ -179,6 +180,10 @@ const output = {
   ],
 };
 let md = `# 全站动作与弹窗覆盖对账\n\n基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。\n\n- 当前源候选${summary.currentSourceCandidates}；旧登记${summary.historicalCandidates}；新身份${summary.newSourceIdentities}，旧表独有身份${summary.oldOnlyIdentities}。签名变化不等于增删业务能力。\n- 已具体语义对应${summary.reviewedPages}页/${summary.explicitlyGroupedSourceSites}源位置/${summary.semanticGroups}组；其中路由动作${summary.routeActions}组，转发/容器关联${summary.wiringGroups}组，其余明确排除。其余${summary.pagesWithoutExplicitSemanticReview.length}页未完成此级映射，不称没有图或没有测试。\n- 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。\n\n## 逐页缺口\n\n| 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |\n| --- | --- | --- | --- |\n`;
+md = md.replace(
+  "## 逐页缺口",
+  "组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。\n\n## 逐页缺口",
+);
 for (const p of pages)
   md += `| [${p.id} ${p.title}](page-specs/${p.id}.md) | ${p.oldStaticAssociatedCandidates} | ${p.review ? `[${p.review.semanticGroups}组](action-reviews/${p.id}.json)` : "未逐项映射"} | ${p.review ? `${p.review.unmappedVisualSlots}个视觉状态槽待判断/映射；完整组合/真实Vue待验` : p.compositionGaps.length ? "优先核对分段组合及每个动作/弹窗" : "对齐合同动作、动态变体、场景与测试"} |\n`;
 md += [
@@ -187,7 +192,7 @@ md += [
   "",
   "AccountShell与PersonalCenter的20个源位置对应15组已有合同ID：14组P11可用语义动作，1组旧局部Tab由accountShell=true排除；含4类写入，表单/按钮不重复计数。五个分区链接保留独立变体，不改路由数。两源没有弹窗，不能为填数量增加确认框。",
   "",
-  "P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌稿及204张双端图。14组代表控件适用六态均与具体selector/scene绑定；通用样本板不抵扣业务验收。0个未映射代表槽不等于全变体/输入/真实history或写入通过；P18/P54局部源语义见下表，下一核其逐控件/共享消费者、完整采纳成本组合与其余70页，未获具体稿批准前不替换生产Vue。",
+  "P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌稿及204张双端图。14组代表控件适用六态均与具体selector/scene绑定；通用样本板不抵扣业务验收。0个未映射代表槽不等于全变体/输入/真实history或写入通过；P18/P54局部源语义见下表，下一核其逐控件/共享消费者、完整采纳成本组合与其余未复核页面（数量见上方动态汇总），未获具体稿批准前不替换生产Vue。",
   "",
   "## 使用与证据",
   "",
@@ -215,8 +220,7 @@ for (const review of reviews.filter((r) => r.surfaceReview)) {
   const surface = review.surfaceReview,
     summary = reviewSummaries.find((r) => r.pageId === review.pageId);
   md += `\n## ${review.pageId} 局部动作与共享消费者\n\n[逐项机器清单](action-reviews/${review.pageId}.json)：${summary.sourceSites}个局部源位置 → ${summary.semanticGroups}组；${summary.writeActions}类写入，${summary.routeActions}组路由动作，${summary.wiringGroups}组转发/容器关联不重复计动作。${summary.surfaces.localModelBindings}个本地v-model，${summary.surfaces.callerContainers}处调用/内嵌容器，${summary.surfaces.consumerVariants}个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。\n\n`;
-  md +=
-    "原六态仍保守未映射，须判断适用性并绑定逐动作selector/state；有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。\n\n";
+  md += `尚有${summary.unmappedVisualSlots}个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。\n\n`;
   md +=
     "| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |\n| --- | --- | --- | --- |\n";
   for (const a of review.actions)
@@ -240,6 +244,16 @@ for (const review of reviews.filter((r) => r.surfaceReview)) {
   for (const c of surface.containers)
     for (const v of c.variants)
       md += `| ${c.file.split("/").at(-1)} / ${c.tag}.${c.ordinal} / ${v.name} | ${c.shape} / ${v.evidenceScope} | ${v.scenes.map(sceneLink).join("、")} | ${v.remaining} |\n`;
+  if (review.modeReachability) {
+    md += "\n### 路径与局部模式\n\n";
+    md += `初始mode=${review.modeReachability.initialMode}；局部模式族：${review.modeReachability.reachableModes.join("、")}。排除：${review.modeReachability.excludedModes.join("、")}。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。\n\n`;
+    md +=
+      "自动动作：" +
+      review.modeReachability.automaticActions
+        .map((a) => `${a.actionId} / ${a.trigger}`)
+        .join("；") +
+      "。不登记为按钮。\n";
+  }
   md +=
     "\n### 明确保留的边界\n\n" +
     [...review.compositionGaps, ...surface.sharedRemaining].map((s) => `- ${s}`).join("\n") +

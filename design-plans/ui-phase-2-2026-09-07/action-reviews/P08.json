@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P08",
+  "route": "/select-context",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "源无原生dialog或确认调用；aside/form是内联结构，MFA/首次设置/验证结果不冒充弹窗。共享UiStatePanel内部另审。"
+  },
+  "inputs": {
+    "local": ["organizationQuery"]
+  },
+  "actions": [
+    {
+      "actionId": "ID-ROOT",
+      "label": "品牌返回根入口",
+      "kind": "navigation",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#9b4b982bf643379f.1"],
+      "condition": "所有state固定入口",
+      "handler": "RouterLink /",
+      "variants": ["all-states"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-organizations"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "仍由根入口决定角色落点，未验真实会话。"
+    },
+    {
+      "actionId": "NONACTION-ACCOUNT",
+      "label": "当前账号占位",
+      "kind": "excluded",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#fbfed57848d7366f.1"],
+      "condition": "源button无handler/href",
+      "handler": "无业务处理",
+      "variants": ["placeholder"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-organizations"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "源视觉上可按但没有账号菜单；新稿非交互呈现是待审，不新增用户菜单。"
+    },
+    {
+      "actionId": "ID-LOGIN-ROUTE",
+      "label": "会话失效重新登录",
+      "kind": "navigation",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#5587941412d5210f.1"],
+      "condition": "state=expired",
+      "handler": "RouterLink /login",
+      "variants": ["expired"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-expired"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "没有保留return_to到登录的源代码，不能宣称重新登录必回原页。"
+    },
+    {
+      "actionId": "ID-ORG-RELOAD",
+      "label": "返回并重读组织",
+      "kind": "read",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#222cadb1072dc1d8.1",
+        "apps/web/src/components/TenancyChooser.vue#9dde30dd57699c01.1",
+        "apps/web/src/components/TenancyChooser.vue#04d5594b96977687.1"
+      ],
+      "condition": "错误/403、组织下空工作区、已选组织三个入口",
+      "handler": "loadOrganizations 清selectedOrganization/Workspace/Context后GET /org/memberships",
+      "variants": ["error", "forbidden", "workspace-empty", "workspace-back"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-error"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-forbidden"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-workspaces-empty"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-workspaces"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不只是本地返回；未清query，旧工作区/团队ref仍在。选择写入期间返回可打断范围，晚到响应待验。"
+    },
+    {
+      "actionId": "ID-PERSONAL-PROVISION",
+      "label": "创建本人选品空间",
+      "kind": "write",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#ecd9e9dbd8b34d05.1"],
+      "condition": "state=empty且未选组织；loading/provisioning时入口被替换",
+      "handler": "createPersonalWorkspace -> POST /me/personal-workspace无body；默认/onboarding改/home，否则safeReturnTo",
+      "variants": ["empty-org", "provisioning", "direct-return"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-empty"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-provisioning"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是创建任意组织；没有handler单飞早退。后端幂等/会话/失败重试/实际导航需隔离验证。"
+    },
+    {
+      "actionId": "ID-ACCOUNT-ROUTE",
+      "label": "进入个人中心",
+      "kind": "navigation",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#d29e9f25fe7a5452.1"],
+      "condition": "无组织empty分支",
+      "handler": "RouterLink /me",
+      "variants": ["empty-org"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不意味着账号或组织权限已验。"
+    },
+    {
+      "actionId": "ID-MFA-ROUTE",
+      "label": "进入MFA管理",
+      "kind": "navigation",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#df188704ef470c64.1"],
+      "condition": "无组织empty分支",
+      "handler": "RouterLink /security/mfa",
+      "variants": ["empty-org"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "实际账号级准入与P07重挂载另验。"
+    },
+    {
+      "actionId": "ID-CONTEXT-CONTINUE",
+      "label": "继续引导或返回原页",
+      "kind": "navigation",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#72a9593314273d39.1"],
+      "condition": "state=selected且selectedContext",
+      "handler": "RouterLink safeReturnTo；/开头非//，默认/onboarding",
+      "variants": ["onboarding", "return-to"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-selected"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-return"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不能把startsWith检测当完整重定向安全验证；与本人空间直接/home分开。"
+    },
+    {
+      "actionId": "ID-ORG-CHOOSE",
+      "label": "选择组织并读工作区和团队",
+      "kind": "read",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#6f0aae6f4f0ea461.1"],
+      "condition": "未选组织目录按过滤/最近顺序循环",
+      "handler": "chooseOrganization -> rememberOrganization -> Promise.all两个组织GET",
+      "variants": ["organization-row", "recent-order", "loading"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-organizations"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-workspaces-loading"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-workspaces"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "两个GET一个失败整体错误；已记录最近组织不等于成功选择会话，晚到响应与所有动态行未验。"
+    },
+    {
+      "actionId": "ID-ORG-CLEAR",
+      "label": "清除组织搜索",
+      "kind": "local",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#087b197306ae2192.1"],
+      "condition": "无已选组织且filteredOrganizations为空",
+      "handler": "organizationQuery=''；本地过滤name/slug，trim+zh-CN小写",
+      "variants": ["no-match"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-search-empty"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-organizations"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "没有组织与无匹配不是同一状态；不代表全部unicode/排序/搜索输入六态。"
+    },
+    {
+      "actionId": "ID-WORKSPACE-CHOOSE",
+      "label": "设置会话组织工作区",
+      "kind": "write",
+      "routeApplicability": "P08-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#a556210b61698de6.1"],
+      "condition": "selectedOrganization；非active或selecting禁用；handler只保护active",
+      "handler": "chooseWorkspace -> POST /auth/context使用workspace.organization_id/id -> selected，需显式继续",
+      "variants": ["active", "archived", "selecting", "selected"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-workspaces"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-selecting"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p08-selected"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是选组织立即写会话；selecting时返回组织仍可按，两个请求归属与真实事务/权限待验。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/TenancyChooser.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+      "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+      "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/TenancyChooser.vue",
+        "binding": "organizationQuery",
+        "meaning": "组织名称与slug本地筛选；trim/zh-CN小写，不写GET参数",
+        "remaining": "排序、最近组织、各语言/超长/输入六态与真实Vue仍待验"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/TenancyChooser.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "组织工作区旁团队数量说明aside，不是业务弹窗",
+        "remaining": "结构容器数量不是业务弹窗数量；存在图片不等于所有字段/状态/动态路由验收",
+        "variants": [
+          {
+            "name": "team-summary",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p08-workspaces"
+              }
+            ],
+            "remaining": "现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。",
+      "所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。"
+    ]
+  },
+  "compositionGaps": [
+    "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
+    "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P09",
+  "route": "/onboarding",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OnboardingGuide.vue": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "源无原生dialog或确认调用；aside/form是内联结构，MFA/首次设置/验证结果不冒充弹窗。共享UiStatePanel内部另审。"
+  },
+  "inputs": {
+    "local": []
+  },
+  "actions": [
+    {
+      "actionId": "ID-ROOT",
+      "label": "品牌回根入口",
+      "kind": "navigation",
+      "routeApplicability": "P09-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/OnboardingGuide.vue#07db575ab56f90da.1"],
+      "condition": "全部步骤",
+      "handler": "RouterLink /",
+      "variants": ["all-steps"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-1"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不写进度，真实根落点另验。"
+    },
+    {
+      "actionId": "ID-GUIDE-SKIP",
+      "label": "跳过引导",
+      "kind": "navigation",
+      "routeApplicability": "P09-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/OnboardingGuide.vue#7142f76fc59ad9ee.1"],
+      "condition": "全部步骤",
+      "handler": "RouterLink /",
+      "variants": ["step-1", "step-2", "step-3"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-1"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-3"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是完成标记，不清理服务端状态；所有步骤键盘和返回链待验。"
+    },
+    {
+      "actionId": "ID-GUIDE-STEP",
+      "label": "直接选择三步骤",
+      "kind": "local",
+      "routeApplicability": "P09-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/OnboardingGuide.vue#75986af56e7cd4f4.1"],
+      "condition": "v-for index in3；aria-current依step",
+      "handler": "step=index",
+      "variants": ["1", "2", "3"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-1"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-2"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-3"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "没有URL同步/持久化；初始小数query可导致undefined，未修源组件。"
+    },
+    {
+      "actionId": "ID-GUIDE-PREVIOUS",
+      "label": "上一步",
+      "kind": "local",
+      "routeApplicability": "P09-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/OnboardingGuide.vue#0728ff37173af0c0.1"],
+      "condition": "step>1",
+      "handler": "previous -> step-=1，边界保护",
+      "variants": ["2-to-1", "3-to-2"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-2"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-3"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "首步是隐藏而非disabled；逐状态/焦点/非法初值未全验。"
+    },
+    {
+      "actionId": "ID-GUIDE-NEXT",
+      "label": "下一步",
+      "kind": "local",
+      "routeApplicability": "P09-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/OnboardingGuide.vue#f74e91375a9aef9f.1"],
+      "condition": "step<3",
+      "handler": "next -> step+=1，边界保护",
+      "variants": ["1-to-2", "2-to-3"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-1"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-2"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "末步替换为完成链接，不补造busy请求或保存进度。"
+    },
+    {
+      "actionId": "ID-GUIDE-FINISH",
+      "label": "结束引导返回根入口",
+      "kind": "navigation",
+      "routeApplicability": "P09-local-caller-only",
+      "sourceCandidateIds": ["apps/web/src/components/OnboardingGuide.vue#176ac690f7c39e94.1"],
+      "condition": "step>=3模板else",
+      "handler": "RouterLink /",
+      "variants": ["step-3"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p09-step-3"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "只提供跳转，不代表已持久化完成或已验landing。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/OnboardingGuide.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/OnboardingGuide.vue": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956"
+    },
+    "inputs": [],
+    "containers": [],
+    "sharedRemaining": [
+      "App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。",
+      "所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。"
+    ]
+  },
+  "compositionGaps": [
+    "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
+    "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"
+  ]
+}

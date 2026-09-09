@@ -1,0 +1,1018 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P02",
+  "route": "/login",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "源无原生dialog或确认调用；aside/form是内联结构，MFA/首次设置/验证结果不冒充弹窗。共享UiStatePanel内部另审。"
+  },
+  "inputs": {
+    "local": [
+      "mfaCode",
+      "identifier",
+      "email",
+      "password",
+      "confirmPassword",
+      "currentPassword",
+      "newPassword"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "ID-ROOT",
+      "label": "品牌返回根入口",
+      "kind": "navigation",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1"],
+      "condition": "全部局部模式的RouterLink",
+      "handler": "RouterLink /",
+      "variants": ["all-modes"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "最终落点由根页解析；本页图不能证明鉴权或最近成员路径。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-FORM-SUBMIT",
+      "label": "按模式提交身份表单",
+      "kind": "write",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#2e7305c394f2d04e.1",
+        "apps/web/src/components/LocalIdentity.vue#e469057c327dc16e.1"
+      ],
+      "condition": "login/register/forgot/reset/mfa-challenge；按钮loading禁用，但submit无单飞早退",
+      "handler": "submit -> 按mode请求既有auth端点；register不一致零请求",
+      "variants": [
+        "login",
+        "register",
+        "forgot",
+        "reset",
+        "mfa-challenge",
+        "submit-event",
+        "submit-button"
+      ],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-challenge"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p03-mismatch"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p03-queued"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p04-accepted"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p06-success"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#2e7305c394f2d04e.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#e469057c327dc16e.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-SHOW-FORGOT",
+      "label": "切到找回密码",
+      "kind": "local",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#4ea44facc4e04130.1"],
+      "condition": "mode=login，无busy禁用",
+      "handler": "switchMode('forgot')只改mode/反馈，不改URL、不清敏感ref",
+      "variants": ["login-to-forgot"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p04-idle"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#4ea44facc4e04130.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-SHOW-LOGIN",
+      "label": "返回局部登录模式",
+      "kind": "local",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.1",
+        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.2",
+        "apps/web/src/components/LocalIdentity.vue#170fb1546e423ddb.1"
+      ],
+      "condition": "verify正文、安全设置完成区及非login页脚三入口",
+      "handler": "switchMode('login')，URL不变；不自动触发confirmEmail/loadMfa",
+      "variants": ["verify-result", "seed-complete", "footer"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p05-success"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed-recovery"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.2",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#170fb1546e423ddb.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-SEED-PASSWORD",
+      "label": "修改种子密码",
+      "kind": "write",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#3170fd522bb10adc.1"],
+      "condition": "security-setup.must_change_password；form外button，无loading禁用/required",
+      "handler": "changeSeedPassword -> POST /me/password；成功保留新密码在password，清current/new，退login",
+      "variants": ["security-setup-change", "relogin"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed-loading"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed-relogin"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#3170fd522bb10adc.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-MFA-START",
+      "label": "开始认证器绑定",
+      "kind": "write",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.1",
+        "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.2"
+      ],
+      "condition": "首次设置需绑定且无secret；普通mfa未启用且无secret；均无busy锁",
+      "handler": "startMfa -> POST /me/mfa/totp/enrollment {current_password} -> secret",
+      "variants": ["security-setup-enrollment", "mfa-management-enrollment"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed-enroll"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-enroll"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-enroll-loading"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.2",
+          "classification": "cross-route-reference-only",
+          "reason": "mfa不是公开query模式，也无局部switchMode('mfa')按钮；需前往P07"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-MFA-CONFIRM",
+      "label": "确认启用认证器",
+      "kind": "write",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#6eba4c9b2b754a44.1",
+        "apps/web/src/components/LocalIdentity.vue#ea20d050ca8862b0.1"
+      ],
+      "condition": "首次设置或普通mfa有secret；form外button，无busy/原生required保护",
+      "handler": "confirmMfa -> POST /me/mfa/totp/confirm {code} -> enabled/recoveryCodes",
+      "variants": ["security-setup-confirm", "mfa-management-confirm"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed-secret"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-seed-recovery"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-secret"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-recovery"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#6eba4c9b2b754a44.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ea20d050ca8862b0.1",
+          "classification": "cross-route-reference-only",
+          "reason": "mfa不是公开query模式，也无局部switchMode('mfa')按钮；需前往P07"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-MFA-DISABLE",
+      "label": "停用MFA并撤销会话",
+      "kind": "excluded",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#44386aa05f9251f5.1"],
+      "condition": "mode=mfa且mfaEnabled；无busy禁用；仅P07初始管理分支",
+      "handler": "disableMfa -> DELETE /me/mfa/totp {current_password,code}；成功enabled=false，无跳转",
+      "variants": ["enabled", "recovery-visible", "disable"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-enabled"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-disable-loading"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-disabled"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#44386aa05f9251f5.1",
+          "classification": "cross-route-reference-only",
+          "reason": "mfa不是公开query模式，也无局部switchMode('mfa')按钮；需前往P07"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-LEGACY-SESSION-REVOKE",
+      "label": "旧会话撤销模板",
+      "kind": "excluded",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#f29375268246ac09.1"],
+      "condition": "sessions不在pathModes或publicQueryModes，模板无switchMode('sessions')入口",
+      "handler": "revoke(id) -> DELETE /me/sessions/{id} -> loadSessions，仅保留源定义",
+      "variants": ["legacy-sessions-not-public"],
+      "scenes": [],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#f29375268246ac09.1",
+          "classification": "no-public-entry",
+          "reason": "path/query均不含sessions，模板没有切换入口"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-SHOW-REGISTER",
+      "label": "切到本地注册",
+      "kind": "local",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#c29c165271e564d1.1"],
+      "condition": "mode非register；按钮无busy禁用",
+      "handler": "switchMode('register')，只改局部模式与反馈",
+      "variants": ["all-non-register-modes"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p03-idle"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#c29c165271e564d1.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-ACCOUNT-SECURITY",
+      "label": "前往个人安全会话",
+      "kind": "navigation",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.1"],
+      "condition": "全部局部模式固定RouterLink",
+      "handler": "RouterLink /me?section=security",
+      "variants": ["footer-security"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-enabled"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-MFA-ROUTE",
+      "label": "前往MFA管理路由",
+      "kind": "navigation",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#df188704ef470c64.1"],
+      "condition": "全部局部模式固定RouterLink",
+      "handler": "RouterLink /security/mfa；App按routePath重挂载",
+      "variants": ["footer-mfa"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-idle"
+        },
+        {
+          "package": "identity-direction-c",
+          "scene": "p07-enabled"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#df188704ef470c64.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-CONTEXT-ROUTE",
+      "label": "继续选择组织",
+      "kind": "navigation",
+      "routeApplicability": "shared-identity-modes-not-initial-screen-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#68d7e490dbe530cd.1"],
+      "condition": "mode=login且requestState=success；与是否拿到落点分开",
+      "handler": "RouterLink /select-context",
+      "variants": ["login-success-no-route"],
+      "scenes": [
+        {
+          "package": "identity-direction-c",
+          "scene": "p02-success-no-route"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-identity-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-identity-review.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#68d7e490dbe530cd.1",
+          "classification": "route-mode-family",
+          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        }
+      ]
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/LocalIdentity.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+      "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+      "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+      "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "mfaCode",
+        "meaning": "mfa-challenge：认证器或恢复码6–32；普通form required",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "identifier",
+        "meaning": "login：邮箱或用户名2–254，required",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "email",
+        "meaning": "register/forgot：email类型、required、maxlength254",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "password",
+        "meaning": "login/register/reset：12–128、required；reset仍沿用password ref",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "confirmPassword",
+        "meaning": "register：12–128、required；只比较、不发后端",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "currentPassword",
+        "meaning": "security-setup/password：种子当前密码12–128，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "newPassword",
+        "meaning": "security-setup/password：新长期密码12–128，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "currentPassword",
+        "meaning": "security-setup/enrollment：当前密码12–128，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "mfaCode",
+        "meaning": "security-setup/confirm：验证码maxlength8，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "currentPassword",
+        "meaning": "mfa/enrollment：当前密码12–128，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "mfaCode",
+        "meaning": "mfa/confirm：验证码maxlength8，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "currentPassword",
+        "meaning": "mfa/disable：当前密码maxlength128，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "binding": "mfaCode",
+        "meaning": "mfa/disable：验证码或恢复码maxlength32，非form",
+        "remaining": "共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "旧身份营销说明aside，不是弹窗；C方向重构不继承旧装饰轨道",
+        "remaining": "结构容器数量不是业务弹窗数量；存在图片不等于所有字段/状态/动态路由验收",
+        "variants": [
+          {
+            "name": "identity-story-replaced",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p02-idle"
+              }
+            ],
+            "remaining": "现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/LocalIdentity.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "五种mode共用单一原生form；MFA管理/首次设置不在form内",
+        "remaining": "结构容器数量不是业务弹窗数量；存在图片不等于所有字段/状态/动态路由验收",
+        "variants": [
+          {
+            "name": "p02-idle",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p02-idle"
+              }
+            ],
+            "remaining": "mode图为共享表单消费者参考；不证明当前URL下全连续链或六态"
+          },
+          {
+            "name": "p03-idle",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p03-idle"
+              }
+            ],
+            "remaining": "mode图为共享表单消费者参考；不证明当前URL下全连续链或六态"
+          },
+          {
+            "name": "p04-idle",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p04-idle"
+              }
+            ],
+            "remaining": "mode图为共享表单消费者参考；不证明当前URL下全连续链或六态"
+          },
+          {
+            "name": "p06-idle",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p06-idle"
+              }
+            ],
+            "remaining": "mode图为共享表单消费者参考；不证明当前URL下全连续链或六态"
+          },
+          {
+            "name": "p02-challenge",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p02-challenge"
+              }
+            ],
+            "remaining": "mode图为共享表单消费者参考；不证明当前URL下全连续链或六态"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。",
+      "所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。"
+    ]
+  },
+  "compositionGaps": [
+    "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
+    "query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。",
+    "普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。",
+    "ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。",
+    "六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
+    "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"
+  ],
+  "modeReachability": {
+    "initialMode": "login",
+    "publicQueryModes": ["login", "register", "forgot", "verify", "reset"],
+    "reachableModes": [
+      "login",
+      "register",
+      "forgot",
+      "verify",
+      "reset",
+      "mfa-challenge",
+      "security-setup"
+    ],
+    "excludedModes": ["mfa", "sessions"],
+    "scope": "one-mounted-path-plus-local-mode-transitions-not-authorized-security-state",
+    "automaticActions": [
+      {
+        "actionId": "ID-EMAIL-CONFIRM",
+        "trigger": "onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail",
+        "handler": "confirmEmail",
+        "scenes": [
+          {
+            "package": "identity-direction-c",
+            "scene": "p05-loading"
+          },
+          {
+            "package": "identity-direction-c",
+            "scene": "p05-success"
+          },
+          {
+            "package": "identity-direction-c",
+            "scene": "p05-error"
+          }
+        ]
+      }
+    ]
+  }
+}

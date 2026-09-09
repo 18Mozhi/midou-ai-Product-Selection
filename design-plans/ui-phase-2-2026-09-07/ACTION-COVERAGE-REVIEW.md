@@ -3,22 +3,24 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1478；旧登记1477；新身份16，旧表独有身份15。签名变化不等于增删业务能力。
-- 已具体语义对应3页/159源位置/84组；其中路由动作74组，转发/容器关联8组，其余明确排除。其余70页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应12页/197源位置/180组；其中路由动作158组，转发/容器关联8组，其余明确排除。其余61页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
+
+组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
 ## 逐页缺口
 
 | 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |
 | --- | --- | --- | --- |
-| [P01 正在进入](page-specs/P01.md) | 3 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P02 登录](page-specs/P02.md) | 18 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P03 注册](page-specs/P03.md) | 18 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P04 找回密码](page-specs/P04.md) | 18 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P05 验证邮箱](page-specs/P05.md) | 18 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P06 重置密码](page-specs/P06.md) | 18 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P07 安全设置](page-specs/P07.md) | 18 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P08 选择组织与工作区](page-specs/P08.md) | 13 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P09 快速引导](page-specs/P09.md) | 6 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P01 正在进入](page-specs/P01.md) | 3 | [1组](action-reviews/P01.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P02 登录](page-specs/P02.md) | 18 | [13组](action-reviews/P02.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P03 注册](page-specs/P03.md) | 18 | [13组](action-reviews/P03.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P04 找回密码](page-specs/P04.md) | 18 | [13组](action-reviews/P04.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P05 验证邮箱](page-specs/P05.md) | 18 | [13组](action-reviews/P05.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P06 重置密码](page-specs/P06.md) | 18 | [13组](action-reviews/P06.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P07 安全设置](page-specs/P07.md) | 18 | [13组](action-reviews/P07.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P08 选择组织与工作区](page-specs/P08.md) | 13 | [11组](action-reviews/P08.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P09 快速引导](page-specs/P09.md) | 6 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P10 外观偏好](page-specs/P10.md) | 11 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P11 个人中心](page-specs/P11.md) | 20 | [15组](action-reviews/P11.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P12 今日行动](page-specs/P12.md) | 56 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -88,7 +90,7 @@
 
 AccountShell与PersonalCenter的20个源位置对应15组已有合同ID：14组P11可用语义动作，1组旧局部Tab由accountShell=true排除；含4类写入，表单/按钮不重复计数。五个分区链接保留独立变体，不改路由数。两源没有弹窗，不能为填数量增加确认框。
 
-P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌稿及204张双端图。14组代表控件适用六态均与具体selector/scene绑定；通用样本板不抵扣业务验收。0个未映射代表槽不等于全变体/输入/真实history或写入通过；P18/P54局部源语义见下表，下一核其逐控件/共享消费者、完整采纳成本组合与其余70页，未获具体稿批准前不替换生产Vue。
+P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌稿及204张双端图。14组代表控件适用六态均与具体selector/scene绑定；通用样本板不抵扣业务验收。0个未映射代表槽不等于全变体/输入/真实history或写入通过；P18/P54局部源语义见下表，下一核其逐控件/共享消费者、完整采纳成本组合与其余未复核页面（数量见上方动态汇总），未获具体稿批准前不替换生产Vue。
 
 ## 使用与证据
 
@@ -98,11 +100,508 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 来源漂移、未知候选、漏项/重复映射、无合同ID、缺图/视口、假批准均失败关闭。全局HTML/图像哈希用既有`audit-ui-phase2-design-delivery.mjs`单独复核，不把此处场景存在检查当图片正确性。
 - 不改变API/OpenAPI/配置/依赖/数据库/生产，无重启要求；两个报告和验证器为永久交付物，无一次性临时产物。
 
+## P01 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P01.json)：1个局部源位置 → 1组；0类写入，1组路由动作，0组转发/容器关联不重复计动作。0个本地v-model，0处调用/内嵌容器，0个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有6个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-LANDING-CHECK 重新确定登录落点 / read | 1处；mounted、blocked-retry | [p01-loading · 1440](design/identity-direction-c/1440-p01-loading.png) / [p01-loading · 390](design/identity-direction-c/390-p01-loading.png)、[p01-blocked · 1440](design/identity-direction-c/1440-p01-blocked.png) / [p01-blocked · 390](design/identity-direction-c/390-p01-blocked.png)；其余见JSON | 共享blocked次按钮有emit却无本页监听；不是影响详情。缺失目标/角色/真实会话、导航与重复读取待验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P02 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P02.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| LocalIdentity.vue / mfaCode | mfa-challenge：认证器或恢复码6–32；普通form required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / identifier | login：邮箱或用户名2–254，required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / email | register/forgot：email类型、required、maxlength254 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / password | login/register/reset：12–128、required；reset仍沿用password ref | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / confirmPassword | register：12–128、required；只比较、不发后端 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/password：种子当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / newPassword | security-setup/password：新长期密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | security-setup/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/disable：当前密码maxlength128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/disable：验证码或恢复码maxlength32，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| LocalIdentity.vue / aside.1 / identity-story-replaced | inline-aside / proposal-shape-differs | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| LocalIdentity.vue / form.1 / p02-idle | form-container / matching-inline-form-scene | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p03-idle | form-container / matching-inline-form-scene | [p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p04-idle | form-container / matching-inline-form-scene | [p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p06-idle | form-container / matching-inline-form-scene | [p06-idle · 1440](design/identity-direction-c/1440-p06-idle.png) / [p06-idle · 390](design/identity-direction-c/390-p06-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p02-challenge | form-container / matching-inline-form-scene | [p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+
+### 路径与局部模式
+
+初始mode=login；局部模式族：login、register、forgot、verify、reset、mfa-challenge、security-setup。排除：mfa、sessions。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：ID-EMAIL-CONFIRM / onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail。不登记为按钮。
+
+### 明确保留的边界
+
+- P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。
+- query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。
+- 普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。
+- ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。
+- 六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P03 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P03.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| LocalIdentity.vue / mfaCode | mfa-challenge：认证器或恢复码6–32；普通form required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / identifier | login：邮箱或用户名2–254，required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / email | register/forgot：email类型、required、maxlength254 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / password | login/register/reset：12–128、required；reset仍沿用password ref | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / confirmPassword | register：12–128、required；只比较、不发后端 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/password：种子当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / newPassword | security-setup/password：新长期密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | security-setup/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/disable：当前密码maxlength128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/disable：验证码或恢复码maxlength32，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| LocalIdentity.vue / aside.1 / identity-story-replaced | inline-aside / proposal-shape-differs | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| LocalIdentity.vue / form.1 / p02-idle | form-container / matching-inline-form-scene | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p03-idle | form-container / matching-inline-form-scene | [p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p04-idle | form-container / matching-inline-form-scene | [p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p06-idle | form-container / matching-inline-form-scene | [p06-idle · 1440](design/identity-direction-c/1440-p06-idle.png) / [p06-idle · 390](design/identity-direction-c/390-p06-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p02-challenge | form-container / matching-inline-form-scene | [p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+
+### 路径与局部模式
+
+初始mode=register；局部模式族：login、register、forgot、verify、reset、mfa-challenge、security-setup。排除：mfa、sessions。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：ID-EMAIL-CONFIRM / onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail。不登记为按钮。
+
+### 明确保留的边界
+
+- P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。
+- query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。
+- 普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。
+- ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。
+- 六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P04 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P04.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| LocalIdentity.vue / mfaCode | mfa-challenge：认证器或恢复码6–32；普通form required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / identifier | login：邮箱或用户名2–254，required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / email | register/forgot：email类型、required、maxlength254 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / password | login/register/reset：12–128、required；reset仍沿用password ref | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / confirmPassword | register：12–128、required；只比较、不发后端 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/password：种子当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / newPassword | security-setup/password：新长期密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | security-setup/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/disable：当前密码maxlength128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/disable：验证码或恢复码maxlength32，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| LocalIdentity.vue / aside.1 / identity-story-replaced | inline-aside / proposal-shape-differs | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| LocalIdentity.vue / form.1 / p02-idle | form-container / matching-inline-form-scene | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p03-idle | form-container / matching-inline-form-scene | [p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p04-idle | form-container / matching-inline-form-scene | [p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p06-idle | form-container / matching-inline-form-scene | [p06-idle · 1440](design/identity-direction-c/1440-p06-idle.png) / [p06-idle · 390](design/identity-direction-c/390-p06-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p02-challenge | form-container / matching-inline-form-scene | [p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+
+### 路径与局部模式
+
+初始mode=forgot；局部模式族：login、register、forgot、verify、reset、mfa-challenge、security-setup。排除：mfa、sessions。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：ID-EMAIL-CONFIRM / onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail。不登记为按钮。
+
+### 明确保留的边界
+
+- P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。
+- query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。
+- 普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。
+- ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。
+- 六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P05 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P05.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| LocalIdentity.vue / mfaCode | mfa-challenge：认证器或恢复码6–32；普通form required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / identifier | login：邮箱或用户名2–254，required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / email | register/forgot：email类型、required、maxlength254 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / password | login/register/reset：12–128、required；reset仍沿用password ref | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / confirmPassword | register：12–128、required；只比较、不发后端 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/password：种子当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / newPassword | security-setup/password：新长期密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | security-setup/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/disable：当前密码maxlength128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/disable：验证码或恢复码maxlength32，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| LocalIdentity.vue / aside.1 / identity-story-replaced | inline-aside / proposal-shape-differs | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| LocalIdentity.vue / form.1 / p02-idle | form-container / matching-inline-form-scene | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p03-idle | form-container / matching-inline-form-scene | [p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p04-idle | form-container / matching-inline-form-scene | [p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p06-idle | form-container / matching-inline-form-scene | [p06-idle · 1440](design/identity-direction-c/1440-p06-idle.png) / [p06-idle · 390](design/identity-direction-c/390-p06-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p02-challenge | form-container / matching-inline-form-scene | [p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+
+### 路径与局部模式
+
+初始mode=verify；局部模式族：login、register、forgot、verify、reset、mfa-challenge、security-setup。排除：mfa、sessions。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：ID-EMAIL-CONFIRM / onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail。不登记为按钮。
+
+### 明确保留的边界
+
+- P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。
+- query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。
+- 普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。
+- ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。
+- 六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P06 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P06.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| LocalIdentity.vue / mfaCode | mfa-challenge：认证器或恢复码6–32；普通form required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / identifier | login：邮箱或用户名2–254，required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / email | register/forgot：email类型、required、maxlength254 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / password | login/register/reset：12–128、required；reset仍沿用password ref | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / confirmPassword | register：12–128、required；只比较、不发后端 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/password：种子当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / newPassword | security-setup/password：新长期密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | security-setup/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/disable：当前密码maxlength128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/disable：验证码或恢复码maxlength32，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| LocalIdentity.vue / aside.1 / identity-story-replaced | inline-aside / proposal-shape-differs | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| LocalIdentity.vue / form.1 / p02-idle | form-container / matching-inline-form-scene | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p03-idle | form-container / matching-inline-form-scene | [p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p04-idle | form-container / matching-inline-form-scene | [p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p06-idle | form-container / matching-inline-form-scene | [p06-idle · 1440](design/identity-direction-c/1440-p06-idle.png) / [p06-idle · 390](design/identity-direction-c/390-p06-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p02-challenge | form-container / matching-inline-form-scene | [p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+
+### 路径与局部模式
+
+初始mode=reset；局部模式族：login、register、forgot、verify、reset、mfa-challenge、security-setup。排除：mfa、sessions。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：ID-EMAIL-CONFIRM / onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail。不登记为按钮。
+
+### 明确保留的边界
+
+- P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。
+- query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。
+- 普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。
+- ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。
+- 六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P07 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P07.json)：18个局部源位置 → 13组；5类写入，12组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / write | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| LocalIdentity.vue / mfaCode | mfa-challenge：认证器或恢复码6–32；普通form required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / identifier | login：邮箱或用户名2–254，required | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / email | register/forgot：email类型、required、maxlength254 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / password | login/register/reset：12–128、required；reset仍沿用password ref | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / confirmPassword | register：12–128、required；只比较、不发后端 | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/password：种子当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / newPassword | security-setup/password：新长期密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | security-setup/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | security-setup/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/enrollment：当前密码12–128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/confirm：验证码maxlength8，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / currentPassword | mfa/disable：当前密码maxlength128，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+| LocalIdentity.vue / mfaCode | mfa/disable：验证码或恢复码maxlength32，非form | 共享ref的位置不等于同时可见；原型清空和统一校验/忙碌不是源生命周期修复，字段边界与全部消费者仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| LocalIdentity.vue / aside.1 / identity-story-replaced | inline-aside / proposal-shape-differs | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| LocalIdentity.vue / form.1 / p02-idle | form-container / matching-inline-form-scene | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p03-idle | form-container / matching-inline-form-scene | [p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p04-idle | form-container / matching-inline-form-scene | [p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p06-idle | form-container / matching-inline-form-scene | [p06-idle · 1440](design/identity-direction-c/1440-p06-idle.png) / [p06-idle · 390](design/identity-direction-c/390-p06-idle.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+| LocalIdentity.vue / form.1 / p02-challenge | form-container / matching-inline-form-scene | [p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png) | mode图为共享表单消费者参考；不证明当前URL下全连续链或六态 |
+
+### 路径与局部模式
+
+初始mode=mfa；局部模式族：login、register、forgot、verify、reset、mfa-challenge、security-setup、mfa。排除：sessions。这是当前挂载路径内源码适用性，不是服务端授权证明。共享源在多页重复引用不增加全站唯一按钮数。
+
+自动动作：ID-EMAIL-CONFIRM / onMounted且初始mode=verify且URL token存在；switchMode不调用confirmEmail。不登记为按钮。
+
+### 明确保留的边界
+
+- P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。
+- query的五个公开mode可覆盖路径初始值；局部注册/登录/忘记密码不改URL，注册成功verify与登录结果挑战/首次设置也不改URL。
+- 普通mfa管理只在P07初始可达；其余页start/confirm组仅首次设置实例可达，管理实例只作跨路由参考。legacy sessions无公开入口。
+- ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。
+- 六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P08 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P08.json)：13个局部源位置 → 11组；2类写入，10组路由动作，0组转发/容器关联不重复计动作。1个本地v-model，1处调用/内嵌容器，1个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有60个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌返回根入口 / navigation | 1处；all-states | [p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)；其余见JSON | 仍由根入口决定角色落点，未验真实会话。 |
+| NONACTION-ACCOUNT 当前账号占位 / excluded | 1处；placeholder | [p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)；其余见JSON | 源视觉上可按但没有账号菜单；新稿非交互呈现是待审，不新增用户菜单。 |
+| ID-LOGIN-ROUTE 会话失效重新登录 / navigation | 1处；expired | [p08-expired · 1440](design/identity-direction-c/1440-p08-expired.png) / [p08-expired · 390](design/identity-direction-c/390-p08-expired.png)；其余见JSON | 没有保留return_to到登录的源代码，不能宣称重新登录必回原页。 |
+| ID-ORG-RELOAD 返回并重读组织 / read | 3处；error、forbidden、workspace-empty、workspace-back | [p08-error · 1440](design/identity-direction-c/1440-p08-error.png) / [p08-error · 390](design/identity-direction-c/390-p08-error.png)、[p08-forbidden · 1440](design/identity-direction-c/1440-p08-forbidden.png) / [p08-forbidden · 390](design/identity-direction-c/390-p08-forbidden.png)；其余见JSON | 不只是本地返回；未清query，旧工作区/团队ref仍在。选择写入期间返回可打断范围，晚到响应待验。 |
+| ID-PERSONAL-PROVISION 创建本人选品空间 / write | 1处；empty-org、provisioning、direct-return | [p08-empty · 1440](design/identity-direction-c/1440-p08-empty.png) / [p08-empty · 390](design/identity-direction-c/390-p08-empty.png)、[p08-provisioning · 1440](design/identity-direction-c/1440-p08-provisioning.png) / [p08-provisioning · 390](design/identity-direction-c/390-p08-provisioning.png)；其余见JSON | 不是创建任意组织；没有handler单飞早退。后端幂等/会话/失败重试/实际导航需隔离验证。 |
+| ID-ACCOUNT-ROUTE 进入个人中心 / navigation | 1处；empty-org | [p08-empty · 1440](design/identity-direction-c/1440-p08-empty.png) / [p08-empty · 390](design/identity-direction-c/390-p08-empty.png)；其余见JSON | 不意味着账号或组织权限已验。 |
+| ID-MFA-ROUTE 进入MFA管理 / navigation | 1处；empty-org | [p08-empty · 1440](design/identity-direction-c/1440-p08-empty.png) / [p08-empty · 390](design/identity-direction-c/390-p08-empty.png)；其余见JSON | 实际账号级准入与P07重挂载另验。 |
+| ID-CONTEXT-CONTINUE 继续引导或返回原页 / navigation | 1处；onboarding、return-to | [p08-selected · 1440](design/identity-direction-c/1440-p08-selected.png) / [p08-selected · 390](design/identity-direction-c/390-p08-selected.png)、[p08-return · 1440](design/identity-direction-c/1440-p08-return.png) / [p08-return · 390](design/identity-direction-c/390-p08-return.png)；其余见JSON | 不能把startsWith检测当完整重定向安全验证；与本人空间直接/home分开。 |
+| ID-ORG-CHOOSE 选择组织并读工作区和团队 / read | 1处；organization-row、recent-order、loading | [p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)、[p08-workspaces-loading · 1440](design/identity-direction-c/1440-p08-workspaces-loading.png) / [p08-workspaces-loading · 390](design/identity-direction-c/390-p08-workspaces-loading.png)；其余见JSON | 两个GET一个失败整体错误；已记录最近组织不等于成功选择会话，晚到响应与所有动态行未验。 |
+| ID-ORG-CLEAR 清除组织搜索 / local | 1处；no-match | [p08-search-empty · 1440](design/identity-direction-c/1440-p08-search-empty.png) / [p08-search-empty · 390](design/identity-direction-c/390-p08-search-empty.png)、[p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)；其余见JSON | 没有组织与无匹配不是同一状态；不代表全部unicode/排序/搜索输入六态。 |
+| ID-WORKSPACE-CHOOSE 设置会话组织工作区 / write | 1处；active、archived、selecting、selected | [p08-workspaces · 1440](design/identity-direction-c/1440-p08-workspaces.png) / [p08-workspaces · 390](design/identity-direction-c/390-p08-workspaces.png)、[p08-selecting · 1440](design/identity-direction-c/1440-p08-selecting.png) / [p08-selecting · 390](design/identity-direction-c/390-p08-selecting.png)；其余见JSON | 不是选组织立即写会话；selecting时返回组织仍可按，两个请求归属与真实事务/权限待验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| TenancyChooser.vue / organizationQuery | 组织名称与slug本地筛选；trim/zh-CN小写，不写GET参数 | 排序、最近组织、各语言/超长/输入六态与真实Vue仍待验 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| TenancyChooser.vue / aside.1 / team-summary | inline-aside / proposal-shape-differs | [p08-workspaces · 1440](design/identity-direction-c/1440-p08-workspaces.png) / [p08-workspaces · 390](design/identity-direction-c/390-p08-workspaces.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+
+### 明确保留的边界
+
+- 仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
+## P09 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P09.json)：6个局部源位置 → 6组；0类写入，6组路由动作，0组转发/容器关联不重复计动作。0个本地v-model，0处调用/内嵌容器，0个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有36个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| ID-ROOT 品牌回根入口 / navigation | 1处；all-steps | [p09-step-1 · 1440](design/identity-direction-c/1440-p09-step-1.png) / [p09-step-1 · 390](design/identity-direction-c/390-p09-step-1.png)；其余见JSON | 不写进度，真实根落点另验。 |
+| ID-GUIDE-SKIP 跳过引导 / navigation | 1处；step-1、step-2、step-3 | [p09-step-1 · 1440](design/identity-direction-c/1440-p09-step-1.png) / [p09-step-1 · 390](design/identity-direction-c/390-p09-step-1.png)、[p09-step-3 · 1440](design/identity-direction-c/1440-p09-step-3.png) / [p09-step-3 · 390](design/identity-direction-c/390-p09-step-3.png)；其余见JSON | 不是完成标记，不清理服务端状态；所有步骤键盘和返回链待验。 |
+| ID-GUIDE-STEP 直接选择三步骤 / local | 1处；1、2、3 | [p09-step-1 · 1440](design/identity-direction-c/1440-p09-step-1.png) / [p09-step-1 · 390](design/identity-direction-c/390-p09-step-1.png)、[p09-step-2 · 1440](design/identity-direction-c/1440-p09-step-2.png) / [p09-step-2 · 390](design/identity-direction-c/390-p09-step-2.png)；其余见JSON | 没有URL同步/持久化；初始小数query可导致undefined，未修源组件。 |
+| ID-GUIDE-PREVIOUS 上一步 / local | 1处；2-to-1、3-to-2 | [p09-step-2 · 1440](design/identity-direction-c/1440-p09-step-2.png) / [p09-step-2 · 390](design/identity-direction-c/390-p09-step-2.png)、[p09-step-3 · 1440](design/identity-direction-c/1440-p09-step-3.png) / [p09-step-3 · 390](design/identity-direction-c/390-p09-step-3.png)；其余见JSON | 首步是隐藏而非disabled；逐状态/焦点/非法初值未全验。 |
+| ID-GUIDE-NEXT 下一步 / local | 1处；1-to-2、2-to-3 | [p09-step-1 · 1440](design/identity-direction-c/1440-p09-step-1.png) / [p09-step-1 · 390](design/identity-direction-c/390-p09-step-1.png)、[p09-step-2 · 1440](design/identity-direction-c/1440-p09-step-2.png) / [p09-step-2 · 390](design/identity-direction-c/390-p09-step-2.png)；其余见JSON | 末步替换为完成链接，不补造busy请求或保存进度。 |
+| ID-GUIDE-FINISH 结束引导返回根入口 / navigation | 1处；step-3 | [p09-step-3 · 1440](design/identity-direction-c/1440-p09-step-3.png) / [p09-step-3 · 390](design/identity-direction-c/390-p09-step-3.png)；其余见JSON | 只提供跳转，不代表已持久化完成或已验landing。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。
+- App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
+- 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
+
 ## P18 局部动作与共享消费者
 
 [逐项机器清单](action-reviews/P18.json)：95个局部源位置 → 52组；12类写入，43组路由动作，8组转发/容器关联不重复计动作。34个本地v-model，23处调用/内嵌容器，38个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
 
-原六态仍保守未映射，须判断适用性并绑定逐动作selector/state；有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有258个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -290,7 +789,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 [逐项机器清单](action-reviews/P54.json)：44个局部源位置 → 17组；4类写入，17组路由动作，0组转发/容器关联不重复计动作。7个本地v-model，9处调用/内嵌容器，14个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
 
-原六态仍保守未映射，须判断适用性并绑定逐动作selector/state；有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有21个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
