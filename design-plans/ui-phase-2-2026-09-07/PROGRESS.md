@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P21四窗关闭和取消
+
+上一轮4f6edcf0新增提交按钮图与修复原型手机底栏，属实际进展；本轮从干净main继续，按AGENTS/Feature Map/蓝图3.6与实际SD关闭事件、SW关闭处理及原型追踪，使用ui-skills-root/frontend-design/既有Playwright工作流。新增SOURCING-SECONDARY-STATE-REVIEW.md与四窗右上关闭/底部取消8控件变体96张双端图，包现62主场景289PNG、12控件变体144双端状态实例。4关闭组增加24代表槽，4取消额外变体不扩动作分母；P21累计48代表槽映射、122待补，全站22页/479源位置/426组不变。
+
+关闭图标保持窗口名称，次级操作中性色/深蓝焦点，锁定为不透明灰色；通过data-close-variant区分同名两个位置，父表单aria-busy与按钮状态说明分开。取消保持“取消”，无自身aria-busy或请求进度标记。真实Vue仍允许busy时关闭，父请求在途锁是现有离线提案，本轮不把它实施为生产规则、不宣称请求取消。键盘Enter关闭与Escape重开回到精确入口，特测第二个同名采购按钮；搜索/删除保留草稿，报价/采购重开重新预填。直达query无原始入口、真实history/异步归属及SC-G01–08仍待。
+
+smoke及完整capture通过：9真实setup隔离组、144双端控件状态实例、>=44px触控、>=16px控件字体、键盘深蓝3px轮廓、内侧命中/可见边界、文字对比最低6.355、禁用/在途不误提交、关闭重开不写入、草稿/精确回焦、多屏宽和NY时间；HTTP/页面错误0。只目检390-control-quote-close-focus及1440-control-purchase-cancel-busy，不宣称全图人工审阅；默认check未重复，capture完成同一交互并由设计审计另验哈希。
+
+动作审计通过，审核文档99链接存在；docs（73路由/60保护/6角色/153必需文档）、runtime-docs、390文件static-analysis、format:check和diff检查通过。设计审计76包10368PNG、844独立来源/1451绑定、8533 README链接，来源/PNG漂移及未登记图0；完整页面完成未证明、批准0，G0进行中/G1–G5待验。
+
+本批仅改离线原型/永久验证脚本、图稿/证据/图册、动作审核、计划和Feature Map。生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/配置、依赖/权限/安全、宝塔均未改，无参数或重启变化；不重跑未受影响的真实Vue E2E/构建。继续用--smoke预检、默认完整复验、--capture重生成本包永久交付物。无新临时文件或服务，所有浏览器finally关闭且无headless_shell残留；旧output/playwright/ui-phase2-competitor-races-20260909内playwright.config.ts、results/.last-run.json仍因原清理被拒而保留，不绕过策略。P21其余控件、P22等51页同级审阅、具体批准、实际全站重构和部署签收仍未完成。
+
 ## 2026-09-09 · P21四提交按钮双端六态
 
 上一轮2b67c069已提交真实动作清单，属实质进展；本轮从干净main继续ui-skills-root/frontend-design及既有Playwright工作流。新增SOURCING-CONTROL-STATE-REVIEW.md、四动作48张双端状态图与精确pageId/actionId/selector/state证据；62主场景保持，P21包现193PNG。24代表槽已映射、146待补，全站22页/479独立源位置/426语义组不变，不冻结分母或提升批准。

@@ -27,6 +27,19 @@ const controls = [
   selector: '#modal button[data-action="' + control.domId + '"]',
 }));
 const controlStates = [];
+const secondaryControls = controls.flatMap((submit) =>
+  ["close", "cancel"].map((variant) => ({
+    key: submit.key + "-" + variant,
+    actionId: submit.key === "search" ? "SC-S-CLOSE" : "SC-" + submit.key.toUpperCase() + "-CLOSE",
+    ready: submit.ready,
+    selector: '#modal button[data-close-variant="' + variant + '"]',
+    submitSelector: submit.selector,
+    parentKey: submit.key,
+    secondary: true,
+    variantOnly: variant === "cancel",
+  })),
+);
+const allControls = [...controls, ...secondaryControls];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const sourcePaths = [
   ...[
@@ -143,15 +156,16 @@ async function verifyControls(page, width) {
       window.sourcingReview.outcome = "success";
       window.sourcingReview.choose(scene);
     }, control.ready);
-    if (control.key === "quote") {
+    if ((control.parentKey || control.key) === "quote") {
       await page.locator("[name=specification]").fill("30x20cm / 1pc");
       await page.locator("[name=moq]").fill("100");
       await page.locator("[name=lead_time_days]").fill("7");
     }
-    if (control.key === "delete") await page.locator("#modal [name=reason]").fill("重复找货记录");
+    if ((control.parentKey || control.key) === "delete")
+      await page.locator("#modal [name=reason]").fill("重复找货记录");
     assert.equal(await page.locator("#modal-form").evaluate((form) => form.checkValidity()), true);
   };
-  for (const control of controls) {
+  for (const control of allControls) {
     for (const state of states) {
       await page.mouse.move(0, 0);
       await prepare(control);
@@ -161,7 +175,7 @@ async function verifyControls(page, width) {
       if (pending) {
         await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
         const before = await count();
-        await target.click();
+        await page.locator(control.submitSelector || control.selector).click();
         assert.equal(await count(), before + 1, "valid pending snapshot records one intent");
       } else if (state === "disabled") {
         await page.locator("[name=quantity]").fill("99");
@@ -171,8 +185,15 @@ async function verifyControls(page, width) {
       await page.evaluate(() => document.activeElement?.blur());
       const before = await count();
       assert.equal(await target.isDisabled(), ["disabled", "busy"].includes(state));
-      assert.equal(await target.getAttribute("aria-busy"), String(pending));
-      assert.equal(await target.getAttribute("aria-describedby"), "modal-submit-hint");
+      assert.equal(
+        await target.getAttribute("aria-busy"),
+        control.secondary ? null : String(pending),
+      );
+      assert.equal(
+        await target.getAttribute("aria-describedby"),
+        control.secondary && !pending ? null : "modal-submit-hint",
+      );
+      assert.equal(await page.locator("#modal-form").getAttribute("aria-busy"), String(pending));
       if (["hover", "pressed"].includes(state)) {
         await target.hover();
         assert.ok(await target.evaluate((el) => el.matches(":hover")));
@@ -193,7 +214,13 @@ async function verifyControls(page, width) {
         assert.notEqual(await target.evaluate((el) => getComputedStyle(el).boxShadow), "none");
       }
       if (pending) {
-        assert.match(await target.innerText(), /正在/);
+        if (control.secondary) {
+          assert.equal(await target.innerText(), control.variantOnly ? "取消" : "×");
+          assert.equal(
+            await target.evaluate((el) => getComputedStyle(el, "::before").content),
+            "none",
+          );
+        } else assert.match(await target.innerText(), /正在/);
         assert.match(await page.locator("#modal-submit-hint").innerText(), /尚未确认|尚未.*确认/);
         assert.equal(
           await target.evaluate((el) => getComputedStyle(el, "::before").animationName),
@@ -275,6 +302,10 @@ async function verifyControls(page, width) {
         assert.equal(await count(), before, "pending duplicate intent rejected");
       }
     }
+    if (control.secondary) {
+      await verifyCloseBehavior(page, control, count);
+      continue;
+    }
     await prepare(control);
     const before = await count();
     await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
@@ -350,6 +381,57 @@ async function verifyControls(page, width) {
       );
     }
   }
+}
+async function verifyCloseBehavior(page, control, count) {
+  await page.evaluate(() => {
+    window.sourcingReview.outcome = "success";
+    window.sourcingReview.choose("workspace");
+  });
+  const id = {
+    search: "SC-S-OPEN",
+    quote: "SC-QUOTE-OPEN",
+    purchase: "SC-PURCHASE-OPEN",
+    delete: "SC-DELETE-OPEN",
+  }[control.parentKey];
+  if (control.parentKey === "delete") await page.locator(".more > summary").click();
+  // Use the second purchase source to catch accidental return to the first same-label button.
+  const opener = page
+    .locator('[data-action="' + id + '"]')
+    .nth(control.parentKey === "purchase" ? 1 : 0);
+  const openerHandle = await opener.elementHandle();
+  const before = await count();
+  await opener.click();
+  const field = {
+    search: "input_ref",
+    quote: "specification",
+    purchase: "reason",
+    delete: "reason",
+  }[control.parentKey];
+  await page.locator('#modal [name="' + field + '"]').fill("尚未提交的核对内容");
+  if (control.parentKey === "purchase") await page.locator("#modal [name=quantity]").fill("101");
+  assert.equal(await page.locator(control.selector).getAttribute("type"), "button");
+  await page.locator(control.selector).focus();
+  await page.keyboard.press("Enter");
+  assert.equal(await page.locator("dialog[open]").count(), 0);
+  assert.equal(await count(), before, "close must not submit");
+  assert.ok(
+    await openerHandle.evaluate((el) => el === document.activeElement),
+    "return to the exact opener",
+  );
+  await opener.click();
+  const expected = ["search", "delete"].includes(control.parentKey)
+    ? "尚未提交的核对内容"
+    : control.parentKey === "quote"
+      ? ""
+      : "从供应链找货页面创建采购任务";
+  assert.equal(await page.locator('#modal [name="' + field + '"]').inputValue(), expected);
+  if (control.parentKey === "purchase")
+    assert.equal(await page.locator("#modal [name=quantity]").inputValue(), "100");
+  await page.keyboard.press("Escape");
+  assert.equal(await page.locator("dialog[open]").count(), 0);
+  assert.ok(await openerHandle.evaluate((el) => el === document.activeElement));
+  assert.equal(await count(), before, "Escape/reopen only changes local form visibility");
+  await openerHandle.dispose();
 }
 try {
   for (const width of [1440, 390]) {
@@ -565,6 +647,7 @@ try {
       await verifyControls(page, width);
       checks.push(
         `${width}: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions`,
+        `${width}: four dialog close/cancel pairs x six states; parent in-flight lock only, no cancel-request spinner; keyboard close/Escape return to exact opener including second purchase button; search/delete draft retained and quote/purchase reprefilled; no close/reopen write`,
       );
       checks.push(
         `${width}: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes`,
@@ -629,23 +712,44 @@ try {
           controlStates,
           pageActionVisualReferences: {
             P21: Object.fromEntries(
-              controls.map((control) => [
-                control.actionId,
+              allControls
+                .filter((control) => !control.variantOnly)
+                .map((control) => [
+                  control.actionId,
+                  {
+                    pageId: "P21",
+                    selector: control.selector,
+                    scope: "representative-control-only-not-all-variants-or-Vue",
+                    states: Object.fromEntries(
+                      states.map((state) => [state, "control-" + control.key + "-" + state]),
+                    ),
+                    limitation: control.secondary
+                      ? "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
+                      : control.key === "purchase"
+                        ? "disabled uses current MOQ; busy is request in-flight, not accepted purchase task; full reason/field variants pending"
+                        : "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending",
+                  },
+                ]),
+            ),
+          },
+          controlVariantReferences: Object.fromEntries(
+            secondaryControls
+              .filter((control) => control.variantOnly)
+              .map((control) => [
+                control.key,
                 {
                   pageId: "P21",
+                  actionId: control.actionId,
                   selector: control.selector,
-                  scope: "representative-control-only-not-all-variants-or-Vue",
+                  scope: "additional-control-variant-not-new-action",
                   states: Object.fromEntries(
                     states.map((state) => [state, "control-" + control.key + "-" + state]),
                   ),
                   limitation:
-                    control.key === "purchase"
-                      ? "disabled uses current MOQ; busy is request in-flight, not accepted purchase task; full reason/field variants pending"
-                      : "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending",
+                    "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback.",
                 },
               ]),
-            ),
-          },
+          ),
           actionIds: [...actions].sort(),
           checks,
           http,

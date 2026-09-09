@@ -18,10 +18,10 @@
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "scripts/verify-ui-phase2-sourcing-source.mjs": "1b3e30a35f3a7d754d1f3fcee2cfbb4d1a7ce3c1799d6d6c7914fbc09866e6c6",
-    "scripts/verify-ui-phase2-sourcing-c.mjs": "adb335c2716645c7d65aa7e25884648db208ccec6cb90d3b1b820e09cf7e382a",
+    "scripts/verify-ui-phase2-sourcing-c.mjs": "6b85465ad634ba9bae2c23ce4fffce14fc4f7aeb6acf27131f440079b26a6e63",
     "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/index.html": "a7590f66142c3bce8f896c6c627cefd858c63af53c8b10bce4f557ba1954f7f4",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "aba83781d10b5d3a935aa5133f90825774796f58fb29eb650ebda66fc0f2e7be",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "128b3554adff94e1eef1b8ed59e90d529710a3de9e7815c6f5b3b86d5252541f"
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css": "b64a5b03bf68f468c634d55ee070a61f9c0673b946de2e396fb615208566ae15",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js": "dfc7eb778ec16657282ff333aca10cf443d1e905ed899ec6122a4ef8705a0b8b"
   },
   "sourceProof": {
     "checks": [
@@ -579,7 +579,7 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "search-busy",
-      "sha256": "bc69a149653dbcf7b13c2afc21cb3e34194110f2167b45dce6619aad466d8549"
+      "sha256": "c880e02dc7b7175df453bc3450d314ef9db556002c33fcd0a351a8efc3263429"
     },
     {
       "file": "1440-quote.png",
@@ -628,14 +628,14 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-busy",
-      "sha256": "f6c47d1a66f51624a98ce78f366f23d4603d08d1feaad7fefcf0529c06d789c6"
+      "sha256": "03e06e7cd5f319e06d82e7b395a657b2af75e13943243abbe3c4a0cdd9599493"
     },
     {
       "file": "1440-quote-busy-lower.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "quote-busy-lower",
-      "sha256": "f6c47d1a66f51624a98ce78f366f23d4603d08d1feaad7fefcf0529c06d789c6"
+      "sha256": "03e06e7cd5f319e06d82e7b395a657b2af75e13943243abbe3c4a0cdd9599493"
     },
     {
       "file": "1440-purchase.png",
@@ -656,7 +656,7 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "purchase-busy",
-      "sha256": "d2d104cdab3114677e5618f104d5b74d5f0d87257711c4ff8407d68cf8ea7dfe"
+      "sha256": "c3f225e33a0b6fe4d38c4ae1334b89b0f9e6be1a02e7e51bd4c49dc712670d49"
     },
     {
       "file": "1440-delete.png",
@@ -670,14 +670,14 @@
       "pageId": "P21",
       "width": 1440,
       "scene": "delete-error",
-      "sha256": "1977ab235451ccd3bd0d1541b1df2f86f841e44c6209ec580d6b5382fdd8a1c6"
+      "sha256": "01133ae55541bcf95ed124aa08f937afa7a62ec7771a675d4ebf38d2bfefa942"
     },
     {
       "file": "1440-delete-busy.png",
       "pageId": "P21",
       "width": 1440,
       "scene": "delete-busy",
-      "sha256": "a5130688053633bd1cc934fab6433207d68194de7122fd869555f6b1b2f92222"
+      "sha256": "2739a1ea185f714e136042894035082d2a8645a65c922e2497584c90f4faadb2"
     },
     {
       "file": "1440-cost-missing.png",
@@ -938,7 +938,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "42a16de4c7b69a39e70f27016f59f065bdaa1aa5e817f11c05d47c798dbf3643"
+      "sha256": "3c63d10410067f437a52b6f7bb64f062ae662ba5818fcf28422142dd4aafd7f9"
     },
     {
       "file": "1440-control-search-busy.png",
@@ -958,7 +958,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "e15c3d68f23d103c8732d0765699585b3fa7264a7a5ca837f367fa7d00ca52fb"
+      "sha256": "4886fe2ef1c28e90335cea9433b8e5f4f1ec3d4064c95aee12b94cf768df64fb"
     },
     {
       "file": "1440-control-quote-default.png",
@@ -978,7 +978,7 @@
         "condition": "valid-input"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "9c099f66b349e2f26fd160495f5352c34480ab9df8b6fbddd92544fa7a048b46"
+      "sha256": "0405cadcde42761ad28eb7395d55580947fccabd8ec8ff6f4cdf0bf231b9c633"
     },
     {
       "file": "1440-control-quote-hover.png",
@@ -1058,7 +1058,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "3ca081dbfb572377f0c417f2ff9d4437102d89317749ecea6182109182e80026"
+      "sha256": "d67c545dc8fa5e254063c5a797eca9cb4d1434f7d6db5a84370b720d8fd1b519"
     },
     {
       "file": "1440-control-quote-busy.png",
@@ -1078,7 +1078,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "b53e58097ba4e77817d185a23ebb89560523db39a3bb9d7fe048ee62eac274e1"
+      "sha256": "fe345e051ad29732c5a83a4c65cf44cd9f60e19b01e7ee013163433ba149193e"
     },
     {
       "file": "1440-control-purchase-default.png",
@@ -1198,7 +1198,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "e424148b3a399f57a2998ab0e36774d1ba8f9426e2d0fd2e303206195587248c"
+      "sha256": "bfe87928075c01825452ff0d5dcdbfdb8a33c994c382e28679f868d9076a30b4"
     },
     {
       "file": "1440-control-delete-default.png",
@@ -1298,7 +1298,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "8460cd90d3d55f107acb08848c5e17c2db727fa2ece216f8a8125be6dfb678b9"
+      "sha256": "b5a3fbfa77690462c4b70f03d55660df9b8484bf74e7d5a683100d5653063ee6"
     },
     {
       "file": "1440-control-delete-busy.png",
@@ -1318,7 +1318,967 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "8460cd90d3d55f107acb08848c5e17c2db727fa2ece216f8a8125be6dfb678b9"
+      "sha256": "b5a3fbfa77690462c4b70f03d55660df9b8484bf74e7d5a683100d5653063ee6"
+    },
+    {
+      "file": "1440-control-search-close-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-default",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0d3fffc726d998ff8235897a0d64269157988782efde094b9ee40f609fa116da"
+    },
+    {
+      "file": "1440-control-search-close-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-hover",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "cc487e0226f2f27f47c94fc8b45ac51467e64a8ffc59340b81372aaf2fdab71d"
+    },
+    {
+      "file": "1440-control-search-close-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-focus",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b16fbd426195cf17a6b99942fed71f88b6d7c04cb2821d023a85938d2614edd1"
+    },
+    {
+      "file": "1440-control-search-close-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-pressed",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3e1f3860a68b656328c2e48761101879daae0010bc689f92882b4cf3bf186568"
+    },
+    {
+      "file": "1440-control-search-close-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-disabled",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3c63d10410067f437a52b6f7bb64f062ae662ba5818fcf28422142dd4aafd7f9"
+    },
+    {
+      "file": "1440-control-search-close-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-busy",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4886fe2ef1c28e90335cea9433b8e5f4f1ec3d4064c95aee12b94cf768df64fb"
+    },
+    {
+      "file": "1440-control-search-cancel-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-default",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0d3fffc726d998ff8235897a0d64269157988782efde094b9ee40f609fa116da"
+    },
+    {
+      "file": "1440-control-search-cancel-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-hover",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "edede796b16b002b09d1c6a917d6053ab25a46e93798da27207e6e4ffda30938"
+    },
+    {
+      "file": "1440-control-search-cancel-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-focus",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "69e6bc81c4b4809f5bad236f7977733efad31cca368227d8e1e386a414ad5d38"
+    },
+    {
+      "file": "1440-control-search-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-pressed",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "2c5204b4359f5567a44f5105e12f07f26ac0a0bbdaf01ac3d36fe198a1dd0d15"
+    },
+    {
+      "file": "1440-control-search-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-disabled",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3c63d10410067f437a52b6f7bb64f062ae662ba5818fcf28422142dd4aafd7f9"
+    },
+    {
+      "file": "1440-control-search-cancel-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-busy",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-search-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "4886fe2ef1c28e90335cea9433b8e5f4f1ec3d4064c95aee12b94cf768df64fb"
+    },
+    {
+      "file": "1440-control-quote-close-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-default",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9c099f66b349e2f26fd160495f5352c34480ab9df8b6fbddd92544fa7a048b46"
+    },
+    {
+      "file": "1440-control-quote-close-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-hover",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b8978a61d9c0c1e9ae52c36afaa26157a6cf781171901fce0cf207d795effb3f"
+    },
+    {
+      "file": "1440-control-quote-close-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-focus",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8954e6ba4ce400c33c455e8048a14dae5546900ca988de2f5073b4fdfca74acc"
+    },
+    {
+      "file": "1440-control-quote-close-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-pressed",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "662030d3b907077fa2701fe490d1c0c0674392f914b610a46c47f5a2b3a051e8"
+    },
+    {
+      "file": "1440-control-quote-close-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-disabled",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d67c545dc8fa5e254063c5a797eca9cb4d1434f7d6db5a84370b720d8fd1b519"
+    },
+    {
+      "file": "1440-control-quote-close-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-busy",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fe345e051ad29732c5a83a4c65cf44cd9f60e19b01e7ee013163433ba149193e"
+    },
+    {
+      "file": "1440-control-quote-cancel-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-default",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3dda3322659cda89e8b37e3965498e9623c7e1f490c3d68596be250608daeb93"
+    },
+    {
+      "file": "1440-control-quote-cancel-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-hover",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3bd266c402e146406ea107d71fea37a6ca3199c585bb0f6460433ddb636a08e5"
+    },
+    {
+      "file": "1440-control-quote-cancel-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-focus",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "de17b01b319dc7ccd4df240cfb7e6425655261ab89302d6ff9f56727727f5089"
+    },
+    {
+      "file": "1440-control-quote-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-pressed",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "df3e9e66c5d393ee960d26a9f014f702b65c19ced77ee09e0dca54c555128f6b"
+    },
+    {
+      "file": "1440-control-quote-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-disabled",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e9177a8e10e9186cc032ab5e6b931535e0052be8408775882157034e094020e5"
+    },
+    {
+      "file": "1440-control-quote-cancel-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-busy",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-quote-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8fd24011035c368f979f684c516b3d1b6d88fb6b1ddf614e4b7abb7ebe19ec92"
+    },
+    {
+      "file": "1440-control-purchase-close-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-default",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d415868ac01207277fb7a39947015110517d9d204f74d605dbc8ce49e7249fe2"
+    },
+    {
+      "file": "1440-control-purchase-close-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-hover",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c2af66fda403c8487a2092f36c1539e329fb8227022d80c597e7d4f15a394b2b"
+    },
+    {
+      "file": "1440-control-purchase-close-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-focus",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "0d429fba119937470b26495efb91e36f020b8f0d65406911ee03e7f54c7c1a68"
+    },
+    {
+      "file": "1440-control-purchase-close-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-pressed",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ea30ccb274eb8850186ef2665cd6c85c874c4bf80aaa3ae4e2b3f1639fcb336d"
+    },
+    {
+      "file": "1440-control-purchase-close-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-disabled",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8b29e5712d04148627ee3d603a79b1c1a3362b662c3492f71b0e5f749a52b9d9"
+    },
+    {
+      "file": "1440-control-purchase-close-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-busy",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8b29e5712d04148627ee3d603a79b1c1a3362b662c3492f71b0e5f749a52b9d9"
+    },
+    {
+      "file": "1440-control-purchase-cancel-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-default",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "d415868ac01207277fb7a39947015110517d9d204f74d605dbc8ce49e7249fe2"
+    },
+    {
+      "file": "1440-control-purchase-cancel-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-hover",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a5bc05c4469d13d530d6463edafb7188c8e21773cdc0ca3f0133df3e930c9742"
+    },
+    {
+      "file": "1440-control-purchase-cancel-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-focus",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8c275d2e3f6c91afab2bf2847b609377f1a1e4d6168cd93bf1d90e3a6900afb0"
+    },
+    {
+      "file": "1440-control-purchase-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-pressed",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "9f0ab7690db1fee7d00779c182de177f2263663286bbb5e7e749ef8fc0cec375"
+    },
+    {
+      "file": "1440-control-purchase-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-disabled",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8b29e5712d04148627ee3d603a79b1c1a3362b662c3492f71b0e5f749a52b9d9"
+    },
+    {
+      "file": "1440-control-purchase-cancel-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-busy",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-purchase-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8b29e5712d04148627ee3d603a79b1c1a3362b662c3492f71b0e5f749a52b9d9"
+    },
+    {
+      "file": "1440-control-delete-close-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-default",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "5bd15641cc36ccab991ad51811982e4d5c0f3b11a011f693d89e42278096c8b0"
+    },
+    {
+      "file": "1440-control-delete-close-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-hover",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "01671a942ca8c609d2e9c9a8534f1856c68499f9ee7e982acec345b0f39b2db0"
+    },
+    {
+      "file": "1440-control-delete-close-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-focus",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "162a253a0171253dd7ece17399439da70a34ed84ca94f89e570eced427c1e5b5"
+    },
+    {
+      "file": "1440-control-delete-close-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-pressed",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7270dba74d4521bca1ffa76ad3113fd14e4e8bb09f405b31c487c65eeb670e02"
+    },
+    {
+      "file": "1440-control-delete-close-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-disabled",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "89d4a5a7fa6f0aec554bbcc43bae437038d0a66b77aea6a25c71381779632603"
+    },
+    {
+      "file": "1440-control-delete-close-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-busy",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "89d4a5a7fa6f0aec554bbcc43bae437038d0a66b77aea6a25c71381779632603"
+    },
+    {
+      "file": "1440-control-delete-cancel-default.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-default",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c36dadcf40fb4084f40356769fbf00e83317d895a080818202665d91cccd054c"
+    },
+    {
+      "file": "1440-control-delete-cancel-hover.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-hover",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "489dce0dd9f71a2950656d6272706bc9eeaf6c5af994f954fb93dcf22381680d"
+    },
+    {
+      "file": "1440-control-delete-cancel-focus.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-focus",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "7cfc85b5bf04f06755f6ad6a22039121789c319962d708397f4c3dd1fefc9188"
+    },
+    {
+      "file": "1440-control-delete-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-pressed",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "3268b5e704354d0eb0155dab941154b54c52e16b58518ede46ee0ae0c81a5d08"
+    },
+    {
+      "file": "1440-control-delete-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-disabled",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b5a3fbfa77690462c4b70f03d55660df9b8484bf74e7d5a683100d5653063ee6"
+    },
+    {
+      "file": "1440-control-delete-cancel-busy.png",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-busy",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 1440,
+        "scene": "control-delete-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b5a3fbfa77690462c4b70f03d55660df9b8484bf74e7d5a683100d5653063ee6"
     },
     {
       "file": "390-workspace.png",
@@ -1549,7 +2509,7 @@
       "pageId": "P21",
       "width": 390,
       "scene": "search-busy",
-      "sha256": "2f1257b7445e8b5d9bbcbff7dd243d101300c604a32003920de0db4841520880"
+      "sha256": "b09c9478a702f5458049599421df4f3d8fb4ac0993608c583e0dcd076d19d5d3"
     },
     {
       "file": "390-quote.png",
@@ -1598,14 +2558,14 @@
       "pageId": "P21",
       "width": 390,
       "scene": "quote-busy",
-      "sha256": "6aa28b27fdd785242c9b1493fb9359d00459fb9fb7e315a3b7607fac7ae8e2fe"
+      "sha256": "3d6590f4c25b0f59180abaad7352a9017d44e88bea0e785c90379a49cfefda04"
     },
     {
       "file": "390-quote-busy-lower.png",
       "pageId": "P21",
       "width": 390,
       "scene": "quote-busy-lower",
-      "sha256": "6aa28b27fdd785242c9b1493fb9359d00459fb9fb7e315a3b7607fac7ae8e2fe"
+      "sha256": "3d6590f4c25b0f59180abaad7352a9017d44e88bea0e785c90379a49cfefda04"
     },
     {
       "file": "390-purchase.png",
@@ -1633,7 +2593,7 @@
       "pageId": "P21",
       "width": 390,
       "scene": "purchase-busy",
-      "sha256": "6e13f1d23a3c023284aafada9a693d31c921785ea12260f8a4b5db6f73a5a941"
+      "sha256": "5c76fa15ce8800c1952f484e1b781d3f2d49f0eae7ceb5c7772619d2587e7c4c"
     },
     {
       "file": "390-delete.png",
@@ -1654,7 +2614,7 @@
       "pageId": "P21",
       "width": 390,
       "scene": "delete-busy",
-      "sha256": "cb15adce7b8674e797cc1b39cb0ff79f59e49ecb4317ee603b9ebf51806245d1"
+      "sha256": "5f2aa203da593832b819adf194bc6a04db5301896b8d72306e1bf7a0e11ea24b"
     },
     {
       "file": "390-cost-missing.png",
@@ -1915,7 +2875,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "fbc3d54cb827c43cb510f80b5e7905906c97823175f75381bbf25f530ed54ea1"
+      "sha256": "e7ced897a364feda9722f7defec7ef15b2b993293ed6b3b1944c1f88c8053fad"
     },
     {
       "file": "390-control-search-busy.png",
@@ -1935,7 +2895,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "fbc3d54cb827c43cb510f80b5e7905906c97823175f75381bbf25f530ed54ea1"
+      "sha256": "e7ced897a364feda9722f7defec7ef15b2b993293ed6b3b1944c1f88c8053fad"
     },
     {
       "file": "390-control-quote-default.png",
@@ -2035,7 +2995,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "547599c75f770b136db8cc29115d08f3e93729b34cbb6f034c4cf7af68dd78f3"
+      "sha256": "f8deadbb5fe7112e6c08ddefcf7323e1b8e59314b3ba6e5bb68cacd2180932af"
     },
     {
       "file": "390-control-quote-busy.png",
@@ -2055,7 +3015,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "547599c75f770b136db8cc29115d08f3e93729b34cbb6f034c4cf7af68dd78f3"
+      "sha256": "f8deadbb5fe7112e6c08ddefcf7323e1b8e59314b3ba6e5bb68cacd2180932af"
     },
     {
       "file": "390-control-purchase-default.png",
@@ -2175,7 +3135,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "ca3767c8d58461581db7f8aa5990614b9e1939f7e976fa21db7a906034984315"
+      "sha256": "df9df84c00577e307aa964430a767b6c7c00c7ff875132368bb6b4ac927f92a3"
     },
     {
       "file": "390-control-delete-default.png",
@@ -2275,7 +3235,7 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "d922430a746a223533b914ac4cc8a0ee20e874fcb7439c6fdbea9d1166db86f1"
+      "sha256": "22b6ecce144cbde108a23225d9b2010d764f3f1361909abf653920eb56bc1dea"
     },
     {
       "file": "390-control-delete-busy.png",
@@ -2295,7 +3255,967 @@
         "condition": "request-in-flight"
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "d922430a746a223533b914ac4cc8a0ee20e874fcb7439c6fdbea9d1166db86f1"
+      "sha256": "22b6ecce144cbde108a23225d9b2010d764f3f1361909abf653920eb56bc1dea"
+    },
+    {
+      "file": "390-control-search-close-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-default",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "55d8e7b31ea2e1ce36909013e2ff352e8eb8911eee67159da2dd745925566fbf"
+    },
+    {
+      "file": "390-control-search-close-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-hover",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "20e5548bbc38f041199c8eb5eb4abf527760893b824187f6c090eae864fb9985"
+    },
+    {
+      "file": "390-control-search-close-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-focus",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "5a65419ca4f7d494a1e794525c452bafe6f3476f35cd2c72a811ffb6bdea1b56"
+    },
+    {
+      "file": "390-control-search-close-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-pressed",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c6db90d98e82dddc090d514ae6fa72acc229a38dd1ff3a5e94652a811c8c3a71"
+    },
+    {
+      "file": "390-control-search-close-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-disabled",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e7ced897a364feda9722f7defec7ef15b2b993293ed6b3b1944c1f88c8053fad"
+    },
+    {
+      "file": "390-control-search-close-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-busy",
+      "control": {
+        "key": "search-close",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e7ced897a364feda9722f7defec7ef15b2b993293ed6b3b1944c1f88c8053fad"
+    },
+    {
+      "file": "390-control-search-cancel-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-default",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "49d2d10c9079a0af8eabb7b30f87001db983ed867ab88790075d030572f7d556"
+    },
+    {
+      "file": "390-control-search-cancel-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-hover",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a85208929f4537384cf682c76a6a8fa2459950e7d2b28c67077f7b285361c872"
+    },
+    {
+      "file": "390-control-search-cancel-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-focus",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "45ca5766c6ed5c79a204cf4828fa95cded6431baa05fbbe17cdda2b0ed5a43d6"
+    },
+    {
+      "file": "390-control-search-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-pressed",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f8df468432359c6beda14b86b7f52fa0a744565b3d65a78fae47424b9aaa39fc"
+    },
+    {
+      "file": "390-control-search-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-disabled",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e7ced897a364feda9722f7defec7ef15b2b993293ed6b3b1944c1f88c8053fad"
+    },
+    {
+      "file": "390-control-search-cancel-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-busy",
+      "control": {
+        "key": "search-cancel",
+        "actionId": "SC-S-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "search-keyword",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-search-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e7ced897a364feda9722f7defec7ef15b2b993293ed6b3b1944c1f88c8053fad"
+    },
+    {
+      "file": "390-control-quote-close-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-default",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "967c44702e0d3f26ca04f106a144e005e39ccb930cd4c5a2b44b652a6bbd318a"
+    },
+    {
+      "file": "390-control-quote-close-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-hover",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "16d9d8d3f369aa4a5f38d51b264b2a0a6ca29bb3fd8d9221f699beef391ff65f"
+    },
+    {
+      "file": "390-control-quote-close-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-focus",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "21f9b34b3225ef3b5442ffb6dc3e573568a7e11732e644e2173399ffee0fd8e4"
+    },
+    {
+      "file": "390-control-quote-close-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-pressed",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "18fc0ca1b272074045a5080cb42b2f380bcead6a0e442af1057593a758ddad79"
+    },
+    {
+      "file": "390-control-quote-close-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-disabled",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f8deadbb5fe7112e6c08ddefcf7323e1b8e59314b3ba6e5bb68cacd2180932af"
+    },
+    {
+      "file": "390-control-quote-close-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-busy",
+      "control": {
+        "key": "quote-close",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "f8deadbb5fe7112e6c08ddefcf7323e1b8e59314b3ba6e5bb68cacd2180932af"
+    },
+    {
+      "file": "390-control-quote-cancel-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-default",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c8f14b0162927ce4e65b163be40e74f3911eea8e07967384e5c081e679d1ebfd"
+    },
+    {
+      "file": "390-control-quote-cancel-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-hover",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "47a68cff6d40826119c38a8c2b6dbe2faa298065cb6e27bcc986ac3850a20d5d"
+    },
+    {
+      "file": "390-control-quote-cancel-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-focus",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "41e1a265c42b665e2d92524636d408d4d79246e7dd434d0fd0879f8ead4c2dcc"
+    },
+    {
+      "file": "390-control-quote-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-pressed",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b0d6e65a72bc1053b2ad91f855b56f9240da2c06754b00b1f5c9ab0f8d589e99"
+    },
+    {
+      "file": "390-control-quote-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-disabled",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6edee1b6634ec2b2a3e06e5c06facc18af00697318233cf9444abe4d980c874b"
+    },
+    {
+      "file": "390-control-quote-cancel-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-busy",
+      "control": {
+        "key": "quote-cancel",
+        "actionId": "SC-QUOTE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "quote",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-quote-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "6edee1b6634ec2b2a3e06e5c06facc18af00697318233cf9444abe4d980c874b"
+    },
+    {
+      "file": "390-control-purchase-close-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-default",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "609f83c50e6a52f09bc6756e1df97f58dd32903dc7dd752786d35372fa0b9b6c"
+    },
+    {
+      "file": "390-control-purchase-close-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-hover",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "aefb159e8acfe9871a38409a5fd2b0b50440b50dfcb781eb89946dd9487afc73"
+    },
+    {
+      "file": "390-control-purchase-close-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-focus",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "a78f75e5e1390cb41828af7feeb74999afcb4b26141e26fad7dc3bff815cc288"
+    },
+    {
+      "file": "390-control-purchase-close-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-pressed",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "fd1f7ce2832ef3bca02d72201741dc7f45575ae7f8b67ff856062622ba28279d"
+    },
+    {
+      "file": "390-control-purchase-close-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-disabled",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1f0dfb607625a9c34d66a13ed1b05fdd0e338a9312395190f8001c9888606691"
+    },
+    {
+      "file": "390-control-purchase-close-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-busy",
+      "control": {
+        "key": "purchase-close",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1f0dfb607625a9c34d66a13ed1b05fdd0e338a9312395190f8001c9888606691"
+    },
+    {
+      "file": "390-control-purchase-cancel-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-default",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "609f83c50e6a52f09bc6756e1df97f58dd32903dc7dd752786d35372fa0b9b6c"
+    },
+    {
+      "file": "390-control-purchase-cancel-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-hover",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "e7ee8e27154da9e336e7a76d7ffe32d1633b85442b44ae51b4768cfd31ab4b7b"
+    },
+    {
+      "file": "390-control-purchase-cancel-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-focus",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "554b3d5a2a8901d678cc291341cb745bd5e7733702081c18638c62ec85dc088e"
+    },
+    {
+      "file": "390-control-purchase-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-pressed",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "8bcbca8a0fbc0b14c33b0691375237937640bdcd82455bbc05518a7f706af5c9"
+    },
+    {
+      "file": "390-control-purchase-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-disabled",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1f0dfb607625a9c34d66a13ed1b05fdd0e338a9312395190f8001c9888606691"
+    },
+    {
+      "file": "390-control-purchase-cancel-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-busy",
+      "control": {
+        "key": "purchase-cancel",
+        "actionId": "SC-PURCHASE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "purchase",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-purchase-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "1f0dfb607625a9c34d66a13ed1b05fdd0e338a9312395190f8001c9888606691"
+    },
+    {
+      "file": "390-control-delete-close-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-default",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "default",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-close-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "90d028ad58689b023772236471c01307407bf0d7a6f3f541cd2c77b62411a92e"
+    },
+    {
+      "file": "390-control-delete-close-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-hover",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "hover",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-close-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "05323bdd5e501c6e87c11eb7fe892d4c2b83a5f74bbb939f35f01ca30d8b6f7e"
+    },
+    {
+      "file": "390-control-delete-close-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-focus",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "focus",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-close-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "ac33f22c2f13c4db76d862c65ba31a5859626af3a486a02f17814a79ae217efd"
+    },
+    {
+      "file": "390-control-delete-close-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-pressed",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "pressed",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-close-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "b8ef2e6d1119b8ea58cc3a457d3e84372cc09e3a365351613f75cee07d20993b"
+    },
+    {
+      "file": "390-control-delete-close-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-disabled",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "disabled",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-close-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "db79af410cb41530707929938a8b9fa848670912d09425196f589d0067b8950a"
+    },
+    {
+      "file": "390-control-delete-close-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-busy",
+      "control": {
+        "key": "delete-close",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "state": "busy",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-close-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "db79af410cb41530707929938a8b9fa848670912d09425196f589d0067b8950a"
+    },
+    {
+      "file": "390-control-delete-cancel-default.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-default",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "default",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-cancel-default",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "c6c9eb1d77b2d6621f300828309428180b80bb907718180bb4d93db6cdff3ca3"
+    },
+    {
+      "file": "390-control-delete-cancel-hover.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-hover",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "hover",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-cancel-hover",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "165b7043801bb3dd55c2cb25a6f573fdce7a027822ecfc44b97eed83505c8174"
+    },
+    {
+      "file": "390-control-delete-cancel-focus.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-focus",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "focus",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-cancel-focus",
+        "contrast": 14.102738944447992,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "53a4ab6b347a24e3f5130e4ee249af120f7d13410346fb1aea8917fa78dd419c"
+    },
+    {
+      "file": "390-control-delete-cancel-pressed.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-pressed",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "pressed",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-cancel-pressed",
+        "contrast": 12.669055719579259,
+        "condition": "valid-input"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "dfd00d5969bd5e3e56e90bd0217d7d91c21b0b836146b0071e567399d65fa122"
+    },
+    {
+      "file": "390-control-delete-cancel-disabled.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-disabled",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "disabled",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-cancel-disabled",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "93aca36a8a121ca90d620c198e52fa2327ea1a68c1f43b62259b835f283c5544"
+    },
+    {
+      "file": "390-control-delete-cancel-busy.png",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-busy",
+      "control": {
+        "key": "delete-cancel",
+        "actionId": "SC-DELETE-CLOSE",
+        "selector": "#modal button[data-close-variant=\"cancel\"]",
+        "state": "busy",
+        "baseScene": "delete",
+        "pageId": "P21",
+        "width": 390,
+        "scene": "control-delete-cancel-busy",
+        "contrast": 6.355026273093729,
+        "condition": "request-in-flight"
+      },
+      "captureScope": "viewport-with-control-context",
+      "sha256": "93aca36a8a121ca90d620c198e52fa2327ea1a68c1f43b62259b835f283c5544"
     },
     {
       "file": "768-workspace.png",
@@ -2616,6 +4536,582 @@
       "condition": "request-in-flight"
     },
     {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-search-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-quote-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-purchase-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 1440,
+      "scene": "control-delete-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
       "key": "search",
       "actionId": "SC-S-SUBMIT",
       "selector": "#modal button[data-action=\"SC-SEARCH-SUBMIT\"]",
@@ -2902,6 +5398,582 @@
       "scene": "control-delete-busy",
       "contrast": 6.355026273093729,
       "condition": "request-in-flight"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search-close",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "search-cancel",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "search-keyword",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-search-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-close",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "quote-cancel",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "quote",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-quote-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-close",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "purchase-cancel",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "purchase",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-purchase-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "default",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "hover",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "focus",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "pressed",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "disabled",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-close",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"close\"]",
+      "state": "busy",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-close-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "default",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-default",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "hover",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-hover",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "focus",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-focus",
+      "contrast": 14.102738944447992,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "pressed",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-pressed",
+      "contrast": 12.669055719579259,
+      "condition": "valid-input"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "disabled",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-disabled",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
+    },
+    {
+      "key": "delete-cancel",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "state": "busy",
+      "baseScene": "delete",
+      "pageId": "P21",
+      "width": 390,
+      "scene": "control-delete-cancel-busy",
+      "contrast": 6.355026273093729,
+      "condition": "request-in-flight"
     }
   ],
   "pageActionVisualReferences": {
@@ -2961,7 +6033,125 @@
           "busy": "control-delete-busy"
         },
         "limitation": "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending"
+      },
+      "SC-S-CLOSE": {
+        "pageId": "P21",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-search-close-default",
+          "hover": "control-search-close-hover",
+          "focus": "control-search-close-focus",
+          "pressed": "control-search-close-pressed",
+          "disabled": "control-search-close-disabled",
+          "busy": "control-search-close-busy"
+        },
+        "limitation": "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
+      },
+      "SC-QUOTE-CLOSE": {
+        "pageId": "P21",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-quote-close-default",
+          "hover": "control-quote-close-hover",
+          "focus": "control-quote-close-focus",
+          "pressed": "control-quote-close-pressed",
+          "disabled": "control-quote-close-disabled",
+          "busy": "control-quote-close-busy"
+        },
+        "limitation": "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
+      },
+      "SC-PURCHASE-CLOSE": {
+        "pageId": "P21",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-purchase-close-default",
+          "hover": "control-purchase-close-hover",
+          "focus": "control-purchase-close-focus",
+          "pressed": "control-purchase-close-pressed",
+          "disabled": "control-purchase-close-disabled",
+          "busy": "control-purchase-close-busy"
+        },
+        "limitation": "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
+      },
+      "SC-DELETE-CLOSE": {
+        "pageId": "P21",
+        "selector": "#modal button[data-close-variant=\"close\"]",
+        "scope": "representative-control-only-not-all-variants-or-Vue",
+        "states": {
+          "default": "control-delete-close-default",
+          "hover": "control-delete-close-hover",
+          "focus": "control-delete-close-focus",
+          "pressed": "control-delete-close-pressed",
+          "disabled": "control-delete-close-disabled",
+          "busy": "control-delete-close-busy"
+        },
+        "limitation": "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
       }
+    }
+  },
+  "controlVariantReferences": {
+    "search-cancel": {
+      "pageId": "P21",
+      "actionId": "SC-S-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-search-cancel-default",
+        "hover": "control-search-cancel-hover",
+        "focus": "control-search-cancel-focus",
+        "pressed": "control-search-cancel-pressed",
+        "disabled": "control-search-cancel-disabled",
+        "busy": "control-search-cancel-busy"
+      },
+      "limitation": "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback."
+    },
+    "quote-cancel": {
+      "pageId": "P21",
+      "actionId": "SC-QUOTE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-quote-cancel-default",
+        "hover": "control-quote-cancel-hover",
+        "focus": "control-quote-cancel-focus",
+        "pressed": "control-quote-cancel-pressed",
+        "disabled": "control-quote-cancel-disabled",
+        "busy": "control-quote-cancel-busy"
+      },
+      "limitation": "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback."
+    },
+    "purchase-cancel": {
+      "pageId": "P21",
+      "actionId": "SC-PURCHASE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-purchase-cancel-default",
+        "hover": "control-purchase-cancel-hover",
+        "focus": "control-purchase-cancel-focus",
+        "pressed": "control-purchase-cancel-pressed",
+        "disabled": "control-purchase-cancel-disabled",
+        "busy": "control-purchase-cancel-busy"
+      },
+      "limitation": "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback."
+    },
+    "delete-cancel": {
+      "pageId": "P21",
+      "actionId": "SC-DELETE-CLOSE",
+      "selector": "#modal button[data-close-variant=\"cancel\"]",
+      "scope": "additional-control-variant-not-new-action",
+      "states": {
+        "default": "control-delete-cancel-default",
+        "hover": "control-delete-cancel-hover",
+        "focus": "control-delete-cancel-focus",
+        "pressed": "control-delete-cancel-pressed",
+        "disabled": "control-delete-cancel-disabled",
+        "busy": "control-delete-cancel-busy"
+      },
+      "limitation": "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback."
     }
   },
   "actionIds": [
@@ -2996,8 +6186,10 @@
   ],
   "checks": [
     "1440: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions",
+    "1440: four dialog close/cancel pairs x six states; parent in-flight lock only, no cancel-request spinner; keyboard close/Escape return to exact opener including second purchase button; search/delete draft retained and quote/purchase reprefilled; no close/reopen write",
     "1440: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
     "390: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions",
+    "390: four dialog close/cancel pairs x six states; parent in-flight lock only, no cancel-request spinner; keyboard close/Escape return to exact opener including second purchase button; search/delete draft retained and quote/purchase reprefilled; no close/reopen write",
     "390: all scenes, tabs/search/roles; max5, four input kinds, quote exact fields/zero/local instant, MOQ/reason/reset, delete trim/retention, independent cost/review versions, no numeric ROI on missing, busy/Escape/backdrop/focus return/trap; no real writes",
     "nine widths x5 representative surfaces; New York quote local display; 720x500 equivalent reflow only, not actual browser zoom or complete timezone/assistive technology coverage"
   ],

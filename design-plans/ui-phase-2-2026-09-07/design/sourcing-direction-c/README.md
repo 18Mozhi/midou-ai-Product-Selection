@@ -1,5 +1,29 @@
 # P21 供应链与利润 · C方向整页待审提案
 
+2026-09-09最新：[关闭与取消状态审核](../../SOURCING-SECONDARY-STATE-REVIEW.md)新增96图，现62主场景289PNG、12控件变体144双端状态实例；48代表槽已绑定、122待补。父请求在途关闭锁为待审提案，真实Vue仍允许关闭；取消没有自己的请求或旋转标记。键盘回到实际入口（含第二采购按钮）、搜索/删除保留和报价/采购重开预填通过离线检查；没有提升批准、改生产或部署。以下193图/146槽为前批记录。
+
+## 关闭与取消图直达
+
+| 控件 / 宽度 | 默认 | 悬停 | 焦点 | 按下 | 禁用 | 父请求在途 |
+| --- | --- | --- | --- | --- | --- | --- |
+| search-close / 1440px | [查看](1440-control-search-close-default.png) | [查看](1440-control-search-close-hover.png) | [查看](1440-control-search-close-focus.png) | [查看](1440-control-search-close-pressed.png) | [查看](1440-control-search-close-disabled.png) | [查看](1440-control-search-close-busy.png) |
+| search-cancel / 1440px | [查看](1440-control-search-cancel-default.png) | [查看](1440-control-search-cancel-hover.png) | [查看](1440-control-search-cancel-focus.png) | [查看](1440-control-search-cancel-pressed.png) | [查看](1440-control-search-cancel-disabled.png) | [查看](1440-control-search-cancel-busy.png) |
+| quote-close / 1440px | [查看](1440-control-quote-close-default.png) | [查看](1440-control-quote-close-hover.png) | [查看](1440-control-quote-close-focus.png) | [查看](1440-control-quote-close-pressed.png) | [查看](1440-control-quote-close-disabled.png) | [查看](1440-control-quote-close-busy.png) |
+| quote-cancel / 1440px | [查看](1440-control-quote-cancel-default.png) | [查看](1440-control-quote-cancel-hover.png) | [查看](1440-control-quote-cancel-focus.png) | [查看](1440-control-quote-cancel-pressed.png) | [查看](1440-control-quote-cancel-disabled.png) | [查看](1440-control-quote-cancel-busy.png) |
+| purchase-close / 1440px | [查看](1440-control-purchase-close-default.png) | [查看](1440-control-purchase-close-hover.png) | [查看](1440-control-purchase-close-focus.png) | [查看](1440-control-purchase-close-pressed.png) | [查看](1440-control-purchase-close-disabled.png) | [查看](1440-control-purchase-close-busy.png) |
+| purchase-cancel / 1440px | [查看](1440-control-purchase-cancel-default.png) | [查看](1440-control-purchase-cancel-hover.png) | [查看](1440-control-purchase-cancel-focus.png) | [查看](1440-control-purchase-cancel-pressed.png) | [查看](1440-control-purchase-cancel-disabled.png) | [查看](1440-control-purchase-cancel-busy.png) |
+| delete-close / 1440px | [查看](1440-control-delete-close-default.png) | [查看](1440-control-delete-close-hover.png) | [查看](1440-control-delete-close-focus.png) | [查看](1440-control-delete-close-pressed.png) | [查看](1440-control-delete-close-disabled.png) | [查看](1440-control-delete-close-busy.png) |
+| delete-cancel / 1440px | [查看](1440-control-delete-cancel-default.png) | [查看](1440-control-delete-cancel-hover.png) | [查看](1440-control-delete-cancel-focus.png) | [查看](1440-control-delete-cancel-pressed.png) | [查看](1440-control-delete-cancel-disabled.png) | [查看](1440-control-delete-cancel-busy.png) |
+| search-close / 390px | [查看](390-control-search-close-default.png) | [查看](390-control-search-close-hover.png) | [查看](390-control-search-close-focus.png) | [查看](390-control-search-close-pressed.png) | [查看](390-control-search-close-disabled.png) | [查看](390-control-search-close-busy.png) |
+| search-cancel / 390px | [查看](390-control-search-cancel-default.png) | [查看](390-control-search-cancel-hover.png) | [查看](390-control-search-cancel-focus.png) | [查看](390-control-search-cancel-pressed.png) | [查看](390-control-search-cancel-disabled.png) | [查看](390-control-search-cancel-busy.png) |
+| quote-close / 390px | [查看](390-control-quote-close-default.png) | [查看](390-control-quote-close-hover.png) | [查看](390-control-quote-close-focus.png) | [查看](390-control-quote-close-pressed.png) | [查看](390-control-quote-close-disabled.png) | [查看](390-control-quote-close-busy.png) |
+| quote-cancel / 390px | [查看](390-control-quote-cancel-default.png) | [查看](390-control-quote-cancel-hover.png) | [查看](390-control-quote-cancel-focus.png) | [查看](390-control-quote-cancel-pressed.png) | [查看](390-control-quote-cancel-disabled.png) | [查看](390-control-quote-cancel-busy.png) |
+| purchase-close / 390px | [查看](390-control-purchase-close-default.png) | [查看](390-control-purchase-close-hover.png) | [查看](390-control-purchase-close-focus.png) | [查看](390-control-purchase-close-pressed.png) | [查看](390-control-purchase-close-disabled.png) | [查看](390-control-purchase-close-busy.png) |
+| purchase-cancel / 390px | [查看](390-control-purchase-cancel-default.png) | [查看](390-control-purchase-cancel-hover.png) | [查看](390-control-purchase-cancel-focus.png) | [查看](390-control-purchase-cancel-pressed.png) | [查看](390-control-purchase-cancel-disabled.png) | [查看](390-control-purchase-cancel-busy.png) |
+| delete-close / 390px | [查看](390-control-delete-close-default.png) | [查看](390-control-delete-close-hover.png) | [查看](390-control-delete-close-focus.png) | [查看](390-control-delete-close-pressed.png) | [查看](390-control-delete-close-disabled.png) | [查看](390-control-delete-close-busy.png) |
+| delete-cancel / 390px | [查看](390-control-delete-cancel-default.png) | [查看](390-control-delete-cancel-hover.png) | [查看](390-control-delete-cancel-focus.png) | [查看](390-control-delete-cancel-pressed.png) | [查看](390-control-delete-cancel-disabled.png) | [查看](390-control-delete-cancel-busy.png) |
+
+
 ## 四提交控件图直达
 
 - [1440px · search · default](1440-control-search-default.png)
