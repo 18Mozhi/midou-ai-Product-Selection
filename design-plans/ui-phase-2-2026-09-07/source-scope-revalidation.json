@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "status": "supporting-shell-source-revalidated-not-runtime-acceptance",
+  "runtimeAcceptance": "partial-not-frozen",
+  "bindings": [
+    {
+      "file": "apps/web/src/components/NavigationShell.vue",
+      "previousSha256": "993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92",
+      "currentSha256": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+      "previousRevision": "b043fd7ff11a796f682e39fd869f898e9c2a9eb1",
+      "changeRevision": "243941a0620cd7444bd494a0242d471b343e58c5",
+      "reviewConclusion": "54 outside-route source sites remain in unchanged components. This supporting shell changed navigation request sequence/abort ownership and closes discovery/theme/menu on navigation or shell switch; no new development renderer or orphan consumer was introduced.",
+      "unchangedInitializers": [
+        "componentModules",
+        "surfaceComponents",
+        "selectedSurfaceComponent",
+        "activeSurface",
+        "activeCachePolicy"
+      ],
+      "templateUnchanged": true
+    }
+  ],
+  "limits": [
+    "Original source-scope-review.json and its historical hashes remain unchanged.",
+    "Git parent/current LF hashes and TypeScript initializers plus template compared during this review; only this exact current whole-file hash is accepted.",
+    "The broad component glob and six orphan sites retain their previous limitations; this is not production bundle removal or per-candidate runtime acceptance."
+  ]
+}

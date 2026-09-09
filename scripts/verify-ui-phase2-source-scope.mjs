@@ -7,6 +7,30 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const base = "design-plans/ui-phase-2-2026-09-07";
 const readJson = async (file) => JSON.parse(await readFile(path.join(repo, file), "utf8"));
+export function revalidatedScopeSources(review, revalidation) {
+  assert.equal(revalidation.schemaVersion, 1);
+  assert.equal(revalidation.sourceFingerprint, review.sourceFingerprint);
+  assert.equal(revalidation.status, "supporting-shell-source-revalidated-not-runtime-acceptance");
+  assert.equal(revalidation.runtimeAcceptance, "partial-not-frozen");
+  assert.equal(revalidation.bindings.length, 1);
+  const binding = revalidation.bindings[0];
+  assert.equal(binding.file, "apps/web/src/components/NavigationShell.vue");
+  assert.ok(!review.records.some((r) => r.file === binding.file));
+  assert.equal(binding.previousSha256, review.sources[binding.file]);
+  assert.match(binding.currentSha256, /^[a-f0-9]{64}$/);
+  assert.match(binding.previousRevision, /^[a-f0-9]{40}$/);
+  assert.match(binding.changeRevision, /^[a-f0-9]{40}$/);
+  assert.ok(binding.reviewConclusion);
+  assert.equal(binding.templateUnchanged, true);
+  assert.deepEqual(binding.unchangedInitializers, [
+    "componentModules",
+    "surfaceComponents",
+    "selectedSurfaceComponent",
+    "activeSurface",
+    "activeCachePolicy",
+  ]);
+  return { ...review.sources, [binding.file]: binding.currentSha256 };
+}
 export function validateScopeRecords(review, candidates, fingerprint, sourceHashes) {
   assert.equal(review.schemaVersion, 1);
   assert.equal(review.sourceFingerprint, fingerprint, "stale inventory fingerprint");
@@ -75,6 +99,8 @@ export function validateScopeRecords(review, candidates, fingerprint, sourceHash
 }
 export async function verifySourceScope() {
   const review = await readJson(`${base}/source-scope-review.json`);
+  const revalidation = await readJson(`${base}/source-scope-revalidation.json`);
+  const reviewedSources = revalidatedScopeSources(review, revalidation);
   const baseline = await readJson(`${base}/baseline.json`);
   const actions = await readJson(`${base}/actions.json`);
   const dialogs = await readJson(`${base}/dialogs.json`);
@@ -89,7 +115,7 @@ export async function verifySourceScope() {
   for (const file of new Set(review.records.map((row) => row.testFile).filter(Boolean)))
     await readFile(path.join(repo, file), "utf8");
   return validateScopeRecords(
-    review,
+    { ...review, sources: reviewedSources },
     [...actions.candidates, ...dialogs.candidates],
     baseline.sourceFingerprint,
     sourceHashes,

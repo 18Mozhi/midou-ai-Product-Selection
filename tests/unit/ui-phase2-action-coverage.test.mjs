@@ -1,0 +1,122 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  validateActionReview,
+  reconcileActionCandidates,
+} from "../../scripts/lib/ui-phase2-action-coverage.mjs";
+
+function fixture() {
+  const id = "source.vue#identity.1",
+    candidate = {
+      candidateId: id,
+      file: "source.vue",
+      line: 1,
+      kind: "control",
+      label: "保存",
+      conditions: [],
+    };
+  const action = {
+    actionId: "EXISTING-SAVE",
+    kind: "write",
+    condition: "ready",
+    handler: "save",
+    remaining: "real runtime pending",
+    sourceCandidateIds: [id],
+    variants: ["submit"],
+    scenes: [{ package: "sample", scene: "ready" }],
+    testReferences: [{ file: "verify.mjs", evidenceType: "offline-proposal-check-not-Vue" }],
+    visualStates: Object.fromEntries(
+      ["default", "hover", "focus", "pressed", "disabled", "busy"].map((s) => [s, "not-mapped"]),
+    ),
+  };
+  const review = {
+    schemaVersion: 1,
+    pageId: "P11",
+    approval: "pending-user-review",
+    sourceHashes: { "source.vue": "hash" },
+    contract: "contract.md",
+    actions: [action],
+    dialogs: { kind: "none-in-current-source" },
+  };
+  const context = {
+    candidates: [candidate],
+    sourceHashes: { "source.vue": "hash" },
+    contracts: [
+      {
+        candidateId: id,
+        document: "contract.md",
+        status: "identity-current",
+        temporalScope: "unclassified",
+        claim: "| EXISTING-SAVE |",
+      },
+    ],
+    packages: new Map([
+      [
+        "sample",
+        {
+          screenshots: [
+            { scene: "ready", width: 1440 },
+            { scene: "ready", viewport: { width: 390 } },
+          ],
+        },
+      ],
+    ]),
+    files: new Set(["verify.mjs"]),
+  };
+  return { review, context };
+}
+test("explicit mapping accepted but runtime/approval not promoted", () => {
+  const { review, context } = fixture();
+  const result = validateActionReview(review, context);
+  assert.equal(result.routeActions, 1);
+  assert.equal(result.unmappedVisualSlots, 6);
+  assert.equal(result.writeActions, 1);
+});
+for (const [name, change] of [
+  ["source drift", (r, c) => (c.sourceHashes["source.vue"] = "changed")],
+  ["duplicate action", (r) => r.actions.push(structuredClone(r.actions[0]))],
+  [
+    "duplicate candidate",
+    (r) => r.actions[0].sourceCandidateIds.push(r.actions[0].sourceCandidateIds[0]),
+  ],
+  ["unknown candidate", (r) => (r.actions[0].sourceCandidateIds = ["other.vue#identity.1"])],
+  [
+    "unmapped source",
+    (r, c) => c.candidates.push({ ...c.candidates[0], candidateId: "source.vue#second.1" }),
+  ],
+  ["unproven contract", (r, c) => (c.contracts[0].temporalScope = "historical")],
+  ["substring action not accepted", (r) => (r.actions[0].actionId = "SAVE")],
+  ["missing mobile scene", (r, c) => c.packages.get("sample").screenshots.pop()],
+  ["missing verifier", (r, c) => c.files.clear()],
+  ["fake approval", (r) => (r.approval = "approved")],
+  ["unsupported passed state", (r) => (r.actions[0].visualStates.busy = "passed")],
+  [
+    "write cannot exempt busy as navigation",
+    (r) => (r.actions[0].visualStates.busy = "not-applicable-navigation-only"),
+  ],
+  ["omitted dialog", (r, c) => (c.candidates[0].kind = "dialog-definition")],
+])
+  test("rejects " + name, () => {
+    const { review, context } = fixture();
+    change(review, context);
+    assert.throws(() => validateActionReview(review, context));
+  });
+test("changed identities are not inferred to be a renamed semantic action", () => {
+  const { context } = fixture();
+  const old = [
+    { ...context.candidates[0], candidateId: "source.vue#old.1", candidateRouteIds: ["P11"] },
+  ];
+  const result = reconcileActionCandidates(context.candidates, old, context.contracts);
+  assert.equal(result.candidates[0].registration, "not-in-historical-inventory");
+  assert.deepEqual(result.candidates[0].staticRouteIds, []);
+  assert.equal(result.oldOnly[0].disposition, "source-identity-changed-not-safe-to-delete");
+});
+test("historical references cannot count as current contract binding", () => {
+  const { context } = fixture();
+  const result = reconcileActionCandidates(
+    context.candidates,
+    [],
+    context.contracts.map((r) => ({ ...r, temporalScope: "historical" })),
+  );
+  assert.equal(result.candidates[0].contractReferences.length, 0);
+});

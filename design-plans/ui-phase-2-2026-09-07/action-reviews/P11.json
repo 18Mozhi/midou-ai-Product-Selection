@@ -1,0 +1,649 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P11",
+  "route": "/me",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "reason": "AccountShell与PersonalCenter无模态定义/调用；资料、密码、通知均内联，撤销会话直接DELETE。"
+  },
+  "inputs": {
+    "profile": [
+      "form.username",
+      "form.display_name",
+      "form.avatar_url",
+      "form.phone",
+      "form.locale",
+      "form.timezone",
+      "form.reason"
+    ],
+    "security": [
+      "passwordForm.current_password",
+      "passwordForm.new_password",
+      "passwordForm.confirm_password"
+    ],
+    "notifications": [
+      "preferences.in_app_enabled",
+      "preferences.email_enabled",
+      "preferences.task_enabled",
+      "preferences.approval_enabled",
+      "preferences.competitor_enabled"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "AC-ROOT",
+      "label": "品牌与应用入口",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AccountShell.vue#dfb70bc4ca0070a5.1",
+        "apps/web/src/components/AccountShell.vue#aa62e5d933afce98.1"
+      ],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "账号壳层可见",
+      "handler": "RouterLink to /",
+      "variants": ["brand", "breadcrumb"],
+      "scenes": [
+        {
+          "package": "personal-direction-c",
+          "scene": "profile"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "两个呈现位置合并一个落点；实际根路由鉴权和跨角色跳转未由原型证明。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "两个呈现位置合并一个落点；实际根路由鉴权和跨角色跳转未由原型证明。"
+    },
+    {
+      "actionId": "AC-CONTEXT",
+      "label": "组织与工作区",
+      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#0f58e919e43acff5.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "账号壳层可见",
+      "handler": "RouterLink to /select-context",
+      "variants": ["link"],
+      "scenes": [
+        {
+          "package": "personal-direction-c",
+          "scene": "profile"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "只核对导航意图，未验证真实选择组织链。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "只核对导航意图，未验证真实选择组织链。"
+    },
+    {
+      "actionId": "AC-SECTION",
+      "label": "个人中心五分区",
+      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#1f54ecd0f870df67.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "五个固定 section；非法 query 回 profile",
+      "handler": "RouterLink /me?section=item.key -> activeSection",
+      "variants": ["profile", "permissions", "security", "notifications", "assets"],
+      "scenes": [
+        {
+          "package": "personal-direction-c",
+          "scene": "profile"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "permissions"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "assets"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "invalid-section"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "两份HTML不能互相切换完整五分区；profile稿中的四个导航占位不计正文。真实history与未保存草稿连续性待验。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "两份HTML不能互相切换完整五分区；profile稿中的四个导航占位不计正文。真实history与未保存草稿连续性待验。"
+    },
+    {
+      "actionId": "TH-ROUTE",
+      "label": "外观偏好",
+      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#508ee18711ffdef2.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "账号壳层可见",
+      "handler": "RouterLink to /settings/theme",
+      "variants": ["link"],
+      "scenes": [
+        {
+          "package": "personal-direction-c",
+          "scene": "profile"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "外观独立P10；此处不测试偏好写入。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "外观独立P10；此处不测试偏好写入。"
+    },
+    {
+      "actionId": "PC-LOAD",
+      "label": "刷新与重新加载",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PersonalCenter.vue#50ca10b185d1647b.1",
+        "apps/web/src/components/PersonalCenter.vue#835072c0eb99454f.1"
+      ],
+      "kind": "read",
+      "routeApplicability": "P11",
+      "condition": "顶部刷新；profile error 时另有重试",
+      "handler": "load -> GET /me/profile then loadSections",
+      "variants": ["refresh", "profile-error-retry"],
+      "scenes": [
+        {
+          "package": "personal-direction-c",
+          "scene": "profile"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "profile-loading"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "profile-error"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "profile-partial"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "重复呈现合并同一读取；旧源码重填草稿，分区allSettled失败回退和requestId竞态未修。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "重复呈现合并同一读取；旧源码重填草稿，分区allSettled失败回退和requestId竞态未修。"
+    },
+    {
+      "actionId": "PC-LEGACY-TAB",
+      "label": "旧内嵌标签",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#1076771cfdefa098.1"],
+      "kind": "excluded",
+      "routeApplicability": "excluded-source-site",
+      "condition": "!accountShell；P11由AccountShell传true",
+      "handler": "tab = item.key",
+      "variants": ["five-inline-tabs-outside-P11"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-applicable-excluded"
+      },
+      "remaining": "保留源码候选，P11不把不可渲染的旧Tab算可达动作；其他开发入口不据此删除。"
+    },
+    {
+      "actionId": "PC-SAVE-PROFILE",
+      "label": "保存基本资料",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PersonalCenter.vue#955fa769b3cd8fe0.1",
+        "apps/web/src/components/PersonalCenter.vue#a0c7836a08f38875.1"
+      ],
+      "kind": "write",
+      "routeApplicability": "P11",
+      "condition": "ready && tab=profile；原生required校验；无源码busy锁",
+      "handler": "saveProfile -> PATCH /me/profile",
+      "variants": ["form-submit", "submit-button"],
+      "scenes": [
+        {
+          "package": "personal-direction-c",
+          "scene": "profile"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "profile-edited"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "profile-save-failed"
+        },
+        {
+          "package": "personal-direction-c",
+          "scene": "profile-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "7输入+expected_version，邮箱不提交；无profile保存busy图，真实重复POST/归属、服务端校验未验。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "7输入+expected_version，邮箱不提交；无profile保存busy图，真实重复POST/归属、服务端校验未验。"
+    },
+    {
+      "actionId": "PC-ORG-TOKENS",
+      "label": "组织令牌入口",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#f395dfc785eeb3e5.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "permissions且capabilities含organization_token:manage",
+      "handler": "RouterLink /org-admin/tokens",
+      "variants": ["capability-present", "capability-absent"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "permissions"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "permissions-token"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "有/无入口已离线检查，真实授权由后端验证；不能把隐藏视为鉴权。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "有/无入口已离线检查，真实授权由后端验证；不能把隐藏视为鉴权。"
+    },
+    {
+      "actionId": "AC-MFA",
+      "label": "管理MFA",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#df188704ef470c64.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "ready && tab=security",
+      "handler": "RouterLink /security/mfa",
+      "variants": ["link"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "不从链接推断MFA状态；独立P07验收。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "不从链接推断MFA状态；独立P07验收。"
+    },
+    {
+      "actionId": "PC-PASSWORD",
+      "label": "修改密码",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PersonalCenter.vue#d11c87e9c1045850.1",
+        "apps/web/src/components/PersonalCenter.vue#7872fbd4ec279ff5.1"
+      ],
+      "kind": "write",
+      "routeApplicability": "P11",
+      "condition": "security；三输入required/minlength12；确认相等；源码无busy锁",
+      "handler": "changePassword -> POST /me/password -> replace /login",
+      "variants": ["form-submit", "submit-button"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-mismatch"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-password-busy"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-password-failed"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-password-success"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "只发送current_password/new_password；原型字段错误/锁定与成功导航不证明真实改密或会话撤销。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "remaining": "只发送current_password/new_password；原型字段错误/锁定与成功导航不证明真实改密或会话撤销。"
+    },
+    {
+      "actionId": "PC-REVOKE",
+      "label": "撤销设备会话",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#065748ba997faf11.1"],
+      "kind": "write",
+      "routeApplicability": "P11",
+      "condition": "security；源对返回的每条会话均显示按钮",
+      "handler": "revokeSession(id) -> DELETE /me/sessions/{id}",
+      "variants": ["active", "revoked", "expired"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-revoke-busy"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-revoke-failed"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-revoked"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-revoked-retry-failed"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "security-expired-retry-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源无确认弹窗，不添加；真实后端仅active成功；三状态原型验证不等于真实会话撤销。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "remaining": "源无确认弹窗，不添加；真实后端仅active成功；三状态原型验证不等于真实会话撤销。"
+    },
+    {
+      "actionId": "PC-PREFERENCES",
+      "label": "保存通知偏好",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PersonalCenter.vue#a5a06b2da05ee49b.1",
+        "apps/web/src/components/PersonalCenter.vue#6dacbeb2eac421c9.1"
+      ],
+      "kind": "write",
+      "routeApplicability": "P11",
+      "condition": "ready && tab=notifications；源码无busy锁",
+      "handler": "savePreferences -> PUT /me/notification-preferences",
+      "variants": ["form-submit", "submit-button", "mail-provider-pending"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications-error"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications-edited"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications-saving"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications-save-failed"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications-mail-blocked"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "notifications-saved"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "五布尔值+expected_version；后端email_enabled=true返回503，旧成功夹具不能证明邮件可用。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "remaining": "五布尔值+expected_version；后端email_enabled=true返回503，旧成功夹具不能证明邮件可用。"
+    },
+    {
+      "actionId": "PC-TREND",
+      "label": "查看关注热点",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#d31010912340ba44.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "assets.followed_trends各返回项",
+      "handler": "RouterLink /trends?topic={id}",
+      "variants": ["each-trend"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "assets"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "assets-empty"
+        },
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "assets-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "原型仅导航意图；真实返回和证据落点待验。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "原型仅导航意图；真实返回和证据落点待验。"
+    },
+    {
+      "actionId": "PC-DECISION",
+      "label": "查看本人决策机会",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#fe2ef7002fcbab8c.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "assets.decisions各返回项",
+      "handler": "RouterLink /opportunities/{opportunity_id}",
+      "variants": ["each-decision"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "assets"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "不得把decision.id当opportunity_id；真实详情权限待验。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "不得把decision.id当opportunity_id；真实详情权限待验。"
+    },
+    {
+      "actionId": "PC-TASK",
+      "label": "查看本人任务",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#ee2568a050e8c314.1"],
+      "kind": "navigation",
+      "routeApplicability": "P11",
+      "condition": "assets.tasks各返回项",
+      "handler": "RouterLink /tasks",
+      "variants": ["each-task-to-list"],
+      "scenes": [
+        {
+          "package": "personal-sections-direction-c",
+          "scene": "assets"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-personal-sections-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "实际均去列表，没有mine筛选或详情id；不按文案猜详情合同。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
+      },
+      "remaining": "实际均去列表，没有mine筛选或详情id；不按文案猜详情合同。"
+    }
+  ],
+  "compositionGaps": [
+    "五分区分属两个离线HTML；第一包四张双端导航占位不计正文，第二包profile入口只记录目标。缺连续五分区装配。",
+    "缺统一六态视觉板到各动作的映射；三主题两密度、实际200%缩放、完整history/异步生命周期未证明。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "沿用合同actionId和源码candidateId，不改历史actions/dialogs/coverage。",
+    "这里是人工源码语义对应和既有图/测试引用；非动态挂载Vue、SQL、认证或用户批准。"
+  ]
+}

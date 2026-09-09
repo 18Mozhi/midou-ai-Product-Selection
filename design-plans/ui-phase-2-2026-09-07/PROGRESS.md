@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · 全站动作对账与P11语义映射
+
+最终门禁：六个UI2单元文件58项通过（含新增16项语义验证、2项支持源重验证）；两P11浏览器复验通过。新动作报告只读复验、旧全站图稿审计（70包/8026PNG/1208来源绑定/8038链接，漂移0）、verify:docs（73/60/6/153）、verify:runtime-docs、verify:static-analysis（390）、format:check（5变更代码/496生产/51仓储/最长640）和git diff --check通过。报告生成模板曾有超长行，拆分并复验，不改报告含义。仅保留永久报告/映射/测试，未新建PNG、一次性文件或测试服务；最终进程检查无本次浏览器残留。
+
+扩展单元回归初次55/56通过，定位既有source-scope旧支持文件指纹失配：NavigationShell在243941a0增加请求序列/Abort与跨壳层关闭，旧审阅仍为993d7e1a，实际4490c21c。只读对比父提交b043fd7f与当前源，componentModules/surfaceComponents/selectedSurfaceComponent/activeSurface/activeCachePolicy初始化及template相同；其他12来源与54范围外候选未变。保留旧source-scope-review.json，新增source-scope-revalidation.json精确记录新旧hash/提交/结论，验证器只接受此单一支持文件映射，不允许未来源码、其他文件、历史不匹配或runtime门升级；两项新增测试覆盖这些拒绝分支。不是静默改旧hash，也未修改导航生产代码。
+
+从干净main/8e54f6d8接续；上一轮P22提交为进展。本轮用requirement-to-implementation将清单收口到既有candidateId/actionId，不新建竞争编号；ui-skills-root按系统类定位，Playwright复用已有两个永久浏览器验证器。新增[action覆盖报告](ACTION-COVERAGE-REVIEW.md)、机器报告和[action-reviews/P11.json](action-reviews/P11.json)。
+
+当前164源/1478候选全部有28合同中的现行引用；旧actions/dialogs共1477候选，新身份16、旧表独有15，不推断成新增16或删除15业务动作。旧静态route集合明确只是可能范围，新身份不按相似标签猜归属。P11真实AccountShell/PersonalCenter20位置合并15合同组，排除本页不渲染的旧Tab，14本页语义动作含4写入；五分区展开变体，15输入单独登记，两源无弹窗，不凑确认框。其余72页尚未达到本次显式映射级别，不称没有图或测试。
+
+16个永久单元用例通过：源码漂移、重复/未知/遗漏候选、历史合同冒用、部分字符串ID、缺手机图/验证器、假批准和写入busy错误免验均被拒绝。两个原有P11只读浏览器验证器双端通过12+31场景及86原图hash，HTTP/storage均0；不新建图片、不重绑旧证据，不重复执行未变化的产品API/数据库测试。测试引用只是离线原型，真实Vue/权限/SQL/邮件/会话/历史和异步仍未验。
+
+确认P11仍为两个独立HTML，首包四分区导航占位不抵扣正文，第二包profile仅记录目标。缺连续五分区组合、资料保存busy稿和49个适用视觉状态槽映射；下一先组合补图，再P18/P54和剩余页面，不以新报告当重构完成。生产/API/OpenAPI/依赖/配置/数据库/旧coverage与批准不变，无需重启。报告/审阅数据/验证器/测试均永久保留，无一次性临时文件或服务，浏览器finally关闭。最终门禁提交前补记。
+
 ## 2026-09-09 · W03 P22费用版本审批 / COST-RULES-C-r1
 
 提交前门禁：capture 和只读 verify 均通过74场景166PNG/九源分组/16场景DOM动作标记，HTTP与浏览器错误0；全站审计73路由/70包/8026PNG/1208来源绑定/8038图册本地链接、漂移0。verify:docs（73路由/60保护/6角色/153文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check（496生产文件/51仓储/最长640）、五交付代码Prettier及git diff --check通过。人工审看1440目录与390自动成本长窗下部，输入/操作区可达；不替代全图用户审核。未变更产品运行代码，不重复执行与本次离线图稿无关的生产构建/数据库E2E。
