@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P16真实字段、键盘焦点与紧凑密度
+
+上一轮7409293a新增P26图稿为实际进展。本轮从干净main继续，按计划已审页优先实施原则回到P16已批准C布局；ui-skills-root/frontend-design、fixing-accessibility及Playwright技能限定局部风格、可见焦点、字段可辨识和真实浏览器核对。仅修改生产selection-journey.css：字段边界使用#7a8ba8、占位字显式C辅助色、三组原生radio的整行focus-visible、compact密度压缩留白，保持16px正文/44px目标、阶段/双区及原业务不变。
+
+先新增永久真实Vue表单验证器并运行red：390标准字段边界对比2.2436未达到本批3.0阈值。修正CSS后smoke16通过，完整三现有主题ID/两密度/1440与390为96观察、24焦点PNG；字段边界3.4505、占位5.7676。核对类型/ASIN pattern/required/maxlength、键盘radio切换、候选更换后采纳条件、全行焦点、尺寸/命中/无横溢出；业务写0、未登记请求0、页面错误0。三主题兼容不称三套新配色，密度经实际applyDensity函数生效，不注入临时样式；不声称全页字段或无障碍认证。
+
+原真实Vue布局/控制验证器重拍114图并复验170项通过；新验证器格式收尾改变源哈希后再次capture96/24和无参数复验，最终证据以工具终态为准，不手改指纹。目视1440档案主题标准输入焦点与390净页白紧凑原因焦点；截图仍保留旧全局壳层，不以局部蓝白布局冒充全站重构。build:web含vue-tsc、verify:frontend-budget（251资产）、verify:static-analysis（390文件）、verify:docs（153文件/73路由）、verify:runtime-docs、format:check（changed2/production496/repositories51）通过。CSS不改生产JS/接口，未重复执行不受影响的后端/MySQL/外站验证。
+
+P16新增actualVueFieldEvidence，源11位置/9组/5模型/4结构不变，不扩大动作分母/批准数；具体按钮/字段审稿和完整动态变体、异步生命周期、其他页面与全局主题/导航重设计继续。API/OpenAPI、env、数据/迁移、依赖、权限、后端/Worker/Python和生产均未改，未部署。无新用户参数；在现有/settings/theme选择紧凑后返回创建选品可比较；后续发布遵循宝塔既有部署器与其重启要求，不承诺绕过服务重启。
+
+新增output/playwright/p16-c-r2-fields-review的24PNG/index.html/evidence.json及永久验证器为审核交付；旧p16-c-r2-review只更新本批源相关证据。此新目录被通用output忽略规则覆盖，提交时仅强制加入该明确交付目录，不暂存其他output。无新一次性文件或日志；临时Vite5175及浏览器finally关闭，既有构建产物/依赖缓存保留。历史拒绝清理的output/playwright/p16-layout-20260910/.last-run.json、output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts及results/.last-run.json不重试、不绕过、不暂存，完整路径见前批记录。
+
 ## 2026-09-10 · P26五个通知提交控件逐态图稿
 
 基线 main / 4493b18d，工作树干净。按 ui-skills-root → frontend-design 与 Playwright 技能，在独立 notification-controls-direction-c 包细化开始处理、关闭、重新打开、全部已读、保存偏好。保留旧98图及其控制器/源数据，新增60张双端默认/原生悬停/键盘焦点/原生按下/等待/失败图。禁用与忙碌共用真实busy条件；新增的等待文案、ARIA和减少动态效果支持仅在提案内。

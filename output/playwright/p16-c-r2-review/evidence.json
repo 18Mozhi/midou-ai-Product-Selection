@@ -1,11 +1,11 @@
 {
   "version": "P16-C-r2-mounted-controls-2",
-  "capturedAt": "2026-09-09T16:49:31.358Z",
+  "capturedAt": "2026-09-09T19:39:56.698Z",
   "approval": "pending-controls-review",
   "boundary": "Real Vue route under existing shell; intercepted fixture HTTP, not real API/database/production. Only P16 overall layout approved. Buttons, themes and full page remain pending.",
   "sourceHashes": {
     "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de",
-    "apps/web/src/selection-journey.css": "5f760cf6111309072cd0c4d9fd10310ceb19239b78b79efdfc2f279de66f8693",
+    "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
@@ -785,7 +785,7 @@
       "controlHeight": 44,
       "fontSize": "16px",
       "color": "rgb(255, 255, 255)",
-      "background": "rgb(31, 67, 143)",
+      "background": "rgb(31, 67, 142)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -3504,7 +3504,7 @@
       "scene": "create-default",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "bbc9c9670ac1102bb3e39d5712976365c5ba13c3c030aa07d32d520af53441fb"
+      "sha256": "429eebc6928357e233e354d15e272c9b141a9c80d92f4bbf28427c42212fe8d8"
     },
     {
       "file": "1440-control-create-default.png",
@@ -3517,7 +3517,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "default"
       },
-      "sha256": "bbc9c9670ac1102bb3e39d5712976365c5ba13c3c030aa07d32d520af53441fb"
+      "sha256": "429eebc6928357e233e354d15e272c9b141a9c80d92f4bbf28427c42212fe8d8"
     },
     {
       "file": "1440-control-create-hover.png",
@@ -3530,7 +3530,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "hover"
       },
-      "sha256": "99a34428d904578067eeb7aa4f30f4263c3a8cbb894de2cb6789bfd8b98c1532"
+      "sha256": "bb48c580a2a37a24ae87dc15a051a174f841c005db6dd799dbea0d52cd12177c"
     },
     {
       "file": "1440-control-create-focus.png",
@@ -3543,7 +3543,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "d0a67ac73bb7eacecd70de4b2366b867f10391d9ce5ecb582e8bfebae375d867"
+      "sha256": "12f3c2574393589bf1d4a09b67518f39ab9d5cd4c5e2d5be4d6b097184867362"
     },
     {
       "file": "1440-control-create-pressed.png",
@@ -3556,7 +3556,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "pressed"
       },
-      "sha256": "de14194f1a280e9ad303976b390b62ad9e29506b44e1bbb9333a72ec86253618"
+      "sha256": "7808b5d6f8bd096bb9703a6840c175f05d4a7242d161d8cbdd08680e8690eae1"
     },
     {
       "file": "1440-control-list-default.png",
@@ -3569,7 +3569,7 @@
         "selector": ".selection-workspace > header a",
         "state": "default"
       },
-      "sha256": "303f304eac76bbd3352117a1b0176fadc9397f1eb07439177fae80e5e080de87"
+      "sha256": "2591ef80b451089a826d1690ad542500d8d99cc537f0a817a3b507d2c24a503b"
     },
     {
       "file": "1440-control-list-hover.png",
@@ -3582,7 +3582,7 @@
         "selector": ".selection-workspace > header a",
         "state": "hover"
       },
-      "sha256": "303f304eac76bbd3352117a1b0176fadc9397f1eb07439177fae80e5e080de87"
+      "sha256": "2591ef80b451089a826d1690ad542500d8d99cc537f0a817a3b507d2c24a503b"
     },
     {
       "file": "1440-control-list-focus.png",
@@ -3595,7 +3595,7 @@
         "selector": ".selection-workspace > header a",
         "state": "focus"
       },
-      "sha256": "3fff6fb42a5a52a6563cc5924d463a872e6cf64cd95b131d9d3e3fde5fb72b9c"
+      "sha256": "1af6f0736034dec1b31562a2e28e6c3226df70e0bb4ac1ef183c4ebeddb5c357"
     },
     {
       "file": "1440-control-list-pressed.png",
@@ -3608,28 +3608,28 @@
         "selector": ".selection-workspace > header a",
         "state": "pressed"
       },
-      "sha256": "6cea44ffa64bd0bd4cd5eab2297b4fd779f8e15ef767527889ffedeb8474d6c7"
+      "sha256": "8cc6d49a16e7939ce2c6cf3b116b308562ee797c630f388f1f6183fbfab2012a"
     },
     {
       "file": "1440-create-hover.png",
       "scene": "create-hover",
       "width": 1440,
       "captureType": "hover-viewport",
-      "sha256": "81e66e5997307ff280876338fbc6061b643b6d9a86c65359c113f1c3803a009b"
+      "sha256": "a8a4729957eef1d39a6a54b8d9c5bee81d42a5a522ce2abd6a7e3c5a56e3d998"
     },
     {
       "file": "1440-create-focus.png",
       "scene": "create-focus",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "6f22264523caf13f8711f230918ffb693c9f3033260ee4df213c095c64d96775"
+      "sha256": "30c68efe2801d3a40174785223101835bf70171c4a534cb477254485fe09d945"
     },
     {
       "file": "1440-create-busy.png",
       "scene": "create-busy",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "c11c48765ecf91ba868b341fac540d00ad0547680c538a8b95ea7455634b2182"
+      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
     },
     {
       "file": "1440-control-create-disabled.png",
@@ -3642,7 +3642,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "disabled"
       },
-      "sha256": "c11c48765ecf91ba868b341fac540d00ad0547680c538a8b95ea7455634b2182"
+      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
     },
     {
       "file": "1440-control-create-busy.png",
@@ -3655,28 +3655,28 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "busy"
       },
-      "sha256": "c11c48765ecf91ba868b341fac540d00ad0547680c538a8b95ea7455634b2182"
+      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
     },
     {
       "file": "1440-create-failed.png",
       "scene": "create-failed",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "8e3f740b28789c25affdaabb60fd89583ce47da37c6cbb24df19e3af5e2f2a52"
+      "sha256": "86d95a0ac64642055cacef6d5c7b92e018f1577557d78907d968e0dbf99f6a73"
     },
     {
       "file": "1440-candidate-unselected.png",
       "scene": "candidate-unselected",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "e2a456bab131bd40396fa32ebd10fdd6ddd1e31c92b385205668d85feed8dca9"
+      "sha256": "1d227a129859a0cc90e16c777fa89bcdc068c2839ad950dad82da2655e51ee3a"
     },
     {
       "file": "1440-adopt-ready.png",
       "scene": "adopt-ready",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "10ea86e3c499d72d94330bb490032190c752797c52f3ee311ab09aac57486085"
+      "sha256": "1d1c03412ec0028806604edf527cd55c5c6ce123f31f572b0b74c8577d1938f8"
     },
     {
       "file": "1440-control-source-default.png",
@@ -3689,7 +3689,7 @@
         "selector": ".selection-candidate-grid > label:first-child a",
         "state": "default"
       },
-      "sha256": "22adf84ed6fc4553bfe561a9353cb60a916fcf935cf4ebb86f0445297fbbc7f8"
+      "sha256": "4737497a765018b6f526981c98e2015d650f7ddf09a6856af1d096d0f45554fa"
     },
     {
       "file": "1440-control-source-hover.png",
@@ -3702,7 +3702,7 @@
         "selector": ".selection-candidate-grid > label:first-child a",
         "state": "hover"
       },
-      "sha256": "03380c2c683ab5048dd352b08ff680cb31452b73a936f0df573a01c99f79c54c"
+      "sha256": "ed48008986af0dc1fa8142e3233c8b4d83e7c4e8b1092372531bce793d604cad"
     },
     {
       "file": "1440-control-source-focus.png",
@@ -3715,7 +3715,7 @@
         "selector": ".selection-candidate-grid > label:first-child a",
         "state": "focus"
       },
-      "sha256": "b8d004e1bb61b0c0083f6e56f4f7ca89a2d977fb0669676d11d3a2c74a669a31"
+      "sha256": "4e38fc52b6fcea2d207f2c20d8884dd02f8ccd1a53073fcadcc9ac0096a3ba7c"
     },
     {
       "file": "1440-control-source-pressed.png",
@@ -3728,7 +3728,7 @@
         "selector": ".selection-candidate-grid > label:first-child a",
         "state": "pressed"
       },
-      "sha256": "4ed5175eec0986153cf418b3d022f78a491b0a16c742a04eee7896e1d5e14d36"
+      "sha256": "7f26ba67601cb0479464447ea8b11f8a10bfa60ad73e851797b62e6f32ecc380"
     },
     {
       "file": "1440-control-save-default.png",
@@ -3741,7 +3741,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "default"
       },
-      "sha256": "6c227bdc7ca977b8f9b01058374d6e699898766229667f242389d7339783fd2e"
+      "sha256": "e300f696ff51ffee73466da7ce23ab25ccb89e33deb2716e8f2c3d446fec3198"
     },
     {
       "file": "1440-control-save-hover.png",
@@ -3754,7 +3754,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "hover"
       },
-      "sha256": "4c3863a77f101b712a4033a3c9f2b0da2350429727cf2590799a52aaa2586259"
+      "sha256": "6ffb5cc997d540b1489e1fc37d01658e89366ebdcfec2e298796632bfa00cf81"
     },
     {
       "file": "1440-control-save-focus.png",
@@ -3767,7 +3767,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "c444614e82dce0a90ba33b6f5c3d32990525d9103b6ceb94209668079d994545"
+      "sha256": "4670728428463be3a6236c1932f7cf6be98274cabfd70594fa3841314da38d53"
     },
     {
       "file": "1440-control-save-pressed.png",
@@ -3780,7 +3780,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "pressed"
       },
-      "sha256": "9812dfb3c85373dd0564d191ce658a61167bbfa715601b56e60115c2a23aa0d8"
+      "sha256": "156253e95a383354c816bec9222ecc5e2423246f9ca42465bd475f9ab343d8fb"
     },
     {
       "file": "1440-control-reset-default.png",
@@ -3793,7 +3793,7 @@
         "selector": ".selection-footer button",
         "state": "default"
       },
-      "sha256": "7b8e75d4f51d4a16af366b32caea29430ac7049e4356efb87e67dbfdb30394e5"
+      "sha256": "8c1aac4ef504badd50b1fc88cd8cc69efcf14449aed75c091dd7d727bc7fb34a"
     },
     {
       "file": "1440-control-reset-hover.png",
@@ -3806,7 +3806,7 @@
         "selector": ".selection-footer button",
         "state": "hover"
       },
-      "sha256": "9321c3501590985a6025da3638426cfdde6c26b35dd5afdf2804731984ab5ece"
+      "sha256": "63f6e66506628a8cc1fdbb0ccf3ebfe2559eddda930635a51ddeb27ba6197b73"
     },
     {
       "file": "1440-control-reset-focus.png",
@@ -3819,7 +3819,7 @@
         "selector": ".selection-footer button",
         "state": "focus"
       },
-      "sha256": "07f448aefd1f2a4828db53b3a3b0da6e41034f4bc2ab5ab84840c0168cf32590"
+      "sha256": "d89fd362c56ba74ba40a6ab09b2339285d1ed29fd6018c7527580dc5bae6fce7"
     },
     {
       "file": "1440-control-reset-pressed.png",
@@ -3832,7 +3832,7 @@
         "selector": ".selection-footer button",
         "state": "pressed"
       },
-      "sha256": "2ecf14e6caa1f23b713bd9721356d628fe4c03a48fe160dfeadbb739f16db00b"
+      "sha256": "f39b1ca6e3470dfc53fdb8135d647f253b6eb37d8536f1b6413a84584fc043dd"
     },
     {
       "file": "1440-control-timeline-default.png",
@@ -3891,21 +3891,21 @@
       "scene": "timeline-open-focus",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "cad866ff5d811a68c946263defc3378244f4e3408ad3c44d7fe2471d4145127e"
+      "sha256": "f72adcbf0a154973974004be65b1a4fa2e48b70a7218d49cb94102695d6aea1b"
     },
     {
       "file": "1440-save-focus.png",
       "scene": "save-focus",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "2a7b4d604fd2696adedbede7b4646bab7c003de6ee5d75a7c7e94f9f022a2ac8"
+      "sha256": "2e94c5672febedecb17ecca351eefe651a15d667b359fa8f88d4d63b0dde8823"
     },
     {
       "file": "1440-save-busy.png",
       "scene": "save-busy",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "368cfc0f73ab31c74c47e459cff1a639dd63a07d11ab22bd12cd1206d8014c06"
+      "sha256": "29806359d355bac8117232fa18ab621ad0f9ec504daa119d34549f701d272419"
     },
     {
       "file": "1440-control-save-disabled.png",
@@ -3918,7 +3918,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "disabled"
       },
-      "sha256": "63a912edb8a8dfc87ce8c1b179874487793e661b0437b9ced366712b0d58e47d"
+      "sha256": "77637e439fef8591580eb2b2de93bd78952150ed2ab3d12babcdb38e1b0fd049"
     },
     {
       "file": "1440-control-save-busy.png",
@@ -3931,7 +3931,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "busy"
       },
-      "sha256": "63a912edb8a8dfc87ce8c1b179874487793e661b0437b9ced366712b0d58e47d"
+      "sha256": "77637e439fef8591580eb2b2de93bd78952150ed2ab3d12babcdb38e1b0fd049"
     },
     {
       "file": "1440-control-reset-disabled.png",
@@ -3944,21 +3944,21 @@
         "selector": ".selection-footer button",
         "state": "disabled"
       },
-      "sha256": "63a912edb8a8dfc87ce8c1b179874487793e661b0437b9ced366712b0d58e47d"
+      "sha256": "77637e439fef8591580eb2b2de93bd78952150ed2ab3d12babcdb38e1b0fd049"
     },
     {
       "file": "1440-save-failed.png",
       "scene": "save-failed",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "2466704d3ef24e3248230b6dc5654a7f01cbe26224cfe5886022d23f5ed8280b"
+      "sha256": "53e1fcd79bebcd66bb354a11ad1d899670b6535276a1368a7ebd6f4a0fd1bb46"
     },
     {
       "file": "1440-gate-cost.png",
       "scene": "gate-cost",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "b4ef17708288f6a18550dc8c59bf7f1655bc5363765a7f216e9877a7e1086058"
+      "sha256": "1283fb43fa95007b56116141def09ae187dc5fbc5134dfc08a7b3ee9b2938900"
     },
     {
       "file": "1440-control-opportunity-default.png",
@@ -4075,7 +4075,7 @@
         "selector": ".selection-workspace > .ui-state-panel .primary",
         "state": "default"
       },
-      "sha256": "19bd470565c4b52047625332aa9acfbcf217350f5b930b2e7b834336ab69925c"
+      "sha256": "8ad51b6f9541e305894927d04c96a1cd08fd0650e3d0f892a7e3ebb9fcab7264"
     },
     {
       "file": "1440-control-retry-hover.png",
@@ -4088,7 +4088,7 @@
         "selector": ".selection-workspace > .ui-state-panel .primary",
         "state": "hover"
       },
-      "sha256": "1f292f10a9795df37efd096c2866d3f5da9bfcf1b4a461f11d936d8b06763c0d"
+      "sha256": "731702a58c70e4cb060b8dfb74ebe660edda6b2d29e32614bfdc939457d60274"
     },
     {
       "file": "1440-control-retry-focus.png",
@@ -4101,7 +4101,7 @@
         "selector": ".selection-workspace > .ui-state-panel .primary",
         "state": "focus"
       },
-      "sha256": "f5e041c0be440506a16d25e3cee99e4fd78a0348a4b1450d35a53ed2d60856e8"
+      "sha256": "732f63c80e4436b357efc2b12ba2f8fb65a6e9b27a4f81cded9acdfaac2434fb"
     },
     {
       "file": "1440-control-retry-pressed.png",
@@ -4114,7 +4114,7 @@
         "selector": ".selection-workspace > .ui-state-panel .primary",
         "state": "pressed"
       },
-      "sha256": "d418aed03ee6d3a1a041541137288a712828112a36a9033a0cd3fbe0f2ed19c7"
+      "sha256": "f1dc52eccebb5da25956085eb5393682404b4b396d1b1826b979577bea442488"
     },
     {
       "file": "1440-control-secondary-default.png",
@@ -4127,7 +4127,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "default"
       },
-      "sha256": "97f3f6faebb1fcc8d3dd24278d779be3b0c7ae4fb2438542d90473cc580f46b5"
+      "sha256": "e9ed30797e41572426bd4a726e59febb5df8ae3ebaecce889f1bee77feb84a0d"
     },
     {
       "file": "1440-control-secondary-hover.png",
@@ -4140,7 +4140,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "hover"
       },
-      "sha256": "6d2fa7a68ad4c8eb0ce6ea7a18bf39f3418c58ef207cce78fd4e5959db1d55d6"
+      "sha256": "50b858310855227fd3114bf6e5a10b21abe09d63e11587bdc23022d516087369"
     },
     {
       "file": "1440-control-secondary-focus.png",
@@ -4153,7 +4153,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "focus"
       },
-      "sha256": "ec3405219e09de0b18a90fb3f0ede9d042c681f0ee0481703f00dc31658cc6cc"
+      "sha256": "21eceb9abb2a48575fc4b9fca62a2b96d0f1815644dc98bd4844db1b8be715ee"
     },
     {
       "file": "1440-control-secondary-pressed.png",
@@ -4166,14 +4166,14 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "pressed"
       },
-      "sha256": "1125035df225f41107a0a03f79659eb257cd773505cba5369f719c2f13b6c5f0"
+      "sha256": "f1b020c112710491f861a955a17e4a9657a1b84f3783611d2d0838c72c7db6d1"
     },
     {
       "file": "390-create-default.png",
       "scene": "create-default",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "82c3155ed437d99c1090aa6f09a8520d6ee7c83e390e4ca71573a0b045d06b2b"
+      "sha256": "0903fc52b072875b5baf69fa976600cff78c95b6cb72c060785a97147b594de0"
     },
     {
       "file": "390-control-create-default.png",
@@ -4186,7 +4186,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "default"
       },
-      "sha256": "1b14f9886f7e895f2cd7d55522701b05e82c1a7871a726c3ce1d555c98fa61cf"
+      "sha256": "07b3ce1d348a2cc970b23d9951375cd1de50f2ff822a40289e307ce0db06e415"
     },
     {
       "file": "390-control-create-hover.png",
@@ -4199,7 +4199,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "hover"
       },
-      "sha256": "e7cd734fd42803543c937ea42aaba23023239939f595fa130191ede667849605"
+      "sha256": "099b5bdc89ecd4bc0d6c199e5ce2df77d5206dd14465435183ef15dc4abd4cd6"
     },
     {
       "file": "390-control-create-focus.png",
@@ -4212,7 +4212,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "746d8a9789f281c185bfe8de436ffc328fb9fe16701665fc09adebfcb30c4ff3"
+      "sha256": "5066b8e7a311632b388d0b59a5d1501087933cc3d5b0b9cedea999a9c266f35d"
     },
     {
       "file": "390-control-create-pressed.png",
@@ -4225,7 +4225,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "pressed"
       },
-      "sha256": "fda2434c71bd2ec176fed549ca0ad66d24d578fb1c408b3dd5ecdf4aa5387f33"
+      "sha256": "f02e4b7cb09df4c4e1a9585aa3aaa6bd9a7d327792efb539e4bfdb4af2599427"
     },
     {
       "file": "390-control-list-default.png",
@@ -4238,7 +4238,7 @@
         "selector": ".selection-workspace > header a",
         "state": "default"
       },
-      "sha256": "d0aeac10fc772229f3916f631b3ccfe4b3cba5bc17ef12e0fd4e9488325b495d"
+      "sha256": "343d4205618a0d979969d33c1b1f8b584e5db10733c80dbd98c79b31087a2bf8"
     },
     {
       "file": "390-control-list-hover.png",
@@ -4251,7 +4251,7 @@
         "selector": ".selection-workspace > header a",
         "state": "hover"
       },
-      "sha256": "d0aeac10fc772229f3916f631b3ccfe4b3cba5bc17ef12e0fd4e9488325b495d"
+      "sha256": "343d4205618a0d979969d33c1b1f8b584e5db10733c80dbd98c79b31087a2bf8"
     },
     {
       "file": "390-control-list-focus.png",
@@ -4264,7 +4264,7 @@
         "selector": ".selection-workspace > header a",
         "state": "focus"
       },
-      "sha256": "0586a32865befe71e2737d5c29f6bc76a40e8479e8b31686a9df6e87f94d4025"
+      "sha256": "573fc034da50a0506971471d958dde1a50c7fd4ab1e4a571480db8f1a2c8e361"
     },
     {
       "file": "390-control-list-pressed.png",
@@ -4277,28 +4277,28 @@
         "selector": ".selection-workspace > header a",
         "state": "pressed"
       },
-      "sha256": "d0aeac10fc772229f3916f631b3ccfe4b3cba5bc17ef12e0fd4e9488325b495d"
+      "sha256": "343d4205618a0d979969d33c1b1f8b584e5db10733c80dbd98c79b31087a2bf8"
     },
     {
       "file": "390-create-hover.png",
       "scene": "create-hover",
       "width": 390,
       "captureType": "hover-viewport",
-      "sha256": "e7cd734fd42803543c937ea42aaba23023239939f595fa130191ede667849605"
+      "sha256": "099b5bdc89ecd4bc0d6c199e5ce2df77d5206dd14465435183ef15dc4abd4cd6"
     },
     {
       "file": "390-create-focus.png",
       "scene": "create-focus",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "22ea30aa7c83b320bb06f73c989f78acf4e609f196d4cdb5a77afcb25ab63f49"
+      "sha256": "0802f225b91ccc9676d7f038e45bfcf5e758c222d75ce933bfe6ece042698b69"
     },
     {
       "file": "390-create-busy.png",
       "scene": "create-busy",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "cb65560ee18c3e345e65fdc85269b43593b2db2c969a096468d63f3aeb18ae3b"
+      "sha256": "06f1cd6c8a97230be9164ecace9637e2142401e3235b7a4714b48e572900172e"
     },
     {
       "file": "390-control-create-disabled.png",
@@ -4311,7 +4311,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "disabled"
       },
-      "sha256": "92ea53bf906e6fbec34b271bb878641daaca3072e7b7399c647995335b198259"
+      "sha256": "0b3d3cfa7bf8bd0dc35d24aead3168737e79410f90736e6dba67b44afac1e54d"
     },
     {
       "file": "390-control-create-busy.png",
@@ -4324,28 +4324,28 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "busy"
       },
-      "sha256": "92ea53bf906e6fbec34b271bb878641daaca3072e7b7399c647995335b198259"
+      "sha256": "0b3d3cfa7bf8bd0dc35d24aead3168737e79410f90736e6dba67b44afac1e54d"
     },
     {
       "file": "390-create-failed.png",
       "scene": "create-failed",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "fef22d64be277d605a2d8fa0e74b4aa86caaac426cd7f9f1fa5c7846eec0af31"
+      "sha256": "cca444334bd89b51a8fda8779495ffa72b9d1455963dbc145a61278653b6e059"
     },
     {
       "file": "390-candidate-unselected.png",
       "scene": "candidate-unselected",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "59935a71d136cb3dabb66ce1e3f7bf59502ec4422e83374729bf79709a56aca4"
+      "sha256": "3c28331a35e9384aff2bd696e0387aefdece923deeb3b48f0f3f3be488a636c8"
     },
     {
       "file": "390-adopt-ready.png",
       "scene": "adopt-ready",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "aeb7d67fe0e08056448a48c441e0ce051064823c5c64a8bd93205be6c9697677"
+      "sha256": "f2c3c2b3522824fcc8948a2ee46a81df45bfe96ad2ccc6c631ccf4ffdb54a96f"
     },
     {
       "file": "390-control-source-default.png",
@@ -4384,7 +4384,7 @@
         "selector": ".selection-candidate-grid > label:first-child a",
         "state": "focus"
       },
-      "sha256": "ead9fe9731fe1ce983e825c3dfac06d79e02f1633798c8ef4c77f930b357bcec"
+      "sha256": "eda7a1a949a838c728c59ffa05c2ffc49bd21841bba495973ebd4dc79bc943a7"
     },
     {
       "file": "390-control-source-pressed.png",
@@ -4397,7 +4397,7 @@
         "selector": ".selection-candidate-grid > label:first-child a",
         "state": "pressed"
       },
-      "sha256": "8f0d32143c849000edf693e1133afecc5d301a0803564b8c96c7408b18dd971c"
+      "sha256": "9a822b92425cd093ecbd36368c029fdf16abdf4a19843a006652bbb705c0f06e"
     },
     {
       "file": "390-control-save-default.png",
@@ -4410,7 +4410,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "default"
       },
-      "sha256": "5bb92cb2a8965da55266e05884d6a61cf05b76289dfeea050c30b1531a3f5e97"
+      "sha256": "774965b6ab0e1f28059e40520f8fa313c6a8b2ce372a576725a358d6121f662b"
     },
     {
       "file": "390-control-save-hover.png",
@@ -4423,7 +4423,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "hover"
       },
-      "sha256": "92818fe0e5bfc251c48101784f7d335115fc8a28c5f9272fc294f6c57c758cdf"
+      "sha256": "b0e2b4a5f4f51e2c155ef07ed78e9ed88c2d41a0f4e47e635b45ec2e46a7397e"
     },
     {
       "file": "390-control-save-focus.png",
@@ -4436,7 +4436,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "f26c72bd41c72c13e2c547ba22a4bb362619bf66ade60c329ccaaa0cd760b150"
+      "sha256": "ea662d0e6ab733067fa8920b6ef9524aae1a1c41978a3d5d072a3173a5cca70f"
     },
     {
       "file": "390-control-save-pressed.png",
@@ -4449,7 +4449,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "pressed"
       },
-      "sha256": "7c8c724521339ae4378659bbb8070e7f7291094a49264b45be8ecf6a6b407f30"
+      "sha256": "427b43d0e78608bbe3a8bfc620872dbb031ae4a4c5becf5f1c50df1fe8670303"
     },
     {
       "file": "390-control-reset-default.png",
@@ -4462,7 +4462,7 @@
         "selector": ".selection-footer button",
         "state": "default"
       },
-      "sha256": "f12cf2865b0a2f4ea0e1607445de83c7ad3e5dfbc4e14431b84dc39037835a0b"
+      "sha256": "0ff2c7c2ccee960c32ee1161072154033f70e9b1858fc23ee2139328adb5cb40"
     },
     {
       "file": "390-control-reset-hover.png",
@@ -4475,7 +4475,7 @@
         "selector": ".selection-footer button",
         "state": "hover"
       },
-      "sha256": "706e721b89eec2dcec0d48c32613d40bc5a771959ed43b53cb0108e503e505d8"
+      "sha256": "7e95edad77acae6304d6ec1fa10d826399d9519a671d54fb11dcd0e850d82389"
     },
     {
       "file": "390-control-reset-focus.png",
@@ -4488,7 +4488,7 @@
         "selector": ".selection-footer button",
         "state": "focus"
       },
-      "sha256": "c05358e11bae3a95aefbc3e919efbb607ea42d27e2213b4f9de52fa55d278f94"
+      "sha256": "d531a1d50f0143af18cd41337a8ce401ce9b27000f7714adf77c1c385975092a"
     },
     {
       "file": "390-control-reset-pressed.png",
@@ -4501,7 +4501,7 @@
         "selector": ".selection-footer button",
         "state": "pressed"
       },
-      "sha256": "3c47ef6161abc92c85d7e7e96c49564128dddb2a49b0cfe02f956a21ba1de992"
+      "sha256": "498bae0ed03a4d10e1707be6e557343da5751a9c44ded71f337f7da4f64d4a58"
     },
     {
       "file": "390-control-timeline-default.png",
@@ -4540,7 +4540,7 @@
         "selector": ".selection-timeline-disclosure > summary",
         "state": "focus"
       },
-      "sha256": "8a2516c10a34a33c9a1d0d9f26774ba3ea3914b6b8711fa4c0ea0f22d3756158"
+      "sha256": "daa418747a17b4d444a966dd2e9abb2120aebd69565b1e41fde6743e524676dd"
     },
     {
       "file": "390-control-timeline-pressed.png",
@@ -4560,21 +4560,21 @@
       "scene": "timeline-open-focus",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "3102950aa41096fcffd535de0dd14a700bb594653640feb0c4c7e50ab9456cd1"
+      "sha256": "aa3fb3e27d752d2bc3fc3b2d52bc93ded292bc37b0965928b55ac33899dc1469"
     },
     {
       "file": "390-save-focus.png",
       "scene": "save-focus",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "164677b27561045af5fac66a7aa1f71f4b00ef99a72becb4719dde9ff80d4596"
+      "sha256": "8fa10599eccb40535bf45017cd1d2ae0f46a2c647d72511a778c8c4ced2579a0"
     },
     {
       "file": "390-save-busy.png",
       "scene": "save-busy",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "40540851c5656aee14bb50cc156009891e4bfe28632fc1b1741130c17948e5ba"
+      "sha256": "3f2d2f9d57a6c789cd2e6befcacf8b91f4b6a50fc541af8d02c9f82407df8a8b"
     },
     {
       "file": "390-control-save-disabled.png",
@@ -4587,7 +4587,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "disabled"
       },
-      "sha256": "d60a783a444c8e09968450609ade051d8f695a0e929ae82ca3bbfd64302e9a40"
+      "sha256": "bbaf3659ec70cb961d6328e6242d13117cda7133e99ac6db48c1eaabc1ff3044"
     },
     {
       "file": "390-control-save-busy.png",
@@ -4600,7 +4600,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "busy"
       },
-      "sha256": "d60a783a444c8e09968450609ade051d8f695a0e929ae82ca3bbfd64302e9a40"
+      "sha256": "bbaf3659ec70cb961d6328e6242d13117cda7133e99ac6db48c1eaabc1ff3044"
     },
     {
       "file": "390-control-reset-disabled.png",
@@ -4613,21 +4613,21 @@
         "selector": ".selection-footer button",
         "state": "disabled"
       },
-      "sha256": "d60a783a444c8e09968450609ade051d8f695a0e929ae82ca3bbfd64302e9a40"
+      "sha256": "bbaf3659ec70cb961d6328e6242d13117cda7133e99ac6db48c1eaabc1ff3044"
     },
     {
       "file": "390-save-failed.png",
       "scene": "save-failed",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "6c5b210ae8a8661e056dc63e1cf83fad6149fcd884df27a7cac5d06eb21f3eac"
+      "sha256": "cab3a5ee512ced3a32a4fddf53c6ecd03d5308f5dfbc73203a31ff73196ff05d"
     },
     {
       "file": "390-gate-cost.png",
       "scene": "gate-cost",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "fc35491b2f3d8b7a103b072eef5ac9d082bab051e91a073703310bc0f0ca92eb"
+      "sha256": "cc3f5ed1499557327905b8fe55df671e8fc7fc7e984e7bfe77ed6c1ccacda2dd"
     },
     {
       "file": "390-control-opportunity-default.png",
@@ -4796,7 +4796,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "default"
       },
-      "sha256": "783047c5940382847da503e317d232d45ad80e1e74eac4a2dd1752d634404848"
+      "sha256": "589c3a7f649af6d81af116e7aeb6c7aa21b149d090337c288a1066c623adc1ba"
     },
     {
       "file": "390-control-secondary-hover.png",
@@ -4809,7 +4809,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "hover"
       },
-      "sha256": "945988e74fc913ca8493e74e01c4426069cf8c916ba8192b8e6408acaf2f994e"
+      "sha256": "b059b7b1a477db24c79cca9f43820b9c9759dd9e53dc45a5988c55b1532b36a3"
     },
     {
       "file": "390-control-secondary-focus.png",
@@ -4822,7 +4822,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "focus"
       },
-      "sha256": "645b55f2e886a99301a34f64763a2434d32479a33ffd93d4b8d835e871cd9d7d"
+      "sha256": "152a333c29a8981e57a56ac9b60afa7bd6a01af5669b6da33e2b9d9320dde8f8"
     },
     {
       "file": "390-control-secondary-pressed.png",
@@ -4835,7 +4835,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "pressed"
       },
-      "sha256": "85d00ae93acbf80bef5a20e2871180cf1957d2f162c31c9b50a0ea1d8a410620"
+      "sha256": "d510a80d51868a1bf03c6aa8b5bfb32f10639353d9d29c8807e9b9edfe5ae2be"
     }
   ]
 }

@@ -4,6 +4,7 @@ html #app .selection-journey {
   --journey-ink: #202c3d;
   --journey-muted: #58677b;
   --journey-border: #dbe1e9;
+  --journey-field-border: #7a8ba8;
   display: grid;
   grid-template-columns: 208px minmax(0, 1fr);
   min-width: 0;
@@ -214,6 +215,12 @@ html #app .selection-actions label:has(:checked) {
   border-color: var(--journey-blue);
   background: #edf2fc;
 }
+html #app .selection-kind label:has(:focus-visible),
+html #app .selection-actions label:has(:focus-visible),
+html #app .selection-candidate-grid > label:has(:focus-visible) {
+  outline: 2px solid var(--journey-blue);
+  outline-offset: 3px;
+}
 html #app .selection-kind input,
 html #app .selection-actions input,
 html #app .selection-candidate-grid input {
@@ -239,11 +246,15 @@ html #app .selection-decision textarea {
   min-width: 0;
   min-height: 48px;
   padding: 12px;
-  border: 1px solid #9daecc;
+  border: 1px solid var(--journey-field-border);
   border-radius: 8px;
   background: #fff;
   color: var(--journey-ink);
   font: inherit;
+}
+html #app .selection-input input::placeholder {
+  color: var(--journey-muted);
+  opacity: 1;
 }
 html #app .selection-decision textarea {
   resize: vertical;
@@ -554,5 +565,47 @@ html #app .selection-footer button {
   }
   html #app .selection-timeline {
     grid-template-columns: 1fr;
+  }
+}
+/* Existing density preference changes spacing, never text or minimum target sizes. */
+html[data-density="compact"] #app .selection-workspace {
+  padding: 20px;
+  gap: 16px;
+}
+html[data-density="compact"]
+  #app
+  :is(
+    .selection-start,
+    .selection-status,
+    .selection-candidates,
+    .selection-evidence,
+    .selection-decision,
+    .selection-complete
+  ) {
+  padding: 20px;
+}
+html[data-density="compact"]
+  #app
+  :is(.selection-start, .selection-status, .selection-decision, .selection-review-grid) {
+  gap: 16px;
+}
+html[data-density="compact"] #app .selection-candidate-grid {
+  gap: 12px;
+}
+@media (max-width: 520px) {
+  html[data-density="compact"] #app .selection-workspace {
+    padding: 12px;
+  }
+  html[data-density="compact"]
+    #app
+    :is(
+      .selection-start,
+      .selection-status,
+      .selection-candidates,
+      .selection-evidence,
+      .selection-decision,
+      .selection-complete
+    ) {
+    padding: 14px;
   }
 }

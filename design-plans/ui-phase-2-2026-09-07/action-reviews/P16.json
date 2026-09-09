@@ -1308,6 +1308,14 @@
       "package": "journey-direction-c"
     }
   },
+  "actualVueFieldEvidence": {
+    "review": "P16-VUE-FIELD-REVIEW.md",
+    "evidence": "output/playwright/p16-c-r2-fields-review/evidence.json",
+    "verifier": "scripts/verify-ui-phase2-journey-fields.mjs",
+    "approval": "pending-fields-and-controls-review",
+    "scope": "real Vue with intercepted HTTP;96 field observations/24 focus PNG across3 existing theme IDs,2 densities and1440/390;not3 new palettes or full-field/lifecycle acceptance",
+    "remaining": "Full dynamic variants,async field ownership,real services,other pages/global theme redesign and user acceptance remain pending. No business writes or runtime contract changes."
+  },
   "actualVueLayoutEvidence": {
     "review": "P16-VUE-CONTROL-REVIEW.md",
     "evidence": "output/playwright/p16-c-r2-review/evidence.json",
