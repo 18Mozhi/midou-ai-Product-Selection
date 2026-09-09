@@ -221,6 +221,8 @@ for (const review of reviews.filter((r) => r.surfaceReview)) {
     summary = reviewSummaries.find((r) => r.pageId === review.pageId);
   md += `\n## ${review.pageId} 局部动作与共享消费者\n\n[逐项机器清单](action-reviews/${review.pageId}.json)：${summary.sourceSites}个局部源位置 → ${summary.semanticGroups}组；${summary.writeActions}类写入，${summary.routeActions}组路由动作，${summary.wiringGroups}组转发/容器关联不重复计动作。${summary.surfaces.localModelBindings}个本地v-model，${summary.surfaces.callerContainers}处调用/内嵌容器，${summary.surfaces.consumerVariants}个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。\n\n`;
   md += `尚有${summary.unmappedVisualSlots}个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。\n\n`;
+  if (summary.sourceInapplicableVisualSlots)
+    md += `另有${summary.sourceInapplicableVisualSlots}个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。\n\n`;
   md +=
     "| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |\n| --- | --- | --- | --- |\n";
   for (const a of review.actions)

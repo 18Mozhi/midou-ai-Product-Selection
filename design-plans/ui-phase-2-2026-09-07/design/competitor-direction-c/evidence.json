@@ -19,8 +19,8 @@
     "scripts/verify-ui-phase2-competitor-source.mjs": "66f247271940138c9ce44b476c693acc67731d908e902d0205b40aab382aeeb5",
     "scripts/verify-ui-phase2-competitor-boundaries.mjs": "2125382dd972924c4ba00da4c20abd75048ab0a1ee9b4467b9b12cca598a1df7",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "76ddeaf4a9b4fec93701b5be6e4b8b998170ef8a2467384d9e341695461a0240",
-    "tests/unit/ui-phase2-action-coverage.test.mjs": "69c8a26cc5f9adf969de84360daa4416666c7f10f25757a1e2817d53e7e6ed44",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "cdeb3c77909d311263745f29e0fb5e5e0dbce2622349c17fcf8ec803528a9cce",
+    "tests/unit/ui-phase2-action-coverage.test.mjs": "e78d398565df3e07bc004a184f4b19e8b609be0ee16ea7acbcd16e69d2062c29",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/index.html": "694070719fadf31f425cbd08c8afedbec8b3cb485d274f86bca10e6b6e0c9aa2",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css": "5847cb5ef4e99d6a44609a8c92383948117a4bcb3d216ae51cbaa88ef48a3b99",
     "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "cb2227d02c54ce1e8a211dd7744b927ba510b442f29b37e0b200722080851d0b"
@@ -600,7 +600,7 @@
         "contrast": 8.273466608002094
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "2b5e3cc205c3c27c08686bc77559a86f2e472a4f30659ae6dd313201ef6c868c"
+      "sha256": "c160ddfa0a3ae4aae83f59b93355ba9ea21bbbca4ef5e401b3dee3199ccdcda4"
     },
     {
       "file": "1440-control-rule-open-empty-pressed.png",
@@ -852,7 +852,7 @@
         "contrast": 14.102738944447992
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "e57930a8c0e610e97e9cac5aa874d7c008123b299e9d03106666446f936cb603"
+      "sha256": "b6bacf42279925bcb5371e85b8a59088d11d5e17b10f1ed411cededf986a4403"
     },
     {
       "file": "1440-control-p20-create-previous-hover.png",
@@ -4164,7 +4164,7 @@
         "contrast": 8.273466608002094
       },
       "captureScope": "viewport-with-control-context",
-      "sha256": "9debd2ec50667c04f94d30a518cfb2f1d214575442881a79a4e90b5f7d9cf4b1"
+      "sha256": "8eb72c625c56088d72450eae9b94983c76a7d300f407cb0883ec8d2a261de67f"
     },
     {
       "file": "1440-control-p20-retry-hover.png",

@@ -230,6 +230,17 @@
     },
     {
       "actionId": "SC-S-OPEN",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "入口按canManage显示，不绑定disabled/aria-busy；openSearch只有权限检查与局部展开。",
+        "handlerBoundary": "openSearch只检查canManage并showSearch=true/replace create=1；不重置form",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"],
+        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+        }
+      },
       "label": "发起找货",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -285,10 +296,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端四态代表图已绑定；当前源码无本控件disabled/busy条件，不编造相关图，其槽仍保留not-mapped等待分母逐项复核。具体批准、主题密度、全部变体、真实Vue与异步归属仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -318,6 +329,21 @@
     },
     {
       "actionId": "SC-STATE",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "UiStatePanel主次按钮无禁用/忙碌绑定；loading时整个footer不渲染，父section忙碌不是按钮忙碌。空目录按管理者/只读选择展开、清空或load。",
+        "handlerBoundary": "primary empty+manager打开搜索，其余load；secondary empty清query，其余load；expired/forbidden不跳登录或home",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1"],
+        "renderedControlIds": [
+          "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
+          "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+        }
+      },
       "label": "整页状态主次操作",
       "kind": "read",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -581,10 +607,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端主次恢复及只读/管理者空目录、搜索分支已逐selector绑定；过期仅主按钮、加载无按钮。disabled/busy无源条件，不编造图，其槽保留not-mapped等待分母复核。源load首GET/本地清空/零写打开通过隔离检查，真实恢复响应/路由/异步与批准仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -772,6 +798,21 @@
     },
     {
       "actionId": "SC-SEARCH-RECOVERY",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "空筛选UiStatePanel主次按钮无禁用/忙碌绑定；主操作清query，次操作按角色展开或load，重读后进入无footer的loading。",
+        "handlerBoundary": "primary resetQuery；secondary manager openSearch否则load",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1"],
+        "renderedControlIds": [
+          "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
+          "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+        }
+      },
       "label": "空筛选恢复",
       "kind": "read",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -867,10 +908,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端主次恢复及只读/管理者空目录、搜索分支已逐selector绑定；过期仅主按钮、加载无按钮。disabled/busy无源条件，不编造图，其槽保留not-mapped等待分母复核。源load首GET/本地清空/零写打开通过隔离检查，真实恢复响应/路由/异步与批准仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -941,6 +982,17 @@
     },
     {
       "actionId": "SC-DETAIL",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "记录按钮有选中class但无disabled/aria-busy；detail发GET，不设置按钮busy。请求未结束的视觉缺口不能伪称已实现忙碌。",
+        "handlerBoundary": "切对象先清selectedQuotes；GET /sourcing/searches/:id，成功replace record并清create",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"],
+        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+        }
+      },
       "label": "选择找货记录",
       "kind": "read",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -1008,10 +1060,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端四态代表图已绑定；当前源码无本控件disabled/busy条件，不编造相关图，其槽仍保留not-mapped等待分母逐项复核。具体批准、主题密度、全部变体、真实Vue与异步归属仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -1275,6 +1327,17 @@
     },
     {
       "actionId": "SC-DELETE-OPEN",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "入口按selected/canManage显示，只赋deleting=selected；实际删除提交另有六态，不能把提交busy套到打开入口。",
+        "handlerBoundary": "deleting=selected；此入口不重置旧deleteReason，不发DELETE",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"],
+        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+        }
+      },
       "label": "打开删除确认",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -1318,10 +1381,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端四态代表图已绑定；当前源码无本控件disabled/busy条件，不编造相关图，其槽仍保留not-mapped等待分母逐项复核。具体批准、主题密度、全部变体、真实Vue与异步归属仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -1503,6 +1566,17 @@
     },
     {
       "actionId": "SC-SELECT",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "checkbox有checked无disabled/aria-busy；choose最多保留5个ID并回写checked，第六次拒绝选择不是按钮禁用。",
+        "handlerBoundary": "只接受有quote的候选；最多五个quote.id，取消选择；原生checked同步实际集合",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"],
+        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+        }
+      },
       "label": "选择报价对比",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -1570,10 +1644,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端四态代表图已绑定；当前源码无本控件disabled/busy条件，不编造相关图，其槽仍保留not-mapped等待分母逐项复核。具体批准、主题密度、全部变体、真实Vue与异步归属仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -1758,6 +1832,17 @@
     },
     {
       "actionId": "SC-QUOTE-OPEN",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "按canManage且无quote显示，只预填并打开；确认报价提交是另一个动作，其busy不等于此入口禁用。",
+        "handlerBoundary": "openQuote依候选预填，缺MOQ/交期/可信度用1/7/80；时间按本地时区转换；无quote才显示",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"],
+        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+        }
+      },
       "label": "打开报价确认",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -1805,10 +1890,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端四态代表图已绑定；当前源码无本控件disabled/busy条件，不编造相关图，其槽仍保留not-mapped等待分母逐项复核。具体批准、主题密度、全部变体、真实Vue与异步归属仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -1838,6 +1923,17 @@
     },
     {
       "actionId": "SC-PURCHASE-OPEN",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "按canManage且有quote显示；openPurchase的quote守卫及MOQ预填不是按钮禁用，采购提交另行审核。",
+        "handlerBoundary": "已有quote才可打开；锁定candidate.quote，重置MOQ数量和默认原因",
+        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"],
+        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+        }
+      },
       "label": "打开采购任务",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -1897,10 +1993,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "双端四态代表图已绑定；当前源码无本控件disabled/busy条件，不编造相关图，其槽仍保留not-mapped等待分母逐项复核。具体批准、主题密度、全部变体、真实Vue与异步归属仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -3962,6 +4058,23 @@
     },
     {
       "actionId": "SC-COST-REVIEW-OPEN",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "两个入口由item.can_review控制可见，均无disabled/aria-busy；beginReview清原因并切换结论，不立即审批。",
+        "handlerBoundary": "item.can_review控制两个入口；beginReview写id/decision并清reason，不立即审批",
+        "sourceCandidateIds": [
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+        }
+      },
       "label": "通过/驳回内联表单",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -4032,10 +4145,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "通过/驳回双端四态已绑定；源无busy禁用，不编造disabled/busy，其槽继续待适用性核对。取消不撤回已发送请求，重开清原因，离线精确回焦；真实异步归属/全部记录/主题密度/具体批准仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -4224,6 +4337,21 @@
     },
     {
       "actionId": "SC-COST-REVIEW-CANCEL",
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "只按review.id显示并清空该ID，无disabled/aria-busy；取消不撤销在途请求。",
+        "handlerBoundary": "只清review.id，不发请求，不保证旧在途响应不会影响新表单",
+        "sourceCandidateIds": [
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+        ],
+        "sourceHashes": {
+          "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+        }
+      },
       "label": "取消内联复核",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
@@ -4289,10 +4417,10 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
       },
-      "remaining": "通过/驳回双端四态已绑定；源无busy禁用，不编造disabled/busy，其槽继续待适用性核对。取消不撤回已发送请求，重开清原因，离线精确回焦；真实异步归属/全部记录/主题密度/具体批准仍待。",
+      "remaining": "四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。",
       "visualStateReferences": {
         "default": {
           "package": "sourcing-direction-c",
@@ -5036,10 +5164,10 @@
       "scripts/verify-ui-phase2-sourcing-c.mjs",
       "tests/e2e/m04-06-sourcing.spec.ts"
     ],
-    "scope": "本轮13组真实setup隔离检查、65主场景695PNG重渲染、59控件变体544双端状态实例。新增成本与采集busy独立、精确机会/复核版本、成本0金额与required区分、不可变请求、取消/换结论不撤回与精确回焦；未挂载真实Vue或重跑历史E2E，SC-G01–08未关闭。"
+    "scope": "上一批13组真实setup隔离检查、65主场景695PNG重渲染、59控件变体544双端状态实例仍作为既有离线证据；本批只复验动作适用性，未重跑未变动的P21图包。成本与采集busy独立、精确机会/复核版本、成本0金额与required区分、不可变请求、取消/换结论不撤回与精确回焦不代表挂载真实Vue或历史E2E通过，SC-G01–08未关闭。"
   },
   "compositionGaps": [
-    "四提交及四关闭组共48代表状态槽已绑定，四取消额外变体不增加动作分母；剩122槽未映射。完整输入/错误/主题密度、真实UI与用户批准仍未完成。",
+    "150个代表状态槽有精确图引用，20个disabled/busy槽按当前源码无此控件呈现单列；未分类代表槽0，不增减38语义组或等同全状态通过。完整输入/错误/全部变体/主题密度、真实UI与用户批准仍未完成。",
     "恢复主次完整矩阵、完整字段与错误、主题/密度、async写入归属/KeepAlive/权限与实际浏览器history未验。",
     "源比较历史失败阻断列表；新稿独立降级只为提案，SC-G01–08未关闭。",
     "P21按实际既有能力细化，P22单独处理；C方向选择/P16布局批准不授予本页批准。"
@@ -5049,6 +5177,6 @@
     "54局部源位置归38组（31动作/7装配关联），共有源位置跨页去重，不是全站冻结分母。",
     "25模型、12结构容器与4自定义弹窗分开；字段和事件转发不是额外业务写入。",
     "输入同步到删除提交组仅为payload所有者关联，不表示updateDeleteReason会发DELETE。",
-    "本批只细化离线关闭/取消及其图稿，未改生产Vue/接口/配置/数据库；父请求在途锁为待审提案，不视为源规则或撤回请求。"
+    "本批只核对无源呈现状态及审核校验器，不修改P21原型/图稿或生产Vue/接口/配置/数据库；既有父请求在途关闭锁仍为待审提案，不视为源规则或撤回请求。"
   ]
 }

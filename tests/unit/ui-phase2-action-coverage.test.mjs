@@ -65,6 +65,108 @@ function fixture() {
   };
   return { review, context };
 }
+function sourceAbsenceFixture(shared = false) {
+  const value = fixture();
+  const { review, context } = value;
+  const action = review.actions[0];
+  action.kind = "local";
+  const candidate = context.candidates[0];
+  candidate.tag = shared ? "StatePanel" : "button";
+  candidate.attributes = { "@click": "open" };
+  action.visualStates.disabled = action.visualStates.busy = "not-applicable-source-unrepresented";
+  action.sourceStateApplicability = {
+    scope: "current-source-presentation-only-not-runtime-or-approval",
+    states: ["disabled", "busy"],
+    reason: "No disabled or busy control presentation in the reviewed source.",
+    handlerBoundary: "Local open only; visibility and handler rejection are not disabled states.",
+    sourceCandidateIds: [candidate.candidateId],
+    renderedControlIds: [candidate.candidateId],
+    sourceHashes: { "source.vue": "hash" },
+  };
+  if (shared) {
+    candidate.kind = "event-binding";
+    const file = "shared/StatePanel.vue";
+    context.sourceHashes[file] = "shared-hash";
+    action.sourceStateApplicability.sourceHashes[file] = "shared-hash";
+    const children = ["primary", "secondary"].map((name) => ({
+      candidateId: file + "#" + name,
+      file,
+      kind: "control",
+      tag: "button",
+      attributes: { "@click": name },
+    }));
+    context.candidates.push(...children);
+    action.sourceStateApplicability.renderedControlIds = children.map((item) => item.candidateId);
+  }
+  return value;
+}
+
+for (const shared of [false, true])
+  test("explicit source absence remains separate from visual evidence " + shared, () => {
+    const { review, context } = sourceAbsenceFixture(shared);
+    const result = validateActionReview(review, context);
+    assert.equal(result.routeActions, 1);
+    assert.equal(result.unmappedVisualSlots, 4);
+    assert.equal(result.sourceInapplicableVisualSlots, 2);
+    assert.equal(review.approval, "pending-user-review");
+  });
+
+for (const [name, mutate] of [
+  ["write", (a) => (a.kind = "write")],
+  ["default", (a) => (a.visualStates.default = "not-applicable-source-unrepresented")],
+  ["no evidence", (a) => delete a.sourceStateApplicability],
+  ["empty reason", (a) => (a.sourceStateApplicability.reason = " ")],
+  ["empty handler boundary", (a) => (a.sourceStateApplicability.handlerBoundary = "")],
+  ["wrong scope", (a) => (a.sourceStateApplicability.scope = "approved")],
+  ["state mismatch", (a) => a.sourceStateApplicability.states.pop()],
+  ["candidate omitted", (a) => a.sourceStateApplicability.sourceCandidateIds.pop()],
+  ["child omitted", (a) => a.sourceStateApplicability.renderedControlIds.pop()],
+  [
+    "child duplicated",
+    (a) =>
+      a.sourceStateApplicability.renderedControlIds.push(
+        a.sourceStateApplicability.renderedControlIds[0],
+      ),
+  ],
+  [
+    "source drift",
+    (a) => (a.sourceStateApplicability.sourceHashes["shared/StatePanel.vue"] = "old"),
+  ],
+  [
+    "source omitted",
+    (a) => delete a.sourceStateApplicability.sourceHashes["shared/StatePanel.vue"],
+  ],
+  ["orphan", (a) => (a.visualStates.disabled = a.visualStates.busy = "not-mapped")],
+  ["child missing", (_a, c) => c.candidates.splice(1)],
+  [
+    "ambiguous child",
+    (_a, c) => c.candidates.push({ ...c.candidates[1], file: "other/StatePanel.vue" }),
+  ],
+])
+  test("source absence fails closed: " + name, () => {
+    const { review, context } = sourceAbsenceFixture(true);
+    mutate(review.actions[0], context);
+    assert.throws(() => validateActionReview(review, context));
+  });
+
+for (const attribute of [
+  "disabled",
+  ":disabled",
+  "v-bind:disabled",
+  "aria-disabled",
+  ":aria-busy",
+  ":busy",
+  ":loading",
+  "inert",
+  "v-bind",
+])
+  for (const target of [0, 1])
+    test("source state declaration cannot be excluded: " + attribute + "/" + target, () => {
+      const { review, context } = sourceAbsenceFixture(true);
+      context.candidates[target].attributes[attribute] = "busy";
+      assert.throws(() => validateActionReview(review, context));
+    });
+
 test("explicit mapping accepted but runtime/approval not promoted", () => {
   const { review, context } = fixture();
   const result = validateActionReview(review, context);

@@ -212,7 +212,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json": "0e3f660c2183fe58464112c5d9899417503efa7e2d24f4fe46efb7dc005f09ae",
     "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/evidence.json": "27712019f5a053e3d04b4e62c1f1b6afb306756bd585ca93252b11c5956b229b",
     "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/evidence.json": "d67da4d14f515bf59f59da74a4a4a82e47eafc6851138acc3dbfe158aa3a034a",
-    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json": "77675f064518c807f09f9a4acf5d3161d4fa7455be8be88eedb9393b9f2069ac",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json": "33bc20241334db1c53591c30090f3a50652df962a2dd97483dae2833c63c01b9",
     "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json": "da8e1396af7ceb615d3954213160500ded8ccbd60f3a68524593bd5e704a98f6",
     "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/evidence.json": "61d0c73a4e8c8bc1e7d6e4a4d50029db73cd2a351befa0b076bcf455748444f2",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json": "5130e8b205448f830a2ef0ba82cd8bee02b3dd2ea6d16f35fbca353139dcb982",
@@ -264,7 +264,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json": "5f401727b28f442e07177f471b5450b41d9dc360e42f4dfd3cb401374972ee22",
     "design-plans/ui-phase-2-2026-09-07/design/shell-direction-c/evidence.json": "dedbecc6794dd51e17a14056467cfa22ecb0791556f27d217b8e22a32a0763e6",
     "design-plans/ui-phase-2-2026-09-07/design/source-channels-direction-c/evidence.json": "357333e977b967fc29364aae6d722f6be28c025b23b9b3e0e4070e5ecd4d00b4",
-    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/evidence.json": "4a6bb47eef832ab77f7b78bbff70d3540781567e4e32954ca3ff6eb60641fcac",
+    "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/evidence.json": "f92aca17cba561cd36d79e97e2eae77ed821c004f2cfc1a5402e13d0f194f682",
     "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/evidence.json": "e55c94edb2bc36a9b53661ba6f1ba423fd20cb98c55c10893318426febaf327c",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/evidence.json": "7ed167b7e63539135e3fde6f1c569473f8910fe4dba3d7a95ca0b91612bf3b3f",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c-forms/evidence.json": "83f7768529bc472132c88a6e6fe68e8d2f40a6ccc5b93b96f5acccf6ab362c3d",
@@ -320,8 +320,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "eb924e76f9086e195e8f10ab1ce450df8e402a133e30409141cb7c77c2869f4c",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "0fac7e896d3a5605b7a660dcaab12877b578cfcbdd07cfef06bd1aa1f6d1d113",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "473cedd45ca055fa7450fa34f5b0a367c7891fdc504b232a4970cd10603dffd2",
-    "scripts/verify-ui-phase2-sourcing-c.mjs": "e63c91c56fa10ec2945c6484b9f58fd40c3cb49fd9a40bca9b5b4257684ae3ac",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "9468627f44ab4e7caf53ba8b5fbb09a57a3e5eb31471b7fd8eab356e9a8e0a49",
+    "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -347,7 +347,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "e012300f64510ffb02432530a74ef4d708b3b4345974cc69d240cdec9e34120e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "a112c1004d6f73abb82e09a95a75c8879956e4ba891dbccaf5c2bcd172a9f109",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "a4bd487eda8ce17476d365eebc479f69985c31918426c62432bfbafc06f29587",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "f67cf8705375df9ceb52487b0cb2d22565088d0bbecf4021f6eae9992f1ab2d3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "30213312536dbd8f757de6a74016f9005fc38f78a700f2c1105533969583dd0d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "de4b4f4b1eed60cf7a75057a49782439dd227e7c6f8cee37aea0c78c8d144420",
@@ -400,8 +400,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "521bb40c9e3166139972537a100486243e73bba1639ac1c2cca8a03fc970a9af",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "9d5945eea5629968885c098c8e477bd7e0bda5b25cbd2ada860304f7a1721e69",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "73d491925cd4090181fd04df614eea603c40885573777c7250057f67c6f5245b",
-    "scripts/audit-ui-phase2-action-coverage.mjs": "04578b4080611ecac404aaa28ff1309e4ece826c93f7a441d761a026b2be91db",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "76ddeaf4a9b4fec93701b5be6e4b8b998170ef8a2467384d9e341695461a0240",
+    "scripts/audit-ui-phase2-action-coverage.mjs": "369c79b9ccd25070839aa8351b0a30a1909d5592fb697d1b272977d72384a5fa",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "cdeb3c77909d311263745f29e0fb5e5e0dbce2622349c17fcf8ec803528a9cce",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "f889a2064905f48cbaec479c0ea89d101271b6b1db94afa64702f8f3199db4b1",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
     "scripts/audit-ui-phase2-contracts.mjs": "2f52f82033aa48f50084d26bd94a0fb503b9b022afd24a95ef464c181a74e8ad",
@@ -488,6 +488,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 0,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 6,
         "surfaces": {
           "callerFiles": 1,
@@ -519,6 +520,7 @@
         "wiringGroups": 0,
         "excludedGroups": 2,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 66,
         "surfaces": {
           "callerFiles": 1,
@@ -554,6 +556,7 @@
         "wiringGroups": 0,
         "excludedGroups": 2,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 66,
         "surfaces": {
           "callerFiles": 1,
@@ -589,6 +592,7 @@
         "wiringGroups": 0,
         "excludedGroups": 2,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 66,
         "surfaces": {
           "callerFiles": 1,
@@ -624,6 +628,7 @@
         "wiringGroups": 0,
         "excludedGroups": 2,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 66,
         "surfaces": {
           "callerFiles": 1,
@@ -659,6 +664,7 @@
         "wiringGroups": 0,
         "excludedGroups": 2,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 66,
         "surfaces": {
           "callerFiles": 1,
@@ -694,6 +700,7 @@
         "wiringGroups": 0,
         "excludedGroups": 1,
         "writeActions": 5,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 72,
         "surfaces": {
           "callerFiles": 1,
@@ -729,6 +736,7 @@
         "wiringGroups": 0,
         "excludedGroups": 1,
         "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 60,
         "surfaces": {
           "callerFiles": 1,
@@ -760,6 +768,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 0,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 36,
         "surfaces": {
           "callerFiles": 1,
@@ -791,6 +800,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 1,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 66,
         "surfaces": {
           "callerFiles": 1,
@@ -824,6 +834,7 @@
         "wiringGroups": 0,
         "excludedGroups": 1,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 0
       },
       "proposalPackages": [
@@ -851,6 +862,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 84,
         "surfaces": {
           "callerFiles": 2,
@@ -885,6 +897,7 @@
         "wiringGroups": 5,
         "excludedGroups": 2,
         "writeActions": 3,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 174,
         "surfaces": {
           "callerFiles": 3,
@@ -919,6 +932,7 @@
         "wiringGroups": 9,
         "excludedGroups": 0,
         "writeActions": 8,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 252,
         "surfaces": {
           "callerFiles": 6,
@@ -953,6 +967,7 @@
         "wiringGroups": 6,
         "excludedGroups": 2,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 162,
         "surfaces": {
           "callerFiles": 4,
@@ -988,6 +1003,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 0,
         "surfaces": {
           "callerFiles": 1,
@@ -1025,6 +1041,7 @@
         "wiringGroups": 3,
         "excludedGroups": 0,
         "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 96,
         "surfaces": {
           "callerFiles": 1,
@@ -1060,6 +1077,7 @@
         "wiringGroups": 8,
         "excludedGroups": 1,
         "writeActions": 12,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 258,
         "surfaces": {
           "callerFiles": 10,
@@ -1102,6 +1120,7 @@
         "wiringGroups": 2,
         "excludedGroups": 2,
         "writeActions": 5,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 20,
         "surfaces": {
           "callerFiles": 1,
@@ -1136,6 +1155,7 @@
         "wiringGroups": 2,
         "excludedGroups": 2,
         "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 8,
         "surfaces": {
           "callerFiles": 1,
@@ -1170,7 +1190,8 @@
         "wiringGroups": 7,
         "excludedGroups": 0,
         "writeActions": 9,
-        "unmappedVisualSlots": 20,
+        "sourceInapplicableVisualSlots": 20,
+        "unmappedVisualSlots": 0,
         "surfaces": {
           "callerFiles": 6,
           "localModelBindings": 25,
@@ -1185,7 +1206,7 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "四提交及四关闭组共48代表状态槽已绑定，四取消额外变体不增加动作分母；剩122槽未映射。完整输入/错误/主题密度、真实UI与用户批准仍未完成。",
+        "150个代表状态槽有精确图引用，20个disabled/busy槽按当前源码无此控件呈现单列；未分类代表槽0，不增减38语义组或等同全状态通过。完整输入/错误/全部变体/主题密度、真实UI与用户批准仍未完成。",
         "恢复主次完整矩阵、完整字段与错误、主题/密度、async写入归属/KeepAlive/权限与实际浏览器history未验。",
         "源比较历史失败阻断列表；新稿独立降级只为提案，SC-G01–08未关闭。",
         "P21按实际既有能力细化，P22单独处理；C方向选择/P16布局批准不授予本页批准。"
@@ -1623,6 +1644,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 21,
         "surfaces": {
           "callerFiles": 2,
@@ -1905,6 +1927,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 0,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 6,
       "surfaces": {
         "callerFiles": 1,
@@ -1922,6 +1945,7 @@
       "wiringGroups": 0,
       "excludedGroups": 2,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 66,
       "surfaces": {
         "callerFiles": 1,
@@ -1939,6 +1963,7 @@
       "wiringGroups": 0,
       "excludedGroups": 2,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 66,
       "surfaces": {
         "callerFiles": 1,
@@ -1956,6 +1981,7 @@
       "wiringGroups": 0,
       "excludedGroups": 2,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 66,
       "surfaces": {
         "callerFiles": 1,
@@ -1973,6 +1999,7 @@
       "wiringGroups": 0,
       "excludedGroups": 2,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 66,
       "surfaces": {
         "callerFiles": 1,
@@ -1990,6 +2017,7 @@
       "wiringGroups": 0,
       "excludedGroups": 2,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 66,
       "surfaces": {
         "callerFiles": 1,
@@ -2007,6 +2035,7 @@
       "wiringGroups": 0,
       "excludedGroups": 1,
       "writeActions": 5,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 72,
       "surfaces": {
         "callerFiles": 1,
@@ -2024,6 +2053,7 @@
       "wiringGroups": 0,
       "excludedGroups": 1,
       "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 60,
       "surfaces": {
         "callerFiles": 1,
@@ -2041,6 +2071,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 0,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 36,
       "surfaces": {
         "callerFiles": 1,
@@ -2058,6 +2089,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 1,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 66,
       "surfaces": {
         "callerFiles": 1,
@@ -2075,6 +2107,7 @@
       "wiringGroups": 0,
       "excludedGroups": 1,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 0
     },
     {
@@ -2085,6 +2118,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 84,
       "surfaces": {
         "callerFiles": 2,
@@ -2102,6 +2136,7 @@
       "wiringGroups": 5,
       "excludedGroups": 2,
       "writeActions": 3,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 174,
       "surfaces": {
         "callerFiles": 3,
@@ -2119,6 +2154,7 @@
       "wiringGroups": 9,
       "excludedGroups": 0,
       "writeActions": 8,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 252,
       "surfaces": {
         "callerFiles": 6,
@@ -2136,6 +2172,7 @@
       "wiringGroups": 6,
       "excludedGroups": 2,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 162,
       "surfaces": {
         "callerFiles": 4,
@@ -2153,6 +2190,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 0,
       "surfaces": {
         "callerFiles": 1,
@@ -2170,6 +2208,7 @@
       "wiringGroups": 3,
       "excludedGroups": 0,
       "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 96,
       "surfaces": {
         "callerFiles": 1,
@@ -2187,6 +2226,7 @@
       "wiringGroups": 8,
       "excludedGroups": 1,
       "writeActions": 12,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 258,
       "surfaces": {
         "callerFiles": 10,
@@ -2204,6 +2244,7 @@
       "wiringGroups": 2,
       "excludedGroups": 2,
       "writeActions": 5,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 20,
       "surfaces": {
         "callerFiles": 1,
@@ -2221,6 +2262,7 @@
       "wiringGroups": 2,
       "excludedGroups": 2,
       "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 8,
       "surfaces": {
         "callerFiles": 1,
@@ -2238,7 +2280,8 @@
       "wiringGroups": 7,
       "excludedGroups": 0,
       "writeActions": 9,
-      "unmappedVisualSlots": 20,
+      "sourceInapplicableVisualSlots": 20,
+      "unmappedVisualSlots": 0,
       "surfaces": {
         "callerFiles": 6,
         "localModelBindings": 25,
@@ -2255,6 +2298,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 21,
       "surfaces": {
         "callerFiles": 2,

@@ -1,5 +1,73 @@
 import assert from "node:assert/strict";
 
+const sourceAbsentState = "not-applicable-source-unrepresented";
+function validateSourceStateApplicability(action, context) {
+  const states = Object.keys(action.visualStates).filter(
+    (state) => action.visualStates[state] === sourceAbsentState,
+  );
+  const evidence = action.sourceStateApplicability;
+  if (!states.length) {
+    assert.ok(!evidence, "orphan source applicability evidence");
+    return;
+  }
+  assert.ok(["local", "read"].includes(action.kind), "source absence cannot exclude a write");
+  assert.ok(states.every((state) => ["disabled", "busy"].includes(state)));
+  assert.equal(evidence?.scope, "current-source-presentation-only-not-runtime-or-approval");
+  assert.ok(evidence.reason?.trim() && evidence.handlerBoundary?.trim());
+  assert.deepEqual([...evidence.states].sort(), [...states].sort());
+  assert.deepEqual([...evidence.sourceCandidateIds].sort(), [...action.sourceCandidateIds].sort());
+  const expectedControls = new Set();
+  const expectedFiles = new Set();
+  const getCandidate = (id) => {
+    const candidate = context.candidates.find((item) => item.candidateId === id);
+    assert.ok(candidate, "unknown applicability candidate");
+    expectedFiles.add(candidate.file);
+    return candidate;
+  };
+  const checkAttributes = (candidate) => {
+    assert.ok(candidate.attributes, "source attributes unavailable");
+    assert.ok(
+      !Object.keys(candidate.attributes).some((key) =>
+        /^(?::|v-bind:)?(?:disabled|aria-disabled|aria-busy|busy|loading|inert)$|^v-bind$/u.test(
+          key,
+        ),
+      ),
+      "source declares state or dynamic attributes; cannot exclude it",
+    );
+  };
+  for (const id of action.sourceCandidateIds) {
+    const candidate = getCandidate(id);
+    checkAttributes(candidate);
+    if (["button", "input", "summary"].includes(candidate.tag)) expectedControls.add(id);
+    else {
+      assert.match(candidate.tag, /^[A-Z]/u, "unsupported source control");
+      const childFiles = new Set(
+        context.candidates
+          .filter((item) => item.file.endsWith("/" + candidate.tag + ".vue"))
+          .map((item) => item.file),
+      );
+      assert.equal(childFiles.size, 1, "shared control source is ambiguous or missing");
+      const childFile = [...childFiles][0];
+      const children = context.candidates.filter(
+        (item) => item.file === childFile && item.kind === "control",
+      );
+      assert.ok(children.length, "shared rendered controls missing");
+      for (const child of children) expectedControls.add(child.candidateId);
+    }
+  }
+  assert.deepEqual([...evidence.renderedControlIds].sort(), [...expectedControls].sort());
+  for (const id of expectedControls) {
+    const candidate = getCandidate(id);
+    assert.ok(["button", "input", "summary"].includes(candidate.tag));
+    checkAttributes(candidate);
+  }
+  assert.deepEqual(Object.keys(evidence.sourceHashes).sort(), [...expectedFiles].sort());
+  for (const [file, hash] of Object.entries(evidence.sourceHashes)) {
+    assert.ok(typeof hash === "string" && hash.length > 0, "missing supporting source hash");
+    assert.equal(hash, context.sourceHashes[file], "applicability supporting source drift");
+  }
+}
+
 // Validate explicit reviews. Never infer a business action from a label or hash.
 export function validateActionReview(
   review,
@@ -111,6 +179,7 @@ export function validateActionReview(
           "not-applicable-wiring",
           "not-applicable-navigation-only",
           "not-applicable-not-disabled-in-source",
+          sourceAbsentState,
         ].includes(value),
         "unsupported visual status",
       );
@@ -119,6 +188,7 @@ export function validateActionReview(
       if (value === "not-applicable-wiring") assert.equal(action.kind, "wiring");
       if (value.startsWith("not-applicable-n")) assert.equal(action.kind, "navigation");
     }
+    validateSourceStateApplicability(action, { candidates, sourceHashes });
     for (const ref of action.scenes) {
       const evidence = packages.get(ref.package);
       assert.ok(evidence, "missing proposal " + ref.package);
@@ -241,6 +311,12 @@ export function validateActionReview(
     wiringGroups: review.actions.filter((a) => a.kind === "wiring").length,
     excludedGroups: review.actions.filter((a) => a.kind === "excluded").length,
     writeActions: review.actions.filter((a) => a.kind === "write").length,
+    sourceInapplicableVisualSlots: review.actions.reduce(
+      (sum, action) =>
+        sum +
+        Object.values(action.visualStates).filter((value) => value === sourceAbsentState).length,
+      0,
+    ),
     unmappedVisualSlots: review.actions
       .filter((a) => a.kind !== "excluded")
       .reduce(

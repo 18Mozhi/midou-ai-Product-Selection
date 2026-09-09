@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P21剩余控件状态适用性
+
+上一轮ffa144bb提交成本／复核按钮及表单独立busy，属于实际进展。本轮从干净main继续，按AGENTS、Feature Map、蓝图3.6、SW/RQ实际处理器与UiStatePanel实际两个按钮核对；ui-skills-root/frontend-design用于区分隐藏、父加载与控件自身反馈，未引入新视觉方向或子代理。
+
+新增SOURCING-STATE-APPLICABILITY-REVIEW.md及P21逐项sourceStateApplicability：10个local/read动作共20个disabled/busy槽，当前源码没有此控件呈现；不是缺20张图或通过20项验收。150个图状态引用不变，20项单列sourceInapplicableVisualSlots，未分类代表槽0；31路由动作／7关联／54局部源位置不减，P21仍65场景695PNG／59变体544双端实例。权限隐藏、第六次checkbox拒绝、load替换footer不冒充禁用；读取／迟到／SC-G01–08、全部字段与变体、主题密度和用户批准仍待。
+
+公共审计器新增有证据的非适用状态，只接受local/read的disabled/busy；完整原源ID、实际native／共享子控件、源哈希、理由及handler边界必须匹配。动态v-bind或disabled/aria-disabled/aria-busy/busy/loading/inert属性、写动作豁免、漏子控件、旧哈希、孤立证据均失败。其他页不自动套用。定向93项通过，相关action/inventory/contract/surface四组共148测试通过；不是运行权限、接口或Vue验收。
+
+首次设计总审计发现competitor包引用本次公共校验器与测试的两个来源指纹，按失败证据追到其既有生成器，没有手改哈希。因公共验证依赖变化，使用既有Playwright完整capture重新校验：66场景682PNG、536双端控件状态、9源隔离组、28动作、12宽度×五代表面，HTTP与页面错误0。两包原型和生产代码未改；仅3张竞品PNG重生成后字节变化，已人工查看1440-control-p20-create-previous-default、1440-control-p20-retry-default、1440-control-rule-open-empty-focus，未将复验冒称新设计或全图人工审核。P21包未变化，未重复P21浏览器/E2E/构建。
+
+最终动作审计仍22页／479独立源位置／426组；25个新审核链接存在。设计审计76包10774PNG／844独立来源／1453绑定／8942 README链接，来源/PNG漂移、未登记图为0；完整页面批准0、分母未冻结、G0进行中/G1–G5待验。docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check通过。
+
+修改范围为审核器、永久回归测试、P21清单/规格/计划/Feature Map及生成审计，竞品包仅连带重验生成证据与3图；生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/配置、依赖、权限和宝塔均未改，无部署或重启要求。使用node scripts/audit-ui-phase2-action-coverage.mjs只读复验，--write生成报告；新字段用法见审核文档。未新增临时文件／服务，验证浏览器finally关闭，headless_shell为0；旧output/playwright/ui-phase2-competitor-races-20260909下playwright.config.ts、results/.last-run.json因此前工具清理拒绝仍保留，本轮只读检查未绕过。后续仍需P21字段／主题及真实生命周期、P22等其余同级核对、具体审核、全站Vue重构与宝塔签收；本批不宣布阶段完成。
+
 ## 2026-09-09 · P21成本提交、重算与通过／驳回复核
 
 从干净main/e8c7fccc继续，沿AGENTS、Feature Map、蓝图3.6和SC/PP/RQ实际处理链，使用ui-skills-root/frontend-design与现有Playwright脚本；无新依赖、服务或子代理。新增SOURCING-COST-CONTROL-REVIEW.md、8成本／复核控件变体80张双端PNG，包现65主场景695PNG、59控件变体544双端状态实例。五语义组增加26代表槽，P21累计150映射、20待适用性核对；三个驳回额外变体不扩大动作分母。剩余20槽是源码无明确disabled/busy条件的局部／读取动作，不据此编造禁用图。
