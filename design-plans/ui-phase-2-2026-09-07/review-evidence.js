@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "f9ddb3f71c6d5a8aab8a33795afcb353355616d8df1338b095cdceaf3e5a99d9",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "5ba5a436396154476e49ffa1e6acb4aefa13f9ecc76bf3cdb4564bb0de0648d9",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -44,7 +44,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "5b780cba02cea259ca7eea01d936cb27f0e6a1ee7129a9af12259011bdb6f38a",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "a0db54d8d4ea4a6d4c021f52f1eb37b354138bd47ba51517c33ac6ea0de0b4a4",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "327d6edd6cdc5b93b0eb38d94ea19af971d380d1159232ba081fa6f29a19f342",
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
@@ -114,6 +114,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "951e7817102349f8b50496b2403a6b69aa8bcd96461bff34227268c4fef792ca",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "3ed5b8fc9a0b30ab3a3dfc1e6cb36c0245aad040271919f2d2cb734fe6879513",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "1ed6d982b93e4690eed35d328bb1b5988233aa919e76197bdb49a7fe22700fd0",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "404285bf5e264598443adc670bcb13a0b92cfc9af2e5ee29734d22aa00f59cab",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -131,7 +132,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "pngs": 11415,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 8979,
+    "readmeLinksChecked": 8980,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,

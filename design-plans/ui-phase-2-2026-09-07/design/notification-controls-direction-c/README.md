@@ -1,5 +1,7 @@
 # P26 通知操作逐态 · C 方向待审
 
+2026-09-10：[P26逐项源码审核](../../NOTIFICATION-SEMANTIC-REVIEW.md)已绑定23源入口、6字段和两窗。evidence的actionVisualReferences升级为pageId/scope/selector/states精确映射，五写按钮30代表状态引用；60PNG数量和图稿未增加。其余70代表状态槽待核对，7项源码特征测试是缺口复现，不代表生产已修。
+
 新增独立控件图册，继承原 NOTIFICATION-C-r1 数据、布局和离线控制器，不修改原 98 图或生产 Vue。打开 [图册](gallery.html) 审核，或在 [交互稿](index.html) 选择操作、提交反馈，点击“查看”后操作业务按钮。页面顶部工具只用于审稿，不是产品功能。
 
 ## 本批范围

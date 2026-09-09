@@ -19,7 +19,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/index.html": "b7e9f1d04a6cd8143fa79c13581eca976082dcfdc1f14f9b9794b304b01940d9",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/controls.js": "ea7c6dfd3fa8d1881bf2910d8593bc785b3e86574ec6dc1f4cdd5359ab173796",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/controls.css": "d08df2fb38ad623e141244d3cd0e92081952fa8a7fbc5c19bee46c91e9b5d6dc",
-    "scripts/verify-ui-phase2-notification-controls-c.mjs": "9c2ef3a088ce6fc57f14752f4f6e58e94d2b7b768cfffae6d334f70fe7a5a213"
+    "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e"
   },
   "checks": [
     {
@@ -925,54 +925,79 @@
   ],
   "actionVisualReferences": {
     "AN-N-START": {
-      "default": "start-default",
-      "hover": "start-hover",
-      "focus": "start-focus",
-      "pressed": "start-pressed",
-      "pending": "start-pending",
-      "disabled": "start-pending",
-      "busy": "start-pending",
-      "error": "start-error"
+      "pageId": "P26",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#action-start",
+      "states": {
+        "default": "start-default",
+        "hover": "start-hover",
+        "focus": "start-focus",
+        "pressed": "start-pressed",
+        "pending": "start-pending",
+        "disabled": "start-pending",
+        "busy": "start-pending",
+        "error": "start-error"
+      }
     },
     "AN-N-CLOSE": {
-      "default": "close-default",
-      "hover": "close-hover",
-      "focus": "close-focus",
-      "pressed": "close-pressed",
-      "pending": "close-pending",
-      "disabled": "close-pending",
-      "busy": "close-pending",
-      "error": "close-error"
+      "pageId": "P26",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#action-close",
+      "states": {
+        "default": "close-default",
+        "hover": "close-hover",
+        "focus": "close-focus",
+        "pressed": "close-pressed",
+        "pending": "close-pending",
+        "disabled": "close-pending",
+        "busy": "close-pending",
+        "error": "close-error"
+      }
     },
     "AN-N-REOPEN": {
-      "default": "reopen-default",
-      "hover": "reopen-hover",
-      "focus": "reopen-focus",
-      "pressed": "reopen-pressed",
-      "pending": "reopen-pending",
-      "disabled": "reopen-pending",
-      "busy": "reopen-pending",
-      "error": "reopen-error"
+      "pageId": "P26",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#action-reopen",
+      "states": {
+        "default": "reopen-default",
+        "hover": "reopen-hover",
+        "focus": "reopen-focus",
+        "pressed": "reopen-pressed",
+        "pending": "reopen-pending",
+        "disabled": "reopen-pending",
+        "busy": "reopen-pending",
+        "error": "reopen-error"
+      }
     },
     "AN-N-ALL-READ": {
-      "default": "markAll-default",
-      "hover": "markAll-hover",
-      "focus": "markAll-focus",
-      "pressed": "markAll-pressed",
-      "pending": "markAll-pending",
-      "disabled": "markAll-pending",
-      "busy": "markAll-pending",
-      "error": "markAll-error"
+      "pageId": "P26",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#all-read",
+      "states": {
+        "default": "markAll-default",
+        "hover": "markAll-hover",
+        "focus": "markAll-focus",
+        "pressed": "markAll-pressed",
+        "pending": "markAll-pending",
+        "disabled": "markAll-pending",
+        "busy": "markAll-pending",
+        "error": "markAll-error"
+      }
     },
     "AN-N-PREF-SAVE": {
-      "default": "preferences-default",
-      "hover": "preferences-hover",
-      "focus": "preferences-focus",
-      "pressed": "preferences-pressed",
-      "pending": "preferences-pending",
-      "disabled": "preferences-pending",
-      "busy": "preferences-pending",
-      "error": "preferences-error"
+      "pageId": "P26",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#preferences-save",
+      "states": {
+        "default": "preferences-default",
+        "hover": "preferences-hover",
+        "focus": "preferences-focus",
+        "pressed": "preferences-pressed",
+        "pending": "preferences-pending",
+        "disabled": "preferences-pending",
+        "busy": "preferences-pending",
+        "error": "preferences-error"
+      }
     }
   },
   "screenshots": [

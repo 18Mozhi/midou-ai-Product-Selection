@@ -158,11 +158,16 @@ try {
               sha256: hash(await readFile(path.join(root, file))),
             });
           }
-          actionVisualReferences[control.actionId] ??= {};
-          actionVisualReferences[control.actionId][state] = scene;
+          actionVisualReferences[control.actionId] ??= {
+            pageId: "P26",
+            scope: "representative-control-only-not-all-variants-or-Vue",
+            selector: control.selector,
+            states: {},
+          };
+          actionVisualReferences[control.actionId].states[state] = scene;
           if (state === "pending") {
-            actionVisualReferences[control.actionId].disabled = scene;
-            actionVisualReferences[control.actionId].busy = scene;
+            actionVisualReferences[control.actionId].states.disabled = scene;
+            actionVisualReferences[control.actionId].states.busy = scene;
             await target.dispatchEvent("click");
             if (control.id === "preferences")
               await page.locator("#preference-form").dispatchEvent("submit");

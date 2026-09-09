@@ -1,0 +1,1383 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P26",
+  "route": "/notifications",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "2原生dialog：消息详情和通知偏好；1内嵌form不计额外窗口。详情busy阻止关闭，偏好busy仍允许取消。"
+  },
+  "inputs": {
+    "NotificationCenter.vue": [
+      "unread",
+      "preferences.in_app_enabled",
+      "preferences.email_enabled",
+      "preferences.task_enabled",
+      "preferences.approval_enabled",
+      "preferences.competitor_enabled"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "AN-N-PREF-OPEN",
+      "label": "通知偏好入口",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1"],
+      "sourceContractKeys": ["AN-N-PREF-OPEN；busy禁用"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "busy时禁用",
+      "handler": "showPreferences=true，保留当前偏好ref",
+      "variants": ["normal", "preferences"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-ALL-READ",
+      "label": "全部标记已读",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#fd5620d41b8a74b5.1"],
+      "sourceContractKeys": ["AN-N-ALL-READ；当前接收范围全部"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "busy时禁用，不限当前筛选",
+      "handler": "POST /notifications/actions，无筛选或请求体；随后load",
+      "variants": ["all_read_intent", "all_read_busy", "all_read_error"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "all_read_intent"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "all_read_busy"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "all_read_error"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-default"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-hover"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-focus"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-pressed"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-pending"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-error"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-default",
+          "selector": "#all-read"
+        },
+        "hover": {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-hover",
+          "selector": "#all-read"
+        },
+        "focus": {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-focus",
+          "selector": "#all-read"
+        },
+        "pressed": {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-pressed",
+          "selector": "#all-read"
+        },
+        "disabled": {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-pending",
+          "selector": "#all-read"
+        },
+        "busy": {
+          "package": "notification-controls-direction-c",
+          "scene": "markAll-pending",
+          "selector": "#all-read"
+        }
+      }
+    },
+    {
+      "actionId": "AN-N-TECH-PAGE",
+      "label": "页级技术详情",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
+      "sourceContractKeys": ["AN-TECH；页级requestId"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "notice且requestId",
+      "handler": "原生details展开requestId",
+      "variants": ["error"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-FILTER-CATEGORY",
+      "label": "通知分类",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
+      "sourceContractKeys": ["AN-N-FILTER-CATEGORY；五项"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "全部/任务/审批/竞品/系统；无busy禁用",
+      "handler": "setFilters更新URL category并重置页码，watch触发load",
+      "variants": [
+        "normal",
+        "category_task",
+        "category_approval",
+        "category_competitor",
+        "category_system"
+      ],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "category_task"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "category_approval"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "category_competitor"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "category_system"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-UNREAD",
+      "label": "只看未读",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
+      "sourceContractKeys": ["AN-N-UNREAD；URL unread=1/API true"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "checkbox无busy禁用",
+      "handler": "setFilters将URL unread=1转换API unread=true",
+      "variants": ["unread"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "unread"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-FILTER-STATUS",
+      "label": "通知处理状态筛选",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
+      "sourceContractKeys": ["AN-N-FILTER-STATUS；四项"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "全部/open/in_progress/closed；无busy禁用",
+      "handler": "setFilters更新URL status，API workflow_status；不修改来源任务状态",
+      "variants": ["normal", "workflow_open", "workflow_progress", "workflow_closed"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "workflow_open"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "workflow_progress"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "workflow_closed"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-LOAD",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
+      "sourceContractKeys": ["AN-N-LOAD；重读列表/summary/preferences"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "五类错误状态；无busy禁用",
+      "handler": "并行重读列表、summary、preferences，generation仅保护Promise.all后的赋值",
+      "variants": ["loading", "error", "forbidden", "expired", "rate_limited", "version_conflict"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "rate_limited"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "version_conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-DETAIL",
+      "label": "打开消息并自动已读",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#d953dfdf4cb40b85.1"],
+      "sourceContractKeys": ["AN-N-DETAIL；打开，未读时自动read"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "列表行busy禁用；URL watcher直接openById不受busy约束",
+      "handler": "GET详情；未读时POST action=read和expected_version；不能视为纯读取",
+      "variants": ["detail", "detail_unread", "read_busy", "read_error", "read_ack"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "detail_unread"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "read_busy"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "read_error"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "read_ack"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-PAGE",
+      "label": "通知分页",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#01c7bba15fa9f7ce.1",
+        "apps/web/src/components/NotificationCenter.vue#bd5dbf08f126da53.1"
+      ],
+      "sourceContractKeys": ["AN-N-PAGE；上一页", "AN-N-PAGE；下一页"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "total>20；首页禁上一页/末页禁下一页；无busy禁用",
+      "handler": "setFilters页码限制1..pageCount，保留筛选并清消息深链",
+      "variants": ["pagination"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "pagination"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-DETAIL-WIRING",
+      "label": "详情窗口定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1"],
+      "sourceContractKeys": ["D-AN-NOTIFICATION；消息详情"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "selected非空",
+      "handler": "useModalDialog管理原生dialog；cancel另归关闭动作",
+      "variants": ["detail"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "forwardBindings": [],
+      "forwardsTo": ["AN-N-DETAIL", "AN-N-CLOSE-DETAIL"]
+    },
+    {
+      "actionId": "AN-N-CLOSE-DETAIL",
+      "label": "关闭消息详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#a81227b33b62c0a9.1",
+        "apps/web/src/components/NotificationCenter.vue#24417e6753ed4eb7.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-CLOSE-DETAIL；Escape，busy不关闭",
+        "AN-N-CLOSE-DETAIL；按钮同busy边界"
+      ],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "busy拒绝关闭，包括Escape",
+      "handler": "closeDetail清selected及URL notification/notification_id；原生cancel先preventDefault",
+      "variants": ["detail", "read_busy"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "read_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-SOURCE",
+      "label": "返回消息来源",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#9c8237833082965f.1"],
+      "sourceContractKeys": ["AN-N-SOURCE；站内来源+from"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "action_route以/开头但非//",
+      "handler": "RouterLink拼接from=当前fullPath；无允许地址不展示",
+      "variants": ["detail", "detail_missing"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "detail_missing"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-START",
+      "label": "开始处理通知",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#d0ef81cb0803db4e.1"],
+      "sourceContractKeys": ["AN-N-START；仅open"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "仅open，busy禁用",
+      "handler": "updateWorkflow('start') POST action+expected_version；只改变通知状态",
+      "variants": ["detail", "start_busy", "start_error"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "start_busy"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "start_error"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "start-default"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "start-hover"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "start-focus"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "start-pressed"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "start-pending"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "start-error"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-controls-direction-c",
+          "scene": "start-default",
+          "selector": "#action-start"
+        },
+        "hover": {
+          "package": "notification-controls-direction-c",
+          "scene": "start-hover",
+          "selector": "#action-start"
+        },
+        "focus": {
+          "package": "notification-controls-direction-c",
+          "scene": "start-focus",
+          "selector": "#action-start"
+        },
+        "pressed": {
+          "package": "notification-controls-direction-c",
+          "scene": "start-pressed",
+          "selector": "#action-start"
+        },
+        "disabled": {
+          "package": "notification-controls-direction-c",
+          "scene": "start-pending",
+          "selector": "#action-start"
+        },
+        "busy": {
+          "package": "notification-controls-direction-c",
+          "scene": "start-pending",
+          "selector": "#action-start"
+        }
+      }
+    },
+    {
+      "actionId": "AN-N-CLOSE",
+      "label": "关闭通知",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#7490571390181453.1"],
+      "sourceContractKeys": ["AN-N-CLOSE；非closed"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "非closed，busy禁用",
+      "handler": "updateWorkflow('close') POST action+expected_version；不关闭来源任务",
+      "variants": ["detail_progress", "close_error"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail_progress"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "close_error"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "close-default"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "close-hover"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "close-focus"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "close-pressed"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "close-pending"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "close-error"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-controls-direction-c",
+          "scene": "close-default",
+          "selector": "#action-close"
+        },
+        "hover": {
+          "package": "notification-controls-direction-c",
+          "scene": "close-hover",
+          "selector": "#action-close"
+        },
+        "focus": {
+          "package": "notification-controls-direction-c",
+          "scene": "close-focus",
+          "selector": "#action-close"
+        },
+        "pressed": {
+          "package": "notification-controls-direction-c",
+          "scene": "close-pressed",
+          "selector": "#action-close"
+        },
+        "disabled": {
+          "package": "notification-controls-direction-c",
+          "scene": "close-pending",
+          "selector": "#action-close"
+        },
+        "busy": {
+          "package": "notification-controls-direction-c",
+          "scene": "close-pending",
+          "selector": "#action-close"
+        }
+      }
+    },
+    {
+      "actionId": "AN-N-REOPEN",
+      "label": "重新打开通知",
+      "kind": "write",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#696dcabbd8c2d73e.1"],
+      "sourceContractKeys": ["AN-N-REOPEN；closed"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "closed，busy禁用",
+      "handler": "updateWorkflow('reopen') POST action+expected_version；不重开来源任务",
+      "variants": ["detail_closed", "reopen_error"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail_closed"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "reopen_error"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-default"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-hover"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-focus"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-pressed"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-pending"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-error"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-default",
+          "selector": "#action-reopen"
+        },
+        "hover": {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-hover",
+          "selector": "#action-reopen"
+        },
+        "focus": {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-focus",
+          "selector": "#action-reopen"
+        },
+        "pressed": {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-pressed",
+          "selector": "#action-reopen"
+        },
+        "disabled": {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-pending",
+          "selector": "#action-reopen"
+        },
+        "busy": {
+          "package": "notification-controls-direction-c",
+          "scene": "reopen-pending",
+          "selector": "#action-reopen"
+        }
+      }
+    },
+    {
+      "actionId": "AN-N-TECH-RESOURCE",
+      "label": "资源技术详情",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
+      "sourceContractKeys": ["AN-TECH；资源/根因键"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "resource_id/resource_type/root_cause_key任一存在",
+      "handler": "原生details展示资源/根因键，不执行操作",
+      "variants": ["detail_technical"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "detail_technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-PREF-WIRING",
+      "label": "偏好窗口定义",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#b332799077351299.1"],
+      "sourceContractKeys": ["D-AN-PREFERENCES；偏好"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "showPreferences控制原生dialog",
+      "handler": "useModalDialog管理窗口；内嵌form不计第三窗口",
+      "variants": ["preferences"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "forwardBindings": [],
+      "forwardsTo": ["AN-N-PREF-OPEN", "AN-N-PREF-CLOSE", "AN-N-PREF-SAVE"]
+    },
+    {
+      "actionId": "AN-N-PREF-CLOSE",
+      "label": "取消通知偏好",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
+        "apps/web/src/components/NotificationCenter.vue#25755513ca77e550.1"
+      ],
+      "sourceContractKeys": ["AN-N-PREF-CLOSE；Escape", "AN-N-PREF-CLOSE；取消保留当前ref"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "提交中也可取消/Escape",
+      "handler": "showPreferences=false，不清当前ref也不取消在途PUT",
+      "variants": ["preferences", "preferences_busy"],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+    },
+    {
+      "actionId": "AN-N-PREF-SAVE",
+      "label": "保存通知偏好",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
+        "apps/web/src/components/NotificationCenter.vue#0285caea2e8607bf.1"
+      ],
+      "sourceContractKeys": ["AN-N-PREF-SAVE；PUT expected_version", "AN-N-PREF-SAVE；原生submit"],
+      "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
+      "condition": "原生form submit；保存按钮busy禁用",
+      "handler": "PUT /me/notification-preferences，email_enabled=false，expected_version；成功关闭窗口再load",
+      "variants": [
+        "preferences_intent",
+        "preferences_busy",
+        "preferences_error",
+        "preferences_conflict"
+      ],
+      "scenes": [
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences_intent"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences_busy"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences_error"
+        },
+        {
+          "package": "notification-direction-c",
+          "scene": "preferences_conflict"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-default"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-hover"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-focus"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-pressed"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-pending"
+        },
+        {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-error"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-notification-ownership.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-notification-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+      "visualStateReferences": {
+        "default": {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-default",
+          "selector": "#preferences-save"
+        },
+        "hover": {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-hover",
+          "selector": "#preferences-save"
+        },
+        "focus": {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-focus",
+          "selector": "#preferences-save"
+        },
+        "pressed": {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-pressed",
+          "selector": "#preferences-save"
+        },
+        "disabled": {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-pending",
+          "selector": "#preferences-save"
+        },
+        "busy": {
+          "package": "notification-controls-direction-c",
+          "scene": "preferences-pending",
+          "selector": "#preferences-save"
+        }
+      }
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/NotificationCenter.vue"],
+    "dependencyHashes": {
+      "apps/web/src/components/NotificationCenter.vue": "9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
+    },
+    "includeStructuralContainers": true,
+    "inputs": [
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "binding": "unread",
+        "meaning": "未读过滤：URL unread=1，API unread=true；不是已读写操作",
+        "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "binding": "preferences.in_app_enabled",
+        "meaning": "站内通知总开关",
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "binding": "preferences.email_enabled",
+        "meaning": "邮件渠道固定关闭且禁用；服务未接入，不产生外部发送",
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "binding": "preferences.task_enabled",
+        "meaning": "任务事件偏好",
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "binding": "preferences.approval_enabled",
+        "meaning": "审批事件偏好",
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "binding": "preferences.competitor_enabled",
+        "meaning": "竞品事件偏好",
+        "remaining": "load会覆盖未保存ref；字段提交中未统一禁用，当前不修复或改变契约。源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "selected详情dialog；busy时按钮/Escape均拒绝关闭，来源导航与通知处理状态分离",
+        "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+        "variants": [
+          {
+            "name": "detail",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "detail"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "detail_unread",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "detail_unread"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "detail_progress",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "detail_progress"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "detail_closed",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "detail_closed"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "detail_missing",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "detail_missing"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "detail_long",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "detail_long"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "showPreferences偏好dialog；busy仍可取消/Escape，取消保留ref",
+        "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+        "variants": [
+          {
+            "name": "preferences",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preferences_busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences_busy"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preferences_error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences_error"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preferences_conflict",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences_conflict"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/NotificationCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "偏好dialog内原生form；五布尔值和expected_version，邮件强制false",
+        "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
+        "variants": [
+          {
+            "name": "preferences",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preferences_busy",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences_busy"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preferences_error",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences_error"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          },
+          {
+            "name": "preferences_conflict",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "notification-direction-c",
+                "scene": "preferences_conflict"
+              }
+            ],
+            "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "useModalDialog提供原生开关/焦点返回；本轮VM测试替身不证明DOM焦点，完整组合仍需真实Vue验收。",
+      "旧读取meta/error、自动已读和workflow回执、偏好刷新/关闭存在已复现归属缺口，不能用离线图稿掩盖。"
+    ]
+  },
+  "compositionGaps": [
+    "7项源码特征测试记录现状缺口与busy边界，不是修复证明。",
+    "70个代表控件状态槽未映射，不等于缺70张图；98基础图及60控件图数量未增加。",
+    "SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "不改变生产Vue/API/数据库/部署；不把P16布局批准扩展到P26。",
+    "30代表状态引用只覆盖5个写按钮，不包含所有入口和变体。"
+  ]
+}
