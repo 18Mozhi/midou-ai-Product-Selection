@@ -40,6 +40,92 @@ const secondaryControls = controls.flatMap((submit) =>
   })),
 );
 const allControls = [...controls, ...secondaryControls];
+const mainControls = [
+  {
+    key: "main-search-open",
+    actionId: "SC-S-OPEN",
+    selector: '#app .scope > [data-action="SC-S-OPEN"]',
+    kind: "entry",
+    heading: "发起供应商找货",
+  },
+  {
+    key: "main-quote-open",
+    actionId: "SC-QUOTE-OPEN",
+    selector: '#app [data-action="SC-QUOTE-OPEN"]',
+    kind: "entry",
+    heading: "确认完整供应商报价",
+  },
+  {
+    key: "main-purchase-open",
+    actionId: "SC-PURCHASE-OPEN",
+    selector: '#app [data-action="SC-PURCHASE-OPEN"][data-offer$="000000000100"]',
+    kind: "entry",
+    heading: "创建采购任务",
+  },
+  {
+    key: "main-delete-open",
+    actionId: "SC-DELETE-OPEN",
+    selector: '#app [data-action="SC-DELETE-OPEN"]',
+    kind: "entry",
+    heading: "删除找货记录",
+    more: true,
+  },
+  {
+    key: "main-record-current",
+    actionId: "SC-DETAIL",
+    selector: '#app [data-action="SC-DETAIL"][data-record$="000000000021"]',
+    kind: "record",
+    recordId: "00000000-0000-4000-8000-000000000021",
+  },
+  {
+    key: "main-select",
+    actionId: "SC-SELECT",
+    selector: '#app input[data-action="SC-SELECT"][data-offer$="000000000100"]',
+    kind: "checkbox",
+    checked: false,
+  },
+  {
+    key: "main-compare",
+    actionId: "SC-COMPARE",
+    selector: '#app [data-action="SC-COMPARE"]',
+    kind: "write",
+    ready: "select-two",
+    states,
+  },
+  {
+    key: "main-refresh",
+    actionId: "SC-REFRESH",
+    selector: '#app [data-action="SC-REFRESH"]',
+    kind: "write",
+    states,
+  },
+  {
+    key: "main-purchase-second",
+    actionId: "SC-PURCHASE-OPEN",
+    selector: '#app [data-action="SC-PURCHASE-OPEN"][data-offer$="000000000101"]',
+    kind: "entry",
+    heading: "创建采购任务",
+    variantOnly: true,
+  },
+  {
+    key: "main-record-other",
+    actionId: "SC-DETAIL",
+    selector: '#app [data-action="SC-DETAIL"][data-record$="000000000022"]',
+    kind: "record",
+    recordId: "00000000-0000-4000-8000-000000000022",
+    variantOnly: true,
+  },
+  {
+    key: "main-select-checked",
+    actionId: "SC-SELECT",
+    selector: '#app input[data-action="SC-SELECT"][data-offer$="000000000100"]',
+    kind: "checkbox",
+    ready: "select-one",
+    checked: true,
+    variantOnly: true,
+  },
+].map((control) => ({ ready: "workspace", states: states.slice(0, 4), ...control }));
+const visualControls = [...allControls, ...mainControls];
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const sourcePaths = [
   ...[
@@ -116,7 +202,7 @@ async function shot(page, width, scene, control) {
   if (capture) {
     await page.screenshot({
       path: root + "/" + file,
-      fullPage: !(await page.locator("dialog[open]").count()),
+      fullPage: !control && !(await page.locator("dialog[open]").count()),
       animations: "disabled",
     });
     screenshots.push({
@@ -379,6 +465,215 @@ async function verifyControls(page, width) {
         beforeInvalid,
         "native required validation prevents an empty submit",
       );
+    }
+  }
+}
+async function verifyMainControls(page, width) {
+  const count = () => page.evaluate(() => window.sourcingReview.intents.length);
+  const last = () => page.evaluate(() => window.sourcingReview.intents.at(-1));
+  const choose = async (scene) => {
+    await page.evaluate((id) => {
+      window.sourcingReview.outcome = "success";
+      window.sourcingReview.choose(id);
+    }, scene);
+  };
+  const prepare = async (control, state) => {
+    await choose(
+      state === "disabled" && control.actionId === "SC-COMPARE" ? "select-one" : control.ready,
+    );
+    if (control.more) await page.locator(".more > summary").click();
+  };
+  for (const control of mainControls) {
+    for (const state of control.states) {
+      await page.mouse.move(0, 0);
+      await prepare(control, state);
+      const target = page.locator(control.selector);
+      assert.equal(await target.count(), 1);
+      const pending =
+        state === "busy" || (state === "disabled" && control.actionId === "SC-REFRESH");
+      if (pending) {
+        await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+        const n = await count();
+        await target.click();
+        assert.equal(await count(), n + 1);
+      }
+      const frame = control.kind === "checkbox" ? target.locator("..") : target;
+      await frame.evaluate((el) => el.scrollIntoView({ block: "center", inline: "nearest" }));
+      await page.evaluate(() => document.activeElement?.blur());
+      const before = await count();
+      assert.equal(await target.isDisabled(), ["disabled", "busy"].includes(state));
+      if (control.kind === "checkbox") assert.equal(await target.isChecked(), control.checked);
+      if (control.kind === "write")
+        assert.equal(await target.getAttribute("aria-busy"), String(pending));
+      if (["hover", "pressed"].includes(state)) {
+        await target.hover();
+        assert.ok(await target.evaluate((el) => el.matches(":hover")));
+      }
+      if (state === "focus") {
+        await page.keyboard.press("Tab");
+        await target.focus();
+        assert.ok(await target.evaluate((el) => el.matches(":focus-visible")));
+        assert.equal(await frame.evaluate((el) => getComputedStyle(el).outlineWidth), "3px");
+        await frame.evaluate((el) => el.scrollIntoView({ block: "center", inline: "nearest" }));
+      }
+      if (state === "pressed") {
+        await page.mouse.down();
+        assert.ok(await target.evaluate((el) => el.matches(":active")));
+        assert.notEqual(await frame.evaluate((el) => getComputedStyle(el).boxShadow), "none");
+      }
+      if (pending) {
+        assert.match(await target.innerText(), /正在/);
+        assert.match(await page.locator("#main-request-status").innerText(), /尚未确认/);
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el, "::before").animationName),
+          "none",
+        );
+      }
+      const colors = await frame.evaluate((el) => {
+        const s = getComputedStyle(el);
+        let node = el,
+          bg = s.backgroundColor;
+        while (/^rgba\([^)]*,\s*0\)$/.test(bg) && node.parentElement) {
+          node = node.parentElement;
+          bg = getComputedStyle(node).backgroundColor;
+        }
+        return { foreground: s.color, background: bg };
+      });
+      const ratio = contrast(colors.foreground, colors.background);
+      assert.ok(ratio >= 4.5, control.key + "/" + state + " contrast " + ratio);
+      if (["disabled", "busy"].includes(state)) {
+        await target.hover({ force: true });
+        assert.equal(
+          await target.evaluate((el) => getComputedStyle(el).backgroundColor),
+          colors.background,
+        );
+        await page.mouse.move(0, 0);
+      }
+      await layout(page, width + "/" + control.key + "/" + state);
+      const rect = await frame.boundingBox();
+      assert.ok(
+        rect.y >= 6 && rect.y + rect.height <= page.viewportSize().height - 6,
+        control.key + "/" + state + " viewport",
+      );
+      assert.ok(
+        await frame.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return [
+            [r.left + 6, r.top + 6],
+            [r.right - 6, r.top + 6],
+            [r.left + 6, r.bottom - 6],
+            [r.right - 6, r.bottom - 6],
+          ].every(([x, y]) => el.contains(document.elementFromPoint(x, y)));
+        }),
+        control.key + "/" + state + " unoccluded",
+      );
+      const record = {
+        key: control.key,
+        actionId: control.actionId,
+        selector: control.selector,
+        state,
+        scene: "control-" + control.key + "-" + state,
+        baseScene: control.ready,
+        pageId: "P21",
+        width,
+        contrast: ratio,
+        condition: pending
+          ? "request-in-flight-not-task-running"
+          : state === "disabled"
+            ? "one-quote-selected"
+            : "available-control",
+      };
+      controlStates.push(record);
+      await shot(page, width, record.scene, record);
+      if (state === "pressed") {
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+      if (["disabled", "busy"].includes(state)) await target.evaluate((el) => el.click());
+      assert.equal(await count(), before, "state preview must not activate");
+    }
+    await prepare(control, "default");
+    const target = page.locator(control.selector);
+    if (control.kind === "entry") {
+      const n = await count();
+      await target.focus();
+      await page.keyboard.press("Enter");
+      assert.equal(await page.locator("#dialog-title").innerText(), control.heading);
+      assert.equal(await count(), n, "opening only, no write");
+      if (control.actionId === "SC-PURCHASE-OPEN") {
+        assert.match(
+          await page.locator(".locked").innerText(),
+          control.variantOnly ? /澄木家居制品/ : /南岸收纳用品/,
+        );
+      }
+      await page.keyboard.press("Escape");
+      assert.equal(await page.locator("dialog[open]").count(), 0);
+    } else if (control.kind === "record") {
+      await choose("select-two");
+      await target.focus();
+      await page.keyboard.press("Enter");
+      assert.deepEqual(await last(), {
+        path: "/sourcing/searches/" + control.recordId,
+        method: "GET",
+      });
+      assert.equal(await target.getAttribute("aria-pressed"), "true");
+      assert.equal(
+        await page.locator("input[type=checkbox]:checked").count(),
+        control.variantOnly ? 0 : 2,
+      );
+    } else if (control.kind === "checkbox") {
+      const n = await count();
+      await target.focus();
+      await page.keyboard.press("Space");
+      assert.equal(await target.isChecked(), !control.checked);
+      assert.equal(await count(), n, "checkbox is local state, no API write");
+    } else {
+      await choose("select-two");
+      const n = await count();
+      await page.evaluate(() => (window.sourcingReview.outcome = "pending"));
+      await target.focus();
+      await page.keyboard.press("Enter");
+      assert.equal(await count(), n + 1);
+      const compare = control.actionId === "SC-COMPARE";
+      const expected = compare
+        ? {
+            path: "/sourcing/comparisons",
+            method: "POST",
+            body: {
+              name: "桌面收纳机会 · 货源核对 报价对比",
+              quote_ids: [
+                "00000000-0000-4000-8000-000000000300",
+                "00000000-0000-4000-8000-000000000301",
+              ],
+            },
+          }
+        : {
+            path: "/sourcing/searches/00000000-0000-4000-8000-000000000021/refresh",
+            method: "POST",
+            body: {},
+          };
+      assert.deepEqual(await last(), expected);
+      const other = page.locator(
+        compare ? '[data-action="SC-REFRESH"]' : '[data-action="SC-COMPARE"]',
+      );
+      assert.equal(await other.isDisabled(), true);
+      assert.equal(
+        await other.getAttribute("aria-busy"),
+        "false",
+        "another command is locked, not submitting itself",
+      );
+      await target.dispatchEvent("click");
+      assert.equal(await count(), n + 1);
+      if (compare) {
+        await page.locator('input[data-offer$="000000000100"]').uncheck();
+        assert.equal(await page.locator("input[type=checkbox]:checked").count(), 1);
+        assert.match(await page.locator("#compare-request-status").innerText(), /2 家报价/);
+        assert.deepEqual(
+          await last(),
+          expected,
+          "editing selection must not rewrite submitted snapshot",
+        );
+      }
     }
   }
 }
@@ -645,6 +940,10 @@ try {
         "noopener noreferrer",
       );
       await verifyControls(page, width);
+      await verifyMainControls(page, width);
+      checks.push(
+        `${width}: main entry/record/checkbox/write controls; exact opening identity and GET/POST intent, current record retains selection, changed record clears, Space toggles only local state, comparison submission snapshot survives changed checkboxes; no task completion proof`,
+      );
       checks.push(
         `${width}: four submit controls x six states; real pointer/keyboard pseudo states, >=4.5 text contrast, unoccluded corners, exact inert keyboard payload, pending duplicate guard/close lock proposal, required versus disabled/MOQ distinctions`,
         `${width}: four dialog close/cancel pairs x six states; parent in-flight lock only, no cancel-request spinner; keyboard close/Escape return to exact opener including second purchase button; search/delete draft retained and quote/purchase reprefilled; no close/reopen write`,
@@ -712,7 +1011,7 @@ try {
           controlStates,
           pageActionVisualReferences: {
             P21: Object.fromEntries(
-              allControls
+              visualControls
                 .filter((control) => !control.variantOnly)
                 .map((control) => [
                   control.actionId,
@@ -721,19 +1020,24 @@ try {
                     selector: control.selector,
                     scope: "representative-control-only-not-all-variants-or-Vue",
                     states: Object.fromEntries(
-                      states.map((state) => [state, "control-" + control.key + "-" + state]),
+                      (control.states || states).map((state) => [
+                        state,
+                        "control-" + control.key + "-" + state,
+                      ]),
                     ),
-                    limitation: control.secondary
-                      ? "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
-                      : control.key === "purchase"
-                        ? "disabled uses current MOQ; busy is request in-flight, not accepted purchase task; full reason/field variants pending"
-                        : "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending",
+                    limitation: control.kind
+                      ? "Main control representative only; local/read/checkbox controls have no fabricated busy/disabled. Writes use exact inert snapshots, not server acceptance or resolved lifecycle."
+                      : control.secondary
+                        ? "disabled and busy represent the parent form's in-flight close lock proposal; source Vue permits closing; not a cancelling network command"
+                        : control.key === "purchase"
+                          ? "disabled uses current MOQ; busy is request in-flight, not accepted purchase task; full reason/field variants pending"
+                          : "disabled and busy are the same source busy condition, not a new business restriction; other inputs/variants remain pending",
                   },
                 ]),
             ),
           },
           controlVariantReferences: Object.fromEntries(
-            secondaryControls
+            visualControls
               .filter((control) => control.variantOnly)
               .map((control) => [
                 control.key,
@@ -743,10 +1047,14 @@ try {
                   selector: control.selector,
                   scope: "additional-control-variant-not-new-action",
                   states: Object.fromEntries(
-                    states.map((state) => [state, "control-" + control.key + "-" + state]),
+                    (control.states || states).map((state) => [
+                      state,
+                      "control-" + control.key + "-" + state,
+                    ]),
                   ),
-                  limitation:
-                    "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback.",
+                  limitation: control.kind
+                    ? "Additional source/selection variant of the same semantic action, not a new action or runtime acceptance."
+                    : "Footer cancel is the same close semantic group; parent busy lock is an unapproved offline proposal, not abort or rollback.",
                 },
               ]),
           ),

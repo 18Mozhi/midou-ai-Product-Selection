@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P21主入口、记录、勾选与写请求
+
+从干净main/4badc9f1继续，上一轮关闭/取消及收尾提交为实际进展。本轮沿ui-skills-root/frontend-design/既有Playwright工作流，按AGENTS、Feature Map、蓝图3.6和实际SW处理器核对，未启动子代理。新增SOURCING-MAIN-STATE-REVIEW.md与96双端PNG；包现62主场景385PNG、23控件变体240双端状态实例。8语义组增加36代表槽，第二采购来源/其他记录/已勾选3额外变体不扩动作分母；P21累计84映射、86待补。源码无disabled/busy的局部/读取/勾选不编造图，也未修改审计分母规则。
+
+原型主控件补清晰焦点、按下、灰底禁用、静态忙碌提示；深蓝背景用白色焦点，勾选用44px标签承接。修正点击当前记录误清空勾选，保持源“仅ID变化清空”；入口不写入、Space仅本地勾选、最多5家。比较至少2家且非busy、刷新按busy；只有自身写请求标记aria-busy，其他共享busy仅禁用。pending捕获记录/报价ID意图，后续勾选不改已发送快照；无真实HTTP、任务完成或真实幂等/超时/重试证明。已有弹窗关闭锁仍待审，SC-G01–08及真实异步归属未修。
+
+smoke及完整capture通过：9真实setup隔离组、240双端状态实例、鼠标/键盘真实状态、>=44px触控/16px控件字体、对比>=4.5、焦点边界/内侧命中、入口对象与精确GET/POST、不可重入及已选快照、原有所有场景/九宽度×五代表面/NY时间/720×500等效重排，HTTP/页面错误0。只目检390-control-main-compare-busy和1440-control-main-record-other-focus两图，不宣称全图人工审阅；capture已执行完整交互，未重复默认check。
+
+动作审计通过，98审核文档链接均存在。docs（73路由/60保护/6角色/153文档）、runtime-docs、390文件static-analysis、format:check通过。设计审计76包10464PNG、844独立来源/1451绑定、8630 README链接，来源/PNG漂移和未登记图0；批准0、全页完成未证明、分母未冻结，G0进行中/G1–G5待验。未重复未变动生产Vue E2E或构建。
+
+仅改本包离线原型、永久验证脚本/PNG/证据/图册及直接相关计划/动作/Feature Map；生产Vue/CSS/API/OpenAPI、后端/Worker/Python、数据库/迁移、env/运行配置、依赖、权限、安全与宝塔未改。无参数或重启变化；可直接打开审核文档/图册，node scripts/verify-ui-phase2-sourcing-c.mjs完整复验，--smoke预检、--capture重生成本包永久交付。无新临时文件或服务；验证浏览器finally关闭，无headless_shell残留。旧output/playwright/ui-phase2-competitor-races-20260909中的playwright.config.ts与results/.last-run.json仍因原清理被工具策略拒绝保留，本轮只读复核不绕过。P21其余状态/具体批准、其他51页同级核对、实际全站重构和宝塔签收继续未完成。
+
 ## 2026-09-09 · P21四窗关闭和取消
 
 收尾更正：暂存后的diff检查发现新增审核文档尾部多一空行，但同一命令未短路，已生成9214195d；随后单独删除尾部空行并复查整批diff，以独立修正提交收口，不改写已有提交。下文功能、图稿和其他验证结果不受此文档空白影响。

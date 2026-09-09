@@ -1,5 +1,41 @@
 # P21 供应链与利润 · C方向整页待审提案
 
+[主操作状态审核](../../SOURCING-MAIN-STATE-REVIEW.md)。2026-09-09：主操作新增96张双端图；本包62主场景385PNG、23控件变体240双端状态实例。8语义组增加36代表槽，第二采购来源/其他记录/已勾选为3额外变体，不新增业务动作；累计84代表槽已绑定、86待补。局部/读取控件没有源码禁用或busy条件的，不编造图或减分母。仅离线提案，未提升批准、改生产或部署。
+
+## 主操作状态图直达
+
+### 1440px
+
+| 控件 | 默认 | 悬停 | 键盘焦点 | 按下 | 禁用 | 请求提交中 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 发起找货 | [查看](1440-control-main-search-open-default.png) | [查看](1440-control-main-search-open-hover.png) | [查看](1440-control-main-search-open-focus.png) | [查看](1440-control-main-search-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 确认报价入口 | [查看](1440-control-main-quote-open-default.png) | [查看](1440-control-main-quote-open-hover.png) | [查看](1440-control-main-quote-open-focus.png) | [查看](1440-control-main-quote-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 采购入口 / 第一来源 | [查看](1440-control-main-purchase-open-default.png) | [查看](1440-control-main-purchase-open-hover.png) | [查看](1440-control-main-purchase-open-focus.png) | [查看](1440-control-main-purchase-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 删除入口 | [查看](1440-control-main-delete-open-default.png) | [查看](1440-control-main-delete-open-hover.png) | [查看](1440-control-main-delete-open-focus.png) | [查看](1440-control-main-delete-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 当前记录 | [查看](1440-control-main-record-current-default.png) | [查看](1440-control-main-record-current-hover.png) | [查看](1440-control-main-record-current-focus.png) | [查看](1440-control-main-record-current-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 未选报价 | [查看](1440-control-main-select-default.png) | [查看](1440-control-main-select-hover.png) | [查看](1440-control-main-select-focus.png) | [查看](1440-control-main-select-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 保存对比 | [查看](1440-control-main-compare-default.png) | [查看](1440-control-main-compare-hover.png) | [查看](1440-control-main-compare-focus.png) | [查看](1440-control-main-compare-pressed.png) | [查看](1440-control-main-compare-disabled.png) | [查看](1440-control-main-compare-busy.png) |
+| 重新采集 | [查看](1440-control-main-refresh-default.png) | [查看](1440-control-main-refresh-hover.png) | [查看](1440-control-main-refresh-focus.png) | [查看](1440-control-main-refresh-pressed.png) | [查看](1440-control-main-refresh-disabled.png) | [查看](1440-control-main-refresh-busy.png) |
+| 采购入口 / 第二来源 | [查看](1440-control-main-purchase-second-default.png) | [查看](1440-control-main-purchase-second-hover.png) | [查看](1440-control-main-purchase-second-focus.png) | [查看](1440-control-main-purchase-second-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 其他记录 | [查看](1440-control-main-record-other-default.png) | [查看](1440-control-main-record-other-hover.png) | [查看](1440-control-main-record-other-focus.png) | [查看](1440-control-main-record-other-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 已选报价 | [查看](1440-control-main-select-checked-default.png) | [查看](1440-control-main-select-checked-hover.png) | [查看](1440-control-main-select-checked-focus.png) | [查看](1440-control-main-select-checked-pressed.png) | 源码无此条件 | 源码无此条件 |
+
+### 390px
+
+| 控件 | 默认 | 悬停 | 键盘焦点 | 按下 | 禁用 | 请求提交中 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 发起找货 | [查看](390-control-main-search-open-default.png) | [查看](390-control-main-search-open-hover.png) | [查看](390-control-main-search-open-focus.png) | [查看](390-control-main-search-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 确认报价入口 | [查看](390-control-main-quote-open-default.png) | [查看](390-control-main-quote-open-hover.png) | [查看](390-control-main-quote-open-focus.png) | [查看](390-control-main-quote-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 采购入口 / 第一来源 | [查看](390-control-main-purchase-open-default.png) | [查看](390-control-main-purchase-open-hover.png) | [查看](390-control-main-purchase-open-focus.png) | [查看](390-control-main-purchase-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 删除入口 | [查看](390-control-main-delete-open-default.png) | [查看](390-control-main-delete-open-hover.png) | [查看](390-control-main-delete-open-focus.png) | [查看](390-control-main-delete-open-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 当前记录 | [查看](390-control-main-record-current-default.png) | [查看](390-control-main-record-current-hover.png) | [查看](390-control-main-record-current-focus.png) | [查看](390-control-main-record-current-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 未选报价 | [查看](390-control-main-select-default.png) | [查看](390-control-main-select-hover.png) | [查看](390-control-main-select-focus.png) | [查看](390-control-main-select-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 保存对比 | [查看](390-control-main-compare-default.png) | [查看](390-control-main-compare-hover.png) | [查看](390-control-main-compare-focus.png) | [查看](390-control-main-compare-pressed.png) | [查看](390-control-main-compare-disabled.png) | [查看](390-control-main-compare-busy.png) |
+| 重新采集 | [查看](390-control-main-refresh-default.png) | [查看](390-control-main-refresh-hover.png) | [查看](390-control-main-refresh-focus.png) | [查看](390-control-main-refresh-pressed.png) | [查看](390-control-main-refresh-disabled.png) | [查看](390-control-main-refresh-busy.png) |
+| 采购入口 / 第二来源 | [查看](390-control-main-purchase-second-default.png) | [查看](390-control-main-purchase-second-hover.png) | [查看](390-control-main-purchase-second-focus.png) | [查看](390-control-main-purchase-second-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 其他记录 | [查看](390-control-main-record-other-default.png) | [查看](390-control-main-record-other-hover.png) | [查看](390-control-main-record-other-focus.png) | [查看](390-control-main-record-other-pressed.png) | 源码无此条件 | 源码无此条件 |
+| 已选报价 | [查看](390-control-main-select-checked-default.png) | [查看](390-control-main-select-checked-hover.png) | [查看](390-control-main-select-checked-focus.png) | [查看](390-control-main-select-checked-pressed.png) | 源码无此条件 | 源码无此条件 |
+
 2026-09-09最新：[关闭与取消状态审核](../../SOURCING-SECONDARY-STATE-REVIEW.md)新增96图，现62主场景289PNG、12控件变体144双端状态实例；48代表槽已绑定、122待补。父请求在途关闭锁为待审提案，真实Vue仍允许关闭；取消没有自己的请求或旋转标记。键盘回到实际入口（含第二采购按钮）、搜索/删除保留和报价/采购重开预填通过离线检查；没有提升批准、改生产或部署。以下193图/146槽为前批记录。
 
 ## 关闭与取消图直达

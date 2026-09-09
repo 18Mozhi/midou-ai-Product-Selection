@@ -104,6 +104,7 @@
     modalKind,
     modalOffer,
     busy,
+    mainPending,
     message,
     modalError,
     opener,
@@ -121,7 +122,7 @@
     costAllowed = () => !is("readonly", "cost-readonly"),
     reviewAllowed = () => is("cost-review-approved", "cost-review-rejected", "cost-overdue");
   const action = (id, label, cls = "", disabled = false, attrs = "") =>
-    `<button type="button" data-action="${id}" class="${cls}" ${disabled ? "disabled" : ""} ${attrs}>${label}</button>`;
+    `<button type="button" data-action="${id}" class="${cls} ${["SC-S-OPEN", "SC-DETAIL", "SC-REFRESH", "SC-QUOTE-OPEN", "SC-PURCHASE-OPEN", "SC-DELETE-OPEN", "SC-COMPARE"].includes(id) ? "main-control" : ""}" ${disabled ? "disabled" : ""} ${attrs}>${label}</button>`;
   const link = (id, label, href, external = false) =>
     `<a class="${external ? "source-link" : "link"}" data-action="${id}" href="${href}" ${external ? 'target="_blank" rel="noopener noreferrer"' : ""}>${label}</a>`;
   const badge = (v, cls = "") => `<span class="badge ${cls}">${v}</span>`;
@@ -160,6 +161,7 @@
     query = is("search-empty") ? "不存在的找货记录" : "";
     modalKind = "";
     busy = false;
+    mainPending = null;
     modalError = "";
     message = "";
     costMessage = "";
@@ -227,7 +229,7 @@
         .includes(query.trim().toLowerCase()),
     );
     $("#app").innerHTML =
-      `<header class="identity"><span class="brand">Scout<i>Ops</i></span><span class="meta">样本组织 / 桌面收纳工作区</span></header><div class="layout"><aside class="scope"><div><p class="eyebrow">供应链找货</p><h2>把报价追到证据</h2><p class="meta">当前工作区的找货记录，保留来源与版本。</p></div>${manager() ? action("SC-S-OPEN", "＋ 发起找货", "primary") : "<p>货源只读权限</p>"}<label>搜索找货记录<input id="search" data-action="SC-SEARCH" type="search" placeholder="记录名称、编号、状态" value="${esc(query)}" /></label><div class="records">${matches.map((r) => action("SC-DETAIL", `<strong>${r.name}</strong><small>${r.input_type === "opportunity" ? "选品机会" : "关键词"} · ${r.id === record.id ? { queued: "等待采集", running: "采集中", failed: "采集失败", "empty-result": "未找到可用候选" }[current.id] || "已完成但有缺失" : "已完成但有缺失"}</small><small>查看详情 →</small>`, "record", false, `data-record="${r.id}" aria-pressed="${r.id === record.id}"`)).join("")}</div><p class="meta">${matches.length} 个匹配记录</p><div class="scope-footer">真实候选 → 确认报价 → 保存对比 → 采购排队<br><br>样本数据，不连接生产</div></aside><main class="workspace"><header class="page-head"><div><p class="eyebrow">${record.input_type === "opportunity" ? "关联机会" : "关键词找货"} / 货源事实</p><h1>${esc(record.name)}</h1><p>先核对规格与证据，再确定采购数量。</p><div class="actions">${manager() ? action("SC-REFRESH", "重新采集") : ""}${link("SC-RULES", "费用与利润规则", "/sourcing/cost-rules?from=" + encodeURIComponent("/sourcing?record=" + record.id))}${manager() ? `<details class="more"><summary>更多操作</summary><div>${action("SC-DELETE-OPEN", "删除找货记录", "danger")}</div></details>` : ""}</div></div></header>${message ? `<div class="notice info" role="status">${esc(message)}</div>` : ""}${content(matches)}<p class="artifact">P21 · SOURCING-C-r1 · ${esc(current.label)} · 合成合同样本，具体设计待审。</p></main></div>`;
+      `<header class="identity"><span class="brand">Scout<i>Ops</i></span><span class="meta">样本组织 / 桌面收纳工作区</span></header><div class="layout"><aside class="scope"><div><p class="eyebrow">供应链找货</p><h2>把报价追到证据</h2><p class="meta">当前工作区的找货记录，保留来源与版本。</p></div>${manager() ? action("SC-S-OPEN", "＋ 发起找货", "primary") : "<p>货源只读权限</p>"}<label>搜索找货记录<input id="search" data-action="SC-SEARCH" type="search" placeholder="记录名称、编号、状态" value="${esc(query)}" /></label><div class="records">${matches.map((r) => action("SC-DETAIL", `<strong>${r.name}</strong><small>${r.input_type === "opportunity" ? "选品机会" : "关键词"} · ${r.id === record.id ? { queued: "等待采集", running: "采集中", failed: "采集失败", "empty-result": "未找到可用候选" }[current.id] || "已完成但有缺失" : "已完成但有缺失"}</small><small>查看详情 →</small>`, "record", false, `data-record="${r.id}" aria-pressed="${r.id === record.id}"`)).join("")}</div><p class="meta">${matches.length} 个匹配记录</p><div class="scope-footer">真实候选 → 确认报价 → 保存对比 → 采购排队<br><br>样本数据，不连接生产</div></aside><main class="workspace"><header class="page-head"><div><p class="eyebrow">${record.input_type === "opportunity" ? "关联机会" : "关键词找货"} / 货源事实</p><h1>${esc(record.name)}</h1><p>先核对规格与证据，再确定采购数量。</p><div class="actions">${manager() ? action("SC-REFRESH", mainPending?.kind === "refresh" && mainPending.recordId === record.id ? "正在提交采集" : "重新采集", "", busy, `aria-busy="${mainPending?.kind === "refresh" && mainPending.recordId === record.id}" ${mainPending ? 'aria-describedby="main-request-status"' : ""}`) : ""}${link("SC-RULES", "费用与利润规则", "/sourcing/cost-rules?from=" + encodeURIComponent("/sourcing?record=" + record.id))}${manager() ? `<details class="more"><summary>更多操作</summary><div>${action("SC-DELETE-OPEN", "删除找货记录", "danger")}</div></details>` : ""}</div></div></header>${message ? `<div class="notice info" role="status">${esc(message)}</div>` : ""}${mainPending ? `<div id="main-request-status" class="notice info" role="status" tabindex="-1">${esc(mainPending.recordName)}：${mainPending.kind === "compare" ? "正在提交 " + mainPending.quoteIds.length + " 家报价对比，尚未确认保存。" : "重新采集请求提交中，尚未确认排队。"} 不自动重放请求。</div>` : ""}${content(matches)}<p class="artifact">P21 · SOURCING-C-r1 · ${esc(current.label)} · 合成合同样本，具体设计待审。</p></main></div>`;
   }
   function content(matches) {
     if (is("loading"))
@@ -268,7 +270,7 @@
           : is("empty-result")
             ? [3, 0, 0, 0]
             : [1, 0, 2, 0];
-    return `<section class="progress-panel"><div><strong>${noOffers ? { queued: "等待采集", running: "采集中", failed: "采集失败", "empty-result": "采集成功，未找到候选" }[current.id] : "来源分别完成，受阻不掩盖成功"}</strong><p>公开页采集；没有登录续期入口，也没有浏览器自动轮询。</p></div><div class="counts">${progress.map((n, i) => badge(["成功 ", "失败 ", "受阻 ", "执行中 / 等待 "][i] + n, i === 2 && n ? "warn" : "")).join("")}</div>${is("platform-inspect") ? link("SC-COLLECTION", "查看采集任务明细", "/platform-admin/collection?task=" + uuid(70)) : ""}</section>${is("detail-error") ? notice("详情暂不可用", "列表身份保留；下方旧结果未被标成刚读取成功。", "error") : ""}${is("comparison-error") ? notice("对比历史未能读取", "这是独立降级提案：货源仍可读，但历史不能显示为空。当前Vue仍会阻断整页，尚未修复。", "error") : ""}${is("erp") ? notice("ERP货源线索 · 非确认报价", `历史参考 USD 7.00；不能代替现行供应商报价。<br>${link("SC-ERP", "打开ERP样本来源 ↗", "https://example.com/synthetic-erp", true)}<br><code>证据 ${uuid(250)}</code>`, "info") : ""}<div class="tablist" role="tablist" aria-label="找货记录内容">${[["offers", "货源候选"], ["comparison", "报价对比"], ...(record.input_type === "opportunity" ? [["cost", "机会成本"]] : [])].map(([id, label]) => `<button type="button" role="tab" id="tab-${id}" aria-controls="tab-panel" aria-selected="${tab === id}" tabindex="${tab === id ? 0 : -1}" data-action="SC-TAB" data-tab="${id}">${label}</button>`).join("")}</div><div id="tab-panel" role="tabpanel" aria-labelledby="tab-${tab}">${tab === "cost" ? costPanel() : tab === "comparison" ? comparisonPanel() : noOffers ? empty("尚无可用供应商候选", "任务结束不代表必有结果；受阻、空成功和失败分别呈现。", null) : offerPanel()}</div>${manager() && selectedQuotes.length ? `<aside class="tray" aria-live="polite"><div><strong>已选 ${selectedQuotes.length} / 5 家报价</strong><p>${selectedQuotes.length < 2 ? "至少再选择一家" : "保存引用当前报价ID，不改写报价事实"}</p></div>${action("SC-COMPARE", "保存报价对比", "primary", selectedQuotes.length < 2)}</aside>` : ""}`;
+    return `<section class="progress-panel"><div><strong>${noOffers ? { queued: "等待采集", running: "采集中", failed: "采集失败", "empty-result": "采集成功，未找到候选" }[current.id] : "来源分别完成，受阻不掩盖成功"}</strong><p>公开页采集；没有登录续期入口，也没有浏览器自动轮询。</p></div><div class="counts">${progress.map((n, i) => badge(["成功 ", "失败 ", "受阻 ", "执行中 / 等待 "][i] + n, i === 2 && n ? "warn" : "")).join("")}</div>${is("platform-inspect") ? link("SC-COLLECTION", "查看采集任务明细", "/platform-admin/collection?task=" + uuid(70)) : ""}</section>${is("detail-error") ? notice("详情暂不可用", "列表身份保留；下方旧结果未被标成刚读取成功。", "error") : ""}${is("comparison-error") ? notice("对比历史未能读取", "这是独立降级提案：货源仍可读，但历史不能显示为空。当前Vue仍会阻断整页，尚未修复。", "error") : ""}${is("erp") ? notice("ERP货源线索 · 非确认报价", `历史参考 USD 7.00；不能代替现行供应商报价。<br>${link("SC-ERP", "打开ERP样本来源 ↗", "https://example.com/synthetic-erp", true)}<br><code>证据 ${uuid(250)}</code>`, "info") : ""}<div class="tablist" role="tablist" aria-label="找货记录内容">${[["offers", "货源候选"], ["comparison", "报价对比"], ...(record.input_type === "opportunity" ? [["cost", "机会成本"]] : [])].map(([id, label]) => `<button type="button" role="tab" id="tab-${id}" aria-controls="tab-panel" aria-selected="${tab === id}" tabindex="${tab === id ? 0 : -1}" data-action="SC-TAB" data-tab="${id}">${label}</button>`).join("")}</div><div id="tab-panel" role="tabpanel" aria-labelledby="tab-${tab}">${tab === "cost" ? costPanel() : tab === "comparison" ? comparisonPanel() : noOffers ? empty("尚无可用供应商候选", "任务结束不代表必有结果；受阻、空成功和失败分别呈现。", null) : offerPanel()}</div>${manager() && selectedQuotes.length ? `<aside class="tray" aria-live="polite"><div><strong>已选 ${selectedQuotes.length} / 5 家报价</strong><p id="compare-request-status">${mainPending?.kind === "compare" ? "正在提交“" + esc(mainPending.recordName) + "”的 " + mainPending.quoteIds.length + " 家报价，结果尚未确认；当前勾选不改写已发请求。" : selectedQuotes.length < 2 ? "至少再选择一家" : "保存引用当前报价ID，不改写报价事实"}</p></div>${action("SC-COMPARE", mainPending?.kind === "compare" && mainPending.recordId === record.id ? "正在保存对比" : "保存报价对比", "primary", selectedQuotes.length < 2 || busy, `aria-busy="${mainPending?.kind === "compare" && mainPending.recordId === record.id}" aria-describedby="compare-request-status"`)}</aside>` : ""}`;
   }
   function offerPanel() {
     return `<section class="panel"><div class="panel-title"><div><h2>供应商候选</h2><p class="meta">报价、MOQ、规格、交期与证据逐项核对</p></div>${badge(offers.length + " 个样本候选")}</div>${offers
@@ -285,7 +287,7 @@
             .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
             .join(
               "",
-            )}</dl>${!o.quote ? notice("人工确认前不可比较", "规格、MOQ、交期、可信度待补齐；输入默认值不等于采集事实。") : ""}<div class="evidence">${link("SC-SOURCE", "打开原始商品页 ↗", o.original_url, true)}<span class="meta">观测于 2026-09-09 08:00 · 证据 <code>${o.evidence_id}</code></span></div></div><div class="offer-side"><span class="meta">原始报价</span><strong class="price">${o.currency} ${o.quoted_price.toFixed(2)}</strong><span class="meta">到岸价：待费用规则计算</span>${manager() && o.quote ? `<label class="check"><input type="checkbox" data-action="SC-SELECT" data-offer="${o.id}" ${selectedQuotes.includes(o.quote.id) ? "checked" : ""}/>加入对比</label>` : ""}${manager() ? action(o.quote ? "SC-PURCHASE-OPEN" : "SC-QUOTE-OPEN", o.quote ? "创建采购任务" : "确认报价", o.quote ? "" : "primary", false, `data-offer="${o.id}"`) : "<span class='meta'>只读：不能确认或采购</span>"}</div></article>`,
+            )}</dl>${!o.quote ? notice("人工确认前不可比较", "规格、MOQ、交期、可信度待补齐；输入默认值不等于采集事实。") : ""}<div class="evidence">${link("SC-SOURCE", "打开原始商品页 ↗", o.original_url, true)}<span class="meta">观测于 2026-09-09 08:00 · 证据 <code>${o.evidence_id}</code></span></div></div><div class="offer-side"><span class="meta">原始报价</span><strong class="price">${o.currency} ${o.quoted_price.toFixed(2)}</strong><span class="meta">到岸价：待费用规则计算</span>${manager() && o.quote ? `<label class="check main-check"><input type="checkbox" data-action="SC-SELECT" data-offer="${o.id}" ${selectedQuotes.includes(o.quote.id) ? "checked" : ""}/>加入对比</label>` : ""}${manager() ? action(o.quote ? "SC-PURCHASE-OPEN" : "SC-QUOTE-OPEN", o.quote ? "创建采购任务" : "确认报价", o.quote ? "" : "primary", false, `data-offer="${o.id}"`) : "<span class='meta'>只读：不能确认或采购</span>"}</div></article>`,
       )
       .join("")}</section>`;
   }
@@ -367,7 +369,7 @@
     opener = document.activeElement?.closest("[data-action]");
     modalKind = kind;
     modalOffer = offer;
-    busy = scene && current.id.endsWith("busy");
+    busy = scene ? current.id.endsWith("busy") : busy;
     modalError =
       scene && current.id.endsWith("error")
         ? "隔离失败 / 输入已保留。请核对后显式重试，不能由网络错误推定未写入。"
@@ -583,8 +585,8 @@
       render();
       $("#tab-" + tab).focus();
     } else if (id === "SC-DETAIL") {
+      if (record.id !== el.dataset.record) selectedQuotes = [];
       record = { ...records.find((r) => r.id === el.dataset.record) };
-      selectedQuotes = [];
       tab = "offers";
       intent("/sourcing/searches/" + record.id, "GET");
       render();
@@ -593,16 +595,28 @@
       render();
       $("#search").focus();
     } else if (id === "SC-COMPARE") {
-      if (selectedQuotes.length < 2 || selectedQuotes.length > 5) return;
+      if (busy || selectedQuotes.length < 2 || selectedQuotes.length > 5) return;
       intent("/sourcing/comparisons", "POST", {
         name: record.name + " 报价对比",
         quote_ids: selectedQuotes,
       });
-      message = "隔离意图已记录；未保存实际对比。";
+      if (window.sourcingReview.outcome === "pending") {
+        busy = true;
+        mainPending = {
+          kind: "compare",
+          recordId: record.id,
+          recordName: record.name,
+          quoteIds: [...selectedQuotes],
+        };
+      } else message = "隔离意图已记录；未保存实际对比。";
       render();
     } else if (id === "SC-REFRESH") {
+      if (busy) return;
       intent("/sourcing/searches/" + record.id + "/refresh", "POST", {});
-      message = "隔离排队演示，不代表新候选已采集。";
+      if (window.sourcingReview.outcome === "pending") {
+        busy = true;
+        mainPending = { kind: "refresh", recordId: record.id, recordName: record.name };
+      } else message = "隔离排队演示，不代表新候选已采集。";
       render();
     } else if (id === "SC-STATE") {
       intent("/sourcing/searches", "GET");
