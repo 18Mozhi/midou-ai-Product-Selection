@@ -146,6 +146,9 @@ const sources = ["index.html", "data.js", "journey.js", "journey.css"]
   .concat([
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css",
     "apps/web/src/components/SelectionJourney.vue",
+    "apps/web/src/design/theme.ts",
+    "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.css",
+    "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.js",
     "apps/web/src/components/UiStatePanel.vue",
     "apps/web/src/ui/state-contract.ts",
     "apps/api/src/selection-journey-service.ts",
@@ -171,6 +174,13 @@ const data = await buildJourneyDesignData(repo),
   sandbox = { window: {} };
 vm.runInNewContext(texts[`${relative}/data.js`], sandbox);
 assert.deepEqual(JSON.parse(JSON.stringify(sandbox.window.JOURNEY_C_DATA)), data);
+const themeIds = JSON.parse(
+  texts["apps/web/src/design/theme.ts"].match(/themeIds = (\[[^\]]+\])/)[1],
+);
+const densityIds = JSON.parse(
+  texts["apps/web/src/design/theme.ts"].match(/densityIds = (\[[^\]]+\])/)[1],
+);
+const appearanceScenes = ["keyword-edited", "adopt-ready", "adopt-conflict", "adopt-decided"];
 for (const control of fieldControls)
   assert.ok(
     texts["apps/web/src/components/SelectionJourney.vue"].includes(`v-model="${control.field}"`),
@@ -186,7 +196,9 @@ if (!capture && !smoke) {
 const browser = await chromium.launch({ headless: true }),
   screenshots = [],
   expected = [],
-  controlStates = [];
+  controlStates = [],
+  appearanceCases = [],
+  responsiveCases = [];
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({
@@ -642,6 +654,163 @@ try {
       await scene("decided-no-links");
       assert.equal(await page.locator('a[href^="/tasks/"]').count(), 0);
       assert.deepEqual(
+        await page.locator("#preview-theme option").evaluateAll((els) => els.map((el) => el.value)),
+        themeIds,
+      );
+      assert.deepEqual(
+        await page
+          .locator("#preview-density option")
+          .evaluateAll((els) => els.map((el) => el.value)),
+        densityIds,
+      );
+      const presentation = (theme, density) =>
+        page.evaluate(([t, d]) => window.JOURNEY_C.presentation(t, d), [theme, density]);
+      const layout = async (name) => {
+        await checkPrototypeMetrics(page);
+        assert.ok(
+          await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+          name,
+        );
+        const target = page.locator('.j-footer button, #create-form [type="submit"]').last();
+        await target.scrollIntoViewIfNeeded();
+        assert.equal(
+          await target.evaluate((el) => {
+            const r = el.getBoundingClientRect();
+            const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+            return el === hit || el.contains(hit);
+          }),
+          true,
+          `${name} action reachable`,
+        );
+      };
+      const heights = {};
+      for (const theme of themeIds)
+        for (const density of densityIds) {
+          await scene("adopt-ready");
+          const original = await state();
+          await page.locator(".review-display summary").click();
+          await page.selectOption("#preview-theme", theme);
+          await page.selectOption("#preview-density", density);
+          await page.locator(".review-display summary").click();
+          assert.deepEqual(await state(), original, "presentation must retain draft/state");
+          for (const name of appearanceScenes) {
+            await scene(name);
+            await layout(`${width}/${theme}/${density}/${name}`);
+            assert.equal(
+              await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme),
+              "light",
+            );
+            const contrast = await page.evaluate(() => {
+              const luminance = (color) => {
+                const channels = color
+                  .match(/[\d.]+/g)
+                  .slice(0, 3)
+                  .map(Number)
+                  .map((v) => {
+                    const c = v / 255;
+                    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+                  });
+                return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+              };
+              return [
+                [".j-rail", ".j-rail"],
+                [".j-rail small", ".j-rail"],
+                [".j-head p", "html"],
+                [".j-surface", ".j-surface"],
+              ].map(([fg, bg]) => {
+                const a = luminance(getComputedStyle(document.querySelector(fg)).color);
+                const b = luminance(getComputedStyle(document.querySelector(bg)).backgroundColor);
+                return { selector: fg, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
+              });
+            });
+            assert.ok(
+              contrast.every((v) => v.ratio >= 4.5),
+              JSON.stringify({ theme, density, contrast }),
+            );
+            const file =
+              theme === "deep-ocean" && density === "standard"
+                ? `${width}-${name}.png`
+                : `${width}-appearance-${theme}-${density}-${name}.png`;
+            appearanceCases.push({ width, theme, density, scene: name, file, contrast });
+            if (!(theme === "deep-ocean" && density === "standard")) {
+              expected.push(file);
+              if (capture) {
+                const buffer = await page.screenshot({
+                  path: path.join(root, file),
+                  fullPage: true,
+                  animations: "disabled",
+                });
+                screenshots.push({
+                  file,
+                  scene: `appearance-${theme}-${density}-${name}`,
+                  width,
+                  theme,
+                  density,
+                  sha256: hash(buffer),
+                });
+              }
+            }
+            if (name === "adopt-ready")
+              heights[`${theme}/${density}`] = await page
+                .locator("#app")
+                .evaluate((el) => el.getBoundingClientRect().height);
+          }
+        }
+      for (const theme of themeIds)
+        assert.ok(heights[`${theme}/compact`] <= heights[`${theme}/standard`]);
+      await scene("keyword-edited");
+      assert.equal(
+        await page
+          .locator('#create-form [type="submit"]')
+          .evaluate((el) => getComputedStyle(el).transitionDuration),
+        "0s",
+      );
+      await presentation("deep-ocean", "standard");
+      await page.evaluate(() => {
+        document.body.style.zoom = "2";
+      });
+      for (const name of ["long-result", "asin-invalid"]) {
+        await scene(name);
+        await layout(`${width}/css-zoom-2/${name}`);
+        const file = `${width}-zoom-2-${name}.png`;
+        expected.push(file);
+        responsiveCases.push({
+          width,
+          zoom: 2,
+          scene: name,
+          file,
+          kind: "css-zoom-not-native-browser-zoom",
+        });
+        if (capture) {
+          const buffer = await page.screenshot({
+            path: path.join(root, file),
+            fullPage: true,
+            animations: "disabled",
+          });
+          screenshots.push({ file, scene: `zoom-2-${name}`, width, zoom: 2, sha256: hash(buffer) });
+        }
+      }
+      await page.evaluate(() => {
+        document.body.style.zoom = "";
+      });
+      if (width === 1440) {
+        await presentation("cloud-white", "compact");
+        for (const viewportWidth of [320, 759, 760, 761, 768, 1024, 1049, 1050, 1051]) {
+          await page.setViewportSize({ width: viewportWidth, height: 900 });
+          for (const name of ["long-result", "twenty-results"]) {
+            await scene(name);
+            await layout(`${viewportWidth}/compact/${name}`);
+            responsiveCases.push({
+              width: viewportWidth,
+              scene: name,
+              theme: "cloud-white",
+              density: "compact",
+              zoom: 1,
+            });
+          }
+        }
+      }
+      assert.deepEqual(
         await page.evaluate(() => [localStorage.length, sessionStorage.length]),
         [0, 0],
       );
@@ -702,8 +871,10 @@ if (capture)
         controlStates,
         actionVisualReferences,
         fieldVisualReferences,
+        appearanceCases,
+        responsiveCases,
         boundary:
-          "67 full scenes and102 representative control states at two widths; zero business dialogs. Overall layout approved, controls pending. Field validation/focus/busy/error clearing are proposals; real Vue, HTTP, storage, SQL, authorization and production not accepted.",
+          "338 base PNG plus40 appearance and4 CSS-zoom PNG. Three existing light theme IDs/two densities sampled across four phases;18 breakpoint/4 CSS-zoom checks, not every state/theme or native zoom. Zero dialogs/HTTP/storage. Overall layout approved; controls, appearance, real Vue/SQL/production pending.",
         screenshots,
       },
       null,

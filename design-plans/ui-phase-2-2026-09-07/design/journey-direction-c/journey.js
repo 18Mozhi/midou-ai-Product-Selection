@@ -1,6 +1,18 @@
 (() => {
   const d = window.JOURNEY_C_DATA,
     clone = (v) => JSON.parse(JSON.stringify(v));
+  const themes = { "deep-ocean": "目录蓝", "aurora-purple": "冷雾蓝", "cloud-white": "净页白" };
+  const densities = { standard: "标准", compact: "紧凑" };
+  function presentation(theme, density) {
+    if (!Object.hasOwn(themes, theme) || !Object.hasOwn(densities, density))
+      throw new Error("Unknown review presentation");
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.density = density;
+    document.querySelector("#preview-theme").value = theme;
+    document.querySelector("#preview-density").value = density;
+    document.querySelector("#preview-label").textContent =
+      `${themes[theme]} / ${densities[density]}`;
+  }
   const e = (v) =>
     String(v ?? "").replace(
       /[&<>"']/g,
@@ -711,6 +723,16 @@
       }, 350);
     }
   });
-  window.JOURNEY_C = { scenes, scene, state: () => clone(s), advance };
+  for (const id of ["preview-theme", "preview-density"])
+    document
+      .getElementById(id)
+      .addEventListener("change", () =>
+        presentation(
+          document.querySelector("#preview-theme").value,
+          document.querySelector("#preview-density").value,
+        ),
+      );
+  window.JOURNEY_C = { scenes, scene, state: () => clone(s), advance, presentation };
+  presentation("deep-ocean", "standard");
   scene("keyword");
 })();

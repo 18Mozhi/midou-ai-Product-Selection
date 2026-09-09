@@ -1,14 +1,17 @@
 {
   "version": "JOURNEY-C-r2",
   "approval": "pending",
-  "capturedAt": "2026-09-09T11:59:25.178Z",
+  "capturedAt": "2026-09-09T12:12:35.564Z",
   "sourceHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/index.html": "b08397f4815512cdf878c4646a60c75e58e722c057944b029e18ca909603854e",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/index.html": "b98d7c38f9c0b168ef12df75a23d7a8866854da6d18d3a76e8070b58dce7fffb",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/data.js": "e1db28d2ea8fc434984fdcb1eb27d0d09fd8eec19b4ecf3b7b0978c8247f0fe7",
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.js": "47d342013d723852e502bfd80a52572bd80842b4d7ba35164bd7df3dd2361635",
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.css": "3b4c167020b267e5ff732d44a46234b2894340a50a75886141362e920c73607c",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.js": "e0058bbb01acab62d1aecc6544b8c1fd376175b498ffe78c5351bde9446e78b1",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.css": "f3d0b9e4bbadd081cbe0484c3e7ec2d7d4a4546ca7f847ecebabe51a88630c70",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
     "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.css": "014643f74b10d2d06f636a7422896954314b02194133253a3e0d4cff49467d96",
+    "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.js": "e127b556bb28aeef38e91859bdcb2ce95ff30c8a7656ffa91b3a0ad25bfa2f0f",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/api/src/selection-journey-service.ts": "6f563b86b870d78ab69b75c71d41c63ff021a0973ffa268cc1d6db6b56d6303f",
@@ -19,7 +22,7 @@
     "tests/e2e/ui-phase2-journey-reads.spec.ts": "3b8f7733ad099503d14817d73f454006cdc398afc648766563f01c0f2e906a91",
     "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "scripts/verify-ui-phase2-journey-c.mjs": "c905990c13e61a00f23a3a75bc3e307359e4d5c9dc4912aaa9e6652654516a50"
+    "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f"
   },
   "knownGaps": {
     "decideSuccessState": "ready",
@@ -1965,415 +1968,1773 @@
       }
     }
   },
-  "boundary": "67 full scenes and102 representative control states at two widths; zero business dialogs. Overall layout approved, controls pending. Field validation/focus/busy/error clearing are proposals; real Vue, HTTP, storage, SQL, authorization and production not accepted.",
+  "appearanceCases": [
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "keyword-edited",
+      "file": "1440-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "adopt-ready",
+      "file": "1440-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "adopt-conflict",
+      "file": "1440-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "adopt-decided",
+      "file": "1440-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "keyword-edited",
+      "file": "1440-appearance-deep-ocean-compact-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "adopt-ready",
+      "file": "1440-appearance-deep-ocean-compact-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "adopt-conflict",
+      "file": "1440-appearance-deep-ocean-compact-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "adopt-decided",
+      "file": "1440-appearance-deep-ocean-compact-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "keyword-edited",
+      "file": "1440-appearance-aurora-purple-standard-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "adopt-ready",
+      "file": "1440-appearance-aurora-purple-standard-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "adopt-conflict",
+      "file": "1440-appearance-aurora-purple-standard-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "adopt-decided",
+      "file": "1440-appearance-aurora-purple-standard-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "keyword-edited",
+      "file": "1440-appearance-aurora-purple-compact-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "adopt-ready",
+      "file": "1440-appearance-aurora-purple-compact-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "adopt-conflict",
+      "file": "1440-appearance-aurora-purple-compact-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "adopt-decided",
+      "file": "1440-appearance-aurora-purple-compact-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "keyword-edited",
+      "file": "1440-appearance-cloud-white-standard-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "adopt-ready",
+      "file": "1440-appearance-cloud-white-standard-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "adopt-conflict",
+      "file": "1440-appearance-cloud-white-standard-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "adopt-decided",
+      "file": "1440-appearance-cloud-white-standard-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "keyword-edited",
+      "file": "1440-appearance-cloud-white-compact-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "adopt-ready",
+      "file": "1440-appearance-cloud-white-compact-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "adopt-conflict",
+      "file": "1440-appearance-cloud-white-compact-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "adopt-decided",
+      "file": "1440-appearance-cloud-white-compact-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "keyword-edited",
+      "file": "390-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "adopt-ready",
+      "file": "390-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "adopt-conflict",
+      "file": "390-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "standard",
+      "scene": "adopt-decided",
+      "file": "390-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "keyword-edited",
+      "file": "390-appearance-deep-ocean-compact-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "adopt-ready",
+      "file": "390-appearance-deep-ocean-compact-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "adopt-conflict",
+      "file": "390-appearance-deep-ocean-compact-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "scene": "adopt-decided",
+      "file": "390-appearance-deep-ocean-compact-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 8.273466608002094
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 6.840834973400533
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0847350345133275
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "keyword-edited",
+      "file": "390-appearance-aurora-purple-standard-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "adopt-ready",
+      "file": "390-appearance-aurora-purple-standard-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "adopt-conflict",
+      "file": "390-appearance-aurora-purple-standard-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "scene": "adopt-decided",
+      "file": "390-appearance-aurora-purple-standard-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "keyword-edited",
+      "file": "390-appearance-aurora-purple-compact-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "adopt-ready",
+      "file": "390-appearance-aurora-purple-compact-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "adopt-conflict",
+      "file": "390-appearance-aurora-purple-compact-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "scene": "adopt-decided",
+      "file": "390-appearance-aurora-purple-compact-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 7.014479172682688
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.799853521892069
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.0115390056038045
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 13.57122256374463
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "keyword-edited",
+      "file": "390-appearance-cloud-white-standard-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "adopt-ready",
+      "file": "390-appearance-cloud-white-standard-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "adopt-conflict",
+      "file": "390-appearance-cloud-white-standard-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "scene": "adopt-decided",
+      "file": "390-appearance-cloud-white-standard-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "keyword-edited",
+      "file": "390-appearance-cloud-white-compact-keyword-edited.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "adopt-ready",
+      "file": "390-appearance-cloud-white-compact-adopt-ready.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "adopt-conflict",
+      "file": "390-appearance-cloud-white-compact-adopt-conflict.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "scene": "adopt-decided",
+      "file": "390-appearance-cloud-white-compact-adopt-decided.png",
+      "contrast": [
+        {
+          "selector": ".j-rail",
+          "ratio": 10.263030181598372
+        },
+        {
+          "selector": ".j-rail small",
+          "ratio": 5.26813120812352
+        },
+        {
+          "selector": ".j-head p",
+          "ratio": 5.570378283626497
+        },
+        {
+          "selector": ".j-surface",
+          "ratio": 14.102738944447992
+        }
+      ]
+    }
+  ],
+  "responsiveCases": [
+    {
+      "width": 1440,
+      "zoom": 2,
+      "scene": "long-result",
+      "file": "1440-zoom-2-long-result.png",
+      "kind": "css-zoom-not-native-browser-zoom"
+    },
+    {
+      "width": 1440,
+      "zoom": 2,
+      "scene": "asin-invalid",
+      "file": "1440-zoom-2-asin-invalid.png",
+      "kind": "css-zoom-not-native-browser-zoom"
+    },
+    {
+      "width": 320,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 320,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 759,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 759,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 760,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 760,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 761,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 761,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 768,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 768,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1024,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1024,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1049,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1049,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1050,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1050,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1051,
+      "scene": "long-result",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 1051,
+      "scene": "twenty-results",
+      "theme": "cloud-white",
+      "density": "compact",
+      "zoom": 1
+    },
+    {
+      "width": 390,
+      "zoom": 2,
+      "scene": "long-result",
+      "file": "390-zoom-2-long-result.png",
+      "kind": "css-zoom-not-native-browser-zoom"
+    },
+    {
+      "width": 390,
+      "zoom": 2,
+      "scene": "asin-invalid",
+      "file": "390-zoom-2-asin-invalid.png",
+      "kind": "css-zoom-not-native-browser-zoom"
+    }
+  ],
+  "boundary": "338 base PNG plus40 appearance and4 CSS-zoom PNG. Three existing light theme IDs/two densities sampled across four phases;18 breakpoint/4 CSS-zoom checks, not every state/theme or native zoom. Zero dialogs/HTTP/storage. Overall layout approved; controls, appearance, real Vue/SQL/production pending.",
   "screenshots": [
     {
       "file": "1440-keyword.png",
       "scene": "keyword",
       "width": 1440,
-      "sha256": "e9dcef39492809a6cc0a366d61b565acef3e0625a9ee390eb81930ba9e2d59ef"
+      "sha256": "e06a4a94e116b5d6d5fc1c30e59e3e092d83a19d97606892c3a264975d675ffd"
     },
     {
       "file": "1440-asin.png",
       "scene": "asin",
       "width": 1440,
-      "sha256": "99ce7566ebce5d23f3b953e67cfec0cc610e587f07aaac02198c5b9ad7089604"
+      "sha256": "dd31d6d153b43736a634b0a18eb597c9171c30eebf36be3bad15e27a0733a890"
     },
     {
       "file": "1440-url.png",
       "scene": "url",
       "width": 1440,
-      "sha256": "a81befc4c4f23f258cbbe3ab8db1773a01063b0fc47cef8d67bf6e9d2b592bf3"
+      "sha256": "d4d45808cfcefbb409bdea2922edf293ebccb123c69f691f9a676a367b935f44"
     },
     {
       "file": "1440-keyword-edited.png",
       "scene": "keyword-edited",
       "width": 1440,
-      "sha256": "08772880defe5b69753c2d0cea312e0a05de360b0a7c8ba9fa331dc00b80d6db"
+      "sha256": "127b0ed52303959c4b1194a6ac0b813faedaf27575ae760b2b54390efd7058e1"
     },
     {
       "file": "1440-asin-edited.png",
       "scene": "asin-edited",
       "width": 1440,
-      "sha256": "c8d0cd16ab67b6967355f0962a3d6968a3bfec9b13b557097bfe86c87970b2d1"
+      "sha256": "f588f7737c114933136a111daf54263785910c96d55659463c7e4bd7215fa08c"
     },
     {
       "file": "1440-url-edited.png",
       "scene": "url-edited",
       "width": 1440,
-      "sha256": "2c69cde48037b828a3feed8afe2c5c86b81fe7c600f9be53bfdbc6c4cc2cb7fa"
+      "sha256": "df1f0629889a54825056809e487863feb40cc4ca10b7247265ca9935fd104af8"
     },
     {
       "file": "1440-keyword-required.png",
       "scene": "keyword-required",
       "width": 1440,
-      "sha256": "353d6b8f9033c4f6077a8f04dbe0fe8171e4d500d4e8046c99b0ad8d8f22ad9f"
+      "sha256": "724781df21dd3d519dafb2c8ae1056fcad9ce85cae06f3219abd9af77d436e33"
     },
     {
       "file": "1440-asin-invalid.png",
       "scene": "asin-invalid",
       "width": 1440,
-      "sha256": "f5febf340676c4694b65a64cc5ba0e26ca14f71102e0e18641c42391350fdf2f"
+      "sha256": "a27bf9b30d3415572e8c632f903f2aa7e55b781116848233c3fa0a34bae91824"
     },
     {
       "file": "1440-url-invalid.png",
       "scene": "url-invalid",
       "width": 1440,
-      "sha256": "716c90380391ac8845455a694dd98dc1f1d8721db9d996950a14f81fb75e99c6"
+      "sha256": "063b85c6e9b9adb33f6e448c9fafdc99b319794beeca02e8f1b2e579fdca7303"
     },
     {
       "file": "1440-reason-required.png",
       "scene": "reason-required",
       "width": 1440,
-      "sha256": "7bc57b483233e27bbdf1b7f9bd3a6dc865e4ddeeb83e078c8e76e24def6dcd18"
+      "sha256": "cb6ede38bc5164888ca809a63f8c1b01d6f455f4830b15abaa308d4d7291972d"
     },
     {
       "file": "1440-asin-restoring.png",
       "scene": "asin-restoring",
       "width": 1440,
-      "sha256": "b6199b6070571d1117b058cf64fd4b4aabc64b46855979402b5f36a9376e1505"
+      "sha256": "6c9ece1ff47eaac453f79812a2bebfaaa87c670d444127123a2ea8fb7008b6e9"
     },
     {
       "file": "1440-url-restoring.png",
       "scene": "url-restoring",
       "width": 1440,
-      "sha256": "a1c9b8e91bccb61d082632007af6d79fd6557c341240a49f3ecc509ed82f3e36"
+      "sha256": "c68cedf49066bcb0b796b5bd37c90af08c60a7fec30127dc7b2f9eb356a37005"
     },
     {
       "file": "1440-asin-create-busy.png",
       "scene": "asin-create-busy",
       "width": 1440,
-      "sha256": "c7462d8c039a7a0d93cdfda0814792b3734bf009a2b9365755302c0971726837"
+      "sha256": "8116a8d0fa46d815f19a23e916c93397dcc1f9845fc4ac6a770587955eaf4b60"
     },
     {
       "file": "1440-url-create-busy.png",
       "scene": "url-create-busy",
       "width": 1440,
-      "sha256": "65f897bd78298c2dc82fd0f818e8676ee8468a290ecc73e88e0bb14a3718995d"
+      "sha256": "bb01bbfb9e2019e0b22703903c83934eb742b56364a59429148598ef651bbda3"
     },
     {
       "file": "1440-create-busy.png",
       "scene": "create-busy",
       "width": 1440,
-      "sha256": "99a7bb4607b0ab627883d4d26a6fdb4e024a5d5e58f43ca6325105664926fa02"
+      "sha256": "b4a3b19fc8d1569a5bb345404fde8d9175e56f9e7594faa05c8ced5f3ee5e13e"
     },
     {
       "file": "1440-create-failed.png",
       "scene": "create-failed",
       "width": 1440,
-      "sha256": "db9619bd9b1040b111679d43ea3e9614eb59878cd0e54f145d4794ca81768331"
+      "sha256": "f7c9d122eb3f128be608b7d3c241440c185b7f4b34f11491e987a8d30454f909"
     },
     {
       "file": "1440-url-rejected.png",
       "scene": "url-rejected",
       "width": 1440,
-      "sha256": "b8ec04262e7d93785673ad1ae6a8d6d97ae797cf5610d317492c43b921bd5905"
+      "sha256": "4fca6a0ff528dacfb9036772151f2c3f82e5b7b18191ec99c2360db9d6372fbb"
     },
     {
       "file": "1440-restoring.png",
       "scene": "restoring",
       "width": 1440,
-      "sha256": "32c9ec6cf32c822c3f79e100e15bcc1d83487218f219c10628bb73b5e3be4ab0"
+      "sha256": "578bf925e9f2601622a8b0aaa690033b174f8567620803044206fe2c31b218ca"
     },
     {
       "file": "1440-restore-failed.png",
       "scene": "restore-failed",
       "width": 1440,
-      "sha256": "c25a4c5a79f7d392873b99b9357e118ad8b20e07b00f2b9a7713ed854c48adc7"
+      "sha256": "5fee1f2e035eeb5c01115ffd1cbe7495dd5c0e567c0188e4253ebfd03067618c"
     },
     {
       "file": "1440-restore-expired.png",
       "scene": "restore-expired",
       "width": 1440,
-      "sha256": "90c673391e31b83ea36dfeaef89dda239a9440ad2f73a38597c5b4b9dc896564"
+      "sha256": "a5f2dd3058cb6945ea75ee097e5794966bc8e7c8e5bcacf8c04f7cdfefdfc695"
     },
     {
       "file": "1440-restore-forbidden.png",
       "scene": "restore-forbidden",
       "width": 1440,
-      "sha256": "a5ddfbc6a44eec47e9f30deb313cdbd7090cd74b2f3f055c254d9508dd523858"
+      "sha256": "f461bc7e072aeb220003e369de97b65470c8643c9d97d19d4004eba6c96a067f"
     },
     {
       "file": "1440-restore-blocked.png",
       "scene": "restore-blocked",
       "width": 1440,
-      "sha256": "ba6a07c43f6fede833de758084a46aa3e63f9edd23fc69fc6740aae9156ff163"
+      "sha256": "36a2d50b61f1c3f69124aa239a4a959ad849739bac1e5ddd3312d62fee83fc77"
     },
     {
       "file": "1440-retry-busy.png",
       "scene": "retry-busy",
       "width": 1440,
-      "sha256": "621194337fe85f368f569812d8b23c807851fd8fc538e020aa3a7c393a988bd7"
+      "sha256": "067496c44a298bee536f48fd099ebe2c2e1da7ffefc42bc1998f2338a469c8a4"
     },
     {
       "file": "1440-invalid-id.png",
       "scene": "invalid-id",
       "width": 1440,
-      "sha256": "47b3dd311bfea2984226d78dc134781d1df001e0c65b76d5a0d9c5693ab99aba"
+      "sha256": "e34648733230a73cdc158774597da7ceaa447392f9a72fdef402ad794a5cac9f"
     },
     {
       "file": "1440-missing-id.png",
       "scene": "missing-id",
       "width": 1440,
-      "sha256": "e747f0aafe1fe38076c21fea039b6d7af187eb3f13ac73005112be6676f28244"
+      "sha256": "43c9917f8002153e3ad4822a8cef666a032af5853cc5e22a159b402344388eef"
     },
     {
       "file": "1440-accepted.png",
       "scene": "accepted",
       "width": 1440,
-      "sha256": "818553f31c96ef2877ab7fe2aff6522087eb2463f07956dc537f106b9d1063c8"
+      "sha256": "5ae8d98cd29b43cffa5035e8e732daf316d77dd107ffbb8dc472fc7bfc59622d"
     },
     {
       "file": "1440-running.png",
       "scene": "running",
       "width": 1440,
-      "sha256": "69683b6cfd811d973831bf4573f8dd2e416559f495888c037576b59f9b20a224"
+      "sha256": "6fd70d74913e061e9541ab37fe3d0f3e07a7fc1333cd230f4964c853b8a2e9bb"
     },
     {
       "file": "1440-running-evidence.png",
       "scene": "running-evidence",
       "width": 1440,
-      "sha256": "ff9f9b61ee372167de7d4ab5e9d90ab51347a778563f0e966a9074057ed0b89e"
+      "sha256": "17600b9656e145a1b58feddc93166eb843503ae41c899bb3df6271355a4188fa"
     },
     {
       "file": "1440-read-busy.png",
       "scene": "read-busy",
       "width": 1440,
-      "sha256": "7260ea118f9097157c47b7888315ad846f2bab91caabe99ec9af8342f5491730"
+      "sha256": "2f3fe221e073136af990489d12c0c5ca82ef46532663466cf86c20596b637a33"
     },
     {
       "file": "1440-read-failed.png",
       "scene": "read-failed",
       "width": 1440,
-      "sha256": "e99adf320aa628e8b14c3502793d44878305ec6be14c023968d063f942cf4040"
+      "sha256": "0735f629de0688536f534cfe5a51e3ad982ff7488c7206a438db7c7e412c6934"
     },
     {
       "file": "1440-read-expired.png",
       "scene": "read-expired",
       "width": 1440,
-      "sha256": "b21622caf3847a17fc42410d98cd7a3f0b33ece61d739484a3c20f86fc4c3a96"
+      "sha256": "155b21078cf3c97a8c3d6f8ef52e500c0cf6ebd7066a03d0a6adf2f93135fd11"
     },
     {
       "file": "1440-read-forbidden.png",
       "scene": "read-forbidden",
       "width": 1440,
-      "sha256": "1764457472d74a182e33813cb6fdf2000840266d19d041e50a1eb27851aa708c"
+      "sha256": "4538c6b39e5485a26723a426ce1583cd34b513cc853febc94c2454363798159f"
     },
     {
       "file": "1440-read-blocked.png",
       "scene": "read-blocked",
       "width": 1440,
-      "sha256": "ba2216df3d91f7631e06055dd8a2672b7d8713f6c020b124409cac7005a4ea8a"
+      "sha256": "b8ed3a4674f9b50690bc0e403559b778aaa8d20d255a291af7805bbf9c28e098"
     },
     {
       "file": "1440-results.png",
       "scene": "results",
       "width": 1440,
-      "sha256": "5a816e93d69d91f375f575574baf24cb89b34c0900bd6d05ec4e168ba120a232"
+      "sha256": "3598401b4c61464d6fdc242b0346532ff92fe90af70a68549efdeadf7f049ca4"
     },
     {
       "file": "1440-selected.png",
       "scene": "selected",
       "width": 1440,
-      "sha256": "f7b1cc3989359e1b8a3da97b94a176f1f6c2858909fb67ff8f9887fa26652c6c"
+      "sha256": "484f3f7de7b5140b93196667073d7b1d69d35ec9d0d5f6b6196116496aeae9e8"
     },
     {
       "file": "1440-no-topic.png",
       "scene": "no-topic",
       "width": 1440,
-      "sha256": "eb89d7d8fba4b6e9ad321268a40e36f55c2877d5c1487e9656eaf8513c12db86"
+      "sha256": "3920cc289e242fc12a11333858e9707462b2a951c55b275d875dbd27338d8220"
     },
     {
       "file": "1440-single-result.png",
       "scene": "single-result",
       "width": 1440,
-      "sha256": "9f208dad36df441d822b4469507b84c985c9778f9e2da021e0687caf4a40efb5"
+      "sha256": "1e9e3295ce5247f3520f38d9f0d15d18337b06e519061b033c348a86264e5291"
     },
     {
       "file": "1440-first-result.png",
       "scene": "first-result",
       "width": 1440,
-      "sha256": "a309c30a78e68ec0ca97d654d789cb42ae4af6727a1f9d3214c988b6429b04b7"
+      "sha256": "8948ba5064d96de71f9a0edd23b6864cee0a84d31b4d3d2e5ac829e64b0021e6"
     },
     {
       "file": "1440-missing-fields.png",
       "scene": "missing-fields",
       "width": 1440,
-      "sha256": "7274c7044b478727a1f591b042fb277ae453cff882e2384b0f8611adc9977862"
+      "sha256": "0fc21c6d0db04abb2a4390470c9fce3dbc1f9ff313f4d1c5154e4d673cd6c67f"
     },
     {
       "file": "1440-long-result.png",
       "scene": "long-result",
       "width": 1440,
-      "sha256": "d85fbf23775a94e1b0f007aed50738d7b0859b2ce28e389cc87f2456df829533"
+      "sha256": "c4fcd6a7056db497c128d7171e21580ef29a2a3e4cbe92c8614cd2def47022dd"
     },
     {
       "file": "1440-twenty-results.png",
       "scene": "twenty-results",
       "width": 1440,
-      "sha256": "31446f2e00fc5c4ccc02903bd37984897bda94e917fbed1b4384a9dcb6a553bf"
+      "sha256": "2fa4f4006384066052015811f8b83bfffd34ca7dbf721c65580eea9baa819844"
     },
     {
       "file": "1440-timeline.png",
       "scene": "timeline",
       "width": 1440,
-      "sha256": "a2019f85f9eced60921fc733131601428852ace5b466d58f050248f4d64546a5"
+      "sha256": "119ced1569444fc4f5a8372d6f994658a4e765713931632fa92b3f74d310cde6"
     },
     {
       "file": "1440-empty.png",
       "scene": "empty",
       "width": 1440,
-      "sha256": "ac7488edfa5229fac4b90f9b2b4b95e44a50c6e77da5bbdcdbb63350ad70fe2e"
+      "sha256": "3b163eae10f8f668551112466111ed91eafc35bc0574b384c84e081389e10d06"
     },
     {
       "file": "1440-blocked.png",
       "scene": "blocked",
       "width": 1440,
-      "sha256": "cd6abfed82726fd0dd48dc8d0b7df0ca63d0b61d4202db839e065c7976673cd6"
+      "sha256": "f297be08f6adfb69b4b79be8a21a88ea8d5c8012a4856987f6d43f8e0ab4aa5e"
     },
     {
       "file": "1440-failed.png",
       "scene": "failed",
       "width": 1440,
-      "sha256": "28e10a700a302205279fe53dd172925a33b0904afd940fa5b2bdbb968f6a71bc"
+      "sha256": "efb6eb4ac03a714cb1cf5cf87dbb44a4aed32cf63d7ecc79077e9c224d1c865c"
     },
     {
       "file": "1440-deadline-running.png",
       "scene": "deadline-running",
       "width": 1440,
-      "sha256": "53af228f6927f7e6856c15feb32124dd8f435722f618b99ff941664b083a8d99"
+      "sha256": "06fee823cefb8121e715f187369797e86f17624d9052800b36c0d7345bffb6df"
     },
     {
       "file": "1440-adoption-pending.png",
       "scene": "adoption-pending",
       "width": 1440,
-      "sha256": "ac8de68a939d5aadad97c05b5596239cef24e3d4e88915a8cc25f06729b603c8"
+      "sha256": "6ab9833d260d30214739a823bf819d946a5d2b42f2989019c68d1d24e6362d3e"
     },
     {
       "file": "1440-adopt-ready.png",
       "scene": "adopt-ready",
       "width": 1440,
-      "sha256": "48d0d8d2937f09d6256d7b32f28807c380c4622010fde86365aba99695460b7b"
+      "sha256": "933311b520f010eeac56f64978a19f0e37f627eb6d0b06ba3fad356e22e67107"
     },
     {
       "file": "1440-gate-score.png",
       "scene": "gate-score",
       "width": 1440,
-      "sha256": "9623a9e337bcc82e86a1eae2bab183620c39edc538e9792ab94936723d0d68ca"
+      "sha256": "bf8ceef652ff6bbe5857cd54535ea41995eb062b33c8ae43e368e29c5e899925"
     },
     {
       "file": "1440-gate-market.png",
       "scene": "gate-market",
       "width": 1440,
-      "sha256": "c3d84fd12f190b470b31f1b8b4dde93cdd0d2aecc4ba5010bb90af087e4dab37"
+      "sha256": "ad862f01a7c5b6a27c207a5ee30a1709d94dea5d39a5dbe1d2be094971c4eee7"
     },
     {
       "file": "1440-gate-competition.png",
       "scene": "gate-competition",
       "width": 1440,
-      "sha256": "50eeecfc61a68656b7d2c9d89d7554aefa1e040c95877b816ae2d5308eee2c68"
+      "sha256": "48f0aae9ec9400d680025eebe3a0b8f9a2f4e5641d85e7e35a86363e4256805a"
     },
     {
       "file": "1440-gate-cost.png",
       "scene": "gate-cost",
       "width": 1440,
-      "sha256": "b31fc72409b7dceaaadd3a54e0f0470b2adbe6398f6bae067f576ba25e774bd2"
+      "sha256": "36dda70e7b28ea6f9b05f0691ea524bbc0109d79800635d4dcbecb87cfc0cf19"
     },
     {
       "file": "1440-gate-risk.png",
       "scene": "gate-risk",
       "width": 1440,
-      "sha256": "e7074e95de173bc76fd96a95f850856ae743382386bc7be55f8fc89641868e9c"
+      "sha256": "4c1fa240af34068b10b99dfaa4edbe8e16e9021b6febeaed758f1f066de4b8d1"
     },
     {
       "file": "1440-adopt-busy.png",
       "scene": "adopt-busy",
       "width": 1440,
-      "sha256": "6f822da390aef3a175bde88846d83a813dc27b347ac59532c8e7285b2dcfb2d9"
+      "sha256": "4a0aab2f3228e7c07a1991714c516def4c5761fe5125e16f4f2c8fd8e157aa0e"
     },
     {
       "file": "1440-adopt-conflict.png",
       "scene": "adopt-conflict",
       "width": 1440,
-      "sha256": "e48bcb39a9e72b9f0d3388b08cb19205400de4f117ecaf68fb81004feeb9bc6e"
+      "sha256": "b112490f96aeb8a839113d50d5f1dc02a84aa0d203ffc66c6a1a896c1616bf43"
     },
     {
       "file": "1440-adopt-refreshed.png",
       "scene": "adopt-refreshed",
       "width": 1440,
-      "sha256": "ac1a9378541a7593140e8d97003ab9af66079197382d08fac937ce645b257727"
+      "sha256": "5f0b5a3cda7082f0b8863f33f16c82514bce1b9ea54c710d0aabe3a771530664"
     },
     {
       "file": "1440-adopt-decided.png",
       "scene": "adopt-decided",
       "width": 1440,
-      "sha256": "25a1e3d2366eb13e300faaa0b78990de766ca634b15334b274cd6ebb8b09728b"
+      "sha256": "7411712914bc89229a269c45a5457c7d038ac29f265f6a8a1fbd8e9bde9dfa5d"
     },
     {
       "file": "1440-observe-edited.png",
       "scene": "observe-edited",
       "width": 1440,
-      "sha256": "b384c5d46f6d7606da7c789e1faf0c763b73d91f54f2a7ec068c122a169226ac"
+      "sha256": "fa0a444a5bc7f256bd6d61956466cc68f720871311e76b68eae037c1c076cabb"
     },
     {
       "file": "1440-observe-busy.png",
       "scene": "observe-busy",
       "width": 1440,
-      "sha256": "58468234288c635cea83b7fc846dcc9fbecfcb9b8b2fa9d2dae6e07be6fc6d8f"
+      "sha256": "008383acdbec236dc6f00bff88502cf2bcf9b62dd5d176c5b1d8d33424d6e0dc"
     },
     {
       "file": "1440-observe-failed.png",
       "scene": "observe-failed",
       "width": 1440,
-      "sha256": "99cbeca077b3f109871f9a99bbf5aa8a8e1760bf666b1b5d3a94ee224d6fe730"
+      "sha256": "176268b7710fd5f0e3d19551bf950d9e52c6c1c4163f1235859e8d0633d9a0ab"
     },
     {
       "file": "1440-observe-decided.png",
       "scene": "observe-decided",
       "width": 1440,
-      "sha256": "a564014328a9d943c651472c19328d7b8533d621cde9ef6adb721c5895803735"
+      "sha256": "d8f9df8e02975391436ddba844561d82482fa4490d1229e9865ba75732e77305"
     },
     {
       "file": "1440-reject-edited.png",
       "scene": "reject-edited",
       "width": 1440,
-      "sha256": "7f060c5b822eaec74e3d2a24185140d5b2481640077a6b28b0e973fe057019bc"
+      "sha256": "bcb272aaa666c7c6d44392c45831cbf9de76ed3bca93b3e33dd3d94f15bb44a4"
     },
     {
       "file": "1440-reject-busy.png",
       "scene": "reject-busy",
       "width": 1440,
-      "sha256": "85e753f6b223a577f1f0cb46c81034bd333b4edc81cbbac6f6889a2b5beae4b2"
+      "sha256": "2202e443e1834a9904ed14787ec131a66601efdb94677271deafb609c980101b"
     },
     {
       "file": "1440-reject-failed.png",
       "scene": "reject-failed",
       "width": 1440,
-      "sha256": "559907cd2a28e124fbc7889a46f091dcf0425df6abc5f770513776ff6a33ce25"
+      "sha256": "b95fd143ffd1ec020d7443496d19dfa83fb233706434bc282b74fcc8f56e82cb"
     },
     {
       "file": "1440-reject-decided.png",
       "scene": "reject-decided",
       "width": 1440,
-      "sha256": "438cd651c1d8ad4e254736a434464ec30e1aad9d4df9f4545dada5139f626c44"
+      "sha256": "44cf5fa4f1d0a57cded2995c82b4738ea0dd9dfaa1ca617d65c55e06b99a30d1"
     },
     {
       "file": "1440-decided-no-links.png",
       "scene": "decided-no-links",
       "width": 1440,
-      "sha256": "728bc3c98f628522910627e4fcabe0012f7b2dd34dee4833b4862ae67f56ae8a"
+      "sha256": "8b82ad5f7e1018637198a903f018045c84d5fa3d6c1a71a018681d2bc792ff90"
     },
     {
       "file": "1440-next-input.png",
       "scene": "next-input",
       "width": 1440,
-      "sha256": "ae3fa213c703326104275b8815dbe4994edbf26f0b4f6dcda4e011c24926eeb4"
+      "sha256": "3dd49d2f961015f546126b473baf5a3be79d01b05484a2ac8409e5e591ec1a76"
     },
     {
       "file": "1440-control-create-default.png",
       "scene": "control-create-default",
       "width": 1440,
-      "sha256": "08772880defe5b69753c2d0cea312e0a05de360b0a7c8ba9fa331dc00b80d6db",
+      "sha256": "127b0ed52303959c4b1194a6ac0b813faedaf27575ae760b2b54390efd7058e1",
       "control": {
         "key": "create",
         "state": "default",
@@ -2387,7 +3748,7 @@
       "file": "1440-control-create-hover.png",
       "scene": "control-create-hover",
       "width": 1440,
-      "sha256": "49c34dba8c16209928faee62d996f58f7f2c25bf8c00b131944761b6adecd76f",
+      "sha256": "c763fb4adf9b9114cb616a69a3c5cb95c58d3a5c48b9aeff6f05c66306090d7d",
       "control": {
         "key": "create",
         "state": "hover",
@@ -2401,7 +3762,7 @@
       "file": "1440-control-create-focus.png",
       "scene": "control-create-focus",
       "width": 1440,
-      "sha256": "fa85a014b132397d78cc2c597c107f4424c5d236f3386f662f3f955d9da0ba0d",
+      "sha256": "9cc30f47c7aee2ca91c945dc7c1712e2ebc7ad090c381732bdd36ecbd9bbd6ab",
       "control": {
         "key": "create",
         "state": "focus",
@@ -2415,7 +3776,7 @@
       "file": "1440-control-create-pressed.png",
       "scene": "control-create-pressed",
       "width": 1440,
-      "sha256": "475c57bc0610a36baa5e15148b06736d1bf98d59224e495cea98fdcb3e260ead",
+      "sha256": "b7ed417a5612e589310b645c6269189697d3b02b7f8a9a2015278703f397b98b",
       "control": {
         "key": "create",
         "state": "pressed",
@@ -2429,7 +3790,7 @@
       "file": "1440-control-create-disabled.png",
       "scene": "control-create-disabled",
       "width": 1440,
-      "sha256": "6c0736d5c4baee213292c83db96746759af0756c6e138fe965ee48b44b91a7e2",
+      "sha256": "578bf925e9f2601622a8b0aaa690033b174f8567620803044206fe2c31b218ca",
       "control": {
         "key": "create",
         "state": "disabled",
@@ -2443,7 +3804,7 @@
       "file": "1440-control-create-busy.png",
       "scene": "control-create-busy",
       "width": 1440,
-      "sha256": "99a7bb4607b0ab627883d4d26a6fdb4e024a5d5e58f43ca6325105664926fa02",
+      "sha256": "b4a3b19fc8d1569a5bb345404fde8d9175e56f9e7594faa05c8ced5f3ee5e13e",
       "control": {
         "key": "create",
         "state": "busy",
@@ -2457,7 +3818,7 @@
       "file": "1440-control-adopt-default.png",
       "scene": "control-adopt-default",
       "width": 1440,
-      "sha256": "48d0d8d2937f09d6256d7b32f28807c380c4622010fde86365aba99695460b7b",
+      "sha256": "933311b520f010eeac56f64978a19f0e37f627eb6d0b06ba3fad356e22e67107",
       "control": {
         "key": "adopt",
         "state": "default",
@@ -2471,7 +3832,7 @@
       "file": "1440-control-adopt-hover.png",
       "scene": "control-adopt-hover",
       "width": 1440,
-      "sha256": "b51569e2f0100c91ed30f46b9abd5e4a37423c7e9ffdd7d5db35a977e6e49121",
+      "sha256": "1811438316b5b2b0bbe49a7b892ee2d69ef74987060d750d1b5223e96494c014",
       "control": {
         "key": "adopt",
         "state": "hover",
@@ -2485,7 +3846,7 @@
       "file": "1440-control-adopt-focus.png",
       "scene": "control-adopt-focus",
       "width": 1440,
-      "sha256": "13d81521b6e1401e00b06a500a54027b13da0dcb1120f97b857bb2beb88179e2",
+      "sha256": "5a19b08894b1bfb52d8bd94c3f2bff8b1849ff8e9756201f6a5f8163f4f8d1f6",
       "control": {
         "key": "adopt",
         "state": "focus",
@@ -2499,7 +3860,7 @@
       "file": "1440-control-adopt-pressed.png",
       "scene": "control-adopt-pressed",
       "width": 1440,
-      "sha256": "516d56bd18db485e71c1caae060c082f9cae0e9a2db4a32f1e865f9085414bc4",
+      "sha256": "cc390f178b414b0e177843c122431819af6fa224444d137bf093bf928a763c4a",
       "control": {
         "key": "adopt",
         "state": "pressed",
@@ -2513,7 +3874,7 @@
       "file": "1440-control-adopt-disabled.png",
       "scene": "control-adopt-disabled",
       "width": 1440,
-      "sha256": "b31fc72409b7dceaaadd3a54e0f0470b2adbe6398f6bae067f576ba25e774bd2",
+      "sha256": "36dda70e7b28ea6f9b05f0691ea524bbc0109d79800635d4dcbecb87cfc0cf19",
       "control": {
         "key": "adopt",
         "state": "disabled",
@@ -2527,7 +3888,7 @@
       "file": "1440-control-adopt-busy.png",
       "scene": "control-adopt-busy",
       "width": 1440,
-      "sha256": "6f822da390aef3a175bde88846d83a813dc27b347ac59532c8e7285b2dcfb2d9",
+      "sha256": "4a0aab2f3228e7c07a1991714c516def4c5761fe5125e16f4f2c8fd8e157aa0e",
       "control": {
         "key": "adopt",
         "state": "busy",
@@ -2541,7 +3902,7 @@
       "file": "1440-control-save-default.png",
       "scene": "control-save-default",
       "width": 1440,
-      "sha256": "48d0d8d2937f09d6256d7b32f28807c380c4622010fde86365aba99695460b7b",
+      "sha256": "933311b520f010eeac56f64978a19f0e37f627eb6d0b06ba3fad356e22e67107",
       "control": {
         "key": "save",
         "state": "default",
@@ -2555,7 +3916,7 @@
       "file": "1440-control-save-hover.png",
       "scene": "control-save-hover",
       "width": 1440,
-      "sha256": "0261802b103fcc7e9d767c39cc7f9b9964c82e055dbde36c796430589e2cfbb3",
+      "sha256": "c1a41cdf524cf0711b99379ad88b5ccacc559796eb4afa6825343ed6f3d65b5a",
       "control": {
         "key": "save",
         "state": "hover",
@@ -2569,7 +3930,7 @@
       "file": "1440-control-save-focus.png",
       "scene": "control-save-focus",
       "width": 1440,
-      "sha256": "3623257b69921c9ab2e75174ce664c7d187fcd8df50910c363e1701e6bb939ad",
+      "sha256": "0fee8d632d43faf3c23a3cd5abf0ce9f11c1fec1b75be32f24a22d439ca047a3",
       "control": {
         "key": "save",
         "state": "focus",
@@ -2583,7 +3944,7 @@
       "file": "1440-control-save-pressed.png",
       "scene": "control-save-pressed",
       "width": 1440,
-      "sha256": "111f7bb7aa70caef29525c988a1bca83f3ecfffa248c97661f0abfa1f76b4949",
+      "sha256": "5e4bb18b7835abee9f097d225fb4af26115898f812a9098d04dbc01cea4683d5",
       "control": {
         "key": "save",
         "state": "pressed",
@@ -2597,7 +3958,7 @@
       "file": "1440-control-save-disabled.png",
       "scene": "control-save-disabled",
       "width": 1440,
-      "sha256": "b31fc72409b7dceaaadd3a54e0f0470b2adbe6398f6bae067f576ba25e774bd2",
+      "sha256": "36dda70e7b28ea6f9b05f0691ea524bbc0109d79800635d4dcbecb87cfc0cf19",
       "control": {
         "key": "save",
         "state": "disabled",
@@ -2611,7 +3972,7 @@
       "file": "1440-control-save-busy.png",
       "scene": "control-save-busy",
       "width": 1440,
-      "sha256": "6f822da390aef3a175bde88846d83a813dc27b347ac59532c8e7285b2dcfb2d9",
+      "sha256": "4a0aab2f3228e7c07a1991714c516def4c5761fe5125e16f4f2c8fd8e157aa0e",
       "control": {
         "key": "save",
         "state": "busy",
@@ -2625,7 +3986,7 @@
       "file": "1440-control-list-default.png",
       "scene": "control-list-default",
       "width": 1440,
-      "sha256": "e9dcef39492809a6cc0a366d61b565acef3e0625a9ee390eb81930ba9e2d59ef",
+      "sha256": "e06a4a94e116b5d6d5fc1c30e59e3e092d83a19d97606892c3a264975d675ffd",
       "control": {
         "key": "list",
         "state": "default",
@@ -2639,7 +4000,7 @@
       "file": "1440-control-list-hover.png",
       "scene": "control-list-hover",
       "width": 1440,
-      "sha256": "e5279e467aa1bdf8ea99c7077abceb637d21437be70da684eacf5cffb2616910",
+      "sha256": "8a3b3fac28873faf9d78e18e2b54f438e14e0405b56b176b554629d4a427969c",
       "control": {
         "key": "list",
         "state": "hover",
@@ -2653,7 +4014,7 @@
       "file": "1440-control-list-focus.png",
       "scene": "control-list-focus",
       "width": 1440,
-      "sha256": "0b3d601e99652d6c1464a76f3d2104403c13ac81dd64ab98ac3347f3be0c43b4",
+      "sha256": "6781556c127e89e1b220278fcf5110219aa2b3e2ae920034db3022906fc49aab",
       "control": {
         "key": "list",
         "state": "focus",
@@ -2667,7 +4028,7 @@
       "file": "1440-control-list-pressed.png",
       "scene": "control-list-pressed",
       "width": 1440,
-      "sha256": "94e1fa8fdbb6816be15174deec8b6d96da4eb05a0bb618ec61df712b50d053f2",
+      "sha256": "b444c38f2680b4dc189ed56b5ecb38aff359bd0ad0df8bd09022beb3910b32d3",
       "control": {
         "key": "list",
         "state": "pressed",
@@ -2681,7 +4042,7 @@
       "file": "1440-control-source-default.png",
       "scene": "control-source-default",
       "width": 1440,
-      "sha256": "5a816e93d69d91f375f575574baf24cb89b34c0900bd6d05ec4e168ba120a232",
+      "sha256": "3598401b4c61464d6fdc242b0346532ff92fe90af70a68549efdeadf7f049ca4",
       "control": {
         "key": "source",
         "state": "default",
@@ -2695,7 +4056,7 @@
       "file": "1440-control-source-hover.png",
       "scene": "control-source-hover",
       "width": 1440,
-      "sha256": "6a72137256ae57732e7527716f636a56e037477b52be6a84adbd142159b24d49",
+      "sha256": "bef9fe4249b2af31b639046f7580dea9c102c0dc80f36ecef87cf7e859b512f0",
       "control": {
         "key": "source",
         "state": "hover",
@@ -2709,7 +4070,7 @@
       "file": "1440-control-source-focus.png",
       "scene": "control-source-focus",
       "width": 1440,
-      "sha256": "5f4660c1396f64b034364fb669300ce7d06fa0fac8413b952da27b1a48ebb3d1",
+      "sha256": "8c2d5dfb6e3c879c766f81b83461410968a0386d1be6cb8557cc4ebf73db364c",
       "control": {
         "key": "source",
         "state": "focus",
@@ -2723,7 +4084,7 @@
       "file": "1440-control-source-pressed.png",
       "scene": "control-source-pressed",
       "width": 1440,
-      "sha256": "b70644254a53df58681c18d116d1e0a42c4364e8022aa8dc27f1fd8efb383629",
+      "sha256": "32dbe3333fdc8c7cf3d1c5fbaad7ebd4886637974219d4046769f34cf6291da6",
       "control": {
         "key": "source",
         "state": "pressed",
@@ -2737,7 +4098,7 @@
       "file": "1440-control-opportunity-default.png",
       "scene": "control-opportunity-default",
       "width": 1440,
-      "sha256": "25a1e3d2366eb13e300faaa0b78990de766ca634b15334b274cd6ebb8b09728b",
+      "sha256": "7411712914bc89229a269c45a5457c7d038ac29f265f6a8a1fbd8e9bde9dfa5d",
       "control": {
         "key": "opportunity",
         "state": "default",
@@ -2751,7 +4112,7 @@
       "file": "1440-control-opportunity-hover.png",
       "scene": "control-opportunity-hover",
       "width": 1440,
-      "sha256": "f71bec9efc8af5e0e199a2473586f20e68926ccfdbcef2065206f2956ddd9737",
+      "sha256": "b68dd4ed760f6c17e295100072af5a85191d2314ee289cc41fbebad5f4dc647f",
       "control": {
         "key": "opportunity",
         "state": "hover",
@@ -2765,7 +4126,7 @@
       "file": "1440-control-opportunity-focus.png",
       "scene": "control-opportunity-focus",
       "width": 1440,
-      "sha256": "80eb7f31ef8d1f9aa472cd51fc435d822ff928243f7493495b81f30d1cf31689",
+      "sha256": "1717378c25f5c2a0fc8a35798878bd519770abc057bc29db210080f0e942ca33",
       "control": {
         "key": "opportunity",
         "state": "focus",
@@ -2779,7 +4140,7 @@
       "file": "1440-control-opportunity-pressed.png",
       "scene": "control-opportunity-pressed",
       "width": 1440,
-      "sha256": "48bab86e2f852c9b660f7caff1ebb02bf1479d78b348f666ec04e3dbfc81a4b8",
+      "sha256": "16158c4d782c8e730ac9fc292755887c8f9f2cbd1f424440229099305e5b1085",
       "control": {
         "key": "opportunity",
         "state": "pressed",
@@ -2793,7 +4154,7 @@
       "file": "1440-control-task-default.png",
       "scene": "control-task-default",
       "width": 1440,
-      "sha256": "43ad795bb59b7cf88744feeed7dd4a50101f1bb9d29cbcfea499f4bf29c99c24",
+      "sha256": "7411712914bc89229a269c45a5457c7d038ac29f265f6a8a1fbd8e9bde9dfa5d",
       "control": {
         "key": "task",
         "state": "default",
@@ -2807,7 +4168,7 @@
       "file": "1440-control-task-hover.png",
       "scene": "control-task-hover",
       "width": 1440,
-      "sha256": "3f6e1b02becfe020217105c217e525b6e08e4e8a8f945fa2064e278cd55ef943",
+      "sha256": "0e1b1d504957dfb9657f3d8c975e3fc653a608887a4ffd1db969fe523a6e45ce",
       "control": {
         "key": "task",
         "state": "hover",
@@ -2821,7 +4182,7 @@
       "file": "1440-control-task-focus.png",
       "scene": "control-task-focus",
       "width": 1440,
-      "sha256": "45fc12ad643edcb6a5763c79b21f085fae524162d4b69f4be22286fbe7f9c8f7",
+      "sha256": "bd0b573092b3152f06ffd6b069b82a6dd3d09bd1e471bcd740ea07e95103ea80",
       "control": {
         "key": "task",
         "state": "focus",
@@ -2835,7 +4196,7 @@
       "file": "1440-control-task-pressed.png",
       "scene": "control-task-pressed",
       "width": 1440,
-      "sha256": "c42cf412c42f345e8bd31e8edbdefc68b3e03424f9e00961e78502a3c55d5916",
+      "sha256": "26c9a4a6cd6f96267ea0aeb50c136aa0da0a4fad56f5a4e6fecf55993fadf121",
       "control": {
         "key": "task",
         "state": "pressed",
@@ -2849,7 +4210,7 @@
       "file": "1440-control-retry-default.png",
       "scene": "control-retry-default",
       "width": 1440,
-      "sha256": "cccbd9093946b96dbf54cc435c28bd857ee7924d7cdeac08d2ae26dc77c1c1d0",
+      "sha256": "5fee1f2e035eeb5c01115ffd1cbe7495dd5c0e567c0188e4253ebfd03067618c",
       "control": {
         "key": "retry",
         "state": "default",
@@ -2863,7 +4224,7 @@
       "file": "1440-control-retry-hover.png",
       "scene": "control-retry-hover",
       "width": 1440,
-      "sha256": "17f349da5ee007e9f5dc05c30a907dda377a279c1a46957611a727a75e599870",
+      "sha256": "5ff981c9fc51eddaa4c8fc5002573a31789a070f5e479810ad353c0483932f44",
       "control": {
         "key": "retry",
         "state": "hover",
@@ -2877,7 +4238,7 @@
       "file": "1440-control-retry-focus.png",
       "scene": "control-retry-focus",
       "width": 1440,
-      "sha256": "523784b854adb8208f523ee4052934a8278f0405aa5fc960ecf417c829b323ec",
+      "sha256": "ad4d9b34d892e6b5fa073826d1caacd2e1e01f6085e312a5d3c88370ad575659",
       "control": {
         "key": "retry",
         "state": "focus",
@@ -2891,7 +4252,7 @@
       "file": "1440-control-retry-pressed.png",
       "scene": "control-retry-pressed",
       "width": 1440,
-      "sha256": "81896d1c72557cfc7cdd09f0c66ef9e9950334c78cfc0e7172068823150322e6",
+      "sha256": "66549132f11e266f18309f4720c9065c856f3671e9ed7e2324c1eb22483aae89",
       "control": {
         "key": "retry",
         "state": "pressed",
@@ -2905,7 +4266,7 @@
       "file": "1440-control-retry-disabled.png",
       "scene": "control-retry-disabled",
       "width": 1440,
-      "sha256": "621194337fe85f368f569812d8b23c807851fd8fc538e020aa3a7c393a988bd7",
+      "sha256": "067496c44a298bee536f48fd099ebe2c2e1da7ffefc42bc1998f2338a469c8a4",
       "control": {
         "key": "retry",
         "state": "disabled",
@@ -2919,7 +4280,7 @@
       "file": "1440-control-retry-busy.png",
       "scene": "control-retry-busy",
       "width": 1440,
-      "sha256": "621194337fe85f368f569812d8b23c807851fd8fc538e020aa3a7c393a988bd7",
+      "sha256": "067496c44a298bee536f48fd099ebe2c2e1da7ffefc42bc1998f2338a469c8a4",
       "control": {
         "key": "retry",
         "state": "busy",
@@ -2933,7 +4294,7 @@
       "file": "1440-control-reset-default.png",
       "scene": "control-reset-default",
       "width": 1440,
-      "sha256": "5a816e93d69d91f375f575574baf24cb89b34c0900bd6d05ec4e168ba120a232",
+      "sha256": "3598401b4c61464d6fdc242b0346532ff92fe90af70a68549efdeadf7f049ca4",
       "control": {
         "key": "reset",
         "state": "default",
@@ -2947,7 +4308,7 @@
       "file": "1440-control-reset-hover.png",
       "scene": "control-reset-hover",
       "width": 1440,
-      "sha256": "f46f31821a538757fc0748d097a3feb85ac004b27765bcc627ee425c648b42ef",
+      "sha256": "0dcb9572e573ffd5a9271d2e029588398d0afceb511a3b6c1fc7302c6dece21b",
       "control": {
         "key": "reset",
         "state": "hover",
@@ -2961,7 +4322,7 @@
       "file": "1440-control-reset-focus.png",
       "scene": "control-reset-focus",
       "width": 1440,
-      "sha256": "e2a14910e4a0c1dffe7a6f2754068cd5b5f4a7ee1b62df0df84bb7426cfecbf7",
+      "sha256": "5c0b753789b991829e1aca2f58ccee3ae760daef9c7fd53be7a36b62ba175111",
       "control": {
         "key": "reset",
         "state": "focus",
@@ -2975,7 +4336,7 @@
       "file": "1440-control-reset-pressed.png",
       "scene": "control-reset-pressed",
       "width": 1440,
-      "sha256": "387c3b79b4b7a658ce0c8c16ad3b7846d45b6500356c6d79082477ac00eb8bd4",
+      "sha256": "2d7b6c89278a8c783012cf813f5ee927ab18ff6f804d5d2fa8ac80f6c640fe59",
       "control": {
         "key": "reset",
         "state": "pressed",
@@ -2989,7 +4350,7 @@
       "file": "1440-control-reset-disabled.png",
       "scene": "control-reset-disabled",
       "width": 1440,
-      "sha256": "58468234288c635cea83b7fc846dcc9fbecfcb9b8b2fa9d2dae6e07be6fc6d8f",
+      "sha256": "008383acdbec236dc6f00bff88502cf2bcf9b62dd5d176c5b1d8d33424d6e0dc",
       "control": {
         "key": "reset",
         "state": "disabled",
@@ -3003,7 +4364,7 @@
       "file": "1440-control-reset-busy.png",
       "scene": "control-reset-busy",
       "width": 1440,
-      "sha256": "58468234288c635cea83b7fc846dcc9fbecfcb9b8b2fa9d2dae6e07be6fc6d8f",
+      "sha256": "008383acdbec236dc6f00bff88502cf2bcf9b62dd5d176c5b1d8d33424d6e0dc",
       "control": {
         "key": "reset",
         "state": "busy",
@@ -3017,7 +4378,7 @@
       "file": "1440-control-secondary-default.png",
       "scene": "control-secondary-default",
       "width": 1440,
-      "sha256": "6293ef1b59a7f73354337ed30d4e5a7caa2a683c78b56ee2d6dae4c3e4c4eb7c",
+      "sha256": "f461bc7e072aeb220003e369de97b65470c8643c9d97d19d4004eba6c96a067f",
       "control": {
         "key": "secondary",
         "state": "default",
@@ -3031,7 +4392,7 @@
       "file": "1440-control-secondary-hover.png",
       "scene": "control-secondary-hover",
       "width": 1440,
-      "sha256": "d32ec7a869f0db81449d1f301743788d303ebe71b8d12c797f70f0c53e7853c2",
+      "sha256": "23ce4fca2a1c1714555da1c33b4765879609e6e1386adc95d81d288d9ebf7491",
       "control": {
         "key": "secondary",
         "state": "hover",
@@ -3045,7 +4406,7 @@
       "file": "1440-control-secondary-focus.png",
       "scene": "control-secondary-focus",
       "width": 1440,
-      "sha256": "1e242f03d5a1a119f7f7ec01e7430be939e54face707b894fea10d9fbd6e7cf1",
+      "sha256": "df782b877427453c69718dda7271b9256913ccd1259944f2860bada6cef55a88",
       "control": {
         "key": "secondary",
         "state": "focus",
@@ -3059,7 +4420,7 @@
       "file": "1440-control-secondary-pressed.png",
       "scene": "control-secondary-pressed",
       "width": 1440,
-      "sha256": "137d4591310da12d89b90952b9dfec113e3786d4774299b1dca4a6dd1a9bdd24",
+      "sha256": "0580ab815152f938cf4cc6362623a26aed3329bf1e15a5af87bab7e746e35606",
       "control": {
         "key": "secondary",
         "state": "pressed",
@@ -3073,7 +4434,7 @@
       "file": "1440-control-kind-default.png",
       "scene": "control-kind-default",
       "width": 1440,
-      "sha256": "99ce7566ebce5d23f3b953e67cfec0cc610e587f07aaac02198c5b9ad7089604",
+      "sha256": "dd31d6d153b43736a634b0a18eb597c9171c30eebf36be3bad15e27a0733a890",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -3088,7 +4449,7 @@
       "file": "1440-control-kind-hover.png",
       "scene": "control-kind-hover",
       "width": 1440,
-      "sha256": "d7e76748d97eae35f0cdc680764fca93416626629da5c2368b5ed96c6e7d22b5",
+      "sha256": "8cbf597a6f94d4a9e094ebd34444b02638536f03dde914df2ce78e9aa82c06b4",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -3103,7 +4464,7 @@
       "file": "1440-control-kind-focus.png",
       "scene": "control-kind-focus",
       "width": 1440,
-      "sha256": "c96a3df6411c56eb5acf5fffc0706d0a37b9a71593c4eccc3999b6deff0fd4af",
+      "sha256": "061887b4ceaec6817f716f2827dfc8ebc3086783a2f6503e38dbf1a1ac342e57",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -3118,7 +4479,7 @@
       "file": "1440-control-kind-pressed.png",
       "scene": "control-kind-pressed",
       "width": 1440,
-      "sha256": "80a562e92848a570239afacc4fe2f788e6f268df7543ee72a52974901e0ffd13",
+      "sha256": "53db025af0175c2d82dc9af602c11fae46fc230c9774bf8c0456b06eef5a78e5",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -3133,7 +4494,7 @@
       "file": "1440-control-kind-disabled.png",
       "scene": "control-kind-disabled",
       "width": 1440,
-      "sha256": "6c0736d5c4baee213292c83db96746759af0756c6e138fe965ee48b44b91a7e2",
+      "sha256": "578bf925e9f2601622a8b0aaa690033b174f8567620803044206fe2c31b218ca",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -3148,7 +4509,7 @@
       "file": "1440-control-kind-busy.png",
       "scene": "control-kind-busy",
       "width": 1440,
-      "sha256": "99a7bb4607b0ab627883d4d26a6fdb4e024a5d5e58f43ca6325105664926fa02",
+      "sha256": "b4a3b19fc8d1569a5bb345404fde8d9175e56f9e7594faa05c8ced5f3ee5e13e",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -3163,7 +4524,7 @@
       "file": "1440-control-candidate-default.png",
       "scene": "control-candidate-default",
       "width": 1440,
-      "sha256": "5a816e93d69d91f375f575574baf24cb89b34c0900bd6d05ec4e168ba120a232",
+      "sha256": "3598401b4c61464d6fdc242b0346532ff92fe90af70a68549efdeadf7f049ca4",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -3178,7 +4539,7 @@
       "file": "1440-control-candidate-hover.png",
       "scene": "control-candidate-hover",
       "width": 1440,
-      "sha256": "e4d2582c2b76d3c7ba3b59a37a05500cf97342453b2f7878c2758164bec895a7",
+      "sha256": "ace0a40affa7c53107fb7fb4b98b0efb8b71ac7b90e202d78f33d4f459c65875",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -3193,7 +4554,7 @@
       "file": "1440-control-candidate-focus.png",
       "scene": "control-candidate-focus",
       "width": 1440,
-      "sha256": "87f13eff66991b5830d22010104e0267a7678d0ffaf18cd470e4a733e88a01ba",
+      "sha256": "875321e69e36b943f34982e06d26e855db9289d06659affed41e86b33490065a",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -3208,7 +4569,7 @@
       "file": "1440-control-candidate-pressed.png",
       "scene": "control-candidate-pressed",
       "width": 1440,
-      "sha256": "d9835688f80beb583c949c4504b3c815f7542a2725153f6396561a417f13fb1e",
+      "sha256": "fa19311aea6439f4c93ccd6cf5c5de6ca779de39caf6f8185dd4dea5b7c1230e",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -3223,7 +4584,7 @@
       "file": "1440-control-candidate-disabled.png",
       "scene": "control-candidate-disabled",
       "width": 1440,
-      "sha256": "7260ea118f9097157c47b7888315ad846f2bab91caabe99ec9af8342f5491730",
+      "sha256": "2f3fe221e073136af990489d12c0c5ca82ef46532663466cf86c20596b637a33",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -3238,7 +4599,7 @@
       "file": "1440-control-candidate-busy.png",
       "scene": "control-candidate-busy",
       "width": 1440,
-      "sha256": "58468234288c635cea83b7fc846dcc9fbecfcb9b8b2fa9d2dae6e07be6fc6d8f",
+      "sha256": "008383acdbec236dc6f00bff88502cf2bcf9b62dd5d176c5b1d8d33424d6e0dc",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -3253,7 +4614,7 @@
       "file": "1440-control-observe-default.png",
       "scene": "control-observe-default",
       "width": 1440,
-      "sha256": "b384c5d46f6d7606da7c789e1faf0c763b73d91f54f2a7ec068c122a169226ac",
+      "sha256": "fa0a444a5bc7f256bd6d61956466cc68f720871311e76b68eae037c1c076cabb",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -3268,7 +4629,7 @@
       "file": "1440-control-observe-hover.png",
       "scene": "control-observe-hover",
       "width": 1440,
-      "sha256": "28df592a7bdba9f926c6b684df4b2628c27cba57f65a3fa0c01a525a29787278",
+      "sha256": "2505c88112c584f9077b26173990c25ed6a4a8ab6153f0e9a754a924c5993c2b",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -3283,7 +4644,7 @@
       "file": "1440-control-observe-focus.png",
       "scene": "control-observe-focus",
       "width": 1440,
-      "sha256": "1435c6ea7a779575d928a887fe253950956a0195cbd434920520e731cc1c6fb5",
+      "sha256": "d65f5729b5ed3ec8aa924a838d9d0ad785d70114350bf3a710a9e4368abb8274",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -3298,7 +4659,7 @@
       "file": "1440-control-observe-pressed.png",
       "scene": "control-observe-pressed",
       "width": 1440,
-      "sha256": "7b4ca72e82f84fd4cf55e37ee23d7f3a9e40540002aa010627d449aa66537673",
+      "sha256": "5e0bd443929152bba9ffa2130d9726cf6c600104022a823d99a675c1bbac386e",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -3313,7 +4674,7 @@
       "file": "1440-control-observe-disabled.png",
       "scene": "control-observe-disabled",
       "width": 1440,
-      "sha256": "7260ea118f9097157c47b7888315ad846f2bab91caabe99ec9af8342f5491730",
+      "sha256": "2f3fe221e073136af990489d12c0c5ca82ef46532663466cf86c20596b637a33",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -3328,7 +4689,7 @@
       "file": "1440-control-observe-busy.png",
       "scene": "control-observe-busy",
       "width": 1440,
-      "sha256": "58468234288c635cea83b7fc846dcc9fbecfcb9b8b2fa9d2dae6e07be6fc6d8f",
+      "sha256": "008383acdbec236dc6f00bff88502cf2bcf9b62dd5d176c5b1d8d33424d6e0dc",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -3343,7 +4704,7 @@
       "file": "1440-control-reject-default.png",
       "scene": "control-reject-default",
       "width": 1440,
-      "sha256": "7f060c5b822eaec74e3d2a24185140d5b2481640077a6b28b0e973fe057019bc",
+      "sha256": "bcb272aaa666c7c6d44392c45831cbf9de76ed3bca93b3e33dd3d94f15bb44a4",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -3358,7 +4719,7 @@
       "file": "1440-control-reject-hover.png",
       "scene": "control-reject-hover",
       "width": 1440,
-      "sha256": "da27215bfde53513f8b7cf97cee56a71898de101c066cc76606f63e65238c7a5",
+      "sha256": "45abf4a4c8eec93f5cd1b46b4f23d4e678684c893749c7bf8ec94134495127c6",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -3373,7 +4734,7 @@
       "file": "1440-control-reject-focus.png",
       "scene": "control-reject-focus",
       "width": 1440,
-      "sha256": "9d537907765378c0a7a8490feff7b15352f34dcbc172b18cc0571d44e9adc36d",
+      "sha256": "5c104e712bf87fce6a6584b16da215990fe47356573ce1fe7a64d7abd12bc8b5",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -3388,7 +4749,7 @@
       "file": "1440-control-reject-pressed.png",
       "scene": "control-reject-pressed",
       "width": 1440,
-      "sha256": "c782ece193802beb8b5ff5153a6bc871ae0dd5c27c0af6261506f20d04d6a6ea",
+      "sha256": "e2467e24582f071f7de7c32f6ec3067e09ffa122bc76e03ad2972d6cef5345b8",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -3403,7 +4764,7 @@
       "file": "1440-control-reject-disabled.png",
       "scene": "control-reject-disabled",
       "width": 1440,
-      "sha256": "7260ea118f9097157c47b7888315ad846f2bab91caabe99ec9af8342f5491730",
+      "sha256": "2f3fe221e073136af990489d12c0c5ca82ef46532663466cf86c20596b637a33",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -3418,7 +4779,7 @@
       "file": "1440-control-reject-busy.png",
       "scene": "control-reject-busy",
       "width": 1440,
-      "sha256": "85e753f6b223a577f1f0cb46c81034bd333b4edc81cbbac6f6889a2b5beae4b2",
+      "sha256": "2202e443e1834a9904ed14787ec131a66601efdb94677271deafb609c980101b",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -3433,7 +4794,7 @@
       "file": "1440-control-keyword-value-default.png",
       "scene": "control-keyword-value-default",
       "width": 1440,
-      "sha256": "538a68c7e8394ea029527ff352c2ebe2932f3fba912ec3dffbb7d291393c4392",
+      "sha256": "127b0ed52303959c4b1194a6ac0b813faedaf27575ae760b2b54390efd7058e1",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3448,7 +4809,7 @@
       "file": "1440-control-keyword-value-hover.png",
       "scene": "control-keyword-value-hover",
       "width": 1440,
-      "sha256": "ef9e577fb117e7669e167e3cfb3f5bb07b893db7b07ec2119e197cce1efe4606",
+      "sha256": "49b9f487f64ea3b1e47975f44663d81053583ece80876de2275bf0b7768cf3d0",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3463,7 +4824,7 @@
       "file": "1440-control-keyword-value-focus.png",
       "scene": "control-keyword-value-focus",
       "width": 1440,
-      "sha256": "f5c3afb6ad069cabbeecd36ae2091253f8da1399f502477ed59315cdc39326e1",
+      "sha256": "1ff4b2d791f2d33141769c26eecbbdb98db553f333c9483c8c780e1db9894934",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3478,7 +4839,7 @@
       "file": "1440-control-keyword-value-pressed.png",
       "scene": "control-keyword-value-pressed",
       "width": 1440,
-      "sha256": "34361b1ed7104a5c5e42ccc60079aa818c16e7fc1cfacd023a35a7aa2a60ea5e",
+      "sha256": "9185b1123afac82ab026f602aaf6d7e130ccca5f12aee2bdda792f657ca264b6",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3493,7 +4854,7 @@
       "file": "1440-control-keyword-value-disabled.png",
       "scene": "control-keyword-value-disabled",
       "width": 1440,
-      "sha256": "d6720139554698527f5f716c45f8498b22b2e94dc47c86a9f85d95dd9042b7ac",
+      "sha256": "578bf925e9f2601622a8b0aaa690033b174f8567620803044206fe2c31b218ca",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3508,7 +4869,7 @@
       "file": "1440-control-keyword-value-busy.png",
       "scene": "control-keyword-value-busy",
       "width": 1440,
-      "sha256": "99a7bb4607b0ab627883d4d26a6fdb4e024a5d5e58f43ca6325105664926fa02",
+      "sha256": "b4a3b19fc8d1569a5bb345404fde8d9175e56f9e7594faa05c8ced5f3ee5e13e",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3523,7 +4884,7 @@
       "file": "1440-control-keyword-value-invalid.png",
       "scene": "control-keyword-value-invalid",
       "width": 1440,
-      "sha256": "353d6b8f9033c4f6077a8f04dbe0fe8171e4d500d4e8046c99b0ad8d8f22ad9f",
+      "sha256": "724781df21dd3d519dafb2c8ae1056fcad9ce85cae06f3219abd9af77d436e33",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -3538,7 +4899,7 @@
       "file": "1440-control-asin-value-default.png",
       "scene": "control-asin-value-default",
       "width": 1440,
-      "sha256": "c8d0cd16ab67b6967355f0962a3d6968a3bfec9b13b557097bfe86c87970b2d1",
+      "sha256": "f588f7737c114933136a111daf54263785910c96d55659463c7e4bd7215fa08c",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3553,7 +4914,7 @@
       "file": "1440-control-asin-value-hover.png",
       "scene": "control-asin-value-hover",
       "width": 1440,
-      "sha256": "058ce45fbe664ce688be85127e2ad6635b3ff6535f51295eddf5faf7e5b9cbaf",
+      "sha256": "041db8cf41a5b5f0b563dda6522a996508563eb852fd010bb4c5185105990d81",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3568,7 +4929,7 @@
       "file": "1440-control-asin-value-focus.png",
       "scene": "control-asin-value-focus",
       "width": 1440,
-      "sha256": "c636fbf7852e5e6ad1e0898b4d917dfbdc6556a33926ae162d07835a5c75c7cd",
+      "sha256": "e908ac251105c2df2d6e08441c6f32d2bdda37dbfba1a4a8663d15529cae9221",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3583,7 +4944,7 @@
       "file": "1440-control-asin-value-pressed.png",
       "scene": "control-asin-value-pressed",
       "width": 1440,
-      "sha256": "5919361415008e792b33a35cd60bf5900c422d782a906ebef1daa94a5751231c",
+      "sha256": "4eef186a9d6d69b1b84905b771910881f2921b4b04c58679d9f5e5683e0c03d3",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3598,7 +4959,7 @@
       "file": "1440-control-asin-value-disabled.png",
       "scene": "control-asin-value-disabled",
       "width": 1440,
-      "sha256": "1f54d6b8fe180b9928a3f595e9d7f0c14697d764f1ec40cfd5fb018c4ae65f04",
+      "sha256": "6c9ece1ff47eaac453f79812a2bebfaaa87c670d444127123a2ea8fb7008b6e9",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3613,7 +4974,7 @@
       "file": "1440-control-asin-value-busy.png",
       "scene": "control-asin-value-busy",
       "width": 1440,
-      "sha256": "c7462d8c039a7a0d93cdfda0814792b3734bf009a2b9365755302c0971726837",
+      "sha256": "8116a8d0fa46d815f19a23e916c93397dcc1f9845fc4ac6a770587955eaf4b60",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3628,7 +4989,7 @@
       "file": "1440-control-asin-value-invalid.png",
       "scene": "control-asin-value-invalid",
       "width": 1440,
-      "sha256": "f5febf340676c4694b65a64cc5ba0e26ca14f71102e0e18641c42391350fdf2f",
+      "sha256": "a27bf9b30d3415572e8c632f903f2aa7e55b781116848233c3fa0a34bae91824",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -3643,7 +5004,7 @@
       "file": "1440-control-url-value-default.png",
       "scene": "control-url-value-default",
       "width": 1440,
-      "sha256": "2c69cde48037b828a3feed8afe2c5c86b81fe7c600f9be53bfdbc6c4cc2cb7fa",
+      "sha256": "df1f0629889a54825056809e487863feb40cc4ca10b7247265ca9935fd104af8",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3658,7 +5019,7 @@
       "file": "1440-control-url-value-hover.png",
       "scene": "control-url-value-hover",
       "width": 1440,
-      "sha256": "298c9357ffda83a779f8dc9fd4ac6b00194f072984bfc05c2cd96ea79689de7a",
+      "sha256": "bc9f10a81e7efbf3938333b886105eaf028db0b99c1ddd91bb8272abab2f0530",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3673,7 +5034,7 @@
       "file": "1440-control-url-value-focus.png",
       "scene": "control-url-value-focus",
       "width": 1440,
-      "sha256": "b04735b03e7982d77f78f6969983970a73346557f8e6e027a5d0fed0e4243d5a",
+      "sha256": "d019137881fef2794e92d655e09d6fbcfa0f18d09077a67035287b681352292e",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3688,7 +5049,7 @@
       "file": "1440-control-url-value-pressed.png",
       "scene": "control-url-value-pressed",
       "width": 1440,
-      "sha256": "2b3a3e75d1423b525fe0ddf256ad61028e5c6473da0378d391c927eee997b7b2",
+      "sha256": "3955f2be6c391daf4b75a25031922afb977d30b83554cc97778eae72897d3b5f",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3703,7 +5064,7 @@
       "file": "1440-control-url-value-disabled.png",
       "scene": "control-url-value-disabled",
       "width": 1440,
-      "sha256": "92dae8e870c31f65d014673becf22d54b8f4f05dc8ebfcc57e525054dc6af9c4",
+      "sha256": "c68cedf49066bcb0b796b5bd37c90af08c60a7fec30127dc7b2f9eb356a37005",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3718,7 +5079,7 @@
       "file": "1440-control-url-value-busy.png",
       "scene": "control-url-value-busy",
       "width": 1440,
-      "sha256": "65f897bd78298c2dc82fd0f818e8676ee8468a290ecc73e88e0bb14a3718995d",
+      "sha256": "bb01bbfb9e2019e0b22703903c83934eb742b56364a59429148598ef651bbda3",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3733,7 +5094,7 @@
       "file": "1440-control-url-value-invalid.png",
       "scene": "control-url-value-invalid",
       "width": 1440,
-      "sha256": "716c90380391ac8845455a694dd98dc1f1d8721db9d996950a14f81fb75e99c6",
+      "sha256": "063b85c6e9b9adb33f6e448c9fafdc99b319794beeca02e8f1b2e579fdca7303",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -3748,7 +5109,7 @@
       "file": "1440-control-reason-default.png",
       "scene": "control-reason-default",
       "width": 1440,
-      "sha256": "b384c5d46f6d7606da7c789e1faf0c763b73d91f54f2a7ec068c122a169226ac",
+      "sha256": "fa0a444a5bc7f256bd6d61956466cc68f720871311e76b68eae037c1c076cabb",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3763,7 +5124,7 @@
       "file": "1440-control-reason-hover.png",
       "scene": "control-reason-hover",
       "width": 1440,
-      "sha256": "9a4538c34349dec2555b750060f447157c0d7cb8ec9b637939e2a683fcfc2a2f",
+      "sha256": "a85f7b8bce77788ae547d3a3f7c21acc2ab87ec8f4f8fd2edcf2ef60b4a8876a",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3778,7 +5139,7 @@
       "file": "1440-control-reason-focus.png",
       "scene": "control-reason-focus",
       "width": 1440,
-      "sha256": "1ee5382a09b10d724bdaccf2b9c8ca6c099638d8114c13db0fb856869c3f56f0",
+      "sha256": "b169f9f0d1f9a721855df7644548d2e71c3ec4ec634d2fd230f26bf2393b35b9",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3793,7 +5154,7 @@
       "file": "1440-control-reason-pressed.png",
       "scene": "control-reason-pressed",
       "width": 1440,
-      "sha256": "14e2701173e5d31db924213090c3b3d82fb9e49041ad676d9b1cb65fe43a412a",
+      "sha256": "3674fc6c4e6162083444914e213c52871da179e668b8a6baad6794a39af563b2",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3808,7 +5169,7 @@
       "file": "1440-control-reason-disabled.png",
       "scene": "control-reason-disabled",
       "width": 1440,
-      "sha256": "7260ea118f9097157c47b7888315ad846f2bab91caabe99ec9af8342f5491730",
+      "sha256": "2f3fe221e073136af990489d12c0c5ca82ef46532663466cf86c20596b637a33",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3823,7 +5184,7 @@
       "file": "1440-control-reason-busy.png",
       "scene": "control-reason-busy",
       "width": 1440,
-      "sha256": "58468234288c635cea83b7fc846dcc9fbecfcb9b8b2fa9d2dae6e07be6fc6d8f",
+      "sha256": "008383acdbec236dc6f00bff88502cf2bcf9b62dd5d176c5b1d8d33424d6e0dc",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3838,7 +5199,7 @@
       "file": "1440-control-reason-invalid.png",
       "scene": "control-reason-invalid",
       "width": 1440,
-      "sha256": "7bc57b483233e27bbdf1b7f9bd3a6dc865e4ddeeb83e078c8e76e24def6dcd18",
+      "sha256": "cb6ede38bc5164888ca809a63f8c1b01d6f455f4830b15abaa308d4d7291972d",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -3850,412 +5211,586 @@
       }
     },
     {
+      "file": "1440-appearance-deep-ocean-compact-keyword-edited.png",
+      "scene": "appearance-deep-ocean-compact-keyword-edited",
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "b45d0ce8d1c11c72ab2034c26191959e1d20af0106649669da45426b41ad68f3"
+    },
+    {
+      "file": "1440-appearance-deep-ocean-compact-adopt-ready.png",
+      "scene": "appearance-deep-ocean-compact-adopt-ready",
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "98f246b4a26b07dca24c8692d3c6407d474e2fa080c4723442e7bef2f2bcdb5f"
+    },
+    {
+      "file": "1440-appearance-deep-ocean-compact-adopt-conflict.png",
+      "scene": "appearance-deep-ocean-compact-adopt-conflict",
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "c95ecdc8af75e10e1863db1f5485d2ae96907a505e4ae3834da2232323ec8eb3"
+    },
+    {
+      "file": "1440-appearance-deep-ocean-compact-adopt-decided.png",
+      "scene": "appearance-deep-ocean-compact-adopt-decided",
+      "width": 1440,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "906bab727c1f9009702c9b65563fe3aab251c312764288f4f7232ffbfd911951"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-standard-keyword-edited.png",
+      "scene": "appearance-aurora-purple-standard-keyword-edited",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "606c6d597a9fb71800ede3c7f34c5070e5df5b13357ab55df70999e96c4186d6"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-standard-adopt-ready.png",
+      "scene": "appearance-aurora-purple-standard-adopt-ready",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "ee4ae1819563a687fcc229e7c960d9d6e3638628b8f3edec66510e2509705802"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-standard-adopt-conflict.png",
+      "scene": "appearance-aurora-purple-standard-adopt-conflict",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "4c02d6d19200e12f6403ddd7223e4390612104f4b17b4c00877dd416abbb795a"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-standard-adopt-decided.png",
+      "scene": "appearance-aurora-purple-standard-adopt-decided",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "df89253b1a089a4ac58f39106e7986c733dce778a52f1c5cf54e0722541f94d7"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-compact-keyword-edited.png",
+      "scene": "appearance-aurora-purple-compact-keyword-edited",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "2f00f20bf1e7f477b55811393113a3e0c4f8f647f46370bda9c864f80c0066a8"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-compact-adopt-ready.png",
+      "scene": "appearance-aurora-purple-compact-adopt-ready",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "20711eeb7b1975034c10b3c0a28075eda83ade33777d91823c3f4923f7b42739"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-compact-adopt-conflict.png",
+      "scene": "appearance-aurora-purple-compact-adopt-conflict",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "0709a6449c380ab226eeb1f80f1e7f0aff0bdf7c28e24509a89ae914ae3a54ff"
+    },
+    {
+      "file": "1440-appearance-aurora-purple-compact-adopt-decided.png",
+      "scene": "appearance-aurora-purple-compact-adopt-decided",
+      "width": 1440,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "65e6e92af083204455e87597e8814e1a816b567ad4818c05d102d81da4c07dbe"
+    },
+    {
+      "file": "1440-appearance-cloud-white-standard-keyword-edited.png",
+      "scene": "appearance-cloud-white-standard-keyword-edited",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "2a721fb23929f809e895f174e5c9b983671a392e6aecf70879a87799b847596d"
+    },
+    {
+      "file": "1440-appearance-cloud-white-standard-adopt-ready.png",
+      "scene": "appearance-cloud-white-standard-adopt-ready",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "83a48ece4135414ebd37a9ffe81ab94844a4cc8122619f4371ce35e10c108ab4"
+    },
+    {
+      "file": "1440-appearance-cloud-white-standard-adopt-conflict.png",
+      "scene": "appearance-cloud-white-standard-adopt-conflict",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "e74877af4c36c1fd27c344e808e1dde63c04fb8365062f6808e06e08b6db74f9"
+    },
+    {
+      "file": "1440-appearance-cloud-white-standard-adopt-decided.png",
+      "scene": "appearance-cloud-white-standard-adopt-decided",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "f2dee14dbc1d0d78a4d57242a9b7ddc28b0976470bd4431b301fe76b27f52ebd"
+    },
+    {
+      "file": "1440-appearance-cloud-white-compact-keyword-edited.png",
+      "scene": "appearance-cloud-white-compact-keyword-edited",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "68880375965ecde6ae298ac81b729254622a79ae650bd1c60137dc2a25d28226"
+    },
+    {
+      "file": "1440-appearance-cloud-white-compact-adopt-ready.png",
+      "scene": "appearance-cloud-white-compact-adopt-ready",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "41c323beb1590bd8e5d7c3141bb8c195ad066e592d6d2dc6ddf073fd9d9273d4"
+    },
+    {
+      "file": "1440-appearance-cloud-white-compact-adopt-conflict.png",
+      "scene": "appearance-cloud-white-compact-adopt-conflict",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "4b26186e17b4080a718b078de25c2c4a2a200039c5598ce92b2d28033691bcb7"
+    },
+    {
+      "file": "1440-appearance-cloud-white-compact-adopt-decided.png",
+      "scene": "appearance-cloud-white-compact-adopt-decided",
+      "width": 1440,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "f54de4dc8f2797f02a82adad06f620a2d80aa8ace2efa2907cdbb56adc7f16e2"
+    },
+    {
+      "file": "1440-zoom-2-long-result.png",
+      "scene": "zoom-2-long-result",
+      "width": 1440,
+      "zoom": 2,
+      "sha256": "73adcfb9c5967a26c46bd6f40a38d95de5bec1cef4a69c5eb40a47dd08853c21"
+    },
+    {
+      "file": "1440-zoom-2-asin-invalid.png",
+      "scene": "zoom-2-asin-invalid",
+      "width": 1440,
+      "zoom": 2,
+      "sha256": "e9f513fdce6533a8a217cec09bcf7b59b53b788f9471f975363c5a9eca882f04"
+    },
+    {
       "file": "390-keyword.png",
       "scene": "keyword",
       "width": 390,
-      "sha256": "692d6d1d7d8013db933d70657e47d23da9d0149cc4ee8fb16858d1f250823bfc"
+      "sha256": "91b4178cb8ad4d99d94b72529aa9df7fd956fc625348c8a1375a779c5f2d59e4"
     },
     {
       "file": "390-asin.png",
       "scene": "asin",
       "width": 390,
-      "sha256": "0e0a8391fc32f330d2658eb8ab7599fd24df872c6b29860bda211bfcfb0c26bb"
+      "sha256": "27bcd6a479ebb511d398869c00639a1a21e920bc89bda85076a51ca8a7b6a879"
     },
     {
       "file": "390-url.png",
       "scene": "url",
       "width": 390,
-      "sha256": "ce0ee2a047b1e198d98e88095935309ff0277db80a9008e88e9d97a09162237a"
+      "sha256": "62c7af2bc899f2a59d604166e45b920cc87f1d9be720e17439ea0a1e9e7a9433"
     },
     {
       "file": "390-keyword-edited.png",
       "scene": "keyword-edited",
       "width": 390,
-      "sha256": "5ae2411958445034d6493ac0fc11de9ecbad7679a37040cef6ad8e229e3a49c8"
+      "sha256": "f8c62c2b06171362113ebebd9d00a6ec53fabde37954c82733ca854490d17716"
     },
     {
       "file": "390-asin-edited.png",
       "scene": "asin-edited",
       "width": 390,
-      "sha256": "9c535e860e8e7fd65003c298befef8fae3aba33435c3f64315f455b3200a9c86"
+      "sha256": "2f994d0608054ce7ba87f63a4584bade79449a227365cc24443a65492dee7ec1"
     },
     {
       "file": "390-url-edited.png",
       "scene": "url-edited",
       "width": 390,
-      "sha256": "983d82943962f6a4f219a8112e817e6a42b880276037bc807be3fa73aa99b0aa"
+      "sha256": "1266bc4d7a93659f04927eed1c273f5b242bfb307f26ebb8353c395a80beb647"
     },
     {
       "file": "390-keyword-required.png",
       "scene": "keyword-required",
       "width": 390,
-      "sha256": "845b2d974c6fa0207654f9d900114e3300a4ab353259921198942afcff89bd36"
+      "sha256": "38edee5841fbf79f3f25232c567b8e09c710ed901113a42c80fac57e80ce5906"
     },
     {
       "file": "390-asin-invalid.png",
       "scene": "asin-invalid",
       "width": 390,
-      "sha256": "eebc5b1638cfe9d07975120649dac2f6fcd7f49fbb073fdc5edf0f3f642bf4d8"
+      "sha256": "f80010b6bb818aebbc05727be13334bb671091d79ac7bc52913761b84bd4b857"
     },
     {
       "file": "390-url-invalid.png",
       "scene": "url-invalid",
       "width": 390,
-      "sha256": "21bfb3844b07908f7521380ef8fc04c143bf6a85556093ebea3e4deba95b24a8"
+      "sha256": "9c6cf391536d6c02162660fa12d2e0135f58397fc29a8f7b5991fe2f81e88fe3"
     },
     {
       "file": "390-reason-required.png",
       "scene": "reason-required",
       "width": 390,
-      "sha256": "062dcabc4ea6a02554195a886bb31d3327b1d88aa3786068441531f1d82f66de"
+      "sha256": "9cfd0a739ba1a3509886bb39aeb9e13a1287551ac64f2eeedaabe4bab87fccdb"
     },
     {
       "file": "390-asin-restoring.png",
       "scene": "asin-restoring",
       "width": 390,
-      "sha256": "444a6bb8c73bd08d0f10cc305e9e051ca2441273f9bbbbe01d33a1254df91d72"
+      "sha256": "fd340843e0dfa0d74f3b00ab46c2b4e37ba42fde1d707d3159b2ec4a74395063"
     },
     {
       "file": "390-url-restoring.png",
       "scene": "url-restoring",
       "width": 390,
-      "sha256": "00f70f29686232e6ef9f6b872936c185a1e43a86a7a63879ad64b340be18dd49"
+      "sha256": "1b3e0374051244bc68892ab648ff960e87a25eb29ca0bf420a8005f0e3fc7f17"
     },
     {
       "file": "390-asin-create-busy.png",
       "scene": "asin-create-busy",
       "width": 390,
-      "sha256": "aff9c71a3e990fc619f65ffa0f36442a657d1fbbc46e534cb5835d8c33e29f90"
+      "sha256": "faef2b6b6939b574ddcc38a2ad3eed02803982afa05da384354c904d7784f6bd"
     },
     {
       "file": "390-url-create-busy.png",
       "scene": "url-create-busy",
       "width": 390,
-      "sha256": "3f6c12aff617f476e4fa2d1ecd194c1c0d2963a71ad2c08bd91de96d305626ea"
+      "sha256": "7c64468d9dd66e80b306b95171ac39c7ae69962f4bf3f6b0d312d947381fb50d"
     },
     {
       "file": "390-create-busy.png",
       "scene": "create-busy",
       "width": 390,
-      "sha256": "9ccfd586d90c306aa94ba9ad954684a1f1f3d056c2b97ee43c1d2ad30477726a"
+      "sha256": "414cb76a5b6e60d1f477a40f2669ba0f433c2e42e62061529acb0fbc9fc13590"
     },
     {
       "file": "390-create-failed.png",
       "scene": "create-failed",
       "width": 390,
-      "sha256": "0c6d3163353e5d6266d49b1fbba2d0380755eaeab2c9e0569d894027512ecac2"
+      "sha256": "a286ec5e6583334c125f471ade97a2bcaa8fccbe132b6cbfba96455e0f1369cd"
     },
     {
       "file": "390-url-rejected.png",
       "scene": "url-rejected",
       "width": 390,
-      "sha256": "914baf8d7134da4acb2e5112ef1f156af50bb8243b9f1201b06aed8f86c0e674"
+      "sha256": "f57407548b80d2749458599913af82e1cee98093e9c45016f6b518d5b31d79f6"
     },
     {
       "file": "390-restoring.png",
       "scene": "restoring",
       "width": 390,
-      "sha256": "3b07dfd5bc6ecd0935c51c794ba6186749b5e4ec8823f189e53efb9b1c237ab0"
+      "sha256": "4c0e1505c6bda9b56373db87a13e83debf28d1ee571841f75c1e2ccd800c3441"
     },
     {
       "file": "390-restore-failed.png",
       "scene": "restore-failed",
       "width": 390,
-      "sha256": "547e5aa2e5b2e34e489c3e00c1e8932ee3372a244a6c813c7cf8e7df91b0983b"
+      "sha256": "882e460ca7fc50aac9579b431ab233b815daea9d3cb508c52fba82f6593a7486"
     },
     {
       "file": "390-restore-expired.png",
       "scene": "restore-expired",
       "width": 390,
-      "sha256": "ab0c7f99d5218b2bc9d0be4fd4e6c3cd8e3b67a4ed2b01fa467128a63280d41e"
+      "sha256": "df516ff1d1f1554d853a6ba6d42808ae9312e688911612eb531cba3c0c9f5d61"
     },
     {
       "file": "390-restore-forbidden.png",
       "scene": "restore-forbidden",
       "width": 390,
-      "sha256": "8fcca09c5e0bc585869e6b48a44aa9e63f88fd56768ac30f98f8edc8487858dc"
+      "sha256": "88605f2988342a06a1304a060b6d9e31933fead709d02d70e4136d735fb9b92a"
     },
     {
       "file": "390-restore-blocked.png",
       "scene": "restore-blocked",
       "width": 390,
-      "sha256": "f7ee651e9dea11d78170166637498f3c25cd7298db00aab9dc35c916ac834b70"
+      "sha256": "8bfe6c4f5fa249f3b9dd57441c59db86f1631b3861079c853915cfab3db4680e"
     },
     {
       "file": "390-retry-busy.png",
       "scene": "retry-busy",
       "width": 390,
-      "sha256": "3210a6ffa8ed13d1b8646c386f05d6de4164ac08fe6817a68f68c3159f025857"
+      "sha256": "76626b42fdf69ef01002db9c70683d7d920494f99bc2a05ec3facacf93f25686"
     },
     {
       "file": "390-invalid-id.png",
       "scene": "invalid-id",
       "width": 390,
-      "sha256": "b452fe61f38598ecddec4f548ffe34092f7b70bebb47b8735d5a0d97ccf5ba0c"
+      "sha256": "2a2222d44fadc163a7c2ae1a6156ba737117ae09d5408625c230a28f1bfd5a37"
     },
     {
       "file": "390-missing-id.png",
       "scene": "missing-id",
       "width": 390,
-      "sha256": "37e7eb9ccf587987a076b1f7113c6b13b2225943ed20b4d28153f13c4490973f"
+      "sha256": "1d8f052b0b520a8362cda8b7fc5ccef5e8a59ecd49d8c5d0d28e55bf695b8691"
     },
     {
       "file": "390-accepted.png",
       "scene": "accepted",
       "width": 390,
-      "sha256": "3842a3310aeeb2776774536a9e252d7a6913be4147d44341197f05e50c890a5a"
+      "sha256": "e02cc14434b44bf2a99cfe4731a6ce8a991783bbc87b6ebed2ba33f49b7626cd"
     },
     {
       "file": "390-running.png",
       "scene": "running",
       "width": 390,
-      "sha256": "af774beec39f17c8c5cca08207ae04d4765f2ecd0f4281e19e58ae1fbe89d829"
+      "sha256": "0a9c83efa70a68765017260a099013969821d898832e656c361e0f7b22739498"
     },
     {
       "file": "390-running-evidence.png",
       "scene": "running-evidence",
       "width": 390,
-      "sha256": "c4e355b825243e6a50ce8b80543371163c7a49037df78f3e0a2415be87578509"
+      "sha256": "549509babcb778134396a7afe59a4dccee9ef2f8001d3e96af5674dece736fec"
     },
     {
       "file": "390-read-busy.png",
       "scene": "read-busy",
       "width": 390,
-      "sha256": "23f096f9c5e7f1eab35ceab80c94955880cae973d55a7f07686efaa014edcdc6"
+      "sha256": "3cff2c8030694485be4619c795a8d38afec522baa524dbaa7b7a5df9048e0269"
     },
     {
       "file": "390-read-failed.png",
       "scene": "read-failed",
       "width": 390,
-      "sha256": "f131fa219ad36551ce2311c4aecac29d1987ee3b470d0fb4b8376d93e1d48e3b"
+      "sha256": "853b31e4d36a598a251ee08f3287104c999d36d34c95f4025d41a384a45c29a5"
     },
     {
       "file": "390-read-expired.png",
       "scene": "read-expired",
       "width": 390,
-      "sha256": "44792c38e917d541a0fbc9f9628036d24c804df2b80e837951d177cbfc54b238"
+      "sha256": "3e82de38b5102464254babb86fd9d4a1e6d0a888df7ab717b336b19be436980d"
     },
     {
       "file": "390-read-forbidden.png",
       "scene": "read-forbidden",
       "width": 390,
-      "sha256": "c046cf7c530486b605f09a867817db8d7052198fba7d78e458aa18cdd706d4d1"
+      "sha256": "ee31f8f01190f63e689c6370cc4936b29684d71f514d8a285db57668a6e312fb"
     },
     {
       "file": "390-read-blocked.png",
       "scene": "read-blocked",
       "width": 390,
-      "sha256": "7d9b1df642dd9f81c74842aab444726eb3a926f5e40de64a9da3a9bd84c58aa8"
+      "sha256": "38d27e173166c7ee2df43dc19843ee26240918d1706a28d094859561a6740429"
     },
     {
       "file": "390-results.png",
       "scene": "results",
       "width": 390,
-      "sha256": "ea68bf6320d286c835217f64957f7a9b6a2d44fc30f3a474a5dfdf640954c714"
+      "sha256": "7c55c671b90de55d6b0ede0afb04577d498d36788c466d29fa1e104025c7b80a"
     },
     {
       "file": "390-selected.png",
       "scene": "selected",
       "width": 390,
-      "sha256": "8251140e388ba603c491084b2c1f7f1974aeec8305b47f6f984ccad310894fcc"
+      "sha256": "a706952b5a4b97dce7b743db514c7a66bfc0ef377d4d85b98c33fbcd3b1efaf3"
     },
     {
       "file": "390-no-topic.png",
       "scene": "no-topic",
       "width": 390,
-      "sha256": "b0ff3c1aaf659201f546fefba32475c836954d76ed6b5304a72884755a428cc2"
+      "sha256": "e6e122451eb90ac52f890f2cb60e44d1573629562fc645841fb6af6e22bc2213"
     },
     {
       "file": "390-single-result.png",
       "scene": "single-result",
       "width": 390,
-      "sha256": "c125cea921eb675a9ffe836b1a0b2834db5f8d86cfd3853155a5a62b64233631"
+      "sha256": "4e359d32535bc684e0a4596b92ecccb836f4b8bf9092d30bfd863d1db7fa2cff"
     },
     {
       "file": "390-first-result.png",
       "scene": "first-result",
       "width": 390,
-      "sha256": "7c8e8f16b116097e9944e280a24d130e254df1ea3aa2b4aa49ef2b11d46f065a"
+      "sha256": "9e098c6037883d4d5e3ed72fa4508998adc7f61558bb165ce6d2ebdd441f6b4f"
     },
     {
       "file": "390-missing-fields.png",
       "scene": "missing-fields",
       "width": 390,
-      "sha256": "903b6c0fd1f6870ad9e360c7938fcfd5072529f031f0f3c95aef733b20337486"
+      "sha256": "4d8ba06668b1a49e586e9c74ba4f933e265e004b33085a1ac518b441d0e72cc9"
     },
     {
       "file": "390-long-result.png",
       "scene": "long-result",
       "width": 390,
-      "sha256": "36ba32109b4b307f63ca9f15c513d45ce9734b594a3653971a12fb465bfea92a"
+      "sha256": "0ece2f26f14bd2259350c6181528eaefe1507bec57d7e2e4708635c7588b1ee1"
     },
     {
       "file": "390-twenty-results.png",
       "scene": "twenty-results",
       "width": 390,
-      "sha256": "ca156df12045f228b0766278dc6b407b69a85fd37e03b902fe18e16196365a29"
+      "sha256": "23a22b1ebd0323d9cbb9c747e1a3fc852534e8935cbb6c1f99011e9895f944c4"
     },
     {
       "file": "390-timeline.png",
       "scene": "timeline",
       "width": 390,
-      "sha256": "bc91d9da287dd46f1cd3d6502169693d5ea35987c46f2b8248f50ab4eb1ce4a0"
+      "sha256": "7865e7c29ae1f46620b3f7c797fb81d62215d123a4b1c9df0845dd6719d0f3a8"
     },
     {
       "file": "390-empty.png",
       "scene": "empty",
       "width": 390,
-      "sha256": "dd558ed1fe8a8f92480e7412f567bbd37eadbbf6a17dc977ef2c91bc8aa8f94f"
+      "sha256": "6c511d610a3078cfe2ef540309fd970cf9b447fe1841e21d293973feaf2acab4"
     },
     {
       "file": "390-blocked.png",
       "scene": "blocked",
       "width": 390,
-      "sha256": "2c95c7f20c0a3b9d24fbb3166a11d447b3b2b3b06e593a9ed570fa201f1d1a98"
+      "sha256": "8894e15f9b00322af46bcd8516194961167ebb72405c938fb10f5c6c6cae7879"
     },
     {
       "file": "390-failed.png",
       "scene": "failed",
       "width": 390,
-      "sha256": "c47c69b945820af42ef72d4b6d6703a2dcf28055ea8075f145baf15852925e3f"
+      "sha256": "4f09b95725c83d35257f71a6a549242f64c2c32de211442e86fff4aef8099939"
     },
     {
       "file": "390-deadline-running.png",
       "scene": "deadline-running",
       "width": 390,
-      "sha256": "6c6aba1d2e90d358d6c6fbf14421751c238b876fb38377af1301cabb1be09845"
+      "sha256": "cc122f27520dfa45565058067fb9f3eae5decc376d8ef33867d86e6a8b0dc43b"
     },
     {
       "file": "390-adoption-pending.png",
       "scene": "adoption-pending",
       "width": 390,
-      "sha256": "4d96eea66e6941e816027372e261a75af1b6ddf6d5943cf3b72c833680104d88"
+      "sha256": "c386837718c8b733a90014458ee7c875cbe9906ffece8fc17bcacf43ceb03ec6"
     },
     {
       "file": "390-adopt-ready.png",
       "scene": "adopt-ready",
       "width": 390,
-      "sha256": "45a24195a2cc4f66e76b548fd2cfa839026937f33b4822521446e96cba02ad58"
+      "sha256": "ced09e249724f856e9100a6dbb9191b227aff3e7d5e99f56826fa4967fe81387"
     },
     {
       "file": "390-gate-score.png",
       "scene": "gate-score",
       "width": 390,
-      "sha256": "0d3132fd94c4cae9f6d6109d1de893d9b5fd9137fd5bf7021825592979f36408"
+      "sha256": "a6d4b0a596f1d73daceedd6a009ffe46cee7250133c2c771f5684a19f3176135"
     },
     {
       "file": "390-gate-market.png",
       "scene": "gate-market",
       "width": 390,
-      "sha256": "704e552678613bb16ef79b63f4f58d33784d3159a1919ea8e98331d4423b2a75"
+      "sha256": "e67d4c32dd9ef353a72fc16d04f9ef77315c5a55dcaf5539e3530f8978fd87f7"
     },
     {
       "file": "390-gate-competition.png",
       "scene": "gate-competition",
       "width": 390,
-      "sha256": "8d98263c691ac6406d29b66ff57099b41039e3efddeb15803f3cbf7776d6b813"
+      "sha256": "a2f0a559ed6aa12d51318f5d4cdb5f523423fe0f8bb79e6444ee9d890b170837"
     },
     {
       "file": "390-gate-cost.png",
       "scene": "gate-cost",
       "width": 390,
-      "sha256": "d3fdebcc6b1f0ab011d81406edc52e1fd97a94bb47403ab7071621d0d2548d03"
+      "sha256": "ee7847421ef86e13b257c6d8b653f745249c31ce3bd3e0bc76402da7c5a35ce0"
     },
     {
       "file": "390-gate-risk.png",
       "scene": "gate-risk",
       "width": 390,
-      "sha256": "8a6af77cb3fd91bd01e3eecff7a8976a440c169368c2a1bb9f725fc3ed985a2d"
+      "sha256": "e8401dd2034de02a97568d34e818e9934056c3d37e2733de5d1b3de3e1c6e799"
     },
     {
       "file": "390-adopt-busy.png",
       "scene": "adopt-busy",
       "width": 390,
-      "sha256": "e96bf627ff623bb7c2dc9736120bd4341984bad1a268d92cfead914ee468050e"
+      "sha256": "794360a415bd77041240c63b3acaef17422d6fb6711158f597f2fb754f88af7d"
     },
     {
       "file": "390-adopt-conflict.png",
       "scene": "adopt-conflict",
       "width": 390,
-      "sha256": "6e662f175fff4042b6506e836d007e7bc5eef28defb8dfdf23a09bcb60bda901"
+      "sha256": "8bf892e4b787773274de97c02609e4359c4533fe0535e315e12561892b2877d8"
     },
     {
       "file": "390-adopt-refreshed.png",
       "scene": "adopt-refreshed",
       "width": 390,
-      "sha256": "f833c421424adb846e7bb57c804f4eb3d3115875cd1723b8e4b79df516bf3350"
+      "sha256": "3b314c4397809c65a38cf7f30c24057a6c0e53b3a2dcadaa104a19fd4f76b487"
     },
     {
       "file": "390-adopt-decided.png",
       "scene": "adopt-decided",
       "width": 390,
-      "sha256": "d8fcaea3c0498dc3a4a6065a23315ee2b9365c97278dc8a05eebe61ef8a93ea3"
+      "sha256": "11f9bdc9cb29a32c9e36b297419c44e8aa7c0b15cfb78edb1d7e1521b15a4af9"
     },
     {
       "file": "390-observe-edited.png",
       "scene": "observe-edited",
       "width": 390,
-      "sha256": "29b0040e2dd4afb57c4d39dc00138868b37c5218559dee1431cac0bef937543d"
+      "sha256": "5368e06a72b1cdafd52cbe4bd20ab4a2bad43d36fbdc6eb927868f86cfddf84a"
     },
     {
       "file": "390-observe-busy.png",
       "scene": "observe-busy",
       "width": 390,
-      "sha256": "703b031058de12dfaa29b83bf1178e53bb9c6484c85066ba5bb54cdb7768f027"
+      "sha256": "194ee563c713d07c8ea5f940838f23a1519fecbe0346f3c792583c75efb0fa49"
     },
     {
       "file": "390-observe-failed.png",
       "scene": "observe-failed",
       "width": 390,
-      "sha256": "a25e6b4ef9c9d51d5e20ea09eb69e1cd368a40de9c530fb79fe6814956625f43"
+      "sha256": "aae072cd2f72d5da8f2388e4e93fb7dc271c430e46f2374d4d1991aa33332545"
     },
     {
       "file": "390-observe-decided.png",
       "scene": "observe-decided",
       "width": 390,
-      "sha256": "ab86c07e36c2c910301706ff545d53eb7535ecb4c3a4ced64877167ddae2f2d1"
+      "sha256": "4a2a57cc813e83e39d51b6dafc7e1714325b9fe5bc7a8f1af406fb360e9d43e6"
     },
     {
       "file": "390-reject-edited.png",
       "scene": "reject-edited",
       "width": 390,
-      "sha256": "5e781553a5f0393fb9c4c7fdaac67b11672b9faee68bf09e7f6a613b52fff502"
+      "sha256": "430f5a678813857cc3f5485d089518a99620afcbc96f8a80fa98ec958ea5da25"
     },
     {
       "file": "390-reject-busy.png",
       "scene": "reject-busy",
       "width": 390,
-      "sha256": "d6fd696d432f19817009ab76571ec13e509088663e7197c0e749e6d0bbd02d77"
+      "sha256": "f2b1ef10bdfb85db47e14fecbac8f4230c124bb1a0e5ffde14f4dfd252d5a620"
     },
     {
       "file": "390-reject-failed.png",
       "scene": "reject-failed",
       "width": 390,
-      "sha256": "248ff8d3204b52231cac7633d720127873598e88bace42eabb167e397295cc7d"
+      "sha256": "033311d0f8ed2b692f80091baf490ef0d1a5fa9bfbff2ebf864f349da094708e"
     },
     {
       "file": "390-reject-decided.png",
       "scene": "reject-decided",
       "width": 390,
-      "sha256": "bf7f22b70a8ade03a9279319358211991d621edcfd5bfd31b0f64a004d5fce72"
+      "sha256": "acb4580a4bff184cf17ed19e90b6cbd54ff256a2c3ccb795e06f0f95f0be231e"
     },
     {
       "file": "390-decided-no-links.png",
       "scene": "decided-no-links",
       "width": 390,
-      "sha256": "f039b5655067b2bf83f35ffa6cdac0b0d70c7735a85ef3d854f21ef83a6687b3"
+      "sha256": "32b7aa37abdee1f3e1e82bc86439571713b15f753d2b879a85404ea3e1c928f8"
     },
     {
       "file": "390-next-input.png",
       "scene": "next-input",
       "width": 390,
-      "sha256": "5d5339e6f1b902cc6dba204c6090f941087a80604edb2c3b4780ce1f6ebc7a10"
+      "sha256": "903e0ac67b4b40c75cd0c933f9c31cf8905e41dfbbe35893ee37d28c2603980b"
     },
     {
       "file": "390-control-create-default.png",
       "scene": "control-create-default",
       "width": 390,
-      "sha256": "5ae2411958445034d6493ac0fc11de9ecbad7679a37040cef6ad8e229e3a49c8",
+      "sha256": "f8c62c2b06171362113ebebd9d00a6ec53fabde37954c82733ca854490d17716",
       "control": {
         "key": "create",
         "state": "default",
@@ -4269,7 +5804,7 @@
       "file": "390-control-create-hover.png",
       "scene": "control-create-hover",
       "width": 390,
-      "sha256": "0a2bb2c05dfaabd6957eb5475faf4fd4b0c36d0d36ed36842509a4ddc443b2cc",
+      "sha256": "2c382fb6fe71b823f9dc40b879b1fa6a014800694c276a3e27fa4bbf9f3ef46a",
       "control": {
         "key": "create",
         "state": "hover",
@@ -4283,7 +5818,7 @@
       "file": "390-control-create-focus.png",
       "scene": "control-create-focus",
       "width": 390,
-      "sha256": "a17aaeb7abd069295a3af377ee03fa4eda377f31e97002d9bd93b405918576f4",
+      "sha256": "e3aa094330d2b8d954929b1c1aabc8dfd55c92a5a77975121d4c1f4370f0d89b",
       "control": {
         "key": "create",
         "state": "focus",
@@ -4297,7 +5832,7 @@
       "file": "390-control-create-pressed.png",
       "scene": "control-create-pressed",
       "width": 390,
-      "sha256": "2123acad3f6fb9db1f364d245d9ce8f8e44eab05b4642ccf2202256d5b6f2f72",
+      "sha256": "ba850908ab91fae52e6fc26d206e5914daa4c558c29d1b5ca33a5cbf308b2d12",
       "control": {
         "key": "create",
         "state": "pressed",
@@ -4311,7 +5846,7 @@
       "file": "390-control-create-disabled.png",
       "scene": "control-create-disabled",
       "width": 390,
-      "sha256": "3b07dfd5bc6ecd0935c51c794ba6186749b5e4ec8823f189e53efb9b1c237ab0",
+      "sha256": "4c0e1505c6bda9b56373db87a13e83debf28d1ee571841f75c1e2ccd800c3441",
       "control": {
         "key": "create",
         "state": "disabled",
@@ -4325,7 +5860,7 @@
       "file": "390-control-create-busy.png",
       "scene": "control-create-busy",
       "width": 390,
-      "sha256": "9ccfd586d90c306aa94ba9ad954684a1f1f3d056c2b97ee43c1d2ad30477726a",
+      "sha256": "414cb76a5b6e60d1f477a40f2669ba0f433c2e42e62061529acb0fbc9fc13590",
       "control": {
         "key": "create",
         "state": "busy",
@@ -4339,7 +5874,7 @@
       "file": "390-control-adopt-default.png",
       "scene": "control-adopt-default",
       "width": 390,
-      "sha256": "45a24195a2cc4f66e76b548fd2cfa839026937f33b4822521446e96cba02ad58",
+      "sha256": "ced09e249724f856e9100a6dbb9191b227aff3e7d5e99f56826fa4967fe81387",
       "control": {
         "key": "adopt",
         "state": "default",
@@ -4353,7 +5888,7 @@
       "file": "390-control-adopt-hover.png",
       "scene": "control-adopt-hover",
       "width": 390,
-      "sha256": "14741130005a681f8d395104c412267d9cd4c5f7bc9590710066fc0650601d7e",
+      "sha256": "5dbc905ac75f83ffb14e613ef96fa92c913dd8e4a4798e7c93c210c7b6bc480c",
       "control": {
         "key": "adopt",
         "state": "hover",
@@ -4367,7 +5902,7 @@
       "file": "390-control-adopt-focus.png",
       "scene": "control-adopt-focus",
       "width": 390,
-      "sha256": "5bd9cf722b548248b9506733af1f60ab6a383261f74178319817732e896e53a8",
+      "sha256": "9f674a10f8b1be74b477e17f19029abdb3fd0ee86a4212a0316d489183ff87eb",
       "control": {
         "key": "adopt",
         "state": "focus",
@@ -4381,7 +5916,7 @@
       "file": "390-control-adopt-pressed.png",
       "scene": "control-adopt-pressed",
       "width": 390,
-      "sha256": "ec1eb21cab738987a55456f5a2d0623968fc329da738e6e9996757a07fcd43ea",
+      "sha256": "0cc3cb22817806ac4a5e3e8c50c3f4ca5de31ccfd1580c40a6223839ad656248",
       "control": {
         "key": "adopt",
         "state": "pressed",
@@ -4395,7 +5930,7 @@
       "file": "390-control-adopt-disabled.png",
       "scene": "control-adopt-disabled",
       "width": 390,
-      "sha256": "d3fdebcc6b1f0ab011d81406edc52e1fd97a94bb47403ab7071621d0d2548d03",
+      "sha256": "ee7847421ef86e13b257c6d8b653f745249c31ce3bd3e0bc76402da7c5a35ce0",
       "control": {
         "key": "adopt",
         "state": "disabled",
@@ -4409,7 +5944,7 @@
       "file": "390-control-adopt-busy.png",
       "scene": "control-adopt-busy",
       "width": 390,
-      "sha256": "e96bf627ff623bb7c2dc9736120bd4341984bad1a268d92cfead914ee468050e",
+      "sha256": "794360a415bd77041240c63b3acaef17422d6fb6711158f597f2fb754f88af7d",
       "control": {
         "key": "adopt",
         "state": "busy",
@@ -4423,7 +5958,7 @@
       "file": "390-control-save-default.png",
       "scene": "control-save-default",
       "width": 390,
-      "sha256": "45a24195a2cc4f66e76b548fd2cfa839026937f33b4822521446e96cba02ad58",
+      "sha256": "ced09e249724f856e9100a6dbb9191b227aff3e7d5e99f56826fa4967fe81387",
       "control": {
         "key": "save",
         "state": "default",
@@ -4437,7 +5972,7 @@
       "file": "390-control-save-hover.png",
       "scene": "control-save-hover",
       "width": 390,
-      "sha256": "aac5f70c0f4a9c692cc1908cd0e2694cd3f18011f935e021d4d4f090187322a2",
+      "sha256": "9eeef5221be482c8fb0f793f57b331796c4c8f8a5778a49216361ffb8f7351db",
       "control": {
         "key": "save",
         "state": "hover",
@@ -4451,7 +5986,7 @@
       "file": "390-control-save-focus.png",
       "scene": "control-save-focus",
       "width": 390,
-      "sha256": "faedbaf4d75743f0482cab7a608b5b26634ab8dde11d2dd286499991fb3ba6b5",
+      "sha256": "b77bbca4cc4add79c81554d5285eeb4ea22bd1baf5b38a6f80339e6755d05f36",
       "control": {
         "key": "save",
         "state": "focus",
@@ -4465,7 +6000,7 @@
       "file": "390-control-save-pressed.png",
       "scene": "control-save-pressed",
       "width": 390,
-      "sha256": "c49cb49e4ce41e7e0606be746d5d83cdbabaa1c8078aefea4e31e8491b0ca7d4",
+      "sha256": "bcd15b4ae891a1547dda8c93d292eb46851e8a4cdc40c1d9ae60b88f7224c6a8",
       "control": {
         "key": "save",
         "state": "pressed",
@@ -4479,7 +6014,7 @@
       "file": "390-control-save-disabled.png",
       "scene": "control-save-disabled",
       "width": 390,
-      "sha256": "d3fdebcc6b1f0ab011d81406edc52e1fd97a94bb47403ab7071621d0d2548d03",
+      "sha256": "ee7847421ef86e13b257c6d8b653f745249c31ce3bd3e0bc76402da7c5a35ce0",
       "control": {
         "key": "save",
         "state": "disabled",
@@ -4493,7 +6028,7 @@
       "file": "390-control-save-busy.png",
       "scene": "control-save-busy",
       "width": 390,
-      "sha256": "e96bf627ff623bb7c2dc9736120bd4341984bad1a268d92cfead914ee468050e",
+      "sha256": "794360a415bd77041240c63b3acaef17422d6fb6711158f597f2fb754f88af7d",
       "control": {
         "key": "save",
         "state": "busy",
@@ -4507,7 +6042,7 @@
       "file": "390-control-list-default.png",
       "scene": "control-list-default",
       "width": 390,
-      "sha256": "692d6d1d7d8013db933d70657e47d23da9d0149cc4ee8fb16858d1f250823bfc",
+      "sha256": "91b4178cb8ad4d99d94b72529aa9df7fd956fc625348c8a1375a779c5f2d59e4",
       "control": {
         "key": "list",
         "state": "default",
@@ -4521,7 +6056,7 @@
       "file": "390-control-list-hover.png",
       "scene": "control-list-hover",
       "width": 390,
-      "sha256": "daddde7db46617d1ec39a02dea4f00e90db1e8c4f0ee3f79aee947ef855825f5",
+      "sha256": "cd8e1e8a91eea9b446ceb75e28fb5fda0f53fa0a6636a4853911a03d9f93357f",
       "control": {
         "key": "list",
         "state": "hover",
@@ -4535,7 +6070,7 @@
       "file": "390-control-list-focus.png",
       "scene": "control-list-focus",
       "width": 390,
-      "sha256": "c3c5d576ecddac5f5d3547361b3378ce79876dfafdcaffaf9c6e83645ba9ed12",
+      "sha256": "456c63b4226b24effd548877f6519d760ebf27e5e1ac2c538babecb3ec9ad820",
       "control": {
         "key": "list",
         "state": "focus",
@@ -4549,7 +6084,7 @@
       "file": "390-control-list-pressed.png",
       "scene": "control-list-pressed",
       "width": 390,
-      "sha256": "9ce3ecd7828e05a2e09ec7ed4ced7ef33d7b2e2eca1af4f5fefd02ae9d3bf9b0",
+      "sha256": "f554739f91cb1c64dd329057385023a1c38ca73463244b7d34f05617a174e29e",
       "control": {
         "key": "list",
         "state": "pressed",
@@ -4563,7 +6098,7 @@
       "file": "390-control-source-default.png",
       "scene": "control-source-default",
       "width": 390,
-      "sha256": "ea68bf6320d286c835217f64957f7a9b6a2d44fc30f3a474a5dfdf640954c714",
+      "sha256": "7c55c671b90de55d6b0ede0afb04577d498d36788c466d29fa1e104025c7b80a",
       "control": {
         "key": "source",
         "state": "default",
@@ -4577,7 +6112,7 @@
       "file": "390-control-source-hover.png",
       "scene": "control-source-hover",
       "width": 390,
-      "sha256": "0e0ab01b0a3b098cfdc2987ee521c8b11f30f5395a36dac139e4a2335b822a25",
+      "sha256": "d88884f844ae58fe75f865831d8d845fbf1176148bafb16a1e3203f39cab5202",
       "control": {
         "key": "source",
         "state": "hover",
@@ -4591,7 +6126,7 @@
       "file": "390-control-source-focus.png",
       "scene": "control-source-focus",
       "width": 390,
-      "sha256": "03e6af05515afebe2f9e3671a077ab8b55de62ea1cac4814a80071769865f818",
+      "sha256": "359b50a9a8feae461a1b5effdf4ea01317c34cefa4cffa38b88563b9c7e37e0f",
       "control": {
         "key": "source",
         "state": "focus",
@@ -4605,7 +6140,7 @@
       "file": "390-control-source-pressed.png",
       "scene": "control-source-pressed",
       "width": 390,
-      "sha256": "d2e1a9dc1b3b95a98572ef1c37edcebf7f00fa2e71120e904962f4e0e9a8153d",
+      "sha256": "ff169df56868f9ebdce8b9a9c40d10457096723f30dc76a7673cbd7cce004cbc",
       "control": {
         "key": "source",
         "state": "pressed",
@@ -4619,7 +6154,7 @@
       "file": "390-control-opportunity-default.png",
       "scene": "control-opportunity-default",
       "width": 390,
-      "sha256": "d8fcaea3c0498dc3a4a6065a23315ee2b9365c97278dc8a05eebe61ef8a93ea3",
+      "sha256": "11f9bdc9cb29a32c9e36b297419c44e8aa7c0b15cfb78edb1d7e1521b15a4af9",
       "control": {
         "key": "opportunity",
         "state": "default",
@@ -4633,7 +6168,7 @@
       "file": "390-control-opportunity-hover.png",
       "scene": "control-opportunity-hover",
       "width": 390,
-      "sha256": "1984697b6da1462b434ecd9b6132e054ae4b3dd8d4edf991da32326fd5122d0a",
+      "sha256": "f537bcf18415c0aef6d61d95b64500f0de6f6b2aaf8cd8db08dade029b2cd9f4",
       "control": {
         "key": "opportunity",
         "state": "hover",
@@ -4647,7 +6182,7 @@
       "file": "390-control-opportunity-focus.png",
       "scene": "control-opportunity-focus",
       "width": 390,
-      "sha256": "a5beb4603059ee9f88d9db2eea7c3d47701980f5c735de4e83275162f890b5e0",
+      "sha256": "3e2fba23e6841c1ae74cf37a885f9dd2f5f4a55121c64f3af78ea3b79e5f4586",
       "control": {
         "key": "opportunity",
         "state": "focus",
@@ -4661,7 +6196,7 @@
       "file": "390-control-opportunity-pressed.png",
       "scene": "control-opportunity-pressed",
       "width": 390,
-      "sha256": "f03f300e8c988b1d708a7b5dd057a5192699ae535a6dce6cf2aaba2ba5a93f3e",
+      "sha256": "21f0e1b2211f51ff5b65c3e4d6f14afc93b16072c5b78dae54b5c5a86f01586d",
       "control": {
         "key": "opportunity",
         "state": "pressed",
@@ -4675,7 +6210,7 @@
       "file": "390-control-task-default.png",
       "scene": "control-task-default",
       "width": 390,
-      "sha256": "d8fcaea3c0498dc3a4a6065a23315ee2b9365c97278dc8a05eebe61ef8a93ea3",
+      "sha256": "11f9bdc9cb29a32c9e36b297419c44e8aa7c0b15cfb78edb1d7e1521b15a4af9",
       "control": {
         "key": "task",
         "state": "default",
@@ -4689,7 +6224,7 @@
       "file": "390-control-task-hover.png",
       "scene": "control-task-hover",
       "width": 390,
-      "sha256": "c51a7564cceb66151839b117fd3202f11c68fc2a7606950b7e23034d02d3c8a1",
+      "sha256": "02c74c128a8d0b53a33f0ba276508e86b7e749fa9cf8957b9d99b879f2d106e0",
       "control": {
         "key": "task",
         "state": "hover",
@@ -4703,7 +6238,7 @@
       "file": "390-control-task-focus.png",
       "scene": "control-task-focus",
       "width": 390,
-      "sha256": "0a52ee3825674ec2c02acef1b162255aebc54fcd94080c7cdf116fe97d644925",
+      "sha256": "996d9f81516c77a2b8a61be96a873a2deab2d87a46b19e7e0ba7ad8da92fc71d",
       "control": {
         "key": "task",
         "state": "focus",
@@ -4717,7 +6252,7 @@
       "file": "390-control-task-pressed.png",
       "scene": "control-task-pressed",
       "width": 390,
-      "sha256": "a129703e010eb7dc2d3c4896ee5c790b1a0e6950274d59ed448a7f1aa0adc7cd",
+      "sha256": "6d181e09d6d677ee789b85f40ee190f91fe1f61f2f24e1912ac8b878b34ee8bc",
       "control": {
         "key": "task",
         "state": "pressed",
@@ -4731,7 +6266,7 @@
       "file": "390-control-retry-default.png",
       "scene": "control-retry-default",
       "width": 390,
-      "sha256": "547e5aa2e5b2e34e489c3e00c1e8932ee3372a244a6c813c7cf8e7df91b0983b",
+      "sha256": "882e460ca7fc50aac9579b431ab233b815daea9d3cb508c52fba82f6593a7486",
       "control": {
         "key": "retry",
         "state": "default",
@@ -4745,7 +6280,7 @@
       "file": "390-control-retry-hover.png",
       "scene": "control-retry-hover",
       "width": 390,
-      "sha256": "5aa10e0ece65eba6fbe540a03946e2db3f56dc2d0961546a0abeb9b205359ba1",
+      "sha256": "9f2ef2ea86aa90a0d9d91aca0da16ec5a761cd76d0cea8a6667840796934e6c5",
       "control": {
         "key": "retry",
         "state": "hover",
@@ -4759,7 +6294,7 @@
       "file": "390-control-retry-focus.png",
       "scene": "control-retry-focus",
       "width": 390,
-      "sha256": "026f755ffcb1708394d46f184956f7862fbd3f45f622779739a117e84b262613",
+      "sha256": "64ee08e7bf48cca082f23ba4f1b49cb11b6dd47eec2257b44ffe2db28e2feb0b",
       "control": {
         "key": "retry",
         "state": "focus",
@@ -4773,7 +6308,7 @@
       "file": "390-control-retry-pressed.png",
       "scene": "control-retry-pressed",
       "width": 390,
-      "sha256": "be3c89156600046a78ab33f31bb3120c4b0c218df666dea57c72f0f49c556b78",
+      "sha256": "676ae924049f20d3ba0270fa22f7c80a935025af038a005616a99ca10f7872ba",
       "control": {
         "key": "retry",
         "state": "pressed",
@@ -4787,7 +6322,7 @@
       "file": "390-control-retry-disabled.png",
       "scene": "control-retry-disabled",
       "width": 390,
-      "sha256": "3210a6ffa8ed13d1b8646c386f05d6de4164ac08fe6817a68f68c3159f025857",
+      "sha256": "76626b42fdf69ef01002db9c70683d7d920494f99bc2a05ec3facacf93f25686",
       "control": {
         "key": "retry",
         "state": "disabled",
@@ -4801,7 +6336,7 @@
       "file": "390-control-retry-busy.png",
       "scene": "control-retry-busy",
       "width": 390,
-      "sha256": "3210a6ffa8ed13d1b8646c386f05d6de4164ac08fe6817a68f68c3159f025857",
+      "sha256": "76626b42fdf69ef01002db9c70683d7d920494f99bc2a05ec3facacf93f25686",
       "control": {
         "key": "retry",
         "state": "busy",
@@ -4815,7 +6350,7 @@
       "file": "390-control-reset-default.png",
       "scene": "control-reset-default",
       "width": 390,
-      "sha256": "ea68bf6320d286c835217f64957f7a9b6a2d44fc30f3a474a5dfdf640954c714",
+      "sha256": "7c55c671b90de55d6b0ede0afb04577d498d36788c466d29fa1e104025c7b80a",
       "control": {
         "key": "reset",
         "state": "default",
@@ -4829,7 +6364,7 @@
       "file": "390-control-reset-hover.png",
       "scene": "control-reset-hover",
       "width": 390,
-      "sha256": "1388134cb88c26b25dc5d4bd4c06e25b973259abca21e7213bcd856533128b1d",
+      "sha256": "41cb061ebd9b55aaa6805ee15a83685f9b06355005280e30905c0dc9aa8a0e18",
       "control": {
         "key": "reset",
         "state": "hover",
@@ -4843,7 +6378,7 @@
       "file": "390-control-reset-focus.png",
       "scene": "control-reset-focus",
       "width": 390,
-      "sha256": "0a43a3d46b86c483066133e6a4bae3188c2e9fcd2020865b6e8fba3e05cdcbd4",
+      "sha256": "c15a3c6875ccab19a8f6600033abc60c9bc722759ce54092b4ebab35ef30957a",
       "control": {
         "key": "reset",
         "state": "focus",
@@ -4857,7 +6392,7 @@
       "file": "390-control-reset-pressed.png",
       "scene": "control-reset-pressed",
       "width": 390,
-      "sha256": "440ce2e3bbf3d26adf5a4d9475d06a2bea4d115b7a1a0b8975641df6f5bf0d19",
+      "sha256": "38e088dc1e2606f88872d650e361125b171e1bc457de6a6f41ad461322c37477",
       "control": {
         "key": "reset",
         "state": "pressed",
@@ -4871,7 +6406,7 @@
       "file": "390-control-reset-disabled.png",
       "scene": "control-reset-disabled",
       "width": 390,
-      "sha256": "703b031058de12dfaa29b83bf1178e53bb9c6484c85066ba5bb54cdb7768f027",
+      "sha256": "194ee563c713d07c8ea5f940838f23a1519fecbe0346f3c792583c75efb0fa49",
       "control": {
         "key": "reset",
         "state": "disabled",
@@ -4885,7 +6420,7 @@
       "file": "390-control-reset-busy.png",
       "scene": "control-reset-busy",
       "width": 390,
-      "sha256": "703b031058de12dfaa29b83bf1178e53bb9c6484c85066ba5bb54cdb7768f027",
+      "sha256": "194ee563c713d07c8ea5f940838f23a1519fecbe0346f3c792583c75efb0fa49",
       "control": {
         "key": "reset",
         "state": "busy",
@@ -4899,7 +6434,7 @@
       "file": "390-control-secondary-default.png",
       "scene": "control-secondary-default",
       "width": 390,
-      "sha256": "8fcca09c5e0bc585869e6b48a44aa9e63f88fd56768ac30f98f8edc8487858dc",
+      "sha256": "88605f2988342a06a1304a060b6d9e31933fead709d02d70e4136d735fb9b92a",
       "control": {
         "key": "secondary",
         "state": "default",
@@ -4913,7 +6448,7 @@
       "file": "390-control-secondary-hover.png",
       "scene": "control-secondary-hover",
       "width": 390,
-      "sha256": "a869c56097cf6a22addf782b8f192c49e85ae73449d1d63e08e4bd03250c503e",
+      "sha256": "a6fecc12b2a3281234de42af00e5b6fc25829572868f218cccaa93f8222191f8",
       "control": {
         "key": "secondary",
         "state": "hover",
@@ -4927,7 +6462,7 @@
       "file": "390-control-secondary-focus.png",
       "scene": "control-secondary-focus",
       "width": 390,
-      "sha256": "9ce625920be628f7b63f1155ad50aeea08217a83d363cb4da7b103fd16d9cede",
+      "sha256": "86c2b0519917bcbf02948db73e26b84b9b28d27740b4692170499d981be80dfc",
       "control": {
         "key": "secondary",
         "state": "focus",
@@ -4941,7 +6476,7 @@
       "file": "390-control-secondary-pressed.png",
       "scene": "control-secondary-pressed",
       "width": 390,
-      "sha256": "2d7b3f3f8eb7f3c7f6ea6341388c9add0a354a7ef436389d4f59328b45c14072",
+      "sha256": "b34cae7d0b02c1268454f8ebc95b44ee5200475cba61de88a15a8e0278e6a1e3",
       "control": {
         "key": "secondary",
         "state": "pressed",
@@ -4955,7 +6490,7 @@
       "file": "390-control-kind-default.png",
       "scene": "control-kind-default",
       "width": 390,
-      "sha256": "0e0a8391fc32f330d2658eb8ab7599fd24df872c6b29860bda211bfcfb0c26bb",
+      "sha256": "27bcd6a479ebb511d398869c00639a1a21e920bc89bda85076a51ca8a7b6a879",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -4970,7 +6505,7 @@
       "file": "390-control-kind-hover.png",
       "scene": "control-kind-hover",
       "width": 390,
-      "sha256": "a3967d4bfe9de12d099494e2f6db777933824a7880aa9c38739348bdcd7e42ea",
+      "sha256": "3fd693a24ba550c23cbb25ed5464fb087cc6c9ae18d875e0206395e57110a58e",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -4985,7 +6520,7 @@
       "file": "390-control-kind-focus.png",
       "scene": "control-kind-focus",
       "width": 390,
-      "sha256": "e4f95b4698fb1cff4deeb70bfe9f55695133c6d76dd85f387114fac48072e1e4",
+      "sha256": "0effe327e2ba46ba889cc07b50c3cf55b5c8b61bf06c8538634614a8807c7326",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -5000,7 +6535,7 @@
       "file": "390-control-kind-pressed.png",
       "scene": "control-kind-pressed",
       "width": 390,
-      "sha256": "9a627a92ecbb9c79990b4aa8f3cac7b8493a822ed7639b7f58d8ec3833d19de3",
+      "sha256": "a4ddb05be829e4337704ef54f7f7fa3cc450ab15591e11865c7cc65953a29ed7",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -5015,7 +6550,7 @@
       "file": "390-control-kind-disabled.png",
       "scene": "control-kind-disabled",
       "width": 390,
-      "sha256": "3b07dfd5bc6ecd0935c51c794ba6186749b5e4ec8823f189e53efb9b1c237ab0",
+      "sha256": "4c0e1505c6bda9b56373db87a13e83debf28d1ee571841f75c1e2ccd800c3441",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -5030,7 +6565,7 @@
       "file": "390-control-kind-busy.png",
       "scene": "control-kind-busy",
       "width": 390,
-      "sha256": "9ccfd586d90c306aa94ba9ad954684a1f1f3d056c2b97ee43c1d2ad30477726a",
+      "sha256": "414cb76a5b6e60d1f477a40f2669ba0f433c2e42e62061529acb0fbc9fc13590",
       "control": {
         "key": "kind",
         "field": "form.input_kind",
@@ -5045,7 +6580,7 @@
       "file": "390-control-candidate-default.png",
       "scene": "control-candidate-default",
       "width": 390,
-      "sha256": "ea68bf6320d286c835217f64957f7a9b6a2d44fc30f3a474a5dfdf640954c714",
+      "sha256": "7c55c671b90de55d6b0ede0afb04577d498d36788c466d29fa1e104025c7b80a",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -5060,7 +6595,7 @@
       "file": "390-control-candidate-hover.png",
       "scene": "control-candidate-hover",
       "width": 390,
-      "sha256": "f979d9567c9ab3bc5272afc868f2cf1ad0c34376a3d1d08d59f1ef2ed7d47ee8",
+      "sha256": "717fa441d9d54184e2533ed0f9f00b1dc1a8d4607865573852e95352be8b53f6",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -5075,7 +6610,7 @@
       "file": "390-control-candidate-focus.png",
       "scene": "control-candidate-focus",
       "width": 390,
-      "sha256": "43db349d7f059749e2e49d0e3802ab8bf3595c288092a1eee2916b21a4a890dc",
+      "sha256": "cc7fb4f3afbc14a7cbf25306dd68353ce8de960b6ace65070c4da2b0f02eff48",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -5090,7 +6625,7 @@
       "file": "390-control-candidate-pressed.png",
       "scene": "control-candidate-pressed",
       "width": 390,
-      "sha256": "6141acb0e10b51f0d77c39ec40d8f2b7e7bd49d7b1e7019bfc0586cf13d94969",
+      "sha256": "b056c6a0032eede5dd24d345a2b08793383e24b56d03ef5d412c049a6a92b592",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -5105,7 +6640,7 @@
       "file": "390-control-candidate-disabled.png",
       "scene": "control-candidate-disabled",
       "width": 390,
-      "sha256": "23f096f9c5e7f1eab35ceab80c94955880cae973d55a7f07686efaa014edcdc6",
+      "sha256": "3cff2c8030694485be4619c795a8d38afec522baa524dbaa7b7a5df9048e0269",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -5120,7 +6655,7 @@
       "file": "390-control-candidate-busy.png",
       "scene": "control-candidate-busy",
       "width": 390,
-      "sha256": "703b031058de12dfaa29b83bf1178e53bb9c6484c85066ba5bb54cdb7768f027",
+      "sha256": "194ee563c713d07c8ea5f940838f23a1519fecbe0346f3c792583c75efb0fa49",
       "control": {
         "key": "candidate",
         "field": "selectedResultId",
@@ -5135,7 +6670,7 @@
       "file": "390-control-observe-default.png",
       "scene": "control-observe-default",
       "width": 390,
-      "sha256": "29b0040e2dd4afb57c4d39dc00138868b37c5218559dee1431cac0bef937543d",
+      "sha256": "5368e06a72b1cdafd52cbe4bd20ab4a2bad43d36fbdc6eb927868f86cfddf84a",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -5150,7 +6685,7 @@
       "file": "390-control-observe-hover.png",
       "scene": "control-observe-hover",
       "width": 390,
-      "sha256": "63a302075c32cfa6426efa8f912e4810ed87b597a16ad2612e07a4b8d756a9b8",
+      "sha256": "15ab2dfeab90e741d50554b820c8e2857e6f24f2b7b744d096efd03984ac4970",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -5165,7 +6700,7 @@
       "file": "390-control-observe-focus.png",
       "scene": "control-observe-focus",
       "width": 390,
-      "sha256": "4bd6ba9d1ae75b0c3cff0583ccd2833c8f84d121b68deaa86c6381638215e36c",
+      "sha256": "a51032d7095974a409542081482e2ed8764ac17aca92f4d6d584caa58e20a5f3",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -5180,7 +6715,7 @@
       "file": "390-control-observe-pressed.png",
       "scene": "control-observe-pressed",
       "width": 390,
-      "sha256": "0d3321b3da15d3c7f08f8b56b8ec3cf1ee73fa5ae6ca30e280d4f8c932880a35",
+      "sha256": "f674d8574fe1c3a46f850b1088f24af2e02d50b872653f0ab9e9816ea3fe71e4",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -5195,7 +6730,7 @@
       "file": "390-control-observe-disabled.png",
       "scene": "control-observe-disabled",
       "width": 390,
-      "sha256": "23f096f9c5e7f1eab35ceab80c94955880cae973d55a7f07686efaa014edcdc6",
+      "sha256": "3cff2c8030694485be4619c795a8d38afec522baa524dbaa7b7a5df9048e0269",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -5210,7 +6745,7 @@
       "file": "390-control-observe-busy.png",
       "scene": "control-observe-busy",
       "width": 390,
-      "sha256": "703b031058de12dfaa29b83bf1178e53bb9c6484c85066ba5bb54cdb7768f027",
+      "sha256": "194ee563c713d07c8ea5f940838f23a1519fecbe0346f3c792583c75efb0fa49",
       "control": {
         "key": "observe",
         "field": "decision.action",
@@ -5225,7 +6760,7 @@
       "file": "390-control-reject-default.png",
       "scene": "control-reject-default",
       "width": 390,
-      "sha256": "5e781553a5f0393fb9c4c7fdaac67b11672b9faee68bf09e7f6a613b52fff502",
+      "sha256": "430f5a678813857cc3f5485d089518a99620afcbc96f8a80fa98ec958ea5da25",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -5240,7 +6775,7 @@
       "file": "390-control-reject-hover.png",
       "scene": "control-reject-hover",
       "width": 390,
-      "sha256": "e98425363541b971e797ac583e6d5d969accec9544ff1e1061afdbf18c9ee790",
+      "sha256": "becb1c59a3dba3db7050bedbabbde2932d6984f6a819ecc5e3c2802d2e388cce",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -5255,7 +6790,7 @@
       "file": "390-control-reject-focus.png",
       "scene": "control-reject-focus",
       "width": 390,
-      "sha256": "a3f84962fe2f4b12a3c0688ba0a846ecd39561b489b742ea76e4b79e7d833d39",
+      "sha256": "9e0835394ba80e03ec7e079946bfec9cf7c3892e936ef706e87c3d25410bef45",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -5270,7 +6805,7 @@
       "file": "390-control-reject-pressed.png",
       "scene": "control-reject-pressed",
       "width": 390,
-      "sha256": "971ec2d1085c18980d6ea924cad0f3cafb48a19607ad9d9e45064b415e3a561e",
+      "sha256": "2c46880d360d7132aad8b85d6503ec1d2d53888852a66943b3903665db818215",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -5285,7 +6820,7 @@
       "file": "390-control-reject-disabled.png",
       "scene": "control-reject-disabled",
       "width": 390,
-      "sha256": "23f096f9c5e7f1eab35ceab80c94955880cae973d55a7f07686efaa014edcdc6",
+      "sha256": "3cff2c8030694485be4619c795a8d38afec522baa524dbaa7b7a5df9048e0269",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -5300,7 +6835,7 @@
       "file": "390-control-reject-busy.png",
       "scene": "control-reject-busy",
       "width": 390,
-      "sha256": "d6fd696d432f19817009ab76571ec13e509088663e7197c0e749e6d0bbd02d77",
+      "sha256": "f2b1ef10bdfb85db47e14fecbac8f4230c124bb1a0e5ffde14f4dfd252d5a620",
       "control": {
         "key": "reject",
         "field": "decision.action",
@@ -5315,7 +6850,7 @@
       "file": "390-control-keyword-value-default.png",
       "scene": "control-keyword-value-default",
       "width": 390,
-      "sha256": "5ae2411958445034d6493ac0fc11de9ecbad7679a37040cef6ad8e229e3a49c8",
+      "sha256": "f8c62c2b06171362113ebebd9d00a6ec53fabde37954c82733ca854490d17716",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5330,7 +6865,7 @@
       "file": "390-control-keyword-value-hover.png",
       "scene": "control-keyword-value-hover",
       "width": 390,
-      "sha256": "9b4085fe3342d209aaa9f158e989bdf08ec09b74df421d616ec67562e760499d",
+      "sha256": "a1e93308cebc3d3fe9cacbef52968603fedb03e1bdd0da10e462b8e5597e3308",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5345,7 +6880,7 @@
       "file": "390-control-keyword-value-focus.png",
       "scene": "control-keyword-value-focus",
       "width": 390,
-      "sha256": "8650f3f292b5f88983a8402f8d0233996f6d9c8322f8dcd2727e5547ab3ba9f0",
+      "sha256": "49eb6fbf84aa9b854399141f7b73fa01828724798175dc78000ec2b4ca91c228",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5360,7 +6895,7 @@
       "file": "390-control-keyword-value-pressed.png",
       "scene": "control-keyword-value-pressed",
       "width": 390,
-      "sha256": "dd2a2c2b09282d6cd33b6f7d1f3f9952ad38f9f427783c6e82f6cf9c65803808",
+      "sha256": "3be6c25f04654bfd1b966df18addbf497198aff6e392ca495f4089b3a7f1649b",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5375,7 +6910,7 @@
       "file": "390-control-keyword-value-disabled.png",
       "scene": "control-keyword-value-disabled",
       "width": 390,
-      "sha256": "3b07dfd5bc6ecd0935c51c794ba6186749b5e4ec8823f189e53efb9b1c237ab0",
+      "sha256": "4c0e1505c6bda9b56373db87a13e83debf28d1ee571841f75c1e2ccd800c3441",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5390,7 +6925,7 @@
       "file": "390-control-keyword-value-busy.png",
       "scene": "control-keyword-value-busy",
       "width": 390,
-      "sha256": "9ccfd586d90c306aa94ba9ad954684a1f1f3d056c2b97ee43c1d2ad30477726a",
+      "sha256": "414cb76a5b6e60d1f477a40f2669ba0f433c2e42e62061529acb0fbc9fc13590",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5405,7 +6940,7 @@
       "file": "390-control-keyword-value-invalid.png",
       "scene": "control-keyword-value-invalid",
       "width": 390,
-      "sha256": "845b2d974c6fa0207654f9d900114e3300a4ab353259921198942afcff89bd36",
+      "sha256": "38edee5841fbf79f3f25232c567b8e09c710ed901113a42c80fac57e80ce5906",
       "control": {
         "key": "keyword-value",
         "field": "form.input_value",
@@ -5420,7 +6955,7 @@
       "file": "390-control-asin-value-default.png",
       "scene": "control-asin-value-default",
       "width": 390,
-      "sha256": "9c535e860e8e7fd65003c298befef8fae3aba33435c3f64315f455b3200a9c86",
+      "sha256": "2f994d0608054ce7ba87f63a4584bade79449a227365cc24443a65492dee7ec1",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5435,7 +6970,7 @@
       "file": "390-control-asin-value-hover.png",
       "scene": "control-asin-value-hover",
       "width": 390,
-      "sha256": "7858648692ce44b5ab469f71d0ac104d327519923e7c4a79cd9ecba11c69553f",
+      "sha256": "58251490db0056b54ab63191bcb619e83681ec22363f3f39775dc36b708ec6f4",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5450,7 +6985,7 @@
       "file": "390-control-asin-value-focus.png",
       "scene": "control-asin-value-focus",
       "width": 390,
-      "sha256": "0410ad43ada0487d2ff8bf21f291413d8ce29838b5cd20e1588b22e1c93f6d89",
+      "sha256": "28b2c1898e3261a74fc9c0fcb5bfa80c9a0d9cdaa10aca0f0f84133bc86dc2dc",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5465,7 +7000,7 @@
       "file": "390-control-asin-value-pressed.png",
       "scene": "control-asin-value-pressed",
       "width": 390,
-      "sha256": "1cecd78a22ec321e09601baba8e6573a3b6a77c766e293dad70c53a59594b6ce",
+      "sha256": "ac7ee44919285ecc188c52f1173011c178df3b138b1ea8ad77e48ba45ffdd4f3",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5480,7 +7015,7 @@
       "file": "390-control-asin-value-disabled.png",
       "scene": "control-asin-value-disabled",
       "width": 390,
-      "sha256": "444a6bb8c73bd08d0f10cc305e9e051ca2441273f9bbbbe01d33a1254df91d72",
+      "sha256": "fd340843e0dfa0d74f3b00ab46c2b4e37ba42fde1d707d3159b2ec4a74395063",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5495,7 +7030,7 @@
       "file": "390-control-asin-value-busy.png",
       "scene": "control-asin-value-busy",
       "width": 390,
-      "sha256": "aff9c71a3e990fc619f65ffa0f36442a657d1fbbc46e534cb5835d8c33e29f90",
+      "sha256": "faef2b6b6939b574ddcc38a2ad3eed02803982afa05da384354c904d7784f6bd",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5510,7 +7045,7 @@
       "file": "390-control-asin-value-invalid.png",
       "scene": "control-asin-value-invalid",
       "width": 390,
-      "sha256": "eebc5b1638cfe9d07975120649dac2f6fcd7f49fbb073fdc5edf0f3f642bf4d8",
+      "sha256": "f80010b6bb818aebbc05727be13334bb671091d79ac7bc52913761b84bd4b857",
       "control": {
         "key": "asin-value",
         "field": "form.input_value",
@@ -5525,7 +7060,7 @@
       "file": "390-control-url-value-default.png",
       "scene": "control-url-value-default",
       "width": 390,
-      "sha256": "983d82943962f6a4f219a8112e817e6a42b880276037bc807be3fa73aa99b0aa",
+      "sha256": "1266bc4d7a93659f04927eed1c273f5b242bfb307f26ebb8353c395a80beb647",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5540,7 +7075,7 @@
       "file": "390-control-url-value-hover.png",
       "scene": "control-url-value-hover",
       "width": 390,
-      "sha256": "4129a41aede66714fb2b657aae016ede552102c609720f66c466accd6873dc36",
+      "sha256": "b27b11980f514b407a0b5d98d16e47ac05cdf618e374521c85d4ea957c121291",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5555,7 +7090,7 @@
       "file": "390-control-url-value-focus.png",
       "scene": "control-url-value-focus",
       "width": 390,
-      "sha256": "7125b55a5637d1958908257d0af537da94a12487fbea59bf76e5880827714fcd",
+      "sha256": "f505709b2f819bc019fb91e8342335eeee9668159ca2e58180fbcac80bfbbac7",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5570,7 +7105,7 @@
       "file": "390-control-url-value-pressed.png",
       "scene": "control-url-value-pressed",
       "width": 390,
-      "sha256": "72cd4859f563b85a4b17bce423f6056a282dc127c1939197094053292e06e297",
+      "sha256": "587bffcb5768a27851da4aaa0051b3d2491dabd07b1192234e034d166097e78a",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5585,7 +7120,7 @@
       "file": "390-control-url-value-disabled.png",
       "scene": "control-url-value-disabled",
       "width": 390,
-      "sha256": "00f70f29686232e6ef9f6b872936c185a1e43a86a7a63879ad64b340be18dd49",
+      "sha256": "1b3e0374051244bc68892ab648ff960e87a25eb29ca0bf420a8005f0e3fc7f17",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5600,7 +7135,7 @@
       "file": "390-control-url-value-busy.png",
       "scene": "control-url-value-busy",
       "width": 390,
-      "sha256": "3f6c12aff617f476e4fa2d1ecd194c1c0d2963a71ad2c08bd91de96d305626ea",
+      "sha256": "7c64468d9dd66e80b306b95171ac39c7ae69962f4bf3f6b0d312d947381fb50d",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5615,7 +7150,7 @@
       "file": "390-control-url-value-invalid.png",
       "scene": "control-url-value-invalid",
       "width": 390,
-      "sha256": "21bfb3844b07908f7521380ef8fc04c143bf6a85556093ebea3e4deba95b24a8",
+      "sha256": "9c6cf391536d6c02162660fa12d2e0135f58397fc29a8f7b5991fe2f81e88fe3",
       "control": {
         "key": "url-value",
         "field": "form.input_value",
@@ -5630,7 +7165,7 @@
       "file": "390-control-reason-default.png",
       "scene": "control-reason-default",
       "width": 390,
-      "sha256": "29b0040e2dd4afb57c4d39dc00138868b37c5218559dee1431cac0bef937543d",
+      "sha256": "5368e06a72b1cdafd52cbe4bd20ab4a2bad43d36fbdc6eb927868f86cfddf84a",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5645,7 +7180,7 @@
       "file": "390-control-reason-hover.png",
       "scene": "control-reason-hover",
       "width": 390,
-      "sha256": "486def6bad4626a22738b04d0aee7fb733cc673f189e986f2a7f8af09558d943",
+      "sha256": "ac89bfe6c42ba1a1355036f415503a99b0f9ec1c9da2133c5221f452a9951de4",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5660,7 +7195,7 @@
       "file": "390-control-reason-focus.png",
       "scene": "control-reason-focus",
       "width": 390,
-      "sha256": "81dfa7109364733e33396f9d2c423301852371857bed46240d33bd9719ab1b29",
+      "sha256": "f62b54032f1945751e24c425d11847168e6afef5c63dd6a204f405e896d694c9",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5675,7 +7210,7 @@
       "file": "390-control-reason-pressed.png",
       "scene": "control-reason-pressed",
       "width": 390,
-      "sha256": "eae7feba3b92a7d733bbfdb85431872d6930d1b3977e3c2ff9728a4be7cda6fa",
+      "sha256": "8f7f9d3f4f7cd69ec3e2ec2d0d30e36e87618383a125c1c73289d53d37da1c82",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5690,7 +7225,7 @@
       "file": "390-control-reason-disabled.png",
       "scene": "control-reason-disabled",
       "width": 390,
-      "sha256": "23f096f9c5e7f1eab35ceab80c94955880cae973d55a7f07686efaa014edcdc6",
+      "sha256": "3cff2c8030694485be4619c795a8d38afec522baa524dbaa7b7a5df9048e0269",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5705,7 +7240,7 @@
       "file": "390-control-reason-busy.png",
       "scene": "control-reason-busy",
       "width": 390,
-      "sha256": "703b031058de12dfaa29b83bf1178e53bb9c6484c85066ba5bb54cdb7768f027",
+      "sha256": "194ee563c713d07c8ea5f940838f23a1519fecbe0346f3c792583c75efb0fa49",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5720,7 +7255,7 @@
       "file": "390-control-reason-invalid.png",
       "scene": "control-reason-invalid",
       "width": 390,
-      "sha256": "062dcabc4ea6a02554195a886bb31d3327b1d88aa3786068441531f1d82f66de",
+      "sha256": "9cfd0a739ba1a3509886bb39aeb9e13a1287551ac64f2eeedaabe4bab87fccdb",
       "control": {
         "key": "reason",
         "field": "decision.reason",
@@ -5730,6 +7265,180 @@
         "baseScene": "reason-required",
         "width": 390
       }
+    },
+    {
+      "file": "390-appearance-deep-ocean-compact-keyword-edited.png",
+      "scene": "appearance-deep-ocean-compact-keyword-edited",
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "79f6612d8feb9b7f59bdc861d82d8b64550e41a6c3ab1b7b28148773334aa503"
+    },
+    {
+      "file": "390-appearance-deep-ocean-compact-adopt-ready.png",
+      "scene": "appearance-deep-ocean-compact-adopt-ready",
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "29a7c6dc97e25d27f40e9f849f922b8b269485058ce8af3c9ac9c1dd634dd902"
+    },
+    {
+      "file": "390-appearance-deep-ocean-compact-adopt-conflict.png",
+      "scene": "appearance-deep-ocean-compact-adopt-conflict",
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "bec597445e9a5a353a9543f68564b56b9ae441f049e84e4ff55bc55c60549c25"
+    },
+    {
+      "file": "390-appearance-deep-ocean-compact-adopt-decided.png",
+      "scene": "appearance-deep-ocean-compact-adopt-decided",
+      "width": 390,
+      "theme": "deep-ocean",
+      "density": "compact",
+      "sha256": "1316483fb5c713590f5e6e2af9c71d1ab053841164ea1e2e09f5219651b87350"
+    },
+    {
+      "file": "390-appearance-aurora-purple-standard-keyword-edited.png",
+      "scene": "appearance-aurora-purple-standard-keyword-edited",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "f8c239b3d50221d0686eadbe5c160cc1cc2830bb594e66330d07e09ead20244a"
+    },
+    {
+      "file": "390-appearance-aurora-purple-standard-adopt-ready.png",
+      "scene": "appearance-aurora-purple-standard-adopt-ready",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "742ffc922cebcebf444b547e188a944ed8239ce5d1373488c493c6c1c0b0b74e"
+    },
+    {
+      "file": "390-appearance-aurora-purple-standard-adopt-conflict.png",
+      "scene": "appearance-aurora-purple-standard-adopt-conflict",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "bbdb25d71885d5f8b808d617cd4ba3589ef1aece98e5a4400ecd1aaa911a6f50"
+    },
+    {
+      "file": "390-appearance-aurora-purple-standard-adopt-decided.png",
+      "scene": "appearance-aurora-purple-standard-adopt-decided",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "standard",
+      "sha256": "83bca2300ff64e591cafe7ac5b549a6d38ab777222cb2634a80a917122b6647f"
+    },
+    {
+      "file": "390-appearance-aurora-purple-compact-keyword-edited.png",
+      "scene": "appearance-aurora-purple-compact-keyword-edited",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "b50fabef65072286b0690faaf76f7686ea87d71deb16d8ce476df708e91e5044"
+    },
+    {
+      "file": "390-appearance-aurora-purple-compact-adopt-ready.png",
+      "scene": "appearance-aurora-purple-compact-adopt-ready",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "866d4767204961d6a7a820bba68637bec00f132f74c381876981bd80050d5bf0"
+    },
+    {
+      "file": "390-appearance-aurora-purple-compact-adopt-conflict.png",
+      "scene": "appearance-aurora-purple-compact-adopt-conflict",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "c175c2ccdf3a33024741d4df574bc0ed5eded49d1c9020aa2c90f7dcee956b84"
+    },
+    {
+      "file": "390-appearance-aurora-purple-compact-adopt-decided.png",
+      "scene": "appearance-aurora-purple-compact-adopt-decided",
+      "width": 390,
+      "theme": "aurora-purple",
+      "density": "compact",
+      "sha256": "7b7890a78b5b300776a1a99e54e2a8ef82ced41669f99f7b18eb0db45f396112"
+    },
+    {
+      "file": "390-appearance-cloud-white-standard-keyword-edited.png",
+      "scene": "appearance-cloud-white-standard-keyword-edited",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "178ac887b15b840ffbb50ea273d835bd63244196c1983cda48df17c29ed91b08"
+    },
+    {
+      "file": "390-appearance-cloud-white-standard-adopt-ready.png",
+      "scene": "appearance-cloud-white-standard-adopt-ready",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "39229911497ea57cd7dad97f072e27adc501f4922e35508aa0baaa11da8bbf58"
+    },
+    {
+      "file": "390-appearance-cloud-white-standard-adopt-conflict.png",
+      "scene": "appearance-cloud-white-standard-adopt-conflict",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "9de0f5611bef0a05b8d8e24035a707c24e3c56af0745cf681f6053bdff1ce252"
+    },
+    {
+      "file": "390-appearance-cloud-white-standard-adopt-decided.png",
+      "scene": "appearance-cloud-white-standard-adopt-decided",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "standard",
+      "sha256": "ff28b16252bc08b6e3c7e3d1946f8e96a124d3963e14e5b50d63187d9fe47e48"
+    },
+    {
+      "file": "390-appearance-cloud-white-compact-keyword-edited.png",
+      "scene": "appearance-cloud-white-compact-keyword-edited",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "f741191631fc9700e9423b7ecc2a12dd632ba0964a6e8a404cf14a1210080616"
+    },
+    {
+      "file": "390-appearance-cloud-white-compact-adopt-ready.png",
+      "scene": "appearance-cloud-white-compact-adopt-ready",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "f5a85c9c1cbcf030e9a11b3c48a7f83e6ca9e10fc94c965acedd7b58e448ba58"
+    },
+    {
+      "file": "390-appearance-cloud-white-compact-adopt-conflict.png",
+      "scene": "appearance-cloud-white-compact-adopt-conflict",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "14b9fb7e5e7c34a5e58ccee9131a4ae3f1fb7602c32fdf0ea1bdb3faa28db7f3"
+    },
+    {
+      "file": "390-appearance-cloud-white-compact-adopt-decided.png",
+      "scene": "appearance-cloud-white-compact-adopt-decided",
+      "width": 390,
+      "theme": "cloud-white",
+      "density": "compact",
+      "sha256": "63e7e4df02bec7ffb043d791773eb6c0b4f614f141eaa71e382fa44b94f184c2"
+    },
+    {
+      "file": "390-zoom-2-long-result.png",
+      "scene": "zoom-2-long-result",
+      "width": 390,
+      "zoom": 2,
+      "sha256": "4791fecf141b9eecbd5a543c03a48521aeb7d3a4394a89cb93c27cc66a2d4d3d"
+    },
+    {
+      "file": "390-zoom-2-asin-invalid.png",
+      "scene": "zoom-2-asin-invalid",
+      "width": 390,
+      "zoom": 2,
+      "sha256": "2c34dbeb5361e1a6035f03c33253b4641ad5bc85fd0883952c9d177a0d305d71"
     }
   ]
 }

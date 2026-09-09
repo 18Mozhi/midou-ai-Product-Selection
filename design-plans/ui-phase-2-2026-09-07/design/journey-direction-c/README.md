@@ -2,11 +2,13 @@
 
 状态：用户已批准本页整体布局，继续细化按钮；具体控制状态及完整页面验收仍待审核。[批准边界](../../P16-C-R2-LAYOUT-APPROVAL.md)。
 
-67个全页场景×双端=134图；18类代表控件共102种状态×双端=204图，总338张永久审核图。零业务弹窗。8动作组40个适用视觉槽、8导航不适用的口径不变；新增5个实际字段的8种变体，不重复计算业务动作。
+67个全页场景×双端=134图；18类代表控件102种状态×双端=204图，共338基础图。另40张主题/密度图、4张200% CSS放大图，总382张永久审核图。8动作组40适用槽/8导航不适用、5源字段8变体的口径不变；页尾外观选择仅审核工具，零业务弹窗。
 
 [交互原型](index.html) · [源与图证据](evidence.json) · [页面规格](../../page-specs/P16.md) · [当前合同第9节](../../selection-journey-contract-review.md) · [统一质量门决定](../../JOURNEY-ADOPTION-DECISION.md)
 
 ## 设计与使用
+
+[主题与自适应审核](../../P16-APPEARANCE-REVIEW.md)：页尾展开“外观审核”即可切换三种现有兼容ID和标准/紧凑密度，仅改变本图稿显示，不保存偏好、不改变草稿。目录蓝/冷雾蓝/净页白全部为浅色C稿，不按旧ID名称推断深色模式。
 
 沿frontend-design和用户批准的C方向：蓝色阶段目录、白色工作区；候选与决定分区，时间轴按需展开，移动端纵向审阅，正文/输入16px、元信息至少13px、触区至少44px。新质量门区逐行显示评分/市场/竞争/成本/风险，不只给颜色或总分。未形成已评估机会不展示虚假5门通过；5/5仍须待决策、有效规则和来源门槛。
 
@@ -212,8 +214,44 @@
 | 决策原因 / 恢复/提交期间   | [桌面](1440-control-reason-busy.png)            | [手机](390-control-reason-busy.png)            |
 | 决策原因 / 字段错误        | [桌面](1440-control-reason-invalid.png)         | [手机](390-control-reason-invalid.png)         |
 
+## 外观与放大补充图（待审核）
+
+以下48个案例中8张默认标准图复用前表原图，新增40张，不重复计数。
+
+| 主题/密度/阶段             | 桌面                                                              | 手机                                                             |
+| -------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------- |
+| 目录蓝 / 标准 / 线索已填   | [桌面](1440-keyword-edited.png)                                   | [手机](390-keyword-edited.png)                                   |
+| 目录蓝 / 标准 / 合格待采纳 | [桌面](1440-adopt-ready.png)                                      | [手机](390-adopt-ready.png)                                      |
+| 目录蓝 / 标准 / 提交后冲突 | [桌面](1440-adopt-conflict.png)                                   | [手机](390-adopt-conflict.png)                                   |
+| 目录蓝 / 标准 / 采纳成功   | [桌面](1440-adopt-decided.png)                                    | [手机](390-adopt-decided.png)                                    |
+| 目录蓝 / 紧凑 / 线索已填   | [桌面](1440-appearance-deep-ocean-compact-keyword-edited.png)     | [手机](390-appearance-deep-ocean-compact-keyword-edited.png)     |
+| 目录蓝 / 紧凑 / 合格待采纳 | [桌面](1440-appearance-deep-ocean-compact-adopt-ready.png)        | [手机](390-appearance-deep-ocean-compact-adopt-ready.png)        |
+| 目录蓝 / 紧凑 / 提交后冲突 | [桌面](1440-appearance-deep-ocean-compact-adopt-conflict.png)     | [手机](390-appearance-deep-ocean-compact-adopt-conflict.png)     |
+| 目录蓝 / 紧凑 / 采纳成功   | [桌面](1440-appearance-deep-ocean-compact-adopt-decided.png)      | [手机](390-appearance-deep-ocean-compact-adopt-decided.png)      |
+| 冷雾蓝 / 标准 / 线索已填   | [桌面](1440-appearance-aurora-purple-standard-keyword-edited.png) | [手机](390-appearance-aurora-purple-standard-keyword-edited.png) |
+| 冷雾蓝 / 标准 / 合格待采纳 | [桌面](1440-appearance-aurora-purple-standard-adopt-ready.png)    | [手机](390-appearance-aurora-purple-standard-adopt-ready.png)    |
+| 冷雾蓝 / 标准 / 提交后冲突 | [桌面](1440-appearance-aurora-purple-standard-adopt-conflict.png) | [手机](390-appearance-aurora-purple-standard-adopt-conflict.png) |
+| 冷雾蓝 / 标准 / 采纳成功   | [桌面](1440-appearance-aurora-purple-standard-adopt-decided.png)  | [手机](390-appearance-aurora-purple-standard-adopt-decided.png)  |
+| 冷雾蓝 / 紧凑 / 线索已填   | [桌面](1440-appearance-aurora-purple-compact-keyword-edited.png)  | [手机](390-appearance-aurora-purple-compact-keyword-edited.png)  |
+| 冷雾蓝 / 紧凑 / 合格待采纳 | [桌面](1440-appearance-aurora-purple-compact-adopt-ready.png)     | [手机](390-appearance-aurora-purple-compact-adopt-ready.png)     |
+| 冷雾蓝 / 紧凑 / 提交后冲突 | [桌面](1440-appearance-aurora-purple-compact-adopt-conflict.png)  | [手机](390-appearance-aurora-purple-compact-adopt-conflict.png)  |
+| 冷雾蓝 / 紧凑 / 采纳成功   | [桌面](1440-appearance-aurora-purple-compact-adopt-decided.png)   | [手机](390-appearance-aurora-purple-compact-adopt-decided.png)   |
+| 净页白 / 标准 / 线索已填   | [桌面](1440-appearance-cloud-white-standard-keyword-edited.png)   | [手机](390-appearance-cloud-white-standard-keyword-edited.png)   |
+| 净页白 / 标准 / 合格待采纳 | [桌面](1440-appearance-cloud-white-standard-adopt-ready.png)      | [手机](390-appearance-cloud-white-standard-adopt-ready.png)      |
+| 净页白 / 标准 / 提交后冲突 | [桌面](1440-appearance-cloud-white-standard-adopt-conflict.png)   | [手机](390-appearance-cloud-white-standard-adopt-conflict.png)   |
+| 净页白 / 标准 / 采纳成功   | [桌面](1440-appearance-cloud-white-standard-adopt-decided.png)    | [手机](390-appearance-cloud-white-standard-adopt-decided.png)    |
+| 净页白 / 紧凑 / 线索已填   | [桌面](1440-appearance-cloud-white-compact-keyword-edited.png)    | [手机](390-appearance-cloud-white-compact-keyword-edited.png)    |
+| 净页白 / 紧凑 / 合格待采纳 | [桌面](1440-appearance-cloud-white-compact-adopt-ready.png)       | [手机](390-appearance-cloud-white-compact-adopt-ready.png)       |
+| 净页白 / 紧凑 / 提交后冲突 | [桌面](1440-appearance-cloud-white-compact-adopt-conflict.png)    | [手机](390-appearance-cloud-white-compact-adopt-conflict.png)    |
+| 净页白 / 紧凑 / 采纳成功   | [桌面](1440-appearance-cloud-white-compact-adopt-decided.png)     | [手机](390-appearance-cloud-white-compact-adopt-decided.png)     |
+
+| 200% CSS放大（非原生浏览器缩放） | 桌面                                 | 手机                                |
+| -------------------------------- | ------------------------------------ | ----------------------------------- |
+| 长标题与来源                     | [桌面](1440-zoom-2-long-result.png)  | [手机](390-zoom-2-long-result.png)  |
+| ASIN错误反馈                     | [桌面](1440-zoom-2-asin-invalid.png) | [手机](390-zoom-2-asin-invalid.png) |
+
 ## 验证与交接
 
 最小验证：`node scripts/verify-ui-phase2-journey-c.mjs --smoke`。完整只读复验不带参数；`--capture`重拍全部图并登记当前源/图片哈希，旧r1可从Git历史追溯。本批检查源码提取、DOM布局溢出、最小字号触区、各场景及十八类代表控件状态，HTTP=0、真实storage=0，浏览器finally关闭。
 
-本轮只更新审核原型、验证脚本和文档，未改生产Vue/API/OpenAPI/数据库/权限/环境/依赖，不部署、不重启。338PNG为用户要求的永久交付，无临时图片遗留。三主题/密度、全共享控件六态、全部真实可访问性和生产签收仍需继续；整体布局批准不提升全页或全站完成门。
+本轮只更新审核原型、验证脚本和文档，未改生产Vue/API/OpenAPI/数据库/权限/环境/依赖，不部署、不重启。382PNG为永久交付，无临时图片遗留。48外观案例、18断点及4 CSS放大案例仅代表性验证；全部主题状态、真实可访问性、Vue生命周期和生产签收仍待完成，整体布局批准不提升全页或全站完成门。

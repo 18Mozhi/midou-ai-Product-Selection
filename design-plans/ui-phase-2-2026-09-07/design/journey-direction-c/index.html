@@ -12,12 +12,30 @@
   <body>
     <a class="skip" href="#work">跳到当前工作阶段</a>
     <header class="review">
-      <span>P16 / C 方向 r2 · 隔离图稿，待审核</span><label>审核场景<select id="scene"></select></label
+      <span>P16 / C 方向 r2 · 隔离图稿，待审核</span
+      ><label>审核场景<select id="scene"></select></label
       ><button id="advance" type="button">推进隔离样例</button>
     </header>
     <div id="app"></div>
     <footer class="review-footer">
       测试样例与合成状态 · 不发送请求，不写入浏览器存储 · 统一五项质量门，具体图稿待审核
+      <details class="review-display">
+        <summary>外观审核 · <span id="preview-label">目录蓝 / 标准</span></summary>
+        <label
+          >主题（仅此图稿）<select id="preview-theme">
+            <option value="deep-ocean">目录蓝</option>
+            <option value="aurora-purple">冷雾蓝</option>
+            <option value="cloud-white">净页白</option>
+          </select></label
+        >
+        <label
+          >密度（仅此图稿）<select id="preview-density">
+            <option value="standard">标准</option>
+            <option value="compact">紧凑</option>
+          </select></label
+        >
+        <p>只调整本地审核显示，不保存个人偏好，不改变当前草稿或决定。</p>
+      </details>
     </footer>
   </body>
 </html>

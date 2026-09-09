@@ -1,3 +1,29 @@
+:root {
+  --j-paper: #fff;
+  --j-rail: #254a9c;
+  --j-rail-ink: #fff;
+  --j-rail-muted: #e1eafb;
+  --j-rail-line: #6886bd;
+  --j-rail-disc: #9bb1db;
+  color-scheme: light;
+}
+:root[data-theme="aurora-purple"] {
+  --blue: #305873;
+  --blue-deep: #29495f;
+  --j-rail: #365d78;
+  --j-paper: #f8fbfd;
+  --ground: #e9f0f5;
+  --line: #d2dee7;
+}
+:root[data-theme="cloud-white"] {
+  --j-rail: #f1f5fa;
+  --j-rail-ink: #243c5a;
+  --j-rail-muted: #58677b;
+  --j-rail-line: #dae2ed;
+  --j-rail-disc: #899aaf;
+  --ground: #fafbfd;
+  --line: #dae2ed;
+}
 .skip:not(:focus) {
   opacity: 0;
   pointer-events: none;
@@ -39,8 +65,8 @@
   min-height: calc(100vh - 150px);
 }
 .j-rail {
-  background: var(--blue);
-  color: white;
+  background: var(--j-rail);
+  color: var(--j-rail-ink);
   padding: 32px 24px;
 }
 .j-rail h1 {
@@ -48,7 +74,7 @@
   margin: 6px 0 32px;
 }
 .j-rail small {
-  color: #e1eafb;
+  color: var(--j-rail-muted);
 }
 .j-rail ol {
   list-style: none;
@@ -61,19 +87,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #e1eafb;
+  color: var(--j-rail-muted);
 }
 .j-rail li b {
   width: 36px;
   height: 36px;
-  border: 1px solid #9bb1db;
+  border: 1px solid var(--j-rail-disc);
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-weight: 400;
 }
 .j-rail [aria-current] {
-  color: white;
+  color: var(--j-rail-ink);
   font-weight: 700;
 }
 .j-rail [aria-current] b {
@@ -83,9 +109,9 @@
 .j-rail p {
   margin-top: 36px;
   padding-top: 20px;
-  border-top: 1px solid #6886bd;
+  border-top: 1px solid var(--j-rail-line);
   font-size: 13px;
-  color: #e1eafb;
+  color: var(--j-rail-muted);
 }
 .j-work {
   padding: 32px;
@@ -125,7 +151,8 @@
   box-shadow: inset 0 2px 3px #17386320;
 }
 .j-surface {
-  background: white;
+  min-width: 0;
+  background: var(--j-paper);
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 28px;
@@ -346,6 +373,10 @@ summary {
 .candidate .radio input {
   margin-top: 4px;
 }
+.candidate .radio > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .candidate strong {
   display: block;
   overflow-wrap: anywhere;
@@ -468,6 +499,38 @@ summary {
 .j-work textarea[aria-invalid="true"]:hover:not(:disabled) {
   border-color: var(--danger);
 }
+.review-display {
+  max-width: 680px;
+  margin: 16px auto 0;
+  text-align: left;
+}
+.review-display label {
+  margin: 12px 0;
+  font-size: 16px;
+}
+.review-display select {
+  font-size: 16px;
+}
+:root[data-density="compact"] .j-work {
+  padding: 24px;
+}
+:root[data-density="compact"] .j-surface {
+  padding: 20px;
+}
+:root[data-density="compact"] .j-form,
+:root[data-density="compact"] .decision-panel {
+  gap: 16px;
+}
+:root[data-density="compact"] .candidate {
+  padding-block: 14px;
+}
+:root[data-density="compact"] .candidate .radio {
+  padding: 10px;
+}
+:root[data-density="compact"] .results-layout {
+  gap: 16px;
+  margin-top: 16px;
+}
 @media (max-width: 1050px) {
   .j-layout {
     grid-template-columns: 190px minmax(0, 1fr);
@@ -487,6 +550,12 @@ summary {
   }
 }
 @media (max-width: 760px) {
+  :root[data-density="compact"] .j-work {
+    padding: 20px 16px;
+  }
+  :root[data-density="compact"] .j-surface {
+    padding: 16px;
+  }
   .review {
     padding: 12px 16px;
   }
