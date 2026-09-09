@@ -277,6 +277,13 @@
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
     "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "f56f3310d314d7e58f6da4e3a4d046c096e6943dc162416a60c9f5dfc2319f77",
+    "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
+    "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
+    "scripts/verify-ui-phase2-profit-c.mjs": "9caf48a5e9a6da643c068d00511083a1cb0e48f55f74d4f08fcd343e72ec562e",
+    "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5",
+    "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712",
+    "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "634f2b9d1f6f7463f9f73399d6fc452cb8550a5a680abd26f907babeba847313",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -298,7 +305,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "132b908d07d186c1e93ae0328a98277c807ebfe7591062e1d37ed0d53726af77",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "695797bc21f08b233461852d3a2156c8caa13358c127a27819f4015672cbd984",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "39122dbfd133dd632d56aa217eb6af3f280d86f837056483839b3c3625e3e63c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "19d7e29882d2a1e82ad4ffe00d4ffec65953a4086d112eb7efaeb37af72fd9a9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "b36ca8b9706a3332571e586241d3b0682b9240899763862fe126cef473f70891",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d3ed4e1eb0ec5ccf27beb84202e81fa699c217e32ae6669031b3589f86574a97",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "c926b689a69e295d5c4095c4f733edf9a0cab07db70e6fa8a54a4441e2872215",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "2764973e6fb3b82c4f012e7997c17058f72db91ffc3ba17459717312e1fe04bb",
@@ -354,9 +361,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "521bb40c9e3166139972537a100486243e73bba1639ac1c2cca8a03fc970a9af",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "9d5945eea5629968885c098c8e477bd7e0bda5b25cbd2ada860304f7a1721e69",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "73d491925cd4090181fd04df614eea603c40885573777c7250057f67c6f5245b",
-    "scripts/audit-ui-phase2-action-coverage.mjs": "22cf5f07f3c6b4c0b6b381a7342c49bd795c2762fa451da760dc0cee81bd6e89",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "6885affaed19007c9abf73313079a0de1eb8244528958e78b8f503757af1dcfe",
-    "scripts/lib/ui-phase2-review-surfaces.mjs": "466682f928d8fcd17e441ffe0557a4ed20ccf6df29ce5f063fc22137858074d4",
+    "scripts/audit-ui-phase2-action-coverage.mjs": "0daee0911ae9829314cd903d4eab644674d0b7b48c0acc635e7c07280a5c7242",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "b040fe5ba91b88ee5757c66620ab23a33562213163bf5ab058ff2f4734aad81d",
+    "scripts/lib/ui-phase2-review-surfaces.mjs": "f889a2064905f48cbaec479c0ea89d101271b6b1db94afa64702f8f3199db4b1",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
     "scripts/audit-ui-phase2-contracts.mjs": "dea579eba9fffb14ca370b23467f7ce822b1e25112196be9ae93f73df3cacbf5",
     "scripts/lib/ui-phase2-contract-audit.mjs": "92007530e6463dae89d24e669347a9d5fb5482e839e7999dff602f1011817a3d"
@@ -367,10 +374,11 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 16,
     "oldOnlyIdentities": 15,
-    "reviewedPages": 2,
-    "explicitlyGroupedSourceSites": 64,
-    "semanticGroups": 32,
-    "routeActions": 31,
+    "reviewedPages": 3,
+    "explicitlyGroupedSourceSites": 159,
+    "semanticGroups": 84,
+    "routeActions": 74,
+    "wiringGroups": 8,
     "pagesWithoutExplicitSemanticReview": [
       "P01",
       "P02",
@@ -388,7 +396,6 @@
       "P15",
       "P16",
       "P17",
-      "P18",
       "P19",
       "P20",
       "P21",
@@ -588,6 +595,7 @@
         "sourceSites": 20,
         "semanticGroups": 15,
         "routeActions": 14,
+        "wiringGroups": 0,
         "excludedGroups": 1,
         "writeActions": 4,
         "unmappedVisualSlots": 0
@@ -687,7 +695,23 @@
       "path": "/opportunities/:opportunityId",
       "title": "机会详情",
       "oldStaticAssociatedCandidates": 158,
-      "review": null,
+      "review": {
+        "pageId": "P18",
+        "sourceSites": 95,
+        "semanticGroups": 52,
+        "routeActions": 43,
+        "wiringGroups": 8,
+        "excludedGroups": 1,
+        "writeActions": 12,
+        "unmappedVisualSlots": 258,
+        "surfaces": {
+          "callerFiles": 10,
+          "localModelBindings": 34,
+          "callerContainers": 23,
+          "consumerVariants": 38,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "detail-adaptive-direction-c",
         "detail-assembly-direction-c",
@@ -699,7 +723,12 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "multiple section proposals require explicit composition review"
+        "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
+        "概览竞品/供应目录链接当前无能力v-if；旧合同按能力展示描述与真实源不同，待明确审核，未擅自修权限或路由。",
+        "P18主状态页各文案都走load且次按钮无handler；原型恢复入口与实际消费者必须逐态对齐。",
+        "观察/驳回、AI抽检和复核打开按钮部分不禁busy；write无单飞早退，ID/watch和晚到响应无归属token，未知异常称未写入不是事务证明。",
+        "成本初始时间UTC截断/本地解析偏移、reviewer失败置空、复核id残留、AI先关原因再写差异继续保留OP07–OP10。",
+        "43个路由动作的六態仍需逐一判断/selector绑定；已有代表控件图不自动等于全动作、所有行/主题/权限状态已验。"
       ]
     },
     {
@@ -1170,6 +1199,7 @@
         "sourceSites": 44,
         "semanticGroups": 17,
         "routeActions": 17,
+        "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 4,
         "unmappedVisualSlots": 102,
@@ -1450,15 +1480,34 @@
       "sourceSites": 20,
       "semanticGroups": 15,
       "routeActions": 14,
+      "wiringGroups": 0,
       "excludedGroups": 1,
       "writeActions": 4,
       "unmappedVisualSlots": 0
+    },
+    {
+      "pageId": "P18",
+      "sourceSites": 95,
+      "semanticGroups": 52,
+      "routeActions": 43,
+      "wiringGroups": 8,
+      "excludedGroups": 1,
+      "writeActions": 12,
+      "unmappedVisualSlots": 258,
+      "surfaces": {
+        "callerFiles": 10,
+        "localModelBindings": 34,
+        "callerContainers": 23,
+        "consumerVariants": 38,
+        "runtimeAcceptance": "unproven"
+      }
     },
     {
       "pageId": "P54",
       "sourceSites": 44,
       "semanticGroups": 17,
       "routeActions": 17,
+      "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 4,
       "unmappedVisualSlots": 102,
@@ -19195,7 +19244,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-AI-QUEUE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityAiPanel.vue#3fc618c0a253e761.1",
@@ -19222,7 +19277,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-AI-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1",
@@ -19257,7 +19318,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-AI-REVIEW.approved",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1",
@@ -19292,7 +19359,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-AI-REVIEW.rejected",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
@@ -19329,7 +19402,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-REVIEW-OPEN.rejected",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1",
@@ -19366,7 +19445,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-REVIEW-OPEN.approved",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityCostReviewQueue.vue#dcb42c2584efb46b.1",
@@ -19403,7 +19488,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-REVIEW-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1",
@@ -19440,7 +19531,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-REVIEW-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityCostReviewQueue.vue#8c06fd5c1d000db0.1",
@@ -19477,7 +19574,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-REVIEW-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#97f09d6274473315.1",
@@ -19504,7 +19607,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-ANCHOR",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#4c415989b6830734.1",
@@ -19526,7 +19635,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-GATES-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#1755c866489f4c76.1",
@@ -19553,7 +19668,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-OPEN.adopt",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#c5f40664f410ee40.1",
@@ -19580,7 +19701,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-OPEN.observe",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#6cfe6545a209df42.1",
@@ -19607,7 +19734,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-OPEN.reject",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#e28c61b56c99b993.1",
@@ -19634,7 +19767,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-EARLY-DECISION-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#690b264d43e01055.1",
@@ -19661,7 +19800,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-OPEN.observe",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#a2dfed9751073c3d.1",
@@ -19688,7 +19833,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-OPEN.reject",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#7ee1cf6f73d304fe.1",
@@ -19719,7 +19870,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-BLOCKER-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#91b42518b9942791.1",
@@ -19750,7 +19907,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-EVIDENCE-TASK",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#b016bc2c6e34bc74.1",
@@ -19777,7 +19940,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-BLOCKERS-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#ad67a1fb638ba1e7.1",
@@ -19812,7 +19981,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-BLOCKER-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.1",
@@ -19843,7 +20018,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DOWNSTREAM-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#effae781320f38ae.1",
@@ -19874,7 +20055,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COMPETITOR-DISCOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#886e2ed7a10d72e3.1",
@@ -19905,7 +20092,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-SUPPLIER-DISCOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#aa54925800e77301.1",
@@ -19932,7 +20125,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COMPETITORS-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#146cf1d351c32a6f.1",
@@ -19959,7 +20158,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-SOURCING-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#b0a01bc78d278471.1",
@@ -19986,7 +20191,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-SCORE-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#0ea181124012f39d.1",
@@ -20017,7 +20228,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-SCORE-QUEUE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.2",
@@ -20048,7 +20265,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DOWNSTREAM-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#389b0cedfcdcb05c.1",
@@ -20079,7 +20302,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COMPETITOR-DISCOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#98f83f73900ff6d1.1",
@@ -20106,7 +20335,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COMPETITORS-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityEvidencePanel.vue#e7987d558e66f413.1",
@@ -20133,7 +20368,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-EVIDENCE-ORIGINAL",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityEvidencePanel.vue#a7e87a4faa602b0d.1",
@@ -20164,7 +20405,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-EVIDENCE-COLLAPSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityEvidencePanel.vue#562017be17eba5c3.1",
@@ -20195,7 +20442,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-EVIDENCE-MORE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityFeedbackPanel.vue#d2e988e8912be681.1",
@@ -20222,7 +20475,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-FEEDBACK-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityFeedbackPanel.vue#78c5b5b15ae0a028.1",
@@ -20249,7 +20508,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-FEEDBACK-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityFeedbackPanel.vue#3ecf9559a5eb9abf.1",
@@ -20280,7 +20545,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-FEEDBACK-AUDIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityLineagePanel.vue#5abdd0792f0f00a2.1",
@@ -20311,7 +20582,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-LINEAGE-TECHNICAL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityLineagePanel.vue#709fca4084db47ee.1",
@@ -20342,7 +20619,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-LINEAGE-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityLineagePanel.vue#fa9946cc7d514a7e.1",
@@ -20369,7 +20652,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-LINEAGE-FAILURES",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityListPanel.vue#1f137eb293b286d0.1",
@@ -20866,7 +21155,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
@@ -20894,7 +21189,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-COST",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fcdcabfef1ea3474.1",
@@ -20927,7 +21228,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1",
@@ -20960,7 +21267,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COST-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#aff5d679009764bc.1",
@@ -20993,7 +21306,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-PROFIT-QUEUE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
@@ -21024,7 +21343,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
@@ -21055,7 +21380,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
@@ -21090,7 +21421,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
@@ -21125,7 +21462,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
@@ -21152,7 +21495,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-RETURN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
@@ -21179,7 +21528,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1",
@@ -21210,7 +21565,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DETAIL-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
@@ -21241,7 +21602,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-RUNTIME-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
@@ -21272,7 +21639,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-DECISION-PANEL",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
@@ -21307,7 +21680,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-MANUAL-COLLECTION-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
@@ -21346,7 +21725,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-COMPETITOR-DISCOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
@@ -21385,7 +21770,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-SUPPLIER-DISCOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
@@ -21420,7 +21811,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-SCORE-RULES",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1",
@@ -21455,7 +21852,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-TAB",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1",
@@ -21486,7 +21889,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-MORE-ANALYSIS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1",
@@ -21521,7 +21930,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-TAB",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
@@ -21556,7 +21971,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-INSIGHTS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1",
@@ -21591,7 +22012,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-FEEDBACK",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
@@ -21626,7 +22053,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-COST",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
@@ -21661,7 +22094,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-AI",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
@@ -21688,7 +22127,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-DIALOGS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
@@ -21715,7 +22160,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-DIALOGS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
@@ -21742,7 +22193,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
@@ -21769,7 +22226,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#44686188d9948fca.1",
@@ -21796,7 +22259,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
@@ -21823,7 +22292,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
@@ -21850,7 +22325,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
@@ -21872,7 +22353,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-REASON",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
@@ -21894,7 +22381,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-REASON",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1",
@@ -21916,7 +22409,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-REASON",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1",
@@ -21943,7 +22442,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
@@ -21970,7 +22475,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
@@ -21997,7 +22508,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
@@ -22024,7 +22541,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
@@ -22051,7 +22574,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
@@ -22078,7 +22607,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
@@ -22105,7 +22640,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
@@ -22132,7 +22673,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1",
@@ -22159,7 +22706,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#364dc8e63849b27f.1",
@@ -22186,7 +22739,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#781b6e8e908ba7ac.1",
@@ -22213,7 +22772,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
@@ -22240,7 +22805,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1",
@@ -22267,7 +22838,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1",
@@ -22294,7 +22871,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1",
@@ -22321,7 +22904,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-DECISION-CONTAINER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f3f35ebc7969e030.1",
@@ -22348,7 +22937,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
@@ -22375,7 +22970,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
@@ -22402,7 +23003,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
@@ -22429,7 +23036,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1",
@@ -22456,7 +23069,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-DECISION-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1",

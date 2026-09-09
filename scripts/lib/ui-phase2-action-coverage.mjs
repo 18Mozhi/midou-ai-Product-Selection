@@ -17,7 +17,15 @@ export function validateActionReview(
   for (const action of review.actions) {
     assert.ok(!actionIds.has(action.actionId), "duplicate actionId");
     actionIds.add(action.actionId);
-    assert.ok(["navigation", "read", "write", "local", "excluded"].includes(action.kind));
+    assert.ok(["navigation", "read", "write", "local", "excluded", "wiring"].includes(action.kind));
+    const contractKeys = action.sourceContractKeys ?? [action.actionId];
+    assert.ok(
+      contractKeys.length && contractKeys.every((key) => typeof key === "string" && key.trim()),
+    );
+    assert.equal(new Set(contractKeys).size, contractKeys.length, "duplicate contract key");
+    if (action.sourceContractKeys)
+      assert.ok(action.contractAliasReason, "explicit alias needs rationale");
+    const usedContractKeys = new Set();
     assert.ok(action.condition && action.handler && action.remaining);
     assert.ok(action.sourceCandidateIds.length);
     assert.ok(action.variants.length);
@@ -35,14 +43,63 @@ export function validateActionReview(
             r.document === review.contract &&
             r.temporalScope !== "historical" &&
             ["identity-current", "line-moved"].includes(r.status) &&
-            r.claim
-              .split("|")
-              .map((v) => v.replaceAll("`", "").trim().split(" · ")[0])
-              .includes(action.actionId),
+            contractKeys.some((key) => {
+              const cells = r.claim
+                .split("|")
+                .map((v) => v.replaceAll("`", "").trim().split(" · ")[0])
+                .filter(Boolean);
+              const matches = (action.sourceContractKeys ? cells.slice(-1) : cells).includes(key);
+              if (matches) usedContractKeys.add(key);
+              return matches;
+            }),
         ),
         "actionId not in current explicit contract " + action.actionId,
       );
     }
+    assert.equal(usedContractKeys.size, contractKeys.length, "unused contract alias");
+    if (action.kind === "wiring") {
+      assert.ok(action.forwardsTo?.length, "wiring requires explicit targets");
+      assert.equal(new Set(action.forwardsTo).size, action.forwardsTo.length);
+      const eventCandidates = action.sourceCandidateIds.map((id) =>
+        scope.find((c) => c.candidateId === id),
+      );
+      assert.ok(
+        eventCandidates.every((c) =>
+          [
+            "event-binding",
+            "dialog-component-call",
+            "dialog-script-call",
+            "dialog-definition",
+          ].includes(c.kind),
+        ),
+        "business control cannot be wiring",
+      );
+      const expected = eventCandidates.flatMap((c) =>
+        Object.entries(c.events ?? {}).map(([event, handler]) => ({
+          candidateId: c.candidateId,
+          event,
+          handler,
+        })),
+      );
+      assert.deepEqual(
+        (action.forwardBindings ?? []).map(({ candidateId, event, handler }) => ({
+          candidateId,
+          event,
+          handler,
+        })),
+        expected,
+        "forward event omitted or changed",
+      );
+      for (const edge of action.forwardBindings ?? []) {
+        assert.ok(edge.targets?.length);
+        for (const target of edge.targets)
+          assert.ok(action.forwardsTo.includes(target), "undeclared forwarding target");
+      }
+    } else
+      assert.ok(
+        !action.forwardsTo && !action.forwardBindings,
+        "only wiring may declare forwarding edges",
+      );
     for (const state of ["default", "hover", "focus", "pressed", "disabled", "busy"]) {
       const value = action.visualStates[state];
       assert.ok(
@@ -50,6 +107,7 @@ export function validateActionReview(
           "not-mapped",
           "scene-reference-not-acceptance",
           "not-applicable-excluded",
+          "not-applicable-wiring",
           "not-applicable-navigation-only",
           "not-applicable-not-disabled-in-source",
         ].includes(value),
@@ -57,6 +115,7 @@ export function validateActionReview(
       );
       if (value === "scene-reference-not-acceptance") assert.ok(action.scenes.length);
       if (value === "not-applicable-excluded") assert.equal(action.kind, "excluded");
+      if (value === "not-applicable-wiring") assert.equal(action.kind, "wiring");
       if (value.startsWith("not-applicable-n")) assert.equal(action.kind, "navigation");
     }
     for (const ref of action.scenes) {
@@ -91,6 +150,14 @@ export function validateActionReview(
           assert.ok(action.visualStateReferences[state], "missing explicit state reference");
     }
   }
+  for (const action of review.actions.filter((a) => a.kind === "wiring"))
+    for (const id of action.forwardsTo) {
+      const target = review.actions.find((a) => a.actionId === id);
+      assert.ok(
+        target && target.kind !== "wiring",
+        "forward target must be a local action or explicit exclusion, never a cycle",
+      );
+    }
   assert.deepEqual(
     [...seen].sort(),
     scope.map((c) => c.candidateId).sort(),
@@ -110,7 +177,8 @@ export function validateActionReview(
     pageId: review.pageId,
     sourceSites: seen.size,
     semanticGroups: actionIds.size,
-    routeActions: review.actions.filter((a) => a.kind !== "excluded").length,
+    routeActions: review.actions.filter((a) => !["excluded", "wiring"].includes(a.kind)).length,
+    wiringGroups: review.actions.filter((a) => a.kind === "wiring").length,
     excludedGroups: review.actions.filter((a) => a.kind === "excluded").length,
     writeActions: review.actions.filter((a) => a.kind === "write").length,
     unmappedVisualSlots: review.actions

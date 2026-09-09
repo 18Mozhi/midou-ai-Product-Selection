@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P18源动作/输入/消费者语义核对
+
+最终门禁：59项最小相关测试后，全套101项UI2单元通过（新增19项）；动作报告写入及只读复验、设计交付指纹复验通过。补绑定UiStatePanel默认文案来源state-contract.ts后仅重生成/复核受影响动作报告，不重复未变代码测试。当前显式3页/159源位置/84分组，其中74路由动作、8转发、2排除；其余70页仍待同级语义核对。74包/8948PNG、1363来源绑定/831独立文件、8070README链接不变，源/图漂移及未登记PNG均0。verify:docs（73/60/6/153）、runtime-docs、static-analysis（390）、format:check、定向Prettier及git diff --check通过。没有重跑旧P18图稿或生产Vue/SQL；最终无chrome-headless-shell残留，无临时文件或服务，永久新增清单/单元保留。
+
+从干净main/85252f50接续，上一轮72详情补图为已提交进展。本轮使用ui-skills-root定位和requirement-to-implementation技能拆解；按真实OpportunityWorkspace十组件、原因/模态/form helpers和原候选合同逐项审阅。新P18.json登记95源位置：43详情动作（12写入）、8转发/容器关系、24个P15来源位置归一排除。父多事件/原生容器不虚增业务动作，P15排除也不证明跨ID残留不可达。
+
+新增完整合同末单元格别名与说明校验，不接受子串/来源ID冒充语义键；wiring检查当前候选全部事件/handler、显式目标、禁止循环且不重复计动作。原模型字符串检查漏具名/number/trim，改AST识别；P18 opt-in结构扫描覆盖native dialog/form/集合调用，旧P54扫描口径保持。34绑定包含转发和列表字段，23容器/38引用变体不是38业务弹窗；P18仍5原因变体、成本与反馈内联。59项相关最小单元已通过（含新增边界）；完整收口记录随后补入。
+
+源证据新增：概览和竞争区的目录链接无能力v-if，与旧合同描述不同；UiStatePanel所有primary接load，次按钮无handler；观察/驳回和AI抽检等无busy禁用，write无单飞早退，表单/ID晚到归属仍未修。701组合缺完整采纳/成本链，258个视觉槽只表示待适用性/逐控件绑定，不表示缺258图。报告改成真实双端PNG链接，避免假定profit/review等旧包存在gallery.html；未重写任何旧图或manifest。
+
+本轮未变生产源码/外部API/OpenAPI、权限、数据库/迁移、env/依赖、运行配置或宝塔服务，无重启。新字段属于本地审核schema，使用仍为node scripts/audit-ui-phase2-action-coverage.mjs只读或--write生成两报告。永久清单/校验器/单元保留，没有一次性测试文件或新服务；全站目标及批准门保持，下一P54逐控件、P18完整有数据组合和其他70页语义审核。
+
 ## 2026-09-09 · P54三类详情 / DATA-RECORD-DETAIL-C-r1
 
 最终验证：新补稿完整capture及无参数来源/72图指纹和双端7样例DOM复验通过，HTTP=0、存储为空；动作报告与图片交付报告生成后只读复验通过。全站74包/8948PNG、1363源绑定/831独立文件、8070README链接，源/图漂移与未登记图均0；只保留P11/P54两页的明确语义清单，不提升全局验收。verify:docs（73路由/60受保护/6角色/153文件）、runtime-docs、static-analysis（390）、format:check、定向Prettier和git diff --check通过。未重复运行未改动的旧UI2单元、生产构建或SQL验收。最终无本验证器进程或chrome-headless-shell残留，无一次性产物需删除；正式72PNG及补稿保留。图册打开请求返回queued，不声称用户已经看到或批准。

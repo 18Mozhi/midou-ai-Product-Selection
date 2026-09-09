@@ -164,3 +164,79 @@ test("historical references cannot count as current contract binding", () => {
   );
   assert.equal(result.candidates[0].contractReferences.length, 0);
 });
+
+test("explicit full-cell aliases support qualified legacy keys, not substrings", () => {
+  const { review, context } = fixture();
+  const a = review.actions[0];
+  a.sourceContractKeys = ["EXISTING-SAVE：表单入口"];
+  a.contractAliasReason = "Exact existing table key, same handler";
+  context.contracts[0].claim = "| EXISTING-SAVE：表单入口 |";
+  assert.equal(validateActionReview(review, context).routeActions, 1);
+  a.sourceContractKeys = ["EXISTING-SAVE"];
+  assert.throws(() => validateActionReview(review, context));
+  context.contracts[0].claim = "| source.vue#identity.1 | EXISTING-SAVE：表单入口 |";
+  a.sourceContractKeys = ["source.vue#identity.1"];
+  assert.throws(() => validateActionReview(review, context));
+});
+for (const fault of [
+  "none",
+  "missing-alias-reason",
+  "unused-alias",
+  "no-targets",
+  "unknown-target",
+  "cycle",
+  "wrong-handler",
+  "missing-event",
+  "undeclared-edge",
+  "control-as-wiring",
+]) {
+  test("explicit forwarding contract " + fault, () => {
+    const { review, context } = fixture();
+    const id = "source.vue#forward.1";
+    context.candidates.push({
+      ...context.candidates[0],
+      candidateId: id,
+      kind: "event-binding",
+      events: { "@save": "save" },
+    });
+    context.contracts.push({ ...context.contracts[0], candidateId: id, claim: "| 保存事件转发 |" });
+    const a = {
+      ...structuredClone(review.actions[0]),
+      actionId: "SAVE-WIRING",
+      kind: "wiring",
+      sourceCandidateIds: [id],
+      sourceContractKeys: ["保存事件转发"],
+      contractAliasReason: "Caller forwards to existing save",
+      forwardsTo: ["EXISTING-SAVE"],
+      forwardBindings: [
+        { candidateId: id, event: "@save", handler: "save", targets: ["EXISTING-SAVE"] },
+      ],
+    };
+    a.visualStates = Object.fromEntries(
+      Object.keys(a.visualStates).map((s) => [s, "not-applicable-wiring"]),
+    );
+    review.actions.push(a);
+    if (fault === "missing-alias-reason") delete a.contractAliasReason;
+    if (fault === "unused-alias") a.sourceContractKeys.push("unused");
+    if (fault === "no-targets") a.forwardsTo = [];
+    if (fault === "unknown-target") {
+      a.forwardsTo = ["missing"];
+      a.forwardBindings[0].targets = ["missing"];
+    }
+    if (fault === "cycle") {
+      a.forwardsTo = [a.actionId];
+      a.forwardBindings[0].targets = [a.actionId];
+    }
+    if (fault === "wrong-handler") a.forwardBindings[0].handler = "other";
+    if (fault === "missing-event") a.forwardBindings = [];
+    if (fault === "undeclared-edge") a.forwardBindings[0].targets = ["missing"];
+    if (fault === "control-as-wiring") context.candidates[1].kind = "control";
+    if (fault === "none") {
+      const result = validateActionReview(review, context);
+      assert.equal(result.routeActions, 1);
+      assert.equal(result.writeActions, 1);
+      assert.equal(result.wiringGroups, 1);
+      assert.equal(result.unmappedVisualSlots, 6);
+    } else assert.throws(() => validateActionReview(review, context));
+  });
+}

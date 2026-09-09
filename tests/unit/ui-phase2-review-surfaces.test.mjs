@@ -61,6 +61,68 @@ test("caller inventory counts inline aside separately from a modal", () => {
     runtimeAcceptance: "unproven",
   });
 });
+
+test("named and modified model bindings remain exact expressions", () => {
+  const source =
+    '<template><Editor v-model:open="opened"/><input v-model.number="form.amount"/><textarea v-model.trim="reason"/></template>';
+  assert.deepEqual(
+    scanReviewSurfaces(source, "Example.vue").inputs.map((i) => i.binding),
+    ["opened", "form.amount", "reason"],
+  );
+});
+
+test("structural scan is opt-in and never turns a form or aside into a modal", () => {
+  const source =
+    "<template><OpportunityWorkspaceDialogs/><dialog><form><aside>note</aside></form></dialog><form/></template>";
+  assert.equal(scanReviewSurfaces(source, "Example.vue").containers.length, 1);
+  const scan = scanReviewSurfaces(source, "Example.vue", { includeStructuralContainers: true });
+  assert.deepEqual(
+    scan.containers.map((c) => [c.tag, c.ordinal, c.shape]),
+    [
+      ["OpportunityWorkspaceDialogs", 1, "business-dialog-container"],
+      ["dialog", 1, "native-dialog"],
+      ["form", 1, "form-container"],
+      ["aside", 1, "inline-aside"],
+      ["form", 2, "form-container"],
+    ],
+  );
+});
+
+for (const fault of [
+  "none",
+  "omit-dialog",
+  "omit-form",
+  "wrong-shape",
+  "wrong-inline-evidence",
+  "unexplained-exclusion",
+]) {
+  test("opt-in structural consumer validation " + fault, () => {
+    const { review, context } = fixture();
+    const source =
+      '<template><dialog><form><textarea v-model.trim="reason"/></form></dialog></template>';
+    context.sources["Example.vue"] = source;
+    review.dependencyHashes["Example.vue"] = createHash("sha256").update(source).digest("hex");
+    review.includeStructuralContainers = true;
+    const scan = scanReviewSurfaces(source, "Example.vue", review);
+    review.inputs = scan.inputs.map((i) => ({
+      ...i,
+      meaning: "reason",
+      remaining: "runtime pending",
+    }));
+    const template = review.containers[0];
+    review.containers = scan.containers.map((c) => ({ ...structuredClone(template), ...c }));
+    review.containers[1].variants[0].evidenceScope = "matching-inline-form-scene";
+    if (fault === "omit-dialog") review.containers.shift();
+    if (fault === "omit-form") review.containers.pop();
+    if (fault === "wrong-shape") review.containers[1].shape = "native-dialog";
+    if (fault === "wrong-inline-evidence")
+      review.containers[0].variants[0].evidenceScope = "matching-inline-form-scene";
+    if (fault === "unexplained-exclusion")
+      review.containers[0].variants[0].evidenceScope = "route-excluded-reference";
+    if (fault === "none") assert.equal(validateReviewSurfaces(review, context).callerContainers, 2);
+    else assert.throws(() => validateReviewSurfaces(review, context));
+  });
+}
 for (const [name, change] of [
   ["input omitted", (r) => r.inputs.pop()],
   ["duplicate input", (r) => r.inputs.push(r.inputs[0])],

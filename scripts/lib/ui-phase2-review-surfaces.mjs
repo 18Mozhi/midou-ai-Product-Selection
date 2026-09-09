@@ -11,7 +11,15 @@ const shapes = {
   ConfirmDialog: "confirmation-dialog",
   aside: "inline-aside",
 };
-export function scanReviewSurfaces(source, file) {
+export function scanReviewSurfaces(source, file, { includeStructuralContainers = false } = {}) {
+  const selectedShapes = includeStructuralContainers
+    ? {
+        ...shapes,
+        dialog: "native-dialog",
+        form: "form-container",
+        OpportunityWorkspaceDialogs: "business-dialog-container",
+      }
+    : shapes;
   const parsed = parse(source, { filename: file });
   assert.deepEqual(parsed.errors, []);
   const root = baseParse(parsed.descriptor.template?.content ?? "");
@@ -25,9 +33,9 @@ export function scanReviewSurfaces(source, file) {
           assert.ok(prop.exp?.content, "empty model binding");
           inputs.push({ file, binding: prop.exp.content });
         }
-      if (Object.hasOwn(shapes, node.tag)) {
+      if (Object.hasOwn(selectedShapes, node.tag)) {
         const ordinal = (counts[node.tag] = (counts[node.tag] ?? 0) + 1);
-        containers.push({ file, tag: node.tag, ordinal, shape: shapes[node.tag] });
+        containers.push({ file, tag: node.tag, ordinal, shape: selectedShapes[node.tag] });
       }
     }
     for (const child of node.children ?? []) visit(child);
@@ -40,9 +48,13 @@ export function validateReviewSurfaces(review, { sources, packages }) {
   assert.equal(review.status, "source-reviewed-not-runtime-accepted");
   assert.ok(review.files.length > 0);
   assert.equal(new Set(review.files).size, review.files.length);
+  assert.ok(
+    review.includeStructuralContainers === undefined ||
+      typeof review.includeStructuralContainers === "boolean",
+  );
   const scanned = review.files.map((file) => {
     assert.ok(sources[file], "missing reviewed source");
-    return scanReviewSurfaces(sources[file], file);
+    return scanReviewSurfaces(sources[file], file, review);
   });
   const hashes = Object.keys(review.dependencyHashes);
   for (const file of review.files) assert.ok(hashes.includes(file), "missing caller hash");
@@ -74,11 +86,23 @@ export function validateReviewSurfaces(review, { sources, packages }) {
     for (const variant of container.variants) {
       assert.ok(variant.name && variant.remaining && variant.scenes.length);
       assert.ok(
-        ["related-scene-only", "matching-dialog-scene", "proposal-shape-differs"].includes(
-          variant.evidenceScope,
-        ),
+        [
+          "related-scene-only",
+          "matching-dialog-scene",
+          "matching-inline-form-scene",
+          "route-excluded-reference",
+          "proposal-shape-differs",
+        ].includes(variant.evidenceScope),
         "unsupported consumer evidence scope",
       );
+      if (variant.evidenceScope === "matching-inline-form-scene")
+        assert.equal(
+          container.shape,
+          "form-container",
+          "inline form evidence requires a form source",
+        );
+      if (variant.evidenceScope === "route-excluded-reference")
+        assert.ok(variant.exclusionReason, "route exclusion needs source rationale");
       const variantKey = `${key(container)}/${variant.name}`;
       assert.ok(!variantKeys.has(variantKey), "duplicate consumer variant");
       variantKeys.add(variantKey);
