@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P18有利润的观察机会连续稿
+
+起点main/1da0c81a，工作树干净；前轮P18语义提交为实质进展。requirement-to-implementation核真实范围，ui-skills-root选frontend-design落实同一对象身份、蓝目录/白工作面与手机折叠目录。M04-04机会444虽有69.4 USD净利润和40 CNY待复核提交，但recommendation=observe、risk=unknown，缺selection_stage/quality_gates，导航无opportunity:decide。因此不拼入424质量门或701 AI，不声称可采纳全链已补齐。
+
+新detail-cost-context-direction-c复用未修改的profit-direction-c数据/控制器/样式，同文档连接结论与四成本工作面。52正式PNG＝20基础状态＋4往返状态＋2操作区，各1440/390；九字段/失败提示/内联复核原因和分项展开返回保留，忙碌锁目录。最小运行发现新JS缺闭合，修复后通过；增加真实点击后复现原控制器重绘导致目标脱离目录，改为新组合层捕获后同步并复验，未改原控制器或Vue。手机窄标签设最小宽度；目检桌面/手机结论与表单底部。
+
+永久verify-ui-phase2-detail-cost-context-c.mjs支持--smoke、--capture及无参数复验，核旧源hash和现提取数据，再查双端20场景/9字段及底部命中/实际目录点击/往返/技术展开/内联取消归焦/700–1024重排。零HTTP、零存储，finally关闭浏览器。首次失败后先修复最小检查，再重新采图。未创建临时文件或服务；52PNG/图册/evidence/新验证器均为永久交付，不删除旧产物。
+
+P18侧表增加6组操作的场景关联，不升级六态通过。规格/Feature Map/主计划同步；原当前输入为空、完整十分区/全权限/同一对象采纳链、真实Vue生命周期/网络/SQL/权限/具体审图及G0–G5仍未验。无apps/API/OpenAPI/数据库/配置/.env/依赖/生产变更，不部署或重启。下一P54动作状态及余70页/共享语义，完整采纳链证据缺口保留。
+
+最终52图采集及无参数浏览器复验通过；动作/交付报告重建完成，75包9000PNG、来源/图片漂移0、未登记PNG0，仍0具体批准。verify:docs（73路由/60保护/6角色/153必备文档）、verify:runtime-docs、verify:static-analysis（390文件）、format:check及新代码定向Prettier/git diff检查通过。共享验证器与生产未修改，不重复跑上轮101项无变化工具测试，也不以本轮原型检查代替Vue构建/E2E。正式图与本轮材料独立暂存提交，工作树及进程最后复核。
+
 ## 2026-09-09 · P18源动作/输入/消费者语义核对
 
 最终门禁：59项最小相关测试后，全套101项UI2单元通过（新增19项）；动作报告写入及只读复验、设计交付指纹复验通过。补绑定UiStatePanel默认文案来源state-contract.ts后仅重生成/复核受影响动作报告，不重复未变代码测试。当前显式3页/159源位置/84分组，其中74路由动作、8转发、2排除；其余70页仍待同级语义核对。74包/8948PNG、1363来源绑定/831独立文件、8070README链接不变，源/图漂移及未登记PNG均0。verify:docs（73/60/6/153）、runtime-docs、static-analysis（390）、format:check、定向Prettier及git diff --check通过。没有重跑旧P18图稿或生产Vue/SQL；最终无chrome-headless-shell残留，无临时文件或服务，永久新增清单/单元保留。

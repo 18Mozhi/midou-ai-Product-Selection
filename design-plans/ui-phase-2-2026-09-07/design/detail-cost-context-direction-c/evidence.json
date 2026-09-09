@@ -1,0 +1,1017 @@
+{
+  "version": "DETAIL-COST-CONTEXT-C-r1",
+  "approval": "pending",
+  "kind": "additive-single-subject-cost-composition",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/index.html": "887106551c383070bde72da2bcaf7b743a0799751de617682fe043c6373cefc9",
+    "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/data.js": "57fe70ee14002ab8942947314880f4c63e11f63bc51fb5eb6fd08c3b000ede5b",
+    "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/profit.js": "6ff326c614a601805ab040c7af1a9ba745183feb2527599b0123c4c4596af512",
+    "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/profit.css": "598ddbb5b9198eb0ffddad16b589d8d8b316438c57663dfb2da8d5114cbfe0d6",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+    "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
+    "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
+    "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
+    "apps/api/src/profit-service.ts": "d8236fb02f7c0f0bd50d3dbb3720214d65fc3a643d234c5c822a17540441a089",
+    "apps/api/src/profit-routes.ts": "392acfc426f336e1ddb9976797aedf65a0d9b406982d29232d3d6188119c09ff",
+    "apps/api/src/mysql-profit-repository.ts": "cd7fbc1fed15be627beff3d26db013d721573b1b220a2bda80bc0e24ab09124c",
+    "apps/worker/src/automatic-selection-evaluation-worker.ts": "015293d2fab1946193de4b2d66d0db31661388c4155340e78ea2eb2ba74d22fc",
+    "tests/e2e/m04-04-profit.spec.ts": "dc729b13f66892f3b3e09dbbddca5515dc446d99b2cdd7320a2687f250dc0c08",
+    "scripts/lib/ui-phase2-profit-design-data.mjs": "edfa95b4357518d380070103ae3e765ab9c5e03e70c08cbedcff9b65ab7bf8cf",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-profit-c.mjs": "9caf48a5e9a6da643c068d00511083a1cb0e48f55f74d4f08fcd343e72ec562e",
+    "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/evidence.json": "de398d322754e2b3694cbd6215f01787eb35832e107a5388e64355cbe50a5d3a",
+    "design-plans/ui-phase-2-2026-09-07/design/detail-cost-context-direction-c/index.html": "af86c56518b37383b24cf340e6d43c66cc9477b5cbee0a56de5ec8de61c29326",
+    "design-plans/ui-phase-2-2026-09-07/design/detail-cost-context-direction-c/context.js": "2ae6b59874da7852c2101994701eb244334d582cd0d92a870236fed5e5d896f6",
+    "design-plans/ui-phase-2-2026-09-07/design/detail-cost-context-direction-c/context.css": "de20f81abbdd11ecf57b9d33a0a4c5d92e1cae16406e8cc5d9fd695ee6f31558",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+    "scripts/verify-ui-phase2-detail-cost-context-c.mjs": "9083d39ac582b9220f261d5b96ffc3a4a4ca987836c2e29b0fefe107de2c4260"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "originalSubjectOnly": true,
+      "immutableRun": true,
+      "gatesNotInvented": true,
+      "costDraftFields": 9,
+      "nineFieldsAndFootersHitTested": true,
+      "directoryPhysicalClicks": true,
+      "costErrorRoundTrip": true,
+      "reviewReasonRoundTrip": true,
+      "sourceDisclosureRoundTrip": true,
+      "inlineNotModal": true,
+      "reflow": [
+        700,
+        701,
+        768,
+        1024
+      ],
+      "HTTP": 0,
+      "storage": 0,
+      "runtimeAcceptance": false
+    },
+    {
+      "width": 390,
+      "originalSubjectOnly": true,
+      "immutableRun": true,
+      "gatesNotInvented": true,
+      "costDraftFields": 9,
+      "nineFieldsAndFootersHitTested": true,
+      "directoryPhysicalClicks": true,
+      "costErrorRoundTrip": true,
+      "reviewReasonRoundTrip": true,
+      "sourceDisclosureRoundTrip": true,
+      "inlineNotModal": true,
+      "reflow": [
+        700,
+        701,
+        768,
+        1024
+      ],
+      "HTTP": 0,
+      "storage": 0,
+      "runtimeAcceptance": false
+    }
+  ],
+  "boundary": "Opportunity444 original cost fixture only. No adoption eligibility invented, no701/424 data. Two cost inline forms, no added modal. Not full ten-section detail, populated current input, full permissions, Vue/API/SQL/production or approval.",
+  "screenshots": [
+    {
+      "file": "1440-overview.png",
+      "scene": "overview",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8588cebdb7a0231fdc63ed4318a710837d272e30736031edec0f9df61b71448e"
+    },
+    {
+      "file": "1440-directory-open.png",
+      "scene": "directory-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 55,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6ad7c928e2cbe5358c95a5146b109c3ed24371a640b88797e43f512d6a523ea4"
+    },
+    {
+      "file": "1440-snapshot.png",
+      "scene": "snapshot",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 119,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6062dc6cab8db17edaeb7283cdbff6a627888f681676c96b50254339d79a0001"
+    },
+    {
+      "file": "1440-components.png",
+      "scene": "components",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 119,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9bfe03912a07a7612ea914adf56ab7a30f877dbc595ba2806f4bbf36c508c992"
+    },
+    {
+      "file": "1440-no-inputs.png",
+      "scene": "no-inputs",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 26,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "9c36306b4edba1acac0fdd991771845ca6d873918f5d0e0206b6b1cfe6044185"
+    },
+    {
+      "file": "1440-reviews.png",
+      "scene": "reviews",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 35,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4abd7fe7461815e18bf7e33a14e572517fbe59bca52f2315333632a10cd72ffb"
+    },
+    {
+      "file": "1440-approved-edited.png",
+      "scene": "approved-edited",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4e2516db147e4d6b9a7d051f278130a54beff1457dac2eec8b0f5440a727236a"
+    },
+    {
+      "file": "1440-approved-failed.png",
+      "scene": "approved-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "d77e88cd298022e6839b663de80dfb5e2350a42136f42c569bbd25ce55a6d524"
+    },
+    {
+      "file": "1440-rejected-edited.png",
+      "scene": "rejected-edited",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "87fc9c7e2d932bfd45ed06111d83cd64fef5916d3f740739d79f0422b460a12a"
+    },
+    {
+      "file": "1440-rejected-failed.png",
+      "scene": "rejected-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "209fd857edd18ed6d0017f33763bbee600bd8dd82baab2e75bbae438b2d8565a"
+    },
+    {
+      "file": "1440-form.png",
+      "scene": "form",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 44,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5625fb494f5452fd6e6831bce9dc83404ad27e577405dde87f11dcd16dbcf6ef"
+    },
+    {
+      "file": "1440-purchase.png",
+      "scene": "purchase",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "52870371cdf55b415e5f6ccc86e01a507504c17b99a5a0b426672eaadb551976"
+    },
+    {
+      "file": "1440-form-failed.png",
+      "scene": "form-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "62a56e909b691e8b5edced5155d12778635e952f956ea4a301fb64895cb85ab7"
+    },
+    {
+      "file": "1440-form-busy.png",
+      "scene": "form-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b78a131070e7fe85816b99b9105287ea8b3aabd1692676674b443bbebe04a7f1"
+    },
+    {
+      "file": "1440-reviewers-error.png",
+      "scene": "reviewers-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5c51e001d424370576b8255b347ebbf9ac8f9d44ee8defbdf1b454ee589c68e8"
+    },
+    {
+      "file": "1440-reviewers-empty.png",
+      "scene": "reviewers-empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 48,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "13b9b0f7125fdae254276375ea98bc50e2a6a910382c04d098ccb85487a74a85"
+    },
+    {
+      "file": "1440-queue-busy.png",
+      "scene": "queue-busy",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 120,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "98c9954ffb306db543efb5e947916b6a75b25c5b528d83f531b5c64c2a5df38c"
+    },
+    {
+      "file": "1440-queue-failed.png",
+      "scene": "queue-failed",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 121,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "47dfa6b8d74ec60273715e49debcbb1c0896c9af64f28ce5f2bd9c7d20d2b8f8"
+    },
+    {
+      "file": "1440-readonly.png",
+      "scene": "readonly",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 117,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "8d859e1a3dce1b59375ca2f8b006d4fade0c2f6436b628651c2c74b650f08e1d"
+    },
+    {
+      "file": "1440-read-error.png",
+      "scene": "read-error",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 24,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "e43af9f45dae405e4707ddfb32bf7a9f9f98a53ac3821ff763e1536d21f36f69"
+    },
+    {
+      "file": "1440-continuity-source-open.png",
+      "scene": "continuity-source-open",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 119,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "804c144834fff2988b315097a06a60a650baa9d0024f4c84245eaa9c3067ba08"
+    },
+    {
+      "file": "1440-continuity-error-overview.png",
+      "scene": "continuity-error-overview",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 56,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ec08e28faff3aad4bb38a1233e83faad1896e566fb40f8fe5f73a1ec9b03a2ef"
+    },
+    {
+      "file": "1440-continuity-cost-draft.png",
+      "scene": "continuity-cost-draft",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "74bb9f84ce2a15b4558d2e30884f0a0d7ac049da3892000bbf7cce5bd6615351"
+    },
+    {
+      "file": "1440-continuity-cost-footer.png",
+      "scene": "continuity-cost-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 46,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4399d9934f58da2666e5111847a504d2824cb0e3ed169f610f08eeae40bdb178"
+    },
+    {
+      "file": "1440-continuity-review-reason.png",
+      "scene": "continuity-review-reason",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "4fc89e71fa231d93edae1ade27ff54ab20bdb6e2045fd3e6bdff66ee5a82f916"
+    },
+    {
+      "file": "1440-continuity-review-footer.png",
+      "scene": "continuity-review-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "70ad5efa4e643af6e20dfe5c25319891f027c38a39da6e8d8c05a264bb93bcfe"
+    },
+    {
+      "file": "390-overview.png",
+      "scene": "overview",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "670b02cf5d02c43584d51e62a6b625527fb1140ebd43e1bb5a913d205157870c"
+    },
+    {
+      "file": "390-directory-open.png",
+      "scene": "directory-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 52,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "c0bd007d6bce1aeda0d971bba714595ec830e3f48eea50ea7b803bc3af7d627d"
+    },
+    {
+      "file": "390-snapshot.png",
+      "scene": "snapshot",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 116,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "452fca1d2a8c12bbcdb64f94c05e77b418244d57004cb826f0c893eab6e9a1b8"
+    },
+    {
+      "file": "390-components.png",
+      "scene": "components",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 116,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "75ad9520c31ece6b6c626c6cd201eb28a9c6eae8ebbdd16bb30cdff8301a218a"
+    },
+    {
+      "file": "390-no-inputs.png",
+      "scene": "no-inputs",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 23,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "db915e8292e1083d6d693a33909f454c3ea1b44c4305f392085ae0f8a71a057c"
+    },
+    {
+      "file": "390-reviews.png",
+      "scene": "reviews",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 32,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "321cb8892a20e0d7cc8fc7514f666f8f560eed9eae16dc9f0930d33f0d40ff52"
+    },
+    {
+      "file": "390-approved-edited.png",
+      "scene": "approved-edited",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "79629895f64623ad4455480a476ca44debc83b5403ae1cf11a223b5065eb2b0a"
+    },
+    {
+      "file": "390-approved-failed.png",
+      "scene": "approved-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "b66cc8fde67ceedb07672a613f169496149bac47b92b05e48be7917f5ade967b"
+    },
+    {
+      "file": "390-rejected-edited.png",
+      "scene": "rejected-edited",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "37bf070d97e2e2c4f733892b234719a339df992b76f692697af3c825994a0f8d"
+    },
+    {
+      "file": "390-rejected-failed.png",
+      "scene": "rejected-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 40,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "6f7aedf2606cc38a4e48764840f1176558e21a992643dd70198996d6983e2def"
+    },
+    {
+      "file": "390-form.png",
+      "scene": "form",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 41,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "376fc22717d3d9b887b35c29c97e311f5a4dc66962f59c7f46acc5e231d21a03"
+    },
+    {
+      "file": "390-purchase.png",
+      "scene": "purchase",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "1b036f35be9f60f832114f3f2f13355a4db1ae39a0025ddb5f5a2433a5b5ccd2"
+    },
+    {
+      "file": "390-form-failed.png",
+      "scene": "form-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "f34d05b9d3b420aa9ef0bd50c7fbce5a884cc93544664c730564b683e1b84f62"
+    },
+    {
+      "file": "390-form-busy.png",
+      "scene": "form-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 42,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "a034a50b86b225b606f0332634be294369c37a417fabf3bc86445709c6e63528"
+    },
+    {
+      "file": "390-reviewers-error.png",
+      "scene": "reviewers-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "237e542e1fb9774181984c048efcf6761d2c8e06e52652a3a6841e0d52a562f3"
+    },
+    {
+      "file": "390-reviewers-empty.png",
+      "scene": "reviewers-empty",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 17,
+        "textNodesChecked": 45,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "822fb68c0cc548f60b51addcf7958ad3ef22a91229d0de776c5b4fb995205976"
+    },
+    {
+      "file": "390-queue-busy.png",
+      "scene": "queue-busy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 117,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ef201f32d82317e183be935913ecbc68fb34fbb93d4dd72cdf1dab64cd74c451"
+    },
+    {
+      "file": "390-queue-failed.png",
+      "scene": "queue-failed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 118,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "812b9e79ced20a77bc3e7c30e9bd4c8ba9ecdf00d2c4d71e2b45b34287d2f305"
+    },
+    {
+      "file": "390-readonly.png",
+      "scene": "readonly",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 6,
+        "textNodesChecked": 114,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "22781fc980908006479d109e402cbc5b6e37534d47542e40568ca3310da09f5c"
+    },
+    {
+      "file": "390-read-error.png",
+      "scene": "read-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 7,
+        "textNodesChecked": 21,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "19b9820201c95e94da29c59fe474dcd15278d772b88837663dce1e72fcb3d0dc"
+    },
+    {
+      "file": "390-continuity-source-open.png",
+      "scene": "continuity-source-open",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 8,
+        "textNodesChecked": 116,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "cb831075ab903040d10621e661f61dbcfaf06d173d61e3107cef83ee8be2e549"
+    },
+    {
+      "file": "390-continuity-error-overview.png",
+      "scene": "continuity-error-overview",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 9,
+        "textNodesChecked": 53,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "5fbe9e04bb40e528683c61df580c37d477892470308f95046d5102f31eb3b2ec"
+    },
+    {
+      "file": "390-continuity-cost-draft.png",
+      "scene": "continuity-cost-draft",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "11bd758523fb59ec6070346380d4451ac8ea4c53d6ecd756f32b97c47280f29c"
+    },
+    {
+      "file": "390-continuity-cost-footer.png",
+      "scene": "continuity-cost-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 16,
+        "textNodesChecked": 43,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "25c2d190f5b604d000fb4c4d9b494cf60fc27d4a25f1dba0efdfd67bbdac6317"
+    },
+    {
+      "file": "390-continuity-review-reason.png",
+      "scene": "continuity-review-reason",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "cd4e12e71f0b9dd06c76301593751e627e5abe13d31aa45cc4582dbf03d1353d"
+    },
+    {
+      "file": "390-continuity-review-footer.png",
+      "scene": "continuity-review-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "controlsChecked": 11,
+        "textNodesChecked": 39,
+        "minControlFont": 16,
+        "minTextFont": 13,
+        "violations": []
+      },
+      "sha256": "ff11762989b7ca3af825ce28f4d9873491b019709cd58d36617bdab5b6e62c91"
+    }
+  ]
+}

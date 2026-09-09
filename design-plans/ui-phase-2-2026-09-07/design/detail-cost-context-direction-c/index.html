@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href="../profit-direction-c/" />
+    <title>P18 有利润的观察机会 · C 方向连续稿</title>
+    <link rel="stylesheet" href="../account-direction-c/study.css" />
+    <link rel="stylesheet" href="profit.css" />
+    <link rel="stylesheet" href="../detail-cost-context-direction-c/context.css" />
+    <script src="data.js" defer></script>
+    <script src="profit.js" defer></script>
+    <script src="../detail-cost-context-direction-c/context.js" defer></script>
+  </head>
+  <body>
+    <a href="#context-title" class="skip">跳到机会内容</a>
+    <header class="review-bar">
+      <span>P18 · C 方向待审 / 历史隔离样本，非实时数据</span>
+      <label>审核场景<select id="context-scene"></select></label>
+      <a href="../detail-cost-context-direction-c/README.md">图册与范围</a>
+      <select id="scene" hidden aria-label="原成本控制器场景"></select>
+    </header>
+    <header class="masthead">
+      <strong>智能选品</strong><span>选品机会 / 依据核对</span>
+      <a data-local href="/opportunities">返回机会目录</a>
+      <a id="back" data-local hidden href="/opportunities">原分区返回入口</a>
+    </header>
+    <div class="profit-layout">
+      <aside class="cost-index">
+        <p>机会核对</p>
+        <h1>先核依据<br />再做决定</h1>
+        <p class="index-note">利润、当前成本与待复核提交，保持三条独立记录。</p>
+        <details id="context-directory" open>
+          <summary>核对目录 <span id="active-label">结论与缺项</span></summary>
+          <button id="show-overview" type="button">结论与缺项</button>
+          <nav id="sections" aria-label="利润与成本工作面"></nav>
+        </details>
+        <p class="scope-note">有利润不是建议采纳。人工决定和权限必须单独核验。</p>
+      </aside>
+      <div class="context-content">
+        <header id="context-identity" class="identity">
+          <p class="meta">US 市场 · 机会 v8 · 历史隔离样本</p>
+          <h2 id="context-title" tabindex="-1"></h2>
+          <details id="context-tech">
+            <summary>对象与来源信息</summary>
+            <p id="context-id"></p>
+            <p>来源：M04-04 利润测试。未拼入机会 424 或 701 的推荐、权限或证据。</p>
+          </details>
+        </header>
+        <p id="context-notice" role="status" hidden></p>
+        <section id="context-overview" aria-label="结论与缺项"></section>
+        <main id="work" tabindex="-1"></main>
+      </div>
+    </div>
+  </body>
+</html>

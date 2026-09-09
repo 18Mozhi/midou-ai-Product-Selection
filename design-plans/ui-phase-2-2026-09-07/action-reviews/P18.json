@@ -267,6 +267,14 @@
         {
           "package": "profit-direction-c",
           "scene": "overdue"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "rejected-edited"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "rejected-failed"
         }
       ],
       "remaining": "未因新reviews或can_review变化清review.id，旧表单可能残留。",
@@ -286,6 +294,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
         }
       ]
     },
@@ -305,6 +318,14 @@
         {
           "package": "profit-direction-c",
           "scene": "permissions-lost"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "approved-edited"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "continuity-review-reason"
         }
       ],
       "remaining": "未验动态资格变化/忙碌重复打开；不可把已超时直接等同源按钮禁用。",
@@ -324,6 +345,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
         }
       ]
     },
@@ -347,6 +373,18 @@
         {
           "package": "profit-direction-c",
           "scene": "approved-failed"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "approved-failed"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "rejected-failed"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "continuity-review-footer"
         }
       ],
       "remaining": "源表单可独立于item.can_review存在；提交函数只查原因不查busy；服务端资格和版本待实库验收。",
@@ -367,6 +405,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
         }
       ]
     },
@@ -386,6 +429,10 @@
         {
           "package": "profit-direction-c",
           "scene": "rejected-empty"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "continuity-review-reason"
         }
       ],
       "remaining": "内联关闭返焦/新行替换及所有主题待验。",
@@ -405,6 +452,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
         }
       ]
     },
@@ -1420,6 +1472,22 @@
         {
           "package": "profit-direction-c",
           "scene": "form-failed"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "form"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "form-failed"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "continuity-cost-draft"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "continuity-cost-footer"
         }
       ],
       "remaining": "默认UTC截断与本地解析存在偏移；提交未生效，另一人服务端资格需验。",
@@ -1440,6 +1508,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
         }
       ]
     },
@@ -1459,6 +1532,18 @@
         {
           "package": "profit-direction-c",
           "scene": "queue-no-rule"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "snapshot"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "queue-busy"
+        },
+        {
+          "package": "detail-cost-context-direction-c",
+          "scene": "queue-failed"
         }
       ],
       "remaining": "不能以成本表单必填项阻止现行重算；同一701完整权限成本链仍缺。",
@@ -1478,6 +1563,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
         }
       ]
     },
