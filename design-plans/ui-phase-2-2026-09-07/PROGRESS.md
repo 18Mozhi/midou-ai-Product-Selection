@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · C方向统一逐页审核入口
+
+从干净main/7beac32e继续，修正真实review.html仍用纸色红色衬线、主要显示历史研究并硬编码设计未交付的问题。ui-skills-root/frontend-design用于C蓝白目录与材料区，fixing-accessibility保留命名、44px目标、键盘焦点和原生弹窗，Playwright沿用仓库永久验证器。仅本地审核工具变化，未修改产品Vue/业务规则、API/OpenAPI/env/DB/迁移/依赖/权限、后端/Worker/Python或生产服务。
+
+新增永久build-ui-phase2-review-evidence.mjs，通过新鲜设计审计与显式动作注册生成review-evidence.js：73路由按包关联，82包可索引，P16真实布局/代表按钮和字段/密度两份证据单列；其他页未登记不称未实现。图册/预览/存在的gallery/范围/证据本地链接检查，研究与历史方向折叠。原review-data.js、草稿键和schemaVersion1导出字段不变，旧批注不自动批准新图，用户全页批准仍0；P16原布局批准不扩大。
+
+最小双端浏览器验证通过后，补充旧意见跨新版保留和P16/P26边界、导出原格式检查；capture及无参数复验均通过。1440/390下73页关联、过滤空态/内部页、分页、弹窗初焦点/循环/Escape回焦、纯文本批注安全、44px目标和无横溢出，页面错误0。目视两张永久review-proof图，按当前五个审核输入更新manifest；这些是工具截图，不增加业务图数量。3项原task-study单测、verify:docs（153文件/73路由）、verify:runtime-docs、verify:static-analysis（390）、format:check（changed3/production496/repositories51）通过。全图审计82包/11406PNG、源漂移0/截图漂移0/未列PNG0；生成器--check通过。未改生产源码，不重复产品build或部署测试。
+
+使用见REVIEW-ENTRY-GUIDE.md：打开review.html搜索P16，分别打开设计稿与真实Vue图册，注明图册版本/场景/宽度记录并导出意见。先audit --write再生成入口，避免只刷新索引冒充源验证。Feature Map/PLAN/当前领取入口及设计审计说明同步。生产无需重启；未来部署仍按指定宝塔脚本执行，不上传审核资产。
+
+全部验证HTTP服务与浏览器finally关闭，隔离测试意见清除；各临时导出下载绝对路径随工具输出跟踪并delete，新增临时遗留0。永久生成索引、说明、验证器与两张工具图保留为交付。历史output/playwright/p16-layout-20260910/.last-run.json、output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts及results/.last-run.json未重试清理、未绕过、未暂存。全站真实重构、按钮/弹窗完整分母、具体审稿、生产验证/部署签收仍继续；本批不宣称总目标完成。
+
 ## 2026-09-10 · P16销毁实例的迟到写入回执保护
 
 上一轮63072c5b真实表单/密度修正为进展，本轮从干净main继续J08实例生命周期。使用ui-skills-root/fixing-accessibility保留可理解的busy/续办语义，Playwright验证真实挂载；没有改视觉布局。源码确认普通deactivated缓存仍需接收后台结果，但unmounted后的create成功会覆盖后来活动ID、decide成功会清掉后来ID，失败/finally也会修改已销毁refs。先写永久实际setup单测，8项中4红，准确复现上述成功/失败差异。

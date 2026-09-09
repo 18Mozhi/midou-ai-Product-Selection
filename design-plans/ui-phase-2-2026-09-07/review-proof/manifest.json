@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
   "inputs": {
-    "review.html": "94258ac05f6e171d95275edca8b33ede3538d32c868d53498db0e9879ebd9e1e",
-    "review.js": "07376f54000f8a7e89075ce524d7d35e62cbc498106bc5c94acb700dd4021506",
-    "review.css": "09e3776837868cee59b672f77110eeff21daf8cf001f1f0d7c03201ff1da8bc3",
-    "review-data.js": "7bc86064c1312d4fceddb49f70ca61710192e94a96e946360e0b6192f944bf03"
+    "review.html": "233f96c1fed96034cbf769825338e137626a9b58187e6e85012999952586d5d9",
+    "review.js": "5db0fdd5e4587563fab2cc8a41e000419e13c5868b79e0f5c84d1c59d7daf824",
+    "review.css": "748789d5fe23303dea9270717d1fee07488f05bd167a44d1994602e5fc0473f2",
+    "review-data.js": "7bc86064c1312d4fceddb49f70ca61710192e94a96e946360e0b6192f944bf03",
+    "review-evidence.js": "53809a834bc8ed0af552fa379e5528b6904940a43ed281e34713f4efb04fc171"
   },
   "proof": [
     {
@@ -15,10 +16,10 @@
         "height": 1000
       },
       "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
-      "capturedAt": "2026-09-07T16:16:46.620Z",
+      "capturedAt": "2026-09-09T20:10:49.166Z",
       "browser": "151.0.7922.34",
       "platform": "win32",
-      "sha256": "041f7c261c4ead821e85336a8c70cb6af3901e610b574a4c0a5305601a0e3b34"
+      "sha256": "8fe14ad08da3e6be828d2d309906735c7513983cab95246d03614f9137a7b8a0"
     },
     {
       "kind": "local-review-tool-not-product-page",
@@ -28,10 +29,10 @@
         "height": 844
       },
       "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
-      "capturedAt": "2026-09-07T16:16:48.086Z",
+      "capturedAt": "2026-09-09T20:10:50.910Z",
       "browser": "151.0.7922.34",
       "platform": "win32",
-      "sha256": "69f7ed045789ea995db14741e7634e98658129031b9d8f0410876f023c4227c2"
+      "sha256": "8b984731502c20ffde4c408f85a3ff206df5ead70dfb1baf28cff4ffa3f64efb"
     }
   ],
   "results": [
@@ -44,6 +45,7 @@
       "filters": "passed",
       "focus": "passed",
       "notesAndExport": "passed",
+      "currentEvidenceAndHistoricalNotes": "passed",
       "overflow": "passed",
       "errors": 0
     },
@@ -56,6 +58,7 @@
       "filters": "passed",
       "focus": "passed",
       "notesAndExport": "passed",
+      "currentEvidenceAndHistoricalNotes": "passed",
       "overflow": "passed",
       "errors": 0
     }

@@ -4,28 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>第二阶段实施账册 · ScoutOps</title>
+    <title>C 方向逐页审核 · ScoutOps</title>
     <link rel="stylesheet" href="review.css" />
     <script src="review-data.js" defer></script>
+    <script src="review-evidence.js" defer></script>
     <script src="review.js" defer></script>
   </head>
   <body>
     <a class="skip" href="#page-detail">跳至页面规格</a>
     <header class="masthead">
       <a class="wordmark" href="PLAN.md">S / SCOUTOPS</a>
-      <span class="edition">DESIGN DELIVERY JOURNAL · 02</span>
+      <span class="edition">C DIRECTION / REVIEW WORKSPACE</span>
       <a class="text-link" href="PAGES.md">完整逐页计划 ↗</a>
     </header>
     <main>
       <section class="intro" aria-labelledby="journal-title">
         <div>
-          <p class="eyebrow">实施中 / 基线与审核底座</p>
-          <h1 id="journal-title">第二阶段<br />实施账册<span>。</span></h1>
+          <p class="eyebrow">第二阶段 / 全站重设计</p>
+          <h1 id="journal-title">逐页审核工作台</h1>
         </div>
         <div class="intro-note">
-          <p>从页面到动作，逐项留下证据。</p>
+          <p>设计稿、真实界面，分开核对。</p>
           <p>
-            本页展示真实源码盘点及计划方向。候选控件不是已验收动作；设计图、真实界面与生产证据尚未交付时，保持待验。
+            选择页面查看关联 C 图册与已登记的真实 Vue
+            对照。图册可能仅覆盖页面分区或代表状态，不等于完整页面、生产或用户验收通过。
           </p>
           <p id="revision" class="mono"></p>
         </div>
@@ -35,17 +37,23 @@
         覆盖分母尚未冻结 ·
         路由关联来自静态依赖，实际角色、模式和动态变体需逐项核实。当前没有页面被标记为用户验收通过。
       </p>
-      <p>
-        <a class="text-link" href="direction-review.html">1.18 新结构统一审核台 · 106张研究图 ↗</a>
-        ·
-        <a class="text-link" href="design/task-directions.html">W01 新结构 A / B 交互原型 ↗</a>
-        · <a class="text-link" href="design/task-review.html">任务页真实 Vue 基线与样式研究 ↗</a> ·
-        <a class="text-link" href="representative-review.html">规则 / 权限 / 系统状态基线 ↗</a> ·
-        <a class="text-link" href="design/representative-design-review.html"
-          >三类代表页 A/B 新设计图 ↗</a
-        >
-        （均待审核，非生产交付）
-      </p>
+      <details class="historical-research">
+        <summary>历史研究与旧基线（不作为当前 C 方向验收）</summary>
+        <p>
+          <a class="text-link" href="direction-review.html"
+            >1.18 新结构统一审核台 · 106张研究图 ↗</a
+          >
+          ·
+          <a class="text-link" href="design/task-directions.html">W01 新结构 A / B 交互原型 ↗</a>
+          ·
+          <a class="text-link" href="design/task-review.html">任务页真实 Vue 基线与样式研究 ↗</a> ·
+          <a class="text-link" href="representative-review.html">规则 / 权限 / 系统状态基线 ↗</a> ·
+          <a class="text-link" href="design/representative-design-review.html"
+            >三类代表页 A/B 新设计图 ↗</a
+          >
+          （均待审核，非生产交付）
+        </p>
+      </details>
       <div class="journal-tools">
         <label
           >查找页面<input id="page-search" type="search" placeholder="页面名称、路由或编号"
@@ -93,12 +101,12 @@
           <div id="unmapped-list"></div>
         </details>
         <p>
-          意见仅保存在当前浏览器；请导出后交给实施者归档。不要填写账号密码、Cookie、令牌或客户资料。新源码指纹会使用独立草稿，旧版本意见不会自动判定为新版本通过。
+          意见仅保存在当前浏览器；请导出后交给实施者归档。不要填写账号密码、Cookie、令牌或客户资料。保留原历史清单的草稿键与导出格式；请在意见中写明图册名称、场景和宽度，旧意见不会自动成为当前版本批准。
         </p>
         <p id="storage-status" role="status"></p>
       </section>
     </main>
-    <footer>信号账页 / 每一个完成结论，都有对应证据。<a href="PLAN.md">实施与验收标准 ↗</a></footer>
+    <footer>C 方向审核 / 图稿关联不等于全页交付。<a href="PLAN.md">实施与验收标准 ↗</a></footer>
     <dialog id="note-dialog" aria-labelledby="note-title">
       <form id="note-form">
         <p class="eyebrow">REVIEW NOTE / 审核批注</p>
@@ -115,7 +123,7 @@
           >具体意见<textarea id="note-body" rows="5" required maxlength="4000"></textarea>
         </label>
         <p class="meta">
-          当前缺少设计及实现证据，不提供“验收通过”选项。保存批注不会修改业务数据或覆盖已有批注。
+          此处只记录修改或澄清意见；具体批准仍需逐项确认。请注明图册、场景、宽度。保存不会修改业务数据或覆盖已有批注。
         </p>
         <div class="dialog-actions">
           <button id="cancel-note" type="button">取消</button

@@ -16,6 +16,7 @@ const allowed = new Map([
   ["/review.css", ["review.css", "text/css"]],
   ["/review.js", ["review.js", "text/javascript"]],
   ["/review-data.js", ["review-data.js", "text/javascript"]],
+  ["/review-evidence.js", ["review-evidence.js", "text/javascript"]],
 ]);
 const server = createServer(async (request, response) => {
   const asset = allowed.get(new URL(request.url, "http://127.0.0.1").pathname);
@@ -57,6 +58,52 @@ try {
     await page.goto(`${base}/review.html`, { waitUntil: "load" });
     assert.equal(await page.locator(".page-entry").count(), 73);
     assert.equal(await page.getByText("用户验收通过", { exact: true }).count(), 1);
+    assert.equal(
+      await page.evaluate(
+        () =>
+          window.SCOUTOPS_PHASE2_EVIDENCE.pages.filter((item) => item.packages.length > 0).length,
+      ),
+      73,
+    );
+    await page.locator("#page-search").fill("P16");
+    assert.equal(await page.locator(".proposal-materials .material-card").count(), 1);
+    assert.equal(await page.locator(".vue-materials .material-card").count(), 2);
+    const vueLinks = await page
+      .locator(".vue-materials a")
+      .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href")));
+    assert.ok(vueLinks.includes("../../output/playwright/p16-c-r2-review/index.html"));
+    assert.ok(vueLinks.includes("../../output/playwright/p16-c-r2-fields-review/index.html"));
+    assert.equal(await page.getByText("设计图 · 未交付", { exact: true }).count(), 0);
+    assert.equal(await page.locator("#counts .count").last().locator("strong").textContent(), "0");
+    await page.locator("#page-search").fill("P26");
+    assert.equal(await page.locator(".vue-materials .material-card").count(), 0);
+    assert.ok(
+      (await page.locator(".vue-materials").textContent()).includes("不据此断言该页没有实现"),
+    );
+    // Preserve old notes even though the design evidence index is newer than the baseline.
+    await page.evaluate(() =>
+      localStorage.setItem(
+        `scoutops-phase2-review:${window.SCOUTOPS_PHASE2.fingerprint}`,
+        JSON.stringify([
+          {
+            target: "P16",
+            reviewer: "历史审核者",
+            body: "旧清单意见保留",
+            decision: "question",
+            fingerprint: window.SCOUTOPS_PHASE2.fingerprint,
+            createdAt: "2026-09-07T00:00:00Z",
+          },
+        ]),
+      ),
+    );
+    await page.reload({ waitUntil: "load" });
+    await page.locator("#page-search").fill("P16");
+    assert.equal(await page.locator(".review-note").count(), 1);
+    assert.match(await page.locator(".review-note").textContent(), /旧清单意见保留/u);
+    await page.evaluate(() =>
+      localStorage.removeItem(`scoutops-phase2-review:${window.SCOUTOPS_PHASE2.fingerprint}`),
+    );
+    await page.reload({ waitUntil: "load" });
     await page.locator("#batch-filter").selectOption("W04");
     assert.equal(await page.locator(".page-entry").count(), 9);
     await page.locator("#page-search").fill("不存在的关键词-qa");
@@ -102,6 +149,7 @@ try {
     const downloading = page.waitForEvent("download");
     await page.getByRole("button", { name: "导出审核意见 ↓", exact: true }).click();
     const download = await downloading;
+    const temporaryDownload = await download.path();
     const stream = await download.createReadStream();
     const chunks = [];
     for await (const chunk of stream) chunks.push(chunk);
@@ -109,7 +157,15 @@ try {
     assert.equal(exported.notes.length, 1);
     assert.equal(exported.notes[0].target, "P18");
     assert.equal(exported.notes[0].decision, "needs-change");
+    assert.equal(exported.schemaVersion, 1);
+    assert.deepEqual(Object.keys(exported).sort(), [
+      "exportedAt",
+      "notes",
+      "schemaVersion",
+      "sourceFingerprint",
+    ]);
     await download.delete();
+    console.log(`temporary_review_download_deleted ${temporaryDownload}`);
     await page.locator("#control-kind").selectOption("dialog-component-call");
     assert.ok((await page.locator(".candidate").count()) > 0);
     await page.locator(".candidate summary").first().click();
@@ -139,7 +195,7 @@ try {
       localStorage.removeItem(`scoutops-phase2-review:${window.SCOUTOPS_PHASE2.fingerprint}`),
     );
     await page.reload({ waitUntil: "load" });
-    await page.locator("#page-search").fill("P18");
+    await page.locator("#page-search").fill("P16");
     if (capture) {
       await mkdir(path.join(root, "review-proof"), { recursive: true });
       await page.screenshot({
@@ -165,6 +221,7 @@ try {
       filters: "passed",
       focus: "passed",
       notesAndExport: "passed",
+      currentEvidenceAndHistoricalNotes: "passed",
       overflow: "passed",
       errors: errors.length,
     });
@@ -173,7 +230,13 @@ try {
   console.log(`ui_phase2_review_verified ${JSON.stringify(results)}`);
   if (capture) {
     const inputs = {};
-    for (const file of ["review.html", "review.js", "review.css", "review-data.js"])
+    for (const file of [
+      "review.html",
+      "review.js",
+      "review.css",
+      "review-data.js",
+      "review-evidence.js",
+    ])
       inputs[file] = createHash("sha256")
         .update(await readFile(path.join(root, file)))
         .digest("hex");

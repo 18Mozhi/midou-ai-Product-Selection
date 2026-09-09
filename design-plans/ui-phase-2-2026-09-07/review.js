@@ -1,6 +1,7 @@
 "use strict";
 (() => {
   const data = window.SCOUTOPS_PHASE2;
+  const current = window.SCOUTOPS_PHASE2_EVIDENCE;
   const byId = (id) => document.getElementById(id);
   if (!data) {
     byId("page-detail").textContent = "盘点数据未加载，请先运行生成命令。";
@@ -49,11 +50,14 @@
     byId("storage-status").textContent = "本地草稿存储不可用，意见会留在当前页面，请及时导出。";
   }
   byId("revision").textContent =
-    `源码 ${data.sourceRevision.slice(0, 12)} / 清单 ${data.fingerprint.slice(0, 12)}`;
+    `历史候选基线 ${data.sourceRevision.slice(0, 12)} / 草稿清单 ${data.fingerprint.slice(0, 12)}`;
   for (const [value, label] of [
     [data.counts.routes, "路由条目"],
-    [data.counts.controls, "控件 / 事件候选 · 未验收"],
-    [data.counts.dialogs, "弹窗定义 / 调用候选"],
+    [current?.summary.packages ?? "—", "C 图册索引 · 非完整页数"],
+    [
+      current?.pages.filter((page) => page.actualVue.length).length ?? "—",
+      "已登记 Vue 对照的页面 · 非验收",
+    ],
     [0, "用户验收通过"],
   ]) {
     const count = element("div", undefined, "count");
@@ -152,7 +156,7 @@
       selectedPage = visible[0].id;
     byId("page-list").replaceChildren();
     byId("filter-status").textContent =
-      `显示 ${visible.length} / ${data.pages.length} 条路由。所有设计和生产证据仍待逐项交付。`;
+      `显示 ${visible.length} / ${data.pages.length} 条路由。图稿、真实 Vue 与生产验收分别核对。`;
     for (const page of visible) {
       const entry = button("", () => {
         selectedPage = page.id;
@@ -162,7 +166,14 @@
       entry.className = "page-entry";
       if (selectedPage === page.id) entry.setAttribute("aria-current", "page");
       const title = element("span");
-      title.append(element("b", page.title), element("small", `${page.batch} · 待设计 / 待验收`));
+      const related = current?.pages.find((item) => item.id === page.id);
+      title.append(
+        element("b", page.title),
+        element(
+          "small",
+          `${page.batch} · ${related ? `${related.packages.length} 个关联图册` : "图册索引未加载"} / 待验收`,
+        ),
+      );
       entry.append(element("span", page.id, "mono"), title);
       byId("page-list").append(entry);
     }
@@ -174,6 +185,80 @@
       return;
     }
     renderPage();
+  }
+  function evidenceLink(label, href) {
+    const link = element("a", `${label} ↗`, "text-link");
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noopener";
+    return link;
+  }
+  function renderCurrentEvidence(page, panel) {
+    const related = current?.pages.find((item) => item.id === page.id);
+    panel.append(element("h3", "当前 C 方向审核材料"));
+    if (!related) {
+      panel.append(
+        element(
+          "p",
+          "当前图册索引未加载；请运行审核入口生成命令。不可据此判断设计尚未交付。",
+          "notice",
+        ),
+      );
+      return;
+    }
+    panel.append(evidenceLink("逐页范围与剩余项", related.spec));
+    const grid = element("div", undefined, "review-comparison");
+    const proposals = element("section", undefined, "proposal-materials");
+    proposals.append(
+      element("h4", "01 / 设计图与交互预览"),
+      element(
+        "p",
+        "以下为关联包，可能包含其他页面或仅覆盖分区。先读范围，再选场景；不按图片数累计完成度。",
+        "meta",
+      ),
+    );
+    for (const id of related.packages) {
+      const item = current.packages[id];
+      const card = element("div", undefined, "material-card");
+      card.append(
+        element("h5", id),
+        element("p", `${item.screenshots} 张包内图 · 待具体审核`, "meta"),
+        evidenceLink("图册与范围说明", item.readme),
+      );
+      if (item.prototype) card.append(evidenceLink("交互预览 / 场景选择", item.prototype));
+      if (item.gallery) card.append(evidenceLink("打开状态截图图册", item.gallery));
+      card.append(evidenceLink("源与截图清单", item.evidence));
+      proposals.append(card);
+    }
+    const implementation = element("section", undefined, "vue-materials");
+    implementation.append(
+      element("h4", "02 / 真实 Vue 对照"),
+      element(
+        "p",
+        "仅展示动作登记表显式关联的证据；本地拦截数据不代表真实后端或生产验收。",
+        "meta",
+      ),
+    );
+    if (!related.actualVue.length)
+      implementation.append(
+        element("p", "本入口尚未登记该页的真实 Vue 对照；不据此断言该页没有实现。", "notice"),
+      );
+    for (const item of related.actualVue) {
+      const card = element("div", undefined, "material-card");
+      card.append(
+        element(
+          "h5",
+          item.key === "actualVueFieldEvidence" ? "字段、焦点与密度" : "布局与代表控件状态",
+        ),
+        element("p", "本地真实 Vue / 具体状态待审核", "meta"),
+        evidenceLink("打开真实界面图册", item.gallery),
+        evidenceLink("覆盖与剩余项", item.readme),
+        evidenceLink("验证证据", item.evidence),
+      );
+      implementation.append(card);
+    }
+    grid.append(proposals, implementation);
+    panel.append(grid);
   }
   function renderPage() {
     const page = data.pages.find((item) => item.id === selectedPage);
@@ -193,6 +278,7 @@
       element("p", page.path, "mono path"),
       element("p", `实现入口：${page.component}`, "mono path"),
     );
+    renderCurrentEvidence(page, panel);
     const directions = element("div", undefined, "direction-grid");
     for (const [label, content] of [
       ["桌面 / 1440", page.desktopDirection],
@@ -202,13 +288,15 @@
       section.append(element("h3", label), element("p", content));
       directions.append(section);
     }
-    panel.append(directions, element("h3", "独立验收重点"), element("p", page.acceptanceSteps));
+    const baseline = element("details", undefined, "historical-research");
+    baseline.append(element("summary", "历史计划方向（当前稿以以上图册为准）"), directions);
+    panel.append(baseline, element("h3", "独立验收重点"), element("p", page.acceptanceSteps));
     const evidence = element("div", undefined, "evidence");
     for (const label of [
-      "设计图 · 未交付",
+      "设计图 · 关联不等于全页完成",
       "真实 Vue · 未验收",
       page.acceptance === "internal" ? "生产不可达 · 待验证" : "生产证据 · 未交付",
-      "用户审核 · 待进行",
+      "用户审核 · 全页尚未通过",
     ])
       evidence.append(element("span", label));
     panel.append(evidence);
@@ -247,7 +335,18 @@
     list.id = "control-list";
     const pager = element("div", undefined, "pager");
     pager.id = "control-pager";
-    panel.append(tools, status, list, pager);
+    panel.append(
+      element("h3", "历史源码候选 / 按钮与弹窗定位"),
+      element(
+        "p",
+        "以下沿用原清单和批注身份，不是最新业务动作分母；当前语义与状态以逐页规格、图册及动作审核为准。",
+        "meta",
+      ),
+      tools,
+      status,
+      list,
+      pager,
+    );
     for (const input of [search, select])
       input.addEventListener("input", () => {
         controlPage = 0;
@@ -265,7 +364,7 @@
         `${item.label} ${item.file} ${JSON.stringify(item.events)}`.toLowerCase().includes(term),
     );
     byId("control-status").textContent =
-      `${matches.length} 个源码候选，含共享组件的关联上界；均未判定业务覆盖通过。`;
+      `${matches.length} 个历史源码候选，含共享组件的关联上界；文件行号可能已变化，均未判定业务覆盖通过。`;
     const list = byId("control-list");
     list.replaceChildren();
     for (const item of matches.slice(controlPage * pageSize, (controlPage + 1) * pageSize)) {
