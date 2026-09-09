@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P23全部任务逐项核对
+
+上一轮779d0390提交P22清单与测试，属于实际进展。本轮从干净main继续P23，按AGENTS/Feature Map/蓝图M05-01及实际TaskWorkspace、TaskListPanel、TaskBatchActions、模态钩子核对，使用ui-skills-root/frontend-design及Playwright，未启动子代理。新增TASK-LIST-SEMANTIC-REVIEW.md、P23.json：48共享源位置归39组（33动作、5关联、1P24排除），6模型/7结构/15变体关联。原P13排除的4个业务/导出切换和报表导航来源在P23恢复；独立源分母不增加，不能将同一源码多次审阅当新增按钮。
+
+新verify-ui-phase2-task-list-review.mjs复用5路由/7写入body/5资格及惰性SQL检查，再验证P23三个读取配置与4类结论：all列表不带mine但summary仍本人；导出有权限只读report-exports，无权限零API回business；404在列表为error、taskId详情才not_found；DELETE等待期间真实closeDeleteDialog清目标，成功返回访问null.id抛TypeError且不刷新。测试通过，删除缺口标记未修；函数组合不是实际Escape/服务误删证据，GET owner边界使用桩而不冒称重新验证完整读取生命周期。实现后需按修复更新缺陷预期。
+
+既有task-c与task-c-forms无capture复验通过：16+44PNG来源/图hash、双端8+22场景/13表单、字段/批量资格/键盘焦点/校验，HTTP和错误0；未重拍或改图。目检390-batch-resume，确认当前进行中样例继续可执行0，不编造样本。60图为共享P23/P24及审核board总量，不全算P23；导出、多页、混合批量缺稿明示，194代表视觉槽仍未映射。动作审计24页/510独立来源/486逐页组、余49页；设计总审计76包10774PNG/844独立来源/1453绑定/8942链接，漂移0。docs73路由/60保护/6角色/153必需文档、runtime-docs、390文件static-analysis、format通过，4审核链接存在。
+
+仅审核器/清单/说明、规格/计划/Feature Map和生成审计改变；生产Vue/CSS、API/OpenAPI、后端/Worker/Python、env/配置、SQL/迁移、依赖、权限、安全与宝塔未改，无部署/重启或新调节参数。新脚本无参数，仅内存验证；未变生产输入不重复构建/生产E2E或未改公共审计器的单元测试，不冒称历史结果本轮重跑。具体审批、全字段/状态/主题/真实生命周期与最终部署仍待，下一P24同级核对，不提升全站门禁或声明第二阶段完成。
+
+本轮无一次性文件/截图/日志/服务，代码与文档是永久交付，浏览器finally关闭且headless_shell为0。旧output/playwright/p16-layout-20260910/.last-run.json，以及output/playwright/ui-phase2-competitor-races-20260909下playwright.config.ts、results/.last-run.json因前次工具拒绝清理继续保留，不重试绕过、不提交。现有依赖缓存和构建必需产物不删除。
+
 ## 2026-09-10 · P22费用规则逐项核对
 
 上一轮1b95992e已提交P16真实按钮图和两处修复，属于实际进展。本轮从干净main继续计划下一P22，读取AGENTS、Feature Map、蓝图M04-04及CostRuleConsole、UiStatePanel、模态钩子、准备度slot和父路由作用域；使用ui-skills-root/frontend-design并复用Playwright依赖，无子代理。新增COST-RULES-SEMANTIC-REVIEW.md和P22.json：30本地源位置/20组（18动作、2窗口定义关联），19模型/7结构/32变体关联。两个原生窗为草稿和七操作变体，表单/aside不重复计窗，七入口与最终确认提交分开；166既有图不改，104视觉槽未映射，不将关联当作验收。

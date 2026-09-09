@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应23页/510源位置/447组；其中路由动作381组，转发/容器关联44组，其余明确排除。其余50页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应24页/510源位置/486组；其中路由动作414组，转发/容器关联49组，其余明确排除。其余49页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -34,7 +34,7 @@
 | [P20 竞品监控规则](page-specs/P20.md) | 75 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 90 | [38组](action-reviews/P21.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P22 费用与利润规则](page-specs/P22.md) | 66 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P23 全部任务](page-specs/P23.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P23 全部任务](page-specs/P23.md) | 111 | [39组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 111 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P25 审批中心](page-specs/P25.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P26 通知中心](page-specs/P26.md) | 59 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -1892,6 +1892,117 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - useModalDialog原生焦点回收与cancel转发已追源码，当前测试不挂载DOM，不能证明完整键盘圈。
 - 父reset_on_scope缓存key含组织/工作区，不能把局部无GET代次判为服务跨租户泄漏。
 - SC-G05读取重排/操作目标/URL关联待真实Vue集成确认；当前仅setup复现。
+
+## P23 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P23.json)：48个局部源位置 → 39组；3类写入，33组路由动作，5组转发/容器关联不重复计动作。6个本地v-model，7处调用/内嵌容器，15个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有194个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| task.list.create.open 新建入口 / local | 2处；header、empty、create_only、quick-create | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 仅P23新建；P24编辑不属于当前入口。快捷创建仅mounted读取window.search，缓存重入行为仍待验。 |
+| task.read.retry 重读当前任务列表或导出视图 / read | 1处；error、forbidden、expired、rate_limited | [error · 1440](design/task-direction-c-forms/1440-error.png) / [error · 390](design/task-direction-c-forms/390-error.png)、[forbidden · 1440](design/task-direction-c-forms/1440-forbidden.png) / [forbidden · 390](design/task-direction-c-forms/390-forbidden.png)；其余见JSON | 旧缓存与迟到GET归属已有源码保护，不在此轮宣称真实Vue复验；重读按钮不是登录或权限恢复。 |
+| task.list.page.previous 上一页 / local | 1处；first-disabled、later-page、loading-old-total | ；其余见JSON | 本页源有真实多页按钮，当前两批C稿只有单条任务，尚无P23分页图，不以P13两条样本或默认目录图抵扣。 |
+| task.list.page.next 下一页 / local | 1处；next、last-disabled | ；其余见JSON | 本页源有真实多页按钮，当前两批C稿只有单条任务，尚无P23分页图，不以P13两条样本或默认目录图抵扣。 |
+| task.editor.close 关闭新建表单 / local | 2处；cancel、escape、busy-escape、reopen-draft | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 按钮禁用不等于Escape锁定；发出POST后关闭不会撤销请求，源后续成功仍清表单。 |
+| task.editor.create.submit 提交新建 / write | 2处；create、due-set、due-empty、busy、failure | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 不将原型窗内错误/字段锁定当作源实现；源notice在窗外，表单字段无busy disabled。相同函数PATCH只归P24。 |
+| task.all.excluded.detail 排除任务详情事件中转 / excluded | 1处；detail-actions、edit、comment、action-fields | ；其余见JSON | 不是删除组件；仅按当前实际入口排除P23。P24及异常组合另验。 |
+| task.delete.close 关闭删除表单 / local | 2处；cancel、escape、reopen-cleared | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 执行中Escape可清deleting；removeTask在await后仍读取deleting.value.id，完整竞态待验。 |
+| task.delete.submit 提交删除 / write | 2处；valid、blank、failure、busy | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 本页不走详情returnPath；已发删除不因关闭取消，真实审计和版本冲突待验。 |
+| task.list.status 切换六种任务状态 / local | 1处；all、todo、in_progress、paused、completed、cancelled | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | all不加overdue避免重复；summary总7与列表2是独立夹具，不是完整数据库快照。 |
+| task.list.search.disclose 展开搜索排序 / local | 1处；closed、open、advanced-applied | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 当前details/移动布局与C稿不完全同形；焦点、缓存草稿和主题待验。 |
+| task.list.search.apply 应用搜索 / local | 2处；button、enter、trimmed、empty、no-results | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 搜索是服务端过滤；原型只过滤离线样例，不代表全库查询。 |
+| task.list.sort 切换排序并应用搜索草稿 / local | 1处；priority_due、due_asc、updated_desc、created_desc | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 不能改成只排序不应用草稿；URL白名单解析/服务端分页排序保持。 |
+| task.list.reset 重置筛选 / local | 2处；search-reset、empty-reset、default-sort | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 只有非默认sort的空列表仍显示新建而非空态重置；不得按文案猜所有筛选判定相同。 |
+| task.list.select.page 选择或清空本页 / local | 1处；select-page、clear-page、mixed、readonly-hidden | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 不新增跨页全选；输入事件不是额外API。 |
+| task.list.select.clear 清除选择 / local | 1处；clear、none-hidden | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 确认批量未结束时选择变化的交互组合仍待运行验收。 |
+| task.list.select.row 选择单行 / local | 1处；select、deselect、readonly-hidden | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 当前toggle不自行去重；不以合成图证明所有行焦点/热区。 |
+| task.list.detail.open 进入独立任务详情 / navigation | 1处；first、other、long-title、filtered-return | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 只对应离线目标意图；真实详情/返回/关联采集授权归P24完整链。 |
+| task.list.row-menu 展开单行操作 / local | 1处；closed、open、terminal、readonly-hidden | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 原型直接删除入口与源details收纳差异待审；所有状态行菜单图未齐。 |
+| task.delete.open 打开单行删除 / local | 1处；active、completed、cancelled、reopen | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 不与详情删除入口重复计数；来源目标及中途重开待验。 |
+| task.batch.pause.open 批量暂停 / local | 1处；pause、eligible、ineligible、busy-reopen | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
+| task.batch.resume.open 批量继续 / local | 1处；resume、eligible、ineligible、busy-reopen | [batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
+| task.batch.delay.open 批量延期 / local | 1处；delay、eligible、ineligible、busy-reopen | [batch-delay · 1440](design/task-direction-c-forms/1440-batch-delay.png) / [batch-delay · 390](design/task-direction-c-forms/390-batch-delay.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
+| task.batch.transfer.open 批量调整负责人 / local | 1处；transfer、eligible、ineligible、busy-reopen | [batch-transfer · 1440](design/task-direction-c-forms/1440-batch-transfer.png) / [batch-transfer · 390](design/task-direction-c-forms/390-batch-transfer.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
+| task.batch.cancel.open 批量取消 / local | 1处；cancel、eligible、ineligible、busy-reopen | [batch-cancel · 1440](design/task-direction-c-forms/1440-batch-cancel.png) / [batch-cancel · 390](design/task-direction-c-forms/390-batch-cancel.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
+| task.batch.close 关闭批量确认 / local | 2处；return、escape、busy-close、reopen | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 关闭不会取消已发请求。新稿字段/忙碌锁为提案，不能称源已修。 |
+| task.batch.submit 逐任务提交批量动作 / write | 2处；pause、resume、delay、transfer、cancel、partial-failure、no-eligible、in-flight-mutation | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 本轮隔离实测等待首项时修改action/原因，第二项请求随之改变；busy=true再次调用也发请求。非真实DOM双击/服务端重复写证明。 |
+| task.batch.reason.change 修改批量原因 / local | 1处；pause、delay、transfer、cancel、blank、busy-input | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 原型锁字段不能替代真实输入保护；执行中原因变化可进入下一请求。 |
+| task.batch.delay.due.change 修改批量期限 / local | 1处；valid、empty、busy-input | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 时区/无效输入由原生及服务端分别验证；不杜撰最早日期限制。 |
+| task.batch.transfer.assignee.change 选择批量负责人 / local | 1处；selected、empty、directory-failed | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 不新增成员或把无目录当真实无人；活动工作区成员资格仍由后端判定。 |
+| task.all.batch.forward 父子事件转发 / wiring | 1处；@start、@close、@confirm、@update:reason、@update:due-at、@update:assignee-id | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。 |
+| task.all.list.forward 父子事件转发 / wiring | 1处；@update:selected-ids、@status、@apply-filters、@reset-filters、@create、@remove | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。 |
+| task.all.editor.definition 弹窗定义与业务变体关联 / wiring | 1处；source-container、listed-business-variants | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。 |
+| task.all.delete.definition 弹窗定义与业务变体关联 / wiring | 1处；source-container、listed-business-variants | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。 |
+| task.all.batch.definition 弹窗定义与业务变体关联 / wiring | 1处；source-container、listed-business-variants | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。 |
+| task.view.business 业务任务视图 / local | 1处；business-tab | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
+| task.view.exports 导出任务视图 / local | 1处；exports-tab | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
+| task.export.manage 创建或管理导出 / navigation | 1处；export-manage | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
+| task.export.open 查看导出所属报表 / navigation | 1处；export-open | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| task.all.batch.forward | @start / previewBatch | task.batch.pause.open、task.batch.resume.open、task.batch.delay.open、task.batch.transfer.open、task.batch.cancel.open |
+| task.all.batch.forward | @close / showBatchImpact = false | task.batch.close |
+| task.all.batch.forward | @confirm / confirmBatch | task.batch.submit |
+| task.all.batch.forward | @update:reason / batchReason = $event | task.batch.reason.change |
+| task.all.batch.forward | @update:due-at / batchDueAt = $event | task.batch.delay.due.change |
+| task.all.batch.forward | @update:assignee-id / batchAssigneeId = $event | task.batch.transfer.assignee.change |
+| task.all.list.forward | @update:selected-ids / selectedIds = $event | task.list.select.page、task.list.select.row、task.list.select.clear |
+| task.all.list.forward | @status / setStatus | task.list.status |
+| task.all.list.forward | @apply-filters / applyFilters | task.list.search.apply、task.list.sort |
+| task.all.list.forward | @reset-filters / resetFilters | task.list.reset |
+| task.all.list.forward | @create / showCreate = true | task.list.create.open |
+| task.all.list.forward | @remove / askRemove | task.delete.open |
+| task.all.editor.definition | 容器定义，无额外事件 | task.list.create.open、task.editor.close、task.editor.create.submit |
+| task.all.delete.definition | 容器定义，无额外事件 | task.delete.open、task.delete.close、task.delete.submit |
+| task.all.batch.definition | 容器定义，无额外事件 | task.batch.close、task.batch.submit、task.batch.pause.open、task.batch.resume.open、task.batch.delay.open、task.batch.transfer.open、task.batch.cancel.open |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| TaskWorkspace.vue / form.title | 新建标题：required，maxlength200；HTML非空不等于trim后有效。 | 六个v-model以外的排序、checkbox和批量三输入通过事件控制，均在动作清单单列；不声称全部字段校验或实际Vue通过。 |
+| TaskWorkspace.vue / form.description | 可选说明，maxlength5000。 | 六个v-model以外的排序、checkbox和批量三输入通过事件控制，均在动作清单单列；不声称全部字段校验或实际Vue通过。 |
+| TaskWorkspace.vue / form.priority | low/normal/high/critical四选一；不新增默认优先级算法。 | 六个v-model以外的排序、checkbox和批量三输入通过事件控制，均在动作清单单列；不声称全部字段校验或实际Vue通过。 |
+| TaskWorkspace.vue / form.due_at | 可选本地日期时间；空为null，有值转ISO；不增加默认期限。 | 六个v-model以外的排序、checkbox和批量三输入通过事件控制，均在动作清单单列；不声称全部字段校验或实际Vue通过。 |
+| TaskWorkspace.vue / deleteReason | 删除原因，required/maxlength500，提交trim。 | 六个v-model以外的排序、checkbox和批量三输入通过事件控制，均在动作清单单列；不声称全部字段校验或实际Vue通过。 |
+| TaskListPanel.vue / draftQuery | 本地搜索草稿，maxlength200，props.query变化同步；提交trim。 | 六个v-model以外的排序、checkbox和批量三输入通过事件控制，均在动作清单单列；不声称全部字段校验或实际Vue通过。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| TaskWorkspace.vue / dialog.1 / create | native-dialog / matching-dialog-scene | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png) | 取消保留form而清快捷创建三query；源失败notice窗外，输入未busy锁定；P24编辑变体不计本页。 |
+| TaskWorkspace.vue / form.1 / create | form-container / matching-dialog-scene | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png) | 同一弹窗内表单引用，不能重复计业务弹窗。取消保留form而清快捷创建三query；源失败notice窗外，输入未busy锁定；P24编辑变体不计本页。 |
+| TaskWorkspace.vue / dialog.2 / delete | native-dialog / matching-dialog-scene | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png) | 目标、版本和原因必须对应同一操作；等待中Escape清deleting与await后读取的竞态待Vue复验。 |
+| TaskWorkspace.vue / form.2 / delete | form-container / matching-dialog-scene | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png) | 同一弹窗内表单引用，不能重复计业务弹窗。目标、版本和原因必须对应同一操作；等待中Escape清deleting与await后读取的竞态待Vue复验。 |
+| TaskListPanel.vue / form.1 / search | form-container / matching-inline-form-scene | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png) | 应用与排序都提交当前trim草稿，展开/收起不等于应用；全断点/键盘待验。 |
+| TaskBatchActions.vue / dialog.1 / pause | native-dialog / matching-dialog-scene | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png) | 字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / dialog.1 / resume | native-dialog / matching-dialog-scene | [batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png) | 字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / dialog.1 / delay | native-dialog / matching-dialog-scene | [batch-delay · 1440](design/task-direction-c-forms/1440-batch-delay.png) / [batch-delay · 390](design/task-direction-c-forms/390-batch-delay.png) | 字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / dialog.1 / transfer | native-dialog / matching-dialog-scene | [batch-transfer · 1440](design/task-direction-c-forms/1440-batch-transfer.png) / [batch-transfer · 390](design/task-direction-c-forms/390-batch-transfer.png) | 字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / dialog.1 / cancel | native-dialog / matching-dialog-scene | [batch-cancel · 1440](design/task-direction-c-forms/1440-batch-cancel.png) / [batch-cancel · 390](design/task-direction-c-forms/390-batch-cancel.png) | 字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / form.1 / pause | form-container / matching-dialog-scene | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png) | 同一弹窗内表单引用，不能重复计业务弹窗。字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / form.1 / resume | form-container / matching-dialog-scene | [batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png) | 同一弹窗内表单引用，不能重复计业务弹窗。字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / form.1 / delay | form-container / matching-dialog-scene | [batch-delay · 1440](design/task-direction-c-forms/1440-batch-delay.png) / [batch-delay · 390](design/task-direction-c-forms/390-batch-delay.png) | 同一弹窗内表单引用，不能重复计业务弹窗。字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / form.1 / transfer | form-container / matching-dialog-scene | [batch-transfer · 1440](design/task-direction-c-forms/1440-batch-transfer.png) / [batch-transfer · 390](design/task-direction-c-forms/390-batch-transfer.png) | 同一弹窗内表单引用，不能重复计业务弹窗。字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+| TaskBatchActions.vue / form.1 / cancel | form-container / matching-dialog-scene | [batch-cancel · 1440](design/task-direction-c-forms/1440-batch-cancel.png) / [batch-cancel · 390](design/task-direction-c-forms/390-batch-cancel.png) | 同一弹窗内表单引用，不能重复计业务弹窗。字段、返回和Escape无统一busy保护；confirmBatch逐请求读取可变操作与字段。原型锁定不能当源修复。 |
+
+### 明确保留的边界
+
+- 关联两包60PNG中P23相关的目录、筛选空、创建、删除、五批量和读取异常；其余P24编辑/详情/进度与审核board不抵扣P23。
+- P23导出视图及多页/混合任务/只读列表/各写失败与忙碌缺具体图，不能以来源hash或通用截图补全。
+- 源删除等待中closeDeleteDialog清deleting，成功返回后读deleting.id抛TypeError且未load；函数组合已复现，实际Escape序列/服务写入尚未验证或修复。
+- 共享批量每项重读动作/字段且函数无busy guard的既有风险继续待修；本页读取已经有active/read ownership保护，不能以写入风险概括全部读取。
+- 按钮逐态、字段、全部主题/密度、具体审批、真实Vue/API/SQL与部署仍未完成。
+- 父/tasks传mode=all且无taskId，列表不带mine，summary仍本人；当前read owner/Abort保护继续保留，不把本次函数边界桩当作新生命周期验证。
+- TaskListPanel状态summary不是全工作区列表总量；TaskBatchActions五类资格/原因/日期/真实成员分别验；选中本页不是选中全部结果。
+- 6模型以外还有排序/checkbox/批量三字段的事件控制。P24详情/编辑/评论排除，导出视图4源位置在P23可达且无相应C图。
+- useModalDialog无统一busy守卫；原生cancel可清目标，删除返回后空引用已在源组合测试复现。实际键盘/焦点与真实API待验。
 
 ## P54 局部动作与共享消费者
 

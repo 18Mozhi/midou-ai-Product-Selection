@@ -325,6 +325,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "e70fb896d36d80252096c5fb9643ca71b7f105fca0c7cce47f57fdf2ff3e72fb",
     "scripts/verify-ui-phase2-cost-rules-review.mjs": "e48de4ae479273b97cc901647426c810e233b6ed23614f2957741e83d5f148e1",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "951e7817102349f8b50496b2403a6b69aa8bcd96461bff34227268c4fef792ca",
+    "scripts/verify-ui-phase2-task-list-review.mjs": "0fe0bdbbdc2f396728e21fcd801ee16e1a0689f8f8b3f2d7561e55cff5863448",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -352,7 +354,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "a112c1004d6f73abb82e09a95a75c8879956e4ba891dbccaf5c2bcd172a9f109",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "f67cf8705375df9ceb52487b0cb2d22565088d0bbecf4021f6eae9992f1ab2d3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "4578ea4aa5f0cf6d22488b0554f93fc4d617b220b0fd4df52407be95ba763f7f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "358cfe6df07413897bc1dfca66c0ad5c1950a7f191ea094fae6a38b4af2f96d5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "de4b4f4b1eed60cf7a75057a49782439dd227e7c6f8cee37aea0c78c8d144420",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "8f215d0b9afc2d704c310fa2c3a824d03030c6b07e8654f935b94a4443d6ac9a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "1700e155c7106f2da247fa8fe9838a2a65d3666489d00651ff99fd9edc55e878",
@@ -416,13 +418,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 19,
     "oldOnlyIdentities": 17,
-    "reviewedPages": 23,
+    "reviewedPages": 24,
     "explicitlyGroupedSourceSites": 510,
-    "semanticGroups": 447,
-    "routeActions": 381,
-    "wiringGroups": 44,
+    "semanticGroups": 486,
+    "routeActions": 414,
+    "wiringGroups": 49,
     "pagesWithoutExplicitSemanticReview": [
-      "P23",
       "P24",
       "P25",
       "P26",
@@ -1257,14 +1258,37 @@
       "path": "/tasks",
       "title": "全部任务",
       "oldStaticAssociatedCandidates": 111,
-      "review": null,
+      "review": {
+        "pageId": "P23",
+        "sourceSites": 48,
+        "semanticGroups": 39,
+        "routeActions": 33,
+        "wiringGroups": 5,
+        "excludedGroups": 1,
+        "writeActions": 3,
+        "sourceInapplicableVisualSlots": 0,
+        "unmappedVisualSlots": 194,
+        "surfaces": {
+          "callerFiles": 3,
+          "localModelBindings": 6,
+          "callerContainers": 7,
+          "consumerVariants": 15,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "task-direction-c-forms",
         "task-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "关联两包60PNG中P23相关的目录、筛选空、创建、删除、五批量和读取异常；其余P24编辑/详情/进度与审核board不抵扣P23。",
+        "P23导出视图及多页/混合任务/只读列表/各写失败与忙碌缺具体图，不能以来源hash或通用截图补全。",
+        "源删除等待中closeDeleteDialog清deleting，成功返回后读deleting.id抛TypeError且未load；函数组合已复现，实际Escape序列/服务写入尚未验证或修复。",
+        "共享批量每项重读动作/字段且函数无busy guard的既有风险继续待修；本页读取已经有active/read ownership保护，不能以写入风险概括全部读取。",
+        "按钮逐态、字段、全部主题/密度、具体审批、真实Vue/API/SQL与部署仍未完成。"
+      ]
     },
     {
       "id": "P24",
@@ -2332,6 +2356,24 @@
         "localModelBindings": 19,
         "callerContainers": 7,
         "consumerVariants": 32,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P23",
+      "sourceSites": 48,
+      "semanticGroups": 39,
+      "routeActions": 33,
+      "wiringGroups": 5,
+      "excludedGroups": 1,
+      "writeActions": 3,
+      "sourceInapplicableVisualSlots": 0,
+      "unmappedVisualSlots": 194,
+      "surfaces": {
+        "callerFiles": 3,
+        "localModelBindings": 6,
+        "callerContainers": 7,
+        "consumerVariants": 15,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -46324,6 +46366,11 @@
           "pageId": "P13",
           "actionId": "task.batch.pause.open",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.pause.open",
+          "kind": "local"
         }
       ]
     },
@@ -46358,6 +46405,11 @@
           "pageId": "P13",
           "actionId": "task.batch.resume.open",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.resume.open",
+          "kind": "local"
         }
       ]
     },
@@ -46390,6 +46442,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.batch.delay.open",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.batch.delay.open",
           "kind": "local"
         }
@@ -46430,6 +46487,11 @@
           "pageId": "P13",
           "actionId": "task.batch.transfer.open",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.transfer.open",
+          "kind": "local"
         }
       ]
     },
@@ -46464,6 +46526,11 @@
           "pageId": "P13",
           "actionId": "task.batch.cancel.open",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.cancel.open",
+          "kind": "local"
         }
       ]
     },
@@ -46492,6 +46559,11 @@
         {
           "pageId": "P13",
           "actionId": "work.batch.definition",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.all.batch.definition",
           "kind": "wiring"
         }
       ]
@@ -46522,6 +46594,11 @@
           "pageId": "P13",
           "actionId": "task.batch.close",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.close",
+          "kind": "local"
         }
       ]
     },
@@ -46549,6 +46626,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.batch.submit",
+          "kind": "write"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.batch.submit",
           "kind": "write"
         }
@@ -46585,6 +46667,11 @@
           "pageId": "P13",
           "actionId": "task.batch.reason.change",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.reason.change",
+          "kind": "local"
         }
       ]
     },
@@ -46617,6 +46704,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.batch.delay.due.change",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.batch.delay.due.change",
           "kind": "local"
         }
@@ -46653,6 +46745,11 @@
           "pageId": "P13",
           "actionId": "task.batch.transfer.assignee.change",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.transfer.assignee.change",
+          "kind": "local"
         }
       ]
     },
@@ -46682,6 +46779,11 @@
           "pageId": "P13",
           "actionId": "task.batch.close",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.batch.close",
+          "kind": "local"
         }
       ]
     },
@@ -46709,6 +46811,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.batch.submit",
+          "kind": "write"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.batch.submit",
           "kind": "write"
         }
@@ -47534,6 +47641,11 @@
           "pageId": "P13",
           "actionId": "task.list.status",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.status",
+          "kind": "local"
         }
       ]
     },
@@ -47561,6 +47673,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.search.disclose",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.search.disclose",
           "kind": "local"
         }
@@ -47592,6 +47709,11 @@
           "pageId": "P13",
           "actionId": "task.list.search.apply",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.search.apply",
+          "kind": "local"
         }
       ]
     },
@@ -47619,6 +47741,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.sort",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.sort",
           "kind": "local"
         }
@@ -47650,6 +47777,11 @@
           "pageId": "P13",
           "actionId": "task.list.search.apply",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.search.apply",
+          "kind": "local"
         }
       ]
     },
@@ -47677,6 +47809,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.reset",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.reset",
           "kind": "local"
         }
@@ -47711,6 +47848,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.select.page",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.select.page",
           "kind": "local"
         }
@@ -47751,6 +47893,11 @@
           "pageId": "P13",
           "actionId": "task.list.select.clear",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.select.clear",
+          "kind": "local"
         }
       ]
     },
@@ -47789,6 +47936,11 @@
           "pageId": "P13",
           "actionId": "task.list.reset",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.reset",
+          "kind": "local"
         }
       ]
     },
@@ -47825,6 +47977,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.create.open",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.create.open",
           "kind": "local"
         }
@@ -47869,6 +48026,11 @@
           "pageId": "P13",
           "actionId": "task.list.select.row",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.select.row",
+          "kind": "local"
         }
       ]
     },
@@ -47905,6 +48067,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.detail.open",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.detail.open",
           "kind": "navigation"
         }
@@ -47949,6 +48116,11 @@
           "pageId": "P13",
           "actionId": "task.list.row-menu",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.row-menu",
+          "kind": "local"
         }
       ]
     },
@@ -47991,6 +48163,11 @@
           "pageId": "P13",
           "actionId": "task.delete.open",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.delete.open",
+          "kind": "local"
         }
       ]
     },
@@ -48023,6 +48200,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.create.open",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.create.open",
           "kind": "local"
         }
@@ -48059,6 +48241,11 @@
           "pageId": "P13",
           "actionId": "work.excluded.exports",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.view.business",
+          "kind": "local"
         }
       ]
     },
@@ -48097,6 +48284,11 @@
           "pageId": "P13",
           "actionId": "work.excluded.exports",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.view.exports",
+          "kind": "local"
         }
       ]
     },
@@ -48129,6 +48321,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.read.retry",
+          "kind": "read"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.read.retry",
           "kind": "read"
         }
@@ -48169,6 +48366,11 @@
           "pageId": "P13",
           "actionId": "work.batch.forward",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.all.batch.forward",
+          "kind": "wiring"
         }
       ]
     },
@@ -48202,6 +48404,11 @@
         {
           "pageId": "P13",
           "actionId": "work.list.forward",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.all.list.forward",
           "kind": "wiring"
         }
       ]
@@ -48237,6 +48444,11 @@
           "pageId": "P13",
           "actionId": "work.excluded.exports",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.export.manage",
+          "kind": "navigation"
         }
       ]
     },
@@ -48279,6 +48491,11 @@
           "pageId": "P13",
           "actionId": "work.excluded.exports",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.export.open",
+          "kind": "navigation"
         }
       ]
     },
@@ -48311,6 +48528,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.list.page.previous",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.list.page.previous",
           "kind": "local"
         }
@@ -48347,6 +48569,11 @@
           "pageId": "P13",
           "actionId": "task.list.page.next",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.list.page.next",
+          "kind": "local"
         }
       ]
     },
@@ -48376,6 +48603,11 @@
           "pageId": "P13",
           "actionId": "work.editor.definition",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.all.editor.definition",
+          "kind": "wiring"
         }
       ]
     },
@@ -48403,6 +48635,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.editor.close",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.editor.close",
           "kind": "local"
         }
@@ -48434,6 +48671,11 @@
           "pageId": "P13",
           "actionId": "task.editor.create.submit",
           "kind": "write"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.editor.create.submit",
+          "kind": "write"
         }
       ]
     },
@@ -48463,6 +48705,11 @@
           "pageId": "P13",
           "actionId": "task.editor.close",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.editor.close",
+          "kind": "local"
         }
       ]
     },
@@ -48490,6 +48737,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.editor.create.submit",
+          "kind": "write"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.editor.create.submit",
           "kind": "write"
         }
@@ -48526,6 +48778,11 @@
           "pageId": "P13",
           "actionId": "work.excluded.detail",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.all.excluded.detail",
+          "kind": "excluded"
         }
       ]
     },
@@ -48555,6 +48812,11 @@
           "pageId": "P13",
           "actionId": "work.delete.definition",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.all.delete.definition",
+          "kind": "wiring"
         }
       ]
     },
@@ -48582,6 +48844,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.delete.close",
+          "kind": "local"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.delete.close",
           "kind": "local"
         }
@@ -48613,6 +48880,11 @@
           "pageId": "P13",
           "actionId": "task.delete.submit",
           "kind": "write"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.delete.submit",
+          "kind": "write"
         }
       ]
     },
@@ -48642,6 +48914,11 @@
           "pageId": "P13",
           "actionId": "task.delete.close",
           "kind": "local"
+        },
+        {
+          "pageId": "P23",
+          "actionId": "task.delete.close",
+          "kind": "local"
         }
       ]
     },
@@ -48669,6 +48946,11 @@
       "semanticReviews": [
         {
           "pageId": "P13",
+          "actionId": "task.delete.submit",
+          "kind": "write"
+        },
+        {
+          "pageId": "P23",
           "actionId": "task.delete.submit",
           "kind": "write"
         }
