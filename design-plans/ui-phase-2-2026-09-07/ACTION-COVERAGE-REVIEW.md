@@ -142,9 +142,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | --- | --- | --- | --- |
 | PlatformDataCenter.vue / ResponsiveFilterDrawer.1 / records-filter | responsive-filter / matching-dialog-scene | [records:filter](design/data-composed-direction-c/gallery.html) | 原生submit/Enter关闭与返焦、所有错误/主题需每消费者验证。 |
 | PlatformDataCenter.vue / ResponsiveDataView.1 / trends | responsive-row-detail / matching-dialog-scene | [records:detail](design/data-composed-direction-c/gallery.html) | 仅原始热点示例详情，不代表所有状态行。 |
-| PlatformDataCenter.vue / ResponsiveDataView.1 / opportunities | responsive-row-detail / related-scene-only | [records:opportunities](design/data-composed-direction-c/gallery.html) | 有列表图，但该实体完整详情/全部字段打开图尚未显式关联。 |
-| PlatformDataCenter.vue / ResponsiveDataView.1 / competitors | responsive-row-detail / related-scene-only | [records:competitors](design/data-composed-direction-c/gallery.html) | 有列表图，非打开竞品记录详情证明。 |
-| PlatformDataCenter.vue / ResponsiveDataView.1 / suppliers | responsive-row-detail / related-scene-only | [records:original-supplier](design/data-composed-direction-c/gallery.html) | 有原供应记录列表，供应商/地点完整详情需单独出图映射。 |
+| PlatformDataCenter.vue / ResponsiveDataView.1 / opportunities | responsive-row-detail / matching-dialog-scene | [opportunities:detail](design/data-record-detail-direction-c/gallery.html)、[opportunities-long:technical-footer](design/data-record-detail-direction-c/gallery.html) | 合成源投影样例六组字段/标题/技术ID及双端长内容已验；不是全部状态行/主题/真实Vue。桌面详情入口为新提案。 |
+| PlatformDataCenter.vue / ResponsiveDataView.1 / competitors | responsive-row-detail / matching-dialog-scene | [competitors:detail](design/data-record-detail-direction-c/gallery.html)、[competitors-long:technical-footer](design/data-record-detail-direction-c/gallery.html) | 合成源投影样例版本/变更语义及六组字段/技术ID、双端长内容已验；全部状态/主题/真实Vue仍待验。 |
+| PlatformDataCenter.vue / ResponsiveDataView.1 / suppliers | responsive-row-detail / matching-dialog-scene | [suppliers-original:detail](design/data-record-detail-direction-c/gallery.html)、[suppliers:detail](design/data-record-detail-direction-c/gallery.html)、[suppliers-long:technical-footer](design/data-record-detail-direction-c/gallery.html) | 原始隔离与合成供应商/地点、最小起订量/报价详情已分开核对，不引入币种/单位或新的零测量；全部行/主题/真实Vue仍待验。 |
 | PlatformDataCenter.vue / AuditedReasonDialog.1 / export-reason | native-reason-dialog / matching-dialog-scene | [records:export](design/data-composed-direction-c/gallery.html) | 原型是新固定范围表单，真实源请求/文件名竞态未修。 |
 | DataQualityCenter.vue / ResponsiveDataView.1 / evidence-row | responsive-row-detail / matching-dialog-scene | [quality:evidence-detail](design/data-composed-direction-c/gallery.html) | 完整记录稿已存在；真实shared.show/close及完整溯源交接待Vue验收。 |
 | DataQualityCenter.vue / ResponsiveDataView.2 / issue-row | responsive-row-detail / matching-dialog-scene | [quality:issue-detail](design/data-composed-direction-c/gallery.html) | 新稿移动选择为新增，原组件及所有已解决/缺证据组合仍待验。 |
@@ -159,7 +159,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 - 同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。
 - 17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。
-- 实体完整详情三变体仅关联列表；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。
+- 三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。
 - 原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。
 - PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。
 - ConfirmDialog共享typedText适用，acknowledged因本页destructive=false不显示；AuditedReasonDialog内部reason与质量reason分域；TableViewControls密度字段未冒充本页7个v-model。

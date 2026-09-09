@@ -10,7 +10,7 @@
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
-    "reason": "9处调用/aside、14个明确消费者变体；其中aside不是modal，3种近期记录仅有关联列表图。共享导航/组件内部所有动作未据此冻结。"
+    "reason": "9处调用/aside、14个明确消费者变体；其中aside不是modal。三类近期记录已补DATA-RECORD-DETAIL-C-r1打开详情/字段/技术与返回区证据，仍非全部行状态/主题或真实Vue验收。共享导航/组件内部所有动作未据此冻结。"
   },
   "inputs": {
     "records": ["queryDraft", "statusDraft"],
@@ -1136,36 +1136,52 @@
           },
           {
             "name": "opportunities",
-            "evidenceScope": "related-scene-only",
+            "evidenceScope": "matching-dialog-scene",
             "scenes": [
               {
-                "package": "data-composed-direction-c",
-                "scene": "records:opportunities"
+                "package": "data-record-detail-direction-c",
+                "scene": "opportunities:detail"
+              },
+              {
+                "package": "data-record-detail-direction-c",
+                "scene": "opportunities-long:technical-footer"
               }
             ],
-            "remaining": "有列表图，但该实体完整详情/全部字段打开图尚未显式关联。"
+            "remaining": "合成源投影样例六组字段/标题/技术ID及双端长内容已验；不是全部状态行/主题/真实Vue。桌面详情入口为新提案。"
           },
           {
             "name": "competitors",
-            "evidenceScope": "related-scene-only",
+            "evidenceScope": "matching-dialog-scene",
             "scenes": [
               {
-                "package": "data-composed-direction-c",
-                "scene": "records:competitors"
+                "package": "data-record-detail-direction-c",
+                "scene": "competitors:detail"
+              },
+              {
+                "package": "data-record-detail-direction-c",
+                "scene": "competitors-long:technical-footer"
               }
             ],
-            "remaining": "有列表图，非打开竞品记录详情证明。"
+            "remaining": "合成源投影样例版本/变更语义及六组字段/技术ID、双端长内容已验；全部状态/主题/真实Vue仍待验。"
           },
           {
             "name": "suppliers",
-            "evidenceScope": "related-scene-only",
+            "evidenceScope": "matching-dialog-scene",
             "scenes": [
               {
-                "package": "data-composed-direction-c",
-                "scene": "records:original-supplier"
+                "package": "data-record-detail-direction-c",
+                "scene": "suppliers-original:detail"
+              },
+              {
+                "package": "data-record-detail-direction-c",
+                "scene": "suppliers:detail"
+              },
+              {
+                "package": "data-record-detail-direction-c",
+                "scene": "suppliers-long:technical-footer"
               }
             ],
-            "remaining": "有原供应记录列表，供应商/地点完整详情需单独出图映射。"
+            "remaining": "原始隔离与合成供应商/地点、最小起订量/报价详情已分开核对，不引入币种/单位或新的零测量；全部行/主题/真实Vue仍待验。"
           }
         ]
       },
@@ -1348,7 +1364,7 @@
   "compositionGaps": [
     "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
     "17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。",
-    "实体完整详情三变体仅关联列表；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
+    "三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
     "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
   ],
   "approval": "pending-user-review",

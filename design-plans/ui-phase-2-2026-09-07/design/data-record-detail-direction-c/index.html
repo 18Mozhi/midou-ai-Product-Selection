@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <base href="../data-composed-direction-c/" />
+    <title>P54 三类记录详情 · C 待审补稿</title>
+    <link rel="stylesheet" href="composed.css" />
+    <script defer src="../data-records-direction-c/data.js"></script>
+    <script defer src="../data-records-direction-c/source-logic.js"></script>
+    <script defer src="../data-quality-direction-c/data.js"></script>
+    <script defer src="templates.js"></script>
+    <script defer src="records-scoped.js"></script>
+    <script defer src="quality-scoped.js"></script>
+    <script defer src="composed.js"></script>
+    <script defer src="../data-record-detail-direction-c/detail-review.js"></script>
+  </head>
+  <body>
+    <header class="page-head">
+      <div class="identity"><span>SCOUTOPS / 平台管理</span><span>C 方向 · 详情补稿待审</span></div>
+      <div class="title-line">
+        <h1>数据中心</h1>
+        <p>业务记录与证据核验，分域连续工作。</p>
+      </div>
+      <nav aria-label="数据中心工作区">
+        <button id="records-view" data-view="records" aria-controls="records-pane">
+          近期业务记录
+        </button>
+        <button id="quality-view" data-view="quality" aria-controls="quality-pane">
+          证据与质量
+        </button>
+      </nav>
+      <p class="scope-note">平台范围 · 只读详情，不新增编辑、删除或业务模块跳转。</p>
+      <p id="continuity" role="status"></p>
+    </header>
+    <details class="review-controls" open>
+      <summary>详情审核样例（非业务筛选）</summary>
+      <label>样例<select id="detail-sample"></select></label>
+      <p id="sample-note" role="status"></p>
+      <p>选择样例后，点击记录卡片或“查看记录”。长文仅用于排版，不代表生产字段长度或业务事实。</p>
+      <a href="../data-record-detail-direction-c/gallery.html">查看详情图册</a>
+    </details>
+    <section id="records-pane" aria-labelledby="records-view"></section>
+    <section id="quality-pane" aria-labelledby="quality-view" hidden></section>
+    <footer class="review-note">
+      离线待审补稿：源 Vue 桌面没有此详情入口；手机字段沿实际消费者核对。没有修复或部署生产。
+    </footer>
+    <details class="review-controls">
+      <summary>原组合审核工具（切场景会重置样例）</summary>
+      <label>工作区场景<select id="combined-scene"></select></label>
+      <button id="finish-read">返回当前区读取失败（模拟）</button>
+    </details>
+  </body>
+</html>

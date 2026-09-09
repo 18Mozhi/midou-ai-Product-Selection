@@ -218,6 +218,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json": "5130e8b205448f830a2ef0ba82cd8bee02b3dd2ea6d16f35fbca353139dcb982",
     "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/evidence.json": "31977684528e63fd0f13c9651a9c64190285675b300abc8f035839325bba707d",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json": "afb5b2e1cfb4fb838ced20a00729790c9d5d9dd9582b211944f5e98c623c48bf",
+    "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/evidence.json": "a1a9b45b36306b3dd045dbbe13602229a365bc3dde83bd77284a5dbcbcbc1e13",
     "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json": "f788c244f691fdfd4dbecad616933e689cf85cd7a78fdf85e77df05de0314a0a",
     "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/evidence.json": "5750aa2d34f04fbca51134c98c52e44b576376150278653dbe00b01039194deb",
     "design-plans/ui-phase-2-2026-09-07/design/detail-assembly-direction-c/evidence.json": "72b9e9d20311ef242ce9d59b153e5243972a7b6fc4e856e91190aa8be1784027",
@@ -276,7 +277,7 @@
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
     "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "9455cc2c641e8e982f6989fd8a2ed99473d9e3f6ea2cfaafaf1d92986e2259bb",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "634f2b9d1f6f7463f9f73399d6fc452cb8550a5a680abd26f907babeba847313",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
     "scripts/verify-ui-phase2-data-quality-c.mjs": "34b233ff77fc83e61fe1aa3ad8223e5459bdc134ac756d33d8436ff299d80f82",
@@ -333,7 +334,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "bcfa6bd4dd8c5d831769fa14fd991b00c9e3f7a08daec274631ec154328895bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "e98b7eb614a5532f3ac79699ad26778dfb7ea508a6b66203d4bf8b6dc49f68bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "20e7fe16fa7c42c34649a66c02ec978177a28985a365e96c5e5b3f38c96a5932",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "d02f0300c3555adb86aff2787303d1e1fdd5f39e2639c0420f3a9c8432b98540",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "d29921db62f53f14ac53cc82721c6cbfa97cb6ce2bfe6caf8eb208f383033243",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "800b95f470b6952af3216f865ab21aa98a28cb1f9b3e9622eeafdda05072065c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "1cc811fdf1816743e04201ef863e020d02fa9e353cc892ab171c237fdc6c280c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "39a00a2556456cabad8cfad9ca70709c6340925523417b387fec792da25e029c",
@@ -1181,6 +1182,7 @@
         }
       },
       "proposalPackages": [
+        "data-record-detail-direction-c",
         "data-composed-direction-c",
         "data-records-direction-c",
         "data-quality-direction-c"
@@ -1190,7 +1192,7 @@
       "compositionGaps": [
         "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
         "17组源动作已有场景关联，但未提供全部action-specific selector/state证据；102个六态槽保守未映射，不意味着没有截图。",
-        "实体完整详情三变体仅关联列表；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
+        "三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
         "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
       ]
     },

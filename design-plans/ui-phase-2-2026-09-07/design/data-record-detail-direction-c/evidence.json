@@ -1,0 +1,1625 @@
+{
+  "version": "DATA-RECORD-DETAIL-C-r1",
+  "approval": "pending",
+  "kind": "additive-offline-detail-proof",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
+    "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
+    "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "scripts/lib/ui-phase2-data-records-design-data.mjs": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
+    "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/index.html": "c5ccf39bac61f7cf67b281ad5fda93e629f4152ed4df8f0fb34be9a0dc9cc3a3",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.css": "4559c4182eeb6e1198b7a4928628e08f40a0ad6c805a14785281fd07513ab330",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js": "ee46acbc06c4791043fca60b6a76d2cc0c3d9162768ceae5b7e23c623a53dfea",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json": "f788c244f691fdfd4dbecad616933e689cf85cd7a78fdf85e77df05de0314a0a",
+    "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/api/src/data-quality-service.ts": "39bcb82436d7b520e4597bbe8e1bc8e2930e260f564050cd17790c943659a6fc",
+    "apps/api/src/data-quality-routes.ts": "b937aae166ac5f0993b967643dc18e68eef8c2422123aa15cf6ea78e3e3d806c",
+    "apps/api/src/mysql-data-quality-repository.ts": "43e62fdd3a08b3866a66c1e4e7d6c528365edbf2db72716d596e91323b414cd2",
+    "tests/e2e/m03-06-evidence-data-quality.spec.ts": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+    "scripts/lib/ui-phase2-data-quality-design-data.mjs": "91fdcbbadc6f12c20f8d6ebea9f72b7dee390ccca618324d0e0c4b709157462a",
+    "scripts/verify-ui-phase2-data-quality-c.mjs": "34b233ff77fc83e61fe1aa3ad8223e5459bdc134ac756d33d8436ff299d80f82",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/index.html": "2af5828081d89f747203e122b29304a0546b7425043ae058593ec6cf6f13e353",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.js": "0793b418175c3d5eb91026f50be7e8843d174fb03db7b4ff208b223e84aa7b44",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/data.js": "8ebe001d26c1ce7531734f2aabb33c2ca18f8f5ec6d990409154d1094b20584e",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/source-logic.js": "d5aaedb1e113d8bc31ccd6a4f38238c084a63acc63b531a4d1ca6b033eaf9689",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json": "afb5b2e1cfb4fb838ced20a00729790c9d5d9dd9582b211944f5e98c623c48bf",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/index.html": "a97a6fa58eb47c984ea69db28ddea63afd7f83b6481aa2af92ad612dec4aa280",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/composed.js": "053cac6c693b6403864a1c6d0d8081cbde2b727481e3a612ed923f18917f43e7",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/composed.css": "a2c54d819341b7804f6861c01758ecf00ded6be5e1e9164f3abd8ede66199fb4",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/component-overrides.css": "e139f82f70560dc6970cd8264dc49d6d9762f4cab16eba04e582e10aad355edd",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/records-scoped.js": "921351f5315bc3af52abe0dfc86b5a6812c44c47ae25c63ecd9941ff47f5512b",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/records-scoped.css": "d40ea59d13ce1bf79e4bdb1be06ad5120f98f02942be223a0a70aeff055bcd9a",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/quality-scoped.js": "09b3ea1dfa6be4b2ed09f46cf8325140ca4413ab2bdffe0b3d2e0749d33f1a76",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/quality-scoped.css": "f460873c45dd6bec5c3b9d99eb3382d66b86edafd7f0c9d3626feb9102018618",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/templates.js": "e616da2e907a97b0653b0920d163a337103aefd6c9eab2bb73b1e3b1b088d598",
+    "scripts/build-ui-phase2-data-composed-c.mjs": "fa65b87cc8878a5bbd3a5288e52d9fe10365bcf1024cbabfc3f62a9ff2d71fc2",
+    "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/evidence.json": "31977684528e63fd0f13c9651a9c64190285675b300abc8f035839325bba707d",
+    "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/index.html": "48db8acdfe87df58d551c78bcc0c44bcaa7bfaeff52f3b9890f0597cd9482397",
+    "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/detail-review.js": "d489f5237f6264586c6ba52f27c3592cb036567944976fc194186b057923f5ae",
+    "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/detail.css": "5e6356fd2fd389d0b7ae8079e8be5cb3260da5705db792b5c6b30a787212ef95",
+    "scripts/verify-ui-phase2-data-record-detail-c.mjs": "77a371b6c4b840ef4409f23c9897327f8deb8565c6b811d252b25a550bbb8497"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "sample": "opportunities",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 1440,
+      "sample": "opportunities-long",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 1440,
+      "sample": "competitors",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 1440,
+      "sample": "competitors-long",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 1440,
+      "sample": "suppliers",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 1440,
+      "sample": "suppliers-long",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 1440,
+      "sample": "suppliers-original",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "opportunities",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "opportunities-long",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "competitors",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "competitors-long",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "suppliers",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "suppliers-long",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    },
+    {
+      "width": 390,
+      "sample": "suppliers-original",
+      "fields": [
+        "organization_name",
+        "workspace_name",
+        "category",
+        "market",
+        "status",
+        "metric_primary",
+        "metric_secondary",
+        "updated_at",
+        "id"
+      ],
+      "title": true,
+      "keyboard": "loop/Escape/footer/return",
+      "fieldVisibility": "six individually scrolled and hit-tested",
+      "realRuntime": false
+    }
+  ],
+  "boundary": "Three entity detail variants plus isolated supplier fixture. No old package changes. Long strings synthetic; status, metrics and timestamp preserved. Not every row/status/theme, native Vue, API/SQL, global action acceptance or deployment.",
+  "screenshots": [
+    {
+      "file": "1440-opportunities-detail.png",
+      "scene": "opportunities:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "9dd09671d8d89c5eaf46d207801bcaf7503790e300a29bd5c2a8160952c534d2"
+    },
+    {
+      "file": "1440-opportunities-fields.png",
+      "scene": "opportunities:fields",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "9dd09671d8d89c5eaf46d207801bcaf7503790e300a29bd5c2a8160952c534d2"
+    },
+    {
+      "file": "1440-opportunities-technical-footer.png",
+      "scene": "opportunities:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0b563c5ffa9c5056570cbe8faa607c2ece71d2b4fd76cd74ede1c8804ff0169b"
+    },
+    {
+      "file": "1440-opportunities-long-detail.png",
+      "scene": "opportunities-long:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-field-1.png",
+      "scene": "opportunities-long:field-1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-field-2.png",
+      "scene": "opportunities-long:field-2",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-field-3.png",
+      "scene": "opportunities-long:field-3",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-field-4.png",
+      "scene": "opportunities-long:field-4",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-field-5.png",
+      "scene": "opportunities-long:field-5",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-field-6.png",
+      "scene": "opportunities-long:field-6",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "31a8132fec687eb96a68f63083929d9926ea565bdf6ee895c2cfedda50dd488f"
+    },
+    {
+      "file": "1440-opportunities-long-technical-footer.png",
+      "scene": "opportunities-long:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "8265dfe7f261b08ba068b31d277349742a029d7290243b9932c18dfd28279576"
+    },
+    {
+      "file": "1440-competitors-detail.png",
+      "scene": "competitors:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "b0f6fd359312d96cf11dcf2a84eb626320e0bfcb3b0ed4638a8f5d19482a2f97"
+    },
+    {
+      "file": "1440-competitors-fields.png",
+      "scene": "competitors:fields",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "b0f6fd359312d96cf11dcf2a84eb626320e0bfcb3b0ed4638a8f5d19482a2f97"
+    },
+    {
+      "file": "1440-competitors-technical-footer.png",
+      "scene": "competitors:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "67d224bd6d42c7e412b5d2509b32815eab2c3327b298506d34e7063561bbf3b4"
+    },
+    {
+      "file": "1440-competitors-long-detail.png",
+      "scene": "competitors-long:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-field-1.png",
+      "scene": "competitors-long:field-1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-field-2.png",
+      "scene": "competitors-long:field-2",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-field-3.png",
+      "scene": "competitors-long:field-3",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-field-4.png",
+      "scene": "competitors-long:field-4",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-field-5.png",
+      "scene": "competitors-long:field-5",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-field-6.png",
+      "scene": "competitors-long:field-6",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "c37e4fcbf2b070a2ddbebecc4ef55ec24e3e71dec5f48e2cffe97cd71966beb6"
+    },
+    {
+      "file": "1440-competitors-long-technical-footer.png",
+      "scene": "competitors-long:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "40eb03ab28bba4942ea06f2c8ec420fe9d4737c88837b8ae48fb35c4cb2b5178"
+    },
+    {
+      "file": "1440-suppliers-detail.png",
+      "scene": "suppliers:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "799e1cfac497d4513c5d74072c31088e44f998aa74b64babb35478dda41c06bf"
+    },
+    {
+      "file": "1440-suppliers-fields.png",
+      "scene": "suppliers:fields",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "799e1cfac497d4513c5d74072c31088e44f998aa74b64babb35478dda41c06bf"
+    },
+    {
+      "file": "1440-suppliers-technical-footer.png",
+      "scene": "suppliers:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "58c3e4f4bd34bb6939a7e889da075d46ec2db305098a0361f064daad709a52cb"
+    },
+    {
+      "file": "1440-suppliers-long-detail.png",
+      "scene": "suppliers-long:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-field-1.png",
+      "scene": "suppliers-long:field-1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-field-2.png",
+      "scene": "suppliers-long:field-2",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-field-3.png",
+      "scene": "suppliers-long:field-3",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-field-4.png",
+      "scene": "suppliers-long:field-4",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-field-5.png",
+      "scene": "suppliers-long:field-5",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-field-6.png",
+      "scene": "suppliers-long:field-6",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "55cc660b673d9b1628bc0ec6125efee81db83066257a9e11866a80b38b05dd17"
+    },
+    {
+      "file": "1440-suppliers-long-technical-footer.png",
+      "scene": "suppliers-long:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "d4e23cab133a28912aebdd58653248f1c1bd0ee9d68a175d279c411c9f3b4fad"
+    },
+    {
+      "file": "1440-suppliers-original-detail.png",
+      "scene": "suppliers-original:detail",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "6e0556bd64d8b4b51bae7f8d47b78219bb58a471ec69cd39197a10c9e68b3668"
+    },
+    {
+      "file": "1440-suppliers-original-fields.png",
+      "scene": "suppliers-original:fields",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "6e0556bd64d8b4b51bae7f8d47b78219bb58a471ec69cd39197a10c9e68b3668"
+    },
+    {
+      "file": "1440-suppliers-original-technical-footer.png",
+      "scene": "suppliers-original:technical-footer",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "064b152020c0d3b24955ad6226a09a0f09fd5e075fb18df044ffdbc2a8d4e64f"
+    },
+    {
+      "file": "390-opportunities-detail.png",
+      "scene": "opportunities:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "e4d1bac5340784efc1a1cb88aa8edad08affe8005e11abdf760331a748d154b1"
+    },
+    {
+      "file": "390-opportunities-fields.png",
+      "scene": "opportunities:fields",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "e4d1bac5340784efc1a1cb88aa8edad08affe8005e11abdf760331a748d154b1"
+    },
+    {
+      "file": "390-opportunities-technical-footer.png",
+      "scene": "opportunities:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "8185388c5820e719347ca9b085bfed2337048d2c63f0820715683db89c4b0ded"
+    },
+    {
+      "file": "390-opportunities-long-detail.png",
+      "scene": "opportunities-long:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "dc951507a0cf4437d65e9bd7acb46bf6687e7dbb5c7541189f2cb6ed65646524"
+    },
+    {
+      "file": "390-opportunities-long-field-1.png",
+      "scene": "opportunities-long:field-1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "dc951507a0cf4437d65e9bd7acb46bf6687e7dbb5c7541189f2cb6ed65646524"
+    },
+    {
+      "file": "390-opportunities-long-field-2.png",
+      "scene": "opportunities-long:field-2",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "dc951507a0cf4437d65e9bd7acb46bf6687e7dbb5c7541189f2cb6ed65646524"
+    },
+    {
+      "file": "390-opportunities-long-field-3.png",
+      "scene": "opportunities-long:field-3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "710dab9e80d8205b0d0a3119cf0ae1b7949a95a68e110a92aaf4204a7783a1c5"
+    },
+    {
+      "file": "390-opportunities-long-field-4.png",
+      "scene": "opportunities-long:field-4",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "1f14bf1a5e171bb488e69096f77e5e380759b057a6024f6a90992ad728a5cc8d"
+    },
+    {
+      "file": "390-opportunities-long-field-5.png",
+      "scene": "opportunities-long:field-5",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "1f14bf1a5e171bb488e69096f77e5e380759b057a6024f6a90992ad728a5cc8d"
+    },
+    {
+      "file": "390-opportunities-long-field-6.png",
+      "scene": "opportunities-long:field-6",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "1f14bf1a5e171bb488e69096f77e5e380759b057a6024f6a90992ad728a5cc8d"
+    },
+    {
+      "file": "390-opportunities-long-technical-footer.png",
+      "scene": "opportunities-long:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "d5256165b147252f84d2896956a23f0bd69ec243a16208e790afa3d3fcf7b2f0"
+    },
+    {
+      "file": "390-competitors-detail.png",
+      "scene": "competitors:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0ab2a523911507da450597a955c24527c007f638e8b8e93f0f0b970c0d05d6c1"
+    },
+    {
+      "file": "390-competitors-fields.png",
+      "scene": "competitors:fields",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0ab2a523911507da450597a955c24527c007f638e8b8e93f0f0b970c0d05d6c1"
+    },
+    {
+      "file": "390-competitors-technical-footer.png",
+      "scene": "competitors:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "96375cf9ddc3d97993580f44b60b162463c0552d23e3569a120dc8991c24e930"
+    },
+    {
+      "file": "390-competitors-long-detail.png",
+      "scene": "competitors-long:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "f511d1d9e87c02b4baf3cace9cf4dc24d61de580a0b0acbdd32c75a78a062f1e"
+    },
+    {
+      "file": "390-competitors-long-field-1.png",
+      "scene": "competitors-long:field-1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "f511d1d9e87c02b4baf3cace9cf4dc24d61de580a0b0acbdd32c75a78a062f1e"
+    },
+    {
+      "file": "390-competitors-long-field-2.png",
+      "scene": "competitors-long:field-2",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "f511d1d9e87c02b4baf3cace9cf4dc24d61de580a0b0acbdd32c75a78a062f1e"
+    },
+    {
+      "file": "390-competitors-long-field-3.png",
+      "scene": "competitors-long:field-3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "58537c0e36a2e4c599e8f120663a8aeb625520d413322de1c15d277aeaea5e57"
+    },
+    {
+      "file": "390-competitors-long-field-4.png",
+      "scene": "competitors-long:field-4",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "e0f8ea7c4cd69da2b61f11f934d964335bd3de13aebbc937df19a8c396610c25"
+    },
+    {
+      "file": "390-competitors-long-field-5.png",
+      "scene": "competitors-long:field-5",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "e0f8ea7c4cd69da2b61f11f934d964335bd3de13aebbc937df19a8c396610c25"
+    },
+    {
+      "file": "390-competitors-long-field-6.png",
+      "scene": "competitors-long:field-6",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "e0f8ea7c4cd69da2b61f11f934d964335bd3de13aebbc937df19a8c396610c25"
+    },
+    {
+      "file": "390-competitors-long-technical-footer.png",
+      "scene": "competitors-long:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "9446c53663686511e76643b3e5b327b3f3b9cea6da7977b4507106817e9793a2"
+    },
+    {
+      "file": "390-suppliers-detail.png",
+      "scene": "suppliers:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "443414e84d10a8b7f0daac3c8262396285ae8a739b080c3917633f6b88873600"
+    },
+    {
+      "file": "390-suppliers-fields.png",
+      "scene": "suppliers:fields",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "443414e84d10a8b7f0daac3c8262396285ae8a739b080c3917633f6b88873600"
+    },
+    {
+      "file": "390-suppliers-technical-footer.png",
+      "scene": "suppliers:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "9aba4cf69113e97dd71d9a3554ad2340078ac3f8f00c934e1a85aa136fe0ae3f"
+    },
+    {
+      "file": "390-suppliers-long-detail.png",
+      "scene": "suppliers-long:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "61789ed96408e7aee3f0516ba552c207853c9378ac1a0280e9f6e1580d2c8305"
+    },
+    {
+      "file": "390-suppliers-long-field-1.png",
+      "scene": "suppliers-long:field-1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "61789ed96408e7aee3f0516ba552c207853c9378ac1a0280e9f6e1580d2c8305"
+    },
+    {
+      "file": "390-suppliers-long-field-2.png",
+      "scene": "suppliers-long:field-2",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "61789ed96408e7aee3f0516ba552c207853c9378ac1a0280e9f6e1580d2c8305"
+    },
+    {
+      "file": "390-suppliers-long-field-3.png",
+      "scene": "suppliers-long:field-3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "351097c903fcfbf3ac3dbe9e4053b885f3a73226ca12c21146889993c286284c"
+    },
+    {
+      "file": "390-suppliers-long-field-4.png",
+      "scene": "suppliers-long:field-4",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0e0c064dc5da1a9132040232d7904ad0d4024cd389b4b86f6514fc287a1f5bd1"
+    },
+    {
+      "file": "390-suppliers-long-field-5.png",
+      "scene": "suppliers-long:field-5",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0e0c064dc5da1a9132040232d7904ad0d4024cd389b4b86f6514fc287a1f5bd1"
+    },
+    {
+      "file": "390-suppliers-long-field-6.png",
+      "scene": "suppliers-long:field-6",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0e0c064dc5da1a9132040232d7904ad0d4024cd389b4b86f6514fc287a1f5bd1"
+    },
+    {
+      "file": "390-suppliers-long-technical-footer.png",
+      "scene": "suppliers-long:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "6025c16484283bfc1356682a7e59261be913f9768149b94ca7cc21cb4916f92a"
+    },
+    {
+      "file": "390-suppliers-original-detail.png",
+      "scene": "suppliers-original:detail",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "4cd7d124996e6cbb0c0e7fce8fbc9507d85ff62c72d4e33afb2fe92e377f4830"
+    },
+    {
+      "file": "390-suppliers-original-fields.png",
+      "scene": "suppliers-original:fields",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "4cd7d124996e6cbb0c0e7fce8fbc9507d85ff62c72d4e33afb2fe92e377f4830"
+    },
+    {
+      "file": "390-suppliers-original-technical-footer.png",
+      "scene": "suppliers-original:technical-footer",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": false,
+      "approval": "pending",
+      "metrics": {
+        "modal": true,
+        "overflow": false,
+        "pageOverflow": false,
+        "withinViewport": true,
+        "badControls": []
+      },
+      "sha256": "0c95c7bfd006693c55b4655e49a512af879b428adf84306eed6eeacc0b5c3e59"
+    }
+  ]
+}

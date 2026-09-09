@@ -1,0 +1,15 @@
+#record-dialog #record-tech summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#record-dialog #record-tech summary::before {
+  content: "+";
+  margin-right: 10px;
+}
+#record-dialog #record-tech[open] summary::before {
+  content: "−";
+}
