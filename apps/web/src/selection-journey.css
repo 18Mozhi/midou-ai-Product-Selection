@@ -543,6 +543,10 @@ html #app .selection-footer button {
   html #app .selection-footer {
     align-items: stretch;
     flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  html #app .selection-footer > span {
+    flex: initial;
   }
   html #app .selection-start > button,
   html #app .selection-footer > button {

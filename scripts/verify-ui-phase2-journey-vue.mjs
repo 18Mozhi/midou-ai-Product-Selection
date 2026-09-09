@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 import { chromium } from "playwright";
 import { buildJourneyDesignData } from "./lib/ui-phase2-journey-design-data.mjs";
+import { journeyControlCapture } from "./lib/ui-phase2-journey-vue-controls.mjs";
 
 // Real route and Vue, isolated HTTP fixtures. Never connects to production or a database.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -18,12 +19,14 @@ const capture = process.argv.includes("--capture"),
   savedKey = "scoutops.selection-journey.active-id",
   envelope = (value) => ({ data: value, request_id: "p16-layout", trace_id: "p16-layout" }),
   screenshots = [],
-  checks = [];
+  checks = [],
+  controlStates = [];
 const sources = [
   "apps/web/src/components/SelectionJourney.vue",
   "apps/web/src/selection-journey.css",
   "apps/web/src/components/NavigationShell.vue",
   "apps/web/src/components/UiStatePanel.vue",
+  "apps/web/src/ui/state-contract.ts",
   "apps/web/src/main.ts",
   "apps/web/src/styles.css",
   "apps/web/src/accessibility.css",
@@ -36,6 +39,7 @@ const sources = [
   "apps/web/src/signal-ledger-workflows.css",
   "tests/e2e/ui-phase2-journey-contracts.spec.ts",
   "scripts/lib/ui-phase2-journey-design-data.mjs",
+  "scripts/lib/ui-phase2-journey-vue-controls.mjs",
   "scripts/verify-ui-phase2-journey-vue.mjs",
 ];
 const sourceHashes = Object.fromEntries(
@@ -50,7 +54,8 @@ if (capture) await mkdir(root, { recursive: true });
 else {
   const previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
   assert.deepEqual(previous.sourceHashes, sourceHashes, "mounted Vue evidence source drift");
-  assert.equal(previous.screenshots.length, 24);
+  assert.equal(previous.screenshots.length, 114);
+  assert.equal(previous.controlStates.length, 90);
   for (const shot of previous.screenshots) {
     assert.match(shot.file, /^(1440|390)-[a-z-]+\.png$/);
     assert.equal(hash(await readFile(path.join(root, shot.file))), shot.sha256, shot.file);
@@ -78,6 +83,8 @@ try {
         requests = [];
       let journey = structuredClone(data.sample),
         holdWrite = null,
+        holdRead = null,
+        failRead = false,
         rejectWrite = false;
       journey.results[1] = structuredClone(data.qualified);
       journey.first_result = journey.results[0];
@@ -111,6 +118,22 @@ try {
             path: url.pathname,
             body: request.postDataJSON(),
           });
+          if (request.method() === "GET") {
+            if (holdRead) await holdRead;
+            if (failRead)
+              return route.fulfill({
+                status: 503,
+                json: {
+                  error: {
+                    code: "service_unavailable",
+                    message: "隔离恢复受阻",
+                    action_hint: "恢复读取暂时受阻，请稍后核对原任务。",
+                  },
+                  request_id: "p16-read-blocked",
+                  trace_id: "p16-read-blocked",
+                },
+              });
+          }
           if (request.method() !== "GET") {
             if (holdWrite) await holdWrite;
             if (rejectWrite)
@@ -186,14 +209,23 @@ try {
           });
         }
       };
-      const restore = async () => {
+      const restore = async (selector = ".selection-decision") => {
         await page.evaluate(({ key, id }) => localStorage.setItem(key, id), {
           key: savedKey,
           id: journey.id,
         });
         await page.reload();
-        await page.locator(".selection-decision").waitFor();
+        await page.locator(selector).waitFor();
       };
+      const controls = journeyControlCapture({
+        page,
+        width,
+        root,
+        capture,
+        screenshots,
+        checks,
+        requests,
+      });
       await page.goto("http://127.0.0.1:5175/opportunities/start");
       await page.locator(".selection-start").waitFor();
       await check("C palette and typography override legacy skin locally", () =>
@@ -217,6 +249,8 @@ try {
           .then((text) => text.includes("输入线索")),
       );
       await shot("create-default");
+      await controls.take("create", "J-CREATE", '.selection-start button[type="submit"]');
+      await controls.take("list", "J-NAV-LIST", ".selection-workspace > header a");
       await check("radio mark is 20px within a 52px label target", () =>
         page
           .locator(".selection-kind input")
@@ -258,6 +292,13 @@ try {
           .evaluate((node) => getComputedStyle(node).opacity === "1"),
       );
       await shot("create-busy");
+      await controls.take(
+        "create",
+        "J-CREATE",
+        '.selection-start button[type="submit"]',
+        ["disabled", "busy"],
+        "正在创建真实任务…",
+      );
       release();
       holdWrite = null;
       await page.locator(".ui-state-panel").waitFor();
@@ -268,6 +309,16 @@ try {
           .then((value) => value === "portable blender"),
       );
       await shot("create-failed");
+      const beforeCreateExplanation = requests.length;
+      await page.getByRole("button", { name: "查看影响", exact: true }).click();
+      await check(
+        "new create blocked explanation remains creation-specific without HTTP",
+        async () =>
+          requests.length === beforeCreateExplanation &&
+          (await page.locator(".ui-state-panel").innerText()).includes(
+            "本次创建未获得服务端成功确认",
+          ),
+      );
       rejectWrite = false;
       await restore();
       await check("review phase", () =>
@@ -307,6 +358,10 @@ try {
       await adopt.check();
       await page.getByLabel("决策原因").fill("隔离样例：核对五项质量门与来源后记录判断。");
       await shot("adopt-ready");
+      await controls.take("source", "J-SOURCE", ".selection-candidate-grid > label:first-child a");
+      await controls.take("save", "J-DECIDE", '.selection-decision button[type="submit"]');
+      await controls.take("reset", "J-RESET", ".selection-footer button");
+      await controls.take("timeline", "J-TIMELINE", ".selection-timeline-disclosure > summary");
       const summary = page.locator(".selection-timeline-disclosure > summary"),
         before = requests.length;
       await summary.focus();
@@ -339,6 +394,14 @@ try {
           (await page.getByRole("button", { name: "开始下一次", exact: true }).isDisabled()),
       );
       await shot("save-busy");
+      await controls.take(
+        "save",
+        "J-DECIDE",
+        '.selection-decision button[type="submit"]',
+        ["disabled", "busy"],
+        "正在保存…",
+      );
+      await controls.take("reset", "J-RESET", ".selection-footer button", ["disabled"]);
       release();
       holdWrite = null;
       await page.locator(".ui-state-panel").waitFor();
@@ -377,6 +440,74 @@ try {
           .then((text) => text.includes("4 / 5") && text.includes("待补齐")),
       );
       await shot("gate-cost");
+      // Terminal fixture exposes only server-returned links; no adoption POST is manufactured.
+      journey.state = "decided";
+      journey.decision = {
+        action: "adopt",
+        reason: "隔离返回的已保存决定",
+        selected_raw_evidence_id: journey.results[1].raw_evidence_id,
+        actor_id: "00000000-0000-4000-8000-000000007640",
+        created_at: data.sample.accepted_at,
+      };
+      journey.opportunity_id = data.qualified.opportunity_id;
+      journey.verification_task_id = "00000000-0000-4000-8000-000000007630";
+      await restore(".selection-complete");
+      await controls.take(
+        "opportunity",
+        "J-NAV-OPPORTUNITY",
+        '.selection-complete a[href^="/opportunities/"]',
+      );
+      await controls.take("task", "J-NAV-TASK", '.selection-complete a[href^="/tasks/"]');
+      journey.state = "result_ready";
+      journey.decision = null;
+      journey.opportunity_id = null;
+      journey.verification_task_id = null;
+      failRead = true;
+      await restore('.ui-state-panel[data-kind="blocked"]');
+      await controls.take(
+        "retry",
+        "J-STATE-RECOVERY",
+        ".selection-workspace > .ui-state-panel .primary",
+      );
+      await controls.take(
+        "secondary",
+        "J-STATE-RECOVERY",
+        ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      );
+      const beforeExplanation = requests.length;
+      await page.getByRole("button", { name: "查看影响", exact: true }).click();
+      await check(
+        "blocked secondary explains without HTTP",
+        async () =>
+          requests.length === beforeExplanation &&
+          (await page.locator(".ui-state-panel").innerText()).includes("本次仅状态读取受阻"),
+      );
+      holdRead = new Promise((resolve) => {
+        release = resolve;
+      });
+      failRead = false;
+      const beforeRetry = requests.length;
+      await page.getByRole("button", { name: "重试读取进度", exact: true }).click();
+      await page.waitForFunction(
+        () => document.querySelector(".selection-journey")?.getAttribute("aria-busy") === "true",
+      );
+      await check(
+        "restoring retry is unrendered rather than disabled",
+        async () =>
+          (await page.locator(".selection-workspace > .ui-state-panel").count()) === 0 &&
+          (await page.locator(".selection-start button").isDisabled()),
+      );
+      release();
+      holdRead = null;
+      await page.locator(".selection-decision").waitFor();
+      await check(
+        "retry rereads exact saved journey once without POST",
+        async () =>
+          requests.length === beforeRetry + 1 &&
+          requests.at(-1).method === "GET" &&
+          requests.at(-1).path === `/api/v1/selection-journeys/${journey.id}`,
+      );
+      controlStates.push(...controls.records);
       for (const intermediate of [768, 1024, 1280]) {
         await page.setViewportSize({ width: intermediate, height: 1000 });
         await page.waitForFunction((expected) => innerWidth === expected, intermediate);
@@ -389,6 +520,16 @@ try {
           page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
         );
       }
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      const beforeReset = requests.length;
+      await page.getByRole("button", { name: "开始下一次", exact: true }).click();
+      await page.locator(".selection-start").waitFor();
+      await check(
+        "visible reset activates and clears only active journey without HTTP",
+        async () =>
+          requests.length === beforeReset &&
+          (await page.evaluate((key) => localStorage.getItem(key), savedKey)) === null,
+      );
       assert.deepEqual(errors, []);
       assert.deepEqual(unexpected, []);
       checks.push({ width, name: "no page errors or unmocked API/external requests" });
@@ -396,18 +537,59 @@ try {
       await context.close();
     }
   }
+  const expectedControls = [
+    "create",
+    "list",
+    "source",
+    "save",
+    "reset",
+    "timeline",
+    "opportunity",
+    "task",
+    "retry",
+    "secondary",
+  ];
+  const expectedStates = (key) => [
+    "default",
+    "hover",
+    "focus",
+    "pressed",
+    ...(["create", "save"].includes(key)
+      ? ["disabled", "busy"]
+      : key === "reset"
+        ? ["disabled"]
+        : []),
+  ];
+  const cases = (rows) => rows.map((row) => `${row.width}/${row.key}/${row.state}`).sort();
+  const expectedCases = [1440, 390]
+    .flatMap((width) =>
+      expectedControls.flatMap((key) =>
+        expectedStates(key).map((state) => `${width}/${key}/${state}`),
+      ),
+    )
+    .sort();
+  assert.deepEqual(cases(controlStates), expectedCases, "missing/duplicate control state");
+  if (!capture) {
+    const previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
+    assert.deepEqual(
+      cases(previous.controlStates),
+      expectedCases,
+      "stale saved control state matrix",
+    );
+  }
   if (capture)
     await writeFile(
       path.join(root, "evidence.json"),
       JSON.stringify(
         {
-          version: "P16-C-r2-mounted-layout-1",
+          version: "P16-C-r2-mounted-controls-2",
           capturedAt: new Date().toISOString(),
           approval: "pending-controls-review",
           boundary:
             "Real Vue route under existing shell; intercepted fixture HTTP, not real API/database/production. Only P16 overall layout approved. Buttons, themes and full page remain pending.",
           sourceHashes,
           checks,
+          controlStates,
           screenshots,
         },
         null,

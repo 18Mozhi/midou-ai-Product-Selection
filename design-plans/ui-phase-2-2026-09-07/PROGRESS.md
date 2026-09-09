@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P16真实控件状态与手机按钮命中修复
+
+从干净main/f3b0cc25继续，沿已批准C r2布局细化按钮；使用ui-skills-root/frontend-design与既有Playwright流程，无子代理、新依赖或新方向。实际Vue图册由24扩至114PNG：10个代表控件45状态×桌面1440/手机390共90新增状态图。真实鼠标悬停/按下、键盘焦点及拦截请求在途产生状态，不向DOM注入伪disabled/busy；仅采集当前源码适用状态，恢复期间面板未渲染不冒充按钮禁用。
+
+新增中心命中断言抓到手机“开始下一次”x=266/right=596超出390视口：底栏column继承wrap及提示100% flex基准导致换列，原整页scrollWidth因根裁剪未暴露。仅P16窄屏底栏改nowrap及提示自然flex；按钮恢复330×44，实点清活动ID、返回输入且零HTTP。另修复有resumeId但无journey的blocked说明误报创建失败，按读取受阻解释；无活动ID的新建失败说明不变，两分支均验证零HTTP。接口、五门、写入字段、重试及状态行为不变。
+
+新增永久控件采集helper并扩展真实Vue验证器，截图逐态核对尺寸、字体、原生伪状态、中心命中、字段/活动ID/展开快照和请求数；修正记录中viewport width被控件width覆盖的问题，以controlWidth/controlHeight单列，并检查45态×双端精确矩阵避免漏项/重复。最终capture和无capture均170检查通过；来源/114PNG哈希一致，图册230文件链接存在。恢复失败→查看影响→原ID一次GET重试→恢复→实际重置通过。原42业务E2E及148单元为前批结果，本批未重复宣称新运行。
+
+build:web含typecheck、frontend-budget251assets、docs73路由/60保护/6角色/153必需文件、runtime-docs、static-analysis390文件、format均通过。原离线journey-c按更新源码重新capture，双端67场景/382PNG通过且HTTP/storage=0；仅证据来源更新，未改原型。动作审计22页/480位置/427组；设计审计76包10774PNG、844独立来源/1453绑定/8942链接、漂移及未登记图0。114实际Vue图另列，不灌入旧离线分母，不提升完整页面批准数或G0–G5。
+
+永久交付见P16-VUE-CONTROL-REVIEW.md及output/playwright/p16-c-r2-review/index.html；人工查看手机重置默认/重试焦点和桌面时间轴按下，未声称全图人工审核。P16动作证据、合同、规格、计划、Feature Map同步；生产改动仅局部CSS和blocked说明条件，其他页面/全局壳层、API/OpenAPI、后端/Worker/Python、env/配置、依赖、SQL/迁移、权限与宝塔未改。没有部署或重启，无新增调节参数；以后获准发布需原宝塔前端部署流程。
+
+未新增一次性测试文件目录；114图/图库/证据及验证器是保留提交的永久交付物。临时Vite5175及浏览器已关闭，无5175/5173/4101监听或headless_shell残留。既有output/playwright/p16-layout-20260910/.last-run.json及output/playwright/ui-phase2-competitor-races-20260909下playwright.config.ts、results/.last-run.json仍因前次工具清理拒绝保留，本批只读检查，不重试或绕过。具体按钮呈现待用户审核，全量字段/动态行/恢复变体/主题密度、其他页面、真实端到端及最终部署签收尚待；不宣布第二阶段完成。
+
 ## 2026-09-10 · P16已批准布局落地与真实Vue按钮图
 
 从干净main/a4a30f788047495bd34af834d3f28510441f23cb继续。依据P16-C-R2-LAYOUT-APPROVAL及用户继续细化按钮，使用ui-skills-root/frontend-design，Playwright复用现有依赖。蓝色阶段栏、候选/决策双区、五门核对已实现于SelectionJourney.vue/selection-journey.css；不改全局NavigationShell，不将本页批准推广到其他路由。当前11源位置/9组/5模型/4结构、零弹窗；新增原生summary本地展开，决定表单签名因说明变动而刷新，所有原业务handler/禁用条件/POST字段/存储/轮询保持。

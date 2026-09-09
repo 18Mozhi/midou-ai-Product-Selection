@@ -1,13 +1,14 @@
 {
-  "version": "P16-C-r2-mounted-layout-1",
-  "capturedAt": "2026-09-09T16:36:33.609Z",
+  "version": "P16-C-r2-mounted-controls-2",
+  "capturedAt": "2026-09-09T16:49:31.358Z",
   "approval": "pending-controls-review",
   "boundary": "Real Vue route under existing shell; intercepted fixture HTTP, not real API/database/production. Only P16 overall layout approved. Buttons, themes and full page remain pending.",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc",
-    "apps/web/src/selection-journey.css": "d58150be4fa59283343c79ba812f1af00b83c1351799bccf1dbfbb5ac4db7193",
+    "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de",
+    "apps/web/src/selection-journey.css": "5f760cf6111309072cd0c4d9fd10310ceb19239b78b79efdfc2f279de66f8693",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
@@ -20,7 +21,8 @@
     "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
     "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
-    "scripts/verify-ui-phase2-journey-vue.mjs": "d35b087cf9a9aa2bbcb9d121922d823a072068bfc9c36ae8f38609d4f69ca199"
+    "scripts/lib/ui-phase2-journey-vue-controls.mjs": "915d14f16e5c44c9db40d96a02a60c88eea1930a8052a74133a91c1016fa06de",
+    "scripts/verify-ui-phase2-journey-vue.mjs": "dcd3c5ab7c32a6d1adbc1d9e4c9cbc1203b843df1e0b6304487bfb0441cb9041"
   },
   "checks": [
     {
@@ -41,6 +43,38 @@
     },
     {
       "width": 1440,
+      "name": "create/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "create/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "create/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "create/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "list/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "list/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "list/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "list/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
       "name": "radio mark is 20px within a 52px label target"
     },
     {
@@ -69,11 +103,23 @@
     },
     {
       "width": 1440,
+      "name": "create/disabled: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "create/busy: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
       "name": "failed create keeps input"
     },
     {
       "width": 1440,
       "name": "create-failed: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "new create blocked explanation remains creation-specific without HTTP"
     },
     {
       "width": 1440,
@@ -105,6 +151,70 @@
     },
     {
       "width": 1440,
+      "name": "source/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "source/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "source/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "source/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "save/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "save/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "save/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "save/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "timeline/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "timeline/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "timeline/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "timeline/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
       "name": "timeline keyboard expands"
     },
     {
@@ -129,6 +239,18 @@
     },
     {
       "width": 1440,
+      "name": "save/disabled: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "save/busy: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset/disabled: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
       "name": "save failure retains reason"
     },
     {
@@ -149,6 +271,82 @@
     },
     {
       "width": 1440,
+      "name": "opportunity/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "opportunity/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "opportunity/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "opportunity/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "task/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "task/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "task/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "task/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "secondary/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "secondary/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "secondary/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "secondary/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 1440,
+      "name": "blocked secondary explains without HTTP"
+    },
+    {
+      "width": 1440,
+      "name": "restoring retry is unrendered rather than disabled"
+    },
+    {
+      "width": 1440,
+      "name": "retry rereads exact saved journey once without POST"
+    },
+    {
+      "width": 1440,
       "name": "viewport 768 no overflow"
     },
     {
@@ -158,6 +356,10 @@
     {
       "width": 1440,
       "name": "viewport 1280 no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "visible reset activates and clears only active journey without HTTP"
     },
     {
       "width": 1440,
@@ -181,6 +383,38 @@
     },
     {
       "width": 390,
+      "name": "create/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "create/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "create/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "create/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "list/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "list/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "list/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "list/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
       "name": "radio mark is 20px within a 52px label target"
     },
     {
@@ -209,11 +443,23 @@
     },
     {
       "width": 390,
+      "name": "create/disabled: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "create/busy: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
       "name": "failed create keeps input"
     },
     {
       "width": 390,
       "name": "create-failed: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "new create blocked explanation remains creation-specific without HTTP"
     },
     {
       "width": 390,
@@ -245,6 +491,70 @@
     },
     {
       "width": 390,
+      "name": "source/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "source/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "source/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "source/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "save/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "save/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "save/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "save/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "reset/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "reset/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "reset/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "reset/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "timeline/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "timeline/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "timeline/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "timeline/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
       "name": "timeline keyboard expands"
     },
     {
@@ -269,6 +579,18 @@
     },
     {
       "width": 390,
+      "name": "save/disabled: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "save/busy: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "reset/disabled: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
       "name": "save failure retains reason"
     },
     {
@@ -289,6 +611,82 @@
     },
     {
       "width": 390,
+      "name": "opportunity/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "opportunity/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "opportunity/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "opportunity/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "task/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "task/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "task/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "task/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "retry/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "retry/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "retry/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "retry/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "secondary/default: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "secondary/hover: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "secondary/focus: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "secondary/pressed: native state, hit target and unchanged intent"
+    },
+    {
+      "width": 390,
+      "name": "blocked secondary explains without HTTP"
+    },
+    {
+      "width": 390,
+      "name": "restoring retry is unrendered rather than disabled"
+    },
+    {
+      "width": 390,
+      "name": "retry rereads exact saved journey once without POST"
+    },
+    {
+      "width": 390,
       "name": "viewport 768 no overflow"
     },
     {
@@ -301,7 +699,2803 @@
     },
     {
       "width": 390,
+      "name": "visible reset activates and clears only active journey without HTTP"
+    },
+    {
+      "width": 390,
       "name": "no page errors or unmocked API/external requests"
+    }
+  ],
+  "controlStates": [
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 1440,
+      "state": "default",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 154,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 813.25,
+        "right": 463.078125,
+        "bottom": 857.25
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 1440,
+      "state": "hover",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 154,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 813.25,
+        "right": 463.078125,
+        "bottom": 857.25
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 1440,
+      "state": "focus",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 154,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(31, 67, 143)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 813.25,
+        "right": 463.078125,
+        "bottom": 857.25
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 1440,
+      "state": "pressed",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 154,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 813.25,
+        "right": 463.078125,
+        "bottom": 857.25
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 1440,
+      "state": "default",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1245.921875,
+        "y": 362.296875,
+        "right": 1365.921875,
+        "bottom": 406.296875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 1440,
+      "state": "hover",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1245.921875,
+        "y": 362.296875,
+        "right": 1365.921875,
+        "bottom": 406.296875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 1440,
+      "state": "focus",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1245.921875,
+        "y": 362.296875,
+        "right": 1365.921875,
+        "bottom": 406.296875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 1440,
+      "state": "pressed",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1245.921875,
+        "y": 362.296875,
+        "right": 1365.921875,
+        "bottom": 406.296875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 1440,
+      "state": "disabled",
+      "label": "正在创建真实任务…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 167.015625,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 813.25,
+        "right": 476.09375,
+        "bottom": 857.25
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 1440,
+      "state": "busy",
+      "label": "正在创建真实任务…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 167.015625,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 813.25,
+        "right": 476.09375,
+        "bottom": 857.25
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 1440,
+      "state": "default",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 489.40625,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 358.078125,
+        "y": 477.921875,
+        "right": 847.484375,
+        "bottom": 521.921875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 1440,
+      "state": "hover",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 489.40625,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 358.078125,
+        "y": 477.921875,
+        "right": 847.484375,
+        "bottom": 521.921875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 1440,
+      "state": "focus",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 489.40625,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 358.078125,
+        "y": 477.921875,
+        "right": 847.484375,
+        "bottom": 521.921875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 1440,
+      "state": "pressed",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 489.40625,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 358.078125,
+        "y": 477.921875,
+        "right": 847.484375,
+        "bottom": 521.921875
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 1440,
+      "state": "default",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 396.4375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 731.546875,
+        "right": 1338.921875,
+        "bottom": 775.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 1440,
+      "state": "hover",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 396.4375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 731.546875,
+        "right": 1338.921875,
+        "bottom": 775.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 1440,
+      "state": "focus",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 396.4375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 731.546875,
+        "right": 1338.921875,
+        "bottom": 775.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 1440,
+      "state": "pressed",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 396.4375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 731.546875,
+        "right": 1338.921875,
+        "bottom": 775.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 1440,
+      "state": "default",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 106,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(32, 44, 61)",
+      "background": "rgb(255, 255, 255)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1259.921875,
+        "y": 864.140625,
+        "right": 1365.921875,
+        "bottom": 908.140625
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 1440,
+      "state": "hover",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 106,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(32, 44, 61)",
+      "background": "rgb(255, 255, 255)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1259.921875,
+        "y": 864.140625,
+        "right": 1365.921875,
+        "bottom": 908.140625
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 1440,
+      "state": "focus",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 106,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(174, 179, 185)",
+      "background": "rgb(108, 130, 174)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1259.921875,
+        "y": 864.140625,
+        "right": 1365.921875,
+        "bottom": 908.140625
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 1440,
+      "state": "pressed",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 106,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(32, 44, 61)",
+      "background": "rgb(255, 255, 255)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1259.921875,
+        "y": 864.140625,
+        "right": 1365.921875,
+        "bottom": 908.140625
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 1440,
+      "state": "default",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 478.25,
+        "right": 462.015625,
+        "bottom": 522.25
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 1440,
+      "state": "hover",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 478.25,
+        "right": 462.015625,
+        "bottom": 522.25
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 1440,
+      "state": "focus",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 478.25,
+        "right": 462.015625,
+        "bottom": 522.25
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 1440,
+      "state": "pressed",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 309.078125,
+        "y": 478.25,
+        "right": 462.015625,
+        "bottom": 522.25
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 1440,
+      "state": "disabled",
+      "label": "正在保存…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 396.4375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 768.546875,
+        "right": 1338.921875,
+        "bottom": 812.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 1440,
+      "state": "busy",
+      "label": "正在保存…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 396.4375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 768.546875,
+        "right": 1338.921875,
+        "bottom": 812.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 1440,
+      "state": "disabled",
+      "label": "开始下一次",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 106,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 1259.921875,
+        "y": 863.546875,
+        "right": 1365.921875,
+        "bottom": 907.546875
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 1440,
+      "state": "default",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1179.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 1440,
+      "state": "hover",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1179.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 1440,
+      "state": "focus",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1179.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 1440,
+      "state": "pressed",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1179.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 1440,
+      "state": "default",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1163.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 1440,
+      "state": "hover",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1163.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 1440,
+      "state": "focus",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1163.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 1440,
+      "state": "pressed",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 942.484375,
+        "y": 477.828125,
+        "right": 1163.21875,
+        "bottom": 521.828125
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 1440,
+      "state": "default",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 122,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 456.578125,
+        "y": 478.234375,
+        "right": 578.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 1440,
+      "state": "hover",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 122,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 456.578125,
+        "y": 478.234375,
+        "right": 578.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 1440,
+      "state": "focus",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 122,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 456.578125,
+        "y": 478.234375,
+        "right": 578.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 1440,
+      "state": "pressed",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 122,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 456.578125,
+        "y": 478.234375,
+        "right": 578.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 1440,
+      "state": "default",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 90,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 587.578125,
+        "y": 478.234375,
+        "right": 677.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 1440,
+      "state": "hover",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 90,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 587.578125,
+        "y": 478.234375,
+        "right": 677.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 1440,
+      "state": "focus",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 90,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 587.578125,
+        "y": 478.234375,
+        "right": 677.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 1440,
+      "state": "pressed",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 90,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 587.578125,
+        "y": 478.234375,
+        "right": 677.578125,
+        "bottom": 522.234375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 390,
+      "state": "default",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 652.53125,
+        "right": 341,
+        "bottom": 696.53125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 390,
+      "state": "hover",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 652.53125,
+        "right": 341,
+        "bottom": 696.53125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 390,
+      "state": "focus",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 652.53125,
+        "right": 341,
+        "bottom": 696.53125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 390,
+      "state": "pressed",
+      "label": "创建真实选品任务",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 652.53125,
+        "right": 341,
+        "bottom": 696.53125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 390,
+      "state": "default",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 399.5625,
+        "right": 150,
+        "bottom": 443.5625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 390,
+      "state": "hover",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 399.5625,
+        "right": 150,
+        "bottom": 443.5625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 390,
+      "state": "focus",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 399.5625,
+        "right": 150,
+        "bottom": 443.5625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "list",
+      "actionId": "J-NAV-LIST",
+      "selector": ".selection-workspace > header a",
+      "width": 390,
+      "state": "pressed",
+      "label": "返回机会列表",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 120,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 399.5625,
+        "right": 150,
+        "bottom": 443.5625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 390,
+      "state": "disabled",
+      "label": "正在创建真实任务…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 652.53125,
+        "right": 341,
+        "bottom": 696.53125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "create",
+      "actionId": "J-CREATE",
+      "selector": ".selection-start button[type=\"submit\"]",
+      "width": 390,
+      "state": "busy",
+      "label": "正在创建真实任务…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 652.53125,
+        "right": 341,
+        "bottom": 696.53125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 390,
+      "state": "default",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 226,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 98,
+        "y": 399.765625,
+        "right": 324,
+        "bottom": 443.765625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 390,
+      "state": "hover",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 226,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 98,
+        "y": 399.765625,
+        "right": 324,
+        "bottom": 443.765625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 390,
+      "state": "focus",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 226,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 98,
+        "y": 399.765625,
+        "right": 324,
+        "bottom": 443.765625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "source",
+      "actionId": "J-SOURCE",
+      "selector": ".selection-candidate-grid > label:first-child a",
+      "width": 390,
+      "state": "pressed",
+      "label": "查看来源原文 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 226,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 98,
+        "y": 399.765625,
+        "right": 324,
+        "bottom": 443.765625
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 390,
+      "state": "default",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 518.34375,
+        "right": 341,
+        "bottom": 562.34375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 390,
+      "state": "hover",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 518.34375,
+        "right": 341,
+        "bottom": 562.34375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 390,
+      "state": "focus",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 518.34375,
+        "right": 341,
+        "bottom": 562.34375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 390,
+      "state": "pressed",
+      "label": "保存审计决策",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 518.34375,
+        "right": 341,
+        "bottom": 562.34375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 390,
+      "state": "default",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 330,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(32, 44, 61)",
+      "background": "rgb(255, 255, 255)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 671.734375,
+        "right": 360,
+        "bottom": 715.734375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 390,
+      "state": "hover",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 330,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(32, 44, 61)",
+      "background": "rgb(255, 255, 255)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 671.734375,
+        "right": 360,
+        "bottom": 715.734375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 390,
+      "state": "focus",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 330,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(174, 179, 185)",
+      "background": "rgb(108, 130, 174)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 671.734375,
+        "right": 360,
+        "bottom": 715.734375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 390,
+      "state": "pressed",
+      "label": "开始下一次",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 330,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(32, 44, 61)",
+      "background": "rgb(255, 255, 255)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 671.734375,
+        "right": 360,
+        "bottom": 715.734375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 390,
+      "state": "default",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.3125,
+        "right": 201.9375,
+        "bottom": 444.3125
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 390,
+      "state": "hover",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.3125,
+        "right": 201.9375,
+        "bottom": 444.3125
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 390,
+      "state": "focus",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.3125,
+        "right": 201.9375,
+        "bottom": 444.3125
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "timeline",
+      "actionId": "J-TIMELINE",
+      "selector": ".selection-timeline-disclosure > summary",
+      "width": 390,
+      "state": "pressed",
+      "label": "查看处理时间轴",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 152.9375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.3125,
+        "right": 201.9375,
+        "bottom": 444.3125
+      },
+      "hit": "SUMMARY.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 390,
+      "state": "disabled",
+      "label": "正在保存…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 556.34375,
+        "right": 341,
+        "bottom": 600.34375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "save",
+      "actionId": "J-DECIDE",
+      "selector": ".selection-decision button[type=\"submit\"]",
+      "width": 390,
+      "state": "busy",
+      "label": "正在保存…",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 556.34375,
+        "right": 341,
+        "bottom": 600.34375
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "reset",
+      "actionId": "J-RESET",
+      "selector": ".selection-footer button",
+      "width": 390,
+      "state": "disabled",
+      "label": "开始下一次",
+      "disabled": true,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 330,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(70, 86, 109)",
+      "background": "rgb(233, 237, 243)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 30,
+        "y": 672.140625,
+        "right": 360,
+        "bottom": 716.140625
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 390,
+      "state": "default",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 512.4375,
+        "right": 285.734375,
+        "bottom": 556.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 390,
+      "state": "hover",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 512.4375,
+        "right": 285.734375,
+        "bottom": 556.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 390,
+      "state": "focus",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 512.4375,
+        "right": 285.734375,
+        "bottom": 556.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "opportunity",
+      "actionId": "J-NAV-OPPORTUNITY",
+      "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+      "width": 390,
+      "state": "pressed",
+      "label": "查看机会、证据与决策历史 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 236.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 512.4375,
+        "right": 285.734375,
+        "bottom": 556.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 390,
+      "state": "default",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 556.4375,
+        "right": 269.734375,
+        "bottom": 600.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 390,
+      "state": "hover",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 556.4375,
+        "right": 269.734375,
+        "bottom": 600.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 390,
+      "state": "focus",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 556.4375,
+        "right": 269.734375,
+        "bottom": 600.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "task",
+      "actionId": "J-NAV-TASK",
+      "selector": ".selection-complete a[href^=\"/tasks/\"]",
+      "width": 390,
+      "state": "pressed",
+      "label": "打开自动生成的验证任务 ↗",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 220.734375,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(37, 74, 156)",
+      "background": "rgba(0, 0, 0, 0)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 556.4375,
+        "right": 269.734375,
+        "bottom": 600.4375
+      },
+      "hit": "A.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 390,
+      "state": "default",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 390,
+      "state": "hover",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 390,
+      "state": "focus",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "retry",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel .primary",
+      "width": 390,
+      "state": "pressed",
+      "label": "重试读取进度",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.primary",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 390,
+      "state": "default",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 390,
+      "state": "hover",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": true,
+      "active": false,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 390,
+      "state": "focus",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": false,
+      "active": false,
+      "focus": true,
+      "outline": "solid",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(29, 64, 138)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "key": "secondary",
+      "actionId": "J-STATE-RECOVERY",
+      "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+      "width": 390,
+      "state": "pressed",
+      "label": "查看影响",
+      "disabled": false,
+      "hover": true,
+      "active": true,
+      "focus": false,
+      "outline": "none",
+      "controlWidth": 292,
+      "controlHeight": 44,
+      "fontSize": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(37, 74, 156)",
+      "opacity": "1",
+      "centerHit": true,
+      "box": {
+        "x": 49,
+        "y": 400.328125,
+        "right": 341,
+        "bottom": 444.328125
+      },
+      "hit": "BUTTON.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
     }
   ],
   "screenshots": [
@@ -313,25 +3507,155 @@
       "sha256": "bbc9c9670ac1102bb3e39d5712976365c5ba13c3c030aa07d32d520af53441fb"
     },
     {
+      "file": "1440-control-create-default.png",
+      "scene": "control-create-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "default"
+      },
+      "sha256": "bbc9c9670ac1102bb3e39d5712976365c5ba13c3c030aa07d32d520af53441fb"
+    },
+    {
+      "file": "1440-control-create-hover.png",
+      "scene": "control-create-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "hover"
+      },
+      "sha256": "99a34428d904578067eeb7aa4f30f4263c3a8cbb894de2cb6789bfd8b98c1532"
+    },
+    {
+      "file": "1440-control-create-focus.png",
+      "scene": "control-create-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "focus"
+      },
+      "sha256": "d0a67ac73bb7eacecd70de4b2366b867f10391d9ce5ecb582e8bfebae375d867"
+    },
+    {
+      "file": "1440-control-create-pressed.png",
+      "scene": "control-create-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "pressed"
+      },
+      "sha256": "de14194f1a280e9ad303976b390b62ad9e29506b44e1bbb9333a72ec86253618"
+    },
+    {
+      "file": "1440-control-list-default.png",
+      "scene": "control-list-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "default"
+      },
+      "sha256": "303f304eac76bbd3352117a1b0176fadc9397f1eb07439177fae80e5e080de87"
+    },
+    {
+      "file": "1440-control-list-hover.png",
+      "scene": "control-list-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "hover"
+      },
+      "sha256": "303f304eac76bbd3352117a1b0176fadc9397f1eb07439177fae80e5e080de87"
+    },
+    {
+      "file": "1440-control-list-focus.png",
+      "scene": "control-list-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "focus"
+      },
+      "sha256": "3fff6fb42a5a52a6563cc5924d463a872e6cf64cd95b131d9d3e3fde5fb72b9c"
+    },
+    {
+      "file": "1440-control-list-pressed.png",
+      "scene": "control-list-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "pressed"
+      },
+      "sha256": "6cea44ffa64bd0bd4cd5eab2297b4fd779f8e15ef767527889ffedeb8474d6c7"
+    },
+    {
       "file": "1440-create-hover.png",
       "scene": "create-hover",
       "width": 1440,
       "captureType": "hover-viewport",
-      "sha256": "99a34428d904578067eeb7aa4f30f4263c3a8cbb894de2cb6789bfd8b98c1532"
+      "sha256": "81e66e5997307ff280876338fbc6061b643b6d9a86c65359c113f1c3803a009b"
     },
     {
       "file": "1440-create-focus.png",
       "scene": "create-focus",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "87e9aca31bed87682bd3279cf8696fd7418deee36372aac5a201fc66f8b21ea8"
+      "sha256": "6f22264523caf13f8711f230918ffb693c9f3033260ee4df213c095c64d96775"
     },
     {
       "file": "1440-create-busy.png",
       "scene": "create-busy",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "267efceeeb7c731f6eced602b6bcb413a5c33079ea2b0d08a9e6403ff36d66e7"
+      "sha256": "c11c48765ecf91ba868b341fac540d00ad0547680c538a8b95ea7455634b2182"
+    },
+    {
+      "file": "1440-control-create-disabled.png",
+      "scene": "control-create-disabled",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "disabled"
+      },
+      "sha256": "c11c48765ecf91ba868b341fac540d00ad0547680c538a8b95ea7455634b2182"
+    },
+    {
+      "file": "1440-control-create-busy.png",
+      "scene": "control-create-busy",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "busy"
+      },
+      "sha256": "c11c48765ecf91ba868b341fac540d00ad0547680c538a8b95ea7455634b2182"
     },
     {
       "file": "1440-create-failed.png",
@@ -355,32 +3679,279 @@
       "sha256": "10ea86e3c499d72d94330bb490032190c752797c52f3ee311ab09aac57486085"
     },
     {
+      "file": "1440-control-source-default.png",
+      "scene": "control-source-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "default"
+      },
+      "sha256": "22adf84ed6fc4553bfe561a9353cb60a916fcf935cf4ebb86f0445297fbbc7f8"
+    },
+    {
+      "file": "1440-control-source-hover.png",
+      "scene": "control-source-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "hover"
+      },
+      "sha256": "03380c2c683ab5048dd352b08ff680cb31452b73a936f0df573a01c99f79c54c"
+    },
+    {
+      "file": "1440-control-source-focus.png",
+      "scene": "control-source-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "focus"
+      },
+      "sha256": "b8d004e1bb61b0c0083f6e56f4f7ca89a2d977fb0669676d11d3a2c74a669a31"
+    },
+    {
+      "file": "1440-control-source-pressed.png",
+      "scene": "control-source-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "pressed"
+      },
+      "sha256": "4ed5175eec0986153cf418b3d022f78a491b0a16c742a04eee7896e1d5e14d36"
+    },
+    {
+      "file": "1440-control-save-default.png",
+      "scene": "control-save-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "default"
+      },
+      "sha256": "6c227bdc7ca977b8f9b01058374d6e699898766229667f242389d7339783fd2e"
+    },
+    {
+      "file": "1440-control-save-hover.png",
+      "scene": "control-save-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "hover"
+      },
+      "sha256": "4c3863a77f101b712a4033a3c9f2b0da2350429727cf2590799a52aaa2586259"
+    },
+    {
+      "file": "1440-control-save-focus.png",
+      "scene": "control-save-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "focus"
+      },
+      "sha256": "c444614e82dce0a90ba33b6f5c3d32990525d9103b6ceb94209668079d994545"
+    },
+    {
+      "file": "1440-control-save-pressed.png",
+      "scene": "control-save-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "pressed"
+      },
+      "sha256": "9812dfb3c85373dd0564d191ce658a61167bbfa715601b56e60115c2a23aa0d8"
+    },
+    {
+      "file": "1440-control-reset-default.png",
+      "scene": "control-reset-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "default"
+      },
+      "sha256": "7b8e75d4f51d4a16af366b32caea29430ac7049e4356efb87e67dbfdb30394e5"
+    },
+    {
+      "file": "1440-control-reset-hover.png",
+      "scene": "control-reset-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "hover"
+      },
+      "sha256": "9321c3501590985a6025da3638426cfdde6c26b35dd5afdf2804731984ab5ece"
+    },
+    {
+      "file": "1440-control-reset-focus.png",
+      "scene": "control-reset-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "focus"
+      },
+      "sha256": "07f448aefd1f2a4828db53b3a3b0da6e41034f4bc2ab5ab84840c0168cf32590"
+    },
+    {
+      "file": "1440-control-reset-pressed.png",
+      "scene": "control-reset-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "pressed"
+      },
+      "sha256": "2ecf14e6caa1f23b713bd9721356d628fe4c03a48fe160dfeadbb739f16db00b"
+    },
+    {
+      "file": "1440-control-timeline-default.png",
+      "scene": "control-timeline-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "default"
+      },
+      "sha256": "f1556d3ff762522d2dd91b10748795c7f04a0b6f097e6d64eb01c9da6d729d88"
+    },
+    {
+      "file": "1440-control-timeline-hover.png",
+      "scene": "control-timeline-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "hover"
+      },
+      "sha256": "f1556d3ff762522d2dd91b10748795c7f04a0b6f097e6d64eb01c9da6d729d88"
+    },
+    {
+      "file": "1440-control-timeline-focus.png",
+      "scene": "control-timeline-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "focus"
+      },
+      "sha256": "3428ca7a1be83c9c958503a3fe5112ff2473785ea66e9da7e5699024178f5e74"
+    },
+    {
+      "file": "1440-control-timeline-pressed.png",
+      "scene": "control-timeline-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "pressed"
+      },
+      "sha256": "c03a05b621d4e64c391968fdc0681508e3ae9db0586d4f4c2c0ed200739e01b9"
+    },
+    {
       "file": "1440-timeline-open-focus.png",
       "scene": "timeline-open-focus",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "6e60a1a87361e42cfac65da97acac570d1575c8c594405adba449abd42f4dd6c"
+      "sha256": "cad866ff5d811a68c946263defc3378244f4e3408ad3c44d7fe2471d4145127e"
     },
     {
       "file": "1440-save-focus.png",
       "scene": "save-focus",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "d097f70f1ef9c98370aea74adf72e2965287bfc9d08fea32ffc046ef2e1042b5"
+      "sha256": "2a7b4d604fd2696adedbede7b4646bab7c003de6ee5d75a7c7e94f9f022a2ac8"
     },
     {
       "file": "1440-save-busy.png",
       "scene": "save-busy",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "3dd3a9d5821eef75b534a0dd54e30c14ae9355f4ead3344cede56a553a94c8e2"
+      "sha256": "368cfc0f73ab31c74c47e459cff1a639dd63a07d11ab22bd12cd1206d8014c06"
+    },
+    {
+      "file": "1440-control-save-disabled.png",
+      "scene": "control-save-disabled",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "disabled"
+      },
+      "sha256": "63a912edb8a8dfc87ce8c1b179874487793e661b0437b9ced366712b0d58e47d"
+    },
+    {
+      "file": "1440-control-save-busy.png",
+      "scene": "control-save-busy",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "busy"
+      },
+      "sha256": "63a912edb8a8dfc87ce8c1b179874487793e661b0437b9ced366712b0d58e47d"
+    },
+    {
+      "file": "1440-control-reset-disabled.png",
+      "scene": "control-reset-disabled",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "disabled"
+      },
+      "sha256": "63a912edb8a8dfc87ce8c1b179874487793e661b0437b9ced366712b0d58e47d"
     },
     {
       "file": "1440-save-failed.png",
       "scene": "save-failed",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "b8c75213a8fb2f39c1c69a642471e11b015cf3356ce53d087bdbb71d5a1ff829"
+      "sha256": "2466704d3ef24e3248230b6dc5654a7f01cbe26224cfe5886022d23f5ed8280b"
     },
     {
       "file": "1440-gate-cost.png",
@@ -390,11 +3961,323 @@
       "sha256": "b4ef17708288f6a18550dc8c59bf7f1655bc5363765a7f216e9877a7e1086058"
     },
     {
+      "file": "1440-control-opportunity-default.png",
+      "scene": "control-opportunity-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "default"
+      },
+      "sha256": "7725205bb38e4254aa00c2115d2fdb8df4519a5ea32453f59f8a350f58130229"
+    },
+    {
+      "file": "1440-control-opportunity-hover.png",
+      "scene": "control-opportunity-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "hover"
+      },
+      "sha256": "7725205bb38e4254aa00c2115d2fdb8df4519a5ea32453f59f8a350f58130229"
+    },
+    {
+      "file": "1440-control-opportunity-focus.png",
+      "scene": "control-opportunity-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "focus"
+      },
+      "sha256": "ebcecd819ab2053dd3846e30a59e57823dd19e85176ceee26dde2015d85fb0ae"
+    },
+    {
+      "file": "1440-control-opportunity-pressed.png",
+      "scene": "control-opportunity-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "pressed"
+      },
+      "sha256": "7725205bb38e4254aa00c2115d2fdb8df4519a5ea32453f59f8a350f58130229"
+    },
+    {
+      "file": "1440-control-task-default.png",
+      "scene": "control-task-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "default"
+      },
+      "sha256": "2aaab2c99dac1f7b5c3c5cc8dc2c3062b9be5b7568ee00815242b261adae2f8f"
+    },
+    {
+      "file": "1440-control-task-hover.png",
+      "scene": "control-task-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "hover"
+      },
+      "sha256": "2aaab2c99dac1f7b5c3c5cc8dc2c3062b9be5b7568ee00815242b261adae2f8f"
+    },
+    {
+      "file": "1440-control-task-focus.png",
+      "scene": "control-task-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "focus"
+      },
+      "sha256": "e40105b1c318a1da5ec08de1cb8d53c92737548dd6f8dc693503153215bcf126"
+    },
+    {
+      "file": "1440-control-task-pressed.png",
+      "scene": "control-task-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "pressed"
+      },
+      "sha256": "2aaab2c99dac1f7b5c3c5cc8dc2c3062b9be5b7568ee00815242b261adae2f8f"
+    },
+    {
+      "file": "1440-control-retry-default.png",
+      "scene": "control-retry-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "default"
+      },
+      "sha256": "19bd470565c4b52047625332aa9acfbcf217350f5b930b2e7b834336ab69925c"
+    },
+    {
+      "file": "1440-control-retry-hover.png",
+      "scene": "control-retry-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "hover"
+      },
+      "sha256": "1f292f10a9795df37efd096c2866d3f5da9bfcf1b4a461f11d936d8b06763c0d"
+    },
+    {
+      "file": "1440-control-retry-focus.png",
+      "scene": "control-retry-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "focus"
+      },
+      "sha256": "f5e041c0be440506a16d25e3cee99e4fd78a0348a4b1450d35a53ed2d60856e8"
+    },
+    {
+      "file": "1440-control-retry-pressed.png",
+      "scene": "control-retry-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "pressed"
+      },
+      "sha256": "d418aed03ee6d3a1a041541137288a712828112a36a9033a0cd3fbe0f2ed19c7"
+    },
+    {
+      "file": "1440-control-secondary-default.png",
+      "scene": "control-secondary-default",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "default"
+      },
+      "sha256": "97f3f6faebb1fcc8d3dd24278d779be3b0c7ae4fb2438542d90473cc580f46b5"
+    },
+    {
+      "file": "1440-control-secondary-hover.png",
+      "scene": "control-secondary-hover",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "hover"
+      },
+      "sha256": "6d2fa7a68ad4c8eb0ce6ea7a18bf39f3418c58ef207cce78fd4e5959db1d55d6"
+    },
+    {
+      "file": "1440-control-secondary-focus.png",
+      "scene": "control-secondary-focus",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "focus"
+      },
+      "sha256": "ec3405219e09de0b18a90fb3f0ede9d042c681f0ee0481703f00dc31658cc6cc"
+    },
+    {
+      "file": "1440-control-secondary-pressed.png",
+      "scene": "control-secondary-pressed",
+      "width": 1440,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "pressed"
+      },
+      "sha256": "1125035df225f41107a0a03f79659eb257cd773505cba5369f719c2f13b6c5f0"
+    },
+    {
       "file": "390-create-default.png",
       "scene": "create-default",
       "width": 390,
       "captureType": "full-page",
       "sha256": "82c3155ed437d99c1090aa6f09a8520d6ee7c83e390e4ca71573a0b045d06b2b"
+    },
+    {
+      "file": "390-control-create-default.png",
+      "scene": "control-create-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "default"
+      },
+      "sha256": "1b14f9886f7e895f2cd7d55522701b05e82c1a7871a726c3ce1d555c98fa61cf"
+    },
+    {
+      "file": "390-control-create-hover.png",
+      "scene": "control-create-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "hover"
+      },
+      "sha256": "e7cd734fd42803543c937ea42aaba23023239939f595fa130191ede667849605"
+    },
+    {
+      "file": "390-control-create-focus.png",
+      "scene": "control-create-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "focus"
+      },
+      "sha256": "746d8a9789f281c185bfe8de436ffc328fb9fe16701665fc09adebfcb30c4ff3"
+    },
+    {
+      "file": "390-control-create-pressed.png",
+      "scene": "control-create-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "pressed"
+      },
+      "sha256": "fda2434c71bd2ec176fed549ca0ad66d24d578fb1c408b3dd5ecdf4aa5387f33"
+    },
+    {
+      "file": "390-control-list-default.png",
+      "scene": "control-list-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "default"
+      },
+      "sha256": "d0aeac10fc772229f3916f631b3ccfe4b3cba5bc17ef12e0fd4e9488325b495d"
+    },
+    {
+      "file": "390-control-list-hover.png",
+      "scene": "control-list-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "hover"
+      },
+      "sha256": "d0aeac10fc772229f3916f631b3ccfe4b3cba5bc17ef12e0fd4e9488325b495d"
+    },
+    {
+      "file": "390-control-list-focus.png",
+      "scene": "control-list-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "focus"
+      },
+      "sha256": "0586a32865befe71e2737d5c29f6bc76a40e8479e8b31686a9df6e87f94d4025"
+    },
+    {
+      "file": "390-control-list-pressed.png",
+      "scene": "control-list-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "list",
+        "actionId": "J-NAV-LIST",
+        "selector": ".selection-workspace > header a",
+        "state": "pressed"
+      },
+      "sha256": "d0aeac10fc772229f3916f631b3ccfe4b3cba5bc17ef12e0fd4e9488325b495d"
     },
     {
       "file": "390-create-hover.png",
@@ -418,6 +4301,32 @@
       "sha256": "cb65560ee18c3e345e65fdc85269b43593b2db2c969a096468d63f3aeb18ae3b"
     },
     {
+      "file": "390-control-create-disabled.png",
+      "scene": "control-create-disabled",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "disabled"
+      },
+      "sha256": "92ea53bf906e6fbec34b271bb878641daaca3072e7b7399c647995335b198259"
+    },
+    {
+      "file": "390-control-create-busy.png",
+      "scene": "control-create-busy",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "create",
+        "actionId": "J-CREATE",
+        "selector": ".selection-start button[type=\"submit\"]",
+        "state": "busy"
+      },
+      "sha256": "92ea53bf906e6fbec34b271bb878641daaca3072e7b7399c647995335b198259"
+    },
+    {
       "file": "390-create-failed.png",
       "scene": "create-failed",
       "width": 390,
@@ -429,49 +4338,504 @@
       "scene": "candidate-unselected",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "7842be7d8b27eacd98787af5139cdfa8fe60735e6f5aa71c420fa491b6182db8"
+      "sha256": "59935a71d136cb3dabb66ce1e3f7bf59502ec4422e83374729bf79709a56aca4"
     },
     {
       "file": "390-adopt-ready.png",
       "scene": "adopt-ready",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "a69895706ffbb1574a61f1d25569c503f49de0cbcdf455be3f91b9e24250d4cf"
+      "sha256": "aeb7d67fe0e08056448a48c441e0ce051064823c5c64a8bd93205be6c9697677"
+    },
+    {
+      "file": "390-control-source-default.png",
+      "scene": "control-source-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "default"
+      },
+      "sha256": "fbb3b023873cf78bcb8ee02090fb653e85356bd9c9c0a44df78b1bf924abd471"
+    },
+    {
+      "file": "390-control-source-hover.png",
+      "scene": "control-source-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "hover"
+      },
+      "sha256": "a7528bec8b77674435f65167b2d1f3982636555e453f87f2e8593374b213530d"
+    },
+    {
+      "file": "390-control-source-focus.png",
+      "scene": "control-source-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "focus"
+      },
+      "sha256": "ead9fe9731fe1ce983e825c3dfac06d79e02f1633798c8ef4c77f930b357bcec"
+    },
+    {
+      "file": "390-control-source-pressed.png",
+      "scene": "control-source-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "source",
+        "actionId": "J-SOURCE",
+        "selector": ".selection-candidate-grid > label:first-child a",
+        "state": "pressed"
+      },
+      "sha256": "8f0d32143c849000edf693e1133afecc5d301a0803564b8c96c7408b18dd971c"
+    },
+    {
+      "file": "390-control-save-default.png",
+      "scene": "control-save-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "default"
+      },
+      "sha256": "5bb92cb2a8965da55266e05884d6a61cf05b76289dfeea050c30b1531a3f5e97"
+    },
+    {
+      "file": "390-control-save-hover.png",
+      "scene": "control-save-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "hover"
+      },
+      "sha256": "92818fe0e5bfc251c48101784f7d335115fc8a28c5f9272fc294f6c57c758cdf"
+    },
+    {
+      "file": "390-control-save-focus.png",
+      "scene": "control-save-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "focus"
+      },
+      "sha256": "f26c72bd41c72c13e2c547ba22a4bb362619bf66ade60c329ccaaa0cd760b150"
+    },
+    {
+      "file": "390-control-save-pressed.png",
+      "scene": "control-save-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "pressed"
+      },
+      "sha256": "7c8c724521339ae4378659bbb8070e7f7291094a49264b45be8ecf6a6b407f30"
+    },
+    {
+      "file": "390-control-reset-default.png",
+      "scene": "control-reset-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "default"
+      },
+      "sha256": "f12cf2865b0a2f4ea0e1607445de83c7ad3e5dfbc4e14431b84dc39037835a0b"
+    },
+    {
+      "file": "390-control-reset-hover.png",
+      "scene": "control-reset-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "hover"
+      },
+      "sha256": "706e721b89eec2dcec0d48c32613d40bc5a771959ed43b53cb0108e503e505d8"
+    },
+    {
+      "file": "390-control-reset-focus.png",
+      "scene": "control-reset-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "focus"
+      },
+      "sha256": "c05358e11bae3a95aefbc3e919efbb607ea42d27e2213b4f9de52fa55d278f94"
+    },
+    {
+      "file": "390-control-reset-pressed.png",
+      "scene": "control-reset-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "pressed"
+      },
+      "sha256": "3c47ef6161abc92c85d7e7e96c49564128dddb2a49b0cfe02f956a21ba1de992"
+    },
+    {
+      "file": "390-control-timeline-default.png",
+      "scene": "control-timeline-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "default"
+      },
+      "sha256": "aa4d74e41b2e98d72b38db619c07a5a7e58f5fc6a3dd74213687ba0768e21d89"
+    },
+    {
+      "file": "390-control-timeline-hover.png",
+      "scene": "control-timeline-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "hover"
+      },
+      "sha256": "aa4d74e41b2e98d72b38db619c07a5a7e58f5fc6a3dd74213687ba0768e21d89"
+    },
+    {
+      "file": "390-control-timeline-focus.png",
+      "scene": "control-timeline-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "focus"
+      },
+      "sha256": "8a2516c10a34a33c9a1d0d9f26774ba3ea3914b6b8711fa4c0ea0f22d3756158"
+    },
+    {
+      "file": "390-control-timeline-pressed.png",
+      "scene": "control-timeline-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "timeline",
+        "actionId": "J-TIMELINE",
+        "selector": ".selection-timeline-disclosure > summary",
+        "state": "pressed"
+      },
+      "sha256": "aea34010e3a7b90040ca0b57d2d3710eef197a0d43941313b480fc3e40ff0b63"
     },
     {
       "file": "390-timeline-open-focus.png",
       "scene": "timeline-open-focus",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "2b16cf753a7908521daf008df7ea6a659218cdbd621a021e424f542420ff6495"
+      "sha256": "3102950aa41096fcffd535de0dd14a700bb594653640feb0c4c7e50ab9456cd1"
     },
     {
       "file": "390-save-focus.png",
       "scene": "save-focus",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "577a0c46ce91753d46adeff77a06fe097b4b56c5728cb45b2ea1469e6d8468fa"
+      "sha256": "164677b27561045af5fac66a7aa1f71f4b00ef99a72becb4719dde9ff80d4596"
     },
     {
       "file": "390-save-busy.png",
       "scene": "save-busy",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "ce770e75fcdb5e64ad81ed11dff4db352554a99a8d8060101c7af302a822b5a8"
+      "sha256": "40540851c5656aee14bb50cc156009891e4bfe28632fc1b1741130c17948e5ba"
+    },
+    {
+      "file": "390-control-save-disabled.png",
+      "scene": "control-save-disabled",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "disabled"
+      },
+      "sha256": "d60a783a444c8e09968450609ade051d8f695a0e929ae82ca3bbfd64302e9a40"
+    },
+    {
+      "file": "390-control-save-busy.png",
+      "scene": "control-save-busy",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "save",
+        "actionId": "J-DECIDE",
+        "selector": ".selection-decision button[type=\"submit\"]",
+        "state": "busy"
+      },
+      "sha256": "d60a783a444c8e09968450609ade051d8f695a0e929ae82ca3bbfd64302e9a40"
+    },
+    {
+      "file": "390-control-reset-disabled.png",
+      "scene": "control-reset-disabled",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "reset",
+        "actionId": "J-RESET",
+        "selector": ".selection-footer button",
+        "state": "disabled"
+      },
+      "sha256": "d60a783a444c8e09968450609ade051d8f695a0e929ae82ca3bbfd64302e9a40"
     },
     {
       "file": "390-save-failed.png",
       "scene": "save-failed",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "165ad1a7cdac4a7bbd36933a9e204c91aaa9f41a12a6415892a47d8fba9d0e09"
+      "sha256": "6c5b210ae8a8661e056dc63e1cf83fad6149fcd884df27a7cac5d06eb21f3eac"
     },
     {
       "file": "390-gate-cost.png",
       "scene": "gate-cost",
       "width": 390,
       "captureType": "full-page",
-      "sha256": "3c7c39ebc4dac49d7dea46fb733131a08c246b7cd6791b0e08275469c86a8130"
+      "sha256": "fc35491b2f3d8b7a103b072eef5ac9d082bab051e91a073703310bc0f0ca92eb"
+    },
+    {
+      "file": "390-control-opportunity-default.png",
+      "scene": "control-opportunity-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "default"
+      },
+      "sha256": "e6c11ba6c9c2960df610649d021a25557ea012fc7378bc5c1482b5def2e9286b"
+    },
+    {
+      "file": "390-control-opportunity-hover.png",
+      "scene": "control-opportunity-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "hover"
+      },
+      "sha256": "e6c11ba6c9c2960df610649d021a25557ea012fc7378bc5c1482b5def2e9286b"
+    },
+    {
+      "file": "390-control-opportunity-focus.png",
+      "scene": "control-opportunity-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "focus"
+      },
+      "sha256": "7612309a15ef982649ffda509e2bf8f9b830b3aa8a87f2ed5136fd80324cbb76"
+    },
+    {
+      "file": "390-control-opportunity-pressed.png",
+      "scene": "control-opportunity-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "opportunity",
+        "actionId": "J-NAV-OPPORTUNITY",
+        "selector": ".selection-complete a[href^=\"/opportunities/\"]",
+        "state": "pressed"
+      },
+      "sha256": "e6c11ba6c9c2960df610649d021a25557ea012fc7378bc5c1482b5def2e9286b"
+    },
+    {
+      "file": "390-control-task-default.png",
+      "scene": "control-task-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "default"
+      },
+      "sha256": "e6c11ba6c9c2960df610649d021a25557ea012fc7378bc5c1482b5def2e9286b"
+    },
+    {
+      "file": "390-control-task-hover.png",
+      "scene": "control-task-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "hover"
+      },
+      "sha256": "e6c11ba6c9c2960df610649d021a25557ea012fc7378bc5c1482b5def2e9286b"
+    },
+    {
+      "file": "390-control-task-focus.png",
+      "scene": "control-task-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "focus"
+      },
+      "sha256": "16eb0ec65cd7d7058446eaf1fd75dd6912b2cf33f0cf23e768274b4f20fe5def"
+    },
+    {
+      "file": "390-control-task-pressed.png",
+      "scene": "control-task-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "task",
+        "actionId": "J-NAV-TASK",
+        "selector": ".selection-complete a[href^=\"/tasks/\"]",
+        "state": "pressed"
+      },
+      "sha256": "e6c11ba6c9c2960df610649d021a25557ea012fc7378bc5c1482b5def2e9286b"
+    },
+    {
+      "file": "390-control-retry-default.png",
+      "scene": "control-retry-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "default"
+      },
+      "sha256": "b564e9f3d60f3f1f512b28e7dff6b62699a360adb298daa8b75f1cae8d028f36"
+    },
+    {
+      "file": "390-control-retry-hover.png",
+      "scene": "control-retry-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "hover"
+      },
+      "sha256": "91c32e3899d075cb8ffd1cb2b7c809ad8f631b771d5445447eaeb9a7fed02992"
+    },
+    {
+      "file": "390-control-retry-focus.png",
+      "scene": "control-retry-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "focus"
+      },
+      "sha256": "e3f76836e91f54a5fcdcd35d9b6620401ff6c088360e7732741a5456261a7f6a"
+    },
+    {
+      "file": "390-control-retry-pressed.png",
+      "scene": "control-retry-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "retry",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel .primary",
+        "state": "pressed"
+      },
+      "sha256": "f3f478e3af8f02a529468428b0691db16b436e08614c3e81e07392b52d3508e9"
+    },
+    {
+      "file": "390-control-secondary-default.png",
+      "scene": "control-secondary-default",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "default"
+      },
+      "sha256": "783047c5940382847da503e317d232d45ad80e1e74eac4a2dd1752d634404848"
+    },
+    {
+      "file": "390-control-secondary-hover.png",
+      "scene": "control-secondary-hover",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "hover"
+      },
+      "sha256": "945988e74fc913ca8493e74e01c4426069cf8c916ba8192b8e6408acaf2f994e"
+    },
+    {
+      "file": "390-control-secondary-focus.png",
+      "scene": "control-secondary-focus",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "focus"
+      },
+      "sha256": "645b55f2e886a99301a34f64763a2434d32479a33ffd93d4b8d835e871cd9d7d"
+    },
+    {
+      "file": "390-control-secondary-pressed.png",
+      "scene": "control-secondary-pressed",
+      "width": 390,
+      "captureType": "control-viewport",
+      "control": {
+        "key": "secondary",
+        "actionId": "J-STATE-RECOVERY",
+        "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
+        "state": "pressed"
+      },
+      "sha256": "85d00ae93acbf80bef5a20e2871180cf1957d2f162c31c9b50a0ea1d8a410620"
     }
   ]
 }

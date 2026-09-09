@@ -1,6 +1,6 @@
 # P16 创建选品旅程 · 输入、续办、候选与决定合同
 
-2026-09-10：第10节为批准布局落地后的当前源码映射；第1–9节是历史快照。见[P16真实Vue审核](P16-VUE-LAYOUT-REVIEW.md)。业务handler、五模型及API保持；新增原生时间轴展开组，不把整体布局批准计为全页批准。
+2026-09-10：第10节为批准布局落地后的当前源码映射；第1–9节是历史快照。见[P16真实Vue审核](P16-VUE-LAYOUT-REVIEW.md)。除blocked副说明按已保存ID纠正外，写入/读取处理、五模型及API保持；新增原生时间轴展开组，不把整体布局批准计为全页批准。
 
 2026-09-09 r2复核：第9节为c31fddc7统一质量门后的当前源码映射；[JOURNEY-C-r2](design/journey-direction-c/README.md)现67整页场景及102代表控件状态双端共338图；[控件审核](P16-CONTROL-STATE-REVIEW.md)列明40适用槽及8导航不适用。第1–8节为历史，不以旧hash或旧文案覆盖新规则。整体布局已批准，具体控制状态仍待用户。 新增[字段审核](P16-FIELD-STATE-REVIEW.md)，5个源绑定的8控件变体已有状态图与隔离交互验证，生产未改。 另补44张外观/放大图，总382图，见[外观审核](P16-APPEARANCE-REVIEW.md)；仅代表场景，不证明所有主题状态或生产验收。
 
@@ -156,22 +156,24 @@ r2图中五项核对区整体布局已通过；原因错误关联、busy期间�
 
 ## 10. 2026-09-10批准布局落地后的当前映射
 
-SelectionJourney.vue LF SHA-256：a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc。当前11源位置/9组/5模型/4内联结构（2 aside、2 form），零业务弹窗。前缀 apps/web/src/components/SelectionJourney.vue#。原候选表单签名变化来自质量门说明，不是API变化。
+SelectionJourney.vue LF SHA-256：e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de。当前11源位置/9组/5模型/4内联结构（2 aside、2 form），零业务弹窗。前缀 apps/web/src/components/SelectionJourney.vue#。原候选表单签名变化来自质量门说明，不是API变化。
 
 | 当前行 | 当前候选尾键 | 核对边界 | 稳定语义ID |
 | --- | --- | --- | --- |
-| 369 | feb47750cbf8d6c2.1 | 返回列表，原路由不变 | J-NAV-LIST |
-| 371 | 8026812b48a68031.1 | 恢复主次事件保持 | J-STATE-RECOVERY |
-| 380 | 8c00555eac0c2a19.1 | 三输入创建form保持 | J-CREATE |
-| 423 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持 | J-CREATE |
-| 437 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE |
-| 502 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持 | J-SOURCE |
-| 540 | 5d5700a54ddffff7.1 | 质量门只读说明进入原form；decide处理器不变 | J-DECIDE |
-| 609 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持 | J-DECIDE |
-| 620 | 2982f925c629be51.1 | 机会链接按原返回ID | J-NAV-OPPORTUNITY |
-| 625 | d3e6b84b6df72d56.1 | 任务链接按原返回ID | J-NAV-TASK |
-| 635 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持 | J-RESET |
+| 370 | feb47750cbf8d6c2.1 | 返回列表，原路由不变 | J-NAV-LIST |
+| 372 | 8026812b48a68031.1 | 恢复主次事件保持 | J-STATE-RECOVERY |
+| 381 | 8c00555eac0c2a19.1 | 三输入创建form保持 | J-CREATE |
+| 424 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持 | J-CREATE |
+| 438 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE |
+| 503 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持 | J-SOURCE |
+| 541 | 5d5700a54ddffff7.1 | 质量门只读说明进入原form；decide处理器不变 | J-DECIDE |
+| 610 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持 | J-DECIDE |
+| 621 | 2982f925c629be51.1 | 机会链接按原返回ID | J-NAV-OPPORTUNITY |
+| 626 | d3e6b84b6df72d56.1 | 任务链接按原返回ID | J-NAV-TASK |
+| 636 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持 | J-RESET |
 
 阶段栏是只读aside，输入→处理→终态审阅→已决定，不以本地时间假装进度。五项质量门未选中/对象未返回显示“待核对/未返回”，严格true才“已通过”；5/5仍由原canAdopt核对topic/opportunity/recommended/all_passed，服务器保存时再验。候选报告总数与本页返回数分别展示。时间轴默认收起，Enter展开/Space收起无新增旅程HTTP；不新增关闭弹窗、取消任务、输入冻结或重置原因逻辑。
 
 真实Vue图证据位于output/playwright/p16-c-r2-review，接口均拦截为既有service夹具，不能据此证明来源、MySQL或线上状态。42项原业务/读取回归与70项布局检查通过；具体图与未覆盖项见新审核说明。原型382图按当前源函数重新capture，未修改批准字段。
+
+2026-09-10控件补充：[真实控件114图审核](P16-VUE-CONTROL-REVIEW.md)，170检查；手机footer改nowrap与自然span尺寸，避免reset换列被裁剪。handleStateSecondary仅把journey或resumeId存在时均视为读取受阻；新建无ID保留创建未确认说明，原请求/五门/事件/存储不变。十处原按钮及新summary代表状态不新增语义分母，具体批准仍待。

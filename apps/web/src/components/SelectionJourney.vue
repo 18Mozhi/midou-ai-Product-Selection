@@ -305,9 +305,10 @@ function reset() {
 }
 function handleStateSecondary() {
   if (state.value === "blocked") {
-    message.value = journey.value
-      ? "本次仅状态读取受阻；已创建的后台任务不会自动取消，也不会自动重复提交。"
-      : "本次创建未获得服务端成功确认；页面未保存活动旅程，也不会自动重复提交。";
+    message.value =
+      journey.value || resumeId.value
+        ? "本次仅状态读取受阻；已创建的后台任务不会自动取消，也不会自动重复提交。"
+        : "本次创建未获得服务端成功确认；页面未保存活动旅程，也不会自动重复提交。";
     return;
   }
   if (state.value === "forbidden") {
