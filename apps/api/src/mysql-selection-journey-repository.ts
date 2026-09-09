@@ -6,6 +6,10 @@ import type {
   SelectionJourneyState,
 } from "./selection-journey-service.js";
 import { SelectionJourneyError } from "./selection-journey-service.js";
+import {
+  evaluateOpportunitySelection,
+  opportunitySelectionProjectionSql,
+} from "./opportunity-selection-policy.js";
 
 const iso = (value: unknown) =>
   value == null ? null : new Date(value as string | Date).toISOString();
@@ -395,71 +399,28 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       let opportunityId: string | null = null;
       if (i.action === "adopt" && signal?.topic_id) {
         const [existing] = await c.query<RowDataPacket[]>(
-          "SELECT id,decision_status,version FROM opportunities WHERE organization_id=? AND workspace_id=? " +
-            "AND source_type='trend_topic' AND source_ref_id=? LIMIT 1 FOR UPDATE",
+          "SELECT o.id,o.decision_status,o.version,o.recommendation_status,o.overall_score," +
+            "o.score_rule_version,o.coverage_status,o.trend_score,o.competition_score,o.profit_status," +
+            opportunitySelectionProjectionSql +
+            " FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=? " +
+            "AND o.source_type='trend_topic' AND o.source_ref_id=? LIMIT 1 FOR UPDATE",
           [i.organizationId, i.workspaceId, signal.topic_id],
         );
-        let opportunity: undefined | { id: string; decision_status: string; version: number } =
-          existing[0]
-            ? {
-                id: String(existing[0].id),
-                decision_status: String(existing[0].decision_status),
-                version: Number(existing[0].version),
-              }
-            : undefined;
-        if (!opportunity) {
-          opportunityId = randomUUID();
-          await c.query(
-            "INSERT INTO opportunities (id,organization_id,workspace_id,name,market,category," +
-              "source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status," +
-              "overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status," +
-              "confidence_score,evidence_count,source_count,coverage_status,score_rule_version," +
-              "scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?," +
-              "?,?,?,?,NULL,'trend_topic',?,?,'candidate','insufficient_data',NULL,NULL," +
-              "NULL,'insufficient_data','unknown','insufficient_data',NULL,0,0,'insufficient'," +
-              "NULL,NULL,'pending',1,?,?,?)",
-            [
-              opportunityId,
-              i.organizationId,
-              i.workspaceId,
-              String(signal.title).slice(0, 200),
-              signal.market ?? "US",
-              signal.topic_id,
-              i.actorId,
-              i.actorId,
-              i.now,
-              i.now,
-            ],
-          );
-          opportunity = { id: opportunityId, decision_status: "pending", version: 1 };
-        }
-        if (!opportunity)
+        const opportunity = existing[0];
+        if (
+          !opportunity ||
+          evaluateOpportunitySelection(opportunity).selection_stage !== "recommended"
+        )
           throw new SelectionJourneyError(
-            "selection_opportunity_projection_failed",
-            500,
-            "刷新旅程状态后重试。",
+            "opportunity_adopt_evidence_insufficient",
+            409,
+            "采纳须与机会详情一致：待决策机会命中有效规则与来源门槛，且评分、市场、竞争、成本、风险五项质量门全部通过。请在机会列表补齐评估后刷新，或继续观察、驳回。",
           );
         opportunityId = String(opportunity.id);
         const decisionId = randomUUID(),
           status =
             i.action === "adopt" ? "adopted" : i.action === "observe" ? "observing" : "rejected",
           version = Number(opportunity.version) + 1;
-        await c.query(
-          "INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id," +
-            "opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at," +
-            "created_at) SELECT UUID(),s.organization_id,s.workspace_id,?,'trend_signal'," +
-            "s.id,s.provider_id,s.raw_evidence_id,s.observed_at,? FROM collection_task_evidence_links " +
-            "l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN trend_signals s ON s.normalized_record_id=n.id " +
-            "WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND l.raw_evidence_id=?",
-          [
-            opportunityId,
-            i.now,
-            journey.task_id,
-            i.organizationId,
-            i.workspaceId,
-            i.selectedRawEvidenceId,
-          ],
-        );
         await c.query(
           "INSERT INTO opportunity_decisions (id,organization_id,workspace_id,opportunity_id," +
             "action,reason,previous_status,resulting_status,opportunity_version,actor_id," +
@@ -481,11 +442,20 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           ],
         );
         await c.query(
-          "UPDATE opportunities SET decision_status=?,lifecycle_status=?,version=?," +
-            "evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links WHERE opportunity_id=?)," +
-            "source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links WHERE " +
-            "opportunity_id=?),coverage_status='partial',updated_at=? WHERE id=?",
-          [status, status, version, opportunityId, opportunityId, i.now, opportunityId],
+          "UPDATE opportunities SET decision_status=?," +
+            "lifecycle_entered_at=IF(lifecycle_status<>?,?,lifecycle_entered_at)," +
+            "lifecycle_status=?,version=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+          [
+            status,
+            status,
+            i.now,
+            status,
+            version,
+            i.now,
+            opportunityId,
+            i.organizationId,
+            i.workspaceId,
+          ],
         );
         await c.query(
           "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type," +
@@ -625,10 +595,16 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       ),
       db.query<RowDataPacket[]>(
         "SELECT e.id raw_evidence_id,e.canonical_url,e.captured_at,n.payload_json," +
-          "s.title,s.publisher,s.canonical_url signal_url,s.observed_at,s.topic_id FROM selection_journeys " +
+          "s.title,s.publisher,s.canonical_url signal_url,s.observed_at,s.topic_id," +
+          "o.id opportunity_id,o.decision_status,o.recommendation_status,o.overall_score," +
+          "o.score_rule_version,o.coverage_status,o.trend_score,o.competition_score,o.profit_status," +
+          opportunitySelectionProjectionSql +
+          " FROM selection_journeys " +
           "j JOIN collection_task_evidence_links l ON l.collection_task_id=j.task_id AND l.organization_id=j.organization_id " +
           "AND l.workspace_id=j.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN " +
           "normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON s.normalized_record_id=n.id " +
+          "LEFT JOIN opportunities o ON o.organization_id=j.organization_id AND o.workspace_id=j.workspace_id " +
+          "AND o.source_type='trend_topic' AND o.source_ref_id=s.topic_id " +
           "WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? ORDER BY l.created_at," +
           "e.captured_at,e.id LIMIT 20",
         [id, organizationId, workspaceId],
@@ -661,6 +637,8 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           canonical_url: String(evidence.signal_url ?? evidence.canonical_url),
           observed_at: iso(evidence.observed_at ?? evidence.captured_at)!,
           topic_id: evidence.topic_id == null ? null : String(evidence.topic_id),
+          opportunity_id: evidence.opportunity_id == null ? null : String(evidence.opportunity_id),
+          ...evaluateOpportunitySelection(evidence),
         };
       }),
       decision = decisions[0][0],

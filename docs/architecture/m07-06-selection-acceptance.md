@@ -10,7 +10,11 @@ M07-06 把现有真实来源、采集任务、原始证据、趋势投影、机�
 
 迁移 `0028_selection_journeys_m07_06.up.sql` 新增 `selection_journeys`、一次性 `selection_journey_decisions`、追加式事件、Outbox 和幂等操作表。迁移 `0029_collection_task_evidence_links_m07_06.up.sql` 新增范围化的 `collection_task_evidence_links`，并为既有原始证据回填首个采集任务关联。迁移 `0059_selection_journey_candidates.up.sql` 在决策中保存被采纳的原始证据引用。全部业务记录带组织、工作区、请求、链路和时间字段；任务仍由既有 `collection_tasks`、`collection_subqueries`、原始证据和 Worker 状态机承担事实真相。
 
-旅程读取模型不复制结果：它按当前 `task_id` 通过 `collection_task_evidence_links` 读取 `raw_evidence`、`normalized_records` 和可用的 `trend_signals`，按稳定顺序最多返回 20 条候选供成员比较；`first_result` 仅保留为旧客户端兼容别名。浏览器只在本机保存当前旅程 ID，重新打开页面后按会话组织和工作区向 API 读取真实状态，不保存或伪造结果。成员采纳时必须提交属于当前旅程的 `selected_raw_evidence_id`；只有 `adopt` 会从被选候选生成或复用机会并链接该候选证据，`observe` 和 `reject` 只保存旅程决策。
+旅程读取模型不复制结果：它按当前 `task_id` 通过 `collection_task_evidence_links` 读取 `raw_evidence`、`normalized_records` 和可用的 `trend_signals`，按稳定顺序最多返回 20 条候选供成员比较；`first_result` 仅保留为旧客户端兼容别名。浏览器只在本机保存当前旅程 ID，重新打开页面后按会话组织和工作区向 API 读取真实状态，不保存或伪造结果。成员采纳时必须提交属于当前旅程的 `selected_raw_evidence_id`；`observe` 和 `reject` 只保存旅程决策。
+
+2026-09-09 用户确认 P16 与 P18 统一五项质量门。候选按同组织、工作区和 `trend_topic/source_ref_id` 关联既有机会，返回 `opportunity_id`（可空）、`selection_stage` 和 `quality_gates`。读取和采纳事务复用 `opportunity-selection-policy.ts`：待决策机会命中启用规则、达到来源门槛且评分/市场/竞争/成本/风险全部通过，才为 `recommended`。采纳在机会 `FOR UPDATE` 后重新判定，不能信任浏览器的旧状态。无已评估机会或未达门槛返回 `409 opportunity_adopt_evidence_insufficient`，写入前回滚；不再创建未知分数机会直接采纳、不追加未评估证据、不重算证据计数或把覆盖状态降为 `partial`。合格采纳更新决策/生命周期时间/版本，原审计、验证任务和幂等链保留。已完成幂等请求返回原结果，不重新审判历史决策。原始证据仍由采集和评估链维护。
+
+前端未获得质量门字段时失败关闭；逐项提示缺门并保留决策原因。切到不合格候选会阻断已选中的采纳提交；服务端冲突后可重读、补齐评估，或继续观察/驳回。规则不新增开关、依赖、迁移或权限；不得调低质量门来解除禁用。
 
 同一组织、工作区和 Provider 再次采集相同去重键时，Worker 复用不可变原始证据，但必须先校验当前任务/子查询范围并追加 `deduplicated` 关联及审计事件；因此重复真实输入仍能在本次旅程中得到可验证结果。Google RSS 可能在 GUID、规范 URL 和规范字段完全不变时只改变未消费的 XML 包装；此时不得覆盖旧原文，也不得让整个任务进入重试，`evidence.linked` 审计载荷以 `content_changed=true`、`existing_content_sha256` 和 `observed_content_sha256` 留下变化事实。只要规范 URL、Parser、Adapter、Schema 或规范载荷任一变化，仍以 `evidence_dedupe_conflict` 失败关闭，禁止静默复用；单条冲突按不可重试的记录失败保留，其他独立记录继续落库，有可用记录时任务以 `completed_with_warnings / partial` 及时终止，不得把数据冲突误判成来源网络故障反复重试。有原始证据为 `result_ready`；真实空结果为 `succeeded_empty`；登录、验证码、robots、权限或终止失败保留明确错误码。没有属于当前旅程且已形成趋势主题的候选时禁止 `adopt`；空/受阻时仍保存旅程人工决策，但不会捏造机会。
 

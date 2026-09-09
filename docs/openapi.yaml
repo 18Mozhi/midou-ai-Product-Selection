@@ -5831,7 +5831,7 @@ paths:
   /selection-journeys/{journeyId}/decisions:
     post:
       summary: Record the audited human decision after comparing candidate results
-      description: selected_raw_evidence_id is required for adopt and must belong to the current journey; only adopt creates or reuses an opportunity from the selected candidate.
+      description: selected_raw_evidence_id is required for adopt and must belong to the current journey. Adopt requires an existing scoped trend-topic opportunity with selection_stage recommended and all five quality gates passed, rechecked under lock using the opportunity-detail policy. Missing or ineligible opportunities return 409 opportunity_adopt_evidence_insufficient before writes. No unassessed opportunity is created and no assessed evidence or coverage is rewritten. Observe, reject and completed idempotent replays retain their existing behavior.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: opportunity:decide
       parameters:
@@ -7158,7 +7158,18 @@ components:
     SelectionJourneyCandidate:
       type: object
       additionalProperties: false
-      required: [raw_evidence_id, title, publisher, canonical_url, observed_at, topic_id]
+      required:
+        [
+          raw_evidence_id,
+          title,
+          publisher,
+          canonical_url,
+          observed_at,
+          topic_id,
+          opportunity_id,
+          selection_stage,
+          quality_gates,
+        ]
       properties:
         raw_evidence_id: { type: string, format: uuid }
         title: { type: string, nullable: true }
@@ -7166,6 +7177,22 @@ components:
         canonical_url: { type: string, format: uri }
         observed_at: { type: string, format: date-time }
         topic_id: { type: string, format: uuid, nullable: true }
+        opportunity_id: { type: string, format: uuid, nullable: true }
+        selection_stage:
+          type: string
+          enum: [rule_candidate, recommended, not_eligible]
+          description: Current scoped opportunity policy projection; missing opportunities are not_eligible.
+        quality_gates:
+          type: object
+          additionalProperties: false
+          required: [score, market, competition, cost, risk, all_passed]
+          properties:
+            score: { type: boolean }
+            market: { type: boolean }
+            competition: { type: boolean }
+            cost: { type: boolean }
+            risk: { type: boolean }
+            all_passed: { type: boolean }
     SelectionJourneyEnvelope:
       type: object
       required: [data, request_id, trace_id]

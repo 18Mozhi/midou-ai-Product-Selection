@@ -93,7 +93,8 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
   assert.match(files[0], /错误码：[\s\S]*journey\.blocked_reason/);
   assert.match(files[0], /任务状态与事件记录/);
   assert.match(files[0], /localStorage\.setItem\(progressStorageKey/);
-  assert.match(files[0], /比较 \{\{ candidates\.length \}\} 条候选后再生成机会/);
+  assert.match(files[0], /比较 \{\{ candidates\.length \}\} 条候选，质量门通过后再采纳/);
+  assert.match(files[0], /decision\.action === "adopt" && !canAdopt\.value/);
   assert.match(files[0], /@secondary="handleStateSecondary"/);
   assert.match(files[0], /本次创建未获得服务端成功确认/);
   assert.doesNotMatch(files[0], /验收时钟|180 秒|DECIDED|state\.toUpperCase/);
@@ -164,7 +165,8 @@ test("M07-06 candidate comparison scopes adoption to one selected evidence", asy
   assert.match(repository, /l\.raw_evidence_id=\?/);
   assert.match(repository, /selected_raw_evidence_id/);
   assert.match(openapi, /SelectionJourneyCandidate/);
-  assert.match(openapi, /only adopt creates or reuses an opportunity/);
+  assert.match(openapi, /Adopt requires an existing scoped trend-topic opportunity/);
+  assert.match(openapi, /409 opportunity_adopt_evidence_insufficient before writes/);
   assert.match(migration, /FOREIGN KEY \(`selected_raw_evidence_id`\)/);
   assert.match(rollback, /DROP COLUMN `selected_raw_evidence_id`/);
 });

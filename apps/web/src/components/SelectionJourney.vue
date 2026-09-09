@@ -25,6 +25,16 @@ interface Journey {
     canonical_url: string;
     observed_at: string;
     topic_id: string | null;
+    opportunity_id?: string | null;
+    selection_stage?: "rule_candidate" | "recommended" | "not_eligible";
+    quality_gates?: {
+      score: boolean;
+      market: boolean;
+      competition: boolean;
+      cost: boolean;
+      risk: boolean;
+      all_passed: boolean;
+    };
   }>;
   first_result: Journey["results"][number] | null;
   blocked_reason: string | null;
@@ -91,6 +101,7 @@ const terminal = computed(
   selectedCandidate = computed(() =>
     candidates.value.find((candidate) => candidate.raw_evidence_id === selectedResultId.value),
   ),
+  canAdopt = computed(() => eligibleForAdoption(selectedCandidate.value)),
   stateTitle = computed(
     () =>
       ({
@@ -109,6 +120,36 @@ const terminal = computed(
     ],
   decisionLabel = (action: string) =>
     ({ adopt: "已采纳", observe: "继续观察", reject: "已驳回" })[action] ?? action;
+function eligibleForAdoption(candidate: Journey["results"][number] | undefined) {
+  return Boolean(
+    candidate?.topic_id &&
+    candidate.opportunity_id &&
+    candidate.selection_stage === "recommended" &&
+    candidate.quality_gates?.all_passed === true &&
+    (["score", "market", "competition", "cost", "risk"] as const).every(
+      (key) => candidate.quality_gates?.[key] === true,
+    ),
+  );
+}
+function adoptionHint(candidate: Journey["results"][number]) {
+  if (!candidate.opportunity_id) return "尚无已评估机会，暂不能采纳，可继续观察";
+  if (!candidate.quality_gates) return "质量门状态未返回，刷新进度后再核对";
+  const missing = (
+    [
+      ["score", "评分"],
+      ["market", "市场"],
+      ["competition", "竞争"],
+      ["cost", "成本"],
+      ["risk", "风险"],
+    ] as const
+  )
+    .filter(([key]) => !candidate.quality_gates?.[key])
+    .map(([, label]) => label);
+  if (missing.length) return `待通过质量门：${missing.join("、")}。请在机会列表补齐评估后刷新`;
+  return eligibleForAdoption(candidate)
+    ? "五项质量门已通过，可采纳"
+    : "当前不可采纳，请在机会详情核对决策状态、有效规则及来源门槛";
+}
 function applyFailure(error: unknown, fallback: string) {
   if (error instanceof ApiClientError) {
     state.value =
@@ -210,6 +251,10 @@ async function readJourney(id: string, restoring = false) {
 }
 async function decide() {
   if (!active || !journey.value || busy.value || reading.value) return;
+  if (decision.action === "adopt" && !canAdopt.value) {
+    message.value = "所选候选尚未满足采纳条件，请核对五项质量门或选择继续观察、驳回。";
+    return;
+  }
   stopRead();
   busy.value = true;
   message.value = "";
@@ -225,6 +270,7 @@ async function decide() {
     requestId.value = result.request_id;
     applyJourney(result.data);
     decision.reason = "";
+    state.value = "ready";
     stop();
   } catch (error) {
     applyFailure(error, "依赖不可用，决策未写入。");
@@ -390,7 +436,7 @@ onUnmounted(deactivate);
         <header>
           <div>
             <p>候选比较</p>
-            <h3>比较 {{ candidates.length }} 条候选后再生成机会</h3>
+            <h3>比较 {{ candidates.length }} 条候选，质量门通过后再采纳</h3>
           </div>
           <b>已选 {{ selectedResultId ? 1 : 0 }} 条</b>
         </header>
@@ -413,7 +459,7 @@ onUnmounted(deactivate);
                 >{{ candidate.publisher || "来源未提供发布者" }} ·
                 {{ new Date(candidate.observed_at).toLocaleString() }}</em
               >
-              <i v-if="!candidate.topic_id">暂不能生成机会，可继续观察</i>
+              <i>{{ adoptionHint(candidate) }}</i>
             </span>
             <a :href="candidate.canonical_url" target="_blank" rel="noopener noreferrer" @click.stop
               >查看来源原文 ↗</a
@@ -464,20 +510,20 @@ onUnmounted(deactivate);
         <div class="selection-actions">
           <label
             v-for="item in [
-              { value: 'adopt', label: '采纳并生成机会' },
+              { value: 'adopt', label: '采纳合格机会' },
               { value: 'observe', label: '继续观察' },
               { value: 'reject', label: '驳回' },
             ]"
             :key="item.value"
             :class="{
-              disabled: item.value === 'adopt' && !selectedCandidate?.topic_id,
+              disabled: item.value === 'adopt' && !canAdopt,
             }"
             ><input
               v-model="decision.action"
               type="radio"
               name="decision"
               :value="item.value"
-              :disabled="item.value === 'adopt' && !selectedCandidate?.topic_id"
+              :disabled="item.value === 'adopt' && !canAdopt"
             /><span>{{ item.label }}</span></label
           >
         </div>
@@ -488,7 +534,10 @@ onUnmounted(deactivate);
             maxlength="1000"
             rows="4"
           ></textarea></label
-        ><button type="submit" :disabled="busy || reading">
+        ><button
+          type="submit"
+          :disabled="busy || reading || (decision.action === 'adopt' && !canAdopt)"
+        >
           {{ busy ? "正在保存…" : "保存审计决策" }}
         </button>
       </form>

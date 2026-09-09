@@ -30,6 +30,14 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 ## 日志与排查
 
+### P16/P18 统一采纳门（2026-09-09）
+
+`409 opportunity_adopt_evidence_insufficient` 不是采集失败。到机会列表查看所选主题对应的同工作区机会，核对待决策状态、有效监控规则及来源门槛，再补齐评分、市场、竞争、成本、风险评估。没有已评估机会时可继续观察或驳回；页面不会在采纳时创建未评估机会。补齐后刷新旅程状态再核对，不自动重复 POST。历史已决策旅程及原幂等重放保持不变。
+
+本规则需要本地重新构建 API/后端运行包和 Vue 静态文件，未来按既定 `python scripts/deploy-baota.py` 流程发布，再由宝塔重启 Node 项目 `ai选品` 使代码生效（命令 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`）。不新增环境变量、开关或数据库迁移，无需因本规则单独重启 Python Crawler、MySQL、Redis。当前本地实施不代表已经部署。
+
+回归命令：`npm run build:api`、`npm run typecheck:web`、`node --test tests/unit/selection-journey-adoption-gates.test.mjs tests/unit/opportunity-selection-policy.test.mjs tests/m07-06/selection-acceptance.test.mjs`，以及 `node scripts/run-playwright-projects.mjs tests/e2e/ui-phase2-journey-contracts.spec.ts tests/e2e/ui-phase2-journey-reads.spec.ts tests/e2e/m07-06-selection-acceptance.spec.ts`。后者为真实 Vue 加隔离响应，不替代 MySQL 并发或生产真实来源验收。撤回本规则会恢复旧的宽松采纳行为，不能当作无业务影响回滚；应先暂停新采纳并重新确认规则，不删除既有审计或证据。
+
 在宝塔计划任务日志按 `request_id`/`trace_id` 关联 Node API、Worker 和 Crawler。不要打印账号密码、会话 Cookie、Token、Provider 凭证或原始响应正文。优先检查：来源是否 enabled、Worker 是否领取任务、`collection_task_events` 的状态、当前任务在 `collection_task_evidence_links` 是否存在关联、对应 `raw_evidence` 是否有效、趋势投影是否产生主题，以及决策权限是否有效。任务报告结果数大于零但关联数为零属于持久化失败，不得换关键词、放宽 180 秒门或把它判为空结果。若 `evidence.linked` 出现 `content_changed=true`，核对两个 SHA-256、规范 URL、Parser/Adapter/Schema 和规范载荷；仅未消费的 RSS 包装变化允许复用旧不可变证据。规范事实变化仍必须得到单条 `evidence_dedupe_conflict`，不得覆盖旧证据；Worker 应继续处理其他独立记录，有可用记录时以 `completed_with_warnings / partial` 终止，不得把该冲突作为网络错误重试整个来源。回滚本修复只需切回上一 Worker 构建并由宝塔重启 Node Worker，不需要迁移或删除关联、事件、Outbox、证据。
 
 代理异常先检查 OpenClash 监听、Basic 认证以及 API/Worker 是否通过宝塔重启读取新配置；只记录 CONNECT 状态、耗时和错误码，不记录代理用户名或密码。

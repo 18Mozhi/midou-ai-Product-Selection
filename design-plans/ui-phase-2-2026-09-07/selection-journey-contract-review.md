@@ -1,5 +1,7 @@
 # P16 创建选品旅程 · 输入、续办、候选与决定合同
 
+2026-09-09 规则实施更新：用户已明确[统一五项质量门](JOURNEY-ADOPTION-DECISION.md)，P16 本地实现复用 P18 判定，前端缺门阻断/提示与后端锁内复核、候选质量门 DTO 均已加入，保存成功清除旧错误态。下文第1–8节和 P16 动作JSON为改前源码快照，不能再当当前源身份或新采纳门的视觉证据。最新范围与测试见该决定文档及 PROGRESS；旧图未静默换绑，视觉稿重采/逐动作审核仍待继续。
+
 2026-09-08图稿接续：[JOURNEY-C-r1](design/journey-direction-c/README.md)48场景双端96图，零业务弹窗；具体稿待审。实际函数执行复现decide成功仍state=error、reset保留decision.reason，提案清理尚未修Vue。J07仓库直接adopted与P18五门冲突仍在，本轮再次请用户选择；采纳成功图/实现暂未交付，不把禁用审核控件当生产规则变化。输入、观察驳回及恢复可继续推进，不注销J07–J10。
 
 日期2026-09-07；N03；main/d0c1bb6；[页面规格](page-specs/P16.md)。源码入口为NavigationShell → SelectionJourney.vue → selection-journey-routes.ts → selection-journey-service.ts → mysql-selection-journey-repository.ts。当前产品源指纹沿用c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183。本批只补规格/合同/隔离回归，不改旅程业务、生产样式或已审状态。

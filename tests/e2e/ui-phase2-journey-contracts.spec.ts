@@ -31,6 +31,16 @@ function fixture(): SelectionJourneyResult {
       canonical_url: `https://example.test/candidate-${n}`,
       observed_at: at,
       topic_id: n === 1 ? null : id(7620),
+      opportunity_id: null,
+      selection_stage: "not_eligible",
+      quality_gates: {
+        score: false,
+        market: false,
+        competition: false,
+        cost: false,
+        risk: false,
+        all_passed: false,
+      },
     })),
     first_result: null,
     blocked_reason: null,
@@ -100,6 +110,117 @@ function assertPost(request: Request, path: string, body: unknown) {
 }
 const savedId = (page: Page) => page.evaluate((key) => localStorage.getItem(key), storageKey);
 
+function qualify(data: Awaited<ReturnType<typeof ready>>) {
+  Object.assign(data.journey.results[1], {
+    opportunity_id: id(7621),
+    selection_stage: "recommended",
+    quality_gates: {
+      score: true,
+      market: true,
+      competition: true,
+      cost: true,
+      risk: true,
+      all_passed: true,
+    },
+  });
+}
+for (const [gate, label] of [
+  ["score", "评分"],
+  ["market", "市场"],
+  ["competition", "竞争"],
+  ["cost", "成本"],
+  ["risk", "风险"],
+] as const) {
+  test(`UI2-J07 missing ${gate} blocks adoption even with a stale aggregate flag`, async ({
+    page,
+  }) => {
+    const data = await ready(page, journeyId);
+    qualify(data);
+    data.journey.results[1].quality_gates[gate] = false;
+    await page.goto("/opportunities/start");
+    await page.getByText("隔离候选 2", { exact: true }).click();
+    await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
+    await expect(
+      page.getByText(`待通过质量门：${label}。请在机会列表补齐评估后刷新`, { exact: true }),
+    ).toBeVisible();
+    await expect(page.getByRole("radio", { name: "继续观察", exact: true })).toBeEnabled();
+    await expect(page.getByRole("radio", { name: "驳回", exact: true })).toBeEnabled();
+    expect(data.writes).toHaveLength(0);
+  });
+}
+test("UI2-J08 changing to an ineligible candidate blocks an already selected adopt without losing the reason", async ({
+  page,
+}) => {
+  const data = await ready(page, journeyId);
+  qualify(data);
+  await page.goto("/opportunities/start");
+  await page.getByText("隔离候选 2", { exact: true }).click();
+  await page.getByRole("radio", { name: "采纳合格机会" }).check();
+  await page.getByLabel("决策原因").fill("核对过的原因");
+  await page.getByText("隔离候选 1", { exact: true }).click();
+  await expect(page.getByRole("button", { name: "保存审计决策" })).toBeDisabled();
+  // A native form submit bypasses the disabled button: the handler must still refuse the POST.
+  await page
+    .locator(".selection-decision")
+    .evaluate((element) => (element as HTMLFormElement).requestSubmit());
+  await expect(page.locator(".selection-footer")).toContainText("所选候选尚未满足采纳条件");
+  await expect(page.getByLabel("决策原因")).toHaveValue("核对过的原因");
+  expect(data.writes).toHaveLength(0);
+});
+test("UI2-J09 server gate conflict preserves draft, refresh disables adoption, observe remains available", async ({
+  page,
+}) => {
+  const data = await ready(page, journeyId);
+  qualify(data);
+  await page.route(`**/api/v1/selection-journeys/${journeyId}/decisions`, (route) => {
+    if (route.request().postDataJSON().action === "adopt") {
+      data.journey.results[1].quality_gates.cost = false;
+      data.journey.results[1].quality_gates.all_passed = false;
+      data.journey.results[1].selection_stage = "rule_candidate";
+      return route.fulfill({
+        status: 409,
+        json: {
+          error: {
+            code: "opportunity_adopt_evidence_insufficient",
+            message: "质量门已变化",
+            action_hint: "成本质量门已变化，请刷新后核对。",
+          },
+          request_id: "gate-conflict",
+          trace_id: "gate-conflict",
+        },
+      });
+    }
+    data.journey.state = "decided";
+    data.journey.decision = {
+      action: "observe",
+      reason: "保留原因",
+      selected_raw_evidence_id: null,
+      actor_id: id(7640),
+      created_at: at,
+    };
+    return route.fulfill({ status: 201, json: envelope(data.journey) });
+  });
+  await page.goto("/opportunities/start");
+  await page.getByText("隔离候选 2", { exact: true }).click();
+  await page.getByRole("radio", { name: "采纳合格机会" }).check();
+  await page.getByLabel("决策原因").fill("保留原因");
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  await expect(page.locator(".ui-state-panel")).toContainText("成本质量门已变化");
+  await expect(page.getByLabel("决策原因")).toHaveValue("保留原因");
+  await page.getByRole("button", { name: "重试读取进度" }).click();
+  await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "保存审计决策" })).toBeDisabled();
+  await page.getByRole("radio", { name: "继续观察", exact: true }).check();
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  await expect(page.locator(".selection-complete")).toContainText("决策已保存 · 继续观察");
+  expect(data.writes).toHaveLength(2);
+  assertPost(data.writes[1], `/selection-journeys/${journeyId}/decisions`, {
+    action: "observe",
+    reason: "保留原因",
+    selected_raw_evidence_id: null,
+  });
+});
+
 for (const [kind, radio, field, value] of [
   ["keyword", "关键词", "商品关键词", " portable blender "],
   ["asin", "ASIN", "10 位 ASIN", "b012345678"],
@@ -133,7 +254,7 @@ for (const [kind, radio, field, value] of [
     assertPost(data.writes[0], "/selection-journeys", { input_kind: kind, input_value: value });
     expect(await savedId(page)).toBe(journeyId);
     await expect(page.locator(".selection-candidates")).toContainText("已选 0 条");
-    await expect(page.getByRole("radio", { name: "采纳并生成机会" })).toBeDisabled();
+    await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 }

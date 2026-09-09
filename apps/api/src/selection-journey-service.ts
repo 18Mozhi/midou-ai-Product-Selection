@@ -1,5 +1,9 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { DecisionAction } from "./opportunity-service.js";
+import type {
+  OpportunityQualityGates,
+  OpportunitySelectionStage,
+} from "./opportunity-selection-policy.js";
 
 export type SelectionInputKind = "keyword" | "asin" | "product_url";
 export type SelectionJourneyState =
@@ -11,6 +15,9 @@ export interface SelectionJourneyCandidate {
   canonical_url: string;
   observed_at: string;
   topic_id: string | null;
+  opportunity_id: string | null;
+  selection_stage: OpportunitySelectionStage;
+  quality_gates: OpportunityQualityGates;
 }
 export interface SelectionJourneyResult {
   id: string;

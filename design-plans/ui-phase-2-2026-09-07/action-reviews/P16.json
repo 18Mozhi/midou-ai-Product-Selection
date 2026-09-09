@@ -2,7 +2,9 @@
   "schemaVersion": 1,
   "pageId": "P16",
   "route": "/opportunities/start",
-  "status": "source-reviewed-not-user-approved",
+  "status": "historical-source-reviewed-not-user-approved",
+  "supersededBy": "design-plans/ui-phase-2-2026-09-07/JOURNEY-ADOPTION-DECISION.md",
+  "historicalBoundary": "Snapshot reviewed at a8cbf10f before the authorized unified adoption gates. Source hashes and old scene references intentionally retained; current source/action/visual recapture is pending. Do not count this snapshot as current gate evidence.",
   "contract": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/SelectionJourney.vue": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271"

@@ -145,11 +145,21 @@ test("selection journey resumes and adopts only the compared candidate", async (
     },
     second = {
       raw_evidence_id: "55555555-5555-4555-8555-555555555552",
-      title: "候选二：可生成机会",
+      title: "候选二：质量门已通过",
       publisher: "来源二",
       canonical_url: "https://example.com/candidate-two",
       observed_at: "2026-08-10T12:00:12.000Z",
       topic_id: "66666666-6666-4666-8666-666666666666",
+      opportunity_id: "88888888-8888-4888-8888-888888888888",
+      selection_stage: "recommended",
+      quality_gates: {
+        score: true,
+        market: true,
+        competition: true,
+        cost: true,
+        risk: true,
+        all_passed: true,
+      },
     },
     result = {
       ...base,
@@ -191,9 +201,9 @@ test("selection journey resumes and adopts only the compared candidate", async (
   });
   await page.goto("/opportunities/start");
   await expect(page.getByText("已恢复上次未完成的选品进度。")).toBeVisible();
-  await expect(page.getByText("比较 2 条候选后再生成机会")).toBeVisible();
-  await page.getByText("候选二：可生成机会").click();
-  await page.getByLabel("采纳并生成机会").check();
+  await expect(page.getByText("比较 2 条候选，质量门通过后再采纳")).toBeVisible();
+  await page.getByText("候选二：质量门已通过").click();
+  await page.getByLabel("采纳合格机会").check();
   await page.getByLabel("决策原因").fill("比较后选择候选二");
   await page.getByRole("button", { name: "保存审计决策" }).click();
   expect(decisionBody?.selected_raw_evidence_id).toBe(second.raw_evidence_id);
