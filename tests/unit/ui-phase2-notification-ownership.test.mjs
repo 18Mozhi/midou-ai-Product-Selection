@@ -193,7 +193,7 @@ test("P26 load invoked after unmount does not issue a new read batch", async () 
   assert.equal(calls.length, 0);
 });
 
-test("P26 late automatic-read receipt replaces subsequently opened B with A", async () => {
+test("P26 late automatic-read receipt cannot replace subsequently opened B", async () => {
   const old = deferred(),
     started = deferred();
   const { ui, calls } = harness((url, options) => {
@@ -220,11 +220,11 @@ test("P26 late automatic-read receipt replaces subsequently opened B with A", as
     }),
   );
   await first;
-  assert.equal(ui.selected.value.id, a.id);
+  assert.equal(ui.selected.value.id, b.id);
   assert.equal(calls.filter((call) => call.method === "POST").length, 1);
 });
 
-test("P26 workflow receipt can combine A identity with B title after deep-link open", async () => {
+test("P26 workflow receipt cannot combine A identity with B title after deep-link open", async () => {
   const old = deferred();
   const { ui } = harness((url) => {
     if (url === `/notifications/${a.id}/actions`) return old.promise;
@@ -242,8 +242,155 @@ test("P26 workflow receipt can combine A identity with B title after deep-link o
     env({ id: a.id, read_at: a.read_at, workflow_status: "in_progress", version: a.version + 1 }),
   );
   await first;
-  assert.equal(ui.selected.value.id, a.id);
+  assert.equal(ui.selected.value.id, b.id);
   assert.equal(ui.selected.value.title, b.title);
+  assert.equal(ui.selected.value.workflow_status, b.workflow_status);
+  assert.equal(ui.notice.value, "");
+});
+
+for (const outcome of ["success", "failure"]) {
+  test(`P26 old detail ${outcome} cannot replace the newer detail or diagnostic`, async () => {
+    const old = deferred();
+    const { ui, calls } = harness((url) => {
+      if (url === `/notifications/${a.id}`) return old.promise;
+      if (url === `/notifications/${b.id}`) return Promise.resolve(env(b, "current-detail"));
+      throw new Error(url);
+    });
+    const first = ui.openById(a.id);
+    await ui.openById(b.id);
+    if (outcome === "success") old.resolve(env({ ...a, read_at: null }, "old-detail"));
+    else old.reject(new ApiClientError());
+    await first;
+    assert.equal(ui.selected.value.id, b.id);
+    assert.equal(ui.requestId.value, "current-detail");
+    assert.equal(ui.notice.value, "");
+    assert.equal(calls.filter((call) => call.method === "POST").length, 0);
+  });
+}
+
+test("P26 closed pending detail cannot reopen or start automatic read", async () => {
+  const old = deferred();
+  const { ui, calls } = harness(() => old.promise);
+  ui.selected.value = structuredClone(b);
+  const first = ui.openById(a.id);
+  await ui.closeDetail();
+  old.resolve(env({ ...a, read_at: null }));
+  await first;
+  assert.equal(ui.selected.value, null);
+  assert.equal(calls.length, 1);
+});
+
+test("P26 old workflow failure cannot add its diagnostic to B", async () => {
+  const old = deferred();
+  const { ui } = harness((url) =>
+    url === `/notifications/${a.id}/actions` ? old.promise : Promise.resolve(env(b, "B")),
+  );
+  ui.selected.value = structuredClone(a);
+  const first = ui.updateWorkflow("start");
+  await ui.openById(b.id);
+  old.reject(new ApiClientError());
+  await first;
+  assert.equal(ui.selected.value.id, b.id);
+  assert.equal(ui.requestId.value, "B");
+  assert.equal(ui.notice.value, "");
+  assert.equal(ui.busy.value, false);
+});
+
+test("P26 destroyed detail cannot apply data or start automatic read", async () => {
+  const old = deferred();
+  const { ui, hooks, calls } = harness(() => old.promise);
+  const first = ui.openById(a.id);
+  hooks.unmounted.forEach((fn) => fn());
+  old.resolve(env({ ...a, read_at: null }));
+  await first;
+  assert.equal(ui.selected.value, null);
+  assert.equal(calls.length, 1);
+});
+
+test("P26 current workflow still merges its original detail and exact versioned action", async () => {
+  const { ui, calls } = harness((url) =>
+    url === `/notifications/${a.id}/actions`
+      ? Promise.resolve(env({ id: a.id, workflow_status: "in_progress", version: 2 }))
+      : Promise.resolve(defaults(url)),
+  );
+  ui.selected.value = structuredClone(a);
+  await ui.updateWorkflow("start");
+  assert.equal(ui.selected.value.id, a.id);
+  assert.equal(ui.selected.value.title, a.title);
+  assert.equal(ui.selected.value.workflow_status, "in_progress");
+  assert.deepEqual(calls[0].body, { action: "start", expected_version: a.version });
+  assert.equal(ui.busy.value, false);
+});
+
+test("P26 removed detail query invalidates a still pending deep link", async () => {
+  const pending = deferred();
+  const { ui, hooks } = harness(() => pending.promise);
+  const run = ui.openById(a.id);
+  hooks.watches.at(-1).fn([undefined, undefined]);
+  pending.resolve(env(a));
+  await run;
+  assert.equal(ui.selected.value, null);
+});
+
+for (const action of ["read", "start"]) {
+  test(`P26 destroyed ${action} receipt cannot mutate detail, summary, notice or busy`, async () => {
+    const pending = deferred(),
+      started = deferred();
+    const { ui, hooks, calls } = harness((url) => {
+      if (url.endsWith("/actions")) {
+        started.resolve();
+        return pending.promise;
+      }
+      return Promise.resolve(env({ ...a, read_at: null }));
+    });
+    ui.selected.value = structuredClone(a);
+    ui.summary.value.unread = 3;
+    const run = action === "read" ? ui.openById(a.id) : ui.updateWorkflow("start");
+    await started.promise;
+    hooks.unmounted.forEach((fn) => fn());
+    const before = plain({
+      selected: ui.selected.value,
+      summary: ui.summary.value,
+      notice: ui.notice.value,
+      busy: ui.busy.value,
+      requestId: ui.requestId.value,
+    });
+    pending.resolve(
+      env({
+        id: a.id,
+        read_at: "2026-09-10T00:00:00Z",
+        workflow_status: "in_progress",
+        version: 2,
+      }),
+    );
+    await run;
+    assert.deepEqual(
+      plain({
+        selected: ui.selected.value,
+        summary: ui.summary.value,
+        notice: ui.notice.value,
+        busy: ui.busy.value,
+        requestId: ui.requestId.value,
+      }),
+      before,
+    );
+    assert.equal(calls.filter((call) => call.method === "POST").length, 1);
+  });
+}
+
+test("P26 reopening the same ID invalidates an earlier workflow window", async () => {
+  const pending = deferred();
+  const { ui } = harness((url) =>
+    url.endsWith("/actions") ? pending.promise : Promise.resolve(env(a, "reopened")),
+  );
+  ui.selected.value = structuredClone(a);
+  const run = ui.updateWorkflow("start");
+  await ui.openById(a.id);
+  pending.resolve(env({ id: a.id, workflow_status: "in_progress", version: 2 }, "old-window"));
+  await run;
+  assert.equal(ui.selected.value.workflow_status, a.workflow_status);
+  assert.equal(ui.requestId.value, "reopened");
+  assert.equal(ui.notice.value, "");
 });
 
 test("P26 reload replaces open preference draft, including SSE-triggered reload path", async () => {

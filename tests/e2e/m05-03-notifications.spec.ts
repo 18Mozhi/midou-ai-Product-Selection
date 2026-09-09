@@ -65,6 +65,81 @@ for (const outcome of ["success", "failure"] as const) {
   });
 }
 
+for (const action of ["read", "start"] as const) {
+  for (const outcome of ["success", "failure"] as const) {
+    test(`P26 ${action} ${outcome} for A cannot overwrite deep-linked B`, async ({ page }) => {
+      await setup(page);
+      const bId = "00000000-0000-4000-8000-000000000902";
+      let release!: () => void;
+      const pending = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      const bodies: unknown[] = [];
+      await page.route(`**/api/v1/notifications/${id}`, (route) =>
+        route.fulfill({ json: env({ ...item, read_at: action === "read" ? null : item.read_at }) }),
+      );
+      await page.route(`**/api/v1/notifications/${bId}`, (route) =>
+        route.fulfill({ json: env({ ...item, id: bId, title: "后打开的消息B" }) }),
+      );
+      await page.route(`**/api/v1/notifications/${id}/actions`, async (route) => {
+        bodies.push(route.request().postDataJSON());
+        await pending;
+        await route.fulfill(
+          outcome === "success"
+            ? {
+                json: env({
+                  id,
+                  read_at: item.read_at,
+                  workflow_status: action === "start" ? "in_progress" : "open",
+                  version: 2,
+                }),
+              }
+            : {
+                status: 409,
+                json: {
+                  request_id: "old-A-receipt",
+                  error: { code: "notification_version_conflict", action_hint: "旧消息A的错误" },
+                },
+              },
+        );
+      });
+      try {
+        await page.goto(`/notifications?notification=${id}`);
+        const detail = page.getByRole("dialog", { name: "消息详情", exact: true });
+        await expect(detail.getByRole("heading", { name: item.title })).toBeVisible();
+        if (action === "start")
+          await detail.getByRole("button", { name: "开始处理", exact: true }).click();
+        await expect.poll(() => bodies.length).toBe(1);
+        // Same-instance query navigation through the real router's history listener.
+        await page.evaluate((next) => {
+          history.pushState({ ...history.state }, "", next);
+          dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+        }, `/notifications?notification=${bId}`);
+        await expect(detail.getByRole("heading", { name: "后打开的消息B" })).toBeVisible();
+        const response = page.waitForResponse((r) =>
+          r.url().endsWith(`/notifications/${id}/actions`),
+        );
+        release();
+        await (await response).finished();
+        await page.evaluate(
+          () =>
+            new Promise<void>((resolve) =>
+              requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+            ),
+        );
+        await expect(detail.getByRole("heading", { name: "后打开的消息B" })).toBeVisible();
+        await expect(detail.getByRole("button", { name: "开始处理", exact: true })).toBeEnabled();
+        await expect(page.getByText("旧消息A的错误", { exact: true })).toHaveCount(0);
+        await expect(page.getByText("通知已进入处理中。", { exact: true })).toHaveCount(0);
+        await expect(page).toHaveURL(new RegExp(`notification=${bId}`));
+        expect(bodies).toEqual([{ action, expected_version: 1 }]);
+      } finally {
+        release();
+      }
+    });
+  }
+}
+
 const id = "00000000-0000-4000-8000-000000000931",
   env = (data: unknown) => ({
     data,

@@ -90,6 +90,7 @@ const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } =
 );
 let stream: EventSource | null = null;
 let loadGeneration = 0;
+let detailGeneration = 0;
 let disposed = false;
 const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
@@ -141,7 +142,7 @@ async function api<T>(
   options: { method?: string; body?: unknown } = {},
   affectPageState = true,
   captureMeta?: (meta: unknown) => void,
-  owner?: { current: () => boolean; failed: () => void },
+  owner?: { current: () => boolean; failed?: () => void },
 ) {
   try {
     const response = await request<T>(path, options);
@@ -162,7 +163,7 @@ async function api<T>(
               ? "error"
               : (failure?.kind ?? "error");
       notice.value = failure?.actionHint ?? "稍后重试。";
-      owner?.failed();
+      owner?.failed?.();
     }
     throw error;
   }
@@ -216,13 +217,18 @@ async function load() {
   }
 }
 async function openById(id: string, syncUrl = true) {
+  if (disposed) return;
+  const generation = ++detailGeneration;
+  const owner = { current: () => !disposed && generation === detailGeneration };
   try {
-    const detail = await api<Item>(`/notifications/${id}`, {}, false);
+    const detail = await api<Item>(`/notifications/${id}`, {}, false, undefined, owner);
+    if (!owner.current()) return;
     selected.value = detail;
     if (syncUrl)
       await router.replace({
         query: { ...route.query, notification: detail.id, notification_id: undefined },
       });
+    if (!owner.current()) return;
     if (!detail.read_at) {
       const result = await api<Partial<Item>>(
         `/notifications/${detail.id}/actions`,
@@ -234,7 +240,10 @@ async function openById(id: string, syncUrl = true) {
           },
         },
         false,
+        undefined,
+        owner,
       );
+      if (!owner.current()) return;
       selected.value = {
         ...detail,
         ...result,
@@ -249,16 +258,17 @@ async function openById(id: string, syncUrl = true) {
   }
 }
 async function open(item: Item) {
-  if (busy.value) return;
+  if (disposed || busy.value) return;
   busy.value = true;
   try {
     await openById(item.id);
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 async function closeDetail() {
-  if (busy.value) return;
+  if (disposed || busy.value) return;
+  detailGeneration += 1;
   selected.value = null;
   await router.replace({
     query: { ...route.query, notification: undefined, notification_id: undefined },
@@ -298,18 +308,26 @@ async function markAll() {
   }
 }
 async function updateWorkflow(action: "start" | "close" | "reopen") {
-  if (!selected.value || busy.value) return;
+  if (disposed || !selected.value || busy.value) return;
+  const detail = selected.value;
+  const generation = detailGeneration;
+  const owner = {
+    current: () => !disposed && generation === detailGeneration && selected.value?.id === detail.id,
+  };
   busy.value = true;
   try {
     const result = await api<Partial<Item>>(
-      `/notifications/${selected.value.id}/actions`,
+      `/notifications/${detail.id}/actions`,
       {
         method: "POST",
-        body: { action, expected_version: selected.value.version },
+        body: { action, expected_version: detail.version },
       },
       false,
+      undefined,
+      owner,
     );
-    selected.value = { ...selected.value, ...result };
+    if (!owner.current()) return;
+    selected.value = { ...detail, ...result };
     notice.value =
       action === "start"
         ? "通知已进入处理中。"
@@ -320,7 +338,7 @@ async function updateWorkflow(action: "start" | "close" | "reopen") {
   } catch (error) {
     rethrowUnexpectedError(error);
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 async function savePreferences() {
@@ -376,6 +394,7 @@ onMounted(() => {
 onUnmounted(() => {
   disposed = true;
   loadGeneration += 1;
+  detailGeneration += 1;
   stream?.close();
 });
 watch(
@@ -405,7 +424,10 @@ watch(
           : "";
     if (value && value !== selected.value?.id)
       void openById(value, typeof notification !== "string");
-    else if (!value) selected.value = null;
+    else if (!value) {
+      detailGeneration += 1;
+      selected.value = null;
+    }
   },
 );
 </script>

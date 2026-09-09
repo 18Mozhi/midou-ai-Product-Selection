@@ -82,6 +82,8 @@ export async function buildNotificationDesignData(repo) {
       pref = { value: { ...preferences, email_enabled: true } },
       navigation = [];
     const bindings = {
+      disposed: false,
+      detailGeneration: 0,
       busy,
       selected,
       items,
@@ -167,6 +169,8 @@ export async function buildNotificationDesignData(repo) {
     const selected = { value: item },
       calls = [];
     await run(`${extract(source, "closeDetail", "function")} export const result=closeDetail();`, {
+      disposed: false,
+      detailGeneration: 0,
       busy: { value: pending },
       selected,
       route: { query: { status: "open", notification: item.id } },

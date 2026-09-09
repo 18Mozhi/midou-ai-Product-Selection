@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+    "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -318,7 +318,7 @@
         "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
         "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+          "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
         }
       },
       "visualStateReferences": {
@@ -585,7 +585,7 @@
         "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
         "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+          "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
         }
       }
     },
@@ -712,7 +712,7 @@
         "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
         "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+          "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
         }
       }
     },
@@ -915,7 +915,7 @@
         "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
         "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+          "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
         }
       }
     },
@@ -1138,7 +1138,7 @@
         "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
         "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+          "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
         }
       }
     },
@@ -1150,7 +1150,7 @@
       "sourceContractKeys": ["AN-N-DETAIL；打开，未读时自动read"],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "列表行busy禁用；URL watcher直接openById不受busy约束",
-      "handler": "GET详情；未读时POST action=read和expected_version；不能视为纯读取",
+      "handler": "GET详情；未读时POST action=read和expected_version；详情代次保护读取与回执，不能视为纯读取",
       "variants": ["detail", "detail_unread", "read_busy", "read_error", "read_ack"],
       "scenes": [
         {
@@ -2007,7 +2007,7 @@
         "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
         "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092"
+          "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b"
         }
       }
     },
@@ -2268,7 +2268,7 @@
     "status": "source-reviewed-not-runtime-accepted",
     "files": ["apps/web/src/components/NotificationCenter.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/NotificationCenter.vue": "7f7f712108eb3f75cce3a53f9064f4e93ff24f61a13a0a22979ab294e143c092",
+      "apps/web/src/components/NotificationCenter.vue": "f554e7ab30db972ecbfcd5142de1dd2cc8ba8e281146595bc2571bf0d1eee42b",
       "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
     },
     "includeStructuralContainers": true,
@@ -2552,18 +2552,18 @@
     ],
     "sharedRemaining": [
       "useModalDialog提供原生开关/焦点返回；本轮VM测试替身不证明DOM焦点，完整组合仍需真实Vue验收。",
-      "旧读取meta/error已由真实源码读取批次保护；自动已读和workflow回执、偏好刷新/关闭仍有已复现归属缺口，不能用离线图稿掩盖。"
+      "读取meta/error与详情GET、自动已读/workflow回执已局部修复；偏好刷新/关闭仍有已复现归属缺口，不能用离线图稿掩盖。"
     ]
   },
   "compositionGaps": [
-    "12项源码测试含7项读取回归/正常检查与5项仍复现的写入/草稿边界；只有读取批次保护已修，非完整归属修复。",
+    "22项源码测试含19项读取/详情归属正向回归与正常检查，另3项记录2偏好缺口和原有busy入口差异；非完整页面/偏好生命周期验收。",
     "导航240图及本批字段/诊断70图后，代表槽85有图、12按当前源码无呈现单列、3仍待适用性核对；不是完整字段/所有组合或整页批准。原98+60+240图不改。",
     "SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。",
     "余3槽为分页busy及偏好关闭disabled/busy，需完整调用边界登记，不用假禁用图填数。"
   ],
   "approval": "pending-user-review",
   "limits": [
-    "本地真实Vue仅修复读取批次归属；不改变API/数据库/部署或布局，不把P16布局批准扩展到P26。",
+    "本地真实Vue已修读取批次和详情回执归属；不改变API/数据库/部署或布局，不把P16布局批准扩展到P26。",
     "85代表槽与14额外源控件变体不等于全部组合验收；12源码无状态槽不是补图，偏好图标仍仅提案。"
   ]
 }
