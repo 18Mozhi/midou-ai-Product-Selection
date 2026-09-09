@@ -111,6 +111,15 @@
   align-items: center;
   text-underline-offset: 4px;
 }
+.j-work a:hover {
+  background: #e5edfc;
+  border-radius: 8px;
+  text-decoration-thickness: 2px;
+}
+.j-work a:active {
+  background: #d6e2f8;
+  box-shadow: inset 0 2px 3px #17386320;
+}
 .j-surface {
   background: white;
   border: 1px solid var(--line);

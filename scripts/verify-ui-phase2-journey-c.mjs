@@ -15,11 +15,69 @@ assert.ok(process.argv.slice(2).every((v) => v === "--capture" || v === "--smoke
 const capture = process.argv.includes("--capture");
 const smoke = process.argv.includes("--smoke");
 assert.ok(!(capture && smoke));
+const pointerStates = ["default", "hover", "focus", "pressed"];
+const allStates = [...pointerStates, "disabled", "busy"];
+const additionalControls = [
+  {
+    key: "list",
+    actionId: "J-NAV-LIST",
+    selector: '.j-head a[href="/opportunities"]',
+    ready: "keyword",
+    states: pointerStates,
+  },
+  {
+    key: "source",
+    actionId: "J-SOURCE",
+    selector: '.candidate:first-of-type a[data-source="true"]',
+    ready: "results",
+    states: pointerStates,
+  },
+  {
+    key: "opportunity",
+    actionId: "J-NAV-OPPORTUNITY",
+    selector: '.completion a[href^="/opportunities/"]',
+    ready: "adopt-decided",
+    states: pointerStates,
+  },
+  {
+    key: "task",
+    actionId: "J-NAV-TASK",
+    selector: '.completion a[href^="/tasks/"]',
+    ready: "adopt-decided",
+    states: pointerStates,
+  },
+  {
+    key: "retry",
+    actionId: "J-STATE-RECOVERY",
+    selector: '[data-action="retry"]',
+    ready: "restore-failed",
+    disabled: "retry-busy",
+    busy: "retry-busy",
+    states: allStates,
+  },
+  {
+    key: "reset",
+    actionId: "J-RESET",
+    selector: '.j-footer [data-action="reset"]',
+    ready: "results",
+    disabled: "observe-busy",
+    busy: "observe-busy",
+    states: allStates,
+  },
+  {
+    key: "secondary",
+    selector: '[data-action="explain"]',
+    ready: "restore-forbidden",
+    states: pointerStates,
+  },
+];
 const sources = ["index.html", "data.js", "journey.js", "journey.css"]
   .map((v) => `${relative}/${v}`)
   .concat([
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css",
     "apps/web/src/components/SelectionJourney.vue",
+    "apps/web/src/components/UiStatePanel.vue",
+    "apps/web/src/ui/state-contract.ts",
     "apps/api/src/selection-journey-service.ts",
     "apps/api/src/selection-journey-routes.ts",
     "apps/api/src/mysql-selection-journey-repository.ts",
@@ -86,7 +144,7 @@ try {
             () => !window.JOURNEY_C.state().busy && !window.JOURNEY_C.state().reading,
           );
       const names = await page.evaluate(() => Object.keys(window.JOURNEY_C.scenes));
-      assert.equal(names.length, 58);
+      assert.equal(names.length, 59);
       for (const name of smoke
         ? ["adopt-ready", "gate-cost", "adopt-conflict", "adopt-decided"]
         : names) {
@@ -132,8 +190,8 @@ try {
           busy: "adopt-busy",
         },
       ];
-      for (const control of controls)
-        for (const variant of ["default", "hover", "focus", "pressed", "disabled", "busy"]) {
+      for (const control of [...controls, ...additionalControls])
+        for (const variant of control.states || allStates) {
           const baseScene = control[variant] || control.ready;
           await page.mouse.move(0, 0);
           await scene(baseScene);
@@ -191,6 +249,11 @@ try {
             (await state()).intents.length,
             0,
             `${control.key}/${variant} must not submit`,
+          );
+          assert.equal(
+            (await state()).navigation,
+            null,
+            `${control.key}/${variant} must not navigate`,
           );
           await checkPrototypeMetrics(page);
         }
@@ -250,6 +313,53 @@ try {
       });
       assert.equal((await state()).error, "");
       assert.equal((await state()).intents.length, 0);
+      for (const name of ["create-failed", "url-rejected"]) {
+        await scene(name);
+        await page.locator('.notice [data-action="reset"]').click();
+        assert.equal((await state()).journey, null);
+        assert.equal((await state()).intents.length, 0);
+        assert.equal((await state()).form.input_value, "");
+      }
+      for (const name of ["restore-failed", "read-failed", "create-failed"]) {
+        await scene(name);
+        await page.locator('[data-action="explain"]').click();
+        assert.equal((await state()).navigation, "history.back");
+        assert.equal((await state()).intents.length, 0);
+      }
+      for (const name of ["restore-forbidden", "read-blocked"]) {
+        await scene(name);
+        await page.locator('[data-action="explain"]').click();
+        assert.equal((await state()).navigation, null);
+        assert.equal((await state()).intents.length, 0);
+      }
+      for (const name of ["restore-expired", "read-expired"]) {
+        await scene(name);
+        assert.equal(await page.locator('[data-action="explain"]').count(), 0);
+      }
+      await scene("retry-busy");
+      await page.locator('[data-action="retry"]').evaluate((el) => el.click());
+      assert.equal((await state()).lastIntent, null);
+      await scene("restore-failed");
+      await page.locator('[data-action="retry"]').click();
+      assert.equal(await page.locator('[data-action="retry"]').isDisabled(), true);
+      await idle();
+      assert.equal((await state()).journey.id, data.sample.id);
+      for (const control of additionalControls.filter(
+        (v) => v.actionId?.startsWith("J-NAV") || v.key === "source",
+      )) {
+        await scene(control.ready);
+        const href = await page.locator(control.selector).getAttribute("href");
+        await page.locator(control.selector).focus();
+        await page.keyboard.press("Enter");
+        assert.equal((await state()).navigation, href);
+        assert.equal((await state()).intents.length, 0);
+      }
+      for (const name of ["create-busy", "observe-busy", "read-busy"]) {
+        await scene(name);
+        await page.locator('.j-head a[href="/opportunities"]').click();
+        assert.equal((await state()).navigation, "/opportunities");
+        assert.equal((await state()).intents.length, 0);
+      }
       await scene("results");
       await page.locator('[name="candidate"]').nth(1).check();
       const selected = (await state()).selected;
@@ -369,26 +479,24 @@ try {
 }
 const actionVisualReferences = Object.fromEntries(
   [
-    ["J-CREATE", "create", '#create-form [type="submit"]'],
-    ["J-DECIDE", "save", '#decision-form [type="submit"]'],
-  ].map(([id, key, selector]) => [
+    ["J-CREATE", "create", '#create-form [type="submit"]', allStates],
+    ["J-DECIDE", "save", '#decision-form [type="submit"]', allStates],
+    ...additionalControls
+      .filter((v) => v.actionId)
+      .map((v) => [v.actionId, v.key, v.selector, v.states]),
+  ].map(([id, key, selector, states]) => [
     id,
     {
       scope: "representative-control-only-not-all-variants-or-Vue",
       selector,
-      states: Object.fromEntries(
-        ["default", "hover", "focus", "pressed", "disabled", "busy"].map((v) => [
-          v,
-          `control-${key}-${v}`,
-        ]),
-      ),
+      states: Object.fromEntries(states.map((v) => [v, `control-${key}-${v}`])),
     },
   ]),
 );
 if (capture)
   await writeFile(
     path.join(root, "evidence.json"),
-    `${JSON.stringify({ version: data.version, approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, knownGaps: data.knownGaps, controlStates, actionVisualReferences, boundary: "58 full scenes and 18 control states at two widths; zero business dialogs. User approved r2 overall layout only; individual control-state review remains pending. Adoption uses isolated fixtures and source checks. Success clears prior error in Vue; reset draft clearing and inactive write ownership remain proposal-only. No HTTP, real storage, backend tasks or production/DB/authorization acceptance.", screenshots }, null, 2)}\n`,
+    `${JSON.stringify({ version: data.version, approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, knownGaps: data.knownGaps, controlStates, actionVisualReferences, boundary: "59 full scenes and 50 control states at two widths; zero business dialogs. User approved r2 overall layout only; individual control-state review remains pending. Adoption uses isolated fixtures and source checks. Success clears prior error in Vue; reset draft clearing and inactive write ownership remain proposal-only. No HTTP, real storage, backend tasks or production/DB/authorization acceptance.", screenshots }, null, 2)}\n`,
   );
 else if (!smoke)
   assert.deepEqual(

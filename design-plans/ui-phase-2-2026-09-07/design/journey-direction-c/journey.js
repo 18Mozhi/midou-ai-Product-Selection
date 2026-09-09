@@ -21,6 +21,7 @@
     "restore-expired": "恢复登录过期",
     "restore-forbidden": "恢复无权访问",
     "restore-blocked": "恢复受阻",
+    "retry-busy": "重试读取提交中",
     "invalid-id": "非法活动 ID 已清理",
     "missing-id": "活动 ID 返回 404",
     accepted: "任务已接收",
@@ -189,8 +190,11 @@
           ? 2
           : 3;
     const oldY = scrollY;
+    const recovery = s.error
+      ? `<div class="actions">${btn(s.journey || s.savedId ? "retry" : "reset", s.journey || s.savedId ? "重试读取进度" : "重新输入", "", s.busy || s.reading)}${s.error === "expired" ? "" : btn("explain", s.error === "forbidden" ? "查看权限说明" : s.error === "blocked" ? "查看影响" : "返回上一页")}</div>`
+      : "";
     document.querySelector("#app").innerHTML =
-      `<div class="j-layout"><aside class="j-rail"><small>选品 / 新旅程</small><h1>从线索到判断</h1><ol aria-label="工作阶段">${["输入线索", "来源处理", "审阅候选", "决定记录"].map((label, i) => `<li ${step === i + 1 ? 'aria-current="step"' : ""}><b>${i + 1}</b><span>${label}</span></li>`).join("")}</ol><p>当前阶段来自任务返回。页面不会以装饰进度或本地计时冒充真实完成。</p></aside><main class="j-work" id="work" tabindex="-1" aria-busy="${s.busy || s.reading}"><header class="j-head"><div><p class="meta">创建选品 · 当前会话工作区</p><h2>${s.journey ? "核对这次选品进展" : "开始一次选品"}</h2><p>一条线索，一次可追溯的任务。证据和人工判断分开记录。</p></div>${link("/opportunities", "返回机会列表")}</header>${s.message ? `<div class="notice ${s.error ? "error" : "success"}" role="${s.error ? "alert" : "status"}" tabindex="-1"><strong>${e(s.message)}</strong>${s.error && (s.journey || s.savedId) ? `<div class="actions">${btn("retry", "重试读取进度", "", s.busy || s.reading)}${btn("explain", s.error === "forbidden" ? "查看权限说明" : "了解影响")}</div>` : ""}</div>` : ""}${s.reading ? '<div class="notice" role="status">正在读取已存在的旅程；此时不能创建或保存决定。</div>' : ""}${s.journey ? journeyView() : inputView()}</main></div>`;
+      `<div class="j-layout"><aside class="j-rail"><small>选品 / 新旅程</small><h1>从线索到判断</h1><ol aria-label="工作阶段">${["输入线索", "来源处理", "审阅候选", "决定记录"].map((label, i) => `<li ${step === i + 1 ? 'aria-current="step"' : ""}><b>${i + 1}</b><span>${label}</span></li>`).join("")}</ol><p>当前阶段来自任务返回。页面不会以装饰进度或本地计时冒充真实完成。</p></aside><main class="j-work" id="work" tabindex="-1" aria-busy="${s.busy || s.reading}"><header class="j-head"><div><p class="meta">创建选品 · 当前会话工作区</p><h2>${s.journey ? "核对这次选品进展" : "开始一次选品"}</h2><p>一条线索，一次可追溯的任务。证据和人工判断分开记录。</p></div>${link("/opportunities", "返回机会列表")}</header>${s.message ? `<div class="notice ${s.error ? "error" : "success"}" role="${s.error ? "alert" : "status"}" tabindex="-1"><strong>${e(s.message)}</strong>${recovery}</div>` : ""}${s.reading ? '<div class="notice" role="status">正在读取已存在的旅程；此时不能创建或保存决定。</div>' : ""}${s.journey ? journeyView() : inputView()}</main></div>`;
     document.querySelector("#advance").disabled =
       s.busy || s.reading || !s.journey || !["accepted", "running"].includes(s.journey.state);
     if (focus) {
@@ -357,12 +361,17 @@
       s.error = "error";
       s.message = "服务端拒绝此商品链接，请修正后重试。";
     }
-    if (name === "restoring" || name.startsWith("restore-")) {
+    if (name === "restoring" || name.startsWith("restore-") || name === "retry-busy") {
       s.savedId = d.sample.id;
       s.reading = name === "restoring";
       if (!s.reading) {
         s.error = name.slice(8);
         s.message = `上次旅程恢复失败（${s.error === "expired" ? "登录已过期" : s.error === "forbidden" ? "当前范围无权访问" : "读取暂不可用"}）。活动 ID 保留，不自动创建。`;
+      }
+      if (name === "retry-busy") {
+        s.reading = true;
+        s.error = "error";
+        s.message = "重试已发出，正在读取上次旅程；不会创建新任务。";
       }
     }
     if (name === "invalid-id" || name === "missing-id")
@@ -381,6 +390,7 @@
       "create-failed",
       "url-rejected",
       "restoring",
+      "retry-busy",
       "restore-failed",
       "restore-expired",
       "restore-forbidden",
@@ -612,6 +622,12 @@
     if (!button || button.disabled) return;
     if (button.dataset.action === "reset") reset();
     if (button.dataset.action === "explain") {
+      if (!["blocked", "forbidden"].includes(s.error)) {
+        s.navigation = "history.back";
+        s.message = "返回上一页意图；未离开隔离图稿，也未取消后台任务。";
+        render();
+        return;
+      }
       s.message =
         s.error === "forbidden"
           ? "创建/读取/决定分别要求 task:create / opportunity:read / opportunity:decide；联系管理员核对当前范围。"

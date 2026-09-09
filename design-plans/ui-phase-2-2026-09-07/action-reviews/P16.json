@@ -44,24 +44,62 @@
         {
           "package": "journey-direction-c",
           "scene": "results"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-list-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-list-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-list-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-list-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
       },
-      "remaining": "deactivate保护读取，不阻断已发POST；离开后的成功归属必须独立验证。"
+      "remaining": "deactivate保护读取，不阻断已发POST；离开后的成功归属必须独立验证。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-list-default",
+          "selector": ".j-head a[href=\"/opportunities\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-list-hover",
+          "selector": ".j-head a[href=\"/opportunities\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-list-focus",
+          "selector": ".j-head a[href=\"/opportunities\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-list-pressed",
+          "selector": ".j-head a[href=\"/opportunities\"]"
+        }
+      }
     },
     {
       "actionId": "J-STATE-RECOVERY",
@@ -120,24 +158,100 @@
         {
           "package": "journey-direction-c",
           "scene": "adopt-refreshed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-retry-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-retry-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-retry-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-retry-pressed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-retry-disabled"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-retry-busy"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "retry-busy"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-secondary-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-secondary-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-secondary-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-secondary-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "两个事件均保留；无journey/resumeId时共享重新登录等文案不改变reset行为；恢复副说明不是鉴权修复，真实401/403/存储异常待验。"
+      "remaining": "两个事件均保留；无journey/resumeId时共享重新登录等文案不改变reset行为；恢复副说明不是鉴权修复，真实401/403/存储异常待验。 代表视觉映射只覆盖重试主按钮，副按钮另有4态；无ID时主动作reset，error副动作history.back，expired无副按钮，blocked/forbidden仅说明。图稿的重试忙碌禁用和无ID时“重新输入”文案为待审改进，不宣称Vue已有。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-retry-default",
+          "selector": "[data-action=\"retry\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-retry-hover",
+          "selector": "[data-action=\"retry\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-retry-focus",
+          "selector": "[data-action=\"retry\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-retry-pressed",
+          "selector": "[data-action=\"retry\"]"
+        },
+        "disabled": {
+          "package": "journey-direction-c",
+          "scene": "control-retry-disabled",
+          "selector": "[data-action=\"retry\"]"
+        },
+        "busy": {
+          "package": "journey-direction-c",
+          "scene": "control-retry-busy",
+          "selector": "[data-action=\"retry\"]"
+        }
+      }
     },
     {
       "actionId": "J-CREATE",
@@ -227,7 +341,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -299,24 +413,62 @@
         {
           "package": "journey-direction-c",
           "scene": "long-result"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-source-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-source-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-source-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-source-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
       },
-      "remaining": "click.stop只停冒泡，不自动证明label默认激活被取消；原型把来源链接与radio分离，仍需实际鼠标/键盘验收。"
+      "remaining": "click.stop只停冒泡，不自动证明label默认激活被取消；原型把来源链接与radio分离，仍需实际鼠标/键盘验收。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-source-default",
+          "selector": ".candidate:first-of-type a[data-source=\"true\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-source-hover",
+          "selector": ".candidate:first-of-type a[data-source=\"true\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-source-focus",
+          "selector": ".candidate:first-of-type a[data-source=\"true\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-source-pressed",
+          "selector": ".candidate:first-of-type a[data-source=\"true\"]"
+        }
+      }
     },
     {
       "actionId": "J-DECIDE",
@@ -450,7 +602,7 @@
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -514,24 +666,62 @@
         {
           "package": "journey-direction-c",
           "scene": "decided-no-links"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
       },
-      "remaining": "合格fixture返回ID对应链接已原型核对，不代表实际机会访问权限或生产导航已验证。"
+      "remaining": "合格fixture返回ID对应链接已原型核对，不代表实际机会访问权限或生产导航已验证。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-default",
+          "selector": ".completion a[href^=\"/opportunities/\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-hover",
+          "selector": ".completion a[href^=\"/opportunities/\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-focus",
+          "selector": ".completion a[href^=\"/opportunities/\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-opportunity-pressed",
+          "selector": ".completion a[href^=\"/opportunities/\"]"
+        }
+      }
     },
     {
       "actionId": "J-NAV-TASK",
@@ -560,24 +750,62 @@
         {
           "package": "journey-direction-c",
           "scene": "adopt-decided"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-task-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-task-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-task-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-task-pressed"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "not-applicable-navigation-only"
       },
-      "remaining": "请求成功不证明任务执行或消息送达；没有返回ID不补造。"
+      "remaining": "请求成功不证明任务执行或消息送达；没有返回ID不补造。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-task-default",
+          "selector": ".completion a[href^=\"/tasks/\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-task-hover",
+          "selector": ".completion a[href^=\"/tasks/\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-task-focus",
+          "selector": ".completion a[href^=\"/tasks/\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-task-pressed",
+          "selector": ".completion a[href^=\"/tasks/\"]"
+        }
+      }
     },
     {
       "actionId": "J-RESET",
@@ -606,24 +834,80 @@
         {
           "package": "journey-direction-c",
           "scene": "next-input"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-reset-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-reset-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-reset-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-reset-pressed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-reset-disabled"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-reset-busy"
         }
       ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
+          "claim": "r2当前来源函数、59场景及50个代表控件状态双端隔离校验；包含恢复主次动作、键盘导航与零误提交，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "重置保留旧原因已确认；原型清理是待审提案，不能扩充浏览器持久化；写入晚到、storage异常与旧requestId展示仍待验。"
+      "remaining": "重置保留旧原因已确认；原型清理是待审提案，不能扩充浏览器持久化；写入晚到、storage异常与旧requestId展示仍待验。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-reset-default",
+          "selector": ".j-footer [data-action=\"reset\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-reset-hover",
+          "selector": ".j-footer [data-action=\"reset\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-reset-focus",
+          "selector": ".j-footer [data-action=\"reset\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-reset-pressed",
+          "selector": ".j-footer [data-action=\"reset\"]"
+        },
+        "disabled": {
+          "package": "journey-direction-c",
+          "scene": "control-reset-disabled",
+          "selector": ".j-footer [data-action=\"reset\"]"
+        },
+        "busy": {
+          "package": "journey-direction-c",
+          "scene": "control-reset-busy",
+          "selector": ".j-footer [data-action=\"reset\"]"
+        }
+      }
     }
   ],
   "surfaceReview": {
@@ -830,11 +1114,12 @@
     ]
   },
   "compositionGaps": [
-    "r2重拍58全页场景及18代表控件状态双端共152PNG；创建与保存两个代表动作12视觉槽已映射，剩余36槽未逐selector关联，采纳radio6态是字段证据不新增动作。",
+    "r2重拍59全页场景及50代表控件状态双端共218PNG；8动作组40适用视觉槽已映射，8导航禁用/忙碌不适用；采纳radio6态及恢复副按钮4态不新增动作组，完整输入/动态变体仍待审核。",
     "用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。",
     "既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。",
     "同一decide表单签名不变但语义已变；当前源成功state=ready，reset继续保留旧原因，字段busy锁及错误关联提案尚未整体落地。",
-    "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。"
+    "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。",
+    "r2追加：8动作组代表性视觉槽40已映射、8导航不适用、0未映射；这是有限清单，不包括所有主次恢复文案、输入/候选/观察驳回字段、主题密度或真实Vue生命周期。"
   ],
   "approval": "pending-user-review",
   "limits": [

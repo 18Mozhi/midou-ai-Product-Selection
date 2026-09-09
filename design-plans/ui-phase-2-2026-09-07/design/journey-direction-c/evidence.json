@@ -1,14 +1,16 @@
 {
   "version": "JOURNEY-C-r2",
   "approval": "pending",
-  "capturedAt": "2026-09-09T11:31:52.623Z",
+  "capturedAt": "2026-09-09T11:42:08.798Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/index.html": "b08397f4815512cdf878c4646a60c75e58e722c057944b029e18ca909603854e",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/data.js": "e1db28d2ea8fc434984fdcb1eb27d0d09fd8eec19b4ecf3b7b0978c8247f0fe7",
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.js": "42bbb57f6bcb4d1a56b65d7aa264bb316e39776ad25d19ac53a73ab96a5541f6",
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.css": "f3ee9372320f3de3a0d1898a5ad3c4f4ee752f251bb6b2f4abb3d4156421c90f",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.js": "11dcaf2e1c88a543025c1692d25514c58af3f3b3ec53f5b779467f13769681a4",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.css": "620811b30fde0472c3c018ba25bda029cdb9407bdaa8374c2ebc0619996625ee",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
     "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/api/src/selection-journey-service.ts": "6f563b86b870d78ab69b75c71d41c63ff021a0973ffa268cc1d6db6b56d6303f",
     "apps/api/src/selection-journey-routes.ts": "b39bd462adcbb431cdab618f1f7da5d2e4e87c95d0d687e62a0afa240bb9428f",
     "apps/api/src/mysql-selection-journey-repository.ts": "446f432efeeb5983ce2858e7b700782f9ba06def014b6a6690b7acfdb4411f67",
@@ -17,7 +19,7 @@
     "tests/e2e/ui-phase2-journey-reads.spec.ts": "3b8f7733ad099503d14817d73f454006cdc398afc648766563f01c0f2e906a91",
     "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "scripts/verify-ui-phase2-journey-c.mjs": "1965693a7e03e9c66061f6d0cf41a9a7fd4da246e02286ac50b812fd5b52f0bf"
+    "scripts/verify-ui-phase2-journey-c.mjs": "d00daca4ff5e9b514edfb443cf2903a6bebcd98a2dfdbb52b45db62d45614b8d"
   },
   "knownGaps": {
     "decideSuccessState": "ready",
@@ -171,6 +173,262 @@
       "width": 1440
     },
     {
+      "key": "list",
+      "state": "default",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-default",
+      "baseScene": "keyword",
+      "width": 1440
+    },
+    {
+      "key": "list",
+      "state": "hover",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-hover",
+      "baseScene": "keyword",
+      "width": 1440
+    },
+    {
+      "key": "list",
+      "state": "focus",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-focus",
+      "baseScene": "keyword",
+      "width": 1440
+    },
+    {
+      "key": "list",
+      "state": "pressed",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-pressed",
+      "baseScene": "keyword",
+      "width": 1440
+    },
+    {
+      "key": "source",
+      "state": "default",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-default",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "source",
+      "state": "hover",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-hover",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "source",
+      "state": "focus",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-focus",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "source",
+      "state": "pressed",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-pressed",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "opportunity",
+      "state": "default",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-default",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "opportunity",
+      "state": "hover",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-hover",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "opportunity",
+      "state": "focus",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-focus",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "opportunity",
+      "state": "pressed",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-pressed",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "task",
+      "state": "default",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-default",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "task",
+      "state": "hover",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-hover",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "task",
+      "state": "focus",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-focus",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "task",
+      "state": "pressed",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-pressed",
+      "baseScene": "adopt-decided",
+      "width": 1440
+    },
+    {
+      "key": "retry",
+      "state": "default",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-default",
+      "baseScene": "restore-failed",
+      "width": 1440
+    },
+    {
+      "key": "retry",
+      "state": "hover",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-hover",
+      "baseScene": "restore-failed",
+      "width": 1440
+    },
+    {
+      "key": "retry",
+      "state": "focus",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-focus",
+      "baseScene": "restore-failed",
+      "width": 1440
+    },
+    {
+      "key": "retry",
+      "state": "pressed",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-pressed",
+      "baseScene": "restore-failed",
+      "width": 1440
+    },
+    {
+      "key": "retry",
+      "state": "disabled",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-disabled",
+      "baseScene": "retry-busy",
+      "width": 1440
+    },
+    {
+      "key": "retry",
+      "state": "busy",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-busy",
+      "baseScene": "retry-busy",
+      "width": 1440
+    },
+    {
+      "key": "reset",
+      "state": "default",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-default",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "reset",
+      "state": "hover",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-hover",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "reset",
+      "state": "focus",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-focus",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "reset",
+      "state": "pressed",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-pressed",
+      "baseScene": "results",
+      "width": 1440
+    },
+    {
+      "key": "reset",
+      "state": "disabled",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-disabled",
+      "baseScene": "observe-busy",
+      "width": 1440
+    },
+    {
+      "key": "reset",
+      "state": "busy",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-busy",
+      "baseScene": "observe-busy",
+      "width": 1440
+    },
+    {
+      "key": "secondary",
+      "state": "default",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-default",
+      "baseScene": "restore-forbidden",
+      "width": 1440
+    },
+    {
+      "key": "secondary",
+      "state": "hover",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-hover",
+      "baseScene": "restore-forbidden",
+      "width": 1440
+    },
+    {
+      "key": "secondary",
+      "state": "focus",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-focus",
+      "baseScene": "restore-forbidden",
+      "width": 1440
+    },
+    {
+      "key": "secondary",
+      "state": "pressed",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-pressed",
+      "baseScene": "restore-forbidden",
+      "width": 1440
+    },
+    {
       "key": "create",
       "state": "default",
       "selector": "#create-form [type=\"submit\"]",
@@ -313,6 +571,262 @@
       "scene": "control-save-busy",
       "baseScene": "adopt-busy",
       "width": 390
+    },
+    {
+      "key": "list",
+      "state": "default",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-default",
+      "baseScene": "keyword",
+      "width": 390
+    },
+    {
+      "key": "list",
+      "state": "hover",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-hover",
+      "baseScene": "keyword",
+      "width": 390
+    },
+    {
+      "key": "list",
+      "state": "focus",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-focus",
+      "baseScene": "keyword",
+      "width": 390
+    },
+    {
+      "key": "list",
+      "state": "pressed",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "scene": "control-list-pressed",
+      "baseScene": "keyword",
+      "width": 390
+    },
+    {
+      "key": "source",
+      "state": "default",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-default",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "source",
+      "state": "hover",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-hover",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "source",
+      "state": "focus",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-focus",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "source",
+      "state": "pressed",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "scene": "control-source-pressed",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "opportunity",
+      "state": "default",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-default",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "opportunity",
+      "state": "hover",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-hover",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "opportunity",
+      "state": "focus",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-focus",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "opportunity",
+      "state": "pressed",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "scene": "control-opportunity-pressed",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "task",
+      "state": "default",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-default",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "task",
+      "state": "hover",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-hover",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "task",
+      "state": "focus",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-focus",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "task",
+      "state": "pressed",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "scene": "control-task-pressed",
+      "baseScene": "adopt-decided",
+      "width": 390
+    },
+    {
+      "key": "retry",
+      "state": "default",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-default",
+      "baseScene": "restore-failed",
+      "width": 390
+    },
+    {
+      "key": "retry",
+      "state": "hover",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-hover",
+      "baseScene": "restore-failed",
+      "width": 390
+    },
+    {
+      "key": "retry",
+      "state": "focus",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-focus",
+      "baseScene": "restore-failed",
+      "width": 390
+    },
+    {
+      "key": "retry",
+      "state": "pressed",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-pressed",
+      "baseScene": "restore-failed",
+      "width": 390
+    },
+    {
+      "key": "retry",
+      "state": "disabled",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-disabled",
+      "baseScene": "retry-busy",
+      "width": 390
+    },
+    {
+      "key": "retry",
+      "state": "busy",
+      "selector": "[data-action=\"retry\"]",
+      "scene": "control-retry-busy",
+      "baseScene": "retry-busy",
+      "width": 390
+    },
+    {
+      "key": "reset",
+      "state": "default",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-default",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "reset",
+      "state": "hover",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-hover",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "reset",
+      "state": "focus",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-focus",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "reset",
+      "state": "pressed",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-pressed",
+      "baseScene": "results",
+      "width": 390
+    },
+    {
+      "key": "reset",
+      "state": "disabled",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-disabled",
+      "baseScene": "observe-busy",
+      "width": 390
+    },
+    {
+      "key": "reset",
+      "state": "busy",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "scene": "control-reset-busy",
+      "baseScene": "observe-busy",
+      "width": 390
+    },
+    {
+      "key": "secondary",
+      "state": "default",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-default",
+      "baseScene": "restore-forbidden",
+      "width": 390
+    },
+    {
+      "key": "secondary",
+      "state": "hover",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-hover",
+      "baseScene": "restore-forbidden",
+      "width": 390
+    },
+    {
+      "key": "secondary",
+      "state": "focus",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-focus",
+      "baseScene": "restore-forbidden",
+      "width": 390
+    },
+    {
+      "key": "secondary",
+      "state": "pressed",
+      "selector": "[data-action=\"explain\"]",
+      "scene": "control-secondary-pressed",
+      "baseScene": "restore-forbidden",
+      "width": 390
     }
   ],
   "actionVisualReferences": {
@@ -339,9 +853,73 @@
         "disabled": "control-save-disabled",
         "busy": "control-save-busy"
       }
+    },
+    "J-NAV-LIST": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": ".j-head a[href=\"/opportunities\"]",
+      "states": {
+        "default": "control-list-default",
+        "hover": "control-list-hover",
+        "focus": "control-list-focus",
+        "pressed": "control-list-pressed"
+      }
+    },
+    "J-SOURCE": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+      "states": {
+        "default": "control-source-default",
+        "hover": "control-source-hover",
+        "focus": "control-source-focus",
+        "pressed": "control-source-pressed"
+      }
+    },
+    "J-NAV-OPPORTUNITY": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": ".completion a[href^=\"/opportunities/\"]",
+      "states": {
+        "default": "control-opportunity-default",
+        "hover": "control-opportunity-hover",
+        "focus": "control-opportunity-focus",
+        "pressed": "control-opportunity-pressed"
+      }
+    },
+    "J-NAV-TASK": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": ".completion a[href^=\"/tasks/\"]",
+      "states": {
+        "default": "control-task-default",
+        "hover": "control-task-hover",
+        "focus": "control-task-focus",
+        "pressed": "control-task-pressed"
+      }
+    },
+    "J-STATE-RECOVERY": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "[data-action=\"retry\"]",
+      "states": {
+        "default": "control-retry-default",
+        "hover": "control-retry-hover",
+        "focus": "control-retry-focus",
+        "pressed": "control-retry-pressed",
+        "disabled": "control-retry-disabled",
+        "busy": "control-retry-busy"
+      }
+    },
+    "J-RESET": {
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": ".j-footer [data-action=\"reset\"]",
+      "states": {
+        "default": "control-reset-default",
+        "hover": "control-reset-hover",
+        "focus": "control-reset-focus",
+        "pressed": "control-reset-pressed",
+        "disabled": "control-reset-disabled",
+        "busy": "control-reset-busy"
+      }
     }
   },
-  "boundary": "58 full scenes and 18 control states at two widths; zero business dialogs. User approved r2 overall layout only; individual control-state review remains pending. Adoption uses isolated fixtures and source checks. Success clears prior error in Vue; reset draft clearing and inactive write ownership remain proposal-only. No HTTP, real storage, backend tasks or production/DB/authorization acceptance.",
+  "boundary": "59 full scenes and 50 control states at two widths; zero business dialogs. User approved r2 overall layout only; individual control-state review remains pending. Adoption uses isolated fixtures and source checks. Success clears prior error in Vue; reset draft clearing and inactive write ownership remain proposal-only. No HTTP, real storage, backend tasks or production/DB/authorization acceptance.",
   "screenshots": [
     {
       "file": "1440-keyword.png",
@@ -389,13 +967,13 @@
       "file": "1440-create-failed.png",
       "scene": "create-failed",
       "width": 1440,
-      "sha256": "d52926990d7764a929300bcef68332884a3ac66374f57dbd0d6817b2b50595ed"
+      "sha256": "db9619bd9b1040b111679d43ea3e9614eb59878cd0e54f145d4794ca81768331"
     },
     {
       "file": "1440-url-rejected.png",
       "scene": "url-rejected",
       "width": 1440,
-      "sha256": "c4246cebab0c6fad5999d108829a0796d7ae2f30ffa2db7e96042435093ea1eb"
+      "sha256": "b8ec04262e7d93785673ad1ae6a8d6d97ae797cf5610d317492c43b921bd5905"
     },
     {
       "file": "1440-restoring.png",
@@ -407,13 +985,13 @@
       "file": "1440-restore-failed.png",
       "scene": "restore-failed",
       "width": 1440,
-      "sha256": "f54081fd873fd8b2d7dc5193ffe791364d75c0e351c2bd4aeaf10afde8c9af59"
+      "sha256": "c25a4c5a79f7d392873b99b9357e118ad8b20e07b00f2b9a7713ed854c48adc7"
     },
     {
       "file": "1440-restore-expired.png",
       "scene": "restore-expired",
       "width": 1440,
-      "sha256": "83231237afa6b5dd210e1f970bb2702b00f39f717fff7a2c9890692968964919"
+      "sha256": "90c673391e31b83ea36dfeaef89dda239a9440ad2f73a38597c5b4b9dc896564"
     },
     {
       "file": "1440-restore-forbidden.png",
@@ -425,19 +1003,25 @@
       "file": "1440-restore-blocked.png",
       "scene": "restore-blocked",
       "width": 1440,
-      "sha256": "55de960fb825cd5b79176b311c01c022980617f00cf379876b9dbb454ec423f2"
+      "sha256": "ba6a07c43f6fede833de758084a46aa3e63f9edd23fc69fc6740aae9156ff163"
+    },
+    {
+      "file": "1440-retry-busy.png",
+      "scene": "retry-busy",
+      "width": 1440,
+      "sha256": "61df68285bbe63a224c061770be44d1ce83e890893ef0f363e8bccd98035d308"
     },
     {
       "file": "1440-invalid-id.png",
       "scene": "invalid-id",
       "width": 1440,
-      "sha256": "fbe3e8fdd95d51a29e5015147bc157b256674a2f87dcd70c0f8c734e10b54aa0"
+      "sha256": "47b3dd311bfea2984226d78dc134781d1df001e0c65b76d5a0d9c5693ab99aba"
     },
     {
       "file": "1440-missing-id.png",
       "scene": "missing-id",
       "width": 1440,
-      "sha256": "2cb27e38d450f5f7605fabd662e1b61bc51d6bfdb316d6a449abd76ab20e2591"
+      "sha256": "e747f0aafe1fe38076c21fea039b6d7af187eb3f13ac73005112be6676f28244"
     },
     {
       "file": "1440-accepted.png",
@@ -467,13 +1051,13 @@
       "file": "1440-read-failed.png",
       "scene": "read-failed",
       "width": 1440,
-      "sha256": "0c6cd9d71f50970068df18f10a20057b9a487cdef9ec93b3b23d1cb5bd07649d"
+      "sha256": "e99adf320aa628e8b14c3502793d44878305ec6be14c023968d063f942cf4040"
     },
     {
       "file": "1440-read-expired.png",
       "scene": "read-expired",
       "width": 1440,
-      "sha256": "21109e55722950591d3ce58b30066b81046ec0cadccf8616204b1b81e41bf71f"
+      "sha256": "b21622caf3847a17fc42410d98cd7a3f0b33ece61d739484a3c20f86fc4c3a96"
     },
     {
       "file": "1440-read-forbidden.png",
@@ -485,7 +1069,7 @@
       "file": "1440-read-blocked.png",
       "scene": "read-blocked",
       "width": 1440,
-      "sha256": "fc680f626dfd1c88b6229ba577ac3008c35b201b710c04238c6c053e16f3f5b0"
+      "sha256": "ba2216df3d91f7631e06055dd8a2672b7d8713f6c020b124409cac7005a4ea8a"
     },
     {
       "file": "1440-results.png",
@@ -617,7 +1201,7 @@
       "file": "1440-adopt-conflict.png",
       "scene": "adopt-conflict",
       "width": 1440,
-      "sha256": "5e2298c74e05c7ee7c93c58efcf2599ecf0a0a361396a780f92a7f9fa50b78f2"
+      "sha256": "e48bcb39a9e72b9f0d3388b08cb19205400de4f117ecaf68fb81004feeb9bc6e"
     },
     {
       "file": "1440-adopt-refreshed.png",
@@ -647,7 +1231,7 @@
       "file": "1440-observe-failed.png",
       "scene": "observe-failed",
       "width": 1440,
-      "sha256": "b08e142fe18b7d1d34974d98e658f88c4e0be08630e4aad32c94c1a32b5f1b98"
+      "sha256": "99cbeca077b3f109871f9a99bbf5aa8a8e1760bf666b1b5d3a94ee224d6fe730"
     },
     {
       "file": "1440-observe-decided.png",
@@ -671,7 +1255,7 @@
       "file": "1440-reject-failed.png",
       "scene": "reject-failed",
       "width": 1440,
-      "sha256": "363449a5f758fa6305a1c8a20121b86687dfae5f377cb226c24f9d4f77b04a0d"
+      "sha256": "559907cd2a28e124fbc7889a46f091dcf0425df6abc5f770513776ff6a33ce25"
     },
     {
       "file": "1440-reject-decided.png",
@@ -944,6 +1528,454 @@
       }
     },
     {
+      "file": "1440-control-list-default.png",
+      "scene": "control-list-default",
+      "width": 1440,
+      "sha256": "e9dcef39492809a6cc0a366d61b565acef3e0625a9ee390eb81930ba9e2d59ef",
+      "control": {
+        "key": "list",
+        "state": "default",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-default",
+        "baseScene": "keyword",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-list-hover.png",
+      "scene": "control-list-hover",
+      "width": 1440,
+      "sha256": "e5279e467aa1bdf8ea99c7077abceb637d21437be70da684eacf5cffb2616910",
+      "control": {
+        "key": "list",
+        "state": "hover",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-hover",
+        "baseScene": "keyword",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-list-focus.png",
+      "scene": "control-list-focus",
+      "width": 1440,
+      "sha256": "0b3d601e99652d6c1464a76f3d2104403c13ac81dd64ab98ac3347f3be0c43b4",
+      "control": {
+        "key": "list",
+        "state": "focus",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-focus",
+        "baseScene": "keyword",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-list-pressed.png",
+      "scene": "control-list-pressed",
+      "width": 1440,
+      "sha256": "94e1fa8fdbb6816be15174deec8b6d96da4eb05a0bb618ec61df712b50d053f2",
+      "control": {
+        "key": "list",
+        "state": "pressed",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-pressed",
+        "baseScene": "keyword",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-source-default.png",
+      "scene": "control-source-default",
+      "width": 1440,
+      "sha256": "5a816e93d69d91f375f575574baf24cb89b34c0900bd6d05ec4e168ba120a232",
+      "control": {
+        "key": "source",
+        "state": "default",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-default",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-source-hover.png",
+      "scene": "control-source-hover",
+      "width": 1440,
+      "sha256": "6a72137256ae57732e7527716f636a56e037477b52be6a84adbd142159b24d49",
+      "control": {
+        "key": "source",
+        "state": "hover",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-hover",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-source-focus.png",
+      "scene": "control-source-focus",
+      "width": 1440,
+      "sha256": "5f4660c1396f64b034364fb669300ce7d06fa0fac8413b952da27b1a48ebb3d1",
+      "control": {
+        "key": "source",
+        "state": "focus",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-focus",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-source-pressed.png",
+      "scene": "control-source-pressed",
+      "width": 1440,
+      "sha256": "b70644254a53df58681c18d116d1e0a42c4364e8022aa8dc27f1fd8efb383629",
+      "control": {
+        "key": "source",
+        "state": "pressed",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-pressed",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-opportunity-default.png",
+      "scene": "control-opportunity-default",
+      "width": 1440,
+      "sha256": "25a1e3d2366eb13e300faaa0b78990de766ca634b15334b274cd6ebb8b09728b",
+      "control": {
+        "key": "opportunity",
+        "state": "default",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-default",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-opportunity-hover.png",
+      "scene": "control-opportunity-hover",
+      "width": 1440,
+      "sha256": "f71bec9efc8af5e0e199a2473586f20e68926ccfdbcef2065206f2956ddd9737",
+      "control": {
+        "key": "opportunity",
+        "state": "hover",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-hover",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-opportunity-focus.png",
+      "scene": "control-opportunity-focus",
+      "width": 1440,
+      "sha256": "80eb7f31ef8d1f9aa472cd51fc435d822ff928243f7493495b81f30d1cf31689",
+      "control": {
+        "key": "opportunity",
+        "state": "focus",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-focus",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-opportunity-pressed.png",
+      "scene": "control-opportunity-pressed",
+      "width": 1440,
+      "sha256": "48bab86e2f852c9b660f7caff1ebb02bf1479d78b348f666ec04e3dbfc81a4b8",
+      "control": {
+        "key": "opportunity",
+        "state": "pressed",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-pressed",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-task-default.png",
+      "scene": "control-task-default",
+      "width": 1440,
+      "sha256": "43ad795bb59b7cf88744feeed7dd4a50101f1bb9d29cbcfea499f4bf29c99c24",
+      "control": {
+        "key": "task",
+        "state": "default",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-default",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-task-hover.png",
+      "scene": "control-task-hover",
+      "width": 1440,
+      "sha256": "3f6e1b02becfe020217105c217e525b6e08e4e8a8f945fa2064e278cd55ef943",
+      "control": {
+        "key": "task",
+        "state": "hover",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-hover",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-task-focus.png",
+      "scene": "control-task-focus",
+      "width": 1440,
+      "sha256": "45fc12ad643edcb6a5763c79b21f085fae524162d4b69f4be22286fbe7f9c8f7",
+      "control": {
+        "key": "task",
+        "state": "focus",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-focus",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-task-pressed.png",
+      "scene": "control-task-pressed",
+      "width": 1440,
+      "sha256": "c42cf412c42f345e8bd31e8edbdefc68b3e03424f9e00961e78502a3c55d5916",
+      "control": {
+        "key": "task",
+        "state": "pressed",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-pressed",
+        "baseScene": "adopt-decided",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-retry-default.png",
+      "scene": "control-retry-default",
+      "width": 1440,
+      "sha256": "cccbd9093946b96dbf54cc435c28bd857ee7924d7cdeac08d2ae26dc77c1c1d0",
+      "control": {
+        "key": "retry",
+        "state": "default",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-default",
+        "baseScene": "restore-failed",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-retry-hover.png",
+      "scene": "control-retry-hover",
+      "width": 1440,
+      "sha256": "17f349da5ee007e9f5dc05c30a907dda377a279c1a46957611a727a75e599870",
+      "control": {
+        "key": "retry",
+        "state": "hover",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-hover",
+        "baseScene": "restore-failed",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-retry-focus.png",
+      "scene": "control-retry-focus",
+      "width": 1440,
+      "sha256": "523784b854adb8208f523ee4052934a8278f0405aa5fc960ecf417c829b323ec",
+      "control": {
+        "key": "retry",
+        "state": "focus",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-focus",
+        "baseScene": "restore-failed",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-retry-pressed.png",
+      "scene": "control-retry-pressed",
+      "width": 1440,
+      "sha256": "81896d1c72557cfc7cdd09f0c66ef9e9950334c78cfc0e7172068823150322e6",
+      "control": {
+        "key": "retry",
+        "state": "pressed",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-pressed",
+        "baseScene": "restore-failed",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-retry-disabled.png",
+      "scene": "control-retry-disabled",
+      "width": 1440,
+      "sha256": "61df68285bbe63a224c061770be44d1ce83e890893ef0f363e8bccd98035d308",
+      "control": {
+        "key": "retry",
+        "state": "disabled",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-disabled",
+        "baseScene": "retry-busy",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-retry-busy.png",
+      "scene": "control-retry-busy",
+      "width": 1440,
+      "sha256": "61df68285bbe63a224c061770be44d1ce83e890893ef0f363e8bccd98035d308",
+      "control": {
+        "key": "retry",
+        "state": "busy",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-busy",
+        "baseScene": "retry-busy",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-reset-default.png",
+      "scene": "control-reset-default",
+      "width": 1440,
+      "sha256": "58e28413defc673e2a47f66336d687a844b25373760668bf468d7884560946d5",
+      "control": {
+        "key": "reset",
+        "state": "default",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-default",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-reset-hover.png",
+      "scene": "control-reset-hover",
+      "width": 1440,
+      "sha256": "2f052a0a973ef2e51e93a0b38e316dcc4bcc438d2ec6234c279ba37c9733acd1",
+      "control": {
+        "key": "reset",
+        "state": "hover",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-hover",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-reset-focus.png",
+      "scene": "control-reset-focus",
+      "width": 1440,
+      "sha256": "898ea2b60af5a399465a43700c310d8518fa36e0e781117a7eba6393a8a5cd6a",
+      "control": {
+        "key": "reset",
+        "state": "focus",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-focus",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-reset-pressed.png",
+      "scene": "control-reset-pressed",
+      "width": 1440,
+      "sha256": "44d11c726ea9baf147ea290fbb5db33d51436c93b087e5399b1afeeae0e8db25",
+      "control": {
+        "key": "reset",
+        "state": "pressed",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-pressed",
+        "baseScene": "results",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-reset-disabled.png",
+      "scene": "control-reset-disabled",
+      "width": 1440,
+      "sha256": "e5a722c472061a11e7fc7f1c5d3384303c84897f8c327dc20162f3e4dcb8a252",
+      "control": {
+        "key": "reset",
+        "state": "disabled",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-disabled",
+        "baseScene": "observe-busy",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-reset-busy.png",
+      "scene": "control-reset-busy",
+      "width": 1440,
+      "sha256": "e5a722c472061a11e7fc7f1c5d3384303c84897f8c327dc20162f3e4dcb8a252",
+      "control": {
+        "key": "reset",
+        "state": "busy",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-busy",
+        "baseScene": "observe-busy",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-secondary-default.png",
+      "scene": "control-secondary-default",
+      "width": 1440,
+      "sha256": "6293ef1b59a7f73354337ed30d4e5a7caa2a683c78b56ee2d6dae4c3e4c4eb7c",
+      "control": {
+        "key": "secondary",
+        "state": "default",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-default",
+        "baseScene": "restore-forbidden",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-secondary-hover.png",
+      "scene": "control-secondary-hover",
+      "width": 1440,
+      "sha256": "d32ec7a869f0db81449d1f301743788d303ebe71b8d12c797f70f0c53e7853c2",
+      "control": {
+        "key": "secondary",
+        "state": "hover",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-hover",
+        "baseScene": "restore-forbidden",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-secondary-focus.png",
+      "scene": "control-secondary-focus",
+      "width": 1440,
+      "sha256": "1e242f03d5a1a119f7f7ec01e7430be939e54face707b894fea10d9fbd6e7cf1",
+      "control": {
+        "key": "secondary",
+        "state": "focus",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-focus",
+        "baseScene": "restore-forbidden",
+        "width": 1440
+      }
+    },
+    {
+      "file": "1440-control-secondary-pressed.png",
+      "scene": "control-secondary-pressed",
+      "width": 1440,
+      "sha256": "137d4591310da12d89b90952b9dfec113e3786d4774299b1dca4a6dd1a9bdd24",
+      "control": {
+        "key": "secondary",
+        "state": "pressed",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-pressed",
+        "baseScene": "restore-forbidden",
+        "width": 1440
+      }
+    },
+    {
       "file": "390-keyword.png",
       "scene": "keyword",
       "width": 390,
@@ -989,13 +2021,13 @@
       "file": "390-create-failed.png",
       "scene": "create-failed",
       "width": 390,
-      "sha256": "18e6ef5174c50de687274313619b1862cf6d7d2a355d281747e4a3e6c27d5873"
+      "sha256": "0c6d3163353e5d6266d49b1fbba2d0380755eaeab2c9e0569d894027512ecac2"
     },
     {
       "file": "390-url-rejected.png",
       "scene": "url-rejected",
       "width": 390,
-      "sha256": "c573feecd2a5602772f022f8e4bef0618553691ee37bd5aac05e4e0fb83d9836"
+      "sha256": "914baf8d7134da4acb2e5112ef1f156af50bb8243b9f1201b06aed8f86c0e674"
     },
     {
       "file": "390-restoring.png",
@@ -1007,13 +2039,13 @@
       "file": "390-restore-failed.png",
       "scene": "restore-failed",
       "width": 390,
-      "sha256": "c83df783f86173a79e4bac5ada64c0f2b0396119de250c11d24c00858901169e"
+      "sha256": "547e5aa2e5b2e34e489c3e00c1e8932ee3372a244a6c813c7cf8e7df91b0983b"
     },
     {
       "file": "390-restore-expired.png",
       "scene": "restore-expired",
       "width": 390,
-      "sha256": "59d8a999540644a6ac0313502f68dc321aa39277b7441ae8b55a27652064829f"
+      "sha256": "ab0c7f99d5218b2bc9d0be4fd4e6c3cd8e3b67a4ed2b01fa467128a63280d41e"
     },
     {
       "file": "390-restore-forbidden.png",
@@ -1025,7 +2057,13 @@
       "file": "390-restore-blocked.png",
       "scene": "restore-blocked",
       "width": 390,
-      "sha256": "b7d1a5783d18cfc2e17582a4164e7eb1a02ef0cc5f143817ad3fcf4d7ca06bba"
+      "sha256": "f7ee651e9dea11d78170166637498f3c25cd7298db00aab9dc35c916ac834b70"
+    },
+    {
+      "file": "390-retry-busy.png",
+      "scene": "retry-busy",
+      "width": 390,
+      "sha256": "1e4b9e2169a609ef880e92f3a2f4f650a7aade7a7ce8e042ba104af79f4029e0"
     },
     {
       "file": "390-invalid-id.png",
@@ -1067,13 +2105,13 @@
       "file": "390-read-failed.png",
       "scene": "read-failed",
       "width": 390,
-      "sha256": "90fb45d726d282f61beffb2a3869bc45df97c2087936cb73d54d6d4552c2da85"
+      "sha256": "f131fa219ad36551ce2311c4aecac29d1987ee3b470d0fb4b8376d93e1d48e3b"
     },
     {
       "file": "390-read-expired.png",
       "scene": "read-expired",
       "width": 390,
-      "sha256": "9ee90e5aab5a7162c82fd5d3c6e1d32e444cfcd49056b6fa756439678e9932b7"
+      "sha256": "44792c38e917d541a0fbc9f9628036d24c804df2b80e837951d177cbfc54b238"
     },
     {
       "file": "390-read-forbidden.png",
@@ -1085,7 +2123,7 @@
       "file": "390-read-blocked.png",
       "scene": "read-blocked",
       "width": 390,
-      "sha256": "a7ab176a4b5cedc63e7ab3d3221de7ae3512de84263c9d9831c2db749cc996c1"
+      "sha256": "7d9b1df642dd9f81c74842aab444726eb3a926f5e40de64a9da3a9bd84c58aa8"
     },
     {
       "file": "390-results.png",
@@ -1217,7 +2255,7 @@
       "file": "390-adopt-conflict.png",
       "scene": "adopt-conflict",
       "width": 390,
-      "sha256": "c3d4c3bb11ba56d4ac0ac7614ece50fabc092627273521b3e39425b0165b0b77"
+      "sha256": "6e662f175fff4042b6506e836d007e7bc5eef28defb8dfdf23a09bcb60bda901"
     },
     {
       "file": "390-adopt-refreshed.png",
@@ -1247,7 +2285,7 @@
       "file": "390-observe-failed.png",
       "scene": "observe-failed",
       "width": 390,
-      "sha256": "873f24897f5f4a249ea422990c8206eae6fa27be6d5009b68cf5d9374a1d20c5"
+      "sha256": "a25e6b4ef9c9d51d5e20ea09eb69e1cd368a40de9c530fb79fe6814956625f43"
     },
     {
       "file": "390-observe-decided.png",
@@ -1271,7 +2309,7 @@
       "file": "390-reject-failed.png",
       "scene": "reject-failed",
       "width": 390,
-      "sha256": "01f7e4767cbc02405c97d6f532addca0fe3cfdd442b98af5541793ce67e8beba"
+      "sha256": "248ff8d3204b52231cac7633d720127873598e88bace42eabb167e397295cc7d"
     },
     {
       "file": "390-reject-decided.png",
@@ -1540,6 +2578,454 @@
         "selector": "#decision-form [type=\"submit\"]",
         "scene": "control-save-busy",
         "baseScene": "adopt-busy",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-list-default.png",
+      "scene": "control-list-default",
+      "width": 390,
+      "sha256": "e9a1923f9084653caf7354729d0bc53bf6996ff3607d6cee8be04d68479316a8",
+      "control": {
+        "key": "list",
+        "state": "default",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-default",
+        "baseScene": "keyword",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-list-hover.png",
+      "scene": "control-list-hover",
+      "width": 390,
+      "sha256": "95337be4e3e808ecea219181f5e5a71c9cfe8725fca08ac6e876837df435024e",
+      "control": {
+        "key": "list",
+        "state": "hover",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-hover",
+        "baseScene": "keyword",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-list-focus.png",
+      "scene": "control-list-focus",
+      "width": 390,
+      "sha256": "1eea290a340a90144c85b1bd0e2c20797f22d15e3500fda7525e78c4e593d1a6",
+      "control": {
+        "key": "list",
+        "state": "focus",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-focus",
+        "baseScene": "keyword",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-list-pressed.png",
+      "scene": "control-list-pressed",
+      "width": 390,
+      "sha256": "72d55aa3026b4eb41e3b4d02738787f75b251ab26788431ab8f9416cdb314991",
+      "control": {
+        "key": "list",
+        "state": "pressed",
+        "selector": ".j-head a[href=\"/opportunities\"]",
+        "scene": "control-list-pressed",
+        "baseScene": "keyword",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-source-default.png",
+      "scene": "control-source-default",
+      "width": 390,
+      "sha256": "2a813606e90b7c13ab7360f85f1cb708c8cf0a713d5bb1471af49c39cafc21ca",
+      "control": {
+        "key": "source",
+        "state": "default",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-default",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-source-hover.png",
+      "scene": "control-source-hover",
+      "width": 390,
+      "sha256": "a35eccadf5f9cbcdac12585c41a8f9d9f77f04fd550316b0615134f6a472873a",
+      "control": {
+        "key": "source",
+        "state": "hover",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-hover",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-source-focus.png",
+      "scene": "control-source-focus",
+      "width": 390,
+      "sha256": "15a5c3cc1244a53ccda0936fd38c9d93640c09218a1e5b6d41f16a64543cb2dd",
+      "control": {
+        "key": "source",
+        "state": "focus",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-focus",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-source-pressed.png",
+      "scene": "control-source-pressed",
+      "width": 390,
+      "sha256": "15f0ced18e12e377b292e7679e615643e4e6744881a9187a063efc3cc0023466",
+      "control": {
+        "key": "source",
+        "state": "pressed",
+        "selector": ".candidate:first-of-type a[data-source=\"true\"]",
+        "scene": "control-source-pressed",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-opportunity-default.png",
+      "scene": "control-opportunity-default",
+      "width": 390,
+      "sha256": "b71b8c513556c49da2a6dcff625b9d8ea5ca57cee1dc39544b6455a31e5228fb",
+      "control": {
+        "key": "opportunity",
+        "state": "default",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-default",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-opportunity-hover.png",
+      "scene": "control-opportunity-hover",
+      "width": 390,
+      "sha256": "e378676c4c2f7889ee3474fd06a5ce59658f84ca224a15759a166cb8a0c135c6",
+      "control": {
+        "key": "opportunity",
+        "state": "hover",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-hover",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-opportunity-focus.png",
+      "scene": "control-opportunity-focus",
+      "width": 390,
+      "sha256": "ff4df760c2038e94f819e4f94d7b2bc26a94d86f2fcbfa25931e2068a2ec14db",
+      "control": {
+        "key": "opportunity",
+        "state": "focus",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-focus",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-opportunity-pressed.png",
+      "scene": "control-opportunity-pressed",
+      "width": 390,
+      "sha256": "e3e71ea47dac1a72d7e1d758aa28e487f6768ee8c48e8aaf7eaa1a12989ef9bc",
+      "control": {
+        "key": "opportunity",
+        "state": "pressed",
+        "selector": ".completion a[href^=\"/opportunities/\"]",
+        "scene": "control-opportunity-pressed",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-task-default.png",
+      "scene": "control-task-default",
+      "width": 390,
+      "sha256": "b71b8c513556c49da2a6dcff625b9d8ea5ca57cee1dc39544b6455a31e5228fb",
+      "control": {
+        "key": "task",
+        "state": "default",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-default",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-task-hover.png",
+      "scene": "control-task-hover",
+      "width": 390,
+      "sha256": "4d524b0a5eaae4905072f4ee0f47545f067cf4577c698368318308ba05d125a0",
+      "control": {
+        "key": "task",
+        "state": "hover",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-hover",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-task-focus.png",
+      "scene": "control-task-focus",
+      "width": 390,
+      "sha256": "89bc8c5f96c8174f87d3ecc80cd5ae99e4335296b9ab698b6d40bfd35ad42ec4",
+      "control": {
+        "key": "task",
+        "state": "focus",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-focus",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-task-pressed.png",
+      "scene": "control-task-pressed",
+      "width": 390,
+      "sha256": "0f85446fd4cadb4d982dc6d53c47b019e3278112723717ccb3aee3769b0e5a84",
+      "control": {
+        "key": "task",
+        "state": "pressed",
+        "selector": ".completion a[href^=\"/tasks/\"]",
+        "scene": "control-task-pressed",
+        "baseScene": "adopt-decided",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-retry-default.png",
+      "scene": "control-retry-default",
+      "width": 390,
+      "sha256": "29f9c3a41949df58d50a9f509e49c093250d7e9da24d518f22600d24381a8fe1",
+      "control": {
+        "key": "retry",
+        "state": "default",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-default",
+        "baseScene": "restore-failed",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-retry-hover.png",
+      "scene": "control-retry-hover",
+      "width": 390,
+      "sha256": "80f5654b4135e9cb7bb29677e03fd9ee331b1ac1c140870f93a09f64b08078e6",
+      "control": {
+        "key": "retry",
+        "state": "hover",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-hover",
+        "baseScene": "restore-failed",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-retry-focus.png",
+      "scene": "control-retry-focus",
+      "width": 390,
+      "sha256": "dd711c36783291f80db583f0c17be5e9d7cc46f4270d84fa48180f7db380f671",
+      "control": {
+        "key": "retry",
+        "state": "focus",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-focus",
+        "baseScene": "restore-failed",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-retry-pressed.png",
+      "scene": "control-retry-pressed",
+      "width": 390,
+      "sha256": "30fcd063726cf2e6c79758d1b479c0d17b5ced2d5d18dbf3a6518a6a55f9ebb4",
+      "control": {
+        "key": "retry",
+        "state": "pressed",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-pressed",
+        "baseScene": "restore-failed",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-retry-disabled.png",
+      "scene": "control-retry-disabled",
+      "width": 390,
+      "sha256": "dbdc912cbf382a6e9c60959e9eb5f465808c28bd392ee5293675ec5f8bd1fe68",
+      "control": {
+        "key": "retry",
+        "state": "disabled",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-disabled",
+        "baseScene": "retry-busy",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-retry-busy.png",
+      "scene": "control-retry-busy",
+      "width": 390,
+      "sha256": "dbdc912cbf382a6e9c60959e9eb5f465808c28bd392ee5293675ec5f8bd1fe68",
+      "control": {
+        "key": "retry",
+        "state": "busy",
+        "selector": "[data-action=\"retry\"]",
+        "scene": "control-retry-busy",
+        "baseScene": "retry-busy",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-reset-default.png",
+      "scene": "control-reset-default",
+      "width": 390,
+      "sha256": "5a57ac831d6941c0eae4e8a43404c244615b57989433d45ab3eb6a99487a01eb",
+      "control": {
+        "key": "reset",
+        "state": "default",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-default",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-reset-hover.png",
+      "scene": "control-reset-hover",
+      "width": 390,
+      "sha256": "eb6470151a55de4b77c62c7b97743178137bdb54de4f6b3f7b77929a7946ad4c",
+      "control": {
+        "key": "reset",
+        "state": "hover",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-hover",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-reset-focus.png",
+      "scene": "control-reset-focus",
+      "width": 390,
+      "sha256": "74e37e70e2dfbdef3129c4e923cb86ef69f96506ed2b2070c6043044532e5803",
+      "control": {
+        "key": "reset",
+        "state": "focus",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-focus",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-reset-pressed.png",
+      "scene": "control-reset-pressed",
+      "width": 390,
+      "sha256": "c8f9696ea1a86c5fcab6fe3f5627978c2a43e17330bc131f58df47fda0a6fc89",
+      "control": {
+        "key": "reset",
+        "state": "pressed",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-pressed",
+        "baseScene": "results",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-reset-disabled.png",
+      "scene": "control-reset-disabled",
+      "width": 390,
+      "sha256": "92472abf34298471b15733756dcbfcf16951ac2bf804603b3aeab50db9d44042",
+      "control": {
+        "key": "reset",
+        "state": "disabled",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-disabled",
+        "baseScene": "observe-busy",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-reset-busy.png",
+      "scene": "control-reset-busy",
+      "width": 390,
+      "sha256": "92472abf34298471b15733756dcbfcf16951ac2bf804603b3aeab50db9d44042",
+      "control": {
+        "key": "reset",
+        "state": "busy",
+        "selector": ".j-footer [data-action=\"reset\"]",
+        "scene": "control-reset-busy",
+        "baseScene": "observe-busy",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-secondary-default.png",
+      "scene": "control-secondary-default",
+      "width": 390,
+      "sha256": "41d3133aa8ac9095fe8e9ccb50f15d878084103f6f11f24eae8cfdf132a46e84",
+      "control": {
+        "key": "secondary",
+        "state": "default",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-default",
+        "baseScene": "restore-forbidden",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-secondary-hover.png",
+      "scene": "control-secondary-hover",
+      "width": 390,
+      "sha256": "059e745a38b3b9b95a53aa904a4c38d122996f8420e60ebaa00ffd921efd3431",
+      "control": {
+        "key": "secondary",
+        "state": "hover",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-hover",
+        "baseScene": "restore-forbidden",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-secondary-focus.png",
+      "scene": "control-secondary-focus",
+      "width": 390,
+      "sha256": "4fb7fc37fd773f8e93c8520b0f4efbb0bcfa8c00c7738cd7ae087f13eecf5668",
+      "control": {
+        "key": "secondary",
+        "state": "focus",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-focus",
+        "baseScene": "restore-forbidden",
+        "width": 390
+      }
+    },
+    {
+      "file": "390-control-secondary-pressed.png",
+      "scene": "control-secondary-pressed",
+      "width": 390,
+      "sha256": "1d2a7442ad2bd54c3a40a3207daff9fa402c32dfc3d0557f39b8b368e1a50f7a",
+      "control": {
+        "key": "secondary",
+        "state": "pressed",
+        "selector": "[data-action=\"explain\"]",
+        "scene": "control-secondary-pressed",
+        "baseScene": "restore-forbidden",
         "width": 390
       }
     }

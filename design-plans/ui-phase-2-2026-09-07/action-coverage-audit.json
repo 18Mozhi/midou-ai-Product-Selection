@@ -191,7 +191,7 @@
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "894e47fe1fedb1728897fd5afa1497731585d5fbe6507566599008c581db6760",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "09124326e2db64b069941a69ac7161c94fd754015069ea47a24a9b433b3a8938",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "dfe9ea0a1064513435cf4e004233fd1bc64660a0b9a1ecbc3d380893159cad88",
-    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c99611700e6e5e53bda631e66885f338d4e5ee526b962548338ead9e9f42f8ea",
+    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "ca2b6da0c5bfbaead8e68eacc18d79b19cc0bfe7a4f5aef2f800dd0fd616eb79",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "2e55ace742f1d1631f02c37cae32ac721bd7894545f29903ea3c956d5fda2fb4",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "74529109c7dd6373438b50a7121528953d172412ffc9e1eafea81e8f3155e64e",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
@@ -230,7 +230,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/evidence.json": "557bcb85020006497933cda75ada8b0807f83fce8e86781c84d221090078ce7a",
     "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/evidence.json": "f4329b047be3573ee185ff78cc0924e1eea4e2bde5d9c2a83f77330dd0814ce6",
     "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/evidence.json": "a49ba0902fc80bab8f0099fb86f4cce033b52b873a442f7c924fe008c9c8ef33",
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "b0bc862c63299a35cbda28fd243928117c8a2ace9347d59feb3b6fa822bb700e",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "d67260cacf25e76c10802dae9c1cdaf10ff9c6910a410b4c90fe97c8e65eee6c",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
@@ -306,8 +306,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "fc698ee64da11953ba7a420ac8f1814875f8085807c726df26dccf493dd88767",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "af382e02891d613653c14d1674abb07f3915f81be3ca7e3be5625fdf7dc4acd2",
-    "scripts/verify-ui-phase2-journey-c.mjs": "1965693a7e03e9c66061f6d0cf41a9a7fd4da246e02286ac50b812fd5b52f0bf",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "65918e3fa0b939e0575efe4bb44e7ea866666b4eeaeedd628186f824cd801fb4",
+    "scripts/verify-ui-phase2-journey-c.mjs": "d00daca4ff5e9b514edfb443cf2903a6bebcd98a2dfdbb52b45db62d45614b8d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "91620eccefc85cdce2b31a72103e746b983dbcf2f2b69db90f41b53cbc673c4a",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "82e3dc5aef8c8e581cce8780636f5608d6ca49eb01b45fcbe9cfcae75b72cc80",
@@ -337,7 +337,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "98d47be158ab5585230b81ce52df2757d4d7c357ecb9b72edc086a282257dc18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "c4aaec40cdb4abec3364d92898ca22b3f239323d4e0ccc7392d793c18bc08994",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "c0a3ebf0d06a7eb03cee11a658c926de4529d16001715c37fa62c266ac1b9eca",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "f4db9b4d9fd818ff4522cbb1bd9f8fea4b4f105a5f1d87ecee9f91005d7207c1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d3ed4e1eb0ec5ccf27beb84202e81fa699c217e32ae6669031b3589f86574a97",
@@ -986,7 +986,7 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 2,
-        "unmappedVisualSlots": 36,
+        "unmappedVisualSlots": 0,
         "surfaces": {
           "callerFiles": 1,
           "localModelBindings": 5,
@@ -1001,11 +1001,12 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "r2重拍58全页场景及18代表控件状态双端共152PNG；创建与保存两个代表动作12视觉槽已映射，剩余36槽未逐selector关联，采纳radio6态是字段证据不新增动作。",
+        "r2重拍59全页场景及50代表控件状态双端共218PNG；8动作组40适用视觉槽已映射，8导航禁用/忙碌不适用；采纳radio6态及恢复副按钮4态不新增动作组，完整输入/动态变体仍待审核。",
         "用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。",
         "既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。",
         "同一decide表单签名不变但语义已变；当前源成功state=ready，reset继续保留旧原因，字段busy锁及错误关联提案尚未整体落地。",
-        "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。"
+        "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。",
+        "r2追加：8动作组代表性视觉槽40已映射、8导航不适用、0未映射；这是有限清单，不包括所有主次恢复文案、输入/候选/观察驳回字段、主题密度或真实Vue生命周期。"
       ]
     },
     {
@@ -2086,7 +2087,7 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 2,
-      "unmappedVisualSlots": 36,
+      "unmappedVisualSlots": 0,
       "surfaces": {
         "callerFiles": 1,
         "localModelBindings": 5,
