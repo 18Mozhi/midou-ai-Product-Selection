@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "audit": "UI2-C-DELIVERY-AUDIT-r5",
-  "baselineRevision": "b30fb8a2f07a84825037a4a52dba7796109801c5",
+  "audit": "UI2-C-DELIVERY-AUDIT-r6",
+  "baselineRevision": "c79a062616ea0d83e63e004fcf8d5c3acb22974b",
   "scope": "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   "inputHashes": {
     "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "7f2195b70ddb6f13586fbf3e228abacafb4cd9dec4c98993f3fac9ef24b1138a",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "c9913c078e3e72d55064916fdb2a721588dcb3cf0522ef6030957d84ba9faf98",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "1c71dd1cba2e8086f9cd6cdbe493f095cb75c1abc8740ecf1655e48ce799aa8b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "81520123898660bf979d0a199d86664553ba972c07506bacf3575a1d22a4b998",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "0237923cad81c02784b79fc7af4e9f87b4a60b6ba3ff305f62562494d4b22989",
@@ -30,7 +30,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d3ed4e1eb0ec5ccf27beb84202e81fa699c217e32ae6669031b3589f86574a97",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "c926b689a69e295d5c4095c4f733edf9a0cab07db70e6fa8a54a4441e2872215",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "2764973e6fb3b82c4f012e7997c17058f72db91ffc3ba17459717312e1fe04bb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "8b0ff5c3b9492379b727a966cb215f04106cb60e73629dbcd35a9756a7720553",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "30213312536dbd8f757de6a74016f9005fc38f78a700f2c1105533969583dd0d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "de4b4f4b1eed60cf7a75057a49782439dd227e7c6f8cee37aea0c78c8d144420",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "8f215d0b9afc2d704c310fa2c3a824d03030c6b07e8654f935b94a4443d6ac9a",
@@ -86,21 +86,19 @@
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 72,
-    "noLinkedPageProposalRoutes": 1,
-    "missingPageIds": [
-      "P22"
-    ],
-    "packages": 69,
+    "relatedProposalRoutes": 73,
+    "noLinkedPageProposalRoutes": 0,
+    "missingPageIds": [],
+    "packages": 70,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 798,
-    "sourceBindings": 1194,
+    "uniqueBoundFiles": 804,
+    "sourceBindings": 1208,
     "sourceDrift": 0,
-    "pngs": 7860,
+    "pngs": 8026,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 8033,
+    "readmeLinksChecked": 8038,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -596,9 +594,13 @@
       "batch": "W03",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "cost-rules-direction-c"
+      ],
+      "proposalPackages": [
+        "cost-rules-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -2325,6 +2327,44 @@
       "checkedViewportWidths": [
         1440,
         390
+      ]
+    },
+    {
+      "folder": "cost-rules-direction-c",
+      "readme": "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/README.md",
+      "evidence": "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/evidence.json",
+      "manifestHash": "61d0c73a4e8c8bc1e7d6e4a4d50029db73cd2a351befa0b076bcf455748444f2",
+      "readmeHash": "c1c69d9f4295df8b8c6a266c196f25b05a851cd446fdc76b4b4413c94e7598b5",
+      "kind": "page-or-section-proposal",
+      "approval": "pending-user-review",
+      "role": "page-or-section-proposal",
+      "sourceCount": 14,
+      "sourceDrift": [],
+      "screenshotCount": 166,
+      "screenshotDrift": [],
+      "unmanifestedPng": [],
+      "readmeLinksChecked": 5,
+      "checkedSourceFiles": [
+        "apps/web/src/components/CostRuleConsole.vue",
+        "apps/web/src/components/shared/QualityGateSetupSummary.vue",
+        "apps/web/src/use-modal-dialog.ts",
+        "apps/api/src/profit-service.ts",
+        "apps/api/src/profit-routes.ts",
+        "apps/api/src/mysql-profit-repository.ts",
+        "tests/e2e/m04-04-profit.spec.ts",
+        "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+        "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md",
+        "scripts/verify-ui-phase2-cost-rules-source.mjs",
+        "scripts/verify-ui-phase2-cost-rules-c.mjs",
+        "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/index.html",
+        "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/cost-rules.js",
+        "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/cost-rules.css"
+      ],
+      "checkedViewportWidths": [
+        1440,
+        390,
+        768,
+        1024
       ]
     },
     {

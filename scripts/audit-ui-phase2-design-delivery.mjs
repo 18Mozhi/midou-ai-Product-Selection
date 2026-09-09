@@ -201,8 +201,8 @@ const summary = {
 };
 const audit = {
   schemaVersion: 1,
-  audit: "UI2-C-DELIVERY-AUDIT-r5",
-  baselineRevision: "b30fb8a2f07a84825037a4a52dba7796109801c5",
+  audit: "UI2-C-DELIVERY-AUDIT-r6",
+  baselineRevision: "c79a062616ea0d83e63e004fcf8d5c3acb22974b",
   scope:
     "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   inputHashes,
@@ -226,25 +226,20 @@ const audit = {
 const rel = (file) => path.posix.relative(relative, file);
 let report = `# C方向逐页审核索引与交付缺口
 
-本轮起始基线：b30fb8a2；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
+本轮起始基线：c79a0626；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
 
 ## 核对结果
 
 - 真实路由与规格：${summary.routes}/${summary.specifications}。
 - 有明确整页或分段稿关联：${summary.relatedProposalRoutes}条；这不是${summary.relatedProposalRoutes}页全部完成。
-- 未关联对应整页稿：${summary.noLinkedPageProposalRoutes}条（${missing.join("、")}）。共享主题浮层不抵扣P10。
+- 未关联对应整页稿：${summary.noLinkedPageProposalRoutes}条（${missing.join("、") || "无"}）。共享主题浮层不抵扣业务整页。
 - C稿包${summary.packages}个：含${summary.researchPackages}个方向研究包、${summary.sharedOnlyPackages}个共享表面包；正式清单内PNG共${summary.pngs}张。
 - ${summary.sourceBindings}条来源绑定 / ${summary.uniqueBoundFiles}个唯一文件，漂移${summary.sourceDrift}；PNG指纹漂移${summary.pngDrift}，未列入清单PNG ${summary.unmanifestedPng}；图册内${summary.readmeLinksChecked}个本地链接已核对。
 - 用户逐页批准${summary.userApprovedPages}；业务动作已正式验收${summary.verifiedBusinessActions}、弹窗变体已正式验收${summary.verifiedDialogVariants}；分母冻结=${summary.denominatorFrozen}。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
 
-1. **缺少${missing.length}个路由的整页C稿关联**：${pages
-  .filter((p) => missing.includes(p.id))
-  .map((p) => `${p.id} ${p.title}`)
-  .join(
-    "、",
-  )}。C目录扫描、规格链接和共享包README交叉核对；不把共享面或导航装配位计为整页。P01–P09新身份图包已关联，仍待具体审核和完整运行验证；下一按上述缺页顺序补稿。
+1. ${missing.length ? `**仍缺 ${missing.length} 个路由的整页稿关联**：${missing.join("、")}；按缺页清单继续补稿。` : "**73 路由均已有整页或分段 C 稿关联，但不等于整页通过**。P22 费用版本已补关联；下一逐页核对动作/弹窗语义分母、各态映射与 P11/P18/P54 组合，并收集具体图稿审核意见。"}
 2. **有图不等于每个按钮/弹窗六态已覆盖**：PAGES要求逐actionId/dialogId关联验证；现有总coverage仍为未冻结/0已验。各包局部场景、截图及源隔离检查不能证明全站语义分母。后续逐页补动作与变体的状态映射、适用/不适用理由和实际测试，不先把总门改绿。
 3. **审核入口分散，批准与实现仍待办**：旧review.html主要链接历史研究与源码候选；本索引直接列出当前关联图册。P11/P18/P54等多段稿需核对组合，不按包数或PNG数累计成完整页。具体图批准后才能进入相应Vue闭环；此处不修改用户意见或任何生产事实。
 

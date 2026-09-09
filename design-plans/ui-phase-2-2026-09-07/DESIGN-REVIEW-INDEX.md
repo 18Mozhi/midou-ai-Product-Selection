@@ -1,19 +1,19 @@
 # C方向逐页审核索引与交付缺口
 
-本轮起始基线：b30fb8a2；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
+本轮起始基线：c79a0626；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
 
 ## 核对结果
 
 - 真实路由与规格：73/73。
-- 有明确整页或分段稿关联：72条；这不是72页全部完成。
-- 未关联对应整页稿：1条（P22）。共享主题浮层不抵扣P10。
-- C稿包69个：含1个方向研究包、3个共享表面包；正式清单内PNG共7860张。
-- 1194条来源绑定 / 798个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8033个本地链接已核对。
+- 有明确整页或分段稿关联：73条；这不是73页全部完成。
+- 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
+- C稿包70个：含1个方向研究包、3个共享表面包；正式清单内PNG共8026张。
+- 1208条来源绑定 / 804个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内8038个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
 
-1. **缺少1个路由的整页C稿关联**：P22 费用与利润规则。C目录扫描、规格链接和共享包README交叉核对；不把共享面或导航装配位计为整页。P01–P09新身份图包已关联，仍待具体审核和完整运行验证；下一按上述缺页顺序补稿。
+1. **73 路由均已有整页或分段 C 稿关联，但不等于整页通过**。P22 费用版本已补关联；下一逐页核对动作/弹窗语义分母、各态映射与 P11/P18/P54 组合，并收集具体图稿审核意见。
 2. **有图不等于每个按钮/弹窗六态已覆盖**：PAGES要求逐actionId/dialogId关联验证；现有总coverage仍为未冻结/0已验。各包局部场景、截图及源隔离检查不能证明全站语义分母。后续逐页补动作与变体的状态映射、适用/不适用理由和实际测试，不先把总门改绿。
 3. **审核入口分散，批准与实现仍待办**：旧review.html主要链接历史研究与源码候选；本索引直接列出当前关联图册。P11/P18/P54等多段稿需核对组合，不按包数或PNG数累计成完整页。具体图批准后才能进入相应Vue闭环；此处不修改用户意见或任何生产事实。
 
@@ -44,7 +44,7 @@
 | P19 | 竞品监控 · `/competitors` | [规格](page-specs/P19.md) | [competitor](design/competitor-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P20 | 竞品监控规则 · `/competitors/monitoring-rules` | [规格](page-specs/P20.md) | [competitor](design/competitor-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P21 | 供应链与利润 · `/sourcing` | [规格](page-specs/P21.md) | [sourcing](design/sourcing-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P22 | 费用与利润规则 · `/sourcing/cost-rules` | [规格](page-specs/P22.md) | 待补整页稿 | 无对应整页稿关联 |
+| P22 | 费用与利润规则 · `/sourcing/cost-rules` | [规格](page-specs/P22.md) | [cost-rules](design/cost-rules-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P23 | 全部任务 · `/tasks` | [规格](page-specs/P23.md) | [task-forms](design/task-direction-c-forms/README.md) · [task](design/task-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P24 | 任务详情 · `/tasks/:taskId` | [规格](page-specs/P24.md) | [task-forms](design/task-direction-c-forms/README.md) · [task](design/task-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P25 | 审批中心 · `/tasks/approvals` | [规格](page-specs/P25.md) | [approval](design/approval-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑69个包的浏览器测试，也没有重新人工审核7860张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑70个包的浏览器测试，也没有重新人工审核8026张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。
