@@ -306,6 +306,10 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "fc698ee64da11953ba7a420ac8f1814875f8085807c726df26dccf493dd88767",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "878f40be3add57e5791438044727a7a8ce02171398c7719db34e8cba6276bb06",
+    "scripts/lib/ui-phase2-journey-design-data.mjs": "b1ba5695211b069304f89a1c43d81d77386ced868adcaea62365b6a4106d6c4a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "91620eccefc85cdce2b31a72103e746b983dbcf2f2b69db90f41b53cbc673c4a",
+    "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "82e3dc5aef8c8e581cce8780636f5608d6ca49eb01b45fcbe9cfcae75b72cc80",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -333,8 +337,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "98d47be158ab5585230b81ce52df2757d4d7c357ecb9b72edc086a282257dc18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "c4aaec40cdb4abec3364d92898ca22b3f239323d4e0ccc7392d793c18bc08994",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "695797bc21f08b233461852d3a2156c8caa13358c127a27819f4015672cbd984",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "39122dbfd133dd632d56aa217eb6af3f280d86f837056483839b3c3625e3e63c",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "88af8c0028429d2a34fd80f3708659132c74df0decdd75512cd943efb4a6eb52",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d3ed4e1eb0ec5ccf27beb84202e81fa699c217e32ae6669031b3589f86574a97",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "c926b689a69e295d5c4095c4f733edf9a0cab07db70e6fa8a54a4441e2872215",
@@ -404,14 +408,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 16,
     "oldOnlyIdentities": 15,
-    "reviewedPages": 17,
-    "explicitlyGroupedSourceSites": 358,
-    "semanticGroups": 327,
-    "routeActions": 281,
-    "wiringGroups": 28,
+    "reviewedPages": 19,
+    "explicitlyGroupedSourceSites": 396,
+    "semanticGroups": 354,
+    "routeActions": 305,
+    "wiringGroups": 31,
     "pagesWithoutExplicitSemanticReview": [
-      "P16",
-      "P17",
       "P19",
       "P20",
       "P21",
@@ -976,26 +978,70 @@
       "path": "/opportunities/start",
       "title": "创建选品",
       "oldStaticAssociatedCandidates": 46,
-      "review": null,
+      "review": {
+        "pageId": "P16",
+        "sourceSites": 10,
+        "semanticGroups": 8,
+        "routeActions": 8,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "unmappedVisualSlots": 48,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 5,
+          "callerContainers": 3,
+          "consumerVariants": 7,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "journey-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "8动作×6=48代表控件视觉槽未逐selector关联；96PNG为48双端场景，不代表采纳成功或完整三主题两密度。",
+        "J07已按当前仓库/路由及蓝图复核：旅程adopt直接adopted，P18五门不同；用户仅选C没有决定规则。adoption-pending场景不是禁用生产或成功采纳图，P18机会链接仅相关引用。",
+        "本轮实际create/deactivate/applyJourney/schedule在惰性VM：失活后202仍更新journey和内存替身活动ID，active=false没有timer；证明在途写无GET同级归属校验，不等于真实浏览器/多标签复现。",
+        "既有助手再验三输入/三决定精确body/URL拒绝/候选回退/ID清理；decide成功仍error、reset保留原因继续未修。默认adopt残留及topic失效需真实输入组合验证。",
+        "2秒轮询、服务180000ms、普通成员三能力、终态和任务终态区分、真实数据/DB/RBAC及用户具体图审未完成。"
+      ]
     },
     {
       "id": "P17",
       "path": "/opportunities/scoring-rules",
       "title": "评分规则",
       "oldStaticAssociatedCandidates": 64,
-      "review": null,
+      "review": {
+        "pageId": "P17",
+        "sourceSites": 28,
+        "semanticGroups": 19,
+        "routeActions": 16,
+        "wiringGroups": 3,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "unmappedVisualSlots": 96,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 9,
+          "callerContainers": 8,
+          "consumerVariants": 30,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "scoring-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "16页面动作×6=96视觉槽未逐selector映射。48图只有24双端场景，缺列表完整异常、有效创建/提交失败成功、多页预览/缺失字段、全部操作失败长窗/主题密度图。",
+        "本轮源computed校验六阶段通过、正权重过滤body2维；不是完整服务校验或真实创建。仍不填默认权重/阈值，不新增停用按钮。",
+        "本轮实际runAction/begin/closeAction惰性VM：A approve请求等待时B reject替换当前状态，原body稳定但成功关B窗并显示拒绝已完成。需本次动作快照和结果归属验收；没有真实批准或拒绝记录。",
+        "实际loadPreview/closePreview惰性VM：A读取中关闭再开B被previewing早退，晚到A存入关闭态；仅一次A GET意图，不是B错误试算。实际Vue/缓存重入仍待验。",
+        "missing_fields和page_summary.unchanged服务字段未在源模板展示，C稿缺失样本未列出不等于覆盖有值场景；既有评分输入/历史运行/审批权限、事务、queueAll与生产未验证。"
+      ]
     },
     {
       "id": "P18",
@@ -2029,6 +2075,40 @@
         "localModelBindings": 20,
         "callerContainers": 17,
         "consumerVariants": 35,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P16",
+      "sourceSites": 10,
+      "semanticGroups": 8,
+      "routeActions": 8,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "unmappedVisualSlots": 48,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 5,
+        "callerContainers": 3,
+        "consumerVariants": 7,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P17",
+      "sourceSites": 28,
+      "semanticGroups": 19,
+      "routeActions": 16,
+      "wiringGroups": 3,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "unmappedVisualSlots": 96,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 9,
+        "callerContainers": 8,
+        "consumerVariants": 30,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -41383,7 +41463,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1",
@@ -41409,7 +41495,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.list.retry",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1",
@@ -41439,7 +41531,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1",
@@ -41469,7 +41567,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1",
@@ -41503,7 +41607,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.open",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1",
@@ -41537,7 +41647,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.submit.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1",
@@ -41571,7 +41687,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.approve.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1",
@@ -41605,7 +41727,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.reject.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1",
@@ -41639,7 +41767,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.activate.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1",
@@ -41673,7 +41807,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.rollback.open",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1",
@@ -41699,7 +41839,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.definition",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1",
@@ -41725,7 +41871,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1",
@@ -41751,7 +41903,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1",
@@ -41777,7 +41935,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1",
@@ -41803,7 +41967,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1",
@@ -41829,7 +41999,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1",
@@ -41855,7 +42031,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.definition",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#10a68914020a0888.1",
@@ -41881,7 +42063,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1",
@@ -41907,7 +42095,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1",
@@ -41937,7 +42131,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.retry",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1",
@@ -41967,7 +42167,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.previous",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1",
@@ -41997,7 +42203,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.preview.next",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1",
@@ -42023,7 +42235,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.definition",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1",
@@ -42049,7 +42267,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1",
@@ -42075,7 +42299,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1",
@@ -42101,7 +42331,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1",
@@ -42127,7 +42363,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.close",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1",
@@ -42153,7 +42395,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.action.submit",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#4e1ce57777a6a035.1",
@@ -43114,7 +43362,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-NAV-LIST",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1",
@@ -43140,7 +43394,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-STATE-RECOVERY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
@@ -43166,7 +43426,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1",
@@ -43192,7 +43458,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1",
@@ -43226,7 +43498,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-SOURCE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#5704caf4d4e8cd9d.1",
@@ -43256,7 +43534,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-DECIDE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1",
@@ -43286,7 +43570,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-DECIDE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1",
@@ -43320,7 +43610,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-NAV-OPPORTUNITY",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1",
@@ -43354,7 +43650,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-NAV-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1",
@@ -43380,7 +43682,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#bb5d5e072948baa9.1",

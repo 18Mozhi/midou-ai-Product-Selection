@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1478；旧登记1477；新身份16，旧表独有身份15。签名变化不等于增删业务能力。
-- 已具体语义对应17页/358源位置/327组；其中路由动作281组，转发/容器关联28组，其余明确排除。其余56页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应19页/396源位置/354组；其中路由动作305组，转发/容器关联31组，其余明确排除。其余54页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -27,8 +27,8 @@
 | [P13 今日工作](page-specs/P13.md) | 111 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 107 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P15 选品机会](page-specs/P15.md) | 158 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 46 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P17 评分规则](page-specs/P17.md) | 64 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P16 创建选品](page-specs/P16.md) | 46 | [8组](action-reviews/P16.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 64 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 158 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P20 竞品监控规则](page-specs/P20.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -1080,6 +1080,155 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - UiStatePanel主次事件均已核对；异常主标签与apply行为分开，次按钮返回机会列表实际reset。ResponsiveFilterDrawer内部按钮/遮罩/Tab/Escape不由单个调用验收。
 - 父opportunity-workspace传opportunityId或undefined及capabilities/common；路由reset_on_scope存在，但局部load缺read代次/Abort。不能从局部缺watch推断整站无范围隔离。
 - useModalDialog处理原生show/close/Escape/焦点归还，未增加busy或请求取消；全部列表→详情/离开/重开/同tick及迟到成功继续待实际Vue验证。
+
+## P16 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P16.json)：10个局部源位置 → 8组；2类写入，8组路由动作，0组转发/容器关联不重复计动作。5个本地v-model，3处调用/内嵌容器，7个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有48个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| J-NAV-LIST 返回机会列表 / navigation | 1处；input、running、terminal、busy | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png)、[running · 1440](design/journey-direction-c/1440-running.png) / [running · 390](design/journey-direction-c/390-running.png)；其余见JSON | deactivate保护读取，不阻断已发POST；离开后的成功归属必须独立验证。 |
+| J-STATE-RECOVERY 状态面板主次恢复 / local | 1处；restore-failed、restore-expired、restore-forbidden、restore-blocked、read-failed、read-expired、read-forbidden、read-blocked、create-failed | [restore-failed · 1440](design/journey-direction-c/1440-restore-failed.png) / [restore-failed · 390](design/journey-direction-c/390-restore-failed.png)、[restore-expired · 1440](design/journey-direction-c/1440-restore-expired.png) / [restore-expired · 390](design/journey-direction-c/390-restore-expired.png)；其余见JSON | 两个事件均保留；无journey/resumeId时共享重新登录等文案不改变reset行为；恢复副说明不是鉴权修复，真实401/403/存储异常待验。 |
+| J-CREATE 提交三类选品线索 / write | 2处；keyword、asin、product_url、invalid、busy、failed、late-inactive-success | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png)、[asin · 1440](design/journey-direction-c/1440-asin.png) / [asin · 390](design/journey-direction-c/390-asin.png)；其余见JSON | 源函数隔离证实deactivate后旧成功仍applyJourney并写内存替身活动ID，active=false时不设timer；未认证真实缓存/多标签，原未知错误文案未创建不代表无持久化。 |
+| J-SOURCE 查看候选原文 / navigation | 1处；selected、unselected、no-topic、missing-fields、long-result | [results · 1440](design/journey-direction-c/1440-results.png) / [results · 390](design/journey-direction-c/390-results.png)、[selected · 1440](design/journey-direction-c/1440-selected.png) / [selected · 390](design/journey-direction-c/390-selected.png)；其余见JSON | click.stop只停冒泡，不自动证明label默认激活被取消；原型把来源链接与radio分离，仍需实际鼠标/键盘验收。 |
+| J-DECIDE 保存三种审计决定 / write | 2处；adopt-contract-pending、observe、reject、empty-reason、failed、success-after-error、deadline-running | [adoption-pending · 1440](design/journey-direction-c/1440-adoption-pending.png) / [adoption-pending · 390](design/journey-direction-c/390-adoption-pending.png)、[observe-edited · 1440](design/journey-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/journey-direction-c/390-observe-edited.png)；其余见JSON | J07直接adopted与P18五门冲突未获决定；adoption-pending不是采纳成功图，也不代表源已禁用。决定失败重试成功仍state=error已隔离复现；来源超时但task运行时提交会受服务拒绝，源UI未禁。 |
+| J-NAV-OPPORTUNITY 查看返回机会 / navigation | 1处；returned-id、missing-id | [adoption-pending · 1440](design/journey-direction-c/1440-adoption-pending.png) / [adoption-pending · 390](design/journey-direction-c/390-adoption-pending.png)、[decided-no-links · 1440](design/journey-direction-c/1440-decided-no-links.png) / [decided-no-links · 390](design/journey-direction-c/390-decided-no-links.png)；其余见JSON | 现有合规图样本无采纳成功，只有待定/无链接相关图；不可拿观察夹具造机会链接已通过，P18目标证据待业务规则明确。 |
+| J-NAV-TASK 打开返回验证任务 / navigation | 1处；observe、reject、no-task | [observe-decided · 1440](design/journey-direction-c/1440-observe-decided.png) / [observe-decided · 390](design/journey-direction-c/390-observe-decided.png)、[reject-decided · 1440](design/journey-direction-c/1440-reject-decided.png) / [reject-decided · 390](design/journey-direction-c/390-reject-decided.png)；其余见JSON | 请求成功不证明任务执行或消息送达；没有返回ID不补造。 |
+| J-RESET 开始下一次 / local | 1处；running、read-busy、terminal、decided、busy-disabled | [running · 1440](design/journey-direction-c/1440-running.png) / [running · 390](design/journey-direction-c/390-running.png)、[read-busy · 1440](design/journey-direction-c/1440-read-busy.png) / [read-busy · 390](design/journey-direction-c/390-read-busy.png)；其余见JSON | 重置保留旧原因已确认；原型清理是待审提案，不能扩充浏览器持久化；写入晚到、storage异常与旧requestId展示仍待验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| SelectionJourney.vue / form.input_kind | keyword/asin/product_url三radio，默认keyword；切类型保留input_value；没有Provider选择。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / form.input_value | required maxlength200；keyword text，asin pattern十位字母数字，product_url type=url；原生URL不保证HTTPS/无账号/hash，服务端独立验证，原值发送后服务trim。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / selectedResultId | 候选raw_evidence_id动态radio；results非空优先否则first_result；旧选择存在保留，仅单条自动选，其他清空；缺topic禁adopt但不禁该radio。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / decision.action | adopt/observe/reject三radio，默认observe；adopt需selectedCandidate.topic_id，reading/busy未禁radio，仅禁提交；reset保留旧action。采纳规则冲突仍待确认。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / decision.reason | required maxlength1000，前端原值服务trim；失败保留，成功清空；reset保留旧原因，未与输入字段关联错误。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| SelectionJourney.vue / form.1 / keyword | form-container / matching-inline-form-scene | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / form.1 / asin | form-container / matching-inline-form-scene | [asin · 1440](design/journey-direction-c/1440-asin.png) / [asin · 390](design/journey-direction-c/390-asin.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / form.1 / url | form-container / matching-inline-form-scene | [url · 1440](design/journey-direction-c/1440-url.png) / [url · 390](design/journey-direction-c/390-url.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / aside.1 / keyword | inline-aside / related-scene-only | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / form.2 / observe-edited | form-container / matching-inline-form-scene | [observe-edited · 1440](design/journey-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/journey-direction-c/390-observe-edited.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / form.2 / reject-edited | form-container / matching-inline-form-scene | [reject-edited · 1440](design/journey-direction-c/1440-reject-edited.png) / [reject-edited · 390](design/journey-direction-c/390-reject-edited.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / form.2 / adoption-pending | form-container / related-scene-only | [adoption-pending · 1440](design/journey-direction-c/1440-adoption-pending.png) / [adoption-pending · 390](design/journey-direction-c/390-adoption-pending.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+
+### 明确保留的边界
+
+- 8动作×6=48代表控件视觉槽未逐selector关联；96PNG为48双端场景，不代表采纳成功或完整三主题两密度。
+- J07已按当前仓库/路由及蓝图复核：旅程adopt直接adopted，P18五门不同；用户仅选C没有决定规则。adoption-pending场景不是禁用生产或成功采纳图，P18机会链接仅相关引用。
+- 本轮实际create/deactivate/applyJourney/schedule在惰性VM：失活后202仍更新journey和内存替身活动ID，active=false没有timer；证明在途写无GET同级归属校验，不等于真实浏览器/多标签复现。
+- 既有助手再验三输入/三决定精确body/URL拒绝/候选回退/ID清理；decide成功仍error、reset保留原因继续未修。默认adopt残留及topic失效需真实输入组合验证。
+- 2秒轮询、服务180000ms、普通成员三能力、终态和任务终态区分、真实数据/DB/RBAC及用户具体图审未完成。
+- 共享UiStatePanel两个事件均已核对，异常标签不能当真实导航；源码样式/父壳层完整所有控件另审。
+- 五个v-model不等于五个按钮：输入类型三radio、候选动态radio、决定三radio及动态input/原因另列；旧action候选未扫描这些普通模型。
+- 父reset_on_scope及mounted/activated去重、deactivated/unmounted清timer/read版本/Abort已有源码；本轮不推翻已有GET生命周期修复，也不宣称全部写入/存储安全。
+- 全局单UUID-v4活动ID不按组织/账号分key；storage读取在try外，GET可能触发超时持久化事件。当前隔离测试无真实localStorage/HTTP/SQL，不等于后端纯只读。
+
+## P17 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P17.json)：28个局部源位置 → 19组；2类写入，16组路由动作，3组转发/容器关联不重复计动作。9个本地v-model，8处调用/内嵌容器，30个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有96个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| scoring.create.open 打开新规则草稿 / local | 3处；top-loading-or-error、empty、ready-complete、ready-incomplete | [empty · 1440](design/scoring-direction-c/1440-empty.png) / [empty · 390](design/scoring-direction-c/390-empty.png)、[versions · 1440](design/scoring-direction-c/1440-versions.png) / [versions · 390](design/scoring-direction-c/390-versions.png)；其余见JSON | 三个入口不能省略；read/approve-only的当前仅可查看文案不代表没有审批能力；页面异常创建入口仍存在。 |
+| scoring.list.retry 重读版本目录 / read | 1处；loading、error、expired、forbidden、blocked | [versions · 1440](design/scoring-direction-c/1440-versions.png) / [versions · 390](design/scoring-direction-c/390-versions.png)、[empty · 1440](design/scoring-direction-c/1440-empty.png) / [empty · 390](design/scoring-direction-c/390-empty.png)；其余见JSON | 当前48图无页面级全部错误/恢复图，引用只是相关列表；共享重新登录/返回工作台标签不是实际导航；旧GET结果归属未保护。 |
+| scoring.preview.open 打开发布影响预览 / read | 1处；draft、pending_approval、approved、busy-ignored | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)、[preview-loading · 1440](design/scoring-direction-c/1440-preview-loading.png) / [preview-loading · 390](design/scoring-direction-c/390-preview-loading.png)；其余见JSON | 关闭A读取中再请求B会早退；本轮隔离证实只发A且旧结果存入已关闭预览，不宣称B被读取。无read token/Abort，不当作安全切换已完成。 |
+| scoring.action.submit.open 打开提交审批原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。 |
+| scoring.action.approve.open 打开批准原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。 |
+| scoring.action.reject.open 打开拒绝原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [reject · 1440](design/scoring-direction-c/1440-reject.png) / [reject · 390](design/scoring-direction-c/390-reject.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。 |
+| scoring.action.activate.open 打开启用原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [activate · 1440](design/scoring-direction-c/1440-activate.png) / [activate · 390](design/scoring-direction-c/390-activate.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。 |
+| scoring.action.rollback.open 打开回滚原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [rollback · 1440](design/scoring-direction-c/1440-rollback.png) / [rollback · 390](design/scoring-direction-c/390-rollback.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；目标仅列表approved/retired，旧active变rolled_back，目标active；不是历史评分回退。服务端版本/状态/权限另验。 |
+| scoring.create.close 关闭创建草稿 / local | 3处；close、cancel、escape、busy-close | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png)、[create-risk · 1440](design/scoring-direction-c/1440-create-risk.png) / [create-risk · 390](design/scoring-direction-c/390-create-risk.png)；其余见JSON | 创建取消与生命周期重开清原因不是相同草稿规则；旧成功可能清新编辑，待实例归属验收。 |
+| scoring.create.submit 保存正权重规则草稿 / write | 2处；invalid-threshold、less-than-two、weight-total、missing-required、valid、failed、saved | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png)、[create-market_demand · 1440](design/scoring-direction-c/1440-create-market_demand.png) / [create-market_demand · 390](design/scoring-direction-c/390-create-market_demand.png)；其余见JSON | 源六阶段校验隔离通过，不预填业务值；仅初始八维编辑图，完整有效/失败/提交成功图缺失；维度成员对象引用与成功清理/后续load不在busy内待验。 |
+| scoring.preview.close 关闭影响预览 / local | 2处；close、escape、inflight | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)、[preview-loading · 1440](design/scoring-direction-c/1440-preview-loading.png) / [preview-loading · 390](design/scoring-direction-c/390-preview-loading.png)；其余见JSON | 旧GET仍能写preview；已隔离验证，不等于新目标被污染或真实数据库产生写入。 |
+| scoring.preview.retry 重新试算第1页 / read | 1处；after-error、failed-page-two | [preview-error · 1440](design/scoring-direction-c/1440-preview-error.png) / [preview-error · 390](design/scoring-direction-c/390-preview-error.png)、[preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)；其余见JSON | 仅第1页样本图，不覆盖真实第2页失败；missing_fields与page_summary.unchanged源模板未呈现，图也未穷尽缺失组合。 |
+| scoring.preview.previous 预览上一页 / read | 1处；first-disabled、later-page | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)；其余见JSON | 当前48图只有单页样本，不能用双禁用按钮证明实际第二页导航/返回及内容保持。 |
+| scoring.preview.next 预览下一页 / read | 1处；last-disabled、has-next | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)；其余见JSON | 21条20/1的历史Vue合同测试存在但本轮未重跑，图稿缺真实多页内容；页摘要非全量影响。 |
+| scoring.action.close 关闭生命周期原因 / local | 3处；submit、approve、reject、activate、rollback、busy-close | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png)、[approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png)；其余见JSON | 旧请求成功可关闭新原因窗；全busy关闭与焦点契约仍待实际Vue验证。 |
+| scoring.action.submit 提交五种生命周期动作 / write | 2处；submit、approve、reject、activate、rollback、conflict、busy、late-result | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png)、[approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png)；其余见JSON | 隔离证实A approve等待时改B reject，旧body仍A/approve/revision3，成功关B并显示拒绝已完成；不是后端真的拒绝。未知post未写入文案非事务证据，成功重读失败也不冒充整链成功。 |
+| scoring.create.definition 原生弹窗定义关联 / wiring | 1处；create-basics | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png)；其余见JSON | 原生焦点/取消不自动认证长窗、全部主题和进行中重开。 |
+| scoring.preview.definition 原生弹窗定义关联 / wiring | 1处；preview | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)；其余见JSON | 原生焦点/取消不自动认证长窗、全部主题和进行中重开。 |
+| scoring.action.definition 原生弹窗定义关联 / wiring | 1处；submit、approve、reject、activate、rollback | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png)、[approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png)；其余见JSON | 原生焦点/取消不自动认证长窗、全部主题和进行中重开。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| scoring.create.definition | 容器定义，无额外事件 | scoring.create.close、scoring.create.submit |
+| scoring.preview.definition | 容器定义，无额外事件 | scoring.preview.close、scoring.preview.open、scoring.preview.retry、scoring.preview.previous、scoring.preview.next |
+| scoring.action.definition | 容器定义，无额外事件 | scoring.action.close、scoring.action.submit |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| ScoreRuleConsole.vue / form.version_code | version_code required maxlength64，初始空；createValidation只查trim非空，服务版本代码字符规则未复制到浏览器pattern。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.name | name required maxlength160，初始空；前端提交原值，服务trim。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.recommend_min | recommend_min初始null，number0..100 step0.01；必填且大于observe_min，不预填默认业务阈值。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.observe_min | observe_min初始null，number0..100 step0.01；低于recommend_min，真实值由用户填写。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / item.weight | 八代码维度各有weight，初始0，number0..100 step0.01；只提交正权重，至少两维且总和四舍五入两位等于100。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / item.evidence_group | 八维各有market/competition/cost/other证据组，初始other；只随正权重维度提交，不自动赋予真实来源。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / item.required | 八维各有required checkbox初始false；至少一个正权重维度为true，零权重required不满足。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / reason | 五生命周期共用reason required maxlength1000；begin清空、close不清、失败保留，runAction原值发送，服务trim。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / targetRuleId | 仅rollback required select，目标来自当前目录approved/retired；begin清空，服务再验同范围，不新增下拉目标。 | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| ScoreRuleConsole.vue / dialog.1 / create-basics | native-dialog / matching-dialog-scene | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-basics | form-container / matching-dialog-scene | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-market_demand | form-container / matching-dialog-scene | [create-market_demand · 1440](design/scoring-direction-c/1440-create-market_demand.png) / [create-market_demand · 390](design/scoring-direction-c/390-create-market_demand.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-competition | form-container / matching-dialog-scene | [create-competition · 1440](design/scoring-direction-c/1440-create-competition.png) / [create-competition · 390](design/scoring-direction-c/390-create-competition.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-profit | form-container / matching-dialog-scene | [create-profit · 1440](design/scoring-direction-c/1440-create-profit.png) / [create-profit · 390](design/scoring-direction-c/390-create-profit.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-fulfillment_efficiency | form-container / matching-dialog-scene | [create-fulfillment_efficiency · 1440](design/scoring-direction-c/1440-create-fulfillment_efficiency.png) / [create-fulfillment_efficiency · 390](design/scoring-direction-c/390-create-fulfillment_efficiency.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-customer_experience | form-container / matching-dialog-scene | [create-customer_experience · 1440](design/scoring-direction-c/1440-create-customer_experience.png) / [create-customer_experience · 390](design/scoring-direction-c/390-create-customer_experience.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-content_fit | form-container / matching-dialog-scene | [create-content_fit · 1440](design/scoring-direction-c/1440-create-content_fit.png) / [create-content_fit · 390](design/scoring-direction-c/390-create-content_fit.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-risk | form-container / matching-dialog-scene | [create-risk · 1440](design/scoring-direction-c/1440-create-risk.png) / [create-risk · 390](design/scoring-direction-c/390-create-risk.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.1 / create-data_quality | form-container / matching-dialog-scene | [create-data_quality · 1440](design/scoring-direction-c/1440-create-data_quality.png) / [create-data_quality · 390](design/scoring-direction-c/390-create-data_quality.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.1 / create-basics | inline-aside / related-scene-only | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.2 / preview | native-dialog / matching-dialog-scene | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.2 / preview-loading | native-dialog / matching-dialog-scene | [preview-loading · 1440](design/scoring-direction-c/1440-preview-loading.png) / [preview-loading · 390](design/scoring-direction-c/390-preview-loading.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.2 / preview-error | native-dialog / matching-dialog-scene | [preview-error · 1440](design/scoring-direction-c/1440-preview-error.png) / [preview-error · 390](design/scoring-direction-c/390-preview-error.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.2 / preview | inline-aside / related-scene-only | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.3 / submit | native-dialog / matching-dialog-scene | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.3 / approve | native-dialog / matching-dialog-scene | [approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.3 / reject | native-dialog / matching-dialog-scene | [reject · 1440](design/scoring-direction-c/1440-reject.png) / [reject · 390](design/scoring-direction-c/390-reject.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.3 / activate | native-dialog / matching-dialog-scene | [activate · 1440](design/scoring-direction-c/1440-activate.png) / [activate · 390](design/scoring-direction-c/390-activate.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / dialog.3 / rollback | native-dialog / matching-dialog-scene | [rollback · 1440](design/scoring-direction-c/1440-rollback.png) / [rollback · 390](design/scoring-direction-c/390-rollback.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.2 / submit | form-container / matching-dialog-scene | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.2 / approve | form-container / matching-dialog-scene | [approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.2 / reject | form-container / matching-dialog-scene | [reject · 1440](design/scoring-direction-c/1440-reject.png) / [reject · 390](design/scoring-direction-c/390-reject.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.2 / activate | form-container / matching-dialog-scene | [activate · 1440](design/scoring-direction-c/1440-activate.png) / [activate · 390](design/scoring-direction-c/390-activate.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / form.2 / rollback | form-container / matching-dialog-scene | [rollback · 1440](design/scoring-direction-c/1440-rollback.png) / [rollback · 390](design/scoring-direction-c/390-rollback.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.3 / submit | inline-aside / related-scene-only | [submit · 1440](design/scoring-direction-c/1440-submit.png) / [submit · 390](design/scoring-direction-c/390-submit.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.3 / approve | inline-aside / related-scene-only | [approve · 1440](design/scoring-direction-c/1440-approve.png) / [approve · 390](design/scoring-direction-c/390-approve.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.3 / reject | inline-aside / related-scene-only | [reject · 1440](design/scoring-direction-c/1440-reject.png) / [reject · 390](design/scoring-direction-c/390-reject.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.3 / activate | inline-aside / related-scene-only | [activate · 1440](design/scoring-direction-c/1440-activate.png) / [activate · 390](design/scoring-direction-c/390-activate.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| ScoreRuleConsole.vue / aside.3 / rollback | inline-aside / related-scene-only | [rollback · 1440](design/scoring-direction-c/1440-rollback.png) / [rollback · 390](design/scoring-direction-c/390-rollback.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+
+### 明确保留的边界
+
+- 16页面动作×6=96视觉槽未逐selector映射。48图只有24双端场景，缺列表完整异常、有效创建/提交失败成功、多页预览/缺失字段、全部操作失败长窗/主题密度图。
+- 本轮源computed校验六阶段通过、正权重过滤body2维；不是完整服务校验或真实创建。仍不填默认权重/阈值，不新增停用按钮。
+- 本轮实际runAction/begin/closeAction惰性VM：A approve请求等待时B reject替换当前状态，原body稳定但成功关B窗并显示拒绝已完成。需本次动作快照和结果归属验收；没有真实批准或拒绝记录。
+- 实际loadPreview/closePreview惰性VM：A读取中关闭再开B被previewing早退，晚到A存入关闭态；仅一次A GET意图，不是B错误试算。实际Vue/缓存重入仍待验。
+- missing_fields和page_summary.unchanged服务字段未在源模板展示，C稿缺失样本未列出不等于覆盖有值场景；既有评分输入/历史运行/审批权限、事务、queueAll与生产未验证。
+- QualityGateSetupSummary仅展示父投影与slot；risk正权重和market/competition/cost证据组是规则配置，非机会事实质量门。
+- 9模型位置展开为30输入实例：四基本+八维各三+原因与回滚目标；不能用9个默认图填30字段/各态验收。
+- UiStatePanel只消费primary load，secondary即使显示也没有本页handler；所有异常具体图与恢复链待补。
+- useModalDialog复用原生show/close/Escape/焦点归还，不自动锁busy或取消请求；post的busy只到请求结束，后续load和新begin可并行。
+- 父reset_on_scope与真实capabilities传参存在；本组件只有onMounted load，没有active/GET代次/预览Abort。局部风险不等于跨租户服务失守。
 
 ## P18 局部动作与共享消费者
 

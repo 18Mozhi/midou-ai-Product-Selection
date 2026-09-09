@@ -1,5 +1,19 @@
 # 第二阶段实施记录
 
+## 2026-09-09 · P16/P17旅程与评分逐项语义
+
+本轮后续收到用户明确回复“统一五项质量门”，已记录JOURNEY-ADOPTION-DECISION.md。规则分歧解决，下一优先实施P16与P18同一规则门及五项质量门；本批源审阅保持改前证据，不把规则授权当已实现/视觉通过。下文询问和待定为本轮确认前过程。
+
+从干净main/a1e59929继续；前轮P15审核清单/风险为实质进展。本轮requirement-to-implementation/ui-skills-root按AGENTS/feature-map/蓝图/当前合同追SelectionJourney和ScoreRuleConsole及父参数、共享模态/状态/配置摘要。新增两页清单和统一审核入口，38源位置/27组（24页面动作、3原生定义）、14模型/11结构/37场景引用；P16零业务弹窗、P17七变体，不按模型/结构总数算动作分母。复用96+48PNG，仅目检390-selected与1440-rollback，无新图或全图目检声明。
+
+最小源hash/合同精确别名/全部38候选/14输入/11结构/37场景校验通过。buildJourneyDesignData重新执行三输入、三决定body、三种非法URL拒绝、候选/活动ID与J09两缺口。额外惰性VM提取真实create/applyJourney/deactivate/schedule：失活后202仍更新journey且写一次内存替身活动ID，active=false不设timer。没有真实localStorage/HTTP/SQL；既有GET代次/Abort保护保持，不混称读取修复失效。
+
+P17实际computed六阶段：缺阈值、阈值相等、少于两维、权重90、缺必填、合法；create只发两正权重维度。实际begin/runAction/closeAction：A approve/revision3等待时重开B reject，旧body仍A/approve/原原因，成功却关B并提示拒绝已完成；不是服务执行reject。实际loadPreview/closePreview：关闭A读取后请求B因previewing早退，只一次A意图，晚到A存入关闭态。尚未挂载Vue/真实事务复现，不修改动作/权限或权重规则。
+
+按真实仓库/路由再次确认J07采纳直接adopted、P18五门及GET超时登记副作用；异步询问用户是否统一质量门，未答复不改该分支，不阻止其他设计核对。P17完整列表异常、有效创建/结果、多页/有值missing_fields、五操作完整失败与主题图缺口明确列出；P16采纳成功仍缺。没有临时文件/进程或浏览器，无产品apps/API/OpenAPI/DB/迁移/env/依赖/配置/生产变更，不部署/重启。下一P19/P20与已有缺口，目标不缩小。
+
+本批收口：动作报告生成/只读复验19页、396唯一源位置、354按页累计组、305页面动作/31转发定义组，54页待同级核对，具体批准0。设计报告生成/复验76包9364PNG、840来源1439绑定、漂移/未登记均0，8080 README链接有效；verify:docs（73/60/6/153）、runtime-docs、390文件静态检查、format:check、新JSON定向Prettier、审核页本地链接与diff检查通过。无临时文件/进程；将本批改前审核与用户规则决定独立提交，下一实施已获授权的统一质量门，完整视觉与生产门不提升。
+
 ## 2026-09-09 · P15机会列表逐项语义
 
 从干净main/55453ceb继续；前轮P14清单为实质进展。requirement-to-implementation/ui-skills-root按地图/蓝图/机会合同核四组件与实际shared筛选、状态、模态、forms/readiness和父参数。新增P15清单与人读审核入口：67局部源位置/35组（27页面动作、6转发定义、2P18排除），20模型/17结构/35消费者场景引用。50位置已与P18共源，全局仅加17唯一位置；六业务面不按结构数重复计。复用126PNG，目检桌面cross-page和手机assign-failed-lower两图，不重采或伪称全部目检。

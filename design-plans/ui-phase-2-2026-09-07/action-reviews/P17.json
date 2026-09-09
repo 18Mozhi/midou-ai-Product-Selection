@@ -1,0 +1,1376 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P17",
+  "route": "/opportunities/scoring-rules",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "三个原生定义展开七业务变体（创建、预览、五生命周期）；两form与三aside不重复计数。"
+  },
+  "inputs": {
+    "local": [
+      "form.version_code",
+      "form.name",
+      "form.recommend_min",
+      "form.observe_min",
+      "item.weight",
+      "item.evidence_group",
+      "item.required",
+      "reason",
+      "targetRuleId"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "scoring.create.open",
+      "label": "打开新规则草稿",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1"
+      ],
+      "sourceContractKeys": [
+        "create.open：canDecide且非ready时顶部入口；不等于已加载可创建",
+        "create.open：empty且canDecide，创建首个草稿",
+        "create.open：ready覆盖说明内入口；是否缺项不影响canDecide门"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canDecide；非ready顶部、empty首条和ready摘要slot三位置；不要求缺项",
+      "handler": "openCreate只清createError并showCreate=true；不resetForm，无busy守卫",
+      "variants": ["top-loading-or-error", "empty", "ready-complete", "ready-incomplete"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "versions"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-basics"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "三个入口不能省略；read/approve-only的当前仅可查看文案不代表没有审批能力；页面异常创建入口仍存在。"
+    },
+    {
+      "actionId": "scoring.list.retry",
+      "label": "重读版本目录",
+      "kind": "read",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1"],
+      "sourceContractKeys": ["list.retry：UiStatePanel primary→load；读取目录，无业务写入"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "state非ready/empty；共享loading无操作，其他错误primary可触发",
+      "handler": "load GET /opportunity-score-rules；primary统一load，secondary未监听；成功不主动清message，失败不清旧rules",
+      "variants": ["loading", "error", "expired", "forbidden", "blocked"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "versions"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前48图无页面级全部错误/恢复图，引用只是相关列表；共享重新登录/返回工作台标签不是实际导航；旧GET结果归属未保护。"
+    },
+    {
+      "actionId": "scoring.preview.open",
+      "label": "打开发布影响预览",
+      "kind": "read",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1"],
+      "sourceContractKeys": ["preview.open：canApprove，draft/pending_approval/approved；GET第1页"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canApprove且draft/pending_approval/approved；函数canApprove且!previewing",
+      "handler": "loadPreview(rule,1)先设置目标/open/busy并清preview/error；GET /opportunity-score-rules/{id}/preview?page=1&page_size=20",
+      "variants": ["draft", "pending_approval", "approved", "busy-ignored"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview-loading"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "关闭A读取中再请求B会早退；本轮隔离证实只发A且旧结果存入已关闭预览，不宣称B被读取。无read token/Abort，不当作安全切换已完成。"
+    },
+    {
+      "actionId": "scoring.action.submit.open",
+      "label": "打开提交审批原因",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1"],
+      "sourceContractKeys": ["action.submit.open：canDecide且draft，begin清原因/目标/错误"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canDecide且draft；button无busy禁用，begin再校验能力但不验证rule.status",
+      "handler": "begin(rule,'submit')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
+      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "submit"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。"
+    },
+    {
+      "actionId": "scoring.action.approve.open",
+      "label": "打开批准原因",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1"],
+      "sourceContractKeys": ["action.approve.open：canApprove且pending_approval"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canApprove且pending_approval；button无busy禁用，begin再校验能力但不验证rule.status",
+      "handler": "begin(rule,'approve')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
+      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "approve"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。"
+    },
+    {
+      "actionId": "scoring.action.reject.open",
+      "label": "打开拒绝原因",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1"],
+      "sourceContractKeys": ["action.reject.open：canApprove且pending_approval"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canApprove且pending_approval；button无busy禁用，begin再校验能力但不验证rule.status",
+      "handler": "begin(rule,'reject')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
+      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "reject"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。"
+    },
+    {
+      "actionId": "scoring.action.activate.open",
+      "label": "打开启用原因",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1"],
+      "sourceContractKeys": ["action.activate.open：canApprove且approved"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canApprove且approved；button无busy禁用，begin再校验能力但不验证rule.status",
+      "handler": "begin(rule,'activate')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
+      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "activate"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。"
+    },
+    {
+      "actionId": "scoring.action.rollback.open",
+      "label": "打开回滚原因",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1"],
+      "sourceContractKeys": ["action.rollback.open：canApprove且active"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canApprove且active；button无busy禁用，begin再校验能力但不验证rule.status",
+      "handler": "begin(rule,'rollback')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
+      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "rollback"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "不同生命周期需分别审查；目标仅列表approved/retired，旧active变rolled_back，目标active；不是历史评分回退。服务端版本/状态/权限另验。"
+    },
+    {
+      "actionId": "scoring.create.close",
+      "label": "关闭创建草稿",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1"
+      ],
+      "sourceContractKeys": [
+        "create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿",
+        "create.close：标题关闭按钮，现有busy期间仍可关闭",
+        "create.close：取消按钮，与标题关闭同合同"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "标题/取消/Escape；busy时未锁",
+      "handler": "closeCreate关闭并清createError，保留全部form",
+      "variants": ["close", "cancel", "escape", "busy-close"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-basics"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-risk"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "创建取消与生命周期重开清原因不是相同草稿规则；旧成功可能清新编辑，待实例归属验收。"
+    },
+    {
+      "actionId": "scoring.create.submit",
+      "label": "保存正权重规则草稿",
+      "kind": "write",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1"
+      ],
+      "sourceContractKeys": [
+        "create.submit：createValidation无错且canDecide；正权重维度POST",
+        "create.submit：同表单提交；busy或createValidation禁用"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "canDecide且createValidation空；post全局busy守卫；native required/数值范围",
+      "handler": "POST /opportunity-score-rules {version_code,name,dimensions:weight>0,thresholds:{recommend_min,observe_min}}；成功关闭resetForm/load并提示仍需审批启用",
+      "variants": [
+        "invalid-threshold",
+        "less-than-two",
+        "weight-total",
+        "missing-required",
+        "valid",
+        "failed",
+        "saved"
+      ],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-basics"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-market_demand"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-competition"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-risk"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "源六阶段校验隔离通过，不预填业务值；仅初始八维编辑图，完整有效/失败/提交成功图缺失；维度成员对象引用与成功清理/后续load不在busy内待验。"
+    },
+    {
+      "actionId": "scoring.preview.close",
+      "label": "关闭影响预览",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#10a68914020a0888.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1"
+      ],
+      "sourceContractKeys": [
+        "preview.close：cancelPreview→closePreview，清错误，不取消GET",
+        "preview.close：标题关闭按钮"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "标题/Escape无previewing锁",
+      "handler": "closePreview设置showPreview=false并清previewError；不取消GET，不清previewRule/preview",
+      "variants": ["close", "escape", "inflight"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview-loading"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "旧GET仍能写preview；已隔离验证，不等于新目标被污染或真实数据库产生写入。"
+    },
+    {
+      "actionId": "scoring.preview.retry",
+      "label": "重新试算第1页",
+      "kind": "read",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1"],
+      "sourceContractKeys": ["preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "previewError分支按钮；loadPreview要求canApprove&&!previewing",
+      "handler": "loadPreview(previewRule)默认page=1，清旧内容再GET；不重试失败页码",
+      "variants": ["after-error", "failed-page-two"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview-error"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "仅第1页样本图，不覆盖真实第2页失败；missing_fields与page_summary.unchanged源模板未呈现，图也未穷尽缺失组合。"
+    },
+    {
+      "actionId": "scoring.preview.previous",
+      "label": "预览上一页",
+      "kind": "read",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1"],
+      "sourceContractKeys": ["preview.previous：page≤1或previewing禁用；GET上一页"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "page<=1或previewing禁用",
+      "handler": "changePreviewPage(page-1)使用previewRule；loadPreview以page_size20重新试算；函数本身无页码边界校验",
+      "variants": ["first-disabled", "later-page"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前48图只有单页样本，不能用双禁用按钮证明实际第二页导航/返回及内容保持。"
+    },
+    {
+      "actionId": "scoring.preview.next",
+      "label": "预览下一页",
+      "kind": "read",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1"],
+      "sourceContractKeys": ["preview.next：page×page_size≥total或previewing禁用；GET下一页"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "page*page_size>=total或previewing禁用",
+      "handler": "changePreviewPage(page+1)；total与当前items长度分开，不保存试算",
+      "variants": ["last-disabled", "has-next"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "21条20/1的历史Vue合同测试存在但本轮未重跑，图稿缺真实多页内容；页摘要非全量影响。"
+    },
+    {
+      "actionId": "scoring.action.close",
+      "label": "关闭生命周期原因",
+      "kind": "local",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1"
+      ],
+      "sourceContractKeys": [
+        "action.{action}.close：cancelAction→closeAction；关闭清错误，重开清原因/目标",
+        "action.{action}.close：标题关闭按钮；busy期间未锁定",
+        "action.{action}.close：取消按钮；不提交、不改变规则"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "五变体标题/取消/Escape；busy期间可关闭",
+      "handler": "closeAction只关showAction并清actionError，reason/target/selected保留到下次begin清理；不取消POST",
+      "variants": ["submit", "approve", "reject", "activate", "rollback", "busy-close"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "submit"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "approve"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "reject"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "activate"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "rollback"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "旧请求成功可关闭新原因窗；全busy关闭与焦点契约仍待实际Vue验证。"
+    },
+    {
+      "actionId": "scoring.action.submit",
+      "label": "提交五种生命周期动作",
+      "kind": "write",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1"
+      ],
+      "sourceContractKeys": [
+        "action.{action}.submit：runAction→POST actions；expected_revision来自选中快照",
+        "action.{action}.submit：同表单提交；busy禁用；原生required仍生效"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "selected必须存在；按钮busy禁用，post也防重；原因native required≤1000，rollback目标required；runAction无再次能力/状态校验",
+      "handler": "POST /opportunity-score-rules/{selected.id}/actions {action,reason,expected_revision,...rollback target_rule_id}；成功closeAction/load，再用当前action标签显示完成",
+      "variants": [
+        "submit",
+        "approve",
+        "reject",
+        "activate",
+        "rollback",
+        "conflict",
+        "busy",
+        "late-result"
+      ],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "submit"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "approve"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "reject"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "activate"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "rollback"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-conflict"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "action-busy"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "隔离证实A approve等待时改B reject，旧body仍A/approve/revision3，成功关B并显示拒绝已完成；不是后端真的拒绝。未知post未写入文案非事务证据，成功重读失败也不冒充整链成功。"
+    },
+    {
+      "actionId": "scoring.create.definition",
+      "label": "原生弹窗定义关联",
+      "kind": "wiring",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1"],
+      "sourceContractKeys": ["scoring.create（1变体）"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "useModalDialog与本地show/目标条件",
+      "handler": "一个定义不重复算form/aside/cancel；五生命周期共用定义但业务变体分开",
+      "variants": ["create-basics"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "create-basics"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "原生焦点/取消不自动认证长窗、全部主题和进行中重开。",
+      "forwardsTo": ["scoring.create.close", "scoring.create.submit"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "scoring.preview.definition",
+      "label": "原生弹窗定义关联",
+      "kind": "wiring",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1"],
+      "sourceContractKeys": ["scoring.preview（1变体）"],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "useModalDialog与本地show/目标条件",
+      "handler": "一个定义不重复算form/aside/cancel；五生命周期共用定义但业务变体分开",
+      "variants": ["preview"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "preview"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "原生焦点/取消不自动认证长窗、全部主题和进行中重开。",
+      "forwardsTo": [
+        "scoring.preview.close",
+        "scoring.preview.open",
+        "scoring.preview.retry",
+        "scoring.preview.previous",
+        "scoring.preview.next"
+      ],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "scoring.action.definition",
+      "label": "原生弹窗定义关联",
+      "kind": "wiring",
+      "routeApplicability": "P17-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1"],
+      "sourceContractKeys": [
+        "scoring.action.submit / approve / reject / activate / rollback（5变体）"
+      ],
+      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "condition": "useModalDialog与本地show/目标条件",
+      "handler": "一个定义不重复算form/aside/cancel；五生命周期共用定义但业务变体分开",
+      "variants": ["submit", "approve", "reject", "activate", "rollback"],
+      "scenes": [
+        {
+          "package": "scoring-direction-c",
+          "scene": "submit"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "approve"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "reject"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "activate"
+        },
+        {
+          "package": "scoring-direction-c",
+          "scene": "rollback"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-scoring-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "原生焦点/取消不自动认证长窗、全部主题和进行中重开。",
+      "forwardsTo": ["scoring.action.close", "scoring.action.submit"],
+      "forwardBindings": []
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "includeStructuralContainers": true,
+    "files": ["apps/web/src/components/ScoreRuleConsole.vue"],
+    "dependencyHashes": {
+      "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "form.version_code",
+        "meaning": "version_code required maxlength64，初始空；createValidation只查trim非空，服务版本代码字符规则未复制到浏览器pattern。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "form.name",
+        "meaning": "name required maxlength160，初始空；前端提交原值，服务trim。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "form.recommend_min",
+        "meaning": "recommend_min初始null，number0..100 step0.01；必填且大于observe_min，不预填默认业务阈值。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "form.observe_min",
+        "meaning": "observe_min初始null，number0..100 step0.01；低于recommend_min，真实值由用户填写。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "item.weight",
+        "meaning": "八代码维度各有weight，初始0，number0..100 step0.01；只提交正权重，至少两维且总和四舍五入两位等于100。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "item.evidence_group",
+        "meaning": "八维各有market/competition/cost/other证据组，初始other；只随正权重维度提交，不自动赋予真实来源。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "item.required",
+        "meaning": "八维各有required checkbox初始false；至少一个正权重维度为true，零权重required不满足。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "reason",
+        "meaning": "五生命周期共用reason required maxlength1000；begin清空、close不清、失败保留，runAction原值发送，服务trim。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "binding": "targetRuleId",
+        "meaning": "仅rollback required select，目标来自当前目录approved/retired；begin清空，服务再验同范围，不新增下拉目标。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "showCreate原生dialog一个，版本/阈值与八维编辑不是九个业务弹窗。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "create-basics",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-basics"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "创建form四基本字段+八维三字段；source同时渲染八维，C稿按分区/维度阅读是待审构图。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "create-basics",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-basics"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-market_demand",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-market_demand"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-competition",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-competition"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-profit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-profit"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-fulfillment_efficiency",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-fulfillment_efficiency"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-customer_experience",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-customer_experience"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-content_fit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-content_fit"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-risk",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-risk"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "create-data_quality",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-data_quality"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "创建影响说明aside：草稿不自动生效，不是新模态。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "create-basics",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "create-basics"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "showPreview&&previewRule的只读原生dialog；载入/错误/结果在同一实例，关闭不取消GET。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "preview",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "preview"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "preview-loading",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "preview-loading"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "preview-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "preview-error"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "preview响应的当前页items/total说明aside；只比较当前页，不计为额外弹窗。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "preview",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "preview"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "dialog",
+        "ordinal": 3,
+        "shape": "native-dialog",
+        "sourceBehavior": "showAction&&selected原生原因dialog一个，submit/approve/reject/activate/rollback五变体。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "submit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "submit"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "approve",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "approve"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "reject",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "reject"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "activate",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "activate"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "rollback",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "rollback"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "生命周期form：原因通用，rollback额外目标；required与POST版本/状态校验分层。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "submit",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "submit"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "approve",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "approve"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "reject",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "reject"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "activate",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "activate"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "rollback",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "rollback"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/ScoreRuleConsole.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "生命周期审计/历史不可改说明aside，文本不证明真实审计入库。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "variants": [
+          {
+            "name": "submit",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "submit"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "approve",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "approve"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "reject",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "reject"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "activate",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "activate"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "rollback",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "scoring-direction-c",
+                "scene": "rollback"
+              }
+            ],
+            "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "QualityGateSetupSummary仅展示父投影与slot；risk正权重和market/competition/cost证据组是规则配置，非机会事实质量门。",
+      "9模型位置展开为30输入实例：四基本+八维各三+原因与回滚目标；不能用9个默认图填30字段/各态验收。",
+      "UiStatePanel只消费primary load，secondary即使显示也没有本页handler；所有异常具体图与恢复链待补。",
+      "useModalDialog复用原生show/close/Escape/焦点归还，不自动锁busy或取消请求；post的busy只到请求结束，后续load和新begin可并行。",
+      "父reset_on_scope与真实capabilities传参存在；本组件只有onMounted load，没有active/GET代次/预览Abort。局部风险不等于跨租户服务失守。"
+    ]
+  },
+  "compositionGaps": [
+    "16页面动作×6=96视觉槽未逐selector映射。48图只有24双端场景，缺列表完整异常、有效创建/提交失败成功、多页预览/缺失字段、全部操作失败长窗/主题密度图。",
+    "本轮源computed校验六阶段通过、正权重过滤body2维；不是完整服务校验或真实创建。仍不填默认权重/阈值，不新增停用按钮。",
+    "本轮实际runAction/begin/closeAction惰性VM：A approve请求等待时B reject替换当前状态，原body稳定但成功关B窗并显示拒绝已完成。需本次动作快照和结果归属验收；没有真实批准或拒绝记录。",
+    "实际loadPreview/closePreview惰性VM：A读取中关闭再开B被previewing早退，晚到A存入关闭态；仅一次A GET意图，不是B错误试算。实际Vue/缓存重入仍待验。",
+    "missing_fields和page_summary.unchanged服务字段未在源模板展示，C稿缺失样本未列出不等于覆盖有值场景；既有评分输入/历史运行/审批权限、事务、queueAll与生产未验证。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "28源位置/19组（16页面动作、3原生定义关联）、9模型/8结构，7业务弹窗单列。",
+    "图引用与源函数/清单校验不授予具体批准，不证明实际Vue/API/数据库/生产；全站目标与G0–G5保持未完成。"
+  ]
+}
