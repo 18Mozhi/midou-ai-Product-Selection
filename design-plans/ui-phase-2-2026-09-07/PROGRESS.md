@@ -1,5 +1,21 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P25提交中关闭、重开与旧结果隔离图稿
+
+上一轮beba126b交付12诊断图，为实际进展。本轮从干净main继续，按AGENTS/Feature Map approvalWorkflow/蓝图M05-02及真实ApprovalWorkspace、原型record/close/setMode核对。使用ui-skills-root/frontend-design/Playwright，无子代理或依赖安装。新增approval-lifecycle-direction-c组合，复用既有布局、字段帮助、阅读目录尺寸修复，不导入旧controls.js的全局pending回写逻辑；旧94/64/88/354/12图包均未改。
+
+五请求预览仍由原底稿事件生成，精确URL/body/version不变。新控制器捕获原请求副本、dialog首节点代次与递增token；全局在途阻止重复提交，原窗锁输入，新窗可编辑但需等待。关闭不取消或重放；原窗失败保留/模拟成功只关原窗，关闭或重开后旧结果只提示原操作，不关后来B、不改其草稿/URL/焦点/错误文字。重复旧token不能结束新重试。发布上层关闭保留下层模板，非详情遮罩和发布原因清理仍沿旧提案，不宣称源Vue全路径一致。成功是明确审稿工具，不更新事实、模板或历史；源读写竞态与requestId覆盖仍未修。
+
+54永久PNG：五类各等待/原窗失败/原窗模拟成功/关闭后等待/重开等待共25场景，加A成功/失败返回时新B两场景，均1440/390。A/B沿原21行合成分页样例，不冒充真实审批。模板/发起/发布disabled三代表槽按源busy=true条件映射，与busy同时存在，不编造空字段闲置禁用；当前103有图/20源无状态/21待核对，动作与批准分母不变。
+
+最小smoke54检查先通过；首轮capture及完整复验106/54通过。目视手机等待文案换行偏挤后缩短为“等待结果…”，增加真实响应工具点击、旧token干扰重试、B错误文字不污染断言。又为重开窗增加具体前次操作仍等待、当前可编辑但不自动提交的就近提示，避免无解释禁用。最终相关修改后重新smoke54→capture106检查/54图→无参数106/54全部通过。18关闭路径×成功/失败、五类原窗失败重试/模拟成功、五重开、两A/B结果均双端；按钮44px/16px/中心命中/视口、精确请求、不重复意图、事实不改/HTTP0/存储空/错误0通过。目视最终390模板等待、390发起重开及A/B、1440审批等待图。
+
+动作审计26页/579独立源/549组/467动作/58关联不变；全图审计81包/11346PNG，源/图漂移0、未登记图0、批准页0，分母和G0–G5不提升。verify:docs（153文件/73路由）、verify:runtime-docs、verify:static-analysis（390文件）通过；format:check（changed1/production496/repositories51）、新源及P25定向Prettier、git diff --check通过。既有状态校验器未修改，复用上一批同源93单测记录，不重复运行不受影响的生产构建/E2E。
+
+新包60文件（54PNG及6交互/说明/证据文件）和永久验证器为交付，不是临时产物；无新一次性文件、日志或测试服务，浏览器finally关闭，收尾查询无headless残留。历史拒绝清理的output/playwright/p16-layout-20260910/.last-run.json以及output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts、results/.last-run.json仍存在，不重试、不绕过、不暂存；原依赖/构建缓存不动。
+
+生产Vue/CSS、API/OpenAPI、后端/Worker/Python、数据库/迁移、权限、env/配置、依赖及宝塔未改，无新参数、无需重启、未部署。用户可打开图册，或选操作→提交→关闭/重开→使用明确标注的模拟响应工具审阅。P25具体布局/交互尚待审核，两字段直接展示替代12槽、四关闭组合适用性8槽及分页busy1槽仍待；读生命周期、真实实现与73路由全站部署签收继续。P16仅整体布局批准不外推，完整目标保持进行中。
+
 ## 2026-09-10 · P25页级诊断与保守状态适用性
 
 从干净main/67bbd2e6继续，按AGENTS、Feature Map approvalWorkflow、蓝图M05-02及真实ApprovalWorkspace/QueuePanel核对；使用ui-skills-root/frontend-design/Playwright，复用依赖、无子代理。新增独立approval-diagnostics-direction-c：12永久PNG（summary原生四态、展开、无编号回退，各1440/390）；蓝色提示面区分主提示与辅助编号，不拿资源编号图替代请求编号，不增加复制/trace/业务动作。旧94/64/88/354包不改。

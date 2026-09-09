@@ -923,6 +923,14 @@
       "variants": ["关闭按钮", "Escape", "遮罩", "Tab", "Shift+Tab"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "detail"
         },
@@ -964,6 +972,10 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -1349,6 +1361,26 @@
       "variants": ["允许", "空原因", "提交中", "409保留原因"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "reject-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "reject-owner-failure"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "reject-owner-success"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "reject-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "reject-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "decision"
         },
@@ -1398,6 +1430,10 @@
         "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -1457,6 +1493,26 @@
       "variants": ["允许", "空原因", "提交中", "409保留原因"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-owner-failure"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-owner-success"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "approve-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "decision"
         },
@@ -1506,6 +1562,10 @@
         "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -1657,6 +1717,14 @@
       "variants": ["取消", "Escape"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "template"
         },
@@ -1714,6 +1782,10 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -1787,6 +1859,26 @@
       "variants": ["task", "opportunity_decision", "invalid展开", "失败", "忙碌"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-owner-failure"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-owner-success"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "template"
         },
@@ -1828,10 +1920,14 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -1847,6 +1943,11 @@
       ],
       "remaining": "成员字段目前折叠，原型直接显示；失败主要notice在页级，图的就近错误尚未迁Vue。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10新增本按钮代表逐态及失败保留双端图；仅已列selector/场景，不覆盖全部字段/变体/跨窗pending归属，未映射disabled仍待有依据核对，具体审核和真实Vue/服务不据此通过。",
       "visualStateReferences": {
+        "disabled": {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "template-pending",
+          "selector": "#form-submit"
+        },
         "default": {
           "package": "approval-controls-direction-c",
           "scene": "template-default",
@@ -2021,6 +2122,14 @@
       "variants": ["返回", "Escape"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "publish"
         },
@@ -2078,6 +2187,10 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -2151,6 +2264,26 @@
       "variants": ["发布", "失败", "处理中"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-owner-failure"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-owner-success"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "publish"
         },
@@ -2192,10 +2325,14 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -2211,6 +2348,11 @@
       ],
       "remaining": "标题current_version与请求revision不同语义；原独立夹具不能拼成一致版本链。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10新增本按钮代表逐态及失败保留双端图；仅已列selector/场景，不覆盖全部字段/变体/跨窗pending归属，未映射disabled仍待有依据核对，具体审核和真实Vue/服务不据此通过。",
       "visualStateReferences": {
+        "disabled": {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "publish-pending",
+          "selector": "#publish-confirm"
+        },
         "default": {
           "package": "approval-controls-direction-c",
           "scene": "publish-default",
@@ -2252,6 +2394,14 @@
       "handler": "showRequest=false，保留requestForm",
       "variants": ["取消", "Escape"],
       "scenes": [
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-reopened-pending"
+        },
         {
           "package": "approval-direction-c",
           "scene": "request"
@@ -2310,6 +2460,10 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -2383,6 +2537,26 @@
       "variants": ["task", "opportunity_decision", "invalid展开", "失败", "处理中"],
       "scenes": [
         {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-owner-failure"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-owner-success"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-closed-pending"
+        },
+        {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-reopened-pending"
+        },
+        {
           "package": "approval-direction-c",
           "scene": "request"
         },
@@ -2424,10 +2598,14 @@
         "hover": "scene-reference-not-acceptance",
         "focus": "scene-reference-not-acceptance",
         "pressed": "scene-reference-not-acceptance",
-        "disabled": "not-mapped",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-approval-lifecycle-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
         {
           "file": "scripts/verify-ui-phase2-approval-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
@@ -2443,6 +2621,11 @@
       ],
       "remaining": "resource_type由已发布模板watch派生，不加独立字段；服务端验证存在/类型/范围，原型不证明真实发起。具体控件六态、主题/密度/长内容、完整角色和真实Vue/服务尚未验收；场景关联不是控件批准。 2026-09-10新增本按钮代表逐态及失败保留双端图；仅已列selector/场景，不覆盖全部字段/变体/跨窗pending归属，未映射disabled仍待有依据核对，具体审核和真实Vue/服务不据此通过。",
       "visualStateReferences": {
+        "disabled": {
+          "package": "approval-lifecycle-direction-c",
+          "scene": "request-pending",
+          "selector": "#form-submit"
+        },
         "default": {
           "package": "approval-controls-direction-c",
           "scene": "request-default",
@@ -3418,6 +3601,7 @@
     ]
   },
   "compositionGaps": [
+    "2026-09-10生命周期包54PNG：五写入预览锁原请求/窗口代次，原窗失败保留、模拟成功仅关原窗；关闭/重开及旧A结果不改后来B。双端106离线检查，生产读写竞态和requestId覆盖仍未修。模板/发起/发布disabled取源busy=true条件，新增3映射；当前103有图/20源无状态/21待核对，不替代其他变体或具体批准。",
     "全部按钮setFilter('')移除status，刷新回pending；原型显式空值修订不等于真实Vue修复。只监听approval，不宣称history同步所有筛选。",
     "读A/B乱序、关闭后旧读回流、A审批成功关闭后来B已源复现；写入body仍为A，不夸大成批准错对象或线上事故。",
     "发布返回清目标但保留原因，Escape清两者；重开总是清原因。模板/发起关闭保留草稿。",
