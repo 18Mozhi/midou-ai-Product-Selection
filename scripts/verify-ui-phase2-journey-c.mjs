@@ -11,8 +11,10 @@ const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const relative = "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c",
   root = path.join(repo, relative),
   hash = (v) => createHash("sha256").update(v).digest("hex");
-assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
+assert.ok(process.argv.slice(2).every((v) => v === "--capture" || v === "--smoke"));
 const capture = process.argv.includes("--capture");
+const smoke = process.argv.includes("--smoke");
+assert.ok(!(capture && smoke));
 const sources = ["index.html", "data.js", "journey.js", "journey.css"]
   .map((v) => `${relative}/${v}`)
   .concat([
@@ -21,6 +23,7 @@ const sources = ["index.html", "data.js", "journey.js", "journey.css"]
     "apps/api/src/selection-journey-service.ts",
     "apps/api/src/selection-journey-routes.ts",
     "apps/api/src/mysql-selection-journey-repository.ts",
+    "apps/api/src/opportunity-selection-policy.ts",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts",
     "tests/e2e/ui-phase2-journey-reads.spec.ts",
     "scripts/lib/ui-phase2-journey-design-data.mjs",
@@ -41,7 +44,7 @@ const data = await buildJourneyDesignData(repo),
 vm.runInNewContext(texts[`${relative}/data.js`], sandbox);
 assert.deepEqual(JSON.parse(JSON.stringify(sandbox.window.JOURNEY_C_DATA)), data);
 let previous;
-if (!capture) {
+if (!capture && !smoke) {
   previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
   assert.deepEqual(previous.sourceHashes, sourceHashes);
   for (const shot of previous.screenshots)
@@ -49,7 +52,8 @@ if (!capture) {
 }
 const browser = await chromium.launch({ headless: true }),
   screenshots = [],
-  expected = [];
+  expected = [],
+  controlStates = [];
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({
@@ -82,8 +86,10 @@ try {
             () => !window.JOURNEY_C.state().busy && !window.JOURNEY_C.state().reading,
           );
       const names = await page.evaluate(() => Object.keys(window.JOURNEY_C.scenes));
-      assert.equal(names.length, 48);
-      for (const name of names) {
+      assert.equal(names.length, 58);
+      for (const name of smoke
+        ? ["adopt-ready", "gate-cost", "adopt-conflict", "adopt-decided"]
+        : names) {
         await scene(name);
         await checkPrototypeMetrics(page);
         assert.deepEqual(errors, [], name);
@@ -103,6 +109,91 @@ try {
           screenshots.push({ file, scene: name, width, sha256: hash(image) });
         }
       }
+      const controls = [
+        {
+          key: "create",
+          selector: '#create-form [type="submit"]',
+          ready: "keyword-edited",
+          disabled: "restoring",
+          busy: "create-busy",
+        },
+        {
+          key: "adopt",
+          selector: '[name="decision"][value="adopt"]',
+          ready: "adopt-ready",
+          disabled: "gate-cost",
+          busy: "adopt-busy",
+        },
+        {
+          key: "save",
+          selector: '#decision-form [type="submit"]',
+          ready: "adopt-ready",
+          disabled: "gate-cost",
+          busy: "adopt-busy",
+        },
+      ];
+      for (const control of controls)
+        for (const variant of ["default", "hover", "focus", "pressed", "disabled", "busy"]) {
+          const baseScene = control[variant] || control.ready;
+          await page.mouse.move(0, 0);
+          await scene(baseScene);
+          const target = page.locator(control.selector);
+          await target.scrollIntoViewIfNeeded();
+          if (["disabled", "busy"].includes(variant)) assert.equal(await target.isDisabled(), true);
+          else assert.equal(await target.isEnabled(), true);
+          if (variant === "hover" || variant === "pressed") {
+            await target.hover();
+            assert.equal(await target.evaluate((el) => el.matches(":hover")), true);
+          }
+          if (variant === "focus") {
+            await page.keyboard.press("Tab");
+            await target.focus();
+            assert.equal(await target.evaluate((el) => el.matches(":focus-visible")), true);
+            assert.notEqual(
+              await target.evaluate((el) => getComputedStyle(el).outlineStyle),
+              "none",
+            );
+          }
+          if (variant === "pressed") {
+            await page.mouse.down();
+            assert.equal(await target.evaluate((el) => el.matches(":active")), true);
+          }
+          const record = {
+            key: control.key,
+            state: variant,
+            selector: control.selector,
+            scene: `control-${control.key}-${variant}`,
+            baseScene,
+            width,
+          };
+          controlStates.push(record);
+          const file = `${width}-control-${control.key}-${variant}.png`;
+          expected.push(file);
+          if (capture) {
+            const buffer = await page.screenshot({
+              path: path.join(root, file),
+              fullPage: true,
+              animations: "disabled",
+            });
+            screenshots.push({
+              file,
+              scene: record.scene,
+              width,
+              sha256: hash(buffer),
+              control: record,
+            });
+          }
+          if (variant === "pressed") {
+            await page.mouse.move(0, 0);
+            await page.mouse.up();
+          }
+          assert.equal(
+            (await state()).intents.length,
+            0,
+            `${control.key}/${variant} must not submit`,
+          );
+          await checkPrototypeMetrics(page);
+        }
       for (const [kind, value] of Object.entries(data.values)) {
         await scene(kind === "product_url" ? "url" : kind);
         await page.locator('#create-form [type="submit"]').click();
@@ -209,7 +300,42 @@ try {
       assert.equal(await page.locator('[name="reason"]').getAttribute("aria-invalid"), "true");
       await scene("adoption-pending");
       assert.equal(await page.locator('[name="decision"][value="adopt"]').isDisabled(), true);
-      assert.match(await page.locator("#decision-form").innerText(), /不代表生产已禁用/);
+      assert.match(await page.locator("#decision-form").innerText(), /尚无已评估机会/);
+      for (const gate of Object.keys(data.missingGates)) {
+        await scene(`gate-${gate}`);
+        assert.equal(await page.locator('[name="decision"][value="adopt"]').isDisabled(), true);
+        assert.equal(await page.locator('#decision-form [type="submit"]').isDisabled(), true);
+        assert.equal(await page.locator('.gate-summary [data-passed="false"]').count(), 1);
+        await page.locator("#decision-form").evaluate((el) => el.requestSubmit());
+        assert.equal((await state()).intents.length, 0);
+        assert.equal((await state()).decision.reason, "  核对来源后继续验证  ");
+      }
+      await scene("adopt-ready");
+      assert.equal(await page.locator('.gate-summary [data-passed="true"]').count(), 5);
+      await page.locator('#decision-form [type="submit"]').click();
+      await idle();
+      assert.deepEqual((await state()).lastIntent, data.decisionIntents.adopt);
+      assert.equal((await state()).journey.opportunity_id, data.qualified.opportunity_id);
+      assert.equal(
+        await page.locator(`a[href="/opportunities/${data.qualified.opportunity_id}"]`).count(),
+        1,
+      );
+      assert.equal((await state()).savedId, null);
+      await scene("adopt-conflict");
+      await page.locator('#decision-form [type="submit"]').click();
+      await idle();
+      assert.equal((await state()).journey.state, "result_ready");
+      assert.equal((await state()).journey.opportunity_id, null);
+      assert.equal((await state()).decision.reason, "  核对来源后继续验证  ");
+      await page.locator('[data-action="retry"]').click();
+      await idle();
+      assert.equal(await page.locator('[name="decision"][value="adopt"]').isDisabled(), true);
+      assert.equal((await state()).decision.reason, "  核对来源后继续验证  ");
+      await page.locator('[name="decision"][value="observe"]').check();
+      await page.locator('#decision-form [type="submit"]').click();
+      await idle();
+      assert.deepEqual((await state()).lastIntent, data.decisionIntents.observe);
+      assert.equal((await state()).journey.opportunity_id, null);
       await scene("deadline-running");
       assert.equal(await page.locator('#decision-form [type="submit"]').isDisabled(), true);
       await scene("running-evidence");
@@ -232,7 +358,7 @@ try {
       assert.deepEqual(requests, []);
       assert.deepEqual(errors, []);
       console.log(
-        `journey_c width=${width} scenes=${names.length} source-inputs/observe/reject/results/recovery/reset passed; adoption pending, HTTP=0 storage=0`,
+        `journey_c width=${width} scenes=${names.length} source-inputs/adopt/five-gates/conflict/observe/reject/results/recovery/reset passed; HTTP=0 storage=0`,
       );
     } finally {
       await context.close();
@@ -241,12 +367,30 @@ try {
 } finally {
   await browser.close();
 }
+const actionVisualReferences = Object.fromEntries(
+  [
+    ["J-CREATE", "create", '#create-form [type="submit"]'],
+    ["J-DECIDE", "save", '#decision-form [type="submit"]'],
+  ].map(([id, key, selector]) => [
+    id,
+    {
+      scope: "representative-control-only-not-all-variants-or-Vue",
+      selector,
+      states: Object.fromEntries(
+        ["default", "hover", "focus", "pressed", "disabled", "busy"].map((v) => [
+          v,
+          `control-${key}-${v}`,
+        ]),
+      ),
+    },
+  ]),
+);
 if (capture)
   await writeFile(
     path.join(root, "evidence.json"),
-    `${JSON.stringify({ version: data.version, approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, knownGaps: data.knownGaps, boundary: "48 scenes at two widths; zero business dialogs. Adoption is explicitly withheld pending business direction. Source execution confirms success leaves prior error state and reset retains decision draft, neither fixed in Vue. Isolated advance/recovery use no HTTP, real localStorage, polling or backend tasks; no production/DB/authorization acceptance.", screenshots }, null, 2)}\n`,
+    `${JSON.stringify({ version: data.version, approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, knownGaps: data.knownGaps, controlStates, actionVisualReferences, boundary: "58 full scenes and 18 control states at two widths; zero business dialogs. User approved r2 overall layout only; individual control-state review remains pending. Adoption uses isolated fixtures and source checks. Success clears prior error in Vue; reset draft clearing and inactive write ownership remain proposal-only. No HTTP, real storage, backend tasks or production/DB/authorization acceptance.", screenshots }, null, 2)}\n`,
   );
-else
+else if (!smoke)
   assert.deepEqual(
     previous.screenshots.map((v) => v.file),
     expected,

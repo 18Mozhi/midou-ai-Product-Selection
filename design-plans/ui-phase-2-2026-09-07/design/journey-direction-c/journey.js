@@ -44,7 +44,17 @@
     blocked: "来源明确受阻",
     failed: "任务失败",
     "deadline-running": "旅程超时但任务仍运行",
-    "adoption-pending": "采纳规则待业务确认",
+    "adoption-pending": "尚无已评估机会",
+    "adopt-ready": "五门通过待采纳",
+    "gate-score": "评分质量门未通过",
+    "gate-market": "市场质量门未通过",
+    "gate-competition": "竞争质量门未通过",
+    "gate-cost": "成本质量门未通过",
+    "gate-risk": "风险质量门未通过",
+    "adopt-busy": "采纳提交中",
+    "adopt-conflict": "提交时质量门变化",
+    "adopt-refreshed": "冲突刷新后的新状态",
+    "adopt-decided": "采纳成功与验证任务",
     "observe-edited": "观察原因已填",
     "observe-busy": "观察提交中",
     "observe-failed": "观察失败保留",
@@ -74,6 +84,42 @@
   };
   const statusNames = { waiting: "等待", active: "处理中", completed: "已完成", blocked: "受阻" };
   const actionNames = { adopt: "采纳", observe: "继续观察", reject: "驳回" };
+  const gateNames = {
+    score: "评分",
+    market: "市场",
+    competition: "竞争",
+    cost: "成本",
+    risk: "风险",
+  };
+  const selectedCandidate = () => candidates().find((v) => v.raw_evidence_id === s.selected);
+  const canAdopt = () => {
+    const c = selectedCandidate();
+    return Boolean(
+      c?.topic_id &&
+      c.opportunity_id &&
+      c.selection_stage === "recommended" &&
+      c.quality_gates?.all_passed === true &&
+      Object.keys(gateNames).every((k) => c.quality_gates[k] === true),
+    );
+  };
+  function qualityView() {
+    const c = selectedCandidate();
+    if (!c)
+      return '<div class="gate-summary"><strong>先选择一条候选</strong><p>核对所选机会的质量门后，再记录决定。</p></div>';
+    if (!c.opportunity_id)
+      return '<div class="gate-summary"><strong>尚无已评估机会</strong><p>此候选暂不能采纳；可继续观察或驳回。已有主题不等于评估完成。</p></div>';
+    const passed = Object.keys(gateNames).filter((k) => c.quality_gates?.[k] === true).length;
+    return `<section class="gate-summary" aria-label="采纳质量门"><header><strong>采纳质量门</strong><b>${passed} / 5</b></header><ul>${Object.entries(
+      gateNames,
+    )
+      .map(
+        ([k, label]) =>
+          `<li data-passed="${c.quality_gates?.[k] === true}"><span>${label}</span><b>${c.quality_gates?.[k] === true ? "已通过" : "待补齐"}</b></li>`,
+      )
+      .join(
+        "",
+      )}</ul><p>${canAdopt() ? "五门已通过，且满足待决策、有效规则与来源门槛。提交时服务端仍会复核。" : "暂不可采纳。请在机会列表补齐评估，刷新后再核对；五门全过仍需满足待决策、有效规则与来源门槛。"}</p></section>`;
+  }
   const btn = (action, label, cls = "", disabled = false) =>
     `<button type="button" data-action="${action}" class="${cls}" ${disabled ? "disabled" : ""}>${label}</button>`;
   const link = (href, label, external = false) =>
@@ -106,11 +152,15 @@
       )
       .join(
         "",
-      )}</div></fieldset><label>${s.form.input_kind === "keyword" ? "商品关键词" : s.form.input_kind === "asin" ? "10 位 ASIN" : "HTTPS 商品链接"}<input name="input_value" type="${s.form.input_kind === "product_url" ? "url" : "text"}" ${s.form.input_kind === "asin" ? 'pattern="[A-Za-z0-9]{10}"' : ""} value="${e(s.form.input_value)}" required maxlength="200" ${s.busy || s.reading ? "disabled" : ""} ${s.fieldError ? 'aria-invalid="true" aria-describedby="field-error"' : 'aria-describedby="input-hint"'} /><small id="input-hint" class="field-hint">三类输入均使用当前合规的 Google 新闻来源，不承诺直接获得平台商品价格。</small>${s.fieldError ? `<small class="field-error" id="field-error">${e(s.fieldError)}</small>` : ""}</label><p class="field-hint">创建只会提交采集任务，不代表结果已到达或机会已采纳。离开页面不会取消后台任务。</p><button class="primary" type="submit" ${s.busy || s.reading ? "disabled" : ""}>${s.busy ? "正在创建任务…" : s.reading ? "正在恢复进度…" : "创建选品任务"}</button></form><aside class="j-surface aside-note"><h3>接下来会发生什么</h3><ol><li>系统接收线索，创建可追溯的采集任务。</li><li>返回来源证据、空结果或明确失败原因。</li><li>你核对证据，再记录观察或驳回决定。</li></ol><p class="field-hint">本批采纳交互待业务规则确认。页面不会编造评分、利润或来源结果。</p></aside></div>`;
+      )}</div></fieldset><label>${s.form.input_kind === "keyword" ? "商品关键词" : s.form.input_kind === "asin" ? "10 位 ASIN" : "HTTPS 商品链接"}<input name="input_value" type="${s.form.input_kind === "product_url" ? "url" : "text"}" ${s.form.input_kind === "asin" ? 'pattern="[A-Za-z0-9]{10}"' : ""} value="${e(s.form.input_value)}" required maxlength="200" ${s.busy || s.reading ? "disabled" : ""} ${s.fieldError ? 'aria-invalid="true" aria-describedby="field-error"' : 'aria-describedby="input-hint"'} /><small id="input-hint" class="field-hint">三类输入均使用当前合规的 Google 新闻来源，不承诺直接获得平台商品价格。</small>${s.fieldError ? `<small class="field-error" id="field-error">${e(s.fieldError)}</small>` : ""}</label><p class="field-hint">创建只会提交采集任务，不代表结果已到达或机会已采纳。离开页面不会取消后台任务。</p><button class="primary" type="submit" ${s.busy || s.reading ? "disabled" : ""}>${s.busy ? "正在创建任务…" : s.reading ? "正在恢复进度…" : "创建选品任务"}</button></form><aside class="j-surface aside-note"><h3>接下来会发生什么</h3><ol><li>系统接收线索，创建可追溯的采集任务。</li><li>返回来源证据、空结果或明确失败原因。</li><li>你核对证据与质量门，再记录采纳、观察或驳回决定。</li></ol><p class="field-hint">采纳必须满足与机会详情一致的五项质量门。页面不会编造评分、利润或来源结果。</p></aside></div>`;
   }
   function decisionView() {
     const taskReady = d.taskTerminal.includes(s.journey.task_status);
-    return `<form class="j-surface decision-panel" id="decision-form"><p class="meta">人工判断</p><h3>记录本次决定</h3><p class="field-hint">已选 ${s.selected ? "1" : "0"} 条候选。观察与驳回不提交候选 ID，但仍可能返回验证任务。</p><div class="notice">采纳规则待确认：现有旅程可直接采纳，P18 则要求五项质量门。本稿不演示采纳成功，不代表生产已禁用采纳。</div>${taskReady ? "" : '<div class="notice error">任务仍在处理。旅程超时不等于任务终止；此时后端会拒绝决定，先重新读取进度。</div>'}<fieldset ${s.busy || s.reading || !taskReady ? "disabled" : ""}><legend>决定方式</legend><div class="choices"><label class="radio"><input type="radio" name="decision" value="adopt" disabled /><span>采纳并生成机会 · 规则待定</span></label>${["observe", "reject"].map((action) => `<label class="radio"><input type="radio" name="decision" value="${action}" ${s.decision.action === action ? "checked" : ""} /><span>${actionNames[action]}</span></label>`).join("")}</div></fieldset><label>决策原因<textarea name="reason" required maxlength="1000" ${s.busy || s.reading || !taskReady ? "disabled" : ""} ${s.reasonError ? 'aria-invalid="true" aria-describedby="reason-error"' : ""}>${e(s.decision.reason)}</textarea>${s.reasonError ? `<small id="reason-error" class="field-error">${e(s.reasonError)}</small>` : ""}</label><button type="submit" class="${s.decision.action === "reject" ? "danger" : "primary"}" ${s.busy || s.reading || !taskReady ? "disabled" : ""}>${s.busy ? "正在保存…" : "保存审计决策"}</button><p class="field-hint">原因随决定记录，不改写原始证据。只有返回关联 ID，才展示对应机会或任务链接。</p></form>`;
+    return `<form class="j-surface decision-panel" id="decision-form"><p class="meta">人工判断</p><h3>记录本次决定</h3><p class="field-hint">已选 ${s.selected ? "1" : "0"} 条候选。观察与驳回不提交候选 ID，但仍可能返回验证任务。</p>${qualityView()}
+      ${taskReady ? "" : '<div class="notice error">任务仍在处理。旅程超时不等于任务终止；此时后端会拒绝决定，先重新读取进度。</div>'}
+      <fieldset ${s.busy || s.reading || !taskReady ? "disabled" : ""}><legend>决定方式</legend><div class="choices"><label class="radio"><input type="radio" name="decision" value="adopt" ${s.decision.action === "adopt" ? "checked" : ""} ${canAdopt() ? "" : "disabled"} /><span>采纳合格机会</span></label>${["observe", "reject"].map((action) => `<label class="radio"><input type="radio" name="decision" value="${action}" ${s.decision.action === action ? "checked" : ""} /><span>${actionNames[action]}</span></label>`).join("")}</div></fieldset>
+      <label>决策原因<textarea name="reason" required maxlength="1000" ${s.busy || s.reading || !taskReady ? "disabled" : ""} ${s.reasonError ? 'aria-invalid="true" aria-describedby="reason-error"' : ""}>${e(s.decision.reason)}</textarea>${s.reasonError ? `<small id="reason-error" class="field-error">${e(s.reasonError)}</small>` : ""}</label>
+      <button type="submit" class="${s.decision.action === "reject" ? "danger" : "primary"}" ${s.busy || s.reading || !taskReady || (s.decision.action === "adopt" && !canAdopt()) ? "disabled" : ""}>${s.busy ? "正在保存…" : "保存审计决策"}</button><p class="field-hint">原因随决定记录，不改写原始证据。只有返回关联 ID，才展示对应机会或任务链接。</p></form>`;
   }
   function journeyView() {
     const j = s.journey,
@@ -214,7 +264,7 @@
       s.reading ||
       !s.journey ||
       !d.taskTerminal.includes(s.journey.task_status) ||
-      s.decision.action === "adopt"
+      (s.decision.action === "adopt" && !canAdopt())
     )
       return;
     if (!s.decision.reason.trim()) {
@@ -222,7 +272,13 @@
       render('[name="reason"]');
       return;
     }
-    const body = { ...s.decision, selected_raw_evidence_id: null };
+    const body = {
+      ...s.decision,
+      selected_raw_evidence_id: s.decision.action === "adopt" ? s.selected : null,
+    };
+    const opportunityId = body.action === "adopt" ? selectedCandidate().opportunity_id : null;
+    const gateConflict = body.action === "adopt" && Boolean(s.refreshedJourney);
+    if (gateConflict) s.failNext = true;
     later(
       { method: "POST", path: `/selection-journeys/${s.journey.id}/decisions`, body },
       () => {
@@ -236,14 +292,18 @@
             actor_id: "00000000-0000-4000-8000-000000007640",
             created_at: d.sample.accepted_at,
           },
-          opportunity_id: null,
+          opportunity_id: opportunityId,
           verification_task_id: "00000000-0000-4000-8000-000000007630",
         });
         s.decision.reason = "";
         s.error = "";
-        s.message = "决定已保存；未生成机会。验证任务按返回 ID 展示。";
+        s.message = opportunityId
+          ? "合格机会已采纳；机会及验证任务按返回 ID 展示。"
+          : "决定已保存；未生成机会。验证任务按返回 ID 展示。";
       },
-      "决定未获得成功确认；原因保留，未自动重放。",
+      gateConflict
+        ? "服务端已拒绝采纳：成本质量门发生变化。原因已保留，请刷新后再核对。"
+        : "决定未获得成功确认；原因保留，未自动重放。",
     );
   }
   function reset() {
@@ -367,6 +427,39 @@
     )
       s.selected = d.sample.results[1].raw_evidence_id;
     if (name === "no-topic") s.selected = d.sample.results[0].raw_evidence_id;
+    if (name.startsWith("adopt-") || name.startsWith("gate-")) {
+      s.journey.results[1] = clone(d.qualified);
+      s.selected = d.qualified.raw_evidence_id;
+      s.decision = { action: "adopt", reason: "  核对来源后继续验证  " };
+      if (name.startsWith("gate-"))
+        s.journey.results[1] = clone(d.missingGates[name.slice(5)].candidate);
+      if (name === "adopt-busy") s.busy = true;
+      if (name === "adopt-conflict" || name === "adopt-refreshed") {
+        s.refreshedJourney = clone(s.journey);
+        s.refreshedJourney.results[1] = clone(d.missingGates.cost.candidate);
+        if (name === "adopt-refreshed") apply(s.refreshedJourney);
+        else {
+          s.error = "blocked";
+          s.message =
+            "服务端已拒绝采纳：成本质量门发生变化。原因已保留；下方为上次读取状态，请刷新后再核对。";
+        }
+      }
+      if (name === "adopt-decided") {
+        apply({
+          ...s.journey,
+          state: "decided",
+          opportunity_id: d.qualified.opportunity_id,
+          verification_task_id: "00000000-0000-4000-8000-000000007630",
+          decision: {
+            action: "adopt",
+            reason: s.decision.reason.trim(),
+            selected_raw_evidence_id: s.selected,
+            created_at: d.sample.accepted_at,
+          },
+        });
+        s.decision.reason = "";
+      }
+    }
     if (name === "single-result")
       apply({ ...d.sample, results: [d.sample.results[1]], available_result_count: 1 });
     if (name === "first-result")
@@ -536,7 +629,7 @@
         s.reading = false;
         s.error = "";
         s.message = "已恢复上次进度（隔离返回）。";
-        apply(d.sample);
+        apply(s.refreshedJourney || d.sample);
         render();
       }, 350);
     }

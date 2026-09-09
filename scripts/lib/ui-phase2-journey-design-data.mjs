@@ -50,6 +50,31 @@ export async function buildJourneyDesignData(repo) {
       `export const form=${extract(main, "form")}; export const decision=${extract(main, "decision")};`,
     ),
   );
+  const qualified = plain(
+    run(
+      `${extract(fixture, "qualify", "function")}\nqualify(data); export const value=data.journey.results[1];`,
+      {
+        data: { journey: plain(sample) },
+        id: (n) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`,
+      },
+    ).value,
+  );
+  const eligibility = run(
+    `${extract(main, "eligibleForAdoption", "function")}\n${extract(main, "adoptionHint", "function")}\nexport {eligibleForAdoption,adoptionHint};`,
+  );
+  assert.equal(eligibility.eligibleForAdoption(qualified), true);
+  assert.equal(eligibility.eligibleForAdoption(sample.results[1]), false);
+  const missingGates = Object.fromEntries(
+    ["score", "market", "competition", "cost", "risk"].map((gate) => {
+      const candidate = {
+        ...plain(qualified),
+        selection_stage: "rule_candidate",
+        quality_gates: { ...qualified.quality_gates, [gate]: false, all_passed: false },
+      };
+      assert.equal(eligibility.eligibleForAdoption(candidate), false);
+      return [gate, { candidate, hint: eligibility.adoptionHint(candidate) }];
+    }),
+  );
   const validators = run(
     `${extract(backend, "SelectionJourneyError", "class")}\n${vars(backend, ["bounded", "uuid"])}\n${extract(backend, "input", "function")}\n${extract(backend, "decision", "function")}\nexport {input,decision};`,
   );
@@ -92,6 +117,7 @@ export async function buildJourneyDesignData(repo) {
       busy: { value: false },
       reading: { value: false },
       journey: { value: sample },
+      canAdopt: { value: eligibility.eligibleForAdoption(qualified) },
       state,
       message: { value: "" },
       requestId: { value: "" },
@@ -109,7 +135,21 @@ export async function buildJourneyDesignData(repo) {
       },
     }).result;
   }
-  assert.equal(state.value, "error");
+  assert.equal(state.value, "ready");
+  let blockedRequests = 0;
+  await run(`${extract(main, "decide", "function")}\nexport const result=decide();`, {
+    active: true,
+    busy: { value: false },
+    reading: { value: false },
+    journey: { value: sample },
+    canAdopt: { value: false },
+    decision: { action: "adopt", reason: "保留原因" },
+    message: { value: "" },
+    request: async () => {
+      blockedRequests++;
+    },
+  }).result;
+  assert.equal(blockedRequests, 0);
   const resetDecision = { action: "reject", reason: "旧旅程原因" };
   run(`${extract(main, "reset", "function")}\nreset();`, {
     busy: { value: false },
@@ -169,8 +209,10 @@ export async function buildJourneyDesignData(repo) {
     run(`export const value=[...${extract(repository, "terminal")}];`).value,
   );
   return {
-    version: "JOURNEY-C-r1",
+    version: "JOURNEY-C-r2",
     sample,
+    qualified,
+    missingGates,
     defaults,
     values,
     createIntents,
@@ -181,8 +223,9 @@ export async function buildJourneyDesignData(repo) {
       decideSuccessState: state.value,
       resetReason: resetDecision.reason,
       adoption:
-        "Current repository directly writes adopted; P18 five-gate contract conflicts. Awaiting user decision; prototype adoption is explicitly unavailable pending that decision.",
-      sourceFixed: false,
+        "User approved unified P18 gates. Current Vue eligibility and blocked submit executed; qualified fixture is isolated test data, not a real recommendation. Backend locked gates were implemented in c31fddc7; this prototype makes no DB claim.",
+      sourceFixed:
+        "adoption gates and decide success error state fixed; reset draft and full write ownership still pending",
     },
     boundary:
       "Historical isolated UI2-J fixture. Source functions executed in VM; no actual Vue, backend calls, storage, database or production acceptance.",

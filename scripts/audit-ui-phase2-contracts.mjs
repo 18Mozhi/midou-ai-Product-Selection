@@ -117,7 +117,7 @@ const history = {
   "task-contract-review.md": { historicalSections: ["3. 局部候选→语义动作映射"] },
   "scoring-contract-review.md": { historicalSections: ["2. 25个源码候选的完整局部映射"] },
   "selection-journey-contract-review.md": {
-    historicalSections: ["2. 控件候选与表单输入"],
+    historicalSections: ["2. 控件候选与表单输入", "8. 16f524b后的源码清单与证据刷新"],
     historicalColumns: ["N03旧尾键"],
   },
   "state-recovery-contract-review.md": {

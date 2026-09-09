@@ -2,16 +2,14 @@
   "schemaVersion": 1,
   "pageId": "P16",
   "route": "/opportunities/start",
-  "status": "historical-source-reviewed-not-user-approved",
-  "supersededBy": "design-plans/ui-phase-2-2026-09-07/JOURNEY-ADOPTION-DECISION.md",
-  "historicalBoundary": "Snapshot reviewed at a8cbf10f before the authorized unified adoption gates. Source hashes and old scene references intentionally retained; current source/action/visual recapture is pending. Do not count this snapshot as current gate evidence.",
+  "status": "source-reviewed-not-user-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271"
+    "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03"
   },
   "dialogs": {
     "kind": "none-in-current-source",
-    "reason": "零业务弹窗，两form和aside为内联结构；原型没有新增modal，采纳成功仍待规则确认。"
+    "reason": "零业务弹窗，两form和aside为内联结构；r2按已授权统一门补采纳相关场景，不新增modal。"
   },
   "inputs": {
     "local": [
@@ -29,8 +27,8 @@
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1"],
-      "sourceContractKeys": ["J-NAV-LIST；仅源码位置变化"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-NAV-LIST"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "页面常驻；不受busy/reading禁用",
       "handler": "RouterLink /opportunities，不传from；导航不取消后台任务",
       "variants": ["input", "running", "terminal", "busy"],
@@ -50,9 +48,9 @@
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -71,8 +69,8 @@
       "kind": "local",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1"],
-      "sourceContractKeys": ["J-STATE-PRIMARY/SECONDARY；恢复重试分支与主按钮文案更新"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-STATE-RECOVERY"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "仅state非ready且非loading；journey或resumeId时主文案重试读取进度",
       "handler": "primary有journey走load，否则resumeId走resume，均无则reset；secondary blocked仅解释、forbidden提示能力、其余history.back",
       "variants": [
@@ -114,13 +112,21 @@
         {
           "package": "journey-direction-c",
           "scene": "create-failed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-conflict"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-refreshed"
         }
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -142,11 +148,8 @@
         "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
         "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1"
       ],
-      "sourceContractKeys": [
-        "J-CREATE；同一submit=create，表单内忙碌文字改变签名",
-        "J-CREATE；新增reading禁用与恢复文案；旧button-554经精确label/attributes关联"
-      ],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-CREATE"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "!journey内联form；按钮busy||reading禁用；函数!active/busy/reading早退",
       "handler": "POST /selection-journeys {input_kind,input_value}原值；stopRead/resumeId清空→busy/loading→202 applyJourney/ready/schedule；只创建旅程，不等于机会",
       "variants": [
@@ -194,24 +197,80 @@
         {
           "package": "journey-direction-c",
           "scene": "url-rejected"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-create-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-create-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-create-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-create-pressed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-create-disabled"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-create-busy"
         }
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "源函数隔离证实deactivate后旧成功仍applyJourney并写内存替身活动ID，active=false时不设timer；未认证真实缓存/多标签，原未知错误文案未创建不代表无持久化。"
+      "remaining": "源函数隔离证实deactivate后旧成功仍applyJourney并写内存替身活动ID，active=false时不设timer；未认证真实缓存/多标签，原未知错误文案未创建不代表无持久化。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-create-default",
+          "selector": "#create-form [type=\"submit\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-create-hover",
+          "selector": "#create-form [type=\"submit\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-create-focus",
+          "selector": "#create-form [type=\"submit\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-create-pressed",
+          "selector": "#create-form [type=\"submit\"]"
+        },
+        "disabled": {
+          "package": "journey-direction-c",
+          "scene": "control-create-disabled",
+          "selector": "#create-form [type=\"submit\"]"
+        },
+        "busy": {
+          "package": "journey-direction-c",
+          "scene": "control-create-busy",
+          "selector": "#create-form [type=\"submit\"]"
+        }
+      }
     },
     {
       "actionId": "J-SOURCE",
@@ -219,8 +278,8 @@
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1"],
-      "sourceContractKeys": ["J-SOURCE；原文链接不变"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-SOURCE"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "每条candidates；原生a嵌在radio label",
       "handler": "canonical_url原值，target=_blank rel=noopener noreferrer @click.stop；不发业务POST",
       "variants": ["selected", "unselected", "no-topic", "missing-fields", "long-result"],
@@ -244,9 +303,9 @@
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -266,12 +325,12 @@
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": [
         "apps/web/src/components/SelectionJourney.vue#5704caf4d4e8cd9d.1",
-        "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1"
+        "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1"
       ],
-      "sourceContractKeys": ["J-DECIDE；三变体请求合同不变", "J-DECIDE；新增reading禁用"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
-      "condition": "terminal且journey.state!=decided；采纳radio仅selectedCandidate.topic_id可用，提交按钮busy||reading禁用；函数要求active/旅程/非busy/非reading",
-      "handler": "POST /selection-journeys/{id}/decisions {action,reason,selected_raw_evidence_id}；adopt选中ID或null，observe/reject恒null，不带expected_version；成功applyJourney清reason并stop，不设state=ready",
+      "sourceContractKeys": ["J-DECIDE"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "condition": "terminal且未decided；canAdopt要求topic/既有机会ID/recommended及五门和all_passed严格true，adopt radio与submit禁用，函数同级保护；active/旅程/非busy/非reading要求保持",
+      "handler": "原POST三字段不变：adopt所选ID，observe/reject恒null，无expected_version；后端同范围既有机会锁内复核P18五门和规则；成功applyJourney、清reason、state=ready、stop",
       "variants": [
         "adopt-contract-pending",
         "observe",
@@ -321,24 +380,120 @@
         {
           "package": "journey-direction-c",
           "scene": "deadline-running"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-ready"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "gate-score"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "gate-market"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "gate-competition"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "gate-cost"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "gate-risk"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-busy"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-conflict"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-refreshed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-decided"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-save-default"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-save-hover"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-save-focus"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-save-pressed"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-save-disabled"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "control-save-busy"
         }
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "J07直接adopted与P18五门冲突未获决定；adoption-pending不是采纳成功图，也不代表源已禁用。决定失败重试成功仍state=error已隔离复现；来源超时但task运行时提交会受服务拒绝，源UI未禁。"
+      "remaining": "统一采纳规则及成功清错已落实c31fddc7；r2图与按钮仍非生产视觉。真实SQL竞争、权限、失活后写归属/草稿生命周期、全部决定变体控件六态仍待验。",
+      "visualStateReferences": {
+        "default": {
+          "package": "journey-direction-c",
+          "scene": "control-save-default",
+          "selector": "#decision-form [type=\"submit\"]"
+        },
+        "hover": {
+          "package": "journey-direction-c",
+          "scene": "control-save-hover",
+          "selector": "#decision-form [type=\"submit\"]"
+        },
+        "focus": {
+          "package": "journey-direction-c",
+          "scene": "control-save-focus",
+          "selector": "#decision-form [type=\"submit\"]"
+        },
+        "pressed": {
+          "package": "journey-direction-c",
+          "scene": "control-save-pressed",
+          "selector": "#decision-form [type=\"submit\"]"
+        },
+        "disabled": {
+          "package": "journey-direction-c",
+          "scene": "control-save-disabled",
+          "selector": "#decision-form [type=\"submit\"]"
+        },
+        "busy": {
+          "package": "journey-direction-c",
+          "scene": "control-save-busy",
+          "selector": "#decision-form [type=\"submit\"]"
+        }
+      }
     },
     {
       "actionId": "J-NAV-OPPORTUNITY",
@@ -346,15 +501,15 @@
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1"],
-      "sourceContractKeys": ["J-NAV-OPPORTUNITY；返回链接不变"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-NAV-OPPORTUNITY"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "journey.decision存在且返回opportunity_id非空",
       "handler": "/opportunities/{opportunity_id}，无自动跳转或from；不是无条件创建机会",
       "variants": ["returned-id", "missing-id"],
       "scenes": [
         {
           "package": "journey-direction-c",
-          "scene": "adoption-pending"
+          "scene": "adopt-decided"
         },
         {
           "package": "journey-direction-c",
@@ -363,9 +518,9 @@
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -376,7 +531,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "现有合规图样本无采纳成功，只有待定/无链接相关图；不可拿观察夹具造机会链接已通过，P18目标证据待业务规则明确。"
+      "remaining": "合格fixture返回ID对应链接已原型核对，不代表实际机会访问权限或生产导航已验证。"
     },
     {
       "actionId": "J-NAV-TASK",
@@ -384,8 +539,8 @@
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1"],
-      "sourceContractKeys": ["J-NAV-TASK；返回链接不变"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-NAV-TASK"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "journey.decision存在且verification_task_id非空",
       "handler": "/tasks/{verification_task_id}，按实际返回ID；观察/驳回可能产生验证任务",
       "variants": ["observe", "reject", "no-task"],
@@ -401,13 +556,17 @@
         {
           "package": "journey-direction-c",
           "scene": "decided-no-links"
+        },
+        {
+          "package": "journey-direction-c",
+          "scene": "adopt-decided"
         }
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -426,8 +585,8 @@
       "kind": "local",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1"],
-      "sourceContractKeys": ["J-RESET；busy禁用，读取中仍可重置并使旧GET失效"],
-      "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
+      "sourceContractKeys": ["J-RESET"],
+      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
       "condition": "有journey时footer，busy禁用且函数早退；reading期间可用",
       "handler": "stopRead失效旧GET并清resumeId/journey/state/message/input_value/selectedResultId/活动ID；保留input_kind、decision.action/reason、requestId；不取消后台采集",
       "variants": ["running", "read-busy", "terminal", "decided", "busy-disabled"],
@@ -451,9 +610,9 @@
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-journey-design-data.mjs",
+          "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "本轮源函数/服务输入隔离助手重新执行，额外在途写归属见PROGRESS；零真实HTTP/SQL/存储。"
+          "claim": "r2当前来源函数、58场景及18个代表控件状态双端隔离校验；原型HTTP/storage=0，不证明真实Vue/SQL/生产。"
         }
       ],
       "visualStates": {
@@ -472,7 +631,7 @@
     "includeStructuralContainers": true,
     "files": ["apps/web/src/components/SelectionJourney.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/SelectionJourney.vue": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
+      "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
@@ -493,14 +652,15 @@
       {
         "file": "apps/web/src/components/SelectionJourney.vue",
         "binding": "selectedResultId",
-        "meaning": "候选raw_evidence_id动态radio；results非空优先否则first_result；旧选择存在保留，仅单条自动选，其他清空；缺topic禁adopt但不禁该radio。",
+        "meaning": "动态候选ID单选，results优先/first_result回退，单条自动选；资格跟随选中对象，缺topic或未评估不禁候选radio但禁adopt。",
         "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
       },
       {
         "file": "apps/web/src/components/SelectionJourney.vue",
         "binding": "decision.action",
-        "meaning": "adopt/observe/reject三radio，默认observe；adopt需selectedCandidate.topic_id，reading/busy未禁radio，仅禁提交；reset保留旧action。采纳规则冲突仍待确认。",
-        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+        "meaning": "adopt/observe/reject默认observe；adopt按canAdopt，选中后换不合格候选仍保留action但函数/按钮阻断；reset仍保留旧action。",
+        "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
+        "controlStateEvidence": "journey-direction-c/evidence.json controlStates key=adopt; six states at both widths, not whole field/form acceptance"
       },
       {
         "file": "apps/web/src/components/SelectionJourney.vue",
@@ -579,7 +739,7 @@
         "tag": "form",
         "ordinal": 2,
         "shape": "form-container",
-        "sourceBehavior": "terminal且未decided的内联决定form；observe/reject可继续图审；adopt冲突不能用仅待定图算完成。",
+        "sourceBehavior": "terminal且未decided的内联决定form；统一门仅限制adopt，observe/reject保留。",
         "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
         "variants": [
           {
@@ -614,6 +774,50 @@
               }
             ],
             "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。"
+          },
+          {
+            "name": "adopt-ready",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "journey-direction-c",
+                "scene": "adopt-ready"
+              }
+            ],
+            "remaining": "整体布局已获批，具体控件/真实运行与全主题仍未验收。"
+          },
+          {
+            "name": "gate-cost",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "journey-direction-c",
+                "scene": "gate-cost"
+              }
+            ],
+            "remaining": "整体布局已获批，具体控件/真实运行与全主题仍未验收。"
+          },
+          {
+            "name": "adopt-conflict",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "journey-direction-c",
+                "scene": "adopt-conflict"
+              }
+            ],
+            "remaining": "整体布局已获批，具体控件/真实运行与全主题仍未验收。"
+          },
+          {
+            "name": "adopt-refreshed",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "journey-direction-c",
+                "scene": "adopt-refreshed"
+              }
+            ],
+            "remaining": "整体布局已获批，具体控件/真实运行与全主题仍未验收。"
           }
         ]
       }
@@ -626,15 +830,16 @@
     ]
   },
   "compositionGaps": [
-    "8动作×6=48代表控件视觉槽未逐selector关联；96PNG为48双端场景，不代表采纳成功或完整三主题两密度。",
-    "J07已按当前仓库/路由及蓝图复核：旅程adopt直接adopted，P18五门不同；用户仅选C没有决定规则。adoption-pending场景不是禁用生产或成功采纳图，P18机会链接仅相关引用。",
-    "本轮实际create/deactivate/applyJourney/schedule在惰性VM：失活后202仍更新journey和内存替身活动ID，active=false没有timer；证明在途写无GET同级归属校验，不等于真实浏览器/多标签复现。",
-    "既有助手再验三输入/三决定精确body/URL拒绝/候选回退/ID清理；decide成功仍error、reset保留原因继续未修。默认adopt残留及topic失效需真实输入组合验证。",
-    "2秒轮询、服务180000ms、普通成员三能力、终态和任务终态区分、真实数据/DB/RBAC及用户具体图审未完成。"
+    "r2重拍58全页场景及18代表控件状态双端共152PNG；创建与保存两个代表动作12视觉槽已映射，剩余36槽未逐selector关联，采纳radio6态是字段证据不新增动作。",
+    "用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。",
+    "既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。",
+    "同一decide表单签名不变但语义已变；当前源成功state=ready，reset继续保留旧原因，字段busy锁及错误关联提案尚未整体落地。",
+    "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。"
   ],
   "approval": "pending-user-review",
   "limits": [
     "10源位置/8动作组、5模型/3内联结构；零本地业务弹窗，不用共同组件推断全站分母。",
     "图引用与源函数/清单校验不授予具体批准，不证明实际Vue/API/数据库/生产；全站目标与G0–G5保持未完成。"
-  ]
+  ],
+  "layoutApproval": "P16-C-R2-LAYOUT-APPROVAL.md: overall layout only; full page/control approval remains pending"
 }

@@ -1,5 +1,7 @@
 # P16 创建选品旅程 · 输入、续办、候选与决定合同
 
+2026-09-09 r2复核：第9节为c31fddc7统一质量门后的当前源码映射；[JOURNEY-C-r2](design/journey-direction-c/README.md)重新拍摄58场景/116图，补五门分别缺失、合格采纳、忙碌、冲突/刷新及成功。第1–8节为历史，不以旧hash或旧文案覆盖新规则。新图具体批准仍待用户。
+
 2026-09-09 规则实施更新：用户已明确[统一五项质量门](JOURNEY-ADOPTION-DECISION.md)，P16 本地实现复用 P18 判定，前端缺门阻断/提示与后端锁内复核、候选质量门 DTO 均已加入，保存成功清除旧错误态。下文第1–8节和 P16 动作JSON为改前源码快照，不能再当当前源身份或新采纳门的视觉证据。最新范围与测试见该决定文档及 PROGRESS；旧图未静默换绑，视觉稿重采/逐动作审核仍待继续。
 
 2026-09-08图稿接续：[JOURNEY-C-r1](design/journey-direction-c/README.md)48场景双端96图，零业务弹窗；具体稿待审。实际函数执行复现decide成功仍state=error、reset保留decision.reason，提案清理尚未修Vue。J07仓库直接adopted与P18五门冲突仍在，本轮再次请用户选择；采纳成功图/实现暂未交付，不把禁用审核控件当生产规则变化。输入、观察驳回及恢复可继续推进，不注销J07–J10。
@@ -128,3 +130,24 @@ P16十项规格和合同让N01–N03的P14/P15/P16/P18四份规格均有实际�
 五处v-model、零本地弹窗未变；其他1367控件候选及100弹窗候选逐对象与刷新前一致。目录外54候选及其13来源哈希另经现有验证器核对，未改语义或运行通过状态。旧704项再次全部有源码对应，不代表全动作已运行。
 
 本轮用既有采集流程实际重采任务18张Vue基线、18张注入CSS研究图、关联12张独立任务A/B图，以及评分/组织权限/系统状态36张Vue基线；审核台两图也实际重采。没有P16最终设计图、生产图或新增用户通过；这些不同证据类型不得互相替代。记录与检查结果见PROGRESS；旧图片和旧指纹可从Git前一版本追溯，不修改其历史记录。
+
+## 9. c31fddc7统一质量门后的当前源码映射
+
+SelectionJourney.vue LF SHA-256：05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03。十处候选仅保存按钮签名变更；同一form签名未变不代表内部采纳合同未变。五处模型、三个内联结构、零业务弹窗；8语义组不新增总动作。当前候选前缀 apps/web/src/components/SelectionJourney.vue#。
+
+| 当前行 | 当前候选尾键 | 本轮核对 | 稳定语义ID |
+| --- | --- | --- | --- |
+| 339 | feb47750cbf8d6c2.1 | 返回列表，不取消任务 | J-NAV-LIST |
+| 341 | 8026812b48a68031.1 | primary读取原ID，secondary按现有状态解释/返回 | J-STATE-RECOVERY |
+| 350 | 8c00555eac0c2a19.1 | create表单，三输入与原body保持 | J-CREATE |
+| 393 | 8471b8c4a13a52ef.1 | 创建submit，busy或reading禁用 | J-CREATE |
+| 464 | ffaf47bf1a32fcaf.1 | 原文安全新开，不等于radio默认行为全验 | J-SOURCE |
+| 498 | 5704caf4d4e8cd9d.1 | decide表单，新增canAdopt函数保护及成功清错 | J-DECIDE |
+| 537 | 56c9199d58a1af94.1 | 保存按钮新增采纳未达门禁用，旧dc2377签名失效 | J-DECIDE |
+| 548 | 2982f925c629be51.1 | 按返回opportunity_id显示，不猜链接 | J-NAV-OPPORTUNITY |
+| 551 | d3e6b84b6df72d56.1 | 按返回verification_task_id显示 | J-NAV-TASK |
+| 560 | 283a41d530253e0d.1 | reset保留旧决定草稿，未取消后台任务 | J-RESET |
+
+canAdopt要求topic_id、opportunity_id、recommended及五门和all_passed严格true；后端同范围机会锁内复核P18规则，冲突409拒绝。radio、按钮与submit函数都按该规则，改选不合格候选保留原因且不能提交原采纳选择。request仍为action/reason/selected_raw_evidence_id，observe/reject恒null，未新增expected_version。服务端成功后state=ready，reset草稿和在途写归属仍未修。
+
+r2图中五项核对区、原因错误关联、busy期间冻结输入、reset清空草稿、任务未终态禁决定属于待审布局/交互提案；不能把独立HTML当成已经替换Vue。当前Vue的48项隔离回归来自c31fddc7，本轮额外执行实际源eligibility/decide及58场景原型，不替代真实SQL竞争/RBAC/生产。

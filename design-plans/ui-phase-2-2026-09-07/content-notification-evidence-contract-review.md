@@ -1,5 +1,7 @@
 # B2b · 内容、通知与接口证据合同
 
+2026-09-09 P16配套证据刷新：c31fddc7仅改变OpenAPI采纳描述及候选DTO，method/path目录未变；原YAML哈希addefb08已转为当前572fa523。API覆盖稿按现有实际目录构造器重新计算并重拍90图，完整来源与交互检查通过，数据/界面图若未变化不算新增功能；无生产API覆盖通过声明。旧YAML和旧图源可从Git历史追溯，不只更换哈希而跳过验证。
+
 2026-09-09 P63续交：[API-COVERAGE-C-r1](design/api-coverage-direction-c/README.md)，45场景90PNG首轮具体稿待审。当前YAML225路径/258操作、六条合成角色记录/五条非not_run探测与原223/256夹具分开。六组实际源码隔离检查覆盖关联头部、单项ID/适用性、五维/角色口径、九类查询、六结果、301/300、内存报告读取及父读取竞争/403分类丢失/跨domain迟到；没有读生产报告、运行真实接口、SQL或权限测试。15个P63相关历史来源绑定，14个不变，1份E2E既有ff46bfe9焦点变更由前后Git对象精确追溯；下面33项历史表不重写、不宣称全表未变。快照归属、迟到保护、零匹配和证据正文/手机焦点仅提案，真实Vue/报告/六角色/五维/全主题生命周期及全站部署签收未完成。下文“P63新图未交”为历史状态；下一W08 P62链路日志。
 
 2026-09-09 P57续交：[PLATFORM-NOTIFICATIONS-C-r1](design/platform-notifications-direction-c/README.md)，87场景230PNG首轮具体稿待审。三任务分区、三状态全文和六编辑受众，人工消息/投递双分页与全局统计分开；不改受众、订阅、邮件关闭或发布合同。七组源隔离验证复现通知URL/确认版本漂移、重复保存、旧成功关新窗/覆盖读失败；创建/更新/发布/取消事务只接惰性SQL替身，不是真实数据库或投递。21个P57相关合同源独立核实，两份E2E既有ff46bfe9焦点变更精确重绑定，以下历史表保留。PN-G01–08仅部分有新证据，真实Vue/权限/审计/全生命周期、P63新图和全站部署签收未完成。
@@ -238,7 +240,7 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/api/src/api-coverage-dashboard.ts | 9a52518c7c47f26156bda290e7f6614e417e31760652cc73b4f37dd415a90b4c |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | config/api-coverage-metadata.json | 7fc9976841e840120ac355c555abe3ecceb4b387c95320098bc2c5d16e3b79d4 |
-| docs/openapi.yaml | addefb086b2afae6c477be3d97a02fab3343b74ab46433829c8a4f6ddc0b6d46 |
+| docs/openapi.yaml | 572fa523fd10401b9047cc6f98a379bfdf84df9d26ee47f00f5d2c7ee16badfe |
 | tests/e2e/platform-message-management.spec.ts | e73f8e2ce373e2f4ac2a4fc6207c3772c84cb3159855e219b447be5ecfaf5f72 |
 | tests/e2e/m06-02-platform-dashboard.spec.ts | dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66 |
 | tests/unit/platform-content.test.mjs | b59646a32e72b3142d04fb2ead2a1e126dd5e5394466929e63bccbe443bd83ad |

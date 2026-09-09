@@ -1,31 +1,28 @@
-# P16 创建选品 · JOURNEY-C-r1
+# P16 创建选品 · JOURNEY-C-r2
 
-状态：C 方向已选，本批具体稿待审核。48 场景 × 双端 = 96 张图；零业务弹窗。采纳规则仍待用户确认，本稿不执行或演示采纳成功；因此不宣称P16全分支已完成。独立HTML不是生产Vue。
+状态：用户已批准本页整体布局，继续细化按钮；具体控制状态及完整页面验收仍待审核。[批准边界](../../P16-C-R2-LAYOUT-APPROVAL.md)。
 
-[交互原型](index.html) · [证据与哈希](evidence.json) · [页面规格](../../page-specs/P16.md) · [真实合同](../../selection-journey-contract-review.md)
+58个全页场景×双端=116图；创建提交、采纳单选、保存提交各6态×双端=36图，共152张永久审核图。零业务弹窗。不是152项功能，也不是全部按钮已通过。
+
+[交互原型](index.html) · [源与图证据](evidence.json) · [页面规格](../../page-specs/P16.md) · [当前合同第9节](../../selection-journey-contract-review.md) · [统一质量门决定](../../JOURNEY-ADOPTION-DECISION.md)
 
 ## 设计与使用
 
-使用 frontend-design 重组为“输入线索 → 来源处理 → 审阅候选 → 决定记录”四阶段。蓝色阶段目录、白色当前工作区；输入表单与结果页分开，时间轴按需展开，来源链接与候选单选触区分离。手机改为纵向审阅，正文/输入16px、元信息13px、单选真实命中区域44px；不新增业务弹窗。
+沿frontend-design和用户批准的C方向：蓝色阶段目录、白色工作区；候选与决定分区，时间轴按需展开，移动端纵向审阅，正文/输入16px、元信息至少13px、触区至少44px。新质量门区逐行显示评分/市场/竞争/成本/风险，不只给颜色或总分。未形成已评估机会不展示虚假5门通过；5/5仍须待决策、有效规则和来源门槛。
 
-顶部“审核场景”切换图稿；“推进隔离样例”只是测试控件，模拟下一次GET返回，不属于产品按钮。创建/观察/驳回以350ms内存返回演示；不发送HTTP、不访问真实原文、不启动轮询，也不读取或写入真实localStorage。活动ID只在原型内存中模拟。
+顶部“审核场景”与“推进隔离样例”仅用于审核；创建、采纳、观察/驳回、恢复采用内存样例返回，不访问API、原文或真实浏览器存储，不启动采集或轮询。相应按钮只记录导航或请求意图，合格样例来自已有隔离回归，不是真实机会推荐。实际输入仍是Google新闻线索，不承诺抓到ASIN价格。
 
-## 真实合同、复现与待定项
+## 与真实源码的对应及差异
 
-- 创建仅POST /selection-journeys，body为input_kind/input_value，保留原大小写及空白；后端trim。三类输入仍使用google_news_search，不暗示直接获取ASIN/商品链接价格。永久助手执行真实Vue创建函数及后端输入校验，验证非HTTPS、带账号或片段链接被拒绝。
-- 当前route/API能力不完全对齐：创建task:create、读取opportunity:read、决定opportunity:decide；UI不伪造独立capability投影，通过真实错误状态说明权限。未修route/权限。
-- results为空才回退first_result；单条自动选择，多条需主动选择。任务available_result_count与最多20条结果列表分别呈现；20条/28总数和缺标题/长文为明确合成样例，不代表真实查询。
-- accepted/running即使有证据也不开放决定；blocked但task仍running时，后端会409 selection_result_pending。提案禁用该决定并说明原因，不改变后端。空结果、明确受阻和任务失败不互相替代，不补造评分或ROI。时长仅取服务端elapsed_ms向上取整；无递增动画或180秒营销承诺。
-- 观察/驳回的三字段body与真实decide函数深比较，selected_raw_evidence_id为null，没有expected_version。两种决定不会生成机会，但可能返回验证任务；只按返回ID展示任务链接。
-- J07采纳冲突已再次核实并向用户提出选择：旅程repository直接写adopted，P18要求五质量门。图稿显示待定提示且不模拟成功，不等于生产已禁用，也不偷换为“只生成pending”。真实adopt请求字段只在隔离助手中核对，不算该分支实现或获审。
-- J09两缺口在实际函数中复现：decide成功仍保留原state=error；reset仍保留旧decision.action/reason。本稿成功清错、开始下一次清空决定草稿是待审改进，Vue未修。开始下一次不取消采集、不重放POST，输入类型保留。
-- 创建/决定失败保留输入，错误不声称服务器一定未写入。恢复失败重试原ID，恢复中不允许创建或保存；非法/404活动ID图为隔离展示，不证明跨租户或真实storage行为。N04读取生命周期已有测试不在本稿重演为已验收。
+- 统一采纳门与保存成功清错已在c31fddc7实现；助手重新执行当前Vue eligibility、提交函数、三输入校验及禁采纳零请求。采用实际请求字段，adopt携带选中证据ID，observe/reject恒null，不新增expected_version。
+- 五项分别缺失、无已评估机会、合格采纳、提交中、409冲突与刷新、采纳成功均有图。冲突时明确“上次读取状态”；刷新后显示缺门，保留原因，可改为观察。成功只按返回ID显示机会/验证任务链接。
+- 创建与保存两动作的代表按钮六态已逐selector映射；采纳radio作为字段单独记录。hover、focus-visible、pointer-down是浏览器真实状态，拍按下图后移出再抬起，确认未意外发起提交。禁用/提交中读取实际disabled，不用CSS外观冒充禁用。
+- 仍保留Vue与提案差异：原型busy冻结整个输入区、关联原因错误、reset清旧草稿、超时但任务运行时禁决定；生产Vue未全部实现这些改进。实际在途POST失活归属、storage异常、跨范围/多标签、完整RBAC、SQL竞争与生产均未验证。
+- 原型正文单列最多20个候选，任务总量单独标注；缺标题/长文本/20项场景为合成排版样例。观察/驳回不伪造机会；零业务弹窗，不引入确认弹窗改变现有决定合同。
 
-## 全图索引
+## 全页图册
 
-常规工作面均为全页截图，48主场景各有1440和390宽图；长候选列表包含完整20项，没有用首屏代替全文。
-
-| 场景 | 1440 × 1000 | 390 × 844 |
+| 场景 | 桌面1440 | 手机390 |
 | --- | --- | --- |
 | 关键词输入 | [桌面](1440-keyword.png) | [手机](390-keyword.png) |
 | ASIN 输入 | [桌面](1440-asin.png) | [手机](390-asin.png) |
@@ -64,7 +61,17 @@
 | 来源明确受阻 | [桌面](1440-blocked.png) | [手机](390-blocked.png) |
 | 任务失败 | [桌面](1440-failed.png) | [手机](390-failed.png) |
 | 旅程超时但任务仍运行 | [桌面](1440-deadline-running.png) | [手机](390-deadline-running.png) |
-| 采纳规则待业务确认 | [桌面](1440-adoption-pending.png) | [手机](390-adoption-pending.png) |
+| 尚无已评估机会 | [桌面](1440-adoption-pending.png) | [手机](390-adoption-pending.png) |
+| 五门通过待采纳 | [桌面](1440-adopt-ready.png) | [手机](390-adopt-ready.png) |
+| 评分质量门未通过 | [桌面](1440-gate-score.png) | [手机](390-gate-score.png) |
+| 市场质量门未通过 | [桌面](1440-gate-market.png) | [手机](390-gate-market.png) |
+| 竞争质量门未通过 | [桌面](1440-gate-competition.png) | [手机](390-gate-competition.png) |
+| 成本质量门未通过 | [桌面](1440-gate-cost.png) | [手机](390-gate-cost.png) |
+| 风险质量门未通过 | [桌面](1440-gate-risk.png) | [手机](390-gate-risk.png) |
+| 采纳提交中 | [桌面](1440-adopt-busy.png) | [手机](390-adopt-busy.png) |
+| 提交时质量门变化 | [桌面](1440-adopt-conflict.png) | [手机](390-adopt-conflict.png) |
+| 冲突刷新后的新状态 | [桌面](1440-adopt-refreshed.png) | [手机](390-adopt-refreshed.png) |
+| 采纳成功与验证任务 | [桌面](1440-adopt-decided.png) | [手机](390-adopt-decided.png) |
 | 观察原因已填 | [桌面](1440-observe-edited.png) | [手机](390-observe-edited.png) |
 | 观察提交中 | [桌面](1440-observe-busy.png) | [手机](390-observe-busy.png) |
 | 观察失败保留 | [桌面](1440-observe-failed.png) | [手机](390-observe-failed.png) |
@@ -76,10 +83,31 @@
 | 决定已存但无关联 ID | [桌面](1440-decided-no-links.png) | [手机](390-decided-no-links.png) |
 | 开始下一次的空草稿 | [桌面](1440-next-input.png) | [手机](390-next-input.png) |
 
-## 验证与运行交接
+## 代表控件六态（待审核）
 
-运行 `node scripts/verify-ui-phase2-journey-c.mjs`：默认只读复核当前源/数据/PNG哈希及交互；加 `--capture` 才重拍。本批验证实际源函数的三类创建/三类决定字段（采纳仅字段、不执行成功）、输入校验、单条/多条/first_result、链接不误选、准确空candidate body、失败保留/显式重试、恢复ID、busy与reset。全程HTTP=0、真实浏览器存储=0、dialog=0；浏览器finally关闭。
+| 控件/状态 | 桌面 | 手机 |
+| --- | --- | --- |
+| 创建提交 / 默认 | [桌面](1440-control-create-default.png) | [手机](390-control-create-default.png) |
+| 创建提交 / 悬停 | [桌面](1440-control-create-hover.png) | [手机](390-control-create-hover.png) |
+| 创建提交 / 键盘焦点 | [桌面](1440-control-create-focus.png) | [手机](390-control-create-focus.png) |
+| 创建提交 / 按下 | [桌面](1440-control-create-pressed.png) | [手机](390-control-create-pressed.png) |
+| 创建提交 / 禁用 | [桌面](1440-control-create-disabled.png) | [手机](390-control-create-disabled.png) |
+| 创建提交 / 提交/读取中 | [桌面](1440-control-create-busy.png) | [手机](390-control-create-busy.png) |
+| 采纳单选 / 默认 | [桌面](1440-control-adopt-default.png) | [手机](390-control-adopt-default.png) |
+| 采纳单选 / 悬停 | [桌面](1440-control-adopt-hover.png) | [手机](390-control-adopt-hover.png) |
+| 采纳单选 / 键盘焦点 | [桌面](1440-control-adopt-focus.png) | [手机](390-control-adopt-focus.png) |
+| 采纳单选 / 按下 | [桌面](1440-control-adopt-pressed.png) | [手机](390-control-adopt-pressed.png) |
+| 采纳单选 / 禁用 | [桌面](1440-control-adopt-disabled.png) | [手机](390-control-adopt-disabled.png) |
+| 采纳单选 / 提交/读取中 | [桌面](1440-control-adopt-busy.png) | [手机](390-control-adopt-busy.png) |
+| 保存提交 / 默认 | [桌面](1440-control-save-default.png) | [手机](390-control-save-default.png) |
+| 保存提交 / 悬停 | [桌面](1440-control-save-hover.png) | [手机](390-control-save-hover.png) |
+| 保存提交 / 键盘焦点 | [桌面](1440-control-save-focus.png) | [手机](390-control-save-focus.png) |
+| 保存提交 / 按下 | [桌面](1440-control-save-pressed.png) | [手机](390-control-save-pressed.png) |
+| 保存提交 / 禁用 | [桌面](1440-control-save-disabled.png) | [手机](390-control-save-disabled.png) |
+| 保存提交 / 提交/读取中 | [桌面](1440-control-save-busy.png) | [手机](390-control-save-busy.png) |
 
-未改Vue/API/OpenAPI、配置、依赖、权限、数据库、旧图、coverage与审批；无需部署或重启，无本批临时文件或服务遗留，96PNG为永久审核交付。真正2秒轮询、KeepAlive/跨范围/多标签、存储异常、在途写入、Origin/幂等/普通成员权限、实际来源/DB、200%缩放/软键盘/屏幕阅读器、三主题两密度及生产验收仍未覆盖。本稿不能注销J07–J10或全站G0–G5。
+## 验证与交接
 
-下一业务面P18机会详情；P16采纳规则决定、具体图审与Vue实现继续待办，全73页目标不缩减。
+最小验证：`node scripts/verify-ui-phase2-journey-c.mjs --smoke`。完整只读复验不带参数；`--capture`重拍全部图并登记当前源/图片哈希，旧r1可从Git历史追溯。本批检查源码提取、DOM布局溢出、最小字号触区、各场景及三类代表控件状态，HTTP=0、真实storage=0，浏览器finally关闭。
+
+本轮只更新审核原型、验证脚本和文档，未改生产Vue/API/OpenAPI/数据库/权限/环境/依赖，不部署、不重启。152PNG为用户要求的永久交付，无临时图片遗留。三主题/密度、全共享控件六态、全部真实可访问性和生产签收仍需继续；整体布局批准不提升全页或全站完成门。

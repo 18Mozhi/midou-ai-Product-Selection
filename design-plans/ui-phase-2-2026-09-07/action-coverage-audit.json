@@ -122,7 +122,7 @@
     "apps/web/src/components/RuntimeTopologyCenter.vue": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
     "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
     "apps/web/src/components/SecurityOperationsCenter.vue": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
-    "apps/web/src/components/SelectionJourney.vue": "928808169759964ae801e50eb7b20843dec35e8d00f10e1f01bd6329f96fc271",
+    "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03",
     "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
     "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
     "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
@@ -177,7 +177,7 @@
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "34bcb7500816bfbc3e1a1038fefc3b67abef8e60238842d78599a955574eeca5",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "12f45d0ca0790ba78548e9e727ac2eb8e1fad0826a587baf906ac58eae5dc25a",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "dc09dd79de038281f0dd143e1193f137e15bd35dd6416ef627b147a498f25519",
-    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "befdfd0b8bd415aadff8a31fc9eb2dbffe7ab27f3732250edc7c4592d930be14",
+    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "fd326b3be323ced9b5c2e28b902bc86e189b9f13aa8e9e58fb0aa1030eca3aaa",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b3d6ae6546cedabcbf0f606ad238894a18880ccdc33f5ea22437ce6033ce281c",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "5ac68a4b12a31c45c97a103338ee6be97b7bdecc8f81eb5199f5dd470cbc34ab",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "4178e0ff72ad7795596bf344b2e5a3aa0b5a659b97f89420ce179471c17eb868",
@@ -191,7 +191,7 @@
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "894e47fe1fedb1728897fd5afa1497731585d5fbe6507566599008c581db6760",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "09124326e2db64b069941a69ac7161c94fd754015069ea47a24a9b433b3a8938",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "dfe9ea0a1064513435cf4e004233fd1bc64660a0b9a1ecbc3d380893159cad88",
-    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "97bf69490e3d46eeb1efd98de00b943bc0a0b4c3ee0ddfce1acbeda19c76d064",
+    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c99611700e6e5e53bda631e66885f338d4e5ee526b962548338ead9e9f42f8ea",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "2e55ace742f1d1631f02c37cae32ac721bd7894545f29903ea3c956d5fda2fb4",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "74529109c7dd6373438b50a7121528953d172412ffc9e1eafea81e8f3155e64e",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
@@ -202,7 +202,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
-    "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/evidence.json": "a8d9418b30dce3a4c3b90ee2a036b977b6810d5340ddefa81e0c63a293e67d2b",
+    "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/evidence.json": "b232340f4d894c4c61017163517f5506abfa133112af23b8e1da764b14ebe4c4",
     "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/evidence.json": "05109682b313e1d53239758847cb4744f219a42de3b36b2f65110d45213e6b8e",
     "design-plans/ui-phase-2-2026-09-07/design/approval-direction-c/evidence.json": "5275c7e5589860d4fa317a44f81c0c7f21cdd9e2fec220e89db0476d8f16a155",
     "design-plans/ui-phase-2-2026-09-07/design/automation-direction-c/evidence.json": "662c58080dd8a5189f315ee7dfcf3b419f88e7d4c982266c8baf285ea6962d65",
@@ -230,7 +230,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/evidence.json": "557bcb85020006497933cda75ada8b0807f83fce8e86781c84d221090078ce7a",
     "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/evidence.json": "f4329b047be3573ee185ff78cc0924e1eea4e2bde5d9c2a83f77330dd0814ce6",
     "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/evidence.json": "a49ba0902fc80bab8f0099fb86f4cce033b52b873a442f7c924fe008c9c8ef33",
-    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "d0ac87cda88ac10f4bcd339e0f2d6b75d14acccb0baada6257d44ac3ebfd288b",
+    "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "b0bc862c63299a35cbda28fd243928117c8a2ace9347d59feb3b6fa822bb700e",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
@@ -306,8 +306,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "fc698ee64da11953ba7a420ac8f1814875f8085807c726df26dccf493dd88767",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "878f40be3add57e5791438044727a7a8ce02171398c7719db34e8cba6276bb06",
-    "scripts/lib/ui-phase2-journey-design-data.mjs": "b1ba5695211b069304f89a1c43d81d77386ced868adcaea62365b6a4106d6c4a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "af382e02891d613653c14d1674abb07f3915f81be3ca7e3be5625fdf7dc4acd2",
+    "scripts/verify-ui-phase2-journey-c.mjs": "1965693a7e03e9c66061f6d0cf41a9a7fd4da246e02286ac50b812fd5b52f0bf",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "91620eccefc85cdce2b31a72103e746b983dbcf2f2b69db90f41b53cbc673c4a",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "82e3dc5aef8c8e581cce8780636f5608d6ca49eb01b45fcbe9cfcae75b72cc80",
@@ -337,7 +337,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "98d47be158ab5585230b81ce52df2757d4d7c357ecb9b72edc086a282257dc18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "c4aaec40cdb4abec3364d92898ca22b3f239323d4e0ccc7392d793c18bc08994",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "88af8c0028429d2a34fd80f3708659132c74df0decdd75512cd943efb4a6eb52",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "c0a3ebf0d06a7eb03cee11a658c926de4529d16001715c37fa62c266ac1b9eca",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d3ed4e1eb0ec5ccf27beb84202e81fa699c217e32ae6669031b3589f86574a97",
@@ -399,15 +399,15 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "b040fe5ba91b88ee5757c66620ab23a33562213163bf5ab058ff2f4734aad81d",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "f889a2064905f48cbaec479c0ea89d101271b6b1db94afa64702f8f3199db4b1",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "dea579eba9fffb14ca370b23467f7ce822b1e25112196be9ae93f73df3cacbf5",
+    "scripts/audit-ui-phase2-contracts.mjs": "2f52f82033aa48f50084d26bd94a0fb503b9b022afd24a95ef464c181a74e8ad",
     "scripts/lib/ui-phase2-contract-audit.mjs": "92007530e6463dae89d24e669347a9d5fb5482e839e7999dff602f1011817a3d"
   },
   "summary": {
     "routes": 73,
     "currentSourceCandidates": 1478,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 16,
-    "oldOnlyIdentities": 15,
+    "newSourceIdentities": 17,
+    "oldOnlyIdentities": 16,
     "reviewedPages": 19,
     "explicitlyGroupedSourceSites": 396,
     "semanticGroups": 354,
@@ -977,7 +977,7 @@
       "id": "P16",
       "path": "/opportunities/start",
       "title": "创建选品",
-      "oldStaticAssociatedCandidates": 46,
+      "oldStaticAssociatedCandidates": 45,
       "review": {
         "pageId": "P16",
         "sourceSites": 10,
@@ -986,12 +986,12 @@
         "wiringGroups": 0,
         "excludedGroups": 0,
         "writeActions": 2,
-        "unmappedVisualSlots": 48,
+        "unmappedVisualSlots": 36,
         "surfaces": {
           "callerFiles": 1,
           "localModelBindings": 5,
           "callerContainers": 3,
-          "consumerVariants": 7,
+          "consumerVariants": 11,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -1001,11 +1001,11 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "8动作×6=48代表控件视觉槽未逐selector关联；96PNG为48双端场景，不代表采纳成功或完整三主题两密度。",
-        "J07已按当前仓库/路由及蓝图复核：旅程adopt直接adopted，P18五门不同；用户仅选C没有决定规则。adoption-pending场景不是禁用生产或成功采纳图，P18机会链接仅相关引用。",
-        "本轮实际create/deactivate/applyJourney/schedule在惰性VM：失活后202仍更新journey和内存替身活动ID，active=false没有timer；证明在途写无GET同级归属校验，不等于真实浏览器/多标签复现。",
-        "既有助手再验三输入/三决定精确body/URL拒绝/候选回退/ID清理；decide成功仍error、reset保留原因继续未修。默认adopt残留及topic失效需真实输入组合验证。",
-        "2秒轮询、服务180000ms、普通成员三能力、终态和任务终态区分、真实数据/DB/RBAC及用户具体图审未完成。"
+        "r2重拍58全页场景及18代表控件状态双端共152PNG；创建与保存两个代表动作12视觉槽已映射，剩余36槽未逐selector关联，采纳radio6态是字段证据不新增动作。",
+        "用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。",
+        "既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。",
+        "同一decide表单签名不变但语义已变；当前源成功state=ready，reset继续保留旧原因，字段busy锁及错误关联提案尚未整体落地。",
+        "2秒轮询、180000ms、三能力、任务终态、真实数据/DB/RBAC与完整浏览器生命周期仍沿原约束；全局分母未冻结。"
       ]
     },
     {
@@ -2086,12 +2086,12 @@
       "wiringGroups": 0,
       "excludedGroups": 0,
       "writeActions": 2,
-      "unmappedVisualSlots": 48,
+      "unmappedVisualSlots": 36,
       "surfaces": {
         "callerFiles": 1,
         "localModelBindings": 5,
         "callerContainers": 3,
-        "consumerVariants": 7,
+        "consumerVariants": 11,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -31511,7 +31511,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 133,
+          "line": 135,
           "jsonPointer": null
         }
       ],
@@ -31535,7 +31535,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 134,
+          "line": 136,
           "jsonPointer": null
         }
       ],
@@ -33732,7 +33732,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 76,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -33761,7 +33761,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 77,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -33785,7 +33785,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 78,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -33814,7 +33814,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 79,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -33847,7 +33847,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 80,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -33880,7 +33880,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 81,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -33913,7 +33913,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 82,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -33946,7 +33946,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 83,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -33979,7 +33979,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 84,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -34012,7 +34012,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 85,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -34045,7 +34045,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 86,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -34086,7 +34086,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 87,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -34123,7 +34123,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 88,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -34156,7 +34156,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 89,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -34189,7 +34189,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 90,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -34222,7 +34222,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 91,
+          "line": 93,
           "jsonPointer": null
         }
       ],
@@ -34246,7 +34246,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 92,
+          "line": 94,
           "jsonPointer": null
         }
       ],
@@ -34270,7 +34270,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 93,
+          "line": 95,
           "jsonPointer": null
         }
       ],
@@ -34294,7 +34294,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 94,
+          "line": 96,
           "jsonPointer": null
         }
       ],
@@ -34318,7 +34318,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 95,
+          "line": 97,
           "jsonPointer": null
         }
       ],
@@ -34342,7 +34342,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 96,
+          "line": 98,
           "jsonPointer": null
         }
       ],
@@ -34366,7 +34366,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 97,
+          "line": 99,
           "jsonPointer": null
         }
       ],
@@ -34390,7 +34390,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 98,
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -34414,7 +34414,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 99,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -34438,7 +34438,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 100,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -34462,7 +34462,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 101,
+          "line": 103,
           "jsonPointer": null
         }
       ],
@@ -34486,7 +34486,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 107,
+          "line": 109,
           "jsonPointer": null
         }
       ],
@@ -34510,7 +34510,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 108,
+          "line": 110,
           "jsonPointer": null
         }
       ],
@@ -34534,7 +34534,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 109,
+          "line": 111,
           "jsonPointer": null
         }
       ],
@@ -34558,7 +34558,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 110,
+          "line": 112,
           "jsonPointer": null
         }
       ],
@@ -34591,7 +34591,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 116,
+          "line": 118,
           "jsonPointer": null
         }
       ],
@@ -34624,7 +34624,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 117,
+          "line": 119,
           "jsonPointer": null
         }
       ],
@@ -34657,7 +34657,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 118,
+          "line": 120,
           "jsonPointer": null
         }
       ],
@@ -34686,7 +34686,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 119,
+          "line": 121,
           "jsonPointer": null
         }
       ],
@@ -34715,7 +34715,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 120,
+          "line": 122,
           "jsonPointer": null
         }
       ],
@@ -34744,7 +34744,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 121,
+          "line": 123,
           "jsonPointer": null
         }
       ],
@@ -34773,7 +34773,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 122,
+          "line": 124,
           "jsonPointer": null
         }
       ],
@@ -34810,7 +34810,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 123,
+          "line": 125,
           "jsonPointer": null
         }
       ],
@@ -34847,7 +34847,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 124,
+          "line": 126,
           "jsonPointer": null
         }
       ],
@@ -34884,7 +34884,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 125,
+          "line": 127,
           "jsonPointer": null
         }
       ],
@@ -34921,7 +34921,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 126,
+          "line": 128,
           "jsonPointer": null
         }
       ],
@@ -34950,7 +34950,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 127,
+          "line": 129,
           "jsonPointer": null
         }
       ],
@@ -34974,7 +34974,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 149,
+          "line": 151,
           "jsonPointer": null
         }
       ],
@@ -34998,7 +34998,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 150,
+          "line": 152,
           "jsonPointer": null
         }
       ],
@@ -35022,7 +35022,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 151,
+          "line": 153,
           "jsonPointer": null
         }
       ],
@@ -35046,7 +35046,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 152,
+          "line": 154,
           "jsonPointer": null
         }
       ],
@@ -35070,7 +35070,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 153,
+          "line": 155,
           "jsonPointer": null
         }
       ],
@@ -35094,7 +35094,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 154,
+          "line": 156,
           "jsonPointer": null
         }
       ],
@@ -35118,7 +35118,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 140,
+          "line": 142,
           "jsonPointer": null
         }
       ],
@@ -35151,7 +35151,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 141,
+          "line": 143,
           "jsonPointer": null
         }
       ],
@@ -35184,7 +35184,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 142,
+          "line": 144,
           "jsonPointer": null
         }
       ],
@@ -35217,7 +35217,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 143,
+          "line": 145,
           "jsonPointer": null
         }
       ],
@@ -35241,7 +35241,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 160,
+          "line": 162,
           "jsonPointer": null
         }
       ],
@@ -35270,7 +35270,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 161,
+          "line": 163,
           "jsonPointer": null
         }
       ],
@@ -35299,7 +35299,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 162,
+          "line": 164,
           "jsonPointer": null
         }
       ],
@@ -35323,7 +35323,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 168,
+          "line": 170,
           "jsonPointer": null
         }
       ],
@@ -35347,7 +35347,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 169,
+          "line": 171,
           "jsonPointer": null
         }
       ],
@@ -35371,7 +35371,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 170,
+          "line": 172,
           "jsonPointer": null
         }
       ],
@@ -35395,7 +35395,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 171,
+          "line": 173,
           "jsonPointer": null
         }
       ],
@@ -35419,7 +35419,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 177,
+          "line": 179,
           "jsonPointer": null
         }
       ],
@@ -35443,7 +35443,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
-          "line": 178,
+          "line": 180,
           "jsonPointer": null
         }
       ],
@@ -43346,7 +43346,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 293,
+      "line": 339,
       "kind": "control",
       "label": "返回机会列表",
       "conditions": [],
@@ -43358,7 +43358,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 115,
+          "line": 140,
           "jsonPointer": null
         }
       ],
@@ -43373,7 +43373,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 295,
+      "line": 341,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -43390,7 +43390,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 116,
+          "line": 141,
           "jsonPointer": null
         }
       ],
@@ -43405,7 +43405,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 304,
+      "line": 350,
       "kind": "form-event",
       "label": "{{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"HTTPS 商品链接\" }}",
       "conditions": [
@@ -43422,7 +43422,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 117,
+          "line": 142,
           "jsonPointer": null
         }
       ],
@@ -43437,7 +43437,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 347,
+      "line": 393,
       "kind": "control",
       "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
       "conditions": [
@@ -43454,7 +43454,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 118,
+          "line": 143,
           "jsonPointer": null
         }
       ],
@@ -43469,7 +43469,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 418,
+      "line": 464,
       "kind": "control",
       "label": "查看来源原文 ↗",
       "conditions": [
@@ -43494,7 +43494,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 119,
+          "line": 144,
           "jsonPointer": null
         }
       ],
@@ -43509,7 +43509,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#5704caf4d4e8cd9d.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 452,
+      "line": 498,
       "kind": "form-event",
       "label": "留痕决策 对本次真实结果作出决策 决策不会改写原始证据 {{ item.label }} 决策原因 {{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "conditions": [
@@ -43530,7 +43530,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 120,
+          "line": 145,
           "jsonPointer": null
         }
       ],
@@ -43543,9 +43543,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 491,
+      "line": 537,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "conditions": [
@@ -43558,15 +43558,13 @@
           "expression": "terminal && journey.state !== 'decided'"
         }
       ],
-      "staticRouteIds": [
-        "P16"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 121,
+          "line": 146,
           "jsonPointer": null
         }
       ],
@@ -43581,7 +43579,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 499,
+      "line": 548,
       "kind": "control",
       "label": "查看机会、证据与决策历史 ↗",
       "conditions": [
@@ -43606,7 +43604,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 122,
+          "line": 147,
           "jsonPointer": null
         }
       ],
@@ -43621,7 +43619,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 502,
+      "line": 551,
       "kind": "control",
       "label": "打开自动生成的验证任务 ↗",
       "conditions": [
@@ -43646,7 +43644,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 123,
+          "line": 148,
           "jsonPointer": null
         }
       ],
@@ -43661,7 +43659,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 511,
+      "line": 560,
       "kind": "control",
       "label": "开始下一次",
       "conditions": [
@@ -43678,7 +43676,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 124,
+          "line": 149,
           "jsonPointer": null
         }
       ],
@@ -50904,6 +50902,12 @@
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#3670aecf7cfb60e1.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 337,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1",
+      "file": "apps/web/src/components/SelectionJourney.vue",
+      "line": 491,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
