@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P63 接口覆盖证据 · C方向审核</title>
+    <link rel="stylesheet" href="coverage.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">ScoutOps<small>发布诊断二级工具</small></div>
+        <nav id="sections" aria-label="本页证据分区"></nav>
+        <div class="side-note">
+          <p>只读证据<br />不执行接口探测</p>
+          <p class="draft-note">C方向已选<br />P63具体稿待审</p>
+        </div>
+      </aside>
+      <main>
+        <header class="header">
+          <div>
+            <h1>接口覆盖证据</h1>
+            <p class="muted">先核对报告归属，再查看实际执行到哪一步。</p>
+          </div>
+          <span class="review">离线审核 · 超级管理员工具</span>
+        </header>
+        <div id="app"></div>
+        <section class="scene-review">
+          <label for="scene">审核场景（合成报告，未访问生产）</label
+          ><select id="scene"></select>
+          <p class="draft-note">
+            目录来自当前仓库，执行结果为合成。刷新和筛选仅模拟读取，不启动验证。
+          </p>
+        </section>
+      </main>
+    </div>
+    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-desc"></dialog>
+    <script src="data.js"></script>
+    <script src="source-logic.js"></script>
+    <script src="coverage.js"></script>
+  </body>
+</html>
