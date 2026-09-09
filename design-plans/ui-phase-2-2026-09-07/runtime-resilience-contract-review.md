@@ -1,5 +1,11 @@
 # B3b · 运行拓扑与Redis/MySQL/文件韧性合同复核
 
+## 2026-09-09 P66设计补充 · TOPOLOGY-C-r1（未实施）
+
+[图册](design/topology-direction-c/README.md)与永久verify-ui-phase2-topology-c复验器交付81场景181PNG。实际evaluator/service验证预期节点过滤、90秒边界、API未来心跳仍ready而Worker未来快照stale、ready可并存监督器blocker/严重重启告警、八类告警、业务一分钟/等待排除/先取前四再校验、重启首条/下降增量0与重置标记。健康仓库汇总函数惰性执行验证零样本null、包含失败和超时的分位数；源码Vue验证单飞/15秒/401403清快照/其他保留与卸载abort，提取原队列筛选和老化逻辑。仓库SQL和路由guard只静态绑定，不声明实库事务或权限服务器通过。
+
+RS-G01/02已有源隔离与新稿表达：19队列不截断、running非due明确运行中、实际api_*阻断码、无样本和时间观测明细，不改源业务判门。三TechnicalDetails消费者各自展开/模拟复制与拒绝反馈；generic异常仍使用旧请求ID的源问题已复现，新稿把模拟失败ID与旧快照分开。RS-G06真实保活/共享组件与服务取消链未关闭。旧B3b相关9个source hash逐一保持；下文旧“未选择”及“待正式图”为当时事实，不覆盖用户已选择C的最新状态。本稿待审、未部署、未执行恢复/重启/迁移，P67–P69本轮未改。
+
 起点main/ea91a57，工作树干净；覆盖P66–P69四页及实际共享TechnicalDetails。事实规格完成不等于正式图/新风格、全量行为或生产通过；未选择F00 A/B/C。全局baseline/actions/dialogs/coverage和历史图保持原来源，不只修改hash冒充重新采证。
 
 ## 1. 页面范围与动作边界
