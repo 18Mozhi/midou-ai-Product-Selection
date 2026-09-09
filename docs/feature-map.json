@@ -1950,6 +1950,7 @@
     },
     "openPlatform": {
       "module": "M06-05",
+      "uiPhase2OpenPlatformCProposal": "P60 OPEN-PLATFORM-C-r1 under design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c is an offline pending-approval proposal: blue three-workspace navigation, white records and complete metadata details, independent organization draft/snapshot and collection filters, nine form/confirmation flows and four one-time-secret placeholder sources. Seven isolated Vue/service/repository checks and ten relevant historical source hashes do not prove real SQL, crypto, permission or external delivery. Separate reasons, modal focus, stale-result protection and secret clearing exist only in the proposal. No production Vue/API/config/schema/dependency/Worker change or deployment. Next W07 design package P63; P61 already has a representative proposal.",
       "uiPhase2Contract": "P60 and commercial-security-open-platform-contract-review.md under design-plans/ui-phase-2-2026-09-07 map Client/Webhook/delivery actions, one-time-secret and shared confirmation boundaries, per-collection filters versus organization-only summaries, and queued versus externally delivered outcomes. This batch is fact documentation only for this page; no secret creation, rotation, replay or external delivery was executed. Async ownership, field error association, cached secret lifecycle, real permissions/backend and formal design remain pending.",
       "entrypoints": [
         "../apps/api/src/open-platform-service.ts",

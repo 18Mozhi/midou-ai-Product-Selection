@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P60 开放平台 · C方向审核稿</title>
+    <link rel="stylesheet" href="open-platform.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">ScoutOps<small>外部系统接入</small></div>
+        <nav id="views" aria-label="开放平台工作区"></nav>
+        <div class="side-note">
+          <p>账号授权<br />事件回调<br />投递调查</p>
+          <p class="draft-note">C方向已选<br />P60具体稿待审</p>
+        </div>
+      </aside>
+      <main>
+        <header class="header">
+          <div>
+            <h1>开放平台</h1>
+            <p class="muted">管理可信连接，核对每次投递的已有结果。</p>
+          </div>
+          <span class="review">P60 · 离线设计审核</span>
+        </header>
+        <div id="app"></div>
+        <section class="scene-review" aria-label="审核工具">
+          <label for="scene">审核场景（合成数据，不发送请求）</label
+          ><select id="scene"></select>
+          <p class="draft-note">模拟控件仅用于审图；密钥只使用说明性占位，没有凭证复制或外发。</p>
+        </section>
+      </main>
+    </div>
+    <dialog id="modal" aria-labelledby="modal-title" aria-describedby="modal-desc"></dialog>
+    <script src="data.js"></script>
+    <script src="source-logic.js"></script>
+    <script src="open-platform.js"></script>
+  </body>
+</html>
