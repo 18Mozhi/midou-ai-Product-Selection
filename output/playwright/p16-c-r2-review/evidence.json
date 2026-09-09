@@ -1,10 +1,10 @@
 {
   "version": "P16-C-r2-mounted-controls-2",
-  "capturedAt": "2026-09-09T19:39:56.698Z",
+  "capturedAt": "2026-09-09T19:53:42.548Z",
   "approval": "pending-controls-review",
   "boundary": "Real Vue route under existing shell; intercepted fixture HTTP, not real API/database/production. Only P16 overall layout approved. Buttons, themes and full page remain pending.",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
     "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
@@ -20,7 +20,7 @@
     "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
     "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
-    "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
+    "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
     "scripts/lib/ui-phase2-journey-vue-controls.mjs": "915d14f16e5c44c9db40d96a02a60c88eea1930a8052a74133a91c1016fa06de",
     "scripts/verify-ui-phase2-journey-vue.mjs": "dcd3c5ab7c32a6d1adbc1d9e4c9cbc1203b843df1e0b6304487bfb0441cb9041"
   },
@@ -785,7 +785,7 @@
       "controlHeight": 44,
       "fontSize": "16px",
       "color": "rgb(255, 255, 255)",
-      "background": "rgb(31, 67, 142)",
+      "background": "rgb(31, 67, 143)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -1342,8 +1342,8 @@
       "controlWidth": 106,
       "controlHeight": 44,
       "fontSize": "16px",
-      "color": "rgb(174, 179, 185)",
-      "background": "rgb(108, 130, 174)",
+      "color": "rgb(140, 146, 155)",
+      "background": "rgb(144, 160, 194)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -1932,7 +1932,7 @@
       "controlHeight": 44,
       "fontSize": "16px",
       "color": "rgb(255, 255, 255)",
-      "background": "rgb(29, 64, 138)",
+      "background": "rgb(31, 67, 143)",
       "opacity": "1",
       "centerHit": true,
       "box": {
@@ -3543,7 +3543,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "12f3c2574393589bf1d4a09b67518f39ab9d5cd4c5e2d5be4d6b097184867362"
+      "sha256": "6d4bd700df85205e0f8f6df93671dc37282285e2b89315ca4ad190887a2a0c7d"
     },
     {
       "file": "1440-control-create-pressed.png",
@@ -3556,7 +3556,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "pressed"
       },
-      "sha256": "7808b5d6f8bd096bb9703a6840c175f05d4a7242d161d8cbdd08680e8690eae1"
+      "sha256": "5f82c963e5d9301413a286d1c0b5cd84d3eb8957c8dea82da103270601935c6f"
     },
     {
       "file": "1440-control-list-default.png",
@@ -3629,7 +3629,7 @@
       "scene": "create-busy",
       "width": 1440,
       "captureType": "full-page",
-      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
+      "sha256": "5a87c23435da86e4241c52573465fa23b8d265fbd3f443b5ef3cb641e4be335d"
     },
     {
       "file": "1440-control-create-disabled.png",
@@ -3642,7 +3642,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "disabled"
       },
-      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
+      "sha256": "5a87c23435da86e4241c52573465fa23b8d265fbd3f443b5ef3cb641e4be335d"
     },
     {
       "file": "1440-control-create-busy.png",
@@ -3655,7 +3655,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "busy"
       },
-      "sha256": "7dca32e3898bce9cd8eead3c5ed07e17f65f646194ca72e930c29053097e15d8"
+      "sha256": "5a87c23435da86e4241c52573465fa23b8d265fbd3f443b5ef3cb641e4be335d"
     },
     {
       "file": "1440-create-failed.png",
@@ -3871,7 +3871,7 @@
         "selector": ".selection-timeline-disclosure > summary",
         "state": "focus"
       },
-      "sha256": "3428ca7a1be83c9c958503a3fe5112ff2473785ea66e9da7e5699024178f5e74"
+      "sha256": "9d92d7a84ada8444a8c804594ffca45ee4cb8c310b149438eaa760f8535e55e4"
     },
     {
       "file": "1440-control-timeline-pressed.png",
@@ -4114,7 +4114,7 @@
         "selector": ".selection-workspace > .ui-state-panel .primary",
         "state": "pressed"
       },
-      "sha256": "f1dc52eccebb5da25956085eb5393682404b4b396d1b1826b979577bea442488"
+      "sha256": "2a9ddbeea1a3072802c932eca6792a1e0f5d8436bf0deee31f284ea8c5ecfaa8"
     },
     {
       "file": "1440-control-secondary-default.png",
@@ -4127,7 +4127,7 @@
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
         "state": "default"
       },
-      "sha256": "e9ed30797e41572426bd4a726e59febb5df8ae3ebaecce889f1bee77feb84a0d"
+      "sha256": "56804ccef7f86bd28562962626f32b3e0e4920924848d15703ef32f082bfd008"
     },
     {
       "file": "1440-control-secondary-hover.png",
@@ -4212,7 +4212,7 @@
         "selector": ".selection-start button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "5066b8e7a311632b388d0b59a5d1501087933cc3d5b0b9cedea999a9c266f35d"
+      "sha256": "270bae0a8fb814ac3864df38f445ad14ebbebbac735f222808d4da7d32cf2354"
     },
     {
       "file": "390-control-create-pressed.png",
@@ -4436,7 +4436,7 @@
         "selector": ".selection-decision button[type=\"submit\"]",
         "state": "focus"
       },
-      "sha256": "ea662d0e6ab733067fa8920b6ef9524aae1a1c41978a3d5d072a3173a5cca70f"
+      "sha256": "23f1f99b83819eaf31cda3367409e9337ac35c716c9a2b170978214dfccb96b2"
     },
     {
       "file": "390-control-save-pressed.png",

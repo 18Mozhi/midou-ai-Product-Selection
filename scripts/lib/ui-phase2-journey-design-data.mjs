@@ -89,6 +89,7 @@ export async function buildJourneyDesignData(repo) {
     const form = { input_kind, input_value };
     await run(`${extract(main, "create", "function")}\nexport const result=create();`, {
       active: true,
+      disposed: false,
       busy: { value: false },
       reading: { value: false },
       stopRead() {},
@@ -114,6 +115,7 @@ export async function buildJourneyDesignData(repo) {
   for (const action of ["adopt", "observe", "reject"]) {
     await run(`${extract(main, "decide", "function")}\nexport const result=decide();`, {
       active: true,
+      disposed: false,
       busy: { value: false },
       reading: { value: false },
       journey: { value: sample },

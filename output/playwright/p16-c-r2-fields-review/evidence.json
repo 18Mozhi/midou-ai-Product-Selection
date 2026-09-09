@@ -2,7 +2,7 @@
   "version": "P16-C-r2-fields-1",
   "boundary": "Mounted Vue; three existing theme IDs compatibility, not three redesigned palettes; two densities; intercepted HTTP, no writes; pending detailed visual review",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
     "apps/web/src/selection-journey.css": "a848229c6c668111e08f2fdef9f63724b4b29dbb745622d1fac5eff480a1af08",
     "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
@@ -18,7 +18,7 @@
     "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
     "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
-    "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
+    "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
     "scripts/lib/ui-phase2-journey-vue-controls.mjs": "915d14f16e5c44c9db40d96a02a60c88eea1930a8052a74133a91c1016fa06de",
     "scripts/verify-ui-phase2-journey-vue.mjs": "dcd3c5ab7c32a6d1adbc1d9e4c9cbc1203b843df1e0b6304487bfb0441cb9041",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
@@ -2522,7 +2522,7 @@
       "density": "compact",
       "scene": "reason-focus",
       "file": "1440-cloud-white-compact-reason-focus.png",
-      "sha256": "a0df350f967710fff046365101bebc6a1f67334cb7bb0a5e29bea4ac929d5d6f"
+      "sha256": "1b0a71e2af7bb986b7d1a33744db24daa399b68b5654847994721896969c633b"
     },
     {
       "width": 390,
@@ -2538,7 +2538,7 @@
       "density": "standard",
       "scene": "reason-focus",
       "file": "390-deep-ocean-standard-reason-focus.png",
-      "sha256": "e3920a9cc2a54ab6b66a5304191a09e5ad5cde7084ae0db1239320021b10a1aa"
+      "sha256": "d5ad9d77b4f7eb5bf4ccebdbd70860e0a61e29ab05b0cc2fbb2b36fb86659999"
     },
     {
       "width": 390,
@@ -2586,7 +2586,7 @@
       "density": "compact",
       "scene": "reason-focus",
       "file": "390-aurora-purple-compact-reason-focus.png",
-      "sha256": "59a7f4768934daf91d46883487aecd97a374ba0f8f245f60006c089b550de4fd"
+      "sha256": "9b7bf70a5e51eb7f1bf5555aa12749da4c0e566f2eee47fcfab49b956b294df0"
     },
     {
       "width": 390,

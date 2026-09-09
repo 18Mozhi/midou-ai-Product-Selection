@@ -1,14 +1,14 @@
 {
   "version": "JOURNEY-C-r2",
   "approval": "pending",
-  "capturedAt": "2026-09-09T16:50:35.410Z",
+  "capturedAt": "2026-09-09T19:54:28.070Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/index.html": "b98d7c38f9c0b168ef12df75a23d7a8866854da6d18d3a76e8070b58dce7fffb",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/data.js": "e1db28d2ea8fc434984fdcb1eb27d0d09fd8eec19b4ecf3b7b0978c8247f0fe7",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.js": "e0058bbb01acab62d1aecc6544b8c1fd376175b498ffe78c5351bde9446e78b1",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.css": "f3d0b9e4bbadd081cbe0484c3e7ec2d7d4a4546ca7f847ecebabe51a88630c70",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
-    "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.css": "014643f74b10d2d06f636a7422896954314b02194133253a3e0d4cff49467d96",
     "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.js": "e127b556bb28aeef38e91859bdcb2ce95ff30c8a7656ffa91b3a0ad25bfa2f0f",
@@ -20,7 +20,7 @@
     "apps/api/src/opportunity-selection-policy.ts": "9f72219e1f75373fadf173b18642737b4e0540f5ef286d667e699d27964c34ef",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
     "tests/e2e/ui-phase2-journey-reads.spec.ts": "3b8f7733ad099503d14817d73f454006cdc398afc648766563f01c0f2e906a91",
-    "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
+    "scripts/lib/ui-phase2-journey-design-data.mjs": "f0b3df1076ed91fe8d32937b95977a7246a1bb8ad77c59e1e08490414086d591",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f"
   },

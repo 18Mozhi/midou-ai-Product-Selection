@@ -1,5 +1,17 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P16销毁实例的迟到写入回执保护
+
+上一轮63072c5b真实表单/密度修正为进展，本轮从干净main继续J08实例生命周期。使用ui-skills-root/fixing-accessibility保留可理解的busy/续办语义，Playwright验证真实挂载；没有改视觉布局。源码确认普通deactivated缓存仍需接收后台结果，但unmounted后的create成功会覆盖后来活动ID、decide成功会清掉后来ID，失败/finally也会修改已销毁refs。先写永久实际setup单测，8项中4红，准确复现上述成功/失败差异。
+
+SelectionJourney仅增加实例内disposed并在onUnmounted设定，create/decide成功/catch/finally排除已销毁实例；onDeactivated不设定该标志。请求、幂等键、五门、输入/草稿/重置、全局活动ID格式、原读取版本和两秒轮询规则保持。8源测试转绿；新永久本地Vite宿主真实挂载Vue/KeepAlive/SelectionJourney，create/decide×销毁成功/销毁失败/普通缓存成功共6场景通过：新实例ID/原因草稿/页面保留，普通隐藏仍保存结果、2.2秒无轮询、回来一次刷新；每场景1个精确POST，未登记请求/脚本错误0。不是服务端撤回，也不是完整组织/工作区切换测试。
+
+原helper仅为提取的create/decide补disposed=false上下文，原数据/业务规则验证未删。新组件源指纹经实际diff与11候选/9组/5模型/4结构核对后更新P16注册，新增writeLifetimeEvidence。journey-c原67场景/382PNG的capture与无参数通过；实际Vue原114PNG/170检查、字段原24PNG/96观察的capture及无参数全部通过，不使用失效指纹冒称当前证据，不新增审稿图片数。全局动作仍26页/579独立源/549组，47页待同级核对；全站门、用户批准与范围不提升。
+
+build:web含vue-tsc、verify:frontend-budget（251资产）、verify:static-analysis（390文件）、verify:docs（153文件/73路由）、verify:runtime-docs通过，格式/全图审计与提交终态见工具记录。API/OpenAPI/生产路由/参数、env、DB/迁移、依赖、权限、后端/Worker/Python均无变更；本批不需要用户新操作，未部署或重启，后续仍走唯一宝塔部署器及原重启流程。
+
+仍存活的跨范围缓存、多标签全局活动ID竞争、storage异常、等待期间编辑/新草稿归属、reset保留旧原因未据本批修复。原C布局/控件意见、其余页面和全站真实验收/部署继续待办。本批永久单测、验证器和说明保留；验证宿主只由内存插件提供，无新增磁盘临时HTML、一次性图/日志，5175与浏览器finally关闭。旧图证据按任务更新，现有依赖/构建缓存不删。历史拒绝清理的output/playwright/p16-layout-20260910/.last-run.json、output/playwright/ui-phase2-competitor-races-20260909/playwright.config.ts与results/.last-run.json仍不重试、不绕过、不暂存。
+
 ## 2026-09-10 · P16真实字段、键盘焦点与紧凑密度
 
 上一轮7409293a新增P26图稿为实际进展。本轮从干净main继续，按计划已审页优先实施原则回到P16已批准C布局；ui-skills-root/frontend-design、fixing-accessibility及Playwright技能限定局部风格、可见焦点、字段可辨识和真实浏览器核对。仅修改生产selection-journey.css：字段边界使用#7a8ba8、占位字显式C辅助色、三组原生radio的整行focus-visible、compact密度压缩留白，保持16px正文/44px目标、阶段/双区及原业务不变。

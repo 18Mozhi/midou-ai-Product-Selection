@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-user-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de"
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -420,7 +420,7 @@
         "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
         "renderedControlIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
         "sourceHashes": {
-          "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de"
+          "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f"
         }
       },
       "remaining": "真实Vue已补原生四态、中心命中与零副作用，见actualVueLayoutEvidence；旧离线槽仍不冒称该真实Vue证据或全站审批。"
@@ -954,7 +954,7 @@
     "includeStructuralContainers": true,
     "files": ["apps/web/src/components/SelectionJourney.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/SelectionJourney.vue": "e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de",
+      "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
@@ -1307,6 +1307,13 @@
       },
       "package": "journey-direction-c"
     }
+  },
+  "writeLifetimeEvidence": {
+    "review": "P16-WRITE-LIFETIME-REVIEW.md",
+    "unitTest": "tests/unit/ui-phase2-journey-write-lifetime.test.mjs",
+    "mountedVerifier": "scripts/verify-ui-phase2-journey-write-lifetime.mjs",
+    "scope": "8 actual-setup unit cases and6 mountedVue lifecycle-host cases:destroyed create/decide success/failure cannot mutate refs or overwrite/remove next-instance active ID;ordinary KeepAlive deactivation preserves writes without polling",
+    "remaining": "No real organization/workspace or multi-tab integration proof;cached scope identities/global bookmark arbitration,editable pending drafts/reset behavior and full-page approval remain pending. Not cancellation of server writes."
   },
   "actualVueFieldEvidence": {
     "review": "P16-VUE-FIELD-REVIEW.md",

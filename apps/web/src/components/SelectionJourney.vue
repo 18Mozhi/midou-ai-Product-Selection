@@ -80,6 +80,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   resumeId = ref("");
 let timer: number | undefined;
 let active = false,
+  disposed = false,
   readVersion = 0;
 let readController: AbortController | undefined;
 const terminal = computed(
@@ -211,14 +212,16 @@ async function create() {
   message.value = "";
   try {
     const result = await request<Journey>("/selection-journeys", { method: "POST", body: form });
+    if (disposed) return;
     requestId.value = result.request_id;
     applyJourney(result.data);
     state.value = "ready";
     schedule();
   } catch (error) {
+    if (disposed) return;
     applyFailure(error, "依赖不可用，真实任务未创建。");
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 async function load() {
@@ -281,15 +284,17 @@ async function decide() {
           decision.action === "adopt" ? selectedResultId.value || null : null,
       },
     });
+    if (disposed) return;
     requestId.value = result.request_id;
     applyJourney(result.data);
     decision.reason = "";
     state.value = "ready";
     stop();
   } catch (error) {
+    if (disposed) return;
     applyFailure(error, "依赖不可用，决策未写入。");
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 function reset() {
@@ -341,7 +346,11 @@ function deactivate() {
 onMounted(activate);
 onActivated(activate);
 onDeactivated(deactivate);
-onUnmounted(deactivate);
+onUnmounted(() => {
+  // A cached page may still finish a write; a destroyed instance must never write back.
+  disposed = true;
+  deactivate();
+});
 </script>
 <template>
   <section class="selection-journey" aria-label="选品旅程" :aria-busy="reading || busy">
