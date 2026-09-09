@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-user-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03"
+    "apps/web/src/components/SelectionJourney.vue": "a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -28,7 +28,7 @@
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1"],
       "sourceContractKeys": ["J-NAV-LIST"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "页面常驻；不受busy/reading禁用",
       "handler": "RouterLink /opportunities，不传from；导航不取消后台任务",
       "variants": ["input", "running", "terminal", "busy"],
@@ -108,7 +108,7 @@
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1"],
       "sourceContractKeys": ["J-STATE-RECOVERY"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "仅state非ready且非loading；journey或resumeId时主文案重试读取进度",
       "handler": "primary有journey走load，否则resumeId走resume，均无则reset；secondary blocked仅解释、forbidden提示能力、其余history.back",
       "variants": [
@@ -263,7 +263,7 @@
         "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1"
       ],
       "sourceContractKeys": ["J-CREATE"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "!journey内联form；按钮busy||reading禁用；函数!active/busy/reading早退",
       "handler": "POST /selection-journeys {input_kind,input_value}原值；stopRead/resumeId清空→busy/loading→202 applyJourney/ready/schedule；只创建旅程，不等于机会",
       "variants": [
@@ -387,13 +387,52 @@
       }
     },
     {
+      "actionId": "J-TIMELINE",
+      "label": "展开或收起处理时间轴",
+      "kind": "local",
+      "routeApplicability": "P16-normal-route-local-source-only",
+      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
+      "sourceContractKeys": ["J-TIMELINE"],
+      "contractAliasReason": "第10节新增原生summary，仅本地展开",
+      "condition": "journey已返回时显示，默认收起；不受busy/reading禁用",
+      "handler": "原生details/summary切换open，无Vue事件、无HTTP、无持久化；键盘Enter/Space可用",
+      "variants": ["collapsed", "expanded"],
+      "scenes": [
+        {
+          "package": "journey-direction-c",
+          "scene": "results"
+        }
+      ],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-applicable-source-unrepresented",
+        "busy": "not-applicable-source-unrepresented"
+      },
+      "sourceStateApplicability": {
+        "scope": "current-source-presentation-only-not-runtime-or-approval",
+        "states": ["disabled", "busy"],
+        "reason": "summary无禁用或忙碌属性；父aria-busy不禁用本地展开。",
+        "handlerBoundary": "切换open不调用业务函数或接口，不保证其他任务读取没有服务端副作用。",
+        "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
+        "renderedControlIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
+        "sourceHashes": {
+          "apps/web/src/components/SelectionJourney.vue": "a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc"
+        }
+      },
+      "remaining": "真实Vue已有展开/收起及焦点图；尚未纳入离线动作状态引用规范，4代表视觉槽仍待映射，不能算全控件批准。"
+    },
+    {
       "actionId": "J-SOURCE",
       "label": "查看候选原文",
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1"],
       "sourceContractKeys": ["J-SOURCE"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "每条candidates；原生a嵌在radio label",
       "handler": "canonical_url原值，target=_blank rel=noopener noreferrer @click.stop；不发业务POST",
       "variants": ["selected", "unselected", "no-topic", "missing-fields", "long-result"],
@@ -476,11 +515,11 @@
       "kind": "write",
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/SelectionJourney.vue#5704caf4d4e8cd9d.1",
+        "apps/web/src/components/SelectionJourney.vue#5d5700a54ddffff7.1",
         "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1"
       ],
       "sourceContractKeys": ["J-DECIDE"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "terminal且未decided；canAdopt要求topic/既有机会ID/recommended及五门和all_passed严格true，adopt radio与submit禁用，函数同级保护；active/旅程/非busy/非reading要求保持",
       "handler": "原POST三字段不变：adopt所选ID，observe/reject恒null，无expected_version；后端同范围既有机会锁内复核P18五门和规则；成功applyJourney、清reason、state=ready、stop",
       "variants": [
@@ -654,7 +693,7 @@
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1"],
       "sourceContractKeys": ["J-NAV-OPPORTUNITY"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "journey.decision存在且返回opportunity_id非空",
       "handler": "/opportunities/{opportunity_id}，无自动跳转或from；不是无条件创建机会",
       "variants": ["returned-id", "missing-id"],
@@ -730,7 +769,7 @@
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1"],
       "sourceContractKeys": ["J-NAV-TASK"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "journey.decision存在且verification_task_id非空",
       "handler": "/tasks/{verification_task_id}，按实际返回ID；观察/驳回可能产生验证任务",
       "variants": ["observe", "reject", "no-task"],
@@ -814,7 +853,7 @@
       "routeApplicability": "P16-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1"],
       "sourceContractKeys": ["J-RESET"],
-      "contractAliasReason": "第9节当前源码十处逐项对应稳定语义ID；旧表仅作历史，不按旧行号或文字猜新行为。",
+      "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "有journey时footer，busy禁用且函数早退；reading期间可用",
       "handler": "stopRead失效旧GET并清resumeId/journey/state/message/input_value/selectedResultId/活动ID；保留input_kind、decision.action/reason、requestId；不取消后台采集",
       "variants": ["running", "read-busy", "terminal", "decided", "busy-disabled"],
@@ -915,7 +954,7 @@
     "includeStructuralContainers": true,
     "files": ["apps/web/src/components/SelectionJourney.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03",
+      "apps/web/src/components/SelectionJourney.vue": "a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
@@ -954,6 +993,27 @@
       }
     ],
     "containers": [
+      {
+        "file": "apps/web/src/components/SelectionJourney.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "蓝色阶段栏，只读阶段标识，不是导航按钮或弹窗。",
+        "remaining": "整体布局获批，所有主题和状态组合仍待审核。",
+        "variants": [
+          {
+            "name": "stages",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "journey-direction-c",
+                "scene": "results"
+              }
+            ],
+            "remaining": "真实Vue阶段切换仅在隔离数据复测，不证明生产任务完成。"
+          }
+        ]
+      },
       {
         "file": "apps/web/src/components/SelectionJourney.vue",
         "tag": "form",
@@ -1000,7 +1060,7 @@
       {
         "file": "apps/web/src/components/SelectionJourney.vue",
         "tag": "aside",
-        "ordinal": 1,
+        "ordinal": 2,
         "shape": "inline-aside",
         "sourceBehavior": "创建页任务后台继续说明aside，没有关闭或取消任务行为。",
         "remaining": "关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。",
@@ -1114,6 +1174,7 @@
     ]
   },
   "compositionGaps": [
+    "2026-09-10：P16批准布局已局部落地Vue，24张真实挂载图另册，旧离线提案不替代真实验收；新增summary组和只读阶段aside，表单文案导致签名变化，业务handler及五模型不变。",
     "r2重拍67全页场景及102代表控件状态双端共338PNG；8动作组40适用视觉槽已映射，8导航禁用/忙碌不适用；采纳radio6态及恢复副按钮4态不新增动作组，完整输入/动态变体仍待审核。",
     "用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。",
     "既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。",
@@ -1124,7 +1185,7 @@
   ],
   "approval": "pending-user-review",
   "limits": [
-    "10源位置/8动作组、5模型/3内联结构；零本地业务弹窗，不用共同组件推断全站分母。",
+    "当前11源位置/9动作组、5模型/4内联结构；零本地业务弹窗，不推断全站分母。",
     "图引用与源函数/清单校验不授予具体批准，不证明实际Vue/API/数据库/生产；全站目标与G0–G5保持未完成。"
   ],
   "layoutApproval": "P16-C-R2-LAYOUT-APPROVAL.md: overall layout only; full page/control approval remains pending",
@@ -1245,5 +1306,12 @@
       },
       "package": "journey-direction-c"
     }
+  },
+  "actualVueLayoutEvidence": {
+    "review": "P16-VUE-LAYOUT-REVIEW.md",
+    "evidence": "output/playwright/p16-c-r2-review/evidence.json",
+    "verifier": "scripts/verify-ui-phase2-journey-vue.mjs",
+    "scope": "approved-layout-only-with-intercepted-fixtures-not-production",
+    "approval": "pending-controls-review"
   }
 }

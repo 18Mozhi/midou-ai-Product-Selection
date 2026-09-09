@@ -1,5 +1,21 @@
 # 第二阶段实施记录
 
+## 2026-09-10 · P16已批准布局落地与真实Vue按钮图
+
+从干净main/a4a30f788047495bd34af834d3f28510441f23cb继续。依据P16-C-R2-LAYOUT-APPROVAL及用户继续细化按钮，使用ui-skills-root/frontend-design，Playwright复用现有依赖。蓝色阶段栏、候选/决策双区、五门核对已实现于SelectionJourney.vue/selection-journey.css；不改全局NavigationShell，不将本页批准推广到其他路由。当前11源位置/9组/5模型/4结构、零弹窗；新增原生summary本地展开，决定表单签名因说明变动而刷新，所有原业务handler/禁用条件/POST字段/存储/轮询保持。
+
+首次真实挂载图发现旧signal-ledger字体/方角及#app全控件最小尺寸/禁用透明度覆盖局部样式。P16局部选择器明确优先级，radio标记20px且label≥52px，禁用文字不降透明度；不修改全局CSS、其他页或源权限。图库保留旧壳导航、标题及手机底栏，避免把局部实现说成全站重构完成。
+
+新增scripts/verify-ui-phase2-journey-vue.mjs及output/playwright/p16-c-r2-review永久审核图册：12状态×双端24PNG，70检查，含未知/4门/5门、原采纳body、失败保留草稿、忙碌禁用、键盘展开/收起零额外HTTP、样式覆盖及中间宽度。图为实际Vue/原shell＋拦截service夹具，无真实API/MySQL/外部采集/生产；手动查看桌面五门通过、手机创建忙碌及前次成本门图，未声称全图人工审核。无参数核对来源/PNG哈希后重验，capture重拍；权限/主题/完整状态/写入晚到仍未验收。
+
+非capture复验暴露快速390→1280切宽时原导航summary/文字在重排前短时超过右缘（测量documentWidth1349、viewport1280），不能把截图耗时当同步。验证器改为等待目标innerWidth和两帧响应式/原生details绘制后检查，不隐藏溢出或修改旧导航；capture与随后两次无capture复验通过。原业务/读取42项双端E2E通过；清单/action/contract/surface相关148单元检查通过。build:web含typecheck通过，frontend-budget251assets、static-analysis390文件、docs73路由/60保护/6角色/153文件、runtime-docs、最终format及动作清单只读复验均通过；图册50个文件链接存在。
+
+原离线JOURNEY-C-r2按变动来源真实重新capture，双端67场景/102代表状态及外观共382PNG通过，HTTP/storage=0；只有来源证据更新，PNG无字节变动。全局动作审计22页/480位置/427组；新增summary四个视觉槽尚未纳入离线映射，2个disabled/busy按实际无属性单列非适用。设计原型审计76包10774PNG、844独立源/1453绑定/8942链接，漂移0；另24张真实挂载图册独立哈希，不塞进旧离线分母。完整页批准0、G0进行中/G1–G5待验保持。
+
+本轮仅P16Vue/CSS、永久验证器/图册、合同/动作/规格/计划/Feature Map及生成审计变更。API/OpenAPI、后端/Worker/Python、env/配置、依赖、SQL/迁移、权限与宝塔无变更；无部署/重启。后续获准发布时走原前端构建和宝塔部署流程，不需后端/Python重启；没有新增业务调节参数。说明见P16-VUE-LAYOUT-REVIEW.md，图册使用固定本地5175且strictPort，finally关闭浏览器/服务。
+
+本轮E2E临时目录output/playwright/p16-layout-20260910仅含.last-run.json；已核定绝对路径，但删除调用被工具安全策略拒绝，原样保留未提交、不绕过。24图、index.html、evidence.json是永久交付物，明确保留提交。未删除项目既有依赖缓存/构建必需产物。旧output/playwright/ui-phase2-competitor-races-20260909仍有playwright.config.ts及results/.last-run.json，因先前工具拒绝清理仅只读确认。下一步具体按钮/字段/主题审核、其余页面与全局壳层重构、真实运行及宝塔签收；本批不宣布全站或第二阶段完成。
+
 ## 2026-09-10 · P21剩余控件状态适用性
 
 上一轮ffa144bb提交成本／复核按钮及表单独立busy，属于实际进展。本轮从干净main继续，按AGENTS、Feature Map、蓝图3.6、SW/RQ实际处理器与UiStatePanel实际两个按钮核对；ui-skills-root/frontend-design用于区分隐藏、父加载与控件自身反馈，未引入新视觉方向或子代理。

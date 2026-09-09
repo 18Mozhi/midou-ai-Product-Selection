@@ -1,14 +1,14 @@
 {
   "version": "JOURNEY-C-r2",
   "approval": "pending",
-  "capturedAt": "2026-09-09T12:12:35.564Z",
+  "capturedAt": "2026-09-09T16:23:09.019Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/index.html": "b98d7c38f9c0b168ef12df75a23d7a8866854da6d18d3a76e8070b58dce7fffb",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/data.js": "e1db28d2ea8fc434984fdcb1eb27d0d09fd8eec19b4ecf3b7b0978c8247f0fe7",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.js": "e0058bbb01acab62d1aecc6544b8c1fd376175b498ffe78c5351bde9446e78b1",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/journey.css": "f3d0b9e4bbadd081cbe0484c3e7ec2d7d4a4546ca7f847ecebabe51a88630c70",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
-    "apps/web/src/components/SelectionJourney.vue": "05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c96eadc64629b153c03",
+    "apps/web/src/components/SelectionJourney.vue": "a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.css": "014643f74b10d2d06f636a7422896954314b02194133253a3e0d4cff49467d96",
     "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.js": "e127b556bb28aeef38e91859bdcb2ce95ff30c8a7656ffa91b3a0ad25bfa2f0f",

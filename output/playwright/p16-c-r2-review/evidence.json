@@ -1,0 +1,477 @@
+{
+  "version": "P16-C-r2-mounted-layout-1",
+  "capturedAt": "2026-09-09T16:36:33.609Z",
+  "approval": "pending-controls-review",
+  "boundary": "Real Vue route under existing shell; intercepted fixture HTTP, not real API/database/production. Only P16 overall layout approved. Buttons, themes and full page remain pending.",
+  "sourceHashes": {
+    "apps/web/src/components/SelectionJourney.vue": "a1559c90001df2cd8932e223ffeb24aa27ed188bf41f3914e4c031e6c3600ffc",
+    "apps/web/src/selection-journey.css": "d58150be4fa59283343c79ba812f1af00b83c1351799bccf1dbfbb5ac4db7193",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "tests/e2e/ui-phase2-journey-contracts.spec.ts": "013d28eb91847a4d9abb9277631596a717fad65e62eb0974af51fa0ef627beff",
+    "scripts/lib/ui-phase2-journey-design-data.mjs": "631529f10874026e43b4d30694e61c57e132f8e992321a94d3e26cea478c460a",
+    "scripts/verify-ui-phase2-journey-vue.mjs": "d35b087cf9a9aa2bbcb9d121922d823a072068bfc9c36ae8f38609d4f69ca199"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "C palette and typography override legacy skin locally"
+    },
+    {
+      "width": 1440,
+      "name": "C panel radius overrides legacy square panel"
+    },
+    {
+      "width": 1440,
+      "name": "input phase"
+    },
+    {
+      "width": 1440,
+      "name": "create-default: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "radio mark is 20px within a 52px label target"
+    },
+    {
+      "width": 1440,
+      "name": "create-hover: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "create-focus: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create busy disabled"
+    },
+    {
+      "width": 1440,
+      "name": "busy text is not faded by legacy opacity"
+    },
+    {
+      "width": 1440,
+      "name": "create-busy: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "failed create keeps input"
+    },
+    {
+      "width": 1440,
+      "name": "create-failed: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "review phase"
+    },
+    {
+      "width": 1440,
+      "name": "responsive candidate and decision regions"
+    },
+    {
+      "width": 1440,
+      "name": "unselected gates are unknown"
+    },
+    {
+      "width": 1440,
+      "name": "candidate-unselected: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "five gate rows pass"
+    },
+    {
+      "width": 1440,
+      "name": "five gates enable adoption"
+    },
+    {
+      "width": 1440,
+      "name": "adopt-ready: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "timeline keyboard expands"
+    },
+    {
+      "width": 1440,
+      "name": "timeline-open-focus: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "timeline keyboard collapses without HTTP"
+    },
+    {
+      "width": 1440,
+      "name": "save-focus: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "save and reset busy disabled"
+    },
+    {
+      "width": 1440,
+      "name": "save-busy: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "save failure retains reason"
+    },
+    {
+      "width": 1440,
+      "name": "save-failed: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "four gates block adoption but keep observe and reject"
+    },
+    {
+      "width": 1440,
+      "name": "cost gate shows missing"
+    },
+    {
+      "width": 1440,
+      "name": "gate-cost: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "viewport 768 no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "viewport 1024 no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "viewport 1280 no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no page errors or unmocked API/external requests"
+    },
+    {
+      "width": 390,
+      "name": "C palette and typography override legacy skin locally"
+    },
+    {
+      "width": 390,
+      "name": "C panel radius overrides legacy square panel"
+    },
+    {
+      "width": 390,
+      "name": "input phase"
+    },
+    {
+      "width": 390,
+      "name": "create-default: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "radio mark is 20px within a 52px label target"
+    },
+    {
+      "width": 390,
+      "name": "create-hover: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "create keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "create-focus: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "create busy disabled"
+    },
+    {
+      "width": 390,
+      "name": "busy text is not faded by legacy opacity"
+    },
+    {
+      "width": 390,
+      "name": "create-busy: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "failed create keeps input"
+    },
+    {
+      "width": 390,
+      "name": "create-failed: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "review phase"
+    },
+    {
+      "width": 390,
+      "name": "responsive candidate and decision regions"
+    },
+    {
+      "width": 390,
+      "name": "unselected gates are unknown"
+    },
+    {
+      "width": 390,
+      "name": "candidate-unselected: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "five gate rows pass"
+    },
+    {
+      "width": 390,
+      "name": "five gates enable adoption"
+    },
+    {
+      "width": 390,
+      "name": "adopt-ready: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "timeline keyboard expands"
+    },
+    {
+      "width": 390,
+      "name": "timeline-open-focus: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "timeline keyboard collapses without HTTP"
+    },
+    {
+      "width": 390,
+      "name": "save-focus: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "save and reset busy disabled"
+    },
+    {
+      "width": 390,
+      "name": "save-busy: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "save failure retains reason"
+    },
+    {
+      "width": 390,
+      "name": "save-failed: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "four gates block adoption but keep observe and reject"
+    },
+    {
+      "width": 390,
+      "name": "cost gate shows missing"
+    },
+    {
+      "width": 390,
+      "name": "gate-cost: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "viewport 768 no overflow"
+    },
+    {
+      "width": 390,
+      "name": "viewport 1024 no overflow"
+    },
+    {
+      "width": 390,
+      "name": "viewport 1280 no overflow"
+    },
+    {
+      "width": 390,
+      "name": "no page errors or unmocked API/external requests"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1440-create-default.png",
+      "scene": "create-default",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "bbc9c9670ac1102bb3e39d5712976365c5ba13c3c030aa07d32d520af53441fb"
+    },
+    {
+      "file": "1440-create-hover.png",
+      "scene": "create-hover",
+      "width": 1440,
+      "captureType": "hover-viewport",
+      "sha256": "99a34428d904578067eeb7aa4f30f4263c3a8cbb894de2cb6789bfd8b98c1532"
+    },
+    {
+      "file": "1440-create-focus.png",
+      "scene": "create-focus",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "87e9aca31bed87682bd3279cf8696fd7418deee36372aac5a201fc66f8b21ea8"
+    },
+    {
+      "file": "1440-create-busy.png",
+      "scene": "create-busy",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "267efceeeb7c731f6eced602b6bcb413a5c33079ea2b0d08a9e6403ff36d66e7"
+    },
+    {
+      "file": "1440-create-failed.png",
+      "scene": "create-failed",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "8e3f740b28789c25affdaabb60fd89583ce47da37c6cbb24df19e3af5e2f2a52"
+    },
+    {
+      "file": "1440-candidate-unselected.png",
+      "scene": "candidate-unselected",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "e2a456bab131bd40396fa32ebd10fdd6ddd1e31c92b385205668d85feed8dca9"
+    },
+    {
+      "file": "1440-adopt-ready.png",
+      "scene": "adopt-ready",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "10ea86e3c499d72d94330bb490032190c752797c52f3ee311ab09aac57486085"
+    },
+    {
+      "file": "1440-timeline-open-focus.png",
+      "scene": "timeline-open-focus",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "6e60a1a87361e42cfac65da97acac570d1575c8c594405adba449abd42f4dd6c"
+    },
+    {
+      "file": "1440-save-focus.png",
+      "scene": "save-focus",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "d097f70f1ef9c98370aea74adf72e2965287bfc9d08fea32ffc046ef2e1042b5"
+    },
+    {
+      "file": "1440-save-busy.png",
+      "scene": "save-busy",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "3dd3a9d5821eef75b534a0dd54e30c14ae9355f4ead3344cede56a553a94c8e2"
+    },
+    {
+      "file": "1440-save-failed.png",
+      "scene": "save-failed",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "b8c75213a8fb2f39c1c69a642471e11b015cf3356ce53d087bdbb71d5a1ff829"
+    },
+    {
+      "file": "1440-gate-cost.png",
+      "scene": "gate-cost",
+      "width": 1440,
+      "captureType": "full-page",
+      "sha256": "b4ef17708288f6a18550dc8c59bf7f1655bc5363765a7f216e9877a7e1086058"
+    },
+    {
+      "file": "390-create-default.png",
+      "scene": "create-default",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "82c3155ed437d99c1090aa6f09a8520d6ee7c83e390e4ca71573a0b045d06b2b"
+    },
+    {
+      "file": "390-create-hover.png",
+      "scene": "create-hover",
+      "width": 390,
+      "captureType": "hover-viewport",
+      "sha256": "e7cd734fd42803543c937ea42aaba23023239939f595fa130191ede667849605"
+    },
+    {
+      "file": "390-create-focus.png",
+      "scene": "create-focus",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "22ea30aa7c83b320bb06f73c989f78acf4e609f196d4cdb5a77afcb25ab63f49"
+    },
+    {
+      "file": "390-create-busy.png",
+      "scene": "create-busy",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "cb65560ee18c3e345e65fdc85269b43593b2db2c969a096468d63f3aeb18ae3b"
+    },
+    {
+      "file": "390-create-failed.png",
+      "scene": "create-failed",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "fef22d64be277d605a2d8fa0e74b4aa86caaac426cd7f9f1fa5c7846eec0af31"
+    },
+    {
+      "file": "390-candidate-unselected.png",
+      "scene": "candidate-unselected",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "7842be7d8b27eacd98787af5139cdfa8fe60735e6f5aa71c420fa491b6182db8"
+    },
+    {
+      "file": "390-adopt-ready.png",
+      "scene": "adopt-ready",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "a69895706ffbb1574a61f1d25569c503f49de0cbcdf455be3f91b9e24250d4cf"
+    },
+    {
+      "file": "390-timeline-open-focus.png",
+      "scene": "timeline-open-focus",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "2b16cf753a7908521daf008df7ea6a659218cdbd621a021e424f542420ff6495"
+    },
+    {
+      "file": "390-save-focus.png",
+      "scene": "save-focus",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "577a0c46ce91753d46adeff77a06fe097b4b56c5728cb45b2ea1469e6d8468fa"
+    },
+    {
+      "file": "390-save-busy.png",
+      "scene": "save-busy",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "ce770e75fcdb5e64ad81ed11dff4db352554a99a8d8060101c7af302a822b5a8"
+    },
+    {
+      "file": "390-save-failed.png",
+      "scene": "save-failed",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "165ad1a7cdac4a7bbd36933a9e204c91aaa9f41a12a6415892a47d8fba9d0e09"
+    },
+    {
+      "file": "390-gate-cost.png",
+      "scene": "gate-cost",
+      "width": 390,
+      "captureType": "full-page",
+      "sha256": "3c7c39ebc4dac49d7dea46fb733131a08c246b7cd6791b0e08275469c86a8130"
+    }
+  ]
+}

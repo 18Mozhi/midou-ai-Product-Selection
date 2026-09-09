@@ -4,7 +4,6 @@ import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../selection-journey.css";
-import "../selection-journey-enhancements.css";
 type Kind = "keyword" | "asin" | "product_url";
 type JourneyState =
   "accepted" | "running" | "result_ready" | "succeeded_empty" | "blocked" | "failed" | "decided";
@@ -102,6 +101,21 @@ const terminal = computed(
     candidates.value.find((candidate) => candidate.raw_evidence_id === selectedResultId.value),
   ),
   canAdopt = computed(() => eligibleForAdoption(selectedCandidate.value)),
+  currentPhase = computed(() =>
+    !journey.value ? 1 : journey.value.state === "decided" ? 4 : terminal.value ? 3 : 2,
+  ),
+  qualityGateLabels = [
+    ["score", "评分"],
+    ["market", "市场"],
+    ["competition", "竞争"],
+    ["cost", "成本"],
+    ["risk", "风险"],
+  ] as const,
+  passedGateCount = computed(
+    () =>
+      qualityGateLabels.filter(([key]) => selectedCandidate.value?.quality_gates?.[key] === true)
+        .length,
+  ),
   stateTitle = computed(
     () =>
       ({
@@ -330,235 +344,297 @@ onUnmounted(deactivate);
 </script>
 <template>
   <section class="selection-journey" aria-label="选品旅程" :aria-busy="reading || busy">
-    <header>
-      <div>
-        <p>选品旅程</p>
-        <h2>开始一次选品</h2>
-        <span>输入商品线索后可离开页面，系统会保存进度并在回来时继续显示。</span>
-      </div>
-      <RouterLink to="/opportunities">返回机会列表</RouterLink>
-    </header>
-    <UiStatePanel
-      v-if="state !== 'ready' && state !== 'loading'"
-      :kind="state"
-      :request-id="requestId"
-      :action-hint="message"
-      :primary-label="journey || resumeId ? '重试读取进度' : undefined"
-      @primary="journey ? load() : resumeId ? resume() : reset()"
-      @secondary="handleStateSecondary"
-    />
-    <form v-if="!journey" class="selection-start" @submit.prevent="create">
-      <div class="selection-kind" role="radiogroup" aria-label="输入类型">
-        <label
-          v-for="item in [
-            { value: 'keyword', label: '关键词' },
-            { value: 'asin', label: 'ASIN' },
-            { value: 'product_url', label: '商品链接' },
-          ]"
-          :key="item.value"
-          ><input
-            v-model="form.input_kind"
-            type="radio"
-            name="input-kind"
-            :value="item.value"
-          /><span>{{ item.label }}</span></label
+    <aside class="selection-stage-rail" aria-label="本次选品阶段">
+      <p>选品 / 新旅程</p>
+      <h2>从线索到判断</h2>
+      <ol>
+        <li
+          v-for="(label, index) in ['输入线索', '来源处理', '审阅候选', '决定记录']"
+          :key="label"
+          :aria-current="currentPhase === index + 1 ? 'step' : undefined"
         >
-      </div>
-      <label class="selection-input"
-        ><span>{{
-          form.input_kind === "keyword"
-            ? "商品关键词"
-            : form.input_kind === "asin"
-              ? "10 位 ASIN"
-              : "HTTPS 商品链接"
-        }}</span
-        ><input
-          v-model="form.input_value"
-          required
-          maxlength="200"
-          :pattern="form.input_kind === 'asin' ? '[A-Za-z0-9]{10}' : undefined"
-          :type="form.input_kind === 'product_url' ? 'url' : 'text'"
-          :placeholder="
-            form.input_kind === 'keyword'
-              ? '例如 portable blender'
-              : form.input_kind === 'asin'
-                ? '例如 B0XXXXXXXX'
-                : 'https://…'
-          "
-      /></label>
-      <aside>
-        <strong>任务会在后台继续</strong
-        ><span>关闭或离开本页不会取消任务，返回后会自动恢复当前进度。</span>
-      </aside>
-      <button type="submit" :disabled="busy || reading">
-        {{ busy ? "正在创建真实任务…" : reading ? "正在恢复进度…" : "创建真实选品任务" }}
-      </button>
-    </form>
-    <template v-else
-      ><section class="selection-status" :data-state="journey.state" aria-live="polite">
-        <header>
-          <div>
-            <small>选品进度</small>
-            <h3>{{ stateTitle }}</h3>
-          </div>
-          <strong>已进行 {{ seconds }} 秒</strong>
-        </header>
-        <ol class="selection-timeline" aria-label="选品处理时间轴">
-          <li v-for="step in journey.timeline" :key="step.stage" :data-status="step.status">
-            <i aria-hidden="true"></i>
-            <span
-              ><b>{{ stageLabel(step.stage) }}</b
-              ><small>{{ statusLabel(step.status) }}</small></span
-            >
-            <time>{{
-              step.occurred_at
-                ? new Date(step.occurred_at).toLocaleString("zh-CN", { hour12: false })
-                : "等待前序步骤"
-            }}</time>
-          </li>
-        </ol>
-        <dl>
-          <div>
-            <dt>输入</dt>
-            <dd>{{ journey.input_kind }} · {{ journey.input_value }}</dd>
-          </div>
-          <div>
-            <dt>真实来源</dt>
-            <dd>{{ journey.provider_code }}</dd>
-          </div>
-          <div>
-            <dt>候选结果</dt>
-            <dd>{{ journey.available_result_count }} 条</dd>
-          </div>
-        </dl>
-      </section>
-      <section v-if="candidates.length" class="selection-candidates">
-        <header>
-          <div>
-            <p>候选比较</p>
-            <h3>比较 {{ candidates.length }} 条候选，质量门通过后再采纳</h3>
-          </div>
-          <b>已选 {{ selectedResultId ? 1 : 0 }} 条</b>
-        </header>
-        <div class="selection-candidate-grid">
-          <label
-            v-for="(candidate, index) in candidates"
-            :key="candidate.raw_evidence_id"
-            :data-selected="selectedResultId === candidate.raw_evidence_id"
-          >
-            <input
-              v-model="selectedResultId"
-              type="radio"
-              name="selection-candidate"
-              :value="candidate.raw_evidence_id"
-            />
-            <span>
-              <small>候选 {{ index + 1 }}</small>
-              <strong>{{ candidate.title || "真实来源记录" }}</strong>
-              <em
-                >{{ candidate.publisher || "来源未提供发布者" }} ·
-                {{ new Date(candidate.observed_at).toLocaleString() }}</em
-              >
-              <i>{{ adoptionHint(candidate) }}</i>
-            </span>
-            <a :href="candidate.canonical_url" target="_blank" rel="noopener noreferrer" @click.stop
-              >查看来源原文 ↗</a
-            >
-          </label>
+          <span aria-hidden="true">{{ index + 1 }}</span
+          ><b>{{ label }}</b>
+        </li>
+      </ol>
+      <small>阶段按任务返回显示，不以装饰进度或本地计时冒充完成。</small>
+    </aside>
+    <div class="selection-workspace">
+      <header>
+        <div>
+          <p>创建选品 · 当前会话工作区</p>
+          <h2>{{ journey ? "核对这次选品进展" : "开始一次选品" }}</h2>
+          <span>输入商品线索后可离开页面，系统会保存进度并在回来时继续显示。</span>
         </div>
-      </section>
-      <article v-else-if="terminal" class="selection-evidence selection-evidence--empty">
-        <header>
-          <div>
-            <p>明确终止状态</p>
-            <h3>
-              {{
-                journey.task_status === "succeeded_empty"
-                  ? "真实来源没有返回可用结果"
-                  : "真实来源已明确受阻"
-              }}
-            </h3>
-          </div>
-          <b>{{ journey.task_status }}</b>
-        </header>
-        <p>
-          错误码：{{ journey.blocked_reason || "none" }}。请结合任务状态与事件记录排查阻塞原因。
-        </p>
-        <dl v-if="journey.blocked_reason" class="selection-block-owner">
-          <div>
-            <dt>责任人</dt>
-            <dd>{{ journey.blocked_owner || "采集负责人" }}</dd>
-          </div>
-          <div>
-            <dt>下一步</dt>
-            <dd>{{ journey.blocked_next_step || "查看失败根因后再处理。" }}</dd>
-          </div>
-        </dl>
-      </article>
-      <form
-        v-if="terminal && journey.state !== 'decided'"
-        class="selection-decision"
-        @submit.prevent="decide"
-      >
-        <header>
-          <div>
-            <p>留痕决策</p>
-            <h3>对本次真实结果作出决策</h3>
-          </div>
-          <span>决策不会改写原始证据</span>
-        </header>
-        <div class="selection-actions">
+        <RouterLink to="/opportunities">返回机会列表</RouterLink>
+      </header>
+      <UiStatePanel
+        v-if="state !== 'ready' && state !== 'loading'"
+        :kind="state"
+        :request-id="requestId"
+        :action-hint="message"
+        :primary-label="journey || resumeId ? '重试读取进度' : undefined"
+        @primary="journey ? load() : resumeId ? resume() : reset()"
+        @secondary="handleStateSecondary"
+      />
+      <form v-if="!journey" class="selection-start" @submit.prevent="create">
+        <div class="selection-kind" role="radiogroup" aria-label="输入类型">
           <label
             v-for="item in [
-              { value: 'adopt', label: '采纳合格机会' },
-              { value: 'observe', label: '继续观察' },
-              { value: 'reject', label: '驳回' },
+              { value: 'keyword', label: '关键词' },
+              { value: 'asin', label: 'ASIN' },
+              { value: 'product_url', label: '商品链接' },
             ]"
             :key="item.value"
-            :class="{
-              disabled: item.value === 'adopt' && !canAdopt,
-            }"
             ><input
-              v-model="decision.action"
+              v-model="form.input_kind"
               type="radio"
-              name="decision"
+              name="input-kind"
               :value="item.value"
-              :disabled="item.value === 'adopt' && !canAdopt"
             /><span>{{ item.label }}</span></label
           >
         </div>
-        <label
-          >决策原因<textarea
-            v-model="decision.reason"
+        <label class="selection-input"
+          ><span>{{
+            form.input_kind === "keyword"
+              ? "商品关键词"
+              : form.input_kind === "asin"
+                ? "10 位 ASIN"
+                : "HTTPS 商品链接"
+          }}</span
+          ><input
+            v-model="form.input_value"
             required
-            maxlength="1000"
-            rows="4"
-          ></textarea></label
-        ><button
-          type="submit"
-          :disabled="busy || reading || (decision.action === 'adopt' && !canAdopt)"
-        >
-          {{ busy ? "正在保存…" : "保存审计决策" }}
+            maxlength="200"
+            :pattern="form.input_kind === 'asin' ? '[A-Za-z0-9]{10}' : undefined"
+            :type="form.input_kind === 'product_url' ? 'url' : 'text'"
+            :placeholder="
+              form.input_kind === 'keyword'
+                ? '例如 portable blender'
+                : form.input_kind === 'asin'
+                  ? '例如 B0XXXXXXXX'
+                  : 'https://…'
+            "
+        /></label>
+        <aside>
+          <strong>任务会在后台继续</strong
+          ><span>关闭或离开本页不会取消任务，返回后会自动恢复当前进度。</span>
+        </aside>
+        <button type="submit" :disabled="busy || reading">
+          {{ busy ? "正在创建真实任务…" : reading ? "正在恢复进度…" : "创建真实选品任务" }}
         </button>
       </form>
-      <article v-if="journey.decision" class="selection-complete">
-        <p>决策已保存 · {{ decisionLabel(journey.decision.action) }}</p>
-        <h3>{{ journey.decision.reason }}</h3>
-        <span>{{ new Date(journey.decision.created_at).toLocaleString() }}</span
-        ><RouterLink v-if="journey.opportunity_id" :to="`/opportunities/${journey.opportunity_id}`"
-          >查看机会、证据与决策历史 ↗</RouterLink
-        >
-        <RouterLink
-          v-if="journey.verification_task_id"
-          :to="`/tasks/${journey.verification_task_id}`"
-          >打开自动生成的验证任务 ↗</RouterLink
-        >
-      </article>
-      <footer class="selection-footer">
-        <span v-if="message" role="status">{{ message }}</span
-        ><code>关联编号 {{ requestId || journey.request_id }}</code
-        ><button type="button" :disabled="busy" @click="reset">开始下一次</button>
-      </footer></template
-    >
+      <template v-else
+        ><section class="selection-status" :data-state="journey.state" aria-live="polite">
+          <header>
+            <div>
+              <small>选品进度</small>
+              <h3>{{ stateTitle }}</h3>
+            </div>
+            <strong>已进行 {{ seconds }} 秒</strong>
+          </header>
+          <details class="selection-timeline-disclosure">
+            <summary>查看处理时间轴</summary>
+            <ol class="selection-timeline" aria-label="选品处理时间轴">
+              <li v-for="step in journey.timeline" :key="step.stage" :data-status="step.status">
+                <i aria-hidden="true"></i>
+                <span
+                  ><b>{{ stageLabel(step.stage) }}</b
+                  ><small>{{ statusLabel(step.status) }}</small></span
+                >
+                <time>{{
+                  step.occurred_at
+                    ? new Date(step.occurred_at).toLocaleString("zh-CN", { hour12: false })
+                    : "等待前序步骤"
+                }}</time>
+              </li>
+            </ol>
+          </details>
+          <dl>
+            <div>
+              <dt>输入</dt>
+              <dd>{{ journey.input_kind }} · {{ journey.input_value }}</dd>
+            </div>
+            <div>
+              <dt>真实来源</dt>
+              <dd>{{ journey.provider_code }}</dd>
+            </div>
+            <div>
+              <dt>候选结果</dt>
+              <dd>{{ journey.available_result_count }} 条</dd>
+            </div>
+          </dl>
+        </section>
+        <div class="selection-review-grid">
+          <section v-if="candidates.length" class="selection-candidates">
+            <header>
+              <div>
+                <p>候选比较</p>
+                <h3>比较 {{ candidates.length }} 条候选，质量门通过后再采纳</h3>
+              </div>
+              <b>已选 {{ selectedResultId ? 1 : 0 }} 条</b>
+            </header>
+            <p class="selection-result-scope">
+              任务报告 {{ journey.available_result_count }} 条；本页返回
+              {{ candidates.length }} 条。这里不是历史记录总数。
+            </p>
+            <div class="selection-candidate-grid">
+              <label
+                v-for="(candidate, index) in candidates"
+                :key="candidate.raw_evidence_id"
+                :data-selected="selectedResultId === candidate.raw_evidence_id"
+              >
+                <input
+                  v-model="selectedResultId"
+                  type="radio"
+                  name="selection-candidate"
+                  :value="candidate.raw_evidence_id"
+                />
+                <span>
+                  <small>候选 {{ index + 1 }}</small>
+                  <strong>{{ candidate.title || "真实来源记录" }}</strong>
+                  <em
+                    >{{ candidate.publisher || "来源未提供发布者" }} ·
+                    {{ new Date(candidate.observed_at).toLocaleString() }}</em
+                  >
+                  <i>{{ adoptionHint(candidate) }}</i>
+                </span>
+                <a
+                  :href="candidate.canonical_url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  @click.stop
+                  >查看来源原文 ↗</a
+                >
+              </label>
+            </div>
+          </section>
+          <article v-else-if="terminal" class="selection-evidence selection-evidence--empty">
+            <header>
+              <div>
+                <p>明确终止状态</p>
+                <h3>
+                  {{
+                    journey.task_status === "succeeded_empty"
+                      ? "真实来源没有返回可用结果"
+                      : "真实来源已明确受阻"
+                  }}
+                </h3>
+              </div>
+              <b>{{ journey.task_status }}</b>
+            </header>
+            <p>
+              错误码：{{ journey.blocked_reason || "none" }}。请结合任务状态与事件记录排查阻塞原因。
+            </p>
+            <dl v-if="journey.blocked_reason" class="selection-block-owner">
+              <div>
+                <dt>责任人</dt>
+                <dd>{{ journey.blocked_owner || "采集负责人" }}</dd>
+              </div>
+              <div>
+                <dt>下一步</dt>
+                <dd>{{ journey.blocked_next_step || "查看失败根因后再处理。" }}</dd>
+              </div>
+            </dl>
+          </article>
+          <form
+            v-if="terminal && journey.state !== 'decided'"
+            class="selection-decision"
+            @submit.prevent="decide"
+          >
+            <header>
+              <div>
+                <p>留痕决策</p>
+                <h3>对本次真实结果作出决策</h3>
+              </div>
+              <span>决策不会改写原始证据</span>
+            </header>
+            <section class="selection-quality-gates" aria-label="采纳质量门">
+              <header>
+                <h4>采纳质量门</h4>
+                <strong>{{
+                  selectedCandidate?.quality_gates ? `${passedGateCount} / 5` : "待核对"
+                }}</strong>
+              </header>
+              <dl>
+                <div v-for="[key, label] in qualityGateLabels" :key="key">
+                  <dt>{{ label }}</dt>
+                  <dd :data-passed="selectedCandidate?.quality_gates?.[key] === true">
+                    {{
+                      !selectedCandidate?.quality_gates
+                        ? "未返回"
+                        : selectedCandidate.quality_gates[key] === true
+                          ? "已通过"
+                          : "待补齐"
+                    }}
+                  </dd>
+                </div>
+              </dl>
+              <p>
+                {{
+                  selectedCandidate
+                    ? `当前选择：${adoptionHint(selectedCandidate)}`
+                    : "请选择候选后核对；未选择不代表五项质量门均不通过。"
+                }}
+              </p>
+              <small>五门通过仍需满足当前采纳条件，保存时由服务端再次核对。</small>
+            </section>
+            <div class="selection-actions">
+              <label
+                v-for="item in [
+                  { value: 'adopt', label: '采纳合格机会' },
+                  { value: 'observe', label: '继续观察' },
+                  { value: 'reject', label: '驳回' },
+                ]"
+                :key="item.value"
+                :class="{
+                  disabled: item.value === 'adopt' && !canAdopt,
+                }"
+                ><input
+                  v-model="decision.action"
+                  type="radio"
+                  name="decision"
+                  :value="item.value"
+                  :disabled="item.value === 'adopt' && !canAdopt"
+                /><span>{{ item.label }}</span></label
+              >
+            </div>
+            <label
+              >决策原因<textarea
+                v-model="decision.reason"
+                required
+                maxlength="1000"
+                rows="4"
+              ></textarea></label
+            ><button
+              type="submit"
+              :disabled="busy || reading || (decision.action === 'adopt' && !canAdopt)"
+            >
+              {{ busy ? "正在保存…" : "保存审计决策" }}
+            </button>
+          </form>
+          <article v-if="journey.decision" class="selection-complete">
+            <p>决策已保存 · {{ decisionLabel(journey.decision.action) }}</p>
+            <h3>{{ journey.decision.reason }}</h3>
+            <span>{{ new Date(journey.decision.created_at).toLocaleString() }}</span
+            ><RouterLink
+              v-if="journey.opportunity_id"
+              :to="`/opportunities/${journey.opportunity_id}`"
+              >查看机会、证据与决策历史 ↗</RouterLink
+            >
+            <RouterLink
+              v-if="journey.verification_task_id"
+              :to="`/tasks/${journey.verification_task_id}`"
+              >打开自动生成的验证任务 ↗</RouterLink
+            >
+          </article>
+        </div>
+        <footer class="selection-footer">
+          <span v-if="message" role="status">{{ message }}</span
+          ><code>关联编号 {{ requestId || journey.request_id }}</code
+          ><button type="button" :disabled="busy" @click="reset">开始下一次</button>
+        </footer></template
+      >
+    </div>
   </section>
 </template>

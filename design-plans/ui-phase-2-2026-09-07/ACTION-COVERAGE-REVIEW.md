@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1478；旧登记1477；新身份17，旧表独有身份16。签名变化不等于增删业务能力。
-- 已具体语义对应22页/479源位置/426组；其中路由动作362组，转发/容器关联42组，其余明确排除。其余51页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
+- 已具体语义对应22页/480源位置/427组；其中路由动作363组，转发/容器关联42组，其余明确排除。其余51页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -27,7 +27,7 @@
 | [P13 今日工作](page-specs/P13.md) | 111 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 107 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P15 选品机会](page-specs/P15.md) | 158 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 45 | [8组](action-reviews/P16.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P16 创建选品](page-specs/P16.md) | 44 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 64 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 158 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 75 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1083,15 +1083,18 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P16 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P16.json)：10个局部源位置 → 8组；2类写入，8组路由动作，0组转发/容器关联不重复计动作。5个本地v-model，3处调用/内嵌容器，11个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P16.json)：11个局部源位置 → 9组；2类写入，9组路由动作，0组转发/容器关联不重复计动作。5个本地v-model，4处调用/内嵌容器，12个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
 
-尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有4个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+另有2个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | J-NAV-LIST 返回机会列表 / navigation | 1处；input、running、terminal、busy | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png)、[running · 1440](design/journey-direction-c/1440-running.png) / [running · 390](design/journey-direction-c/390-running.png)；其余见JSON | deactivate保护读取，不阻断已发POST；离开后的成功归属必须独立验证。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。 |
 | J-STATE-RECOVERY 状态面板主次恢复 / local | 1处；restore-failed、restore-expired、restore-forbidden、restore-blocked、read-failed、read-expired、read-forbidden、read-blocked、create-failed | [restore-failed · 1440](design/journey-direction-c/1440-restore-failed.png) / [restore-failed · 390](design/journey-direction-c/390-restore-failed.png)、[restore-expired · 1440](design/journey-direction-c/1440-restore-expired.png) / [restore-expired · 390](design/journey-direction-c/390-restore-expired.png)；其余见JSON | 两个事件均保留；无journey/resumeId时共享重新登录等文案不改变reset行为；恢复副说明不是鉴权修复，真实401/403/存储异常待验。 代表视觉映射只覆盖重试主按钮，副按钮另有4态；无ID时主动作reset，error副动作history.back，expired无副按钮，blocked/forbidden仅说明。图稿的重试忙碌禁用和无ID时“重新输入”文案为待审改进，不宣称Vue已有。 |
 | J-CREATE 提交三类选品线索 / write | 2处；keyword、asin、product_url、invalid、busy、failed、late-inactive-success | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png)、[asin · 1440](design/journey-direction-c/1440-asin.png) / [asin · 390](design/journey-direction-c/390-asin.png)；其余见JSON | 源函数隔离证实deactivate后旧成功仍applyJourney并写内存替身活动ID，active=false时不设timer；未认证真实缓存/多标签，原未知错误文案未创建不代表无持久化。 |
+| J-TIMELINE 展开或收起处理时间轴 / local | 1处；collapsed、expanded | [results · 1440](design/journey-direction-c/1440-results.png) / [results · 390](design/journey-direction-c/390-results.png)；其余见JSON | 真实Vue已有展开/收起及焦点图；尚未纳入离线动作状态引用规范，4代表视觉槽仍待映射，不能算全控件批准。 |
 | J-SOURCE 查看候选原文 / navigation | 1处；selected、unselected、no-topic、missing-fields、long-result | [results · 1440](design/journey-direction-c/1440-results.png) / [results · 390](design/journey-direction-c/390-results.png)、[selected · 1440](design/journey-direction-c/1440-selected.png) / [selected · 390](design/journey-direction-c/390-selected.png)；其余见JSON | click.stop只停冒泡，不自动证明label默认激活被取消；原型把来源链接与radio分离，仍需实际鼠标/键盘验收。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。 |
 | J-DECIDE 保存三种审计决定 / write | 2处；adopt-contract-pending、observe、reject、empty-reason、failed、success-after-error、deadline-running | [adoption-pending · 1440](design/journey-direction-c/1440-adoption-pending.png) / [adoption-pending · 390](design/journey-direction-c/390-adoption-pending.png)、[observe-edited · 1440](design/journey-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/journey-direction-c/390-observe-edited.png)；其余见JSON | 统一采纳规则及成功清错已落实c31fddc7；r2图与按钮仍非生产视觉。真实SQL竞争、权限、失活后写归属/草稿生命周期、全部决定变体控件六态仍待验。 |
 | J-NAV-OPPORTUNITY 查看返回机会 / navigation | 1处；returned-id、missing-id | [adopt-decided · 1440](design/journey-direction-c/1440-adopt-decided.png) / [adopt-decided · 390](design/journey-direction-c/390-adopt-decided.png)、[decided-no-links · 1440](design/journey-direction-c/1440-decided-no-links.png) / [decided-no-links · 390](design/journey-direction-c/390-decided-no-links.png)；其余见JSON | 合格fixture返回ID对应链接已原型核对，不代表实际机会访问权限或生产导航已验证。 当前源码链接不禁用、无本地提交忙碌态；缺返回ID时入口不渲染，不伪造disabled。 |
@@ -1112,10 +1115,11 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
+| SelectionJourney.vue / aside.1 / stages | inline-aside / related-scene-only | [results · 1440](design/journey-direction-c/1440-results.png) / [results · 390](design/journey-direction-c/390-results.png) | 真实Vue阶段切换仅在隔离数据复测，不证明生产任务完成。 |
 | SelectionJourney.vue / form.1 / keyword | form-container / matching-inline-form-scene | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
 | SelectionJourney.vue / form.1 / asin | form-container / matching-inline-form-scene | [asin · 1440](design/journey-direction-c/1440-asin.png) / [asin · 390](design/journey-direction-c/390-asin.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
 | SelectionJourney.vue / form.1 / url | form-container / matching-inline-form-scene | [url · 1440](design/journey-direction-c/1440-url.png) / [url · 390](design/journey-direction-c/390-url.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
-| SelectionJourney.vue / aside.1 / keyword | inline-aside / related-scene-only | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
+| SelectionJourney.vue / aside.2 / keyword | inline-aside / related-scene-only | [keyword · 1440](design/journey-direction-c/1440-keyword.png) / [keyword · 390](design/journey-direction-c/390-keyword.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
 | SelectionJourney.vue / form.2 / observe-edited | form-container / matching-inline-form-scene | [observe-edited · 1440](design/journey-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/journey-direction-c/390-observe-edited.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
 | SelectionJourney.vue / form.2 / reject-edited | form-container / matching-inline-form-scene | [reject-edited · 1440](design/journey-direction-c/1440-reject-edited.png) / [reject-edited · 390](design/journey-direction-c/390-reject-edited.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
 | SelectionJourney.vue / form.2 / adoption-pending | form-container / related-scene-only | [adoption-pending · 1440](design/journey-direction-c/1440-adoption-pending.png) / [adoption-pending · 390](design/journey-direction-c/390-adoption-pending.png) | 关联是现有离线提案，不是控件全状态/实际Vue/主题/权限/生命周期通过；未批准部分不得迁入生产。 |
@@ -1126,6 +1130,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ### 明确保留的边界
 
+- 2026-09-10：P16批准布局已局部落地Vue，24张真实挂载图另册，旧离线提案不替代真实验收；新增summary组和只读阶段aside，表单文案导致签名变化，业务handler及五模型不变。
 - r2重拍67全页场景及102代表控件状态双端共338PNG；8动作组40适用视觉槽已映射，8导航禁用/忙碌不适用；采纳radio6态及恢复副按钮4态不新增动作组，完整输入/动态变体仍待审核。
 - 用户明确通过P16 r2整体布局，非全页/全控件批准。统一门在c31fddc7已实现，缺门/可采纳/忙碌/冲突/刷新/成功图为隔离fixture，不证明SQL或生产事实。
 - 既有create失活后晚到成功仍更新journey/活动ID的源证据不被本轮注销；r2内存ticket保护与reset清草稿仍是待审提案，不等于Vue已有。
