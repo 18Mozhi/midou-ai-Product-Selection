@@ -1,0 +1,1071 @@
+{
+  "proposal": "COMPETITOR-C-r1",
+  "kind": "page-or-section-proposal",
+  "approval": "pending-user-review",
+  "baselineRevision": "7e589620ee9b321c489754afa739fba109c302f1",
+  "sourceHashes": {
+    "apps/web/src/components/CompetitorMonitor.vue": "49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7",
+    "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
+    "apps/api/src/competitor-service.ts": "b825619a4d97d11cdf07ea1fa147f4bf72ac9380454eaa2a3255bf2dd13a432e",
+    "apps/api/src/competitor-routes.ts": "e2b3ba66db6d383b3ef062dab75653d9c47c2e573a6774b6a711644738c26b1d",
+    "apps/api/src/mysql-competitor-repository.ts": "0d45027d3b6e0e5b6ebd7faf8bf6926713f21f833d81ff7d64259bc544f1e509",
+    "apps/worker/src/competitor-monitor-worker.ts": "861ded5eab7f8a2046fedeb300f7d58023963e22793cfae055f5a584aafb044c",
+    "tests/e2e/m04-05-competitors.spec.ts": "6ac9a2c24edbd0cfdf8e3f6f38f0904109aff1742d1aa1c8253273a6e8675023",
+    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "dc09dd79de038281f0dd143e1193f137e15bd35dd6416ef627b147a498f25519",
+    "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
+    "scripts/verify-ui-phase2-competitor-source.mjs": "66f247271940138c9ce44b476c693acc67731d908e902d0205b40aab382aeeb5",
+    "scripts/verify-ui-phase2-competitor-c.mjs": "6ff4ca64478349a2691dd38364e6f6fdbe4968f537ed72fa0527f0548145729c",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/index.html": "694070719fadf31f425cbd08c8afedbec8b3cb485d274f86bca10e6b6e0c9aa2",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css": "a6096ebdf724d5ff35e3adae67aaf8ee3c910f732b38a1c880e36ee526d2a3ac",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js": "95e62209d921b3b6fd8925e9f92a4f402c54d9cbbbde75dc298865882f31727d"
+  },
+  "sourceProof": {
+    "checks": [
+      "changes join alerts by change_id and currency by evidence_id; baseline is last returned snapshot, not full history",
+      "UNFIXED: disabled applicable rule included; global price rule borrows selected currency",
+      "UNFIXED: optional list rules failure silently becomes []; rules route instead shows error",
+      "create first two steps zero request; exact optional omission; conflict retains step3; close/reopen retains fields",
+      "rule availability omits threshold; global numeric target null with zero preserved; new open resets defaults; conflicts retain input",
+      "delete trims required reason and uses revision7, failed input retained, reopen clears; toggle uses exact status/revision",
+      "task:create independent from competitor:manage; task intent binds evidence/change, no competitor mutation",
+      "collect acceptance is queued not snapshot success; current-row polling keeps new task over stale response; unmount clears inert timer",
+      "deep-linked selected item remains visible despite search; new search clears competitor/create query"
+    ],
+    "limits": "Real setup functions only; readiness helper inert, no template mount, HTTP, authorization, SQL, worker, notification, history lifecycle or race closure."
+  },
+  "scenes": [
+    {
+      "id": "directory",
+      "pageId": "P19",
+      "label": "竞品目录与证据"
+    },
+    {
+      "id": "partial",
+      "pageId": "P19",
+      "label": "字段缺失与币种未知"
+    },
+    {
+      "id": "pending",
+      "pageId": "P19",
+      "label": "首次采集排队"
+    },
+    {
+      "id": "running",
+      "pageId": "P19",
+      "label": "采集进行中"
+    },
+    {
+      "id": "blocked-captcha",
+      "pageId": "P19",
+      "label": "验证码阻塞"
+    },
+    {
+      "id": "terminal",
+      "pageId": "P19",
+      "label": "采集失败无快照"
+    },
+    {
+      "id": "paused",
+      "pageId": "P19",
+      "label": "暂停监控"
+    },
+    {
+      "id": "readonly",
+      "pageId": "P19",
+      "label": "只读角色"
+    },
+    {
+      "id": "task-only",
+      "pageId": "P19",
+      "label": "独立任务权限"
+    },
+    {
+      "id": "deep-link",
+      "pageId": "P19",
+      "label": "深链优先搜索"
+    },
+    {
+      "id": "search-empty",
+      "pageId": "P19",
+      "label": "搜索无结果"
+    },
+    {
+      "id": "empty",
+      "pageId": "P19",
+      "label": "首次空目录"
+    },
+    {
+      "id": "loading",
+      "pageId": "P19",
+      "label": "目录读取中"
+    },
+    {
+      "id": "error",
+      "pageId": "P19",
+      "label": "目录读取失败"
+    },
+    {
+      "id": "expired",
+      "pageId": "P19",
+      "label": "会话过期"
+    },
+    {
+      "id": "forbidden",
+      "pageId": "P19",
+      "label": "无读取权限"
+    },
+    {
+      "id": "rate-limited",
+      "pageId": "P19",
+      "label": "来源限流"
+    },
+    {
+      "id": "detail-error",
+      "pageId": "P19",
+      "label": "详情失败保留目录"
+    },
+    {
+      "id": "rules-unknown",
+      "pageId": "P19",
+      "label": "规则读取未知"
+    },
+    {
+      "id": "history-window",
+      "pageId": "P19",
+      "label": "历史窗口边界"
+    },
+    {
+      "id": "alerts-mixed",
+      "pageId": "P19",
+      "label": "提醒与任务分离"
+    },
+    {
+      "id": "create-link",
+      "pageId": "P19",
+      "label": "添加 / 商品链接"
+    },
+    {
+      "id": "create-market",
+      "pageId": "P19",
+      "label": "添加 / 市场信息"
+    },
+    {
+      "id": "create-confirm",
+      "pageId": "P19",
+      "label": "添加 / 确认"
+    },
+    {
+      "id": "create-error",
+      "pageId": "P19",
+      "label": "添加 / 失败保留"
+    },
+    {
+      "id": "create-busy",
+      "pageId": "P19",
+      "label": "添加 / 提交中"
+    },
+    {
+      "id": "delete",
+      "pageId": "P19",
+      "label": "删除 / 保留历史"
+    },
+    {
+      "id": "delete-error",
+      "pageId": "P19",
+      "label": "删除 / 版本冲突"
+    },
+    {
+      "id": "delete-busy",
+      "pageId": "P19",
+      "label": "删除 / 提交中"
+    },
+    {
+      "id": "rules",
+      "pageId": "P20",
+      "label": "监控规则目录"
+    },
+    {
+      "id": "rules-empty",
+      "pageId": "P20",
+      "label": "无监控规则"
+    },
+    {
+      "id": "rules-disabled",
+      "pageId": "P20",
+      "label": "只有停用规则"
+    },
+    {
+      "id": "rules-no-objects",
+      "pageId": "P20",
+      "label": "对象空但规则仍存在"
+    },
+    {
+      "id": "rules-error",
+      "pageId": "P20",
+      "label": "规则读取失败"
+    },
+    {
+      "id": "rules-loading",
+      "pageId": "P20",
+      "label": "规则读取中"
+    },
+    {
+      "id": "rules-readonly",
+      "pageId": "P20",
+      "label": "只读规则目录"
+    },
+    {
+      "id": "rule-global",
+      "pageId": "P20",
+      "label": "规则 / 工作区价格"
+    },
+    {
+      "id": "rule-target",
+      "pageId": "P20",
+      "label": "规则 / 指定竞品"
+    },
+    {
+      "id": "rule-availability",
+      "pageId": "P20",
+      "label": "规则 / 库存"
+    },
+    {
+      "id": "rule-error",
+      "pageId": "P20",
+      "label": "规则 / 失败保留"
+    },
+    {
+      "id": "rule-busy",
+      "pageId": "P20",
+      "label": "规则 / 提交中"
+    },
+    {
+      "id": "deep-ocean-standard",
+      "pageId": "P19",
+      "label": "deep-ocean / standard"
+    },
+    {
+      "id": "deep-ocean-compact",
+      "pageId": "P19",
+      "label": "deep-ocean / compact"
+    },
+    {
+      "id": "cloud-white-standard",
+      "pageId": "P19",
+      "label": "cloud-white / standard"
+    },
+    {
+      "id": "cloud-white-compact",
+      "pageId": "P19",
+      "label": "cloud-white / compact"
+    },
+    {
+      "id": "aurora-purple-standard",
+      "pageId": "P19",
+      "label": "aurora-purple / standard"
+    },
+    {
+      "id": "aurora-purple-compact",
+      "pageId": "P19",
+      "label": "aurora-purple / compact"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1440-directory.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "directory",
+      "sha256": "24bfa1258c5eb3583b2f420f216dd3a29555fdcdb0471641d6c3c35f8f491d4c"
+    },
+    {
+      "file": "1440-partial.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "partial",
+      "sha256": "f812068fc1b102767eaf93479f9da2e45bb439653080e8da164cf7ceda9ebb65"
+    },
+    {
+      "file": "1440-pending.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "pending",
+      "sha256": "a8169d568f4520bb22b7217b17f52ba88dd4099051b0ac04240c873b9398cb17"
+    },
+    {
+      "file": "1440-running.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "running",
+      "sha256": "d7fd9b2f8832aaf86be64d99a18c2ff2a635fe4219333e812d4d742c4486e34f"
+    },
+    {
+      "file": "1440-blocked-captcha.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "blocked-captcha",
+      "sha256": "e587bc8b27e9fa5bb49d95b03641eeaeed581f3d4641019244d61d8bd401835c"
+    },
+    {
+      "file": "1440-terminal.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "terminal",
+      "sha256": "9fb0f5964c134bbdb1aa3f3673ba15e0372f22003425e1ae9b49a3fa8b0cc99f"
+    },
+    {
+      "file": "1440-paused.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "paused",
+      "sha256": "bb7d36ec57d8f6d1f91beb11e4fbd1d06fb9dd384aee95799caf559576ea4407"
+    },
+    {
+      "file": "1440-readonly.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "readonly",
+      "sha256": "0bf5009b4c9f4b481fc6f5420b4e0078f870c270ae3a1e80b72bfd0428a749da"
+    },
+    {
+      "file": "1440-task-only.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "task-only",
+      "sha256": "9eec4d74b2e69dc5cc1621ea2b173ff30c6663edc6cdc2ffbe52a4a178c902cd"
+    },
+    {
+      "file": "1440-deep-link.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "deep-link",
+      "sha256": "ed63f127c0554fac708a80e6a7b7d3cfc788a7c72c823d2381291c8f294f6300"
+    },
+    {
+      "file": "1440-search-empty.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "search-empty",
+      "sha256": "0aa80c7bfe342536d8c33079b24aa6bd5df552c410128851b5e8d5c5c34e6725"
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "empty",
+      "sha256": "55973a238de59980e819edf0ddb155855ca8e7430847b21e993e870246621bed"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "loading",
+      "sha256": "155dcd6ad9872c4b5c27d05e7ced0867e520fc05acef6de6071e4f8263a69948"
+    },
+    {
+      "file": "1440-error.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "error",
+      "sha256": "3a5e60c66cdc8b0578707b45b640208519997a1bbf4175092fd9d58992435e96"
+    },
+    {
+      "file": "1440-expired.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "expired",
+      "sha256": "330f382ed943ec5be91f36ec16e9ba9495c29d69d90c86b5126f794ca49d1b74"
+    },
+    {
+      "file": "1440-forbidden.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "forbidden",
+      "sha256": "6c03c064c89f6d3eee5ae9d25b46d26b1f77529fa57d42310a3f1eb1ab00042e"
+    },
+    {
+      "file": "1440-rate-limited.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "rate-limited",
+      "sha256": "f3f51054ccb4670ef962c97073b1e2c254f0075aa65a299c57bd9d3e98bbe624"
+    },
+    {
+      "file": "1440-detail-error.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "detail-error",
+      "sha256": "e67256d3410839c9e31541ade5c1900cf62447682284b771729a1645c537f1e9"
+    },
+    {
+      "file": "1440-rules-unknown.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "rules-unknown",
+      "sha256": "8e4fb66e159b12734c5b6c1cd86ce6e334413a103ecacfaa9f681aa1bf620beb"
+    },
+    {
+      "file": "1440-history-window.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "history-window",
+      "sha256": "0fbc7a75c5317b5fd6eee882e07356d13d94ecc890dc8a8464a08878f2388f3e"
+    },
+    {
+      "file": "1440-alerts-mixed.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "alerts-mixed",
+      "sha256": "bfaf6589d992abbc7e2a1446775ab18a6371786d427eadafcbae9589024d98d0"
+    },
+    {
+      "file": "1440-create-link.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "create-link",
+      "sha256": "2399b2be3e2e2ac546768527c145a16e0f35aaea54791d263d9e8ffe93b2f561"
+    },
+    {
+      "file": "1440-create-market.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "create-market",
+      "sha256": "eeaf57284401e781f6115d47cc6fad770739e55822fa6e43cfdbddb41499f297"
+    },
+    {
+      "file": "1440-create-confirm.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "create-confirm",
+      "sha256": "5485c234ac55f67f2ad32617b09ef9047af7b84e6b8d898951ccc1160cc4d76f"
+    },
+    {
+      "file": "1440-create-error.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "create-error",
+      "sha256": "9b6baf8e3a335c56d13a3a83b6bbabc0040682332daa785143b64c2c385ca4f5"
+    },
+    {
+      "file": "1440-create-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "create-busy",
+      "sha256": "a9fc0eac01605d0c48ad8d7b3b6a7fe8b2da36efea9b773f16ad8d9271d63e3e"
+    },
+    {
+      "file": "1440-delete.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "delete",
+      "sha256": "9c0d605bd1b6f88cec0a3e23cd65d1428fa3c81d637da7cae3e6234fe3adbea2"
+    },
+    {
+      "file": "1440-delete-error.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "delete-error",
+      "sha256": "3fa5e39ccfe6e1fe300a35cbfc7777dfede02b62ad89ae79a95647e54fef91bd"
+    },
+    {
+      "file": "1440-delete-busy.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "delete-busy",
+      "sha256": "cea3398b27fdd5e207b4fa6b32e7f54e470aa13798673b2f530bb0f6dcb6eb82"
+    },
+    {
+      "file": "1440-rules.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules",
+      "sha256": "c6f40096b206ce32c3955373753dae33417a81082f1644e3d4870496599c4ea9"
+    },
+    {
+      "file": "1440-rules-empty.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-empty",
+      "sha256": "b2572ef64fe2488f4fa325021d6a738bc66ab80f96b99bc90617f7bca3c1a128"
+    },
+    {
+      "file": "1440-rules-disabled.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-disabled",
+      "sha256": "3d3cf4bf1681e5a81412443c1f4a31c97ff54fce34f6df17f27e2accf2a749e4"
+    },
+    {
+      "file": "1440-rules-no-objects.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-no-objects",
+      "sha256": "e5a7035e2b55be836a0ef4a1910c9f36894df1b274c3e4cba970719f0415c63e"
+    },
+    {
+      "file": "1440-rules-error.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-error",
+      "sha256": "bcc4148403e4305982f2b801707248d0db53d2d83e791308cec2ef14d7e8a489"
+    },
+    {
+      "file": "1440-rules-loading.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-loading",
+      "sha256": "0f3866eacc2fb11f7279852bda2c6c3433591dd772089d40f2d276f11ed92c11"
+    },
+    {
+      "file": "1440-rules-readonly.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rules-readonly",
+      "sha256": "9e0b6c8318ff627359a83960f335b6055e2bdbe787cac286627d80345d566184"
+    },
+    {
+      "file": "1440-rule-global.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rule-global",
+      "sha256": "b066f3c7496c930d91bf30839b9a4d1dd37f49b7a9e536177db3e1af28957ba0"
+    },
+    {
+      "file": "1440-rule-target.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rule-target",
+      "sha256": "1ed925f836d8a189c9c00d7ee41db0694740b534989aa8b046b4308775bb5843"
+    },
+    {
+      "file": "1440-rule-availability.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rule-availability",
+      "sha256": "d57315a56519c5a5c0f4094b8ae09fab004f38562e86439c6723104b17025bc4"
+    },
+    {
+      "file": "1440-rule-error.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rule-error",
+      "sha256": "79ac0d8f43d11ad6845bd4e4d79bf71ada5385405a2d109eedc17a5c18d267fd"
+    },
+    {
+      "file": "1440-rule-busy.png",
+      "width": 1440,
+      "pageId": "P20",
+      "scene": "rule-busy",
+      "sha256": "88277ccfb05d9663a40f64f092a018d4e7ec3e4639f8cd0c3d8f3490769cacba"
+    },
+    {
+      "file": "1440-deep-ocean-standard.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "deep-ocean-standard",
+      "sha256": "39ab1d0c7694c08c5f2379648c779715ac0b112d56ed1acb901a6c17bb435372"
+    },
+    {
+      "file": "1440-deep-ocean-compact.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "deep-ocean-compact",
+      "sha256": "1213ac6102570a29c3af0db3cf59105f8a4c3df2bd37cfa5571a2a7bc42eb76e"
+    },
+    {
+      "file": "1440-cloud-white-standard.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "cloud-white-standard",
+      "sha256": "6f8391b46bc0a2e085b7f3dea70fdb497b9bc24fc6066d9d2cdfc87bd28ddddc"
+    },
+    {
+      "file": "1440-cloud-white-compact.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "cloud-white-compact",
+      "sha256": "fae081850d57fcff32c8c157d8f42f20c0bcdccb02dcd829f4e1b205f559ec17"
+    },
+    {
+      "file": "1440-aurora-purple-standard.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "aurora-purple-standard",
+      "sha256": "fe7129c6e7b6b5ae7b3fbf850685402c7e8287b9721d89c8542e67a8cdec9e38"
+    },
+    {
+      "file": "1440-aurora-purple-compact.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "aurora-purple-compact",
+      "sha256": "618f8800315ddfbc5a845a7c0326d2d0f58b5708e51956af0da8d5a474847e47"
+    },
+    {
+      "file": "1440-more-open.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "more-open",
+      "sha256": "eb2a7292bd3c6011f7024372f087aaf18be42571a71bb90cbfd469a735bb5160"
+    },
+    {
+      "file": "1440-delete-required.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "delete-required",
+      "sha256": "7a2552e107a13178de3f794b4670913af8d504937feb1bf53d62e12887320500"
+    },
+    {
+      "file": "1440-create-invalid.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "create-invalid",
+      "sha256": "965536dfbcc3ef296bc3bb825bca008b83c52e0cd6a8f553762659ecef50b81d"
+    },
+    {
+      "file": "1440-button-focus.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "button-focus",
+      "sha256": "24bfa1258c5eb3583b2f420f216dd3a29555fdcdb0471641d6c3c35f8f491d4c"
+    },
+    {
+      "file": "1440-button-hover.png",
+      "width": 1440,
+      "pageId": "P19",
+      "scene": "button-hover",
+      "sha256": "24bfa1258c5eb3583b2f420f216dd3a29555fdcdb0471641d6c3c35f8f491d4c"
+    },
+    {
+      "file": "390-directory.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "directory",
+      "sha256": "3960c9a0277d80a04b4bcc8c5c362fe5e433ce7232c34cc372dae28870e9928a"
+    },
+    {
+      "file": "390-partial.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "partial",
+      "sha256": "2b7fe340721db2fe54d473fa3f75d24103d47af491b8c29c534545ec3622b0cf"
+    },
+    {
+      "file": "390-pending.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "pending",
+      "sha256": "e7f463d2933b07dbdd2ec5e743e962b09e0f0a5eb36550511518d5364c67dc90"
+    },
+    {
+      "file": "390-running.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "running",
+      "sha256": "048de1d90914d8d62f45bf443ed66e24c47cb96581331b354575dbb60552bd65"
+    },
+    {
+      "file": "390-blocked-captcha.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "blocked-captcha",
+      "sha256": "c52404bd886c5e2d01d448134bdcb058d7a24571967920f3b7e9275ebdc3b2bb"
+    },
+    {
+      "file": "390-terminal.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "terminal",
+      "sha256": "3f475a150b4be17c24c7a1dcc03569a2c30a9097b2710122458f3256d0adc9ca"
+    },
+    {
+      "file": "390-paused.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "paused",
+      "sha256": "8392b24b0305d71459b48edc60264a00da1e156ad820bc9551b75c0c60c0da6d"
+    },
+    {
+      "file": "390-readonly.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "readonly",
+      "sha256": "b777147b35a1e9164ec7ecd47e1bf1a8c8f9c744bd4e34345d563dcefa73a9d9"
+    },
+    {
+      "file": "390-task-only.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "task-only",
+      "sha256": "e504c5f8f5c2858291f7ddb6f8321172f4a2623fb583c8ce6fa849226fd8869a"
+    },
+    {
+      "file": "390-deep-link.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "deep-link",
+      "sha256": "ccd8a7d2c63cc23ef718f3aa91aaecc73576cdf742a1906cd851913deb7d7025"
+    },
+    {
+      "file": "390-search-empty.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "search-empty",
+      "sha256": "ffb6ac9ce0038cd10fd2e89d06e0740abeb0d9e49558a57482190dea5ef0e4d6"
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "empty",
+      "sha256": "dd33f9bc75098a4aa046d967278c4dd174258875b532fd4b4fbab61de43e9982"
+    },
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "loading",
+      "sha256": "5064dda3e62cbd89acdbf0f4cfd1a88645944107ec745fdd84369408c72e90a9"
+    },
+    {
+      "file": "390-error.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "error",
+      "sha256": "e377334aa77476265fe4da39e210d810873abd175624ec45af0c4e4f3d32badf"
+    },
+    {
+      "file": "390-expired.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "expired",
+      "sha256": "5dd0bdc9cf3f4ab6261c5afbe14b00aa21ec37e56046d1348090df5ffd24be74"
+    },
+    {
+      "file": "390-forbidden.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "forbidden",
+      "sha256": "e67d1a9fd14a53447f1d8c33d464cbdc43758881d67e0b582f936be43a16240b"
+    },
+    {
+      "file": "390-rate-limited.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "rate-limited",
+      "sha256": "bcfd18a5b222accdc4b54dd6f6bc09e091c265aa86768a5df4680247180d3e24"
+    },
+    {
+      "file": "390-detail-error.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "detail-error",
+      "sha256": "ba484092cfd4f2b440b1c9af2ddbde8d7cfd21f1d6cc655f9cc6c8f3644f8810"
+    },
+    {
+      "file": "390-rules-unknown.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "rules-unknown",
+      "sha256": "3e6fa9c58c719d1c75c82079f4ca0e67d45cb0f08e6f0c4925f2eab20137b434"
+    },
+    {
+      "file": "390-history-window.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "history-window",
+      "sha256": "9179903fcc139531cf8d627b5717e003c0d64b108aa8ff7470a7597e48d611bd"
+    },
+    {
+      "file": "390-alerts-mixed.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "alerts-mixed",
+      "sha256": "a9aee70ff9c097540e02ceae58565d4644fba59c08cc78ea201701e80162f5ea"
+    },
+    {
+      "file": "390-create-link.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "create-link",
+      "sha256": "2495ffd95ead9926438c55dcec658d6b918e3fddb2265bd452cdcd9b7925aebb"
+    },
+    {
+      "file": "390-create-market.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "create-market",
+      "sha256": "0f6b42a4a3666772caa7eb4d21fb315e9e68d9f80d15d3be2856b7492294b6e5"
+    },
+    {
+      "file": "390-create-confirm.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "create-confirm",
+      "sha256": "e50c0960f32c9a29746a8dde6cb4221e9121c0941a5077083e03de154a11d97e"
+    },
+    {
+      "file": "390-create-error.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "create-error",
+      "sha256": "b239586588bde9749e239050bc9918af056617822605cf8fa80c06aaf35f7684"
+    },
+    {
+      "file": "390-create-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "create-busy",
+      "sha256": "80e3722d3ef090907e460340b0ba275cd42241971b46be61cef7b4421e796f1a"
+    },
+    {
+      "file": "390-delete.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "delete",
+      "sha256": "92d674890a0efb42658c691d3f018bfdec9a238e2fc8883aa3c908bfef6ff96e"
+    },
+    {
+      "file": "390-delete-error.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "delete-error",
+      "sha256": "7ddaf152b38cb2a2b15c09ddf2fce5443b268a4375d1adf01f3a88892f03a80f"
+    },
+    {
+      "file": "390-delete-busy.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "delete-busy",
+      "sha256": "d7d94ee3a2364b469f8fbdcb0018fab1846c70654bd8fff3834f4e4717b5e353"
+    },
+    {
+      "file": "390-rules.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules",
+      "sha256": "f4ea7675dbee1548e9703f45fbbca6c8509b13bb7ee13b9bed4420341be3e5b6"
+    },
+    {
+      "file": "390-rules-empty.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-empty",
+      "sha256": "784bfc9804e6c50e964ff54276eea2be783d3abca21b9b1fcb632dd6cfc3fdf9"
+    },
+    {
+      "file": "390-rules-disabled.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-disabled",
+      "sha256": "7f5fe835add9765f9018f02682bbaea8ce18cb0caadba6e5c3298fa9ab2c62b5"
+    },
+    {
+      "file": "390-rules-no-objects.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-no-objects",
+      "sha256": "bb58a5d36f2596a2a51f3b134353f1a46eab0a5f9e05ce963e16e5f900f31f81"
+    },
+    {
+      "file": "390-rules-error.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-error",
+      "sha256": "63c4323614b0924b8f76c57a35b3e64cfbc8b5273db0f14ea7af9674e0ca8ee9"
+    },
+    {
+      "file": "390-rules-loading.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-loading",
+      "sha256": "a426dcbf8c87134050deb11d7a3bda7a672188833af5275fa44244fa394d7f33"
+    },
+    {
+      "file": "390-rules-readonly.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rules-readonly",
+      "sha256": "2cc96a07e0b7c9656d8fdd5480d84f2c2f6ed99fb8fd1b9d27837c7afa37d3ae"
+    },
+    {
+      "file": "390-rule-global.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rule-global",
+      "sha256": "9923f7d0acf4ab85fd5e828edf4758cc6c3c1bc126ebced3988e4b3231f7929c"
+    },
+    {
+      "file": "390-rule-target.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rule-target",
+      "sha256": "bedfbbcba0aa02a72f27996343601656097538eda2809e8bc721e8286d8acf86"
+    },
+    {
+      "file": "390-rule-availability.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rule-availability",
+      "sha256": "79c5290afb3bf0664441412500dac35e28d750d3877d45c3a5d7c044136a15d6"
+    },
+    {
+      "file": "390-rule-error.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rule-error",
+      "sha256": "ece04bd3b9ff1d06a5d9f88801e8c2e03e27f160f2bc2c4c83b9aab38f3f9fdb"
+    },
+    {
+      "file": "390-rule-busy.png",
+      "width": 390,
+      "pageId": "P20",
+      "scene": "rule-busy",
+      "sha256": "6ad812b04e61ccc70c65c1314837635cda3b1f41815188bf7f0b8aea8916b818"
+    },
+    {
+      "file": "390-deep-ocean-standard.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "deep-ocean-standard",
+      "sha256": "c70abf7a63e94d75b87b3e8a03537f7d48ab96a7f720515f97f9082b9d7ab27b"
+    },
+    {
+      "file": "390-deep-ocean-compact.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "deep-ocean-compact",
+      "sha256": "77ab0ce12445f6bdb5749a7f1dd312d67c8a2edb6613e4e7f67657cba535eb5f"
+    },
+    {
+      "file": "390-cloud-white-standard.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "cloud-white-standard",
+      "sha256": "90149e06761335e162f5107695c782f04e05322fbaf97bc22fed23b7c4c4a517"
+    },
+    {
+      "file": "390-cloud-white-compact.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "cloud-white-compact",
+      "sha256": "37b9e91f1a0dfd3a45c9913f890a6a19192b55aa04b5fcc9a588e07278f0d8bf"
+    },
+    {
+      "file": "390-aurora-purple-standard.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "aurora-purple-standard",
+      "sha256": "8e4539807793df67fc427da777174bd366fa14b205c58b71672841926e2b4739"
+    },
+    {
+      "file": "390-aurora-purple-compact.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "aurora-purple-compact",
+      "sha256": "39a0e1dd68961d384f1a992a813c358b17267831160cda1d584ff1061fb8dd59"
+    },
+    {
+      "file": "390-more-open.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "more-open",
+      "sha256": "859948742253244b18c02c7576df4d9abb2cfe0faf02fec7953f16f0725fc49b"
+    },
+    {
+      "file": "390-delete-required.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "delete-required",
+      "sha256": "28f0d1b65d01410b93bb6f3ab487490f256f6cf9944783a2ee9c60ae5528cb91"
+    },
+    {
+      "file": "390-create-invalid.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "create-invalid",
+      "sha256": "a65a753fcd06cbdc21032138a84c7211a658efeb720563123ca1810ce38f7138"
+    },
+    {
+      "file": "390-button-focus.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "button-focus",
+      "sha256": "3960c9a0277d80a04b4bcc8c5c362fe5e433ce7232c34cc372dae28870e9928a"
+    },
+    {
+      "file": "390-button-hover.png",
+      "width": 390,
+      "pageId": "P19",
+      "scene": "button-hover",
+      "sha256": "3960c9a0277d80a04b4bcc8c5c362fe5e433ce7232c34cc372dae28870e9928a"
+    },
+    {
+      "file": "768-directory.png",
+      "width": 768,
+      "pageId": "P19",
+      "scene": "directory",
+      "sha256": "3993b6bd9edb4f489ade9c3c98c045e3e48b6b5838438d5f11bac4ddabe257ce"
+    },
+    {
+      "file": "768-rules.png",
+      "width": 768,
+      "pageId": "P20",
+      "scene": "rules",
+      "sha256": "d1b459aa6347baf28def379d9f058a976b6365fec405d90393bd60726bab24ba"
+    },
+    {
+      "file": "1024-directory.png",
+      "width": 1024,
+      "pageId": "P19",
+      "scene": "directory",
+      "sha256": "0baba5314f36d87e25b2da1334b26201eaa505b4b657f9433b4669153cc41752"
+    },
+    {
+      "file": "1024-rules.png",
+      "width": 1024,
+      "pageId": "P20",
+      "scene": "rules",
+      "sha256": "6b9783f2c23a2194cfdd9f962bf618cfe7020b2ec2bd0c3f0fefae01505f165e"
+    }
+  ],
+  "actionIds": [
+    "CP-COLLECT",
+    "CP-CREATE-CLOSE",
+    "CP-CREATE-OPEN",
+    "CP-CREATE-PREVIOUS",
+    "CP-CREATE-SUBMIT",
+    "CP-DELETE-CLOSE",
+    "CP-DELETE-OPEN",
+    "CP-DELETE-SUBMIT",
+    "CP-DETAIL",
+    "CP-DETAIL-RETRY",
+    "CP-HELP",
+    "CP-MORE",
+    "CP-RULE-BACK",
+    "CP-RULE-CLOSE",
+    "CP-RULE-NAV",
+    "CP-RULE-NAV-CURRENT",
+    "CP-RULE-OPEN",
+    "CP-RULE-SUBMIT",
+    "CP-SEARCH",
+    "CP-SEARCH-CLEAR",
+    "CP-SOURCE",
+    "CP-STATE-PRIMARY",
+    "CP-TASK-CREATE",
+    "CP-TASK-CREATE-REVIEW",
+    "CP-TOGGLE"
+  ],
+  "checks": [
+    "1440: scenes/layout, search/deep link, independent permissions, pending/paused, source link, no rule writes beyond create, create validation/retention, rule threshold omission/null/zero/reset, delete trim/retention/cancel, keyboard trap/return/Escape/backdrop, busy guard, hover/focus; all intents inert",
+    "390: scenes/layout, search/deep link, independent permissions, pending/paused, source link, no rule writes beyond create, create validation/retention, rule threshold omission/null/zero/reset, delete trim/retention/cancel, keyboard trap/return/Escape/backdrop, busy guard, hover/focus; all intents inert",
+    "12 widths x5 representative scenes; 720x500 CSS-pixel reflow equivalent only, not actual browser zoom/assistive technology"
+  ],
+  "errors": [],
+  "http": [],
+  "limits": [
+    "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
+    "Current source gaps are reproduced or cited, not fixed. No global action/dialog denominator or approval promotion.",
+    "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
+    "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination."
+  ]
+}

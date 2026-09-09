@@ -1,0 +1,369 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { chromium } from "playwright";
+import { verifyCompetitorSource } from "./verify-ui-phase2-competitor-source.mjs";
+
+const root = "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c";
+const capture = process.argv.includes("--capture");
+assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
+const hash = (v) => createHash("sha256").update(v).digest("hex");
+const files = [
+  "apps/web/src/components/CompetitorMonitor.vue",
+  "apps/web/src/components/shared/monitoring-readiness.ts",
+  "apps/api/src/competitor-service.ts",
+  "apps/api/src/competitor-routes.ts",
+  "apps/api/src/mysql-competitor-repository.ts",
+  "apps/worker/src/competitor-monitor-worker.ts",
+  "tests/e2e/m04-05-competitors.spec.ts",
+  "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+  "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md",
+  "scripts/verify-ui-phase2-competitor-source.mjs",
+  "scripts/verify-ui-phase2-competitor-c.mjs",
+  ...["index.html", "competitor.css", "competitor.js"].map((f) => root + "/" + f),
+];
+const sourceHashes = Object.fromEntries(
+  await Promise.all(
+    files.map(async (f) => [f, hash((await readFile(f, "utf8")).replaceAll("\r\n", "\n"))]),
+  ),
+);
+const sourceProof = await verifyCompetitorSource();
+let old;
+if (!capture) {
+  old = JSON.parse(await readFile(root + "/evidence.json", "utf8"));
+  assert.deepEqual(old.sourceHashes, sourceHashes);
+  for (const s of old.screenshots)
+    assert.equal(hash(await readFile(root + "/" + s.file)), s.sha256);
+}
+const screenshots = [],
+  errors = [],
+  http = [],
+  checks = [],
+  actions = new Set();
+const browser = await chromium.launch({ headless: true });
+let scenes;
+async function layout(page, label) {
+  assert.ok(
+    await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+    label + " horizontal overflow",
+  );
+  const bad = await page
+    .locator(
+      "#app button,#app a,#app summary,#modal button,#modal input,#modal select,#modal textarea",
+    )
+    .evaluateAll((nodes) =>
+      nodes
+        .filter((n) => n.getClientRects().length)
+        .filter((n) => {
+          const r = n.getBoundingClientRect();
+          return r.height < 43.9 || r.width < 43.9 || parseFloat(getComputedStyle(n).fontSize) < 16;
+        })
+        .map((n) => n.textContent.slice(0, 40)),
+    );
+  assert.deepEqual(bad, [], label + " touch/font");
+  const ids = await page.locator("[id]").evaluateAll((nodes) => nodes.map((n) => n.id));
+  assert.equal(ids.length, new Set(ids).size);
+  if (await page.locator("dialog[open]").count()) {
+    const r = await page.locator("dialog").boundingBox(),
+      vp = page.viewportSize();
+    assert.ok(
+      r.x >= 0 && r.y >= 0 && r.x + r.width <= vp.width + 1 && r.y + r.height <= vp.height + 1,
+      label + " dialog bounds",
+    );
+    assert.ok(await page.getByRole("dialog").getAttribute("aria-labelledby"));
+  }
+}
+async function shot(page, width, scene, pageId) {
+  const file = `${width}-${scene}.png`;
+  if (capture) {
+    await page.screenshot({
+      path: root + "/" + file,
+      fullPage: !(await page.locator("dialog[open]").count()),
+      animations: "disabled",
+    });
+    screenshots.push({
+      file,
+      width,
+      pageId,
+      scene,
+      sha256: hash(await readFile(root + "/" + file)),
+    });
+  } else
+    assert.ok(
+      old.screenshots.some((s) => s.file === file),
+      file,
+    );
+}
+try {
+  for (const width of [1440, 390]) {
+    const context = await browser.newContext({
+      viewport: { width, height: 1000 },
+      reducedMotion: "reduce",
+      locale: "zh-CN",
+    });
+    try {
+      await context.route(/^https?:/, (r) => {
+        http.push(r.request().url());
+        return r.abort();
+      });
+      const page = await context.newPage();
+      page.on("pageerror", (e) => errors.push(e.message));
+      await page.goto(pathToFileURL(path.resolve(root, "index.html")).href);
+      await page.evaluate(() => document.body.classList.add("capture"));
+      scenes = await page.evaluate(() => window.competitorReview.scenes);
+      const choose = async (id) => {
+        await page.evaluate((v) => window.competitorReview.choose(v), id);
+        await layout(page, width + ":" + id);
+      };
+      const click = (id) => page.locator(`[data-action="${id}"]`).first().click();
+      const count = () => page.evaluate(() => window.competitorReview.intents.length);
+      const last = () => page.evaluate(() => window.competitorReview.intents.at(-1));
+      for (const s of scenes) {
+        await choose(s.id);
+        for (const id of await page
+          .locator("[data-action]")
+          .evaluateAll((nodes) => nodes.map((n) => n.dataset.action)))
+          actions.add(id);
+        await shot(page, width, s.id, s.pageId);
+      }
+      await choose("directory");
+      const source = page.locator("[data-action=CP-SOURCE]");
+      assert.equal(await source.getAttribute("rel"), "noopener noreferrer");
+      assert.equal(await source.getAttribute("target"), "_blank");
+      await page.locator("#search").fill("没有结果");
+      await page.getByRole("heading", { name: "没有匹配的竞品" }).waitFor();
+      await click("CP-SEARCH-CLEAR");
+      assert.equal(await page.locator(".object").count(), 3);
+      await choose("deep-link");
+      assert.equal(await page.locator(".object").count(), 1);
+      await page.locator("#search").fill("absent");
+      assert.equal(await page.locator(".object").count(), 0);
+      await choose("readonly");
+      assert.equal(
+        await page
+          .locator(
+            "[data-action=CP-COLLECT],[data-action=CP-CREATE-OPEN],[data-action=CP-TASK-CREATE]",
+          )
+          .count(),
+        0,
+      );
+      await click("CP-RULE-NAV-CURRENT");
+      assert.equal(await page.locator("dialog[open]").count(), 0);
+      assert.equal(await page.locator("[data-action=CP-RULE-OPEN]").count(), 0);
+      await choose("task-only");
+      await click("CP-TASK-CREATE");
+      assert.equal((await last()).path, "/tasks");
+      assert.equal((await last()).body.priority, "high");
+      assert.equal(await page.locator("[data-action=CP-TASK-LINK]").count(), 1);
+      await choose("pending");
+      assert.equal(await page.locator("[data-action=CP-COLLECT]").isDisabled(), true);
+      await choose("paused");
+      assert.equal(await page.locator("[data-action=CP-COLLECT]").isDisabled(), true);
+      await choose("rules");
+      assert.ok(!(await page.locator(".rule-row").allTextContents()).join(" ").includes("USD"));
+      assert.equal(await page.locator(".rule-row button").count(), 0);
+      await choose("directory");
+      await page.locator("[data-action=CP-MORE] summary").click();
+      await layout(page, "more");
+      await shot(page, width, "more-open", "P19");
+      await click("CP-DELETE-OPEN");
+      const before = await count();
+      await page.locator("textarea").fill("   ");
+      await click("CP-DELETE-SUBMIT");
+      assert.equal(await count(), before);
+      await page.getByRole("alert").waitFor();
+      await shot(page, width, "delete-required", "P19");
+      await page.locator("textarea").fill("  重复监控  ");
+      await page.evaluate(() => (window.competitorReview.outcome = "error"));
+      await click("CP-DELETE-SUBMIT");
+      assert.deepEqual((await last()).body, { expected_revision: 7, reason: "重复监控" });
+      assert.equal(await page.locator("textarea").inputValue(), "  重复监控  ");
+      await page.keyboard.press("Escape");
+      assert.equal(await page.locator("dialog[open]").count(), 0);
+      assert.equal(
+        await page
+          .locator("[data-action=CP-DELETE-OPEN]")
+          .evaluate((n) => n === document.activeElement),
+        true,
+      );
+      await click("CP-DELETE-OPEN");
+      assert.equal(await page.locator("textarea").inputValue(), "");
+      await page.keyboard.press("Escape");
+      await click("CP-CREATE-OPEN");
+      await page.locator("[name=product_url]").fill("bad");
+      const b = await count();
+      await click("CP-CREATE-SUBMIT");
+      assert.equal(await count(), b);
+      assert.equal(
+        await page.locator("[name=product_url]").evaluate((n) => n.validity.valid),
+        false,
+      );
+      await shot(page, width, "create-invalid", "P19");
+      await page.locator("[name=product_url]").fill("https://www.amazon.com/dp/B000000019");
+      await click("CP-CREATE-SUBMIT");
+      await page.locator("[name=title]").fill("保留名称");
+      await click("CP-CREATE-SUBMIT");
+      assert.equal(await count(), b);
+      await click("CP-CREATE-SUBMIT");
+      assert.deepEqual(Object.keys((await last()).body).sort(), ["market", "product_url", "title"]);
+      await page.keyboard.press("Escape");
+      await click("CP-CREATE-OPEN");
+      await click("CP-CREATE-SUBMIT");
+      assert.equal(await page.locator("[name=title]").inputValue(), "保留名称");
+      await page.keyboard.press("Escape");
+      await choose("rule-global");
+      await page.locator("[name=threshold_value]").fill("0");
+      await click("CP-RULE-SUBMIT");
+      assert.deepEqual((await last()).body, {
+        competitor_id: null,
+        metric: "price",
+        direction: "decrease",
+        threshold_value: 0,
+      });
+      await page.keyboard.press("Escape");
+      await click("CP-RULE-OPEN");
+      assert.equal(await page.locator("[name=threshold_value]").inputValue(), "1");
+      await page.locator("[name=metric]").selectOption("availability");
+      assert.equal(await page.locator("[name=threshold_value]").count(), 0);
+      assert.equal(await page.locator("[name=direction]").inputValue(), "change");
+      await page.locator("[name=direction]").selectOption("became_unavailable");
+      await click("CP-RULE-SUBMIT");
+      assert.deepEqual((await last()).body, {
+        competitor_id: null,
+        metric: "availability",
+        direction: "became_unavailable",
+      });
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press("Tab");
+        assert.ok(await page.evaluate(() => document.activeElement.closest("dialog")));
+      }
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press("Shift+Tab");
+        assert.ok(await page.evaluate(() => document.activeElement.closest("dialog")));
+      }
+      await page.keyboard.press("Escape");
+      assert.equal(await page.locator("dialog[open]").count(), 0);
+      assert.equal(
+        await page
+          .locator("[data-action=CP-RULE-OPEN]")
+          .evaluate((n) => n === document.activeElement),
+        true,
+      );
+      await choose("create-busy");
+      const busyBefore = await count();
+      await page.keyboard.press("Escape");
+      assert.equal(await page.locator("dialog[open]").count(), 1);
+      assert.equal(await count(), busyBefore);
+      await choose("directory");
+      await click("CP-CREATE-OPEN");
+      await page.mouse.click(1, 1);
+      assert.equal(await page.locator("dialog[open]").count(), 0);
+      await page.locator("[data-action=CP-CREATE-OPEN]").focus();
+      await shot(page, width, "button-focus", "P19");
+      await page.locator("[data-action=CP-CREATE-OPEN]").hover();
+      await shot(page, width, "button-hover", "P19");
+      await choose("rules-unknown");
+      assert.match(await page.locator(".notice").innerText(), /规则状态未知/);
+      await choose("partial");
+      assert.match(await page.locator(".evidence").innerText(), /0 \/ 未采到/);
+      assert.match(await page.locator(".delta").innerText(), /币种未采到/);
+      checks.push(
+        `${width}: scenes/layout, search/deep link, independent permissions, pending/paused, source link, no rule writes beyond create, create validation/retention, rule threshold omission/null/zero/reset, delete trim/retention/cancel, keyboard trap/return/Escape/backdrop, busy guard, hover/focus; all intents inert`,
+      );
+    } finally {
+      await context.close();
+    }
+  }
+  const context = await browser.newContext({
+    viewport: { width: 768, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  try {
+    await context.route(/^https?:/, (r) => {
+      http.push(r.request().url());
+      return r.abort();
+    });
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto(pathToFileURL(path.resolve(root, "index.html")).href);
+    await page.evaluate(() => document.body.classList.add("capture"));
+    for (const width of [320, 519, 520, 521, 619, 620, 621, 768, 819, 820, 821, 1024]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const id of [
+        "directory",
+        "rules",
+        "create-market",
+        "rule-availability",
+        "delete-error",
+      ]) {
+        await page.evaluate((v) => window.competitorReview.choose(v), id);
+        await layout(page, width + ":" + id);
+      }
+    }
+    for (const width of [768, 1024]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const id of ["directory", "rules"]) {
+        await page.evaluate((v) => window.competitorReview.choose(v), id);
+        await shot(page, width, id, id === "rules" ? "P20" : "P19");
+      }
+    }
+    await page.setViewportSize({ width: 720, height: 500 });
+    await page.evaluate(() => window.competitorReview.choose("rule-target"));
+    await layout(page, "200%-equivalent-reflow");
+    checks.push(
+      "12 widths x5 representative scenes; 720x500 CSS-pixel reflow equivalent only, not actual browser zoom/assistive technology",
+    );
+  } finally {
+    await context.close();
+  }
+  assert.deepEqual(errors, []);
+  assert.deepEqual(http, []);
+  if (capture) {
+    const evidence = {
+      proposal: "COMPETITOR-C-r1",
+      kind: "page-or-section-proposal",
+      approval: "pending-user-review",
+      baselineRevision: "7e589620ee9b321c489754afa739fba109c302f1",
+      sourceHashes,
+      sourceProof,
+      scenes,
+      screenshots,
+      actionIds: [...actions].sort(),
+      checks,
+      errors,
+      http,
+      limits: [
+        "Synthetic offline HTML, not real Vue template/backend/SQL/worker/notification acceptance.",
+        "Current source gaps are reproduced or cited, not fixed. No global action/dialog denominator or approval promotion.",
+        "History-window scene elides middle98 rows; all-history/long-list lifecycle remains unverified.",
+        "Three-theme/two-density matrix is representative P19 only, not every dialog/P20 combination.",
+      ],
+    };
+    await writeFile(root + "/evidence.json", JSON.stringify(evidence, null, 2) + "\n");
+    await writeFile(
+      root + "/gallery.html",
+      `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>竞品 C 图册</title><style>
+body{margin:24px;font:16px/1.7 'Microsoft YaHei',sans-serif;background:#edf1f6;color:#202c3d}nav{display:flex;gap:16px}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}figure{margin:0;background:white;padding:16px;border-radius:12px}img{width:100%;height:420px;object-fit:contain;object-position:top}
+a{color:#254a9c}figcaption{overflow-wrap:anywhere}</style>
+<h1>P19 / P20 · C 方向正式待审图册</h1><p>合成样本，不连接生产；不是页面批准或实施证明。</p>
+<nav><a href="index.html">交互原型</a><a href="README.md">边界与复验</a></nav>
+<main>${screenshots.map((s) => `<figure><a href="${s.file}"><img loading="lazy" src="${s.file}" alt="${s.pageId} ${s.scene} ${s.width}"></a><figcaption>${s.pageId} · ${s.scene} · ${s.width}px</figcaption></figure>`).join("")}</main></html>\n`,
+    );
+  }
+  console.log(
+    JSON.stringify({
+      mode: capture ? "capture" : "check",
+      scenes: scenes.length,
+      screenshots: capture ? screenshots.length : old.screenshots.length,
+      sourceChecks: sourceProof.checks.length,
+      actions: actions.size,
+      checks,
+      http: http.length,
+      errors: errors.length,
+    }),
+  );
+} finally {
+  await browser.close();
+}

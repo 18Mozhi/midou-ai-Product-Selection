@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "audit": "UI2-C-DELIVERY-AUDIT-r3",
-  "baselineRevision": "b83b71f3f0e483161e9e290f2648a71a988d11e4",
+  "audit": "UI2-C-DELIVERY-AUDIT-r4",
+  "baselineRevision": "7e589620ee9b321c489754afa739fba109c302f1",
   "scope": "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   "inputHashes": {
     "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "7fae9041966db5d804e8fdb5694b6bd6ec9df328945156644372c95c05088df8",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "ab0e56f67827a118add2f19ccbec95358d2ce075022e8770b7c9c511a6e4e8d5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "1c71dd1cba2e8086f9cd6cdbe493f095cb75c1abc8740ecf1655e48ce799aa8b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "81520123898660bf979d0a199d86664553ba972c07506bacf3575a1d22a4b998",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "0237923cad81c02784b79fc7af4e9f87b4a60b6ba3ff305f62562494d4b22989",
@@ -27,8 +27,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "695797bc21f08b233461852d3a2156c8caa13358c127a27819f4015672cbd984",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "39122dbfd133dd632d56aa217eb6af3f280d86f837056483839b3c3625e3e63c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "1471daa0635b325110f226ea7f49e3cfb0347a63f206a24880a089da1845291f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "fa50105cf9b1cf84a3aaf4406dfff32cbe6b4e0ab2f4ae5d05c30a887e7a323a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "ac008b2be723633c92a7e0654202af23edd7844ec0238bb878a6480a4de3d657",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "d3ed4e1eb0ec5ccf27beb84202e81fa699c217e32ae6669031b3589f86574a97",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "c926b689a69e295d5c4095c4f733edf9a0cab07db70e6fa8a54a4441e2872215",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "0d1e6f0abab7ac43f7ed9396b964f077a79556238f71ea8e4800520715c397d8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "8b0ff5c3b9492379b727a966cb215f04106cb60e73629dbcd35a9756a7720553",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "375212b521c86a48ba33c33bc45128afe913b483a7049c9174ae13783839ada8",
@@ -86,24 +86,22 @@
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 69,
-    "noLinkedPageProposalRoutes": 4,
+    "relatedProposalRoutes": 71,
+    "noLinkedPageProposalRoutes": 2,
     "missingPageIds": [
-      "P19",
-      "P20",
       "P21",
       "P22"
     ],
-    "packages": 67,
+    "packages": 68,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 774,
-    "sourceBindings": 1162,
+    "uniqueBoundFiles": 784,
+    "sourceBindings": 1176,
     "sourceDrift": 0,
-    "pngs": 7607,
+    "pngs": 7715,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 7773,
+    "readmeLinksChecked": 7884,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -533,9 +531,13 @@
       "batch": "W03",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "competitor-direction-c"
+      ],
+      "proposalPackages": [
+        "competitor-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -551,9 +553,13 @@
       "batch": "W03",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "competitor-direction-c"
+      ],
+      "proposalPackages": [
+        "competitor-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -2231,6 +2237,44 @@
       "checkedViewportWidths": [
         1440,
         390
+      ]
+    },
+    {
+      "folder": "competitor-direction-c",
+      "readme": "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/README.md",
+      "evidence": "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json",
+      "manifestHash": "14b8027d0a005893d5f2e241e31cfeb9b3914b8a4ef637d29319e0ce8d43eafa",
+      "readmeHash": "3c1f022146b562197850fa2b6c907874f0421e410dab539d599dc6b6d97d48c0",
+      "kind": "page-or-section-proposal",
+      "approval": "pending-user-review",
+      "role": "page-or-section-proposal",
+      "sourceCount": 14,
+      "sourceDrift": [],
+      "screenshotCount": 108,
+      "screenshotDrift": [],
+      "unmanifestedPng": [],
+      "readmeLinksChecked": 111,
+      "checkedSourceFiles": [
+        "apps/web/src/components/CompetitorMonitor.vue",
+        "apps/web/src/components/shared/monitoring-readiness.ts",
+        "apps/api/src/competitor-service.ts",
+        "apps/api/src/competitor-routes.ts",
+        "apps/api/src/mysql-competitor-repository.ts",
+        "apps/worker/src/competitor-monitor-worker.ts",
+        "tests/e2e/m04-05-competitors.spec.ts",
+        "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+        "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md",
+        "scripts/verify-ui-phase2-competitor-source.mjs",
+        "scripts/verify-ui-phase2-competitor-c.mjs",
+        "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/index.html",
+        "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css",
+        "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js"
+      ],
+      "checkedViewportWidths": [
+        1440,
+        390,
+        768,
+        1024
       ]
     },
     {
