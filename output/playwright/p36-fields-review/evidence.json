@@ -1,0 +1,3102 @@
+{
+  "pageId": "P36",
+  "approval": "pending-field-review",
+  "scope": "Offline fields and source-expression oracle; no mounted Vue/API/SQL/permissions/OS clipboard or production proof",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/index.html": "529d563c5aae674548867da37c502a7802219c017044424b1c684eaf5cdfd4f7",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.css": "14a8ea8d27f328ff1442224772a263541d86df7f10ac7c70d9a59da34db8ded2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.js": "f7748959f9c2612db89a919c1934f73dfb8a1955281d398e862991ec4ba3e62a",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/data.js": "5ed377927e57ece618435f984ea238667400e87d93c85373ebd787d8f11ea405",
+    "scripts/lib/ui-phase2-org-token-design-data.mjs": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
+    "scripts/verify-ui-phase2-org-token-c.mjs": "e9432d22d284c2e965091bd76ef3e2d11f106a1ca03b25fd14dfc5d43e91583d",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-controls/index.html": "40ed5bd27e168a665a6f4aa809743c71b6d5d2573a614b67c3e51326351878c1",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-controls/controls.css": "f633a7487f2b9d9e0c400925ed48966cfb2bc51723ff4f39a9d4b769a5aa101d",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-controls/controls.js": "345281e4a6087f220807d5caca3d45631705d08104f706543776d7ee68d3dc8c",
+    "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
+    "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-fields/index.html": "249558388a50f49a9be9e2a01e2f5cd67caef1604f2888d1f5091f4454980d7c",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-fields/fields.js": "54eb23f0d3fcd43fa8d941613334275b08ffa46b203ce6e7013e1e7f30d53591",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-fields/fields.css": "899c64338d519d78d6226304a3f7bb2b0a09fed617e65b0f44a587827a3499dc",
+    "scripts/verify-ui-phase2-org-token-fields.mjs": "756e825d0d0b336a97f9f338e5c13441f034270af646feeeee3ad3f00bb5db0d"
+  },
+  "retained": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c": {
+      "manifest": "ae69d013cfcb8d622165515c9adfe54a8a99bb533a544f41cdd5c1696bf14f4b",
+      "pngCount": 112
+    },
+    "output/playwright/p36-controls-review": {
+      "manifest": "0ca07d44404002410c0d26dc21d1ac8a1bc455aac01c324f4301896d89535123",
+      "pngCount": 354
+    }
+  },
+  "models": [
+    {
+      "model": "createForm.name",
+      "tag": "input",
+      "attrs": {
+        "required": "",
+        "maxlength": "120",
+        "autocomplete": "off",
+        "placeholder": "例如：月度经营报表"
+      },
+      "options": null
+    },
+    {
+      "model": "createForm.ttl_days",
+      "tag": "input",
+      "attrs": {
+        "type": "number",
+        "min": "1",
+        "max": "365",
+        "required": ""
+      },
+      "options": null
+    },
+    {
+      "model": "createForm.reason",
+      "tag": "textarea",
+      "attrs": {
+        "required": "",
+        "maxlength": "500",
+        "rows": "3",
+        "placeholder": "说明接入系统、负责人和业务用途"
+      },
+      "options": null
+    },
+    {
+      "model": "tokenQuery",
+      "tag": "input",
+      "attrs": {
+        "type": "search",
+        "placeholder": "名称、前缀、scope 或状态"
+      },
+      "options": null
+    },
+    {
+      "model": "statusFilter",
+      "tag": "select",
+      "attrs": {},
+      "options": [
+        "all",
+        "active",
+        "expiring",
+        "never_used",
+        "revoked",
+        "rotated",
+        "expired"
+      ]
+    },
+    {
+      "model": "scopeFilter",
+      "tag": "select",
+      "attrs": {},
+      "options": [
+        "all",
+        "task:read",
+        "trend:read",
+        "opportunity:read",
+        "report:read"
+      ]
+    },
+    {
+      "model": "tokenSort",
+      "tag": "select",
+      "attrs": {},
+      "options": [
+        "created_desc",
+        "expires_asc",
+        "last_used_desc",
+        "name_asc",
+        "status_asc"
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "id": "filter-query",
+      "model": "tokenQuery",
+      "kind": "query",
+      "help": "搜索名称、前缀、中文状态或读取范围，不搜索记录 ID。",
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "filled",
+        "spaces",
+        "long",
+        "empty-result",
+        "id-excluded"
+      ]
+    },
+    {
+      "id": "filter-status",
+      "model": "statusFilter",
+      "kind": "select",
+      "help": "生命周期来自已返回的记录，筛选不会撤销或轮换令牌。",
+      "options": [
+        "all",
+        "active",
+        "expiring",
+        "never_used",
+        "revoked",
+        "rotated",
+        "expired"
+      ],
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "option-all",
+        "option-active",
+        "option-expiring",
+        "option-never_used",
+        "option-revoked",
+        "option-rotated",
+        "option-expired"
+      ]
+    },
+    {
+      "id": "filter-scope",
+      "model": "scopeFilter",
+      "kind": "select",
+      "help": "仅筛选已有读取范围，不更改令牌授权。",
+      "options": [
+        "all",
+        "task:read",
+        "trend:read",
+        "opportunity:read",
+        "report:read"
+      ],
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "option-all",
+        "option-task:read",
+        "option-trend:read",
+        "option-opportunity:read",
+        "option-report:read"
+      ]
+    },
+    {
+      "id": "filter-sort",
+      "model": "tokenSort",
+      "kind": "select",
+      "help": "只调整已加载记录的排列顺序。",
+      "options": [
+        "created_desc",
+        "expires_asc",
+        "last_used_desc",
+        "name_asc",
+        "status_asc"
+      ],
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "option-created_desc",
+        "option-expires_asc",
+        "option-last_used_desc",
+        "option-name_asc",
+        "option-status_asc"
+      ]
+    },
+    {
+      "id": "create-name",
+      "model": "createForm.name",
+      "kind": "create",
+      "help": "按接入系统或用途命名，不填写密钥、密码或个人隐私。",
+      "max": 120,
+      "error": "name",
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "filled",
+        "limit",
+        "spaces",
+        "error",
+        "busy"
+      ]
+    },
+    {
+      "id": "create-ttl",
+      "model": "createForm.ttl_days",
+      "kind": "create",
+      "help": "填写 1–365 的整数天数；预计到期仅供核对，实际以响应为准。",
+      "error": "ttl_days",
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "minimum",
+        "maximum",
+        "zero",
+        "over",
+        "fraction",
+        "empty",
+        "error",
+        "busy"
+      ]
+    },
+    {
+      "id": "create-reason",
+      "model": "createForm.reason",
+      "kind": "create",
+      "help": "说明接入系统、负责人及用途；原因会写入组织审计。",
+      "max": 500,
+      "error": "reason",
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "filled",
+        "limit",
+        "spaces",
+        "error",
+        "busy"
+      ]
+    },
+    {
+      "id": "field-scopes",
+      "model": "createForm.scopes",
+      "kind": "scopes",
+      "variants": [
+        "empty",
+        "one",
+        "all",
+        "error",
+        "busy"
+      ]
+    },
+    {
+      "id": "reason-rotate",
+      "inputId": "reason-input",
+      "model": "reason",
+      "kind": "reason",
+      "action": "rotate",
+      "help": "原因会与操作者、时间和目标一起记录；取消不会提交。",
+      "proposalMax": 500,
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "short",
+        "valid",
+        "limit"
+      ]
+    },
+    {
+      "id": "reason-revoke",
+      "inputId": "reason-input",
+      "model": "reason",
+      "kind": "reason",
+      "action": "revoke",
+      "help": "原因会与操作者、时间和目标一起记录；取消不会提交。",
+      "proposalMax": 500,
+      "variants": [
+        "default",
+        "hover",
+        "focus",
+        "short",
+        "valid",
+        "limit"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "fieldId": "filter-query",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "filled",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "spaces",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "long",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "empty-result",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "id-excluded",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-all",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-active",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-expiring",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-never_used",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-revoked",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-rotated",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-expired",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-all",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-task:read",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-trend:read",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-opportunity:read",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-report:read",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-created_desc",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-expires_asc",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-last_used_desc",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-name_asc",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-status_asc",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "filled",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "limit",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "spaces",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "error",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "busy",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "minimum",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "maximum",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "zero",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "over",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "fraction",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "empty",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "error",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "busy",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "filled",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "limit",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "spaces",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "error",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "busy",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "empty",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "one",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "all",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "error",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "busy",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "short",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "valid",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "limit",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "default",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "hover",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "focus",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "short",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "valid",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "limit",
+      "width": 1440,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "filled",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "spaces",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "long",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "empty-result",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-query",
+      "variant": "id-excluded",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-all",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-active",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-expiring",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-never_used",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-revoked",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-rotated",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-status",
+      "variant": "option-expired",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-all",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-task:read",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-trend:read",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-opportunity:read",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-scope",
+      "variant": "option-report:read",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-created_desc",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-expires_asc",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-last_used_desc",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-name_asc",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "filter-sort",
+      "variant": "option-status_asc",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "filled",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "limit",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "spaces",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "error",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-name",
+      "variant": "busy",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "minimum",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "maximum",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "zero",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "over",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "fraction",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "empty",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "error",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-ttl",
+      "variant": "busy",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "filled",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "limit",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "spaces",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "error",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "create-reason",
+      "variant": "busy",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "empty",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "one",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "all",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "error",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "field-scopes",
+      "variant": "busy",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "short",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "valid",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-rotate",
+      "variant": "limit",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "default",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "hover",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "focus",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "short",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "valid",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    },
+    {
+      "fieldId": "reason-revoke",
+      "variant": "limit",
+      "width": 390,
+      "sourceFilterIds": true,
+      "fieldContract": true
+    }
+  ],
+  "flows": [
+    {
+      "id": "filter-query",
+      "width": 1440,
+      "kind": "native-input-caret"
+    },
+    {
+      "id": "create-name",
+      "width": 1440,
+      "kind": "native-input-caret"
+    },
+    {
+      "id": "create-reason",
+      "width": 1440,
+      "kind": "native-input-caret"
+    },
+    {
+      "width": 1440,
+      "id": "create-order",
+      "kind": "native-tab-form-order"
+    },
+    {
+      "width": 1440,
+      "id": "create",
+      "kind": "exact-source-handler-body-intent-only"
+    },
+    {
+      "id": "filter-query",
+      "width": 390,
+      "kind": "native-input-caret"
+    },
+    {
+      "id": "create-name",
+      "width": 390,
+      "kind": "native-input-caret"
+    },
+    {
+      "id": "create-reason",
+      "width": 390,
+      "kind": "native-input-caret"
+    },
+    {
+      "width": 390,
+      "id": "create-order",
+      "kind": "native-tab-form-order"
+    },
+    {
+      "width": 390,
+      "id": "create",
+      "kind": "exact-source-handler-body-intent-only"
+    }
+  ],
+  "compositions": [
+    [
+      "filters-default",
+      "normal",
+      "filters"
+    ],
+    [
+      "filters-search",
+      "search",
+      "filters"
+    ],
+    [
+      "filters-empty",
+      "filter_empty",
+      "filters"
+    ],
+    [
+      "filters-refreshing",
+      "refreshing",
+      "filters"
+    ],
+    [
+      "create",
+      "create",
+      "create"
+    ],
+    [
+      "create_draft",
+      "create_draft",
+      "create"
+    ],
+    [
+      "create_all_scopes",
+      "create_all_scopes",
+      "create"
+    ],
+    [
+      "create_required",
+      "create_required",
+      "create"
+    ],
+    [
+      "create_busy",
+      "create_busy",
+      "create"
+    ],
+    [
+      "create_failure",
+      "create_failure",
+      "create"
+    ],
+    [
+      "create_long",
+      "create_long",
+      "create"
+    ],
+    [
+      "create_ttl_error",
+      "create_ttl_error",
+      "create"
+    ],
+    [
+      "rotate-default",
+      "reason-rotate",
+      "reason",
+      "default"
+    ],
+    [
+      "rotate-short",
+      "reason-rotate",
+      "reason",
+      "short"
+    ],
+    [
+      "rotate-valid",
+      "reason-rotate",
+      "reason",
+      "valid"
+    ],
+    [
+      "rotate-limit",
+      "reason-rotate",
+      "reason",
+      "limit"
+    ],
+    [
+      "revoke-default",
+      "reason-revoke",
+      "reason",
+      "default"
+    ],
+    [
+      "revoke-short",
+      "reason-revoke",
+      "reason",
+      "short"
+    ],
+    [
+      "revoke-valid",
+      "reason-revoke",
+      "reason",
+      "valid"
+    ],
+    [
+      "revoke-limit",
+      "reason-revoke",
+      "reason",
+      "limit"
+    ]
+  ],
+  "screenshots": [
+    {
+      "file": "filter-query-default-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "default",
+      "sha256": "542275037d568e5c973bbbe69ae68f091ef94f93efe936c5e80d09ea411c3b69",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-hover-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "hover",
+      "sha256": "cad022977d168e2dd4c73de8fed2264dd30b65ed7862758a940278e10061739b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-focus-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "focus",
+      "sha256": "cc8affa0f4c7fcdb45d3d9c7045ec74bd3675fe7583bc9d18fff66793b68a052",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-filled-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "filled",
+      "sha256": "a18fae40f11efc1a593af9f448e8b5fb7e67532d618124eac33928e9915bef70",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-spaces-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "spaces",
+      "sha256": "26f2a89152f9cbbe69ef9b3d5ba5ba9bbc8ff63ded8ff183037820c90e160a8f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-long-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "long",
+      "sha256": "fb51053041a5b683abf9918ebf111ae94976a52f2835cc7468b7a2cdb257dd11",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-empty-result-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "empty-result",
+      "sha256": "fd097594ac514b00d3f6c04d9a71382f94e42f459e5b4f36a148a45dca2db7f6",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-id-excluded-1440.png",
+      "width": 1440,
+      "fieldId": "filter-query",
+      "variant": "id-excluded",
+      "sha256": "5412de4df66d42524b35800d9d939b8864fc621f0bb8da13129c52864e15e5ab",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-default-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "default",
+      "sha256": "e2edab99ff5bb66e8dc03a84f15f80c8240dca78d5bd71e86cf64496298bb6d2",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-hover-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "hover",
+      "sha256": "17c0646f8d3f867c7b098af6ede58df139925cb5eb8a646449b01136b1fea596",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-focus-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "focus",
+      "sha256": "c7fc082316fe6c75a106bb0b05dca095ff2fe0d8d79901102a1f0a86a2a304f7",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-all-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-all",
+      "sha256": "e2edab99ff5bb66e8dc03a84f15f80c8240dca78d5bd71e86cf64496298bb6d2",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-active-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-active",
+      "sha256": "347db4ffc960e6331d767587f0fdc8df0f1dfff3ba65ca648ed597aa707068a2",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-expiring-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-expiring",
+      "sha256": "105485fddddd9ecc0da8ea036147a0a5f45a68ba4584eae219756b8ac58e7029",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-never_used-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-never_used",
+      "sha256": "1a22994489a866f2724a46e90261fd6fc88c3422c7a241c97c2615b8b17062fc",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-revoked-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-revoked",
+      "sha256": "cafdd4d036beac632970782e9a6ddfbf0030b29419ad4ed4135f37ab61cb9cd9",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-rotated-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-rotated",
+      "sha256": "fa071e4b007856f1e503a98df8d4deeee4cf61e734fc8ce53a1cbc4a5f47a67e",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-expired-1440.png",
+      "width": 1440,
+      "fieldId": "filter-status",
+      "variant": "option-expired",
+      "sha256": "2f93a63d68f24647c51fd734148f862d7d1609f821134effe573e5eba5cdb9a5",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-default-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "default",
+      "sha256": "842b9b1156641f4b1a810798a8904cf163f3234f4d9f527936b027db0902367b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-hover-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "hover",
+      "sha256": "640f4f0af44fa87ebc30ac895f99f2eaf01382b80480df681d1a31bdcd8a84be",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-focus-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "focus",
+      "sha256": "c19c2f09284f1ce4735d53d0a77edf0032eb1f40c0edac9c92b63df734275e7d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-all-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "option-all",
+      "sha256": "842b9b1156641f4b1a810798a8904cf163f3234f4d9f527936b027db0902367b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-task-read-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "option-task:read",
+      "sha256": "54d51c0dd5a84d461d5b3df73427d73ae53bc448457553dd66eb60bc066bde37",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-trend-read-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "option-trend:read",
+      "sha256": "ec17a0ee30bd7a2cb9e29d7ccb057e602011bbd3e3499cf38820072f15361b86",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-opportunity-read-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "option-opportunity:read",
+      "sha256": "6a11faec24fdce1cab3a9ec8bb9f1cada76ae27bea1a1f6648d86fe14071079c",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-report-read-1440.png",
+      "width": 1440,
+      "fieldId": "filter-scope",
+      "variant": "option-report:read",
+      "sha256": "17d65ad8f17b786c60dc5eab40cb83af52c78849a320a36f5c6ea4e68051a30f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-default-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "default",
+      "sha256": "2ce4e6cee5f3acd6ba985ea90e656c0c9d5207388f3344778a87043ebed1f713",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-hover-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "hover",
+      "sha256": "af21234f1f2a620b2f77245278735e5afc697984eda78a9696640196c54bc5e0",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-focus-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "focus",
+      "sha256": "65ee524f0697cdd1407c0d19877b20c0c4c2c6f21566423494225f61cafd78c7",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-created_desc-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "option-created_desc",
+      "sha256": "2ce4e6cee5f3acd6ba985ea90e656c0c9d5207388f3344778a87043ebed1f713",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-expires_asc-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "option-expires_asc",
+      "sha256": "33a28d8a651de4118e441173531b362d94f221a6017eb4817f5899de6817f5cc",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-last_used_desc-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "option-last_used_desc",
+      "sha256": "64b6866c20d8abceeff7b0b15349ad57f577c5a9d97fbd3b45bc9d3bbb56f15b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-name_asc-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "option-name_asc",
+      "sha256": "c7fb86f79659223920b82f5f06f882b75ad8f2777ffdef6b6fd9cf1b26b05902",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-status_asc-1440.png",
+      "width": 1440,
+      "fieldId": "filter-sort",
+      "variant": "option-status_asc",
+      "sha256": "43a0fe7fefb4dfebc94a7401ad1541ac4d08d150578c5c4371ae2805200d80d4",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-default-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "default",
+      "sha256": "abfda97a264dfaad9652a1876f1de09e5864c86618774fdfd819708727849deb",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-hover-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "hover",
+      "sha256": "17679e209705510577418d1fa7b9069d7b676cfc407bcd4d01d5c2a00a2a23c5",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-focus-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "focus",
+      "sha256": "185a7297425170522a5cf46b23cf9006e00ec2f1e6c45c367e3d4d0eec0e4703",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-filled-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "filled",
+      "sha256": "49b718aa2cb08853982d31f96df98a5e5d618985834931f3ba08848249bbfeac",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-limit-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "limit",
+      "sha256": "6a7f8a0efc944b9904b07140d587585deecee3712ce4c570fe3c511ab735ee2d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-spaces-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "spaces",
+      "sha256": "79e8cebcc9e9a1ceee509f2e6989c992290099b935e964521c69e2be2a2750cf",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-error-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "error",
+      "sha256": "bd5631d26d0ff7cafa2f9ee5809c3cf13b513ad52f085f3bd39afe225321b978",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-busy-1440.png",
+      "width": 1440,
+      "fieldId": "create-name",
+      "variant": "busy",
+      "sha256": "d9b8b6b38196502815a63bcb7eccc5c5e6b20aae5b8b6c82e610025c6e06c77f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-default-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "default",
+      "sha256": "31b117002ab04e4dabf260b8a23fc1f16bef64e6b335aa250494d784f3b473ce",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-hover-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "hover",
+      "sha256": "c859fc2abc1b148aac902d958fa6ebcb41cdd5d7761cb71c2c3de238cd916f4d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-focus-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "focus",
+      "sha256": "c1f25663d6c7b8aff99b84e23164e9fdc6a295ae10e9bcb429c8e2c540ef21e8",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-minimum-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "minimum",
+      "sha256": "db55f6f4270bee780c7b6ecac47dbbe4fc38a8880224364d6b4d849175921724",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-maximum-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "maximum",
+      "sha256": "bba1aca22391ac50ff2d471769b50ed4b74e5712df7ba38c1407524550a7c922",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-zero-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "zero",
+      "sha256": "c147251018175a0865f736a0d02659767bb6687f2822cf28548de14b2c4abc0d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-over-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "over",
+      "sha256": "b0524b0a225729d32f4c65659fcd941b72a9e5a46a81cd8afa862ca6d279a33b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-fraction-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "fraction",
+      "sha256": "cd164102e0d59233d436116dd829526473aee1e38038c27bf326af03fde77bab",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-empty-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "empty",
+      "sha256": "18a178fe9fcb44f5542351c3df5f8d532df7c7d379572ee661aa7fa0e6e20418",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-error-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "error",
+      "sha256": "ae919d976f751cee65eafb5a41546de552e32b22fdee94d15583a4cfe643cbb3",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-busy-1440.png",
+      "width": 1440,
+      "fieldId": "create-ttl",
+      "variant": "busy",
+      "sha256": "a7690c1b9775388779d22912c2169859c6c27adebb0b3f9343d64257d75312da",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-default-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "default",
+      "sha256": "1824f36c4202b559d952f647b9e77faf56c5b04bd6810958f8f5a4f95d89ba14",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-hover-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "hover",
+      "sha256": "230901835927ab98c19cf9f621a77e6717e90455be98f861b0c60ecf6247e06f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-focus-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "focus",
+      "sha256": "33441804054a476268df92dd6eec73961a885b8e236a7b13bb0eee7875fbab77",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-filled-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "filled",
+      "sha256": "9a349cec74a809d787f312b29dc3e2c1fa6e2c20835242b8bf9b667a5c044bb2",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-limit-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "limit",
+      "sha256": "173854344478b635948e0f91a2f9af7e4e5894b1bdca24652a4ad3023f1048cf",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-spaces-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "spaces",
+      "sha256": "85a5bc40c0cb24fd3cc8afc5e1bbed91b06a5863c95d0b46fc89afcd0a32ae87",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-error-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "error",
+      "sha256": "4b9af0e29ba2c5890dd6a012f181add7e2812771f4b91c48e0036e8d9e0de460",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-busy-1440.png",
+      "width": 1440,
+      "fieldId": "create-reason",
+      "variant": "busy",
+      "sha256": "7cc40fd36c29585233576b92859fa991ae84e97a798285c05cff0c240b303b27",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-empty-1440.png",
+      "width": 1440,
+      "fieldId": "field-scopes",
+      "variant": "empty",
+      "sha256": "9673a5e04772c545e6aa2f14b85ec299373c05795faebf36c10ff7e92b82be05",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-one-1440.png",
+      "width": 1440,
+      "fieldId": "field-scopes",
+      "variant": "one",
+      "sha256": "351348759ebb55dbdf7ed3181bf47cf87d92ed154f60fa64bacac191eb38120c",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-all-1440.png",
+      "width": 1440,
+      "fieldId": "field-scopes",
+      "variant": "all",
+      "sha256": "52b71a4ad360d8e4091b9cb713b780a3b26008d0d0bc5d53da64da02f6d8dda7",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-error-1440.png",
+      "width": 1440,
+      "fieldId": "field-scopes",
+      "variant": "error",
+      "sha256": "f0eb21c92c724d4cf2322886804ee50abfc9cf867b39a70522fc31d17ba7b5df",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-busy-1440.png",
+      "width": 1440,
+      "fieldId": "field-scopes",
+      "variant": "busy",
+      "sha256": "8ba5f4c08b35024affd439d7daf43a09e7103a6645aeacb9b7a1bb99a66ac2dc",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-default-1440.png",
+      "width": 1440,
+      "fieldId": "reason-rotate",
+      "variant": "default",
+      "sha256": "7d229b6b85a8ed7763ba40a2bd1cda24a83f3422d15f28282697e0ebe3bcf9fc",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-hover-1440.png",
+      "width": 1440,
+      "fieldId": "reason-rotate",
+      "variant": "hover",
+      "sha256": "e9e95f66cb46e186453f061a07a10ea74cdf83e8739578d6943bacc0774387b5",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-focus-1440.png",
+      "width": 1440,
+      "fieldId": "reason-rotate",
+      "variant": "focus",
+      "sha256": "20d71858c8ee84b32b01b5622045238407eae0cc0e1c40d046300d477c342e24",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-short-1440.png",
+      "width": 1440,
+      "fieldId": "reason-rotate",
+      "variant": "short",
+      "sha256": "66449c27b513b86644ae49c0384e888f9a6aede4e5b77b729afb1973298f3db0",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-valid-1440.png",
+      "width": 1440,
+      "fieldId": "reason-rotate",
+      "variant": "valid",
+      "sha256": "c9ef165ccfe4c11fd4039f087596770640877fb28afce19c209fb7e58a2b7a8a",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-limit-1440.png",
+      "width": 1440,
+      "fieldId": "reason-rotate",
+      "variant": "limit",
+      "sha256": "dd416ebec4dcf9679c7c2d3739013fd785abf016ccae0dfe5e774077b3f4e16b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-default-1440.png",
+      "width": 1440,
+      "fieldId": "reason-revoke",
+      "variant": "default",
+      "sha256": "589337e90efe02d922e6172f9fbce5fd83cb2968a98be6227e8c85c725c90c04",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-hover-1440.png",
+      "width": 1440,
+      "fieldId": "reason-revoke",
+      "variant": "hover",
+      "sha256": "6f6013ecc0c21596e40bdd32369d402799b74eaf8e8014bd6f069fb42ce709f6",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-focus-1440.png",
+      "width": 1440,
+      "fieldId": "reason-revoke",
+      "variant": "focus",
+      "sha256": "aaf3bf539ebb1e6459f4c4af17ca3f5eef4bb2be626f137f3acaded98c2c52f3",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-short-1440.png",
+      "width": 1440,
+      "fieldId": "reason-revoke",
+      "variant": "short",
+      "sha256": "ec57f4cc0f1cfa82395e00768628e73623ab4f89394b22eed6e5762e08ad7fc0",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-valid-1440.png",
+      "width": 1440,
+      "fieldId": "reason-revoke",
+      "variant": "valid",
+      "sha256": "e03248cee615889518efa9b06747429e78742c24d85dc6e4011c60ad9dac5099",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-limit-1440.png",
+      "width": 1440,
+      "fieldId": "reason-revoke",
+      "variant": "limit",
+      "sha256": "e181016e1770956317614e9ba3fdb329670ed7474031fd5dc6534a906d714cd2",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "composition-filters-default-1440.png",
+      "width": 1440,
+      "sha256": "fd73231cbfa45912d3db1498f43c4573bad064f4667f5a9628f2b3b39b772140",
+      "composition": "filters-default",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-filters-search-1440.png",
+      "width": 1440,
+      "sha256": "1b91fb0e7f175a3eb069cddd2fafe2e352f9bd97a90a3e807989312b5255dfd4",
+      "composition": "filters-search",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-filters-empty-1440.png",
+      "width": 1440,
+      "sha256": "2740edf2b0dc5445695a73588ea09e24bbbe50628f20dc5ac81da428260ac4ec",
+      "composition": "filters-empty",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-filters-refreshing-1440.png",
+      "width": 1440,
+      "sha256": "ce1e005e51c1c19439289d503d66361742ca3f01723387df5b4be6faf4ebd748",
+      "composition": "filters-refreshing",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create-1440.png",
+      "width": 1440,
+      "sha256": "75c3741094320d2750e4f892b55a9ac6f2700e6294918d1329bbf11eb4e02777",
+      "composition": "create",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_draft-1440.png",
+      "width": 1440,
+      "sha256": "29808cdcad7c863d95f56ec1ff60febc967090000e917ccef5d9d4a8bca82df6",
+      "composition": "create_draft",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_all_scopes-1440.png",
+      "width": 1440,
+      "sha256": "8a98a7536fb6554818da29d77fed473e85d851bac71815dabfc77d6d62574fb0",
+      "composition": "create_all_scopes",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_required-1440.png",
+      "width": 1440,
+      "sha256": "241fb2e0981759acf375d7218c94eb09202f80cff1be5bdde5b06b408b3faa6e",
+      "composition": "create_required",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_busy-1440.png",
+      "width": 1440,
+      "sha256": "a13eba4788e842ebebadb7dd807491c71611cccaef4d7bc0419aff76d4a9db5f",
+      "composition": "create_busy",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_failure-1440.png",
+      "width": 1440,
+      "sha256": "65231c20620ccc0d9c1f35a62314028de1813abba9440a9569179edfc30c4bef",
+      "composition": "create_failure",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_long-1440.png",
+      "width": 1440,
+      "sha256": "1092f160d9f8a5b44330dd313ae61736f1e1f3cd9bb5376236ce924d43e3249d",
+      "composition": "create_long",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_ttl_error-1440.png",
+      "width": 1440,
+      "sha256": "20712b4422f916da06916463740e629e180421ec393d0d79fe2ac2a2fa86c795",
+      "composition": "create_ttl_error",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-default-1440.png",
+      "width": 1440,
+      "sha256": "66516153001c2da91f84767b7cabe047229462611f91df511872e17e2948c907",
+      "composition": "rotate-default",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-short-1440.png",
+      "width": 1440,
+      "sha256": "58492c249835e967583be3b84292e7b1eaafc982446b4ebcc94572c6835659dc",
+      "composition": "rotate-short",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-valid-1440.png",
+      "width": 1440,
+      "sha256": "f394be1c9b0449d5ae60ac2ee33634e9efaf63a2f37fa73fd4064ecaf90309ab",
+      "composition": "rotate-valid",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-limit-1440.png",
+      "width": 1440,
+      "sha256": "f043d2b6a7fcf2627c83d5dc5eb2620835de61c2c9d5e97421aeedebfe8ce00c",
+      "composition": "rotate-limit",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-default-1440.png",
+      "width": 1440,
+      "sha256": "30233b0e57230afb8950b4f1cc2c4829540acd0e31f14c2bc7737935ab71f7a9",
+      "composition": "revoke-default",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-short-1440.png",
+      "width": 1440,
+      "sha256": "a493945ac71806724f3f73910bd86683817827dc5a4d99a973376f82d055bf50",
+      "composition": "revoke-short",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-valid-1440.png",
+      "width": 1440,
+      "sha256": "39d877e95e09a67d74de892d1a7723f098920efa7f0cde52ef2e4d390d72162c",
+      "composition": "revoke-valid",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-limit-1440.png",
+      "width": 1440,
+      "sha256": "a6dff24d3b65c2a30535f75289a8ff35404410222fc97e8da9bf798f5e490f92",
+      "composition": "revoke-limit",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "filter-query-default-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "default",
+      "sha256": "07873ddb0b8c6cb31ffeafb685f22d3679fec4156f3be2147184c846fc9e76bd",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-hover-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "hover",
+      "sha256": "33cdc46b451236b2447921cd0a01610752e5e4a64785edbb765c597d41fb2df6",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-focus-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "focus",
+      "sha256": "5257ea993f0824a9f8d07d2fbce2231f1f242b3c91fdc37bdde3e658b3acb36c",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-filled-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "filled",
+      "sha256": "eabd0aedf301fc4b9e3bda15a042b6425a7eb4d85913d27f5b405c883e8f7452",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-spaces-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "spaces",
+      "sha256": "26ddd8f6904422b31bcb9b7c4801f40fda0f61fd4c7729a253ed42bdfd8d4efe",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-long-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "long",
+      "sha256": "ef1a6c92cc21f94dd831e0ac42ca7749dc348bfd3ff0fe2ac08f9164d5aa00d1",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-empty-result-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "empty-result",
+      "sha256": "8ef696b5bcb18dc319331911d80450adf2f7e45cbf3105c463f01e9cb1f21cfe",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-query-id-excluded-390.png",
+      "width": 390,
+      "fieldId": "filter-query",
+      "variant": "id-excluded",
+      "sha256": "a80044126d4a940cab22e4c0b32ca9bea15e3cc633fc33cc128ce2826e79301a",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-default-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "default",
+      "sha256": "cb5e0db289e4eb0009e2f485333dd641cfebc6fa65c8ad129f71773c807aba9f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-hover-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "hover",
+      "sha256": "b8c0483837788a4ef868cffcee9762239ee0627ab7ba27a8be2c9208a32aed88",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-focus-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "focus",
+      "sha256": "ae100ca0f747a4eb58fe0b08ca270893813bbe8794fc7762390ba4e8a9ad2120",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-all-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-all",
+      "sha256": "cb5e0db289e4eb0009e2f485333dd641cfebc6fa65c8ad129f71773c807aba9f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-active-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-active",
+      "sha256": "2aaa59342b7022b06fa7c20ecff039a0003f5e221c1fb107937e8a99aa2501ac",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-expiring-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-expiring",
+      "sha256": "fb73b468614f65a144a1443a2bc53aec5d98522cad2d5c0dc28210e9a003664e",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-never_used-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-never_used",
+      "sha256": "41ea4b51443c4d6507b5520054fa328cf093c61065b7d03f1633693eb79dafad",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-revoked-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-revoked",
+      "sha256": "1977cefd2fa9a58157e0e3c63206a48a9d759184c2cc0433aee2115b998a1e14",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-rotated-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-rotated",
+      "sha256": "a6d0ef835e3ee9d2d2ccf270d611ed37cda8ceb7efb645344a76439605dbcd3a",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-status-option-expired-390.png",
+      "width": 390,
+      "fieldId": "filter-status",
+      "variant": "option-expired",
+      "sha256": "1fef77b5db7913809ceeb1af50099fc0c6bac11d4a63aae2846006f3d8bb777b",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-default-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "default",
+      "sha256": "02b9e4bf4e572203d8d8b90d9e892fb357e8c6a8c8e9244fc7a0d2ccf95182a6",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-hover-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "hover",
+      "sha256": "c1f6ee1b25e7b474b9945f4e5659c9313eb464675161ecad88d486848edb7c25",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-focus-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "focus",
+      "sha256": "7ff567e600531210eb5d61104a57e1e3c04308d80e8fae951ab0cd7f8706cdbd",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-all-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "option-all",
+      "sha256": "02b9e4bf4e572203d8d8b90d9e892fb357e8c6a8c8e9244fc7a0d2ccf95182a6",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-task-read-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "option-task:read",
+      "sha256": "af19aa729189809871946e745a62391bc9ad0dddcdf3afce06b93d197eea2328",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-trend-read-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "option-trend:read",
+      "sha256": "a938ceee3dec8870b3c87dd066b76a7eb3d9c3ea0a6c8011b25aab0b698b06da",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-opportunity-read-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "option-opportunity:read",
+      "sha256": "9b79cd3788c66ef3dd3d2af255fde0d1cfab58584e986af93fac3f5a69a4a34e",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-scope-option-report-read-390.png",
+      "width": 390,
+      "fieldId": "filter-scope",
+      "variant": "option-report:read",
+      "sha256": "60ca3f19d3938b387d9737d3ef0fe33d8c8b7d3bec7ad52daccbc935b8d21f94",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-default-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "default",
+      "sha256": "410d95d9adcc5a3419cd5cff6b5376d2b6051504b5371acd97c65028cf3b6f73",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-hover-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "hover",
+      "sha256": "aabe46739e94d7e723fa5f37426dbefef86f0c09a72b24d3452ea03f4e4aaa61",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-focus-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "focus",
+      "sha256": "40a75af770bcf57da6d772037a83394a50b539e9ebb68a735d930981d0605631",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-created_desc-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "option-created_desc",
+      "sha256": "410d95d9adcc5a3419cd5cff6b5376d2b6051504b5371acd97c65028cf3b6f73",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-expires_asc-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "option-expires_asc",
+      "sha256": "ff7e4688b610a57603bf1ff5d9ffb6e37ff7c7adf1941b3f85f1c0b0617523ac",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-last_used_desc-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "option-last_used_desc",
+      "sha256": "e1e33f27caff8870cbb45f5850fabd32b875f2033262d8eb8b3335a1bc8a2c87",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-name_asc-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "option-name_asc",
+      "sha256": "534c672b08c273e7f2141cb7cac76d9960f8f21ab445ecd9bdb7fd4b54fc86bc",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "filter-sort-option-status_asc-390.png",
+      "width": 390,
+      "fieldId": "filter-sort",
+      "variant": "option-status_asc",
+      "sha256": "7fa90a15714d376fcf515f0b9150dd302fe1bb5d43b4a2ea7d1e214e118ccb09",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-default-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "default",
+      "sha256": "cc710db0e12b21698ffd9feaa3a3170ecab2dec87194957bd7385806f42dbe7e",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-hover-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "hover",
+      "sha256": "93137222dca2d739d05053687ac40e03cb3717d237b7f7189fc7d98c053b7cba",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-focus-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "focus",
+      "sha256": "83c1ce1ec55e4a710d475170a63c4e814ec5b100ffbff511e3c1b271796d391f",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-filled-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "filled",
+      "sha256": "6a1d868d50a02981d6de179367e13bfdc283cf14b4834e34ee35cea6b84d2cab",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-limit-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "limit",
+      "sha256": "0824cc9fb40897d0a0e1726b7ef158e10583e322c6988b5fe8de133551e46354",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-spaces-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "spaces",
+      "sha256": "1510d70079ecff9bc8fdbfee7edc88fcba73d8d888c1e65e288e9e6216903750",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-error-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "error",
+      "sha256": "ab0ecf2cbb2f63c75000a822ef6a2e96ee8b2628022e212e5204d5d1d1a61bb8",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-name-busy-390.png",
+      "width": 390,
+      "fieldId": "create-name",
+      "variant": "busy",
+      "sha256": "6f1d7004b44e0464b067cc29cb37da504696f42d4fff8c16def279125a783c96",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-default-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "default",
+      "sha256": "d5112389ca193be2bbbebc242bc5e94f74130a372a4fc9525a8ae88bf92e3b46",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-hover-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "hover",
+      "sha256": "d8c2e7dbee45fa326ed6acac9cc6f92063c753eb508454eb1cc30b984b190d10",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-focus-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "focus",
+      "sha256": "5dd7a93a281983baee171d8bee2a71019f3050fb4141918b8418ba42d2607893",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-minimum-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "minimum",
+      "sha256": "c5e815968a384e299bd068ccfeae05eef31ba8f8865609cd84789966a4979315",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-maximum-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "maximum",
+      "sha256": "297053edc217f84a297890fdc39f7db627d0333e7c18fedf15d51403bd379760",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-zero-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "zero",
+      "sha256": "9a92258a706d977e56ecdb4b7635696b01bbf8c182677e73653ecf74ac1e897d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-over-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "over",
+      "sha256": "e67567c9f4ae4d710a2f81f93c08ea6580bb50ca3e62805f5d3297ef7936f498",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-fraction-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "fraction",
+      "sha256": "4e42df58c7eb60422acc9a35139936d541ce9b50897e026675b9a4cc1428879c",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-empty-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "empty",
+      "sha256": "7bdb7c96520df3801b092111b772df7d7937ebebd8b31d176571fb0b7bde6acd",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-error-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "error",
+      "sha256": "b496f7d412c8f501bc0ebe74044591458d772273b51e60d58dfaa92b29ccb4f1",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-ttl-busy-390.png",
+      "width": 390,
+      "fieldId": "create-ttl",
+      "variant": "busy",
+      "sha256": "dbae8bffdd8a5fc78e07b77e9154fa77ab6b2c43a221e838b46006f7e8d31de9",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-default-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "default",
+      "sha256": "d2fd8cb9bdb5b4609f84af70c7336c66f07019c3649f55046e2398fb5cbf2b4d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-hover-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "hover",
+      "sha256": "4f30bd6001d1bcb2b22fc02f9e088f3a1ae7c632e8171af22bea06f19528d5bc",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-focus-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "focus",
+      "sha256": "7ddf6b293bada08f80ce7991921adcfad91dd2415fa1c1f94dca653e6fcbf82d",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-filled-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "filled",
+      "sha256": "1ec6565797214de689396dc4c484e735b389611beb8b483ef1553fb7815dfcc3",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-limit-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "limit",
+      "sha256": "ffa8ee6e424aad7407a7a096d5257a6ee790429ab65c732ff3c296b539b7d2f7",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-spaces-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "spaces",
+      "sha256": "b01594935529d6d50469a72bce452e4525eef39eef0371ce2fe0a45e183b4023",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-error-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "error",
+      "sha256": "45d3fc446fa664a8021305c4904ce6ab50505a339cd1f127a871bab134f1f63e",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "create-reason-busy-390.png",
+      "width": 390,
+      "fieldId": "create-reason",
+      "variant": "busy",
+      "sha256": "042c778cc1b002d9c546cc83960656c3245c668445ecaaa7d688ccf943ae2213",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-empty-390.png",
+      "width": 390,
+      "fieldId": "field-scopes",
+      "variant": "empty",
+      "sha256": "390eea8e301842c83753e0913f623baf1a8761e16a52eaa30bab220cb98160d0",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-one-390.png",
+      "width": 390,
+      "fieldId": "field-scopes",
+      "variant": "one",
+      "sha256": "c6afd7e395b5aa1ea3f8fde56d23c88e69436b1963fa5dd34e23ab91edd07b2c",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-all-390.png",
+      "width": 390,
+      "fieldId": "field-scopes",
+      "variant": "all",
+      "sha256": "8e0d483150c67e09a822a1879cd06927ceecc7a15da0e9f8c7d358f9a15dbfe7",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-error-390.png",
+      "width": 390,
+      "fieldId": "field-scopes",
+      "variant": "error",
+      "sha256": "887355aa7eb4a08c56011b13118b872cdd7a4bacacba633811a9f8859ee13e39",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "field-scopes-busy-390.png",
+      "width": 390,
+      "fieldId": "field-scopes",
+      "variant": "busy",
+      "sha256": "a72f8f76b2c59a348b67c19bd14a2418dc714bce2ebdc44374be4a9e8f7c5498",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-default-390.png",
+      "width": 390,
+      "fieldId": "reason-rotate",
+      "variant": "default",
+      "sha256": "846f9dccfbfe2e28082fbe5eba1db870555cdd874aa0f33449ad1c98926ecae4",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-hover-390.png",
+      "width": 390,
+      "fieldId": "reason-rotate",
+      "variant": "hover",
+      "sha256": "430952c9dae060d014a6da08fa5dee2655d4bd3633cca5d28a22924d52faef01",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-focus-390.png",
+      "width": 390,
+      "fieldId": "reason-rotate",
+      "variant": "focus",
+      "sha256": "90625475cc8197b5c9e5363a23b666a98472671bba4323db414f8256042fe953",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-short-390.png",
+      "width": 390,
+      "fieldId": "reason-rotate",
+      "variant": "short",
+      "sha256": "47f095ff78783bd349e0f1c4efda36054d6483d97366acb2cac0741bbab64667",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-valid-390.png",
+      "width": 390,
+      "fieldId": "reason-rotate",
+      "variant": "valid",
+      "sha256": "99715b98a6f2aa176b578e5bc69f65615ec2e2a737e26d6018fc3b085c6b35eb",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-rotate-limit-390.png",
+      "width": 390,
+      "fieldId": "reason-rotate",
+      "variant": "limit",
+      "sha256": "98c1b05d956373fbb306db8fecc899164821e0dde2d7c927987a3fcf130ba3c5",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-default-390.png",
+      "width": 390,
+      "fieldId": "reason-revoke",
+      "variant": "default",
+      "sha256": "846f9dccfbfe2e28082fbe5eba1db870555cdd874aa0f33449ad1c98926ecae4",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-hover-390.png",
+      "width": 390,
+      "fieldId": "reason-revoke",
+      "variant": "hover",
+      "sha256": "430952c9dae060d014a6da08fa5dee2655d4bd3633cca5d28a22924d52faef01",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-focus-390.png",
+      "width": 390,
+      "fieldId": "reason-revoke",
+      "variant": "focus",
+      "sha256": "90625475cc8197b5c9e5363a23b666a98472671bba4323db414f8256042fe953",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-short-390.png",
+      "width": 390,
+      "fieldId": "reason-revoke",
+      "variant": "short",
+      "sha256": "47f095ff78783bd349e0f1c4efda36054d6483d97366acb2cac0741bbab64667",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-valid-390.png",
+      "width": 390,
+      "fieldId": "reason-revoke",
+      "variant": "valid",
+      "sha256": "99715b98a6f2aa176b578e5bc69f65615ec2e2a737e26d6018fc3b085c6b35eb",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "reason-revoke-limit-390.png",
+      "width": 390,
+      "fieldId": "reason-revoke",
+      "variant": "limit",
+      "sha256": "98c1b05d956373fbb306db8fecc899164821e0dde2d7c927987a3fcf130ba3c5",
+      "scope": "offline-field-proposal-not-Vue-or-user-approval"
+    },
+    {
+      "file": "composition-filters-default-390.png",
+      "width": 390,
+      "sha256": "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b",
+      "composition": "filters-default",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-filters-search-390.png",
+      "width": 390,
+      "sha256": "fa4e4aadeb00886b1b1a65b1416a8be9dde2b253f31f971a13431ddefa5b30f6",
+      "composition": "filters-search",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-filters-empty-390.png",
+      "width": 390,
+      "sha256": "c137c337ad667bee7e10867ed382178c2264632480f858b6cc86e0e4fec24e12",
+      "composition": "filters-empty",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-filters-refreshing-390.png",
+      "width": 390,
+      "sha256": "291e2e5a982252feff72ca3ce4937eb17ec12ab4c49749fa3c92900f4f0bb3ed",
+      "composition": "filters-refreshing",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create-390.png",
+      "width": 390,
+      "sha256": "bcf90c21a627e809ec5911182ddd6feae03c5a4a4cfda0ce66e2324809e5b7e2",
+      "composition": "create",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_draft-390.png",
+      "width": 390,
+      "sha256": "9c4c3d38c828dedb86af10706c92acb5db0813ddb17bd1058a91c26036ccbf0e",
+      "composition": "create_draft",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_all_scopes-390.png",
+      "width": 390,
+      "sha256": "ed74e0b7e2a0b20d7ee5b34e8e9ea0dbd95810d8c071fe24983001271984baf3",
+      "composition": "create_all_scopes",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_required-390.png",
+      "width": 390,
+      "sha256": "4f2f4f2845012124a0c259f8b65f03133140fbe1bd5e1d189aa7103b0f526c78",
+      "composition": "create_required",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_busy-390.png",
+      "width": 390,
+      "sha256": "ca5ca9e5d4feabcedd4acaa31b919f6ed3d8d3b16f98979c4670d87ffe45008a",
+      "composition": "create_busy",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_failure-390.png",
+      "width": 390,
+      "sha256": "df15391dac0bd25259568ae5ec0d10082c42bd105efb1e0d4c204b7226816054",
+      "composition": "create_failure",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_long-390.png",
+      "width": 390,
+      "sha256": "0c99346f89aabead68c7ce18f7983f0c428c36a12adf7098b3618ea37cc57c3e",
+      "composition": "create_long",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-create_ttl_error-390.png",
+      "width": 390,
+      "sha256": "26c9cf86777eb0af3384c1b9def84b8c0cf302a15f38ed348712eabeb9e7a755",
+      "composition": "create_ttl_error",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-default-390.png",
+      "width": 390,
+      "sha256": "ddc5006b54ef5f0dff5aaab358a6e57e535698626502c07a2679037f198369c6",
+      "composition": "rotate-default",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-short-390.png",
+      "width": 390,
+      "sha256": "0d6f1f5b4671b35250cd987dc10fdd9a9323f4cb95dd651bb96060ca52af901a",
+      "composition": "rotate-short",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-valid-390.png",
+      "width": 390,
+      "sha256": "42046c8a548f68397ff28c9638e162fdabb5dcb5026e58972e494c3a044048c5",
+      "composition": "rotate-valid",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-rotate-limit-390.png",
+      "width": 390,
+      "sha256": "6a2dc9df2e65bf8655ae0981e39922e3be96de208680a6e28b483f16927fdac1",
+      "composition": "rotate-limit",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-default-390.png",
+      "width": 390,
+      "sha256": "379b8a81e58b3837d7f75f1e1bb97bdaa40f3d3395ced592209b9e556ea9090a",
+      "composition": "revoke-default",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-short-390.png",
+      "width": 390,
+      "sha256": "3f0b980f6ab8679224936dc71cafa6400e3ded8fbdb217f40f84b45b955480ed",
+      "composition": "revoke-short",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-valid-390.png",
+      "width": 390,
+      "sha256": "414f134780e67ac1ca7b26084792ffee92e961516ca8c971c6ceeab7d5c58480",
+      "composition": "revoke-valid",
+      "scope": "offline-field-composition-pending-user-review"
+    },
+    {
+      "file": "composition-revoke-limit-390.png",
+      "width": 390,
+      "sha256": "75cf90d1d073108423be75bd9db4b76a2c62ce0defabd7567575fb81eced4252",
+      "composition": "revoke-limit",
+      "scope": "offline-field-composition-pending-user-review"
+    }
+  ]
+}

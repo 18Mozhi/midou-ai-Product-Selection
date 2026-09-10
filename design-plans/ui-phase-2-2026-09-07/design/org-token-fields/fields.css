@@ -1,0 +1,128 @@
+.field-review-region .filters {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+}
+.field-review-region label,
+.form-fields > label,
+.duration > label,
+.reason-body label {
+  min-width: 0;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 16px;
+}
+.field-review-region input,
+.field-review-region select,
+.form-fields input:not([type="checkbox"]),
+.form-fields textarea {
+  min-width: 0;
+  min-height: 46px;
+}
+#reason-input {
+  min-width: 0;
+  min-height: 140px;
+}
+.field-review-region :is(input, select):hover,
+.form-fields :is(input, textarea):hover:not(:disabled),
+#reason-input:hover {
+  border-color: var(--blue);
+  background: #f8faff;
+}
+.field-help {
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.field-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.field-count {
+  display: inline-block;
+  margin-left: 4px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.field-actions button {
+  flex-shrink: 0;
+}
+.form-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+.form-fields .duration {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.form-fields .scope-group,
+.form-fields > label[for="create-reason"],
+.form-fields > button {
+  grid-column: 1 / -1;
+}
+.form-fields .scope-group {
+  padding: 18px;
+  background: #f7f9fd;
+  border-radius: 10px;
+}
+.form-fields .scope-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.form-fields .scope-options label {
+  background: white;
+}
+.form-fields .scope-options label:has(:checked) {
+  background: #e8effe;
+}
+.form-fields .scope-options label:has(:disabled) {
+  background: #e6ebf1;
+}
+.field-error {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #983b32;
+}
+[aria-invalid="true"] {
+  border-color: #a94a40;
+}
+.form-fields :is(input, textarea):disabled {
+  background: #e6ebf1;
+  color: #526176;
+  opacity: 1;
+}
+.reason-body label .field-help {
+  font-size: 13px;
+}
+@media (max-width: 760px) {
+  .field-review-region .filters,
+  .form-fields,
+  .form-fields .scope-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .form-fields .duration {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .field-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .form-fields {
+    gap: 22px;
+  }
+}
