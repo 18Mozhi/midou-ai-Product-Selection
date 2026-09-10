@@ -1,0 +1,100 @@
+.control-tools {
+  max-width: 1440px;
+  margin: 12px auto;
+  padding: 16px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.control-tools label {
+  flex: 1;
+  min-width: 160px;
+}
+.control-tools p {
+  width: 100%;
+  color: var(--blue);
+  font-size: 16px;
+}
+.control-tools:not([open]) > :not(summary) {
+  display: none;
+}
+.control-tools > summary {
+  width: 100%;
+}
+button,
+summary {
+  font-size: 16px;
+  min-height: 44px;
+}
+summary {
+  padding: 12px 8px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+button:focus-visible,
+summary:focus-visible,
+select:focus-visible {
+  outline: 3px solid #153e92;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px white;
+}
+#sections button:focus-visible {
+  outline-color: white;
+  box-shadow: 0 0 0 2px #153e92;
+}
+button:enabled:hover,
+summary:hover {
+  box-shadow: inset 0 0 0 2px #214993;
+}
+button:enabled:active,
+summary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 0 0 3px #143260;
+}
+#sections button:enabled:hover {
+  box-shadow: inset 0 0 0 2px white;
+}
+#sections button:enabled:active {
+  box-shadow: inset 0 0 0 3px #c9dafb;
+}
+.danger:enabled:hover,
+.danger-fill:enabled:hover {
+  box-shadow: inset 0 0 0 2px #8c263a;
+}
+button:disabled,
+button.primary:disabled,
+button.danger-fill:disabled,
+#grant-statuses button:disabled {
+  opacity: 1;
+  color: #58677a;
+  background: #e6ebf1;
+  border-color: #bac5d2;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+#grant-statuses button[aria-pressed="true"]:disabled {
+  border: 2px solid #526d9d;
+  font-weight: 700;
+}
+.control-wait-note {
+  color: #21447e;
+  border-left: 3px solid #2f57a8;
+  padding: 12px;
+  background: #eaf0fa;
+  font-size: 16px;
+}
+.error,
+.dialog-body > p,
+.dialog-body small {
+  font-size: 16px;
+}
+@media (max-width: 900px) {
+  .control-tools {
+    padding: 12px 16px;
+  }
+  .control-tools label {
+    min-width: 100%;
+  }
+}

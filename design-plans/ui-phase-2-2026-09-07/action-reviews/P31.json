@@ -311,23 +311,132 @@
         {
           "package": "roles-direction-c",
           "scene": "revoke-invalid"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-cancel-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-cancel-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-cancel-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-cancel-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-close-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-close-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-close-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-close-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-default",
+          "selector": "#confirm-revoke"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-hover",
+          "selector": "#confirm-revoke"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-focus",
+          "selector": "#confirm-revoke"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-pressed",
+          "selector": "#confirm-revoke"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "reason-confirm-disabled",
+          "selector": "#confirm-revoke"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-reason-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#cancel-revoke",
+          "states": {
+            "default": "reason-cancel-default",
+            "hover": "reason-cancel-hover",
+            "focus": "reason-cancel-focus",
+            "pressed": "reason-cancel-pressed"
+          }
+        },
+        {
+          "key": "P31-reason-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#close-revoke",
+          "states": {
+            "default": "reason-close-default",
+            "hover": "reason-close-hover",
+            "focus": "reason-close-focus",
+            "pressed": "reason-close-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "EX-P36-TOKEN-REASON",
@@ -403,13 +512,109 @@
         {
           "package": "roles-direction-c",
           "scene": "grants"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-scopes-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "section-grants-selected-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -417,9 +622,97 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-default",
+          "selector": "[data-section='roles']"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-hover",
+          "selector": "[data-section='roles']"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-focus",
+          "selector": "[data-section='roles']"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "section-roles-selected-pressed",
+          "selector": "[data-section='roles']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-section-roles-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-section='roles']",
+          "states": {
+            "default": "section-roles-available-default",
+            "hover": "section-roles-available-hover",
+            "focus": "section-roles-available-focus",
+            "pressed": "section-roles-available-pressed"
+          }
+        },
+        {
+          "key": "P31-section-scopes-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-section='scopes']",
+          "states": {
+            "default": "section-scopes-available-default",
+            "hover": "section-scopes-available-hover",
+            "focus": "section-scopes-available-focus",
+            "pressed": "section-scopes-available-pressed"
+          }
+        },
+        {
+          "key": "P31-section-scopes-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-section='scopes']",
+          "states": {
+            "default": "section-scopes-selected-default",
+            "hover": "section-scopes-selected-hover",
+            "focus": "section-scopes-selected-focus",
+            "pressed": "section-scopes-selected-pressed"
+          }
+        },
+        {
+          "key": "P31-section-grants-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-section='grants']",
+          "states": {
+            "default": "section-grants-available-default",
+            "hover": "section-grants-available-hover",
+            "focus": "section-grants-available-focus",
+            "pressed": "section-grants-available-pressed"
+          }
+        },
+        {
+          "key": "P31-section-grants-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-section='grants']",
+          "states": {
+            "default": "section-grants-selected-default",
+            "hover": "section-grants-selected-hover",
+            "focus": "section-grants-selected-focus",
+            "pressed": "section-grants-selected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "role.select.{roleCode}",
@@ -454,13 +747,77 @@
         {
           "package": "roles-direction-c",
           "scene": "role-query-empty"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-auditor-selected-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -468,9 +825,73 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-default",
+          "selector": "[data-role='organization_admin']"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-hover",
+          "selector": "[data-role='organization_admin']"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-focus",
+          "selector": "[data-role='organization_admin']"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-organization_admin-selected-pressed",
+          "selector": "[data-role='organization_admin']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-role-organization_admin-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-role='organization_admin']",
+          "states": {
+            "default": "role-organization_admin-available-default",
+            "hover": "role-organization_admin-available-hover",
+            "focus": "role-organization_admin-available-focus",
+            "pressed": "role-organization_admin-available-pressed"
+          }
+        },
+        {
+          "key": "P31-role-auditor-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-role='auditor']",
+          "states": {
+            "default": "role-auditor-available-default",
+            "hover": "role-auditor-available-hover",
+            "focus": "role-auditor-available-focus",
+            "pressed": "role-auditor-available-pressed"
+          }
+        },
+        {
+          "key": "P31-role-auditor-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-role='auditor']",
+          "states": {
+            "default": "role-auditor-selected-default",
+            "hover": "role-auditor-selected-hover",
+            "focus": "role-auditor-selected-focus",
+            "pressed": "role-auditor-selected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "role.capability.technical.toggle",
@@ -495,13 +916,45 @@
         {
           "package": "roles-direction-c",
           "scene": "role-technical"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-open-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-open-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-open-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-open-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -509,9 +962,49 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-default",
+          "selector": "#role-technical summary"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-hover",
+          "selector": "#role-technical summary"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-focus",
+          "selector": "#role-technical summary"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "role-technical-closed-pressed",
+          "selector": "#role-technical summary"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-role-technical-open",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#role-technical summary",
+          "states": {
+            "default": "role-technical-open-default",
+            "hover": "role-technical-open-hover",
+            "focus": "role-technical-open-focus",
+            "pressed": "role-technical-open-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "role.capability.filter.reset",
@@ -541,23 +1034,75 @@
         {
           "package": "roles-direction-c",
           "scene": "matrix-empty"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-default",
+          "selector": "#reset-capabilities"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-hover",
+          "selector": "#reset-capabilities"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-focus",
+          "selector": "#reset-capabilities"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-pressed",
+          "selector": "#reset-capabilities"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "capability-reset-disabled",
+          "selector": "#reset-capabilities"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "role.scope.filter.reset",
@@ -587,23 +1132,75 @@
         {
           "package": "roles-direction-c",
           "scene": "scopes-empty"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-default",
+          "selector": "#reset-scopes"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-hover",
+          "selector": "#reset-scopes"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-focus",
+          "selector": "#reset-scopes"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-pressed",
+          "selector": "#reset-scopes"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "scope-reset-disabled",
+          "selector": "#reset-scopes"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.create.form.toggle",
@@ -633,13 +1230,45 @@
         {
           "package": "roles-direction-c",
           "scene": "create-opportunity"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-cancel-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-cancel-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-cancel-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-cancel-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -647,9 +1276,49 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-default",
+          "selector": "#toggle-create"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-hover",
+          "selector": "#toggle-create"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-focus",
+          "selector": "#toggle-create"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-open-pressed",
+          "selector": "#toggle-create"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-create-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#toggle-create",
+          "states": {
+            "default": "create-cancel-default",
+            "hover": "create-cancel-hover",
+            "focus": "create-cancel-focus",
+            "pressed": "create-cancel-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "grant.create.submit",
@@ -700,23 +1369,212 @@
         {
           "package": "roles-direction-c",
           "scene": "create-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-task-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-task-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-task-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-task-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-task-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-task-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-competitor-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-competitor-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-competitor-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-competitor-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-competitor-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-competitor-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-sourcing-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-sourcing-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-sourcing-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-sourcing-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-sourcing-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-sourcing-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "create-no-actions-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-default",
+          "selector": "#create-submit"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-hover",
+          "selector": "#create-submit"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-focus",
+          "selector": "#create-submit"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-pressed",
+          "selector": "#create-submit"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-disabled",
+          "selector": "#create-submit"
+        },
+        "busy": {
+          "package": "roles-controls-direction-c",
+          "scene": "create-opportunity-busy",
+          "selector": "#create-submit"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-create-task",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#create-submit",
+          "states": {
+            "default": "create-task-default",
+            "hover": "create-task-hover",
+            "focus": "create-task-focus",
+            "pressed": "create-task-pressed",
+            "disabled": "create-task-disabled",
+            "busy": "create-task-busy"
+          }
+        },
+        {
+          "key": "P31-create-competitor",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#create-submit",
+          "states": {
+            "default": "create-competitor-default",
+            "hover": "create-competitor-hover",
+            "focus": "create-competitor-focus",
+            "pressed": "create-competitor-pressed",
+            "disabled": "create-competitor-disabled",
+            "busy": "create-competitor-busy"
+          }
+        },
+        {
+          "key": "P31-create-sourcing",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#create-submit",
+          "states": {
+            "default": "create-sourcing-default",
+            "hover": "create-sourcing-hover",
+            "focus": "create-sourcing-focus",
+            "pressed": "create-sourcing-pressed",
+            "disabled": "create-sourcing-disabled",
+            "busy": "create-sourcing-busy"
+          }
+        },
+        {
+          "key": "P31-create-no-actions",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#create-submit",
+          "states": {
+            "disabled": "create-no-actions-disabled"
+          }
+        }
+      ]
     },
     {
       "actionId": "grant.create.type.change",
@@ -756,12 +1614,24 @@
         {
           "package": "roles-direction-c",
           "scene": "create-sourcing"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "resource-type-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "resource-type-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "resource-type-focus"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -770,9 +1640,31 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "resource-type-default",
+          "selector": "#resource-type"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "resource-type-hover",
+          "selector": "#resource-type"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "resource-type-focus",
+          "selector": "#resource-type"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.status.select.{status}",
@@ -802,23 +1694,351 @@
         {
           "package": "roles-direction-c",
           "scene": "grants-filter-empty"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-available-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-available-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-available-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-available-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-selected-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-active-selected-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-available-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-available-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-selected-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-expired-selected-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-available-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-available-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-available-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-available-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-available-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-available-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-selected-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-selected-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-selected-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-selected-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-selected-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "status-revoked-selected-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-default",
+          "selector": "[data-status='all']"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-hover",
+          "selector": "[data-status='all']"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-focus",
+          "selector": "[data-status='all']"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-pressed",
+          "selector": "[data-status='all']"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-disabled",
+          "selector": "[data-status='all']"
+        },
+        "busy": {
+          "package": "roles-controls-direction-c",
+          "scene": "status-all-selected-busy",
+          "selector": "[data-status='all']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-status-all-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='all']",
+          "states": {
+            "default": "status-all-available-default",
+            "hover": "status-all-available-hover",
+            "focus": "status-all-available-focus",
+            "pressed": "status-all-available-pressed",
+            "disabled": "status-all-available-disabled",
+            "busy": "status-all-available-busy"
+          }
+        },
+        {
+          "key": "P31-status-active-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='active']",
+          "states": {
+            "default": "status-active-available-default",
+            "hover": "status-active-available-hover",
+            "focus": "status-active-available-focus",
+            "pressed": "status-active-available-pressed",
+            "disabled": "status-active-available-disabled",
+            "busy": "status-active-available-busy"
+          }
+        },
+        {
+          "key": "P31-status-active-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='active']",
+          "states": {
+            "default": "status-active-selected-default",
+            "hover": "status-active-selected-hover",
+            "focus": "status-active-selected-focus",
+            "pressed": "status-active-selected-pressed",
+            "disabled": "status-active-selected-disabled",
+            "busy": "status-active-selected-busy"
+          }
+        },
+        {
+          "key": "P31-status-expired-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='expired']",
+          "states": {
+            "default": "status-expired-available-default",
+            "hover": "status-expired-available-hover",
+            "focus": "status-expired-available-focus",
+            "pressed": "status-expired-available-pressed",
+            "disabled": "status-expired-available-disabled",
+            "busy": "status-expired-available-busy"
+          }
+        },
+        {
+          "key": "P31-status-expired-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='expired']",
+          "states": {
+            "default": "status-expired-selected-default",
+            "hover": "status-expired-selected-hover",
+            "focus": "status-expired-selected-focus",
+            "pressed": "status-expired-selected-pressed",
+            "disabled": "status-expired-selected-disabled",
+            "busy": "status-expired-selected-busy"
+          }
+        },
+        {
+          "key": "P31-status-revoked-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='revoked']",
+          "states": {
+            "default": "status-revoked-available-default",
+            "hover": "status-revoked-available-hover",
+            "focus": "status-revoked-available-focus",
+            "pressed": "status-revoked-available-pressed",
+            "disabled": "status-revoked-available-disabled",
+            "busy": "status-revoked-available-busy"
+          }
+        },
+        {
+          "key": "P31-status-revoked-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "[data-status='revoked']",
+          "states": {
+            "default": "status-revoked-selected-default",
+            "hover": "status-revoked-selected-hover",
+            "focus": "status-revoked-selected-focus",
+            "pressed": "status-revoked-selected-pressed",
+            "disabled": "status-revoked-selected-disabled",
+            "busy": "status-revoked-selected-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "grant.select.{grantId}",
@@ -848,13 +2068,29 @@
         {
           "package": "roles-direction-c",
           "scene": "grants-search-empty"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -862,9 +2098,36 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-default",
+          "selector": "#select-grant"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-hover",
+          "selector": "#select-grant"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-focus",
+          "selector": "#select-grant"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "select-grant-pressed",
+          "selector": "#select-grant"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.technical.toggle",
@@ -889,13 +2152,45 @@
         {
           "package": "roles-direction-c",
           "scene": "grant-technical"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-open-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-open-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-open-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-open-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -903,9 +2198,49 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-default",
+          "selector": "#grant-technical summary"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-hover",
+          "selector": "#grant-technical summary"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-focus",
+          "selector": "#grant-technical summary"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "grant-technical-closed-pressed",
+          "selector": "#grant-technical summary"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P31-grant-technical-open",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "roles-controls-direction-c",
+          "selector": "#grant-technical summary",
+          "states": {
+            "default": "grant-technical-open-default",
+            "hover": "grant-technical-open-hover",
+            "focus": "grant-technical-open-focus",
+            "pressed": "grant-technical-open-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "grant.expiry.submit",
@@ -936,23 +2271,84 @@
         {
           "package": "roles-direction-c",
           "scene": "extend-busy"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-default",
+          "selector": "#extend-submit"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-hover",
+          "selector": "#extend-submit"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-focus",
+          "selector": "#extend-submit"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-pressed",
+          "selector": "#extend-submit"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-disabled",
+          "selector": "#extend-submit"
+        },
+        "busy": {
+          "package": "roles-controls-direction-c",
+          "scene": "extend-busy",
+          "selector": "#extend-submit"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.revoke.request",
@@ -987,23 +2383,84 @@
         {
           "package": "roles-direction-c",
           "scene": "revoke-invalid"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-pressed"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-disabled"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-default",
+          "selector": "#revoke"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-hover",
+          "selector": "#revoke"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-focus",
+          "selector": "#revoke"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-pressed",
+          "selector": "#revoke"
+        },
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-disabled",
+          "selector": "#revoke"
+        },
+        "busy": {
+          "package": "roles-controls-direction-c",
+          "scene": "revoke-busy",
+          "selector": "#revoke"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.page.previous",
@@ -1028,6 +2485,10 @@
         {
           "package": "roles-direction-c",
           "scene": "grants"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "page-prev-disabled"
         }
       ],
       "visualStates": {
@@ -1035,16 +2496,28 @@
         "hover": "not-mapped",
         "focus": "not-mapped",
         "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "page-prev-disabled",
+          "selector": "#pagination button:first-child"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.page.next",
@@ -1069,6 +2542,10 @@
         {
           "package": "roles-direction-c",
           "scene": "grants"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "page-next-disabled"
         }
       ],
       "visualStates": {
@@ -1076,16 +2553,28 @@
         "hover": "not-mapped",
         "focus": "not-mapped",
         "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "disabled": {
+          "package": "roles-controls-direction-c",
+          "scene": "page-next-disabled",
+          "selector": "#pagination button:last-child"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.create.form.open",
@@ -1115,13 +2604,29 @@
         {
           "package": "roles-direction-c",
           "scene": "roles-no-grants"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1129,9 +2634,36 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-default",
+          "selector": "#first-grant"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-hover",
+          "selector": "#first-grant"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-focus",
+          "selector": "#first-grant"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "first-grant-pressed",
+          "selector": "#first-grant"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "grant.status.all",
@@ -1156,13 +2688,29 @@
         {
           "package": "roles-direction-c",
           "scene": "grants-filter-empty"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-default"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-hover"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-focus"
+        },
+        {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -1170,9 +2718,36 @@
         {
           "file": "scripts/verify-ui-phase2-roles-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-roles-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-default",
+          "selector": "#all-grants"
+        },
+        "hover": {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-hover",
+          "selector": "#all-grants"
+        },
+        "focus": {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-focus",
+          "selector": "#all-grants"
+        },
+        "pressed": {
+          "package": "roles-controls-direction-c",
+          "scene": "all-grants-pressed",
+          "selector": "#all-grants"
+        }
+      },
+      "additionalControlVariants": []
     }
   ],
   "dialogs": {
@@ -1260,84 +2835,275 @@
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "roleQuery",
         "meaning": "已加载角色名称/描述/中文能力的trim小写查询；不搜索原始role.code",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#role-query",
+          "states": {
+            "default": "role-query-default",
+            "hover": "role-query-hover",
+            "focus": "role-query-focus",
+            "filled": "role-query-filled",
+            "empty-results": "role-query-empty-results"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "capabilityQuery",
         "meaning": "已加载能力中文和原始能力名称查询",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#capability-query",
+          "states": {
+            "default": "capability-query-default",
+            "hover": "capability-query-hover",
+            "focus": "capability-query-focus",
+            "filled": "capability-query-filled",
+            "empty-results": "capability-query-empty-results"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "capabilityGroup",
         "meaning": "已加载能力分组选择，不调用API",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#capability-group",
+          "states": {
+            "default": "capability-group-default",
+            "hover": "capability-group-hover",
+            "focus": "capability-group-focus",
+            "governance": "capability-group-governance",
+            "audit": "capability-group-audit"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "scopeQuery",
         "meaning": "已加载成员姓名/邮箱/团队查询",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#member-query",
+          "states": {
+            "default": "member-query-default",
+            "hover": "member-query-hover",
+            "focus": "member-query-focus",
+            "filled": "member-query-filled",
+            "empty-results": "member-query-empty-results"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "scopeFilter",
         "meaning": "own/team/workspace/organization本地筛选",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#scope-filter",
+          "states": {
+            "default": "scope-filter-default",
+            "hover": "scope-filter-hover",
+            "focus": "scope-filter-focus",
+            "own": "scope-filter-own",
+            "team": "scope-filter-team",
+            "workspace": "scope-filter-workspace",
+            "organization": "scope-filter-organization"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantForm.workspace_id",
         "meaning": "required，来自当前工作区列表；不扩大读取范围",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#workspace",
+          "states": {
+            "default": "workspace-default",
+            "hover": "workspace-hover",
+            "focus": "workspace-focus"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantForm.resource_id",
         "meaning": "required trim UUID v1–5及变体模式；2026-09-10用户确认保留从真实详情复制UUID，不新增按名称选资源",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#resource-id",
+          "states": {
+            "default": "resource-id-default",
+            "hover": "resource-id-hover",
+            "focus": "resource-id-focus",
+            "empty": "resource-id-empty",
+            "invalid": "resource-id-invalid",
+            "filled": "resource-id-filled",
+            "pending": "resource-id-pending"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantForm.grantee_membership_id",
         "meaning": "required，只从grantTargets对象列表选择，不以所有members替代",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#member-target",
+          "states": {
+            "default": "member-target-default",
+            "hover": "member-target-hover",
+            "focus": "member-target-focus",
+            "empty": "member-target-empty",
+            "selected": "member-target-selected"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantForm.actions",
         "meaning": "按类型白名单多选；checkbox无原生required，按钮及父函数保护至少一项",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#grant-actions label:first-child input",
+          "states": {
+            "default": "grant-actions-default",
+            "hover": "grant-actions-hover",
+            "focus": "grant-actions-focus",
+            "none": "grant-actions-none",
+            "all": "grant-actions-all"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantForm.reason",
         "meaning": "required trim maxlength500；不同于共享撤销窗前端至少2字且无max",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#create-reason",
+          "states": {
+            "default": "create-reason-default",
+            "hover": "create-reason-hover",
+            "focus": "create-reason-focus",
+            "empty": "create-reason-empty",
+            "spaces": "create-reason-spaces",
+            "limit": "create-reason-limit",
+            "pending": "create-reason-pending"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantForm.expires_at",
         "meaning": "required datetime-local；min/max在setup生成；父级提交按当前时间重新检查未来30天",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#expires-at",
+          "states": {
+            "default": "expires-at-default",
+            "hover": "expires-at-hover",
+            "focus": "expires-at-focus",
+            "past": "expires-at-past",
+            "over-limit": "expires-at-over-limit",
+            "pending": "expires-at-pending"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantQuery",
         "meaning": "只搜索当前页成员/工作区/中文类型/中文动作；不搜索授权或资源UUID、reason",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#grant-query",
+          "states": {
+            "default": "grant-query-default",
+            "hover": "grant-query-hover",
+            "focus": "grant-query-focus",
+            "filled": "grant-query-filled",
+            "empty-results": "grant-query-empty-results"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantMutation.reason",
         "meaning": "required trim maxlength500；选中授权对象变化会重置",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#extend-reason",
+          "states": {
+            "default": "extend-reason-default",
+            "hover": "extend-reason-hover",
+            "focus": "extend-reason-focus",
+            "empty": "extend-reason-empty",
+            "spaces": "extend-reason-spaces",
+            "limit": "extend-reason-limit",
+            "pending": "extend-reason-pending"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantMutation.expires_at",
         "meaning": "required datetime-local；默认现在+7天，不是原expiry+7天",
+        "visualReferences": {
+          "package": "roles-fields-direction-c",
+          "pageId": "P31",
+          "scope": "representative-field-states-not-all-combinations-or-Vue",
+          "selector": "#extend-expiry",
+          "states": {
+            "default": "extend-expiry-default",
+            "hover": "extend-expiry-hover",
+            "focus": "extend-expiry-focus",
+            "past": "extend-expiry-past",
+            "over-limit": "extend-expiry-over-limit",
+            "not-extended": "extend-expiry-not-extended",
+            "pending": "extend-expiry-pending"
+          }
+        },
         "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
       }
     ],
@@ -1390,6 +3156,28 @@
               {
                 "package": "roles-direction-c",
                 "scene": "revoke-invalid"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "revoke-short",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "revoke-short-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "revoke-long",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "revoke-long-form"
               }
             ],
             "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
@@ -1469,6 +3257,50 @@
               }
             ],
             "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-ready",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "create-ready-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-errors",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "create-errors-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-no-actions",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "create-no-actions-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-pending",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "create-pending-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
           }
         ]
       },
@@ -1501,6 +3333,39 @@
               }
             ],
             "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "extend-ready",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "extend-ready-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "extend-not-later",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "extend-not-later-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "extend-pending",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-fields-direction-c",
+                "scene": "extend-pending-form"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
           }
         ]
       }
@@ -1515,6 +3380,21 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "value": "grantForm.resource_type",
       "actionId": "grant.create.type.change",
+      "visualReferences": {
+        "package": "roles-fields-direction-c",
+        "pageId": "P31",
+        "scope": "representative-field-states-not-all-combinations-or-Vue",
+        "selector": "#resource-type",
+        "states": {
+          "default": "resource-type-default",
+          "hover": "resource-type-hover",
+          "focus": "resource-type-focus",
+          "task": "resource-type-task",
+          "opportunity": "resource-type-opportunity",
+          "competitor": "resource-type-competitor",
+          "sourcing": "resource-type-sourcing"
+        }
+      },
       "persistence": "parent-form-ref-only",
       "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
     }
@@ -1522,18 +3402,32 @@
   "sharedReasonInput": {
     "file": "apps/web/src/components/AuditedReasonDialog.vue",
     "binding": "reason",
+    "visualReferences": {
+      "package": "roles-fields-direction-c",
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#revoke-reason",
+      "states": {
+        "default": "revoke-reason-default",
+        "hover": "revoke-reason-hover",
+        "focus": "revoke-reason-focus",
+        "short": "revoke-reason-short",
+        "spaces": "revoke-reason-spaces",
+        "long": "revoke-reason-long"
+      }
+    },
     "minimumLength": 2,
     "maximumLength": null,
     "sourceMeaning": "共享前端无max；资源授权API三个写入reason上限500，不代表501字服务端成功"
   },
   "compositionGaps": [
-    "48张旧图仅上下文，20个动作120个代表状态槽全部未映射；父页刷新/错误、真实多页、字段六态仍待专门出图。",
+    "原48图保留上下文；新42控件378图绑定18代表动作76状态及24变体113状态，44代表槽仍未映射；父页刷新/错误、真实多页、字段六态仍待。单页分页仅disabled，唯一已选授权不证明切换。",
     "提交中草稿归属、刷新重置延期草稿、确认期间切组织、创建成功覆盖重读失败提示仍待真实Vue与产品决策。",
-    "用户已明确保留从详情复制UUID；提示/格式错误/焦点仍需逐态出图，不新增资源目录接口、读取权限或持久化规则。"
+    "用户已确认四项控件视觉；新16字段代表状态与9组合保持待审。UUID复制、共享前端501字/服务端500界线、延期不得早于原值在新子稿明确，所有字段排列/主题密度/软键盘/日期弹层及真实Vue仍待，不新增目录或权限。"
   ],
   "approval": "pending-user-review",
   "limits": [
     "P16仅布局通过，不能外推P31或任一按钮状态。",
-    "本批只登记真实调用链并加离线源码测试，不修改Vue/API/RBAC/数据库/配置或生产部署。"
+    "本批登记真实调用链并绑定独立控件图，离线输入演示不修改Vue/API/RBAC/数据库/配置或生产部署。"
   ]
 }

@@ -340,7 +340,7 @@ const childInputs = [
   ["grantMutation.reason", "required trim maxlength500；选中授权对象变化会重置"],
   ["grantMutation.expires_at", "required datetime-local；默认现在+7天，不是原expiry+7天"],
 ];
-export function buildRolesReview(sources, evidence) {
+export function buildRolesReview(sources, evidence, controlsEvidence, fieldEvidence) {
   const dependencyHashes = Object.fromEntries(
     dependencies.map((file) => {
       assert.equal(typeof sources[file], "string", `missing source ${file}`);
@@ -384,6 +384,72 @@ export function buildRolesReview(sources, evidence) {
     }),
   );
   const wire = actions.find((a) => a.kind === "wiring");
+  const controlPackage = "roles-controls-direction-c";
+  const fieldPackage = "roles-fields-direction-c";
+  assert.deepEqual(
+    Object.keys(fieldEvidence.fieldVisualReferences).sort(),
+    [...childInputs.map(([binding]) => binding), "grantForm.resource_type", "reason"].sort(),
+    "exact sixteen role fields",
+  );
+  const fieldRef = (binding) => ({
+    package: fieldPackage,
+    ...fieldEvidence.fieldVisualReferences[binding],
+  });
+  for (const file of dependencies.slice(0, 4)) {
+    assert.equal(
+      controlsEvidence.sourceHashes[file],
+      dependencyHashes[file],
+      "verify current roles controls",
+    );
+    assert.equal(
+      fieldEvidence.sourceHashes[file],
+      dependencyHashes[file],
+      "verify current roles fields",
+    );
+  }
+  assert.deepEqual(
+    Object.keys(controlsEvidence.actionVisualReferences).sort(),
+    actions
+      .filter(
+        (a) =>
+          !["wiring", "excluded"].includes(a.kind) &&
+          !["OG-REFRESH", "OG-RETRY"].includes(a.actionId),
+      )
+      .map((a) => a.actionId)
+      .sort(),
+    "exact eighteen role control representatives",
+  );
+  for (const action of actions) {
+    const primary = controlsEvidence.actionVisualReferences[action.actionId];
+    if (!primary) continue;
+    action.visualStateReferences = {};
+    for (const [state, scene] of Object.entries(primary.states)) {
+      action.visualStates[state] = "scene-reference-not-acceptance";
+      action.visualStateReferences[state] = {
+        package: controlPackage,
+        scene,
+        selector: primary.selector,
+      };
+      action.scenes.push({ package: controlPackage, scene });
+    }
+    action.additionalControlVariants = Object.entries(controlsEvidence.controlVariantReferences)
+      .filter(([, ref]) => ref.actionId === action.actionId)
+      .map(([key, ref]) => {
+        for (const scene of Object.values(ref.states))
+          action.scenes.push({ package: controlPackage, scene });
+        return {
+          key,
+          scope: "additional-control-variant-not-new-action",
+          package: controlPackage,
+          selector: ref.selector,
+          states: ref.states,
+        };
+      });
+    action.testReferences.push({
+      file: "scripts/verify-ui-phase2-roles-controls-c.mjs",
+      evidenceType: "offline-proposal-check-not-Vue",
+    });
+  }
   wire.forwardsTo = [...new Set(eventTargets.flatMap(([, , targets]) => targets))];
   wire.forwardBindings = eventTargets.map(([event, handler, targets]) => ({
     candidateId: wire.sourceCandidateIds[0],
@@ -397,7 +463,7 @@ export function buildRolesReview(sources, evidence) {
     scenes: [{ package: pkg, scene: name }],
     remaining,
   });
-  return {
+  const value = {
     schemaVersion: 1,
     pageId: "P31",
     route: "/org-admin/roles",
@@ -431,6 +497,7 @@ export function buildRolesReview(sources, evidence) {
           file: childFile,
           binding,
           meaning,
+          visualReferences: fieldRef(binding),
           remaining,
         })),
       ],
@@ -494,6 +561,7 @@ export function buildRolesReview(sources, evidence) {
         file: childFile,
         value: "grantForm.resource_type",
         actionId: "grant.create.type.change",
+        visualReferences: fieldRef("grantForm.resource_type"),
         persistence: "parent-form-ref-only",
         remaining,
       },
@@ -501,27 +569,45 @@ export function buildRolesReview(sources, evidence) {
     sharedReasonInput: {
       file: dependencies[2],
       binding: "reason",
+      visualReferences: fieldRef("reason"),
       minimumLength: 2,
       maximumLength: null,
       sourceMeaning: "共享前端无max；资源授权API三个写入reason上限500，不代表501字服务端成功",
     },
     compositionGaps: [
-      "48张旧图仅上下文，20个动作120个代表状态槽全部未映射；父页刷新/错误、真实多页、字段六态仍待专门出图。",
+      "原48图保留上下文；新42控件378图绑定18代表动作76状态及24变体113状态，44代表槽仍未映射；父页刷新/错误、真实多页、字段六态仍待。单页分页仅disabled，唯一已选授权不证明切换。",
       "提交中草稿归属、刷新重置延期草稿、确认期间切组织、创建成功覆盖重读失败提示仍待真实Vue与产品决策。",
-      "用户已明确保留从详情复制UUID；提示/格式错误/焦点仍需逐态出图，不新增资源目录接口、读取权限或持久化规则。",
+      "用户已确认四项控件视觉；新16字段代表状态与9组合保持待审。UUID复制、共享前端501字/服务端500界线、延期不得早于原值在新子稿明确，所有字段排列/主题密度/软键盘/日期弹层及真实Vue仍待，不新增目录或权限。",
     ],
     approval: "pending-user-review",
     limits: [
       "P16仅布局通过，不能外推P31或任一按钮状态。",
-      "本批只登记真实调用链并加离线源码测试，不修改Vue/API/RBAC/数据库/配置或生产部署。",
+      "本批登记真实调用链并绑定独立控件图，离线输入演示不修改Vue/API/RBAC/数据库/配置或生产部署。",
     ],
   };
+  for (const combo of fieldEvidence.combinations) {
+    const target =
+      value.surfaceReview.containers[
+        combo.startsWith("revoke") ? 1 : combo.startsWith("extend") ? 3 : 2
+      ];
+    target.variants.push({
+      name: combo,
+      evidenceScope: combo.startsWith("revoke")
+        ? "matching-dialog-scene"
+        : "matching-inline-form-scene",
+      scenes: [{ package: fieldPackage, scene: `${combo}-form` }],
+      remaining,
+    });
+  }
+  return value;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   assert.ok(process.argv.slice(2).every((arg) => ["--write", "--check"].includes(arg)));
   const value = buildRolesReview(
     Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")])),
     JSON.parse(readFileSync(`${base}/design/${pkg}/evidence.json`, "utf8")),
+    JSON.parse(readFileSync(`${base}/design/roles-controls-direction-c/evidence.json`, "utf8")),
+    JSON.parse(readFileSync(`${base}/design/roles-fields-direction-c/evidence.json`, "utf8")),
   );
   const target = `${base}/action-reviews/P31.json`;
   if (process.argv.includes("--write"))

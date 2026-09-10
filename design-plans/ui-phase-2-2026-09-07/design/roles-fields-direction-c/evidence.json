@@ -1,0 +1,5801 @@
+{
+  "version": "ROLE-FIELDS-C-r1",
+  "scope": "offline-field-proposal-not-runtime-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/index.html": "7bd156d20d1ddb1b7fb45618974cfcf04f53d07d7114aea0e981ba23848c3656",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/data.js": "d51a0d70a6836b1509fd429689dadc580a8e29836c48576f95bae1c876c49cb4",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/roles.js": "c2c0e61ad2e47c4996633605d275aa8c093e3760e2d033dab7cc014e83ac5be5",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/roles.css": "05aab6c2df11deee185fa1be1eaccc706791ef70e178336513c7b4bd6c3acad4",
+    "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/index.html": "17118314f5d6e2fbfba9249008f19d4aedf73668c9eca5acd1e68874ff9d308d",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/controls.css": "2b8d6fcae50dcd87525b5d8a2ba8dc044b27aded1049fd2f954fef9cde9e3557",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/controls.js": "f8fda10760f417d23c9b62a71a5366a06a4197d1cd5c01ccb981a489e2e1f1f1",
+    "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/index.html": "a915c4243ab61ff05a5653bab5653a34e53b7d6ae2f70c488d47091bca9fe1db",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/fields.css": "8ee0faf45c6a08404a05d8d0e0c7261d3e64e0fcc18646ea3534beb5275103ec",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/fields.js": "d06d4d58cb5669cae143d44f658a93d3d660f5c9eefdc0769b19d7b51bf99a3b",
+    "scripts/verify-ui-phase2-roles-fields-c.mjs": "0495ae451cf8d568d64cf9b2049e0c5a67824edc461d83a49ea21848cc85a5b4"
+  },
+  "fieldVisualReferences": {
+    "roleQuery": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#role-query",
+      "states": {
+        "default": "role-query-default",
+        "hover": "role-query-hover",
+        "focus": "role-query-focus",
+        "filled": "role-query-filled",
+        "empty-results": "role-query-empty-results"
+      }
+    },
+    "capabilityQuery": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#capability-query",
+      "states": {
+        "default": "capability-query-default",
+        "hover": "capability-query-hover",
+        "focus": "capability-query-focus",
+        "filled": "capability-query-filled",
+        "empty-results": "capability-query-empty-results"
+      }
+    },
+    "capabilityGroup": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#capability-group",
+      "states": {
+        "default": "capability-group-default",
+        "hover": "capability-group-hover",
+        "focus": "capability-group-focus",
+        "governance": "capability-group-governance",
+        "audit": "capability-group-audit"
+      }
+    },
+    "scopeQuery": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#member-query",
+      "states": {
+        "default": "member-query-default",
+        "hover": "member-query-hover",
+        "focus": "member-query-focus",
+        "filled": "member-query-filled",
+        "empty-results": "member-query-empty-results"
+      }
+    },
+    "scopeFilter": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#scope-filter",
+      "states": {
+        "default": "scope-filter-default",
+        "hover": "scope-filter-hover",
+        "focus": "scope-filter-focus",
+        "own": "scope-filter-own",
+        "team": "scope-filter-team",
+        "workspace": "scope-filter-workspace",
+        "organization": "scope-filter-organization"
+      }
+    },
+    "grantQuery": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#grant-query",
+      "states": {
+        "default": "grant-query-default",
+        "hover": "grant-query-hover",
+        "focus": "grant-query-focus",
+        "filled": "grant-query-filled",
+        "empty-results": "grant-query-empty-results"
+      }
+    },
+    "grantForm.workspace_id": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#workspace",
+      "states": {
+        "default": "workspace-default",
+        "hover": "workspace-hover",
+        "focus": "workspace-focus"
+      }
+    },
+    "grantForm.resource_type": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#resource-type",
+      "states": {
+        "default": "resource-type-default",
+        "hover": "resource-type-hover",
+        "focus": "resource-type-focus",
+        "task": "resource-type-task",
+        "opportunity": "resource-type-opportunity",
+        "competitor": "resource-type-competitor",
+        "sourcing": "resource-type-sourcing"
+      }
+    },
+    "grantForm.resource_id": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#resource-id",
+      "states": {
+        "default": "resource-id-default",
+        "hover": "resource-id-hover",
+        "focus": "resource-id-focus",
+        "empty": "resource-id-empty",
+        "invalid": "resource-id-invalid",
+        "filled": "resource-id-filled",
+        "pending": "resource-id-pending"
+      }
+    },
+    "grantForm.grantee_membership_id": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#member-target",
+      "states": {
+        "default": "member-target-default",
+        "hover": "member-target-hover",
+        "focus": "member-target-focus",
+        "empty": "member-target-empty",
+        "selected": "member-target-selected"
+      }
+    },
+    "grantForm.actions": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#grant-actions label:first-child input",
+      "states": {
+        "default": "grant-actions-default",
+        "hover": "grant-actions-hover",
+        "focus": "grant-actions-focus",
+        "none": "grant-actions-none",
+        "all": "grant-actions-all"
+      }
+    },
+    "grantForm.reason": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#create-reason",
+      "states": {
+        "default": "create-reason-default",
+        "hover": "create-reason-hover",
+        "focus": "create-reason-focus",
+        "empty": "create-reason-empty",
+        "spaces": "create-reason-spaces",
+        "limit": "create-reason-limit",
+        "pending": "create-reason-pending"
+      }
+    },
+    "grantForm.expires_at": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#expires-at",
+      "states": {
+        "default": "expires-at-default",
+        "hover": "expires-at-hover",
+        "focus": "expires-at-focus",
+        "past": "expires-at-past",
+        "over-limit": "expires-at-over-limit",
+        "pending": "expires-at-pending"
+      }
+    },
+    "grantMutation.reason": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#extend-reason",
+      "states": {
+        "default": "extend-reason-default",
+        "hover": "extend-reason-hover",
+        "focus": "extend-reason-focus",
+        "empty": "extend-reason-empty",
+        "spaces": "extend-reason-spaces",
+        "limit": "extend-reason-limit",
+        "pending": "extend-reason-pending"
+      }
+    },
+    "grantMutation.expires_at": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#extend-expiry",
+      "states": {
+        "default": "extend-expiry-default",
+        "hover": "extend-expiry-hover",
+        "focus": "extend-expiry-focus",
+        "past": "extend-expiry-past",
+        "over-limit": "extend-expiry-over-limit",
+        "not-extended": "extend-expiry-not-extended",
+        "pending": "extend-expiry-pending"
+      }
+    },
+    "reason": {
+      "pageId": "P31",
+      "scope": "representative-field-states-not-all-combinations-or-Vue",
+      "selector": "#revoke-reason",
+      "states": {
+        "default": "revoke-reason-default",
+        "hover": "revoke-reason-hover",
+        "focus": "revoke-reason-focus",
+        "short": "revoke-reason-short",
+        "spaces": "revoke-reason-spaces",
+        "long": "revoke-reason-long"
+      }
+    }
+  },
+  "combinations": [
+    "create-ready",
+    "create-errors",
+    "create-no-actions",
+    "create-pending",
+    "extend-ready",
+    "extend-not-later",
+    "extend-pending",
+    "revoke-short",
+    "revoke-long"
+  ],
+  "checks": [
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 963.15625,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 963.15625,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 963.15625,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 1440,
+      "state": "filled",
+      "metrics": {
+        "width": 963.15625,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 1440,
+      "state": "empty-results",
+      "metrics": {
+        "width": 963.15625,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 756,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 756,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 756,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 1440,
+      "state": "filled",
+      "metrics": {
+        "width": 756,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 1440,
+      "state": "empty-results",
+      "metrics": {
+        "width": 756,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 1440,
+      "state": "governance",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 1440,
+      "state": "audit",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 692,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 692,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 692,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 1440,
+      "state": "filled",
+      "metrics": {
+        "width": 692,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 1440,
+      "state": "empty-results",
+      "metrics": {
+        "width": 692,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "own",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "team",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "workspace",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 1440,
+      "state": "organization",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 1052,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 1052,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 1052,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 1440,
+      "state": "filled",
+      "metrics": {
+        "width": 1052,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 1440,
+      "state": "empty-results",
+      "metrics": {
+        "width": 1052,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "workspace",
+      "binding": "grantForm.workspace_id",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "工作区新品决策工作区只选择当前工作区列表；本样本只有一个工作区。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "workspace",
+      "binding": "grantForm.workspace_id",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "工作区新品决策工作区只选择当前工作区列表；本样本只有一个工作区。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "workspace",
+      "binding": "grantForm.workspace_id",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "工作区新品决策工作区只选择当前工作区列表；本样本只有一个工作区。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "task",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "opportunity",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "competitor",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 1440,
+      "state": "sourcing",
+      "metrics": {
+        "width": 493,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 493,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 493,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 493,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 493,
+        "height": 48.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。请从真实资源详情页复制资源编号。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 493,
+        "height": 48.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。资源编号格式不正确，请重新复制完整 UUID。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "filled",
+      "metrics": {
+        "width": 493,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 493,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 493,
+        "height": 53.984375,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 493,
+        "height": 53.984375,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 493,
+        "height": 53.984375,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 493,
+        "height": 46,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。请选择一项有效选项。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 1440,
+      "state": "selected",
+      "metrics": {
+        "width": 493,
+        "height": 53.984375,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 1440,
+      "state": "none",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 1440,
+      "state": "all",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入0字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "spaces",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入3字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "limit",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入500字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 493,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 493,
+        "height": 64.203125,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 493,
+        "height": 64.203125,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 493,
+        "height": 64.203125,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 1440,
+      "state": "past",
+      "metrics": {
+        "width": 493,
+        "height": 54.203125,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。请选择晚于当前校验时钟的时间。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 1440,
+      "state": "over-limit",
+      "metrics": {
+        "width": 493,
+        "height": 54.203125,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。授权有效期不能超过30天。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 493,
+        "height": 64.203125,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 492,
+        "height": 47.46875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 492,
+        "height": 47.46875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 492,
+        "height": 47.46875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 492,
+        "height": 48.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入0字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "spaces",
+      "metrics": {
+        "width": 492,
+        "height": 48.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入3字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "limit",
+      "metrics": {
+        "width": 492,
+        "height": 46.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入500字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 492,
+        "height": 47.46875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 492,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 492,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 492,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "past",
+      "metrics": {
+        "width": 492,
+        "height": 50.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。请选择晚于当前校验时钟的时间。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "over-limit",
+      "metrics": {
+        "width": 492,
+        "height": 50.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。授权有效期不能超过30天。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "not-extended",
+      "metrics": {
+        "width": 492,
+        "height": 50.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。新到期时间必须晚于当前授权的到期时间。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 492,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 572,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入8字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 572,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入8字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 572,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入8字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 1440,
+      "state": "short",
+      "metrics": {
+        "width": 572,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入1字。撤销原因至少需要2个字。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 1440,
+      "state": "spaces",
+      "metrics": {
+        "width": 572,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入3字。撤销原因至少需要2个字。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 1440,
+      "state": "long",
+      "metrics": {
+        "width": 572,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入501字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 390,
+      "state": "filled",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "role-query",
+      "binding": "roleQuery",
+      "width": 390,
+      "state": "empty-results",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索角色或能力只搜索已加载角色名称、描述和中文能力。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 390,
+      "state": "filled",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-query",
+      "binding": "capabilityQuery",
+      "width": 390,
+      "state": "empty-results",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索能力中文动作及技术能力名称；不改变角色权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 390,
+      "state": "governance",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "capability-group",
+      "binding": "capabilityGroup",
+      "width": 390,
+      "state": "audit",
+      "metrics": {
+        "width": 208,
+        "height": 44,
+        "font": 16,
+        "name": "业务域\n                  全部业务域\n                  组织治理\n                  安全审计\n                只选择已加载能力的业务域。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 390,
+      "state": "filled",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-query",
+      "binding": "scopeQuery",
+      "width": 390,
+      "state": "empty-results",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索成员仅已加载成员的姓名、邮箱、团队。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "own",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "team",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "workspace",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "scope-filter",
+      "binding": "scopeFilter",
+      "width": 390,
+      "state": "organization",
+      "metrics": {
+        "width": 272,
+        "height": 44,
+        "font": 16,
+        "name": "数据范围\n                全部范围\n              本人范围团队范围工作区范围组织范围四种范围可重叠，不是互斥成员总数。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 390,
+      "state": "filled",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-query",
+      "binding": "grantQuery",
+      "width": 390,
+      "state": "empty-results",
+      "metrics": {
+        "width": 326,
+        "height": 46.796875,
+        "font": 16,
+        "name": "搜索当前页授权仅当前页；不搜索资源编号、授权编号或原因。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "workspace",
+      "binding": "grantForm.workspace_id",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "工作区新品决策工作区只选择当前工作区列表；本样本只有一个工作区。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "workspace",
+      "binding": "grantForm.workspace_id",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "工作区新品决策工作区只选择当前工作区列表；本样本只有一个工作区。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "workspace",
+      "binding": "grantForm.workspace_id",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "工作区新品决策工作区只选择当前工作区列表；本样本只有一个工作区。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "task",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "opportunity",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "competitor",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-type",
+      "binding": "grantForm.resource_type",
+      "width": 390,
+      "state": "sourcing",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "资源类型\n                  任务\n                  机会\n                  竞品\n                  供应链\n                切换类型将动作重置为该类型首项；不清资源编号。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 290,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 290,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 290,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 290,
+        "height": 48.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。请从真实资源详情页复制资源编号。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 290,
+        "height": 48.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。资源编号格式不正确，请重新复制完整 UUID。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "filled",
+      "metrics": {
+        "width": 290,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "resource-id",
+      "binding": "grantForm.resource_id",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 290,
+        "height": 46.796875,
+        "font": 16,
+        "name": "资源编号保留从真实资源详情页复制 UUID；格式正确不等于资源可访问。实际访问仍按工作区、资源与动作复核。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 290,
+        "height": 46,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。请选择一项有效选项。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "member-target",
+      "binding": "grantForm.grantee_membership_id",
+      "width": 390,
+      "state": "selected",
+      "metrics": {
+        "width": 290,
+        "height": 44,
+        "font": 16,
+        "name": "目标成员\n                  选择同组织活动成员\n                陈采购 · buyer@example.test只选择可授予列表中的同组织活动成员，不扩大读取权限。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 390,
+      "state": "none",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "grant-actions",
+      "binding": "grantForm.actions",
+      "width": 390,
+      "state": "all",
+      "metrics": {
+        "width": 101,
+        "height": 44,
+        "font": 16,
+        "name": "查看选品",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入0字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "spaces",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入3字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "limit",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入500字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "create-reason",
+      "binding": "grantForm.reason",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 290,
+        "height": 112,
+        "font": 16,
+        "name": "业务原因必填且去首尾空白，最多500字；不是撤销窗的至少2字规则。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 290,
+        "height": 48.796875,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 290,
+        "height": 48.796875,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 290,
+        "height": 48.796875,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 390,
+      "state": "past",
+      "metrics": {
+        "width": 290,
+        "height": 50.796875,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。请选择晚于当前校验时钟的时间。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 390,
+      "state": "over-limit",
+      "metrics": {
+        "width": 290,
+        "height": 50.796875,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。授权有效期不能超过30天。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "expires-at",
+      "binding": "grantForm.expires_at",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 290,
+        "height": 48.796875,
+        "font": 16,
+        "name": "到期时间必须晚于固定审核时钟且不超过30天；生产按提交时当前时间校验。晚于校验时钟，且最长30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 288,
+        "height": 46.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 288,
+        "height": 46.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 288,
+        "height": 46.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 288,
+        "height": 48.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入0字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "spaces",
+      "metrics": {
+        "width": 288,
+        "height": 48.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入3字。请填写业务原因。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "limit",
+      "metrics": {
+        "width": 288,
+        "height": 46.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入500字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-reason",
+      "binding": "grantMutation.reason",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 288,
+        "height": 46.796875,
+        "font": 16,
+        "name": "变更原因必填且最多500字；尚未提交的草稿不等于审计记录。 已输入6字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 288,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 288,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 288,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "past",
+      "metrics": {
+        "width": 288,
+        "height": 50.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。请选择晚于当前校验时钟的时间。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "over-limit",
+      "metrics": {
+        "width": 288,
+        "height": 50.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。授权有效期不能超过30天。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "not-extended",
+      "metrics": {
+        "width": 288,
+        "height": 50.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。新到期时间必须晚于当前授权的到期时间。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "extend-expiry",
+      "binding": "grantMutation.expires_at",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 288,
+        "height": 48.796875,
+        "font": 16,
+        "name": "新到期时间既有后端规则：晚于原到期时间，且距当前时间不超过30天。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 316,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入8字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 316,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入8字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 316,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入8字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 390,
+      "state": "short",
+      "metrics": {
+        "width": 316,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入1字。撤销原因至少需要2个字。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 390,
+      "state": "spaces",
+      "metrics": {
+        "width": 316,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入3字。撤销原因至少需要2个字。",
+        "help": true,
+        "invalid": true,
+        "errorVisible": true,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    },
+    {
+      "id": "revoke-reason",
+      "binding": "reason",
+      "width": 390,
+      "state": "long",
+      "metrics": {
+        "width": 316,
+        "height": 112,
+        "font": 16,
+        "name": "原因（至少2个字）前端去空白至少2字且无长度上限；授权API仍限制500字。 已输入501字。",
+        "help": true,
+        "invalid": false,
+        "errorVisible": false,
+        "outline": "3px",
+        "overflow": false,
+        "disabled": false
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "combo": "create-ready",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-errors",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-no-actions",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-pending",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "extend-ready",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "extend-not-later",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "extend-pending",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "revoke-short",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "revoke-long",
+      "width": 1440,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-ready",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-errors",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-no-actions",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "create-pending",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "extend-ready",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "extend-not-later",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "extend-pending",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "revoke-short",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    },
+    {
+      "combo": "revoke-long",
+      "width": 390,
+      "outcome": "offline-field-combination-only"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "role-query-default-1440.png",
+      "width": 1440,
+      "scene": "role-query-default",
+      "sha256": "17fc31e38d8fdc88d710b34abca723ab75319e367487cbff9c2441104fe944ca",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "role-query-hover-1440.png",
+      "width": 1440,
+      "scene": "role-query-hover",
+      "sha256": "17fc31e38d8fdc88d710b34abca723ab75319e367487cbff9c2441104fe944ca",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "role-query-focus-1440.png",
+      "width": 1440,
+      "scene": "role-query-focus",
+      "sha256": "ef6808dcd36e0e4794f84e1ba967c625c2239ac00376c4206b932be1b7a0dd16",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "role-query-filled-1440.png",
+      "width": 1440,
+      "scene": "role-query-filled",
+      "sha256": "ce15114a46833dfbdb5ecc7939674f52fdce8c8acd7f477ef8921f609fd18f96",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "role-query-empty-results-1440.png",
+      "width": 1440,
+      "scene": "role-query-empty-results",
+      "sha256": "a44e579c53c026c75df9628378286b859d9f06deafafc514252db821e39bdd72",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "capability-query-default-1440.png",
+      "width": 1440,
+      "scene": "capability-query-default",
+      "sha256": "44ba8578da5739dfc2704fec72cbe6234dcd9f548aa856ec8b19adaa44215681",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "capability-query-hover-1440.png",
+      "width": 1440,
+      "scene": "capability-query-hover",
+      "sha256": "44ba8578da5739dfc2704fec72cbe6234dcd9f548aa856ec8b19adaa44215681",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "capability-query-focus-1440.png",
+      "width": 1440,
+      "scene": "capability-query-focus",
+      "sha256": "aee0ec212d198505994aff599899b235a29a2072c3e9cee04013087e763a40a0",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "capability-query-filled-1440.png",
+      "width": 1440,
+      "scene": "capability-query-filled",
+      "sha256": "f3426bcad1deea059ab1584c2d05ab237515a2034c663020e2eb3fc930be98f6",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "capability-query-empty-results-1440.png",
+      "width": 1440,
+      "scene": "capability-query-empty-results",
+      "sha256": "573be97d88cb88b04fca811a160bceff4bcb99dc917a2807022dee908288500d",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "capability-group-default-1440.png",
+      "width": 1440,
+      "scene": "capability-group-default",
+      "sha256": "2f3a3006ba1b93ecec9eaefa72f588d44618f5c873ad1b5c9e3ec397e2ec9418",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "default"
+      }
+    },
+    {
+      "file": "capability-group-hover-1440.png",
+      "width": 1440,
+      "scene": "capability-group-hover",
+      "sha256": "9a52c025c4a0474ed3e0280c0491f963c9bfa1b5ffcd9a8274df61321e6ff2a7",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "capability-group-focus-1440.png",
+      "width": 1440,
+      "scene": "capability-group-focus",
+      "sha256": "060ff3434a9f5ddfed5fbca4e94ec5af712dd161a0f6efd45eb0315634399062",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "capability-group-governance-1440.png",
+      "width": 1440,
+      "scene": "capability-group-governance",
+      "sha256": "c178c3f94651c4da0b7a56763a5ddb8f4d47f242e969b71fa555f237d4cfdf22",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "governance"
+      }
+    },
+    {
+      "file": "capability-group-audit-1440.png",
+      "width": 1440,
+      "scene": "capability-group-audit",
+      "sha256": "de8ab97173b96f62cb40d0d6647a2e328df578278eced301ec4544e37278b0e9",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "audit"
+      }
+    },
+    {
+      "file": "member-query-default-1440.png",
+      "width": 1440,
+      "scene": "member-query-default",
+      "sha256": "319b130d1bb7d891504dcb4796740160bf04888bf9ab127f9ef60ec4b3a8b258",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "member-query-hover-1440.png",
+      "width": 1440,
+      "scene": "member-query-hover",
+      "sha256": "319b130d1bb7d891504dcb4796740160bf04888bf9ab127f9ef60ec4b3a8b258",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "member-query-focus-1440.png",
+      "width": 1440,
+      "scene": "member-query-focus",
+      "sha256": "92da48db938c06695fb5824fa6ea868ff2a3f11af1ae41388eac58cc102dae0c",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "member-query-filled-1440.png",
+      "width": 1440,
+      "scene": "member-query-filled",
+      "sha256": "db125f899242b074196348514ecdd4252a10c71b3fe570313041abededf28680",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "member-query-empty-results-1440.png",
+      "width": 1440,
+      "scene": "member-query-empty-results",
+      "sha256": "bc36b8716d16c94c73b220c5beca475361321f3ad2d9120ae20bc6aadcf343db",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "scope-filter-default-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-default",
+      "sha256": "95faf1c5bfbb9bbb00f1b56d536b18f8d5da923877ee0dbd0f5ba0126c386720",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "default"
+      }
+    },
+    {
+      "file": "scope-filter-hover-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-hover",
+      "sha256": "bb1744b57badeb16718f741cf88a87a5c04aadad4ac856a2a4ebd145e56cd632",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "scope-filter-focus-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-focus",
+      "sha256": "4e1f938ca5fa0959fc46c15a4047a9f96064713ed751e25457afc51bc9076745",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "scope-filter-own-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-own",
+      "sha256": "ff3a68869033962e8ea0a1770840c93088f606f212b371be740384579ca96760",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "own"
+      }
+    },
+    {
+      "file": "scope-filter-team-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-team",
+      "sha256": "7cb1357572adf596ef8a3e336fa7dfb06c8cad1444630215b395ea75424253c5",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "team"
+      }
+    },
+    {
+      "file": "scope-filter-workspace-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-workspace",
+      "sha256": "d09e4eea4746a6b3ae38e22b546d86d0eeee3b373b5ca417de84b3700fcfbf36",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "workspace"
+      }
+    },
+    {
+      "file": "scope-filter-organization-1440.png",
+      "width": 1440,
+      "scene": "scope-filter-organization",
+      "sha256": "562fe7b1ee2550aee74ab9a9d1aec8b337eb1baf5c4d23c162a61db667eb8a12",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "organization"
+      }
+    },
+    {
+      "file": "grant-query-default-1440.png",
+      "width": 1440,
+      "scene": "grant-query-default",
+      "sha256": "2a7fe541979af0dd947994cf3d6eb920cb3b74d8cb933032cd018356fb583dd2",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "grant-query-hover-1440.png",
+      "width": 1440,
+      "scene": "grant-query-hover",
+      "sha256": "2a7fe541979af0dd947994cf3d6eb920cb3b74d8cb933032cd018356fb583dd2",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "grant-query-focus-1440.png",
+      "width": 1440,
+      "scene": "grant-query-focus",
+      "sha256": "8c547ff949fccc833d27af828a367aceda3342c943ec39c409e738f01077136e",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "grant-query-filled-1440.png",
+      "width": 1440,
+      "scene": "grant-query-filled",
+      "sha256": "8981c4157072c42d5b08b1b37502ec074be42b2ea056025b7e4f574d721efa73",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "grant-query-empty-results-1440.png",
+      "width": 1440,
+      "scene": "grant-query-empty-results",
+      "sha256": "d29afcce078aee8635e44db41e6ee77e4a8a2e71c8b5a3f320428be391e0ce41",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "workspace-default-1440.png",
+      "width": 1440,
+      "scene": "workspace-default",
+      "sha256": "6597404aa79f3af2ec1120e2da021a42c4582c45b4cb3f549e2fe365449aa444",
+      "field": {
+        "binding": "grantForm.workspace_id",
+        "selector": "#workspace",
+        "state": "default"
+      }
+    },
+    {
+      "file": "workspace-hover-1440.png",
+      "width": 1440,
+      "scene": "workspace-hover",
+      "sha256": "d8c60d77402b9c867253fe69c8019679636845badf47f2923e70fd6b911de64b",
+      "field": {
+        "binding": "grantForm.workspace_id",
+        "selector": "#workspace",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "workspace-focus-1440.png",
+      "width": 1440,
+      "scene": "workspace-focus",
+      "sha256": "0b8922c9657b04947c05b90a2854e217fbe8ba8021fc6b97c6e085dcebb6a656",
+      "field": {
+        "binding": "grantForm.workspace_id",
+        "selector": "#workspace",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "resource-type-default-1440.png",
+      "width": 1440,
+      "scene": "resource-type-default",
+      "sha256": "ddac6e9ab22116f6e53d196d44b80ff9a616ecbd8a550ca6b3d9efb2374940eb",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "default"
+      }
+    },
+    {
+      "file": "resource-type-hover-1440.png",
+      "width": 1440,
+      "scene": "resource-type-hover",
+      "sha256": "1597153007e994e13aed081ef7c55d5fbc29568c7bcf68bcdfa7e8b4fdb0a733",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "resource-type-focus-1440.png",
+      "width": 1440,
+      "scene": "resource-type-focus",
+      "sha256": "806d2ed937a56987f7ec4417e2224722a52d02c5ae80bfbc5dc5c24b0258e6c6",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "resource-type-task-1440.png",
+      "width": 1440,
+      "scene": "resource-type-task",
+      "sha256": "566c932223aa32e9701891879500129ee6753880be60f25a7196927a18c7974f",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "task"
+      }
+    },
+    {
+      "file": "resource-type-opportunity-1440.png",
+      "width": 1440,
+      "scene": "resource-type-opportunity",
+      "sha256": "28411634f92d478a1843b643548feab992ee5a9822a31d26b9585d72138c1187",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "opportunity"
+      }
+    },
+    {
+      "file": "resource-type-competitor-1440.png",
+      "width": 1440,
+      "scene": "resource-type-competitor",
+      "sha256": "b134848423a0f92cf7bd64116168ac0e6d57437c97e605e3dfe41e3f3c51e919",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "competitor"
+      }
+    },
+    {
+      "file": "resource-type-sourcing-1440.png",
+      "width": 1440,
+      "scene": "resource-type-sourcing",
+      "sha256": "478122f16de3485c172c927f29eb22abfa82f0c3f21bf5208d1e8c2474460dea",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "sourcing"
+      }
+    },
+    {
+      "file": "resource-id-default-1440.png",
+      "width": 1440,
+      "scene": "resource-id-default",
+      "sha256": "f46dee1764e36f3951a18a0f9da399a2cff10d04c29bf2486fa038e0ba69dd01",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "default"
+      }
+    },
+    {
+      "file": "resource-id-hover-1440.png",
+      "width": 1440,
+      "scene": "resource-id-hover",
+      "sha256": "a9d243eb3ff48fb33b772dc9c568fbd77966de56ae4e65feee14b8c95ec32039",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "resource-id-focus-1440.png",
+      "width": 1440,
+      "scene": "resource-id-focus",
+      "sha256": "8941d64b367a3785f08d13e1ea9db028ddfde554ce3035ec2cbbeee58e8e1f0b",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "resource-id-empty-1440.png",
+      "width": 1440,
+      "scene": "resource-id-empty",
+      "sha256": "70d3c7fef0bc667b39ce18d88b0a8936cf21a07795bb7a8845adf859a0d5905d",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "resource-id-invalid-1440.png",
+      "width": 1440,
+      "scene": "resource-id-invalid",
+      "sha256": "caa13ff4084d3b5e93097ec13871c5ba013833e51f96864378de035f50f88940",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "invalid"
+      }
+    },
+    {
+      "file": "resource-id-filled-1440.png",
+      "width": 1440,
+      "scene": "resource-id-filled",
+      "sha256": "d6c4abebe32e785381859b74ff188e6f45df9d1bca5746281e66df1f8d66f274",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "resource-id-pending-1440.png",
+      "width": 1440,
+      "scene": "resource-id-pending",
+      "sha256": "4535c4f13d175139244464ae19671212e708b25ee0c042706c7e2fe5aea73057",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "member-target-default-1440.png",
+      "width": 1440,
+      "scene": "member-target-default",
+      "sha256": "ae14540863d12886a73fe140ee9d24a72c8b1deb0c231425f20359e3b5a561ee",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "default"
+      }
+    },
+    {
+      "file": "member-target-hover-1440.png",
+      "width": 1440,
+      "scene": "member-target-hover",
+      "sha256": "f4aa4a1af36c5d74854e5095baa7b276dc44e314f99f5d1ce4a1af5e564e6ce6",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "member-target-focus-1440.png",
+      "width": 1440,
+      "scene": "member-target-focus",
+      "sha256": "f56206259a65441d706622308fe595d7ce36bfe9d05e7d26781e4db2a727d6ee",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "member-target-empty-1440.png",
+      "width": 1440,
+      "scene": "member-target-empty",
+      "sha256": "2ee3956c0b616041143bf285f722e05cf172bd514d4add062bf500e8c3a2512a",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "member-target-selected-1440.png",
+      "width": 1440,
+      "scene": "member-target-selected",
+      "sha256": "228f34eed791cc1f4aacecc29869b6c7e6d85de7355f208723df75ce9c77bf7c",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "selected"
+      }
+    },
+    {
+      "file": "grant-actions-default-1440.png",
+      "width": 1440,
+      "scene": "grant-actions-default",
+      "sha256": "3acceacdd0b58c7b2a34f50e207ac23baf0d6a4538ed5a17b68f56e0f5d44aec",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "default"
+      }
+    },
+    {
+      "file": "grant-actions-hover-1440.png",
+      "width": 1440,
+      "scene": "grant-actions-hover",
+      "sha256": "50dada79376d6a495c558287f6f5fc0e1671dde87585c69aacd1739faba074a2",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "grant-actions-focus-1440.png",
+      "width": 1440,
+      "scene": "grant-actions-focus",
+      "sha256": "592b43d2f175bafe620f70429e3cadb30590c84f6933714069f207f03033d4f4",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "grant-actions-none-1440.png",
+      "width": 1440,
+      "scene": "grant-actions-none",
+      "sha256": "95892fe6f5dd66a4b174c5ab3fe725dbebc377653ccbbdeebc562a64774a3843",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "none"
+      }
+    },
+    {
+      "file": "grant-actions-all-1440.png",
+      "width": 1440,
+      "scene": "grant-actions-all",
+      "sha256": "e254cf96068da8e4b752e8c6e0b41aa1c567410c40d313f86042eb043f8cfe03",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "all"
+      }
+    },
+    {
+      "file": "create-reason-default-1440.png",
+      "width": 1440,
+      "scene": "create-reason-default",
+      "sha256": "e581c0fd281027eb4daf72b3bfd31631a8a6cbabffbe955bb2e2af336a835a83",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "create-reason-hover-1440.png",
+      "width": 1440,
+      "scene": "create-reason-hover",
+      "sha256": "e581c0fd281027eb4daf72b3bfd31631a8a6cbabffbe955bb2e2af336a835a83",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "create-reason-focus-1440.png",
+      "width": 1440,
+      "scene": "create-reason-focus",
+      "sha256": "53bda822049a64b5cdcd8ead7a1bcff9e886c88d9ebf104e8c88a5284bf2896f",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "create-reason-empty-1440.png",
+      "width": 1440,
+      "scene": "create-reason-empty",
+      "sha256": "e80c3dac2a3de83f9837d2df4966e279399babdf0ecfd8b074b5d47747de220b",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "create-reason-spaces-1440.png",
+      "width": 1440,
+      "scene": "create-reason-spaces",
+      "sha256": "d24a48e3f59f11cf0c5a105ecd4fe46776d42a2f8d4efbd39688c033c193458f",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "spaces"
+      }
+    },
+    {
+      "file": "create-reason-limit-1440.png",
+      "width": 1440,
+      "scene": "create-reason-limit",
+      "sha256": "72c5bced632d998f68687d0af6418f99c5141631045887842743fd57b71da1f4",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "limit"
+      }
+    },
+    {
+      "file": "create-reason-pending-1440.png",
+      "width": 1440,
+      "scene": "create-reason-pending",
+      "sha256": "154664ae567aa41ae4c043ab821b3e6af7f083e614921be3d3c709d588fed12a",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "expires-at-default-1440.png",
+      "width": 1440,
+      "scene": "expires-at-default",
+      "sha256": "08ec96d3059d9cab7c034daf6082f4eb01f9753a6febefc4488a2c1233384ed2",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "default"
+      }
+    },
+    {
+      "file": "expires-at-hover-1440.png",
+      "width": 1440,
+      "scene": "expires-at-hover",
+      "sha256": "866a6af835faab02612df7ac6d040bd37d660b75885de777a329b7f022345e82",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "expires-at-focus-1440.png",
+      "width": 1440,
+      "scene": "expires-at-focus",
+      "sha256": "280a1587899d0c96d9d334efd660d338abb80180b269b3d888687e3fe8242a08",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "expires-at-past-1440.png",
+      "width": 1440,
+      "scene": "expires-at-past",
+      "sha256": "d667baceb44fd1ce64d1b4393bc19ab1eb6294d91727abd28f58f325b9ee93a8",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "past"
+      }
+    },
+    {
+      "file": "expires-at-over-limit-1440.png",
+      "width": 1440,
+      "scene": "expires-at-over-limit",
+      "sha256": "97c783d0aaefebe15c0cebc45975d0bb406e6f50949c6620aa2a81256db71cde",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "over-limit"
+      }
+    },
+    {
+      "file": "expires-at-pending-1440.png",
+      "width": 1440,
+      "scene": "expires-at-pending",
+      "sha256": "65409625394d07349aed4e1137813ab38f84e38478b4bdb8c6c06dc6471e1a4d",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "extend-reason-default-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-default",
+      "sha256": "bd65c992042009f0aae4667f2902f5a433b99f4df49df0425b3d9481a870dab6",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "extend-reason-hover-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-hover",
+      "sha256": "559c1eaf4b1eebc9c1ab394c26142c6e6d44c0077ef0ed8601fe54477af48af0",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "extend-reason-focus-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-focus",
+      "sha256": "a0e9f01c34c485e662cf93fe1cffed76bb37fc5f37db9311b8aee9ead30770ab",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "extend-reason-empty-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-empty",
+      "sha256": "3cee2c20200e6a27da0697353d6c5178b3be63b58c6b20cd90fda216b4b5d696",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "extend-reason-spaces-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-spaces",
+      "sha256": "f2e85c8f62656a569c42b0ee8b78f46463eb360f126f12f5b1337a64fda8cef7",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "spaces"
+      }
+    },
+    {
+      "file": "extend-reason-limit-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-limit",
+      "sha256": "8459f28abb78ecb22119726010cd793af5ca6a38607cb0076ed599cbc92873a6",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "limit"
+      }
+    },
+    {
+      "file": "extend-reason-pending-1440.png",
+      "width": 1440,
+      "scene": "extend-reason-pending",
+      "sha256": "7c47e49be592a3897f65f29cef1bc3b5c20d4bb0af02737b97dcb13644b6e083",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "extend-expiry-default-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-default",
+      "sha256": "8ce8cf3f863cdd02947230abb3a7b5e91066f911f33a644328ebbe2cd55368cb",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "default"
+      }
+    },
+    {
+      "file": "extend-expiry-hover-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-hover",
+      "sha256": "4c47e19e2169ba682132259f37d7dd9fb3415b770db6b5b72ccee95beb38fbae",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "extend-expiry-focus-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-focus",
+      "sha256": "cc68c233cfe5503fdbb5d828485c6623b3e6891c4f31cfeb26f74ab7d54c6cb6",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "extend-expiry-past-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-past",
+      "sha256": "dabf69fbdf0fa2d5a7c6e6e002bf97d5a8644ce34a534cda3b1f2fb8593c60b7",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "past"
+      }
+    },
+    {
+      "file": "extend-expiry-over-limit-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-over-limit",
+      "sha256": "c3c9f202897d4e7a08cdf3029a6471ba375e0d014dfcac2b2f9bc9237f1ec6a2",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "over-limit"
+      }
+    },
+    {
+      "file": "extend-expiry-not-extended-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-not-extended",
+      "sha256": "0273692972730f6f786d170be568047484ada7bc0acf449dec01745f2c01f208",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "not-extended"
+      }
+    },
+    {
+      "file": "extend-expiry-pending-1440.png",
+      "width": 1440,
+      "scene": "extend-expiry-pending",
+      "sha256": "42c0522aec3dea6f591edda235261e425f8384f2a0d6c00639143f72e3c8aa8c",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "revoke-reason-default-1440.png",
+      "width": 1440,
+      "scene": "revoke-reason-default",
+      "sha256": "5a6b6334e41f80d3e2bdf20e391a7ab105c322388c7b101cea9f3b21c0f54f5f",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "revoke-reason-hover-1440.png",
+      "width": 1440,
+      "scene": "revoke-reason-hover",
+      "sha256": "5a6b6334e41f80d3e2bdf20e391a7ab105c322388c7b101cea9f3b21c0f54f5f",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "revoke-reason-focus-1440.png",
+      "width": 1440,
+      "scene": "revoke-reason-focus",
+      "sha256": "ddf6e663b260eb0568ff1f2458500920293cdab168f88467a70138e0b32f01b8",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "revoke-reason-short-1440.png",
+      "width": 1440,
+      "scene": "revoke-reason-short",
+      "sha256": "d5c11dd6cb04958bdf274dce51e737222c34ef8a1bbee3b5ec5019a5e068eff6",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "short"
+      }
+    },
+    {
+      "file": "revoke-reason-spaces-1440.png",
+      "width": 1440,
+      "scene": "revoke-reason-spaces",
+      "sha256": "84ca798f3de3f8feef6f143f00c9eae79cf4a6885ef56515962b1f7a9674ad7b",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "spaces"
+      }
+    },
+    {
+      "file": "revoke-reason-long-1440.png",
+      "width": 1440,
+      "scene": "revoke-reason-long",
+      "sha256": "c72eb71bdeba659975a24aa398fd816bee79193b7de9da667544b7ebe79993f8",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "long"
+      }
+    },
+    {
+      "file": "create-ready-form-1440.png",
+      "width": 1440,
+      "scene": "create-ready-form",
+      "sha256": "e30d12a2bba71c03e2c1057f73812aa038f7546cab6914106bd4d53c0903f844",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "create-errors-form-1440.png",
+      "width": 1440,
+      "scene": "create-errors-form",
+      "sha256": "ef70454454add2aa7fff551e9f7f3403b0621ba0ca9f9bf6582e11f6eed2750c",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "create-no-actions-form-1440.png",
+      "width": 1440,
+      "scene": "create-no-actions-form",
+      "sha256": "c34c303a47d1a3ffcc9021b6da46c127300491a5ac7d886d54dc9015c4e50434",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "create-pending-form-1440.png",
+      "width": 1440,
+      "scene": "create-pending-form",
+      "sha256": "11237faf93c7fed5a520f7e30bfa1cde13366ce7ee965484a2e14aaad1c682ad",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "extend-ready-form-1440.png",
+      "width": 1440,
+      "scene": "extend-ready-form",
+      "sha256": "7dcba4147f13f13525619c7613f6018c43eb535337d6a6bb26078c9c55a48c7a",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "extend-not-later-form-1440.png",
+      "width": 1440,
+      "scene": "extend-not-later-form",
+      "sha256": "52be970ac1869569269f1513457080fcd69c6b5da8e8cbe705f056565cd95d6e",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "extend-pending-form-1440.png",
+      "width": 1440,
+      "scene": "extend-pending-form",
+      "sha256": "72d99b60fa712cb3ab135c8537dc913bf690b7b1d00f66a8bd1b7eebe312084c",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "revoke-short-form-1440.png",
+      "width": 1440,
+      "scene": "revoke-short-form",
+      "sha256": "8b2b78760a7ea14edaca344a2525ca83063312cff2ff0990a0eabbb9b7d85ec8",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "revoke-long-form-1440.png",
+      "width": 1440,
+      "scene": "revoke-long-form",
+      "sha256": "59637b4ccc81c00a923b7610a2c4a5ae7388453a7649f5e6e8160aed26d0ffd3",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "role-query-default-390.png",
+      "width": 390,
+      "scene": "role-query-default",
+      "sha256": "f810929fa76a8c6e9acaa2928e8e235a77f8bd808af0aa356e8cd8cb0000d16c",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "role-query-hover-390.png",
+      "width": 390,
+      "scene": "role-query-hover",
+      "sha256": "f810929fa76a8c6e9acaa2928e8e235a77f8bd808af0aa356e8cd8cb0000d16c",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "role-query-focus-390.png",
+      "width": 390,
+      "scene": "role-query-focus",
+      "sha256": "dd063ae99d27c421c0cb0e37ae197207f0b845160297139ca9d5f54edb05a217",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "role-query-filled-390.png",
+      "width": 390,
+      "scene": "role-query-filled",
+      "sha256": "8e78f8d48839e3d3b465f5adfe5908a7e369394f1f1bd1a4b8d9341508735ab2",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "role-query-empty-results-390.png",
+      "width": 390,
+      "scene": "role-query-empty-results",
+      "sha256": "3cb07d4e67631031c288a6c3d6fc1cf01e84fd73512a2c6997b4ba23ba69d0ce",
+      "field": {
+        "binding": "roleQuery",
+        "selector": "#role-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "capability-query-default-390.png",
+      "width": 390,
+      "scene": "capability-query-default",
+      "sha256": "40d7d89215b27f7ab58b9011050ae43028fbf3d1f0d9d68bb8ff4de560dc4007",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "capability-query-hover-390.png",
+      "width": 390,
+      "scene": "capability-query-hover",
+      "sha256": "40d7d89215b27f7ab58b9011050ae43028fbf3d1f0d9d68bb8ff4de560dc4007",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "capability-query-focus-390.png",
+      "width": 390,
+      "scene": "capability-query-focus",
+      "sha256": "0d2bc372306cc5c2932463fea258d24bb458d026168a081ed1188f58b2dd2216",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "capability-query-filled-390.png",
+      "width": 390,
+      "scene": "capability-query-filled",
+      "sha256": "3b69196fac44d6577e092ff8808b48eef5009f2353e528be80fcec1e68c1572b",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "capability-query-empty-results-390.png",
+      "width": 390,
+      "scene": "capability-query-empty-results",
+      "sha256": "a021fca4beea0887e6f818487d338c786f64e7bd5cf2dcad15d1fa7d717c7b6e",
+      "field": {
+        "binding": "capabilityQuery",
+        "selector": "#capability-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "capability-group-default-390.png",
+      "width": 390,
+      "scene": "capability-group-default",
+      "sha256": "d38c323524f96982f33b60846b14687912b705effd6580fa871fa607d8d41609",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "default"
+      }
+    },
+    {
+      "file": "capability-group-hover-390.png",
+      "width": 390,
+      "scene": "capability-group-hover",
+      "sha256": "983697f7674985d7d579316d00aa15f85a51b08cdc6a938df03d91ea9aec84f9",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "capability-group-focus-390.png",
+      "width": 390,
+      "scene": "capability-group-focus",
+      "sha256": "4b2db82f2d5d8e0cb28ea7af88ab0755efc04ca9736a6db630a9dadd30090d9c",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "capability-group-governance-390.png",
+      "width": 390,
+      "scene": "capability-group-governance",
+      "sha256": "6134a3e8a261eefec3a9c431af16cdd347ddbdba81e50aa18872008c89c7ee8a",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "governance"
+      }
+    },
+    {
+      "file": "capability-group-audit-390.png",
+      "width": 390,
+      "scene": "capability-group-audit",
+      "sha256": "74474504ee55b668d61d26ebbcb46e48d4a2e72888921c3b22cf750c9278e339",
+      "field": {
+        "binding": "capabilityGroup",
+        "selector": "#capability-group",
+        "state": "audit"
+      }
+    },
+    {
+      "file": "member-query-default-390.png",
+      "width": 390,
+      "scene": "member-query-default",
+      "sha256": "6082edee86c8000b225b1f3fc1bae63ea7ec816cc2d5fc4c14ec8cd3d980630e",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "member-query-hover-390.png",
+      "width": 390,
+      "scene": "member-query-hover",
+      "sha256": "6082edee86c8000b225b1f3fc1bae63ea7ec816cc2d5fc4c14ec8cd3d980630e",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "member-query-focus-390.png",
+      "width": 390,
+      "scene": "member-query-focus",
+      "sha256": "d4803235774d1fb67fbcb6ac98f1562673f5615fb65c9c67886a5ee2bbd631e1",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "member-query-filled-390.png",
+      "width": 390,
+      "scene": "member-query-filled",
+      "sha256": "06c7d6a77554ea4c9ee1e03a598b60d92b24f0ac9f817d5087ea9134c085e04e",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "member-query-empty-results-390.png",
+      "width": 390,
+      "scene": "member-query-empty-results",
+      "sha256": "f3b5ee751203c3d90f273b2aaa2cd41267d02d8cc63b7a6a2443c22552b4650d",
+      "field": {
+        "binding": "scopeQuery",
+        "selector": "#member-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "scope-filter-default-390.png",
+      "width": 390,
+      "scene": "scope-filter-default",
+      "sha256": "d3cfec3f25363d0730cdfe1e5108a1c3f34c46e9f4e3a4b88bdb8d15239e4041",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "default"
+      }
+    },
+    {
+      "file": "scope-filter-hover-390.png",
+      "width": 390,
+      "scene": "scope-filter-hover",
+      "sha256": "acb5c0cb79c13d5644b8581886ba6d7e286f953c2dfc0154b72a890cf6264b59",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "scope-filter-focus-390.png",
+      "width": 390,
+      "scene": "scope-filter-focus",
+      "sha256": "7cf45dc3cd327a9c120103b7150639f9bd8c059c52d1d34a1f53f137fc9effc4",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "scope-filter-own-390.png",
+      "width": 390,
+      "scene": "scope-filter-own",
+      "sha256": "232f3de8dc1b6dc4dfc01f40bbaaf3f9adaeb97a311d298bf764847cd3644bfe",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "own"
+      }
+    },
+    {
+      "file": "scope-filter-team-390.png",
+      "width": 390,
+      "scene": "scope-filter-team",
+      "sha256": "83ef008bf908a85a199543d993ea10d648cb811d8de1cdd4cc8cf2cb7827c1ae",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "team"
+      }
+    },
+    {
+      "file": "scope-filter-workspace-390.png",
+      "width": 390,
+      "scene": "scope-filter-workspace",
+      "sha256": "6a7555d2119ba696162478cda2dae426f11becc9080d998e79a585707070673a",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "workspace"
+      }
+    },
+    {
+      "file": "scope-filter-organization-390.png",
+      "width": 390,
+      "scene": "scope-filter-organization",
+      "sha256": "fdabc14836ab80ebb2ab8187ee8506f65e4aa79b2d33cbb3524ef3e744688ad7",
+      "field": {
+        "binding": "scopeFilter",
+        "selector": "#scope-filter",
+        "state": "organization"
+      }
+    },
+    {
+      "file": "grant-query-default-390.png",
+      "width": 390,
+      "scene": "grant-query-default",
+      "sha256": "2dde3c6a800fd1ce7b85435c110c5292cc4aaf1079e59d3a27d783fc5f72ffb5",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "default"
+      }
+    },
+    {
+      "file": "grant-query-hover-390.png",
+      "width": 390,
+      "scene": "grant-query-hover",
+      "sha256": "dd4439bd4310577baea92f3d8306cedada30deea0b2013933b8be75c289c93b1",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "grant-query-focus-390.png",
+      "width": 390,
+      "scene": "grant-query-focus",
+      "sha256": "910688272793c2d7c418c3c41720724fd1eec2d107a7836bf7e9bd2b4cabb422",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "grant-query-filled-390.png",
+      "width": 390,
+      "scene": "grant-query-filled",
+      "sha256": "5a716681d98d3b376eaa7c8ea27265f44782fa2c2639f976797394898569b55b",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "grant-query-empty-results-390.png",
+      "width": 390,
+      "scene": "grant-query-empty-results",
+      "sha256": "a2323b7215300d3dda9b70b562974619917f76a7e79e69570fb9cb0b38a28dfc",
+      "field": {
+        "binding": "grantQuery",
+        "selector": "#grant-query",
+        "state": "empty-results"
+      }
+    },
+    {
+      "file": "workspace-default-390.png",
+      "width": 390,
+      "scene": "workspace-default",
+      "sha256": "6c5aa9debf8e6d6178fef048ddf4a2f683e84a033207875aa88247dc0167e152",
+      "field": {
+        "binding": "grantForm.workspace_id",
+        "selector": "#workspace",
+        "state": "default"
+      }
+    },
+    {
+      "file": "workspace-hover-390.png",
+      "width": 390,
+      "scene": "workspace-hover",
+      "sha256": "ee90d0869188875291d9ad874eca440d4f19dc91eb1cce4007b00d946ba9172d",
+      "field": {
+        "binding": "grantForm.workspace_id",
+        "selector": "#workspace",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "workspace-focus-390.png",
+      "width": 390,
+      "scene": "workspace-focus",
+      "sha256": "e544745cf2533f0bf0eeaaa9fd4a6014ec55c9819af40fdee5b5eb81adba0c0a",
+      "field": {
+        "binding": "grantForm.workspace_id",
+        "selector": "#workspace",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "resource-type-default-390.png",
+      "width": 390,
+      "scene": "resource-type-default",
+      "sha256": "82281f8b4a90e998ae39970c238dec29696e829b95bcb69853c7d72f3314bc7b",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "default"
+      }
+    },
+    {
+      "file": "resource-type-hover-390.png",
+      "width": 390,
+      "scene": "resource-type-hover",
+      "sha256": "95711e0722f3075af5664f0cc94e65dbe53d035fdf70b6866335a5cd582ac6b1",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "resource-type-focus-390.png",
+      "width": 390,
+      "scene": "resource-type-focus",
+      "sha256": "5acc7644a54026fa17ac582bc7cad59ef752f4efd59de3fa09ef6be249bb8109",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "resource-type-task-390.png",
+      "width": 390,
+      "scene": "resource-type-task",
+      "sha256": "f3b1b919af0e48f017277a025b3aef71bbdb612924e1fc3183dca0004dae231b",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "task"
+      }
+    },
+    {
+      "file": "resource-type-opportunity-390.png",
+      "width": 390,
+      "scene": "resource-type-opportunity",
+      "sha256": "21bbaac0ae183011d4400d8d8516cd9da0e6eb0013720fbcbeb70362d632f0db",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "opportunity"
+      }
+    },
+    {
+      "file": "resource-type-competitor-390.png",
+      "width": 390,
+      "scene": "resource-type-competitor",
+      "sha256": "01bc5238b9731b4acf5463814b99825eef9731585f0834c4b00e03d41c75dcb0",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "competitor"
+      }
+    },
+    {
+      "file": "resource-type-sourcing-390.png",
+      "width": 390,
+      "scene": "resource-type-sourcing",
+      "sha256": "c74ff8e3a8622bcb1dfbafce234fb7a7bb878f91fd66c3b31561a81c959d31fa",
+      "field": {
+        "binding": "grantForm.resource_type",
+        "selector": "#resource-type",
+        "state": "sourcing"
+      }
+    },
+    {
+      "file": "resource-id-default-390.png",
+      "width": 390,
+      "scene": "resource-id-default",
+      "sha256": "87332a6ef15e64ea075c2a30c439e63020b620b2ab9e172bf22197586447bd69",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "default"
+      }
+    },
+    {
+      "file": "resource-id-hover-390.png",
+      "width": 390,
+      "scene": "resource-id-hover",
+      "sha256": "58898665b632ce04d9a058ec6b91c415bb5449a98695e3c115d4020a6c86f68c",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "resource-id-focus-390.png",
+      "width": 390,
+      "scene": "resource-id-focus",
+      "sha256": "a6c6d8bb7e1e6b1068b8c5179db37c6f25b24987fa069cd493a11202bee134a8",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "resource-id-empty-390.png",
+      "width": 390,
+      "scene": "resource-id-empty",
+      "sha256": "ea38ab222d3d0312697eac02387dff7bd09c177de1b46fb7aaad570d5aa87e4d",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "resource-id-invalid-390.png",
+      "width": 390,
+      "scene": "resource-id-invalid",
+      "sha256": "1001b6c05e84ae412ea7198850bb0005955bb2ff8c39a5156d017cd00801103f",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "invalid"
+      }
+    },
+    {
+      "file": "resource-id-filled-390.png",
+      "width": 390,
+      "scene": "resource-id-filled",
+      "sha256": "4420f033889863ec2931f0914304cd0c7c83d79288e49bad220f456f745efc78",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "filled"
+      }
+    },
+    {
+      "file": "resource-id-pending-390.png",
+      "width": 390,
+      "scene": "resource-id-pending",
+      "sha256": "0de0eebcf510f7f3e7e0ea8b137fd2d515469c6b5a2825a765e79affb9398cd8",
+      "field": {
+        "binding": "grantForm.resource_id",
+        "selector": "#resource-id",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "member-target-default-390.png",
+      "width": 390,
+      "scene": "member-target-default",
+      "sha256": "1ed5e51a8ee47176c830cb2a2cf6493926628e03682a578a6e86fe7731ffb4a0",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "default"
+      }
+    },
+    {
+      "file": "member-target-hover-390.png",
+      "width": 390,
+      "scene": "member-target-hover",
+      "sha256": "1ed5e51a8ee47176c830cb2a2cf6493926628e03682a578a6e86fe7731ffb4a0",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "member-target-focus-390.png",
+      "width": 390,
+      "scene": "member-target-focus",
+      "sha256": "199173d46a59f2184ee2718357a7dd18abeb1a3f198fc2a40157ea7fe624a0d7",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "member-target-empty-390.png",
+      "width": 390,
+      "scene": "member-target-empty",
+      "sha256": "b15a21b9a865186ba73a4a0c12ecc28a00d680be7fe83d4cc5da15a3781215aa",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "member-target-selected-390.png",
+      "width": 390,
+      "scene": "member-target-selected",
+      "sha256": "777420d24e597f0388af5e6905deb24e78dfa243bb708d39f53bf186646e5851",
+      "field": {
+        "binding": "grantForm.grantee_membership_id",
+        "selector": "#member-target",
+        "state": "selected"
+      }
+    },
+    {
+      "file": "grant-actions-default-390.png",
+      "width": 390,
+      "scene": "grant-actions-default",
+      "sha256": "538b44544a3f825ab93e6ad5e5bb338aee6f63fa35098a84c43994d349f96033",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "default"
+      }
+    },
+    {
+      "file": "grant-actions-hover-390.png",
+      "width": 390,
+      "scene": "grant-actions-hover",
+      "sha256": "d49580c6c67f9532c78dc62e35a85c1b65e0370f4ef950504e86745ee814451b",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "grant-actions-focus-390.png",
+      "width": 390,
+      "scene": "grant-actions-focus",
+      "sha256": "c5cd96c8632569e672ad30280bff2604af133d85e7f1fb78d3723038d347b27f",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "grant-actions-none-390.png",
+      "width": 390,
+      "scene": "grant-actions-none",
+      "sha256": "745f19693a1e783f866ae11b65c3a84a1300f57fd9544b2d196fce7fa9855548",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "none"
+      }
+    },
+    {
+      "file": "grant-actions-all-390.png",
+      "width": 390,
+      "scene": "grant-actions-all",
+      "sha256": "7bf0a6113e2c1cb3ab969da961477a7b185de867f8b8a4c1fe2164ece9f14169",
+      "field": {
+        "binding": "grantForm.actions",
+        "selector": "#grant-actions label:first-child input",
+        "state": "all"
+      }
+    },
+    {
+      "file": "create-reason-default-390.png",
+      "width": 390,
+      "scene": "create-reason-default",
+      "sha256": "ea44f757f881d9173f07e4d27ee81db3f2e725b63e2647b6936ae637254bf1cd",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "create-reason-hover-390.png",
+      "width": 390,
+      "scene": "create-reason-hover",
+      "sha256": "ea44f757f881d9173f07e4d27ee81db3f2e725b63e2647b6936ae637254bf1cd",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "create-reason-focus-390.png",
+      "width": 390,
+      "scene": "create-reason-focus",
+      "sha256": "d0ce9d55b1dc35a9b2238ada042c28ffb3337740ee74f7da4890924d3a381db6",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "create-reason-empty-390.png",
+      "width": 390,
+      "scene": "create-reason-empty",
+      "sha256": "208a21cf215161dc491f662cfcc158ff4a4ff9028b207fcd6bbe5f9256b52454",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "create-reason-spaces-390.png",
+      "width": 390,
+      "scene": "create-reason-spaces",
+      "sha256": "7a823f3c1d1a4253ef847a1d356787ebad09a7e0d0d58fddb123de61fe23b171",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "spaces"
+      }
+    },
+    {
+      "file": "create-reason-limit-390.png",
+      "width": 390,
+      "scene": "create-reason-limit",
+      "sha256": "872f252b0b12265d5aebe8b3b035a231b2154bf0d16e1715cd39e1ca6eddf6c1",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "limit"
+      }
+    },
+    {
+      "file": "create-reason-pending-390.png",
+      "width": 390,
+      "scene": "create-reason-pending",
+      "sha256": "adb82b90ab799f4a901798861ba161c601fe4d1e32c43d6a57ad0ad4809e79c1",
+      "field": {
+        "binding": "grantForm.reason",
+        "selector": "#create-reason",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "expires-at-default-390.png",
+      "width": 390,
+      "scene": "expires-at-default",
+      "sha256": "9d4e2c112c920d926c859fcd2473be499c487fa572a0533518cce7c3ee6f3bcb",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "default"
+      }
+    },
+    {
+      "file": "expires-at-hover-390.png",
+      "width": 390,
+      "scene": "expires-at-hover",
+      "sha256": "b8df56f3a393f6c5de756c0d71960e2d23c48a6b308bfa9581cfbf96f9140df8",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "expires-at-focus-390.png",
+      "width": 390,
+      "scene": "expires-at-focus",
+      "sha256": "3db03a58fd820651674581aee4e1f8f41be249120c13a47656f150fa7e0fd117",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "expires-at-past-390.png",
+      "width": 390,
+      "scene": "expires-at-past",
+      "sha256": "ceb51bc1cf9e59223686549e39dc7603bc2fd0cb2a108b680b60ae5a1f877b53",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "past"
+      }
+    },
+    {
+      "file": "expires-at-over-limit-390.png",
+      "width": 390,
+      "scene": "expires-at-over-limit",
+      "sha256": "1bc7e491cf8b9a446ff83c1d12dad3a383e4e5c83fa9cc1fd639e2622541fac8",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "over-limit"
+      }
+    },
+    {
+      "file": "expires-at-pending-390.png",
+      "width": 390,
+      "scene": "expires-at-pending",
+      "sha256": "14738a1b95dec052c21975beddd102cd5d98a297962ed5d85c3e8aa5327476fe",
+      "field": {
+        "binding": "grantForm.expires_at",
+        "selector": "#expires-at",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "extend-reason-default-390.png",
+      "width": 390,
+      "scene": "extend-reason-default",
+      "sha256": "8218fc16f46a0eeb408c48d021581b1b9ba3f953e18b59d38a6d10372e07d5e8",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "extend-reason-hover-390.png",
+      "width": 390,
+      "scene": "extend-reason-hover",
+      "sha256": "b640eb003dc95269e254a161e939c517543210cb4fef8e6cdc9bb9538b99db20",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "extend-reason-focus-390.png",
+      "width": 390,
+      "scene": "extend-reason-focus",
+      "sha256": "fcf0e50160e151b52de9e2b97837af360f22bfc875e44632a5b93e5079c76af8",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "extend-reason-empty-390.png",
+      "width": 390,
+      "scene": "extend-reason-empty",
+      "sha256": "476be350b29833d7612a27bfe2547647511e9bbce7305ee5960a0350d8cc5c69",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "extend-reason-spaces-390.png",
+      "width": 390,
+      "scene": "extend-reason-spaces",
+      "sha256": "c0be03d45cfdcb8a2c5d1aba03c96a9bed542c5c3a5ac516cd4da2cd81881180",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "spaces"
+      }
+    },
+    {
+      "file": "extend-reason-limit-390.png",
+      "width": 390,
+      "scene": "extend-reason-limit",
+      "sha256": "b7fb939b324ac11372181e33c8c4d6ca3922d7cd0bbcf2ff6c1915bae7d9cd4a",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "limit"
+      }
+    },
+    {
+      "file": "extend-reason-pending-390.png",
+      "width": 390,
+      "scene": "extend-reason-pending",
+      "sha256": "8b4e9eb5f2a15f281a4a06abe3df0f5da254c5cea3d49fab70bed7b3e3a0f29e",
+      "field": {
+        "binding": "grantMutation.reason",
+        "selector": "#extend-reason",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "extend-expiry-default-390.png",
+      "width": 390,
+      "scene": "extend-expiry-default",
+      "sha256": "ea257ef03114a855b7c7ffc4c5f13dbcff770fd9ea239b0a52d03e9cca0da1f7",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "default"
+      }
+    },
+    {
+      "file": "extend-expiry-hover-390.png",
+      "width": 390,
+      "scene": "extend-expiry-hover",
+      "sha256": "e06b520b367ff7c05e1704aa149d6139c3e21e638401f9edde9b9ee2ef93b0a7",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "extend-expiry-focus-390.png",
+      "width": 390,
+      "scene": "extend-expiry-focus",
+      "sha256": "f6159d242e295873b9e571802f303bfc75c465228feffbc46ed976732d9aa4bf",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "extend-expiry-past-390.png",
+      "width": 390,
+      "scene": "extend-expiry-past",
+      "sha256": "6baa33c940e32dd4544b23a17d34164a297c0ac6cfe9c83d598289b32d3c3002",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "past"
+      }
+    },
+    {
+      "file": "extend-expiry-over-limit-390.png",
+      "width": 390,
+      "scene": "extend-expiry-over-limit",
+      "sha256": "a7c7972ace504a11783004fb23a2f18982109ba4ea24f758586f253e19092c12",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "over-limit"
+      }
+    },
+    {
+      "file": "extend-expiry-not-extended-390.png",
+      "width": 390,
+      "scene": "extend-expiry-not-extended",
+      "sha256": "8402b0068afe054548bb2ab29df365c407b51f5b13be79ec46a441088a279179",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "not-extended"
+      }
+    },
+    {
+      "file": "extend-expiry-pending-390.png",
+      "width": 390,
+      "scene": "extend-expiry-pending",
+      "sha256": "11899e4979f2dad89125b78679cb84c4497f4e67a9022d0961a4cb06fda57668",
+      "field": {
+        "binding": "grantMutation.expires_at",
+        "selector": "#extend-expiry",
+        "state": "pending"
+      }
+    },
+    {
+      "file": "revoke-reason-default-390.png",
+      "width": 390,
+      "scene": "revoke-reason-default",
+      "sha256": "532dba56fd56766941a96e0db0f69d376c88f50e3f83f84bcc93fbf44a6526e6",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "revoke-reason-hover-390.png",
+      "width": 390,
+      "scene": "revoke-reason-hover",
+      "sha256": "532dba56fd56766941a96e0db0f69d376c88f50e3f83f84bcc93fbf44a6526e6",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "hover"
+      }
+    },
+    {
+      "file": "revoke-reason-focus-390.png",
+      "width": 390,
+      "scene": "revoke-reason-focus",
+      "sha256": "de597a2a4d1b1dfd224bc466341778446857ca0553d00dd20dea9e7816e50e9b",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "revoke-reason-short-390.png",
+      "width": 390,
+      "scene": "revoke-reason-short",
+      "sha256": "3bd422a9cdced5f862ea3fb088f7dfca41fb770b1084b96e1425300e3563003d",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "short"
+      }
+    },
+    {
+      "file": "revoke-reason-spaces-390.png",
+      "width": 390,
+      "scene": "revoke-reason-spaces",
+      "sha256": "a07e16b99f036faafe199ca324cbaf7a118b7ceb2c92bf65d2bc0699ae8259f3",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "spaces"
+      }
+    },
+    {
+      "file": "revoke-reason-long-390.png",
+      "width": 390,
+      "scene": "revoke-reason-long",
+      "sha256": "c48c7b86a0114f117961f2097e9ec72f5d1ad6f11162ca34fddc13f4ee9477f6",
+      "field": {
+        "binding": "reason",
+        "selector": "#revoke-reason",
+        "state": "long"
+      }
+    },
+    {
+      "file": "create-ready-form-390.png",
+      "width": 390,
+      "scene": "create-ready-form",
+      "sha256": "dbff5a53d3af354bcc996504f31efe109522623e4c4d91303af064c1a0f70df1",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "create-errors-form-390.png",
+      "width": 390,
+      "scene": "create-errors-form",
+      "sha256": "0b305227d6e9fafeb37e557e19edcdb0812bd279729eaf1a9883e4914a141737",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "create-no-actions-form-390.png",
+      "width": 390,
+      "scene": "create-no-actions-form",
+      "sha256": "6e2219324a74749d61eb0c124d575d65653c14c691d4d22c25b8b033387719a2",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "create-pending-form-390.png",
+      "width": 390,
+      "scene": "create-pending-form",
+      "sha256": "dfb47b4442624b462f13b3df6f54ce51be9cd9f28587dc0a90a283a1a1280d5d",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "extend-ready-form-390.png",
+      "width": 390,
+      "scene": "extend-ready-form",
+      "sha256": "decef7bf70545f9534a650be1b40c8729c39f0612ac164499cb29ffb933d4285",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "extend-not-later-form-390.png",
+      "width": 390,
+      "scene": "extend-not-later-form",
+      "sha256": "a1f7d4f1589a722f2cbef181b8fef5bcd9df2bb77f3350eb60dbe6a42df2fd11",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "extend-pending-form-390.png",
+      "width": 390,
+      "scene": "extend-pending-form",
+      "sha256": "b673a08539adaf1f14ccaa11130e4d0f2309e7601bd1a5263020e50ae8047ab9",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "revoke-short-form-390.png",
+      "width": 390,
+      "scene": "revoke-short-form",
+      "sha256": "3876632bc1aa1dc3a3e4ecdf62bf523db573224855785b68d3828ef313128d6b",
+      "scope": "field-combination-not-production"
+    },
+    {
+      "file": "revoke-long-form-390.png",
+      "width": 390,
+      "scene": "revoke-long-form",
+      "sha256": "3b885c6c93ed4aa2920ba60a115a4a8d312d4bc9a70f66633ce9c6bccf03a653",
+      "scope": "field-combination-not-production"
+    }
+  ]
+}

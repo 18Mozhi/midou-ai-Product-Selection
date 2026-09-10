@@ -1,0 +1,40 @@
+input:not([type="checkbox"]),
+select,
+textarea {
+  border-color: #667f9e;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+fieldset:focus-within {
+  outline: 3px solid #153e92;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px white;
+}
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"],
+fieldset[aria-invalid="true"] {
+  border-color: #a22b38;
+  border-width: 2px;
+}
+.field-help,
+.field-error {
+  display: block;
+  font-size: 16px;
+  margin: 10px 0 0;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.field-help {
+  color: #485e78;
+}
+.field-error {
+  color: #9b2634;
+}
+.field-error[hidden] {
+  display: none;
+}
+#grant-actions + .field-help {
+  margin-top: 10px;
+}

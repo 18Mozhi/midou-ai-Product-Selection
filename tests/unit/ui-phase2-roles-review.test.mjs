@@ -15,14 +15,26 @@ import {
   parentFile,
   childFile,
   dependencies,
-  buildRolesReview,
+  buildRolesReview as buildReview,
 } from "../../scripts/build-ui-phase2-roles-review.mjs";
 
 const sources = Object.fromEntries(
   dependencies.map((f) => [f, readFileSync(f, "utf8").replaceAll("\r\n", "\n")]),
 );
 const evidence = JSON.parse(readFileSync(`${base}/design/roles-direction-c/evidence.json`, "utf8"));
-const packages = new Map([["roles-direction-c", evidence]]);
+const controlsEvidence = JSON.parse(
+  readFileSync(`${base}/design/roles-controls-direction-c/evidence.json`, "utf8"),
+);
+const fieldEvidence = JSON.parse(
+  readFileSync(`${base}/design/roles-fields-direction-c/evidence.json`, "utf8"),
+);
+const buildRolesReview = (sources, evidence) =>
+  buildReview(sources, evidence, controlsEvidence, fieldEvidence);
+const packages = new Map([
+  ["roles-direction-c", evidence],
+  ["roles-controls-direction-c", controlsEvidence],
+  ["roles-fields-direction-c", fieldEvidence],
+]);
 const context = {
   candidates: [parentFile, childFile].flatMap((f) => scanSource(sources[f], f).candidates),
   sourceHashes: Object.fromEntries(
@@ -30,7 +42,10 @@ const context = {
   ),
   contracts: runContractAudit().records,
   packages,
-  files: new Set(["scripts/verify-ui-phase2-roles-c.mjs"]),
+  files: new Set([
+    "scripts/verify-ui-phase2-roles-c.mjs",
+    "scripts/verify-ui-phase2-roles-controls-c.mjs",
+  ]),
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P31.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
@@ -44,7 +59,7 @@ test("P31 covers 30 sites with 20 actions, six exact forwards and no implied app
   assert.equal(result.writeActions, 3);
   assert.equal(result.wiringGroups, 1);
   assert.equal(result.excludedGroups, 3);
-  assert.equal(result.unmappedVisualSlots, 120);
+  assert.equal(result.unmappedVisualSlots, 44);
   const wire = r.actions.find((a) => a.kind === "wiring");
   assert.equal(wire.forwardBindings.length, 6);
   assert.equal(wire.forwardsTo.length, 8);
@@ -69,7 +84,7 @@ test("P31 registers 20 models, one controlled type and shared reason separately"
     result = validateReviewSurfaces(r.surfaceReview, { sources, packages });
   assert.equal(result.localModelBindings, 20);
   assert.equal(result.callerContainers, 4);
-  assert.equal(result.consumerVariants, 11);
+  assert.equal(result.consumerVariants, 20);
   const values = [];
   function visit(n) {
     if (n.type === 1 && ["input", "textarea", "select"].includes(n.tag)) {
@@ -116,11 +131,18 @@ test("P31 rejects omitted identities, changed wiring, fields, stale sources and 
     /verify current roles proposal/,
   );
 });
-test("P31 keeps 48 contextual images distinct from 120 exact missing state references", () => {
+test("P31 keeps 48 contextual images distinct from 76 exact representative references and 44 missing slots", () => {
   assert.equal(evidence.screenshots.length, 48);
   for (const a of review().actions.filter((a) => !["wiring", "excluded"].includes(a.kind))) {
-    assert.ok(Object.values(a.visualStates).every((v) => v === "not-mapped"));
-    assert.equal(a.visualStateReferences, undefined);
+    if (["OG-REFRESH", "OG-RETRY"].includes(a.actionId)) {
+      assert.ok(Object.values(a.visualStates).every((v) => v === "not-mapped"));
+      assert.equal(a.visualStateReferences, undefined);
+    } else
+      assert.ok(
+        Object.values(a.visualStateReferences).every(
+          (ref) => ref.package === "roles-controls-direction-c",
+        ),
+      );
   }
   const missing = structuredClone(evidence);
   missing.screenshots = missing.screenshots.filter(
@@ -130,13 +152,191 @@ test("P31 keeps 48 contextual images distinct from 120 exact missing state refer
     () =>
       validateActionReview(review(), {
         ...context,
-        packages: new Map([["roles-direction-c", missing]]),
+        packages: new Map([...packages, ["roles-direction-c", missing]]),
       }),
     /missing scene\/viewport/,
   );
 });
 
+test("P31 control catalog covers 42 controls, 18 representatives and 24 variants without inventing enabled pages", () => {
+  const e = controlsEvidence;
+  assert.equal(Object.keys(e.controlReferences).length, 42);
+  assert.equal(Object.keys(e.actionVisualReferences).length, 18);
+  assert.equal(Object.keys(e.controlVariantReferences).length, 24);
+  assert.equal(e.screenshots.length, 378);
+  assert.equal(e.checks.length, 378);
+  assert.equal(e.interactions.length, 78);
+  assert.equal(
+    Object.values(e.actionVisualReferences).reduce(
+      (n, ref) => n + Object.keys(ref.states).length,
+      0,
+    ),
+    76,
+  );
+  assert.equal(
+    Object.values(e.controlVariantReferences).reduce(
+      (n, ref) => n + Object.keys(ref.states).length,
+      0,
+    ),
+    113,
+  );
+  for (const id of ["page-prev", "page-next", "create-no-actions"])
+    assert.deepEqual(Object.keys(e.controlReferences[id].states), ["disabled"]);
+  assert.deepEqual(Object.keys(e.controlReferences["resource-type"].states), [
+    "default",
+    "hover",
+    "focus",
+  ]);
+  for (const part of ["confirm", "cancel", "close"])
+    assert.equal(e.controlReferences[`reason-${part}`].states.busy, undefined);
+});
+test("P31 control evidence binds exact selector, states and both viewports with no stale source bypass", () => {
+  const dir = `${base}/design/roles-controls-direction-c`;
+  for (const [file, sha] of Object.entries(controlsEvidence.sourceHashes))
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
+        .digest("hex"),
+      sha,
+      file,
+    );
+  for (const shot of controlsEvidence.screenshots) {
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(`${dir}/${shot.file}`))
+        .digest("hex"),
+      shot.sha256,
+    );
+    assert.ok(
+      controlsEvidence.checks.some(
+        (c) =>
+          `P31-${c.id}` === shot.control.key &&
+          c.state === shot.control.state &&
+          c.width === shot.width,
+      ),
+    );
+  }
+  const missing = structuredClone(controlsEvidence);
+  missing.screenshots = missing.screenshots.filter(
+    (s) => s.scene !== "reason-confirm-focus" || s.width !== 390,
+  );
+  assert.throws(
+    () =>
+      validateActionReview(review(), {
+        ...context,
+        packages: new Map([...packages, ["roles-controls-direction-c", missing]]),
+      }),
+    /missing scene\/viewport/,
+  );
+});
+test("P31 selected and available variants are explicit while click counters are not backend acceptance", () => {
+  for (const prefix of [
+    "section-roles",
+    "section-scopes",
+    "section-grants",
+    "role-auditor",
+    "role-organization_admin",
+    "status-all",
+    "status-active",
+    "status-expired",
+    "status-revoked",
+  ]) {
+    assert.equal(controlsEvidence.controlReferences[`${prefix}-selected`].selected, true);
+    assert.equal(controlsEvidence.controlReferences[`${prefix}-available`].selected, false);
+  }
+  assert.ok(
+    controlsEvidence.interactions.every(
+      (i) => i.outcome === "passed-offline-input-demo-not-Vue-or-API",
+    ),
+  );
+  assert.equal(review().approval, "pending-user-review");
+});
+
 const ref = (value) => ({ value });
+test("P31 fields bind all sixteen sources and nine form combinations without approving them", () => {
+  const e = fieldEvidence,
+    r = review();
+  assert.equal(Object.keys(e.fieldVisualReferences).length, 16);
+  assert.equal(e.checks.length, 184);
+  assert.equal(e.screenshots.length, 202);
+  assert.equal(e.combinations.length, 9);
+  assert.equal(e.interactions.length, 18);
+  const expected = [
+    ...r.surfaceReview.inputs.filter((i) => i.file === childFile).map((i) => i.binding),
+    r.controlledInputs[0].value,
+    r.sharedReasonInput.binding,
+  ];
+  assert.deepEqual(Object.keys(e.fieldVisualReferences).sort(), expected.sort());
+  for (const input of r.surfaceReview.inputs.filter((i) => i.file === childFile))
+    assert.deepEqual(input.visualReferences, {
+      package: "roles-fields-direction-c",
+      ...e.fieldVisualReferences[input.binding],
+    });
+  assert.deepEqual(r.controlledInputs[0].visualReferences, {
+    package: "roles-fields-direction-c",
+    ...e.fieldVisualReferences["grantForm.resource_type"],
+  });
+  assert.deepEqual(r.sharedReasonInput.visualReferences, {
+    package: "roles-fields-direction-c",
+    ...e.fieldVisualReferences.reason,
+  });
+  assert.equal(r.approval, "pending-user-review");
+});
+test("P31 field source and screenshot fingerprints fail on stale evidence or omitted mobile combinations", () => {
+  for (const [file, sha] of Object.entries(fieldEvidence.sourceHashes))
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
+        .digest("hex"),
+      sha,
+      file,
+    );
+  for (const s of fieldEvidence.screenshots)
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(`${base}/design/roles-fields-direction-c/${s.file}`))
+        .digest("hex"),
+      s.sha256,
+    );
+  const missing = structuredClone(fieldEvidence);
+  missing.screenshots = missing.screenshots.filter(
+    (s) => s.scene !== "extend-not-later-form" || s.width !== 390,
+  );
+  assert.throws(
+    () =>
+      validateReviewSurfaces(review().surfaceReview, {
+        sources,
+        packages: new Map([...packages, ["roles-fields-direction-c", missing]]),
+      }),
+    /missing consumer scene\/viewport/,
+  );
+});
+test("P31 field checks distinguish shared501, invitation-free grant reasons500 and existing expiry rejection", () => {
+  for (const width of [1440, 390]) {
+    const c = (id, state) =>
+      fieldEvidence.checks.find((c) => c.id === id && c.state === state && c.width === width);
+    assert.equal(c("revoke-reason", "long").metrics.invalid, false);
+    assert.equal(c("revoke-reason", "short").metrics.invalid, true);
+    assert.equal(c("create-reason", "limit").metrics.invalid, false);
+    assert.equal(c("extend-reason", "spaces").metrics.invalid, true);
+    assert.equal(c("extend-expiry", "not-extended").metrics.invalid, true);
+    assert.equal(c("resource-id", "invalid").metrics.invalid, true);
+    assert.equal(c("grant-actions", "none").metrics.invalid, true);
+  }
+  assert.ok(fieldEvidence.checks.every((c) => c.metrics.help && !c.metrics.disabled));
+});
+test("P31 fixture-only controls do not claim extra workspaces, all OS popups or server acceptance", () => {
+  const e = fieldEvidence.fieldVisualReferences;
+  assert.deepEqual(Object.keys(e["grantForm.workspace_id"].states), ["default", "hover", "focus"]);
+  for (const value of ["task", "opportunity", "competitor", "sourcing"])
+    assert.ok(e["grantForm.resource_type"].states[value]);
+  for (const value of ["own", "team", "workspace", "organization"])
+    assert.ok(e.scopeFilter.states[value]);
+  assert.equal(e["grantForm.resource_type"].states.pressed, undefined);
+  assert.ok(
+    fieldEvidence.interactions.every((i) => i.outcome === "offline-field-combination-only"),
+  );
+});
 const computed = (fn) => ({
   get value() {
     return fn();
