@@ -1,0 +1,5403 @@
+{
+  "proposal": "P37-CONTROLS-C-r1",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-controls/index.html": "3faeadabc587151c39f276456f68c3a0c25eecff6380b082377c582d0d6bbf2b",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-controls/controls.css": "b714535842d5bc6f220eca1fa794e05cfd659204d7dd2bb3f253fd4107b86dd7",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/index.html": "b91a65f21595a9f55ac8f818b8ab290e3185d1ed156ec058b66bdc36369ebfcf",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.css": "d624063a8fcc0707b712aa8e3a71df150299da932f09cf2419516c5a75814101",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.js": "9da43f94c0b8e6a18abfb72066a178ea858600805b7ed47a681e02643af7eb5f",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html": "b97a1c15dff7ffec7aa2ac03be156d8d6c76c43c2836b49d39a25cf7baaf4ec7",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.css": "6fb60d708949da6cbb4cc58e9df8a8ddc78118652839a42195581cd0c6190122",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.js": "c37158e37ba596bab736e3d73dddc548fd94736181b6ff9651c30f7eb3f99ede",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/data.js": "55140393af77c84207310badd4b497f70c486efa77dd146372d97ade27943aaf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "scripts/lib/ui-phase2-audit-controls.mjs": "e7436e6d091a6f58076ab3276bf3c112665bc00bf591fe03301166cd0ec20421",
+    "scripts/lib/ui-phase2-org-audit-design-data.mjs": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0",
+    "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb"
+  },
+  "retained": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/": {
+      "manifest": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
+      "images": 104
+    },
+    "output/playwright/p37-fields-review/": {
+      "manifest": "aeae7c35fe16617505326ffa5e71811d97c603a30210badda0de66db876f1e34",
+      "images": 38
+    }
+  },
+  "controls": [
+    {
+      "id": "apply",
+      "selector": "#apply",
+      "scene": "normal",
+      "source": "child:submitFilters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "disabledScene": "filter_busy",
+      "filters": true
+    },
+    {
+      "id": "reset",
+      "selector": "#reset",
+      "scene": "exact_draft",
+      "source": "child:resetFilters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "disabledScene": "filter_busy",
+      "filters": true
+    },
+    {
+      "id": "advanced-closed",
+      "selector": "#advanced summary",
+      "scene": "normal",
+      "source": "child:native advanced details",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "filters": true
+    },
+    {
+      "id": "advanced-open",
+      "selector": "#advanced summary",
+      "scene": "advanced",
+      "source": "child:native advanced details",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "filters": true
+    },
+    {
+      "id": "system-closed",
+      "selector": "#system",
+      "scene": "system_collapsed",
+      "source": "child:systemEventsExpanded toggle",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "system-open",
+      "selector": "#system",
+      "scene": "system_expanded",
+      "source": "child:systemEventsExpanded toggle",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "event-selected",
+      "selector": ".event-row[aria-pressed=true]",
+      "scene": "normal",
+      "source": "child:choose(event)",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "event-unselected",
+      "selector": ".event-row[aria-pressed=false]",
+      "scene": "normal",
+      "source": "child:choose(event)",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "more",
+      "selector": "#more",
+      "scene": "normal",
+      "source": "child:loadMore prop",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "disabledScene": "more_busy"
+    },
+    {
+      "id": "refresh",
+      "selector": "#refresh",
+      "scene": "normal",
+      "source": "parent:load({background:true})",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "disabledScene": "refreshing"
+    },
+    {
+      "id": "retry",
+      "selector": "#retry",
+      "scene": "error",
+      "source": "parent:load()",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "copy-request",
+      "selector": "[data-copy=\"request\"]",
+      "scene": "normal",
+      "source": "child:copy(request_id,request)",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "disabledScene": "missing_ids",
+      "disabledProposalOnly": true
+    },
+    {
+      "id": "copy-trace",
+      "selector": "[data-copy=\"trace\"]",
+      "scene": "normal",
+      "source": "child:copy(trace_id,trace)",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "disabledScene": "missing_ids",
+      "disabledProposalOnly": true
+    },
+    {
+      "id": "technical-closed",
+      "selector": ".technical summary",
+      "scene": "normal",
+      "source": "child:native technical details",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "technical-open",
+      "selector": ".technical summary",
+      "scene": "technical",
+      "source": "child:native technical details",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "clear-query",
+      "selector": "#clear-query",
+      "scene": "local_failed",
+      "source": "proposal:local search clear",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "filters-closed",
+      "selector": "#filters-toggle",
+      "scene": "normal",
+      "source": "proposal:mobile filter disclosure",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "mobile": true
+    },
+    {
+      "id": "filters-open",
+      "selector": "#filters-toggle",
+      "scene": "advanced",
+      "source": "proposal:mobile filter disclosure",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "mobile": true
+    },
+    {
+      "id": "back",
+      "selector": "#back-to-list",
+      "scene": "normal",
+      "source": "proposal:mobile focus return",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "mobile": true
+    }
+  ],
+  "compositions": [
+    [
+      "detail-normal",
+      "normal",
+      ".detail"
+    ],
+    [
+      "detail-selected",
+      "selected",
+      ".detail"
+    ],
+    [
+      "detail-technical",
+      "technical",
+      ".detail"
+    ],
+    [
+      "detail-long",
+      "long_ids",
+      ".detail"
+    ],
+    [
+      "detail-missing",
+      "missing_ids",
+      ".detail"
+    ],
+    [
+      "detail-empty",
+      "empty",
+      ".detail"
+    ]
+  ],
+  "checks": [
+    {
+      "width": 390,
+      "name": "apply:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "apply:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-apply-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "apply:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "apply:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "apply:hover"
+    },
+    {
+      "width": 390,
+      "name": "apply:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-apply-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "apply:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "apply:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "apply:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "apply:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-apply-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "apply:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "apply:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "apply:active"
+    },
+    {
+      "width": 390,
+      "name": "apply:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-apply-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "apply:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "apply:disabled:disabled"
+    },
+    {
+      "width": 390,
+      "name": "apply:disabled:height"
+    },
+    {
+      "width": 390,
+      "name": "control-apply-disabled:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "apply:disabled:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "reset:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "reset:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-reset-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "reset:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "reset:hover"
+    },
+    {
+      "width": 390,
+      "name": "reset:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-reset-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "reset:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "reset:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "reset:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-reset-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "reset:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "reset:active"
+    },
+    {
+      "width": 390,
+      "name": "reset:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-reset-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "reset:disabled:disabled"
+    },
+    {
+      "width": 390,
+      "name": "reset:disabled:height"
+    },
+    {
+      "width": 390,
+      "name": "control-reset-disabled:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset:disabled:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-closed-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:hover"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-closed-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-closed-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:active"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-closed-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-open-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:hover"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-open-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-open-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:active"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-advanced-open-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "advanced-open:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-closed-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:hover"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-closed-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-closed-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:active"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-closed-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-open:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-open:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-open-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-open:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-open:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-open:hover"
+    },
+    {
+      "width": 390,
+      "name": "system-open:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-open-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-open:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-open:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "system-open:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-open:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-open-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-open:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "system-open:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "system-open:active"
+    },
+    {
+      "width": 390,
+      "name": "system-open:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-system-open-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "system-open:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:default:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-selected-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:hover"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:hover:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-selected-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:focus:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-selected-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:active"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:pressed:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-selected-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-selected:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:default:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-unselected-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:hover"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:hover:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-unselected-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:focus:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-unselected-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:active"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:pressed:selection"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-event-unselected-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "event-unselected:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "more:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "more:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-more-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "more:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "more:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "more:hover"
+    },
+    {
+      "width": 390,
+      "name": "more:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-more-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "more:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "more:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "more:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "more:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-more-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "more:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "more:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "more:active"
+    },
+    {
+      "width": 390,
+      "name": "more:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-more-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "more:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "more:disabled:disabled"
+    },
+    {
+      "width": 390,
+      "name": "more:disabled:height"
+    },
+    {
+      "width": 390,
+      "name": "control-more-disabled:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "more:disabled:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "refresh:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "refresh:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-refresh-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "refresh:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "refresh:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "refresh:hover"
+    },
+    {
+      "width": 390,
+      "name": "refresh:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-refresh-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "refresh:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "refresh:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "refresh:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "refresh:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-refresh-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "refresh:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "refresh:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "refresh:active"
+    },
+    {
+      "width": 390,
+      "name": "refresh:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-refresh-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "refresh:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "refresh:disabled:disabled"
+    },
+    {
+      "width": 390,
+      "name": "refresh:disabled:height"
+    },
+    {
+      "width": 390,
+      "name": "control-refresh-disabled:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "refresh:disabled:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "retry:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "retry:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-retry-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "retry:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "retry:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "retry:hover"
+    },
+    {
+      "width": 390,
+      "name": "retry:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-retry-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "retry:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "retry:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "retry:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "retry:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-retry-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "retry:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "retry:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "retry:active"
+    },
+    {
+      "width": 390,
+      "name": "retry:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-retry-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "retry:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-request-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:hover"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-request-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-request-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:active"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-request-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:disabled:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:disabled:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-request-disabled:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-request:disabled:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-trace-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:hover"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-trace-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-trace-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:active"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-trace-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:disabled:disabled"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:disabled:height"
+    },
+    {
+      "width": 390,
+      "name": "control-copy-trace-disabled:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace:disabled:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-closed-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:hover"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-closed-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-closed-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:active"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-closed-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-open-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:hover"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-open-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-open-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:active"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-technical-open-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-clear-query-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:hover"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-clear-query-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-clear-query-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:active"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-clear-query-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "clear-query:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-closed-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:hover"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-closed-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-closed-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:active"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-closed-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-open-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:hover"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-open-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-open-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:active"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-filters-open-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filters-open:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "back:default:disabled"
+    },
+    {
+      "width": 390,
+      "name": "back:default:height"
+    },
+    {
+      "width": 390,
+      "name": "control-back-default:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "back:default:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "back:hover:disabled"
+    },
+    {
+      "width": 390,
+      "name": "back:hover"
+    },
+    {
+      "width": 390,
+      "name": "back:hover:height"
+    },
+    {
+      "width": 390,
+      "name": "control-back-hover:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "back:hover:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "back:keyboard-focus"
+    },
+    {
+      "width": 390,
+      "name": "back:focus:disabled"
+    },
+    {
+      "width": 390,
+      "name": "back:focus:height"
+    },
+    {
+      "width": 390,
+      "name": "control-back-focus:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "back:focus:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "back:pressed:disabled"
+    },
+    {
+      "width": 390,
+      "name": "back:active"
+    },
+    {
+      "width": 390,
+      "name": "back:pressed:height"
+    },
+    {
+      "width": 390,
+      "name": "control-back-pressed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "back:pressed:no-write-intent"
+    },
+    {
+      "width": 390,
+      "name": "detail-normal:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "detail-selected:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "detail-technical:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "detail-long:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "detail-missing:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "detail-empty:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy:request:copied"
+    },
+    {
+      "width": 390,
+      "name": "copy:request:value"
+    },
+    {
+      "width": 390,
+      "name": "copy-request-copied:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy:request:failed"
+    },
+    {
+      "width": 390,
+      "name": "copy:request:value"
+    },
+    {
+      "width": 390,
+      "name": "copy-request-failed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy:trace:copied"
+    },
+    {
+      "width": 390,
+      "name": "copy:trace:value"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace-copied:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy:trace:failed"
+    },
+    {
+      "width": 390,
+      "name": "copy:trace:value"
+    },
+    {
+      "width": 390,
+      "name": "copy-trace-failed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "apply:read-first-page"
+    },
+    {
+      "width": 390,
+      "name": "advanced:open"
+    },
+    {
+      "width": 390,
+      "name": "system:show50"
+    },
+    {
+      "width": 390,
+      "name": "system:show10"
+    },
+    {
+      "width": 390,
+      "name": "selection:second-id"
+    },
+    {
+      "width": 390,
+      "name": "selection:focus-detail"
+    },
+    {
+      "width": 390,
+      "name": "technical:keyboard-open"
+    },
+    {
+      "width": 390,
+      "name": "back:focus-timeline"
+    },
+    {
+      "width": 390,
+      "name": "more:cursor"
+    },
+    {
+      "width": 390,
+      "name": "more:55"
+    },
+    {
+      "width": 390,
+      "name": "#refresh:read-only"
+    },
+    {
+      "width": 390,
+      "name": "#retry:read-only"
+    },
+    {
+      "width": 390,
+      "name": "clear:local-only"
+    },
+    {
+      "width": 390,
+      "name": "clear:value"
+    },
+    {
+      "width": 390,
+      "name": "zero-dialogs"
+    },
+    {
+      "width": 390,
+      "name": "zero-http"
+    },
+    {
+      "width": 390,
+      "name": "zero-errors"
+    },
+    {
+      "width": 390,
+      "name": "zero-storage"
+    },
+    {
+      "width": 390,
+      "name": "zero-cookies"
+    },
+    {
+      "width": 1440,
+      "name": "apply:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "apply:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-apply-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "apply:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "apply:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "apply:hover"
+    },
+    {
+      "width": 1440,
+      "name": "apply:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-apply-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "apply:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "apply:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "apply:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "apply:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-apply-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "apply:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "apply:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "apply:active"
+    },
+    {
+      "width": 1440,
+      "name": "apply:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-apply-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "apply:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "apply:disabled:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "apply:disabled:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-apply-disabled:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "apply:disabled:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reset:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-reset-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reset:hover"
+    },
+    {
+      "width": 1440,
+      "name": "reset:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-reset-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "reset:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reset:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-reset-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reset:active"
+    },
+    {
+      "width": 1440,
+      "name": "reset:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-reset-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "reset:disabled:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reset:disabled:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-reset-disabled:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset:disabled:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-closed-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:hover"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-closed-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-closed-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:active"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-closed-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-open-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:hover"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-open-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-open-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:active"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-advanced-open-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "advanced-open:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-closed-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:hover"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-closed-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-closed-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:active"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-closed-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-open-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:hover"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-open-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-open-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:active"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-system-open-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system-open:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:default:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-selected-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:hover"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:hover:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-selected-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:focus:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-selected-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:active"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:pressed:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-selected-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-selected:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:default:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-unselected-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:hover"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:hover:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-unselected-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:focus:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-unselected-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:active"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:pressed:selection"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-event-unselected-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "event-unselected:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "more:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "more:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-more-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "more:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "more:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "more:hover"
+    },
+    {
+      "width": 1440,
+      "name": "more:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-more-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "more:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "more:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "more:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "more:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-more-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "more:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "more:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "more:active"
+    },
+    {
+      "width": 1440,
+      "name": "more:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-more-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "more:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "more:disabled:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "more:disabled:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-more-disabled:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "more:disabled:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-refresh-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:hover"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-refresh-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-refresh-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:active"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-refresh-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:disabled:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:disabled:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-refresh-disabled:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "refresh:disabled:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "retry:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-retry-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "retry:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "retry:hover"
+    },
+    {
+      "width": 1440,
+      "name": "retry:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-retry-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "retry:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "retry:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "retry:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-retry-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "retry:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "retry:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "retry:active"
+    },
+    {
+      "width": 1440,
+      "name": "retry:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-retry-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "retry:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-request-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:hover"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-request-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-request-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:active"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-request-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:disabled:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:disabled:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-request-disabled:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request:disabled:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-trace-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:hover"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-trace-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-trace-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:active"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-trace-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:disabled:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:disabled:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-copy-trace-disabled:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace:disabled:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-closed-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:hover"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-closed-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-closed-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:active"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-closed-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-closed:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-open-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:hover"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-open-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-open-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:active"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-technical-open-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:default:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:default:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-clear-query-default:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:default:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:hover:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:hover"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:hover:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-clear-query-hover:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:hover:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:keyboard-focus"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:focus:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:focus:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-clear-query-focus:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:focus:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:pressed:disabled"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:active"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:pressed:height"
+    },
+    {
+      "width": 1440,
+      "name": "control-clear-query-pressed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "clear-query:pressed:no-write-intent"
+    },
+    {
+      "width": 1440,
+      "name": "detail-normal:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "detail-selected:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "detail-technical:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "detail-long:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "detail-missing:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "detail-empty:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy:request:copied"
+    },
+    {
+      "width": 1440,
+      "name": "copy:request:value"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request-copied:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy:request:failed"
+    },
+    {
+      "width": 1440,
+      "name": "copy:request:value"
+    },
+    {
+      "width": 1440,
+      "name": "copy-request-failed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy:trace:copied"
+    },
+    {
+      "width": 1440,
+      "name": "copy:trace:value"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace-copied:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy:trace:failed"
+    },
+    {
+      "width": 1440,
+      "name": "copy:trace:value"
+    },
+    {
+      "width": 1440,
+      "name": "copy-trace-failed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "apply:read-first-page"
+    },
+    {
+      "width": 1440,
+      "name": "advanced:open"
+    },
+    {
+      "width": 1440,
+      "name": "system:show50"
+    },
+    {
+      "width": 1440,
+      "name": "system:show10"
+    },
+    {
+      "width": 1440,
+      "name": "selection:second-id"
+    },
+    {
+      "width": 1440,
+      "name": "selection:focus-detail"
+    },
+    {
+      "width": 1440,
+      "name": "technical:keyboard-open"
+    },
+    {
+      "width": 1440,
+      "name": "more:cursor"
+    },
+    {
+      "width": 1440,
+      "name": "more:55"
+    },
+    {
+      "width": 1440,
+      "name": "#refresh:read-only"
+    },
+    {
+      "width": 1440,
+      "name": "#retry:read-only"
+    },
+    {
+      "width": 1440,
+      "name": "clear:local-only"
+    },
+    {
+      "width": 1440,
+      "name": "clear:value"
+    },
+    {
+      "width": 1440,
+      "name": "zero-dialogs"
+    },
+    {
+      "width": 1440,
+      "name": "zero-http"
+    },
+    {
+      "width": 1440,
+      "name": "zero-errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero-storage"
+    },
+    {
+      "width": 1440,
+      "name": "zero-cookies"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "control-apply-default-390.png",
+      "width": 390,
+      "name": "control-apply-default",
+      "control": "apply",
+      "visual": "default",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "3c677b99f41346263033cf9dfa62ecf407f5fb97858bcd8d70991ea43f7d09dd",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-hover-390.png",
+      "width": 390,
+      "name": "control-apply-hover",
+      "control": "apply",
+      "visual": "hover",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "52e670ec9f36cc4767bc3f47a153349bdbdb60d6cf3396a5b3239cb9b0f1a857",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-focus-390.png",
+      "width": 390,
+      "name": "control-apply-focus",
+      "control": "apply",
+      "visual": "focus",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "5e040d947fbbfcbdd132d5ab843342046a0922e64253a9f942b3452e4949fb46",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-pressed-390.png",
+      "width": 390,
+      "name": "control-apply-pressed",
+      "control": "apply",
+      "visual": "pressed",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "4a6d2899ba96f82935495b830c8b12b1c0aeda5fd0c1554b45e7a7e2c534a71a",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-disabled-390.png",
+      "width": 390,
+      "name": "control-apply-disabled",
+      "control": "apply",
+      "visual": "disabled",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "d6973773483aae877ed14f7bd0ffec2d2ab9916c272235eb9247033558ddf577",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-default-390.png",
+      "width": 390,
+      "name": "control-reset-default",
+      "control": "reset",
+      "visual": "default",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "681270c2434103c6836edb63300fc8acb799e48208bfee84b1d71bc063704b31",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-hover-390.png",
+      "width": 390,
+      "name": "control-reset-hover",
+      "control": "reset",
+      "visual": "hover",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "681270c2434103c6836edb63300fc8acb799e48208bfee84b1d71bc063704b31",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-focus-390.png",
+      "width": 390,
+      "name": "control-reset-focus",
+      "control": "reset",
+      "visual": "focus",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "6d789275fdf3e0fa49cc5774a03f88aee9addba28d87ea04ea913a0a303112f5",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-pressed-390.png",
+      "width": 390,
+      "name": "control-reset-pressed",
+      "control": "reset",
+      "visual": "pressed",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "681270c2434103c6836edb63300fc8acb799e48208bfee84b1d71bc063704b31",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-disabled-390.png",
+      "width": 390,
+      "name": "control-reset-disabled",
+      "control": "reset",
+      "visual": "disabled",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "b0bf11d30ecc2c843b71a60fb93eaa59d05b48964156003fa35dc9d355ee7af5",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-default-390.png",
+      "width": 390,
+      "name": "control-advanced-closed-default",
+      "control": "advanced-closed",
+      "visual": "default",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "674aac10ecfe31370467be6c5dd4fa8f1fd8223f69c37be3074081362a9dfe76",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-hover-390.png",
+      "width": 390,
+      "name": "control-advanced-closed-hover",
+      "control": "advanced-closed",
+      "visual": "hover",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "674aac10ecfe31370467be6c5dd4fa8f1fd8223f69c37be3074081362a9dfe76",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-focus-390.png",
+      "width": 390,
+      "name": "control-advanced-closed-focus",
+      "control": "advanced-closed",
+      "visual": "focus",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "b417c1dcc693ba81236bb8f8576e7602e83e86f0068d39edaa144dde28a2b348",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-pressed-390.png",
+      "width": 390,
+      "name": "control-advanced-closed-pressed",
+      "control": "advanced-closed",
+      "visual": "pressed",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "674aac10ecfe31370467be6c5dd4fa8f1fd8223f69c37be3074081362a9dfe76",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-default-390.png",
+      "width": 390,
+      "name": "control-advanced-open-default",
+      "control": "advanced-open",
+      "visual": "default",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "57a8767f4a082272ba9630504334858805f509b76fdecefa7e7d13a602df5891",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-hover-390.png",
+      "width": 390,
+      "name": "control-advanced-open-hover",
+      "control": "advanced-open",
+      "visual": "hover",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "57a8767f4a082272ba9630504334858805f509b76fdecefa7e7d13a602df5891",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-focus-390.png",
+      "width": 390,
+      "name": "control-advanced-open-focus",
+      "control": "advanced-open",
+      "visual": "focus",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "668bf2167630157b51f268aae022678b01e50b2c202da01d93b0e5dbe5d1b25b",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-pressed-390.png",
+      "width": 390,
+      "name": "control-advanced-open-pressed",
+      "control": "advanced-open",
+      "visual": "pressed",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "57a8767f4a082272ba9630504334858805f509b76fdecefa7e7d13a602df5891",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-default-390.png",
+      "width": 390,
+      "name": "control-system-closed-default",
+      "control": "system-closed",
+      "visual": "default",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "2e8d808eedd75f4e8a33397fdca486324aa938033f8d8fdd29818f9dbbe56aec",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-hover-390.png",
+      "width": 390,
+      "name": "control-system-closed-hover",
+      "control": "system-closed",
+      "visual": "hover",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "3160d767732b76dc26e94ac17b365e44448215e70f4118721f35e0188ef2a80c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-focus-390.png",
+      "width": 390,
+      "name": "control-system-closed-focus",
+      "control": "system-closed",
+      "visual": "focus",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "ebb3bc0d00b20a32b6bc2078d93176c9135d15e3107897ed93545c3ff4c49a0e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-pressed-390.png",
+      "width": 390,
+      "name": "control-system-closed-pressed",
+      "control": "system-closed",
+      "visual": "pressed",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "9bf3651574818292874654a9c60b34337b891554be7dd695333cfd22bab4b7c2",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-default-390.png",
+      "width": 390,
+      "name": "control-system-open-default",
+      "control": "system-open",
+      "visual": "default",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "8904a6332356542ac9c49cc353ecf0985e09c8378e20424f438a2f62f3c44984",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-hover-390.png",
+      "width": 390,
+      "name": "control-system-open-hover",
+      "control": "system-open",
+      "visual": "hover",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "ad99231cd50354ef19cd0f07ba99e42c4c36dbe77211621d6ff40781f453a611",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-focus-390.png",
+      "width": 390,
+      "name": "control-system-open-focus",
+      "control": "system-open",
+      "visual": "focus",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "8164a72f02a64c9d171b38529239226a0599d2653dab60cf3d3d4250c8e48476",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-pressed-390.png",
+      "width": 390,
+      "name": "control-system-open-pressed",
+      "control": "system-open",
+      "visual": "pressed",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "e5295351b131def0264c15fbbdadaa4cd80836394b0b884eb5221d796b69a32b",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-default-390.png",
+      "width": 390,
+      "name": "control-event-selected-default",
+      "control": "event-selected",
+      "visual": "default",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "0b935d274b6a031b4c423677d68f10fe16542c097e227afc0d10ccc22bfc55f4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-hover-390.png",
+      "width": 390,
+      "name": "control-event-selected-hover",
+      "control": "event-selected",
+      "visual": "hover",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "34408b3d15133733ad55d7dc07cae239711106065cbcd63b553668500a3537c8",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-focus-390.png",
+      "width": 390,
+      "name": "control-event-selected-focus",
+      "control": "event-selected",
+      "visual": "focus",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "b2c1b94743f30f7a70f2eff1ac5e3b9092949ae2d3d6501adea7041f278f16a6",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-pressed-390.png",
+      "width": 390,
+      "name": "control-event-selected-pressed",
+      "control": "event-selected",
+      "visual": "pressed",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "6112868478a8b7a245f4ac9042f743f0fa834874873fd520b8015f9a977756bd",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-default-390.png",
+      "width": 390,
+      "name": "control-event-unselected-default",
+      "control": "event-unselected",
+      "visual": "default",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "4d4816ac0137b598d9abd80027d80ef8baf36aebd26e3747a15e29ca22d01491",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-hover-390.png",
+      "width": 390,
+      "name": "control-event-unselected-hover",
+      "control": "event-unselected",
+      "visual": "hover",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "cc3975305ec46b0bcd9682a935dc3ea1f7c601e9185715da08955312b7f0af9e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-focus-390.png",
+      "width": 390,
+      "name": "control-event-unselected-focus",
+      "control": "event-unselected",
+      "visual": "focus",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "2be37dd503f9e6b0d437d5079f176e3b9e54fd1e44dd1f0a5910fd973d499771",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-pressed-390.png",
+      "width": 390,
+      "name": "control-event-unselected-pressed",
+      "control": "event-unselected",
+      "visual": "pressed",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "e68260ea9aa6e6027b8061b284a8467a2559ce0b0fe372006493d1906091ec8f",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-default-390.png",
+      "width": 390,
+      "name": "control-more-default",
+      "control": "more",
+      "visual": "default",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "9d935d97c7275f7a4f10b8adb43b68470c181d930b93c3ffe72add7d13ee054a",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-hover-390.png",
+      "width": 390,
+      "name": "control-more-hover",
+      "control": "more",
+      "visual": "hover",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "da31fd527252f2be9ed9b3835b336284ddbd31fd4f4572d7a71ba1a784b48bbb",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-focus-390.png",
+      "width": 390,
+      "name": "control-more-focus",
+      "control": "more",
+      "visual": "focus",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "43096930080c6582df9da2a7b2caa19ea7cd2be1c8e62bd4929452b3b027bbde",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-pressed-390.png",
+      "width": 390,
+      "name": "control-more-pressed",
+      "control": "more",
+      "visual": "pressed",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "fb41465d4c1826011e762e22686acdc7e2472f69a71aa260a25940cc9b0f89ec",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-disabled-390.png",
+      "width": 390,
+      "name": "control-more-disabled",
+      "control": "more",
+      "visual": "disabled",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "ec8d3ec1ea884a022def350039d552b48063dae820122879ea761e384fffac2b",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-default-390.png",
+      "width": 390,
+      "name": "control-refresh-default",
+      "control": "refresh",
+      "visual": "default",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "b059df88c9c334649262a6a21022efe481687203a8d18de41f6928fc23e66912",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-hover-390.png",
+      "width": 390,
+      "name": "control-refresh-hover",
+      "control": "refresh",
+      "visual": "hover",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "51e38e4ea0a3eaa518a3dafc60f09b22e6b0c832604eeeeae04593d4b4c77d1e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-focus-390.png",
+      "width": 390,
+      "name": "control-refresh-focus",
+      "control": "refresh",
+      "visual": "focus",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "1ea00ec3f10048faab5ae07c1915eebe8babb5c570ae2b53cfc9dbd0165208dd",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-pressed-390.png",
+      "width": 390,
+      "name": "control-refresh-pressed",
+      "control": "refresh",
+      "visual": "pressed",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "9b1580584850d587f6981aff3142930986e3015f4ce55777e53bc6cf129fa49f",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-disabled-390.png",
+      "width": 390,
+      "name": "control-refresh-disabled",
+      "control": "refresh",
+      "visual": "disabled",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "50591debd2e615d2a3d62bba06320b29a7ef18f6d415ce8f961340eeea08daf0",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-default-390.png",
+      "width": 390,
+      "name": "control-retry-default",
+      "control": "retry",
+      "visual": "default",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "60711da6350f70cd789d221d3e217bb52e79b9544b78b4e5e936ddb9feb9ee2e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-hover-390.png",
+      "width": 390,
+      "name": "control-retry-hover",
+      "control": "retry",
+      "visual": "hover",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "4213c497022114c4343fec150e4b4e0c25e64215e4ca731753f7870da2128302",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-focus-390.png",
+      "width": 390,
+      "name": "control-retry-focus",
+      "control": "retry",
+      "visual": "focus",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "7c1f01ff9530b2602942f60dd5954f079ac8f5f5381e761abba66b921f8bd0fe",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-pressed-390.png",
+      "width": 390,
+      "name": "control-retry-pressed",
+      "control": "retry",
+      "visual": "pressed",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "df6e0d9f0e7fca5d2e5171db5affc793d8a9712744e659b9ce90e9bc3f851565",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-default-390.png",
+      "width": 390,
+      "name": "control-copy-request-default",
+      "control": "copy-request",
+      "visual": "default",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "b0508daf854ac1517127b25646cc653b02fb8cf1b0aa41465f74eda1a2a01409",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-hover-390.png",
+      "width": 390,
+      "name": "control-copy-request-hover",
+      "control": "copy-request",
+      "visual": "hover",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "a5f7edf0f04aa6f2c4d9a46abcb43da8a70f21fea7f3a4d398eec7260544371f",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-focus-390.png",
+      "width": 390,
+      "name": "control-copy-request-focus",
+      "control": "copy-request",
+      "visual": "focus",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "bbaf59453e0e9077617e29e3ad945525937fcd82e52360f91de238b2fb03a42c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-pressed-390.png",
+      "width": 390,
+      "name": "control-copy-request-pressed",
+      "control": "copy-request",
+      "visual": "pressed",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "3f2fbeab19246dcd8634387304f302074ac39a2ac29e71c281cda88463829d4d",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-disabled-390.png",
+      "width": 390,
+      "name": "control-copy-request-disabled",
+      "control": "copy-request",
+      "visual": "disabled",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": true,
+      "sha256": "f60f09d6a28e4260373bbe6908dfde077aa4f4e45ff046b82c76ce80a408520b",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-default-390.png",
+      "width": 390,
+      "name": "control-copy-trace-default",
+      "control": "copy-trace",
+      "visual": "default",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "51998ffebc851fb55f919f61e8dc70458e8afc5215de2c257a1beb5fdbce67f3",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-hover-390.png",
+      "width": 390,
+      "name": "control-copy-trace-hover",
+      "control": "copy-trace",
+      "visual": "hover",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "06dd0386ac0ae362382ef742a6b490ad48c679cb5677d3cc770d2f924a8e9626",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-focus-390.png",
+      "width": 390,
+      "name": "control-copy-trace-focus",
+      "control": "copy-trace",
+      "visual": "focus",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "04cbccd12c752542bed1f421a2ef95c014cef82b0352a82d0184effbdf201211",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-pressed-390.png",
+      "width": 390,
+      "name": "control-copy-trace-pressed",
+      "control": "copy-trace",
+      "visual": "pressed",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "546de153735d73bdc6f398f73c8a2802118287df53ac6e870a88e170424a725a",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-disabled-390.png",
+      "width": 390,
+      "name": "control-copy-trace-disabled",
+      "control": "copy-trace",
+      "visual": "disabled",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": true,
+      "sha256": "4c0544b43a0254b5f33c31661d667d32aa431717b4b03d9c14301cae85dafc28",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-default-390.png",
+      "width": 390,
+      "name": "control-technical-closed-default",
+      "control": "technical-closed",
+      "visual": "default",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "2a1cb5a758780d77afcb17760f3c1513a10f5527c541eb028479e46e6d966b66",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-hover-390.png",
+      "width": 390,
+      "name": "control-technical-closed-hover",
+      "control": "technical-closed",
+      "visual": "hover",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "9f039ebd228364aebcf6d573ba96b9d90b218a7e39eb14e6ae1648acdf30e290",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-focus-390.png",
+      "width": 390,
+      "name": "control-technical-closed-focus",
+      "control": "technical-closed",
+      "visual": "focus",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "ab82c48657921f8be3f1c494d8e90e18bbdf8162f57a87e90a58b0e4ba5d19b4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-pressed-390.png",
+      "width": 390,
+      "name": "control-technical-closed-pressed",
+      "control": "technical-closed",
+      "visual": "pressed",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "66501762cc92ecef683708496dfb672f49947c136e403582f2ef455113b6b9fa",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-default-390.png",
+      "width": 390,
+      "name": "control-technical-open-default",
+      "control": "technical-open",
+      "visual": "default",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "6aacbd0079f90052d5f9bd9dedfcad2ebd87ff04c722543d10aeff874ce65e60",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-hover-390.png",
+      "width": 390,
+      "name": "control-technical-open-hover",
+      "control": "technical-open",
+      "visual": "hover",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "afc80fbd6bd02e72296792b59753fea785a86ca5537e8a5446568f894f89e085",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-focus-390.png",
+      "width": 390,
+      "name": "control-technical-open-focus",
+      "control": "technical-open",
+      "visual": "focus",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "aec8d745cc2326016e02c42ed159783b0a28a03eee6ca9159a24c778beb0555f",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-pressed-390.png",
+      "width": 390,
+      "name": "control-technical-open-pressed",
+      "control": "technical-open",
+      "visual": "pressed",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "9ae7e34729ebcb56b40e79fbe67bb817dadf6dd29c84afc48ab57c4e04cd70ce",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-default-390.png",
+      "width": 390,
+      "name": "control-clear-query-default",
+      "control": "clear-query",
+      "visual": "default",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "16c2290ed4be9b6176438b13d13438372b11c10ccb0579df055b8d8ad7e55ecc",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-hover-390.png",
+      "width": 390,
+      "name": "control-clear-query-hover",
+      "control": "clear-query",
+      "visual": "hover",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "147b977ba67a344334a601c74bc4b3152dd33d7c10e1add6ad687ed9e3e3e125",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-focus-390.png",
+      "width": 390,
+      "name": "control-clear-query-focus",
+      "control": "clear-query",
+      "visual": "focus",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "8d76a2941dec263082b1c22af4195b31c0001b05695dac7eb3187363ba7b6bca",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-pressed-390.png",
+      "width": 390,
+      "name": "control-clear-query-pressed",
+      "control": "clear-query",
+      "visual": "pressed",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "8d4182780d94fc4297c052246ae460a7571644ae92587fd050df1550bd078fd4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-closed-default-390.png",
+      "width": 390,
+      "name": "control-filters-closed-default",
+      "control": "filters-closed",
+      "visual": "default",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "febbf9a34bc36e94aafafc1e68ce8987453a943ea823d603b3a72a9c220c0bb5",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-closed-hover-390.png",
+      "width": 390,
+      "name": "control-filters-closed-hover",
+      "control": "filters-closed",
+      "visual": "hover",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "96324b5aa60be157bd6fd62dd3c622421e499c52fc9cad5a6d466a4b1c98d0ee",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-closed-focus-390.png",
+      "width": 390,
+      "name": "control-filters-closed-focus",
+      "control": "filters-closed",
+      "visual": "focus",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "4fe95e4e5de7551b8dbdbe0c269456f3ebe51834b3bbae16c71dd208261e6ef4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-closed-pressed-390.png",
+      "width": 390,
+      "name": "control-filters-closed-pressed",
+      "control": "filters-closed",
+      "visual": "pressed",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "c3a024d65d07c6995ffe1e2f03e15dc6e1716fb46414d101a525bdc217276cec",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-open-default-390.png",
+      "width": 390,
+      "name": "control-filters-open-default",
+      "control": "filters-open",
+      "visual": "default",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "c66c80846324a821b6258f4cab5a2f357d9b7ac2f41cc1d69ee3754ef110db4a",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-open-hover-390.png",
+      "width": 390,
+      "name": "control-filters-open-hover",
+      "control": "filters-open",
+      "visual": "hover",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "476d4e1c20a8ee91bfbefbc56840a3ab3f2fd0e6d6f6fe24819543c47b53bf3e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-open-focus-390.png",
+      "width": 390,
+      "name": "control-filters-open-focus",
+      "control": "filters-open",
+      "visual": "focus",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "6030bd16a1d2229e9cb274fcc1501ae76fcaf61c1df00f56ba224d085b360d87",
+      "approval": "pending"
+    },
+    {
+      "file": "control-filters-open-pressed-390.png",
+      "width": 390,
+      "name": "control-filters-open-pressed",
+      "control": "filters-open",
+      "visual": "pressed",
+      "source": "proposal:mobile filter disclosure",
+      "proposalOnly": true,
+      "sha256": "6d1328313a4066ba2813909e482a61f9b36ba8da5423345c92b361dc2a186810",
+      "approval": "pending"
+    },
+    {
+      "file": "control-back-default-390.png",
+      "width": 390,
+      "name": "control-back-default",
+      "control": "back",
+      "visual": "default",
+      "source": "proposal:mobile focus return",
+      "proposalOnly": true,
+      "sha256": "ebd5d7247acc62fe176020193d28a07d5c07a87562a24d8f7ca139165429f1b5",
+      "approval": "pending"
+    },
+    {
+      "file": "control-back-hover-390.png",
+      "width": 390,
+      "name": "control-back-hover",
+      "control": "back",
+      "visual": "hover",
+      "source": "proposal:mobile focus return",
+      "proposalOnly": true,
+      "sha256": "cb3f3c407654a83958887ccfb459b675b314a48061cdaa80927958c2a141c951",
+      "approval": "pending"
+    },
+    {
+      "file": "control-back-focus-390.png",
+      "width": 390,
+      "name": "control-back-focus",
+      "control": "back",
+      "visual": "focus",
+      "source": "proposal:mobile focus return",
+      "proposalOnly": true,
+      "sha256": "98f4604cdce1d904facf4f213f4028a7256453a79be08641f9cf7adf3662ecff",
+      "approval": "pending"
+    },
+    {
+      "file": "control-back-pressed-390.png",
+      "width": 390,
+      "name": "control-back-pressed",
+      "control": "back",
+      "visual": "pressed",
+      "source": "proposal:mobile focus return",
+      "proposalOnly": true,
+      "sha256": "7822d97b8893c2580fb06aaf6da481f9c3d14238fc2ba6409aab05cd7d7d4524",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-normal-390.png",
+      "width": 390,
+      "name": "detail-normal",
+      "type": "composition",
+      "sha256": "7a13ddca46363010744a613e40eab0d213d020cbde6115c8837f24937271e5a4",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-selected-390.png",
+      "width": 390,
+      "name": "detail-selected",
+      "type": "composition",
+      "sha256": "7339c9dcca8d48ce141a04b7feb4e3a3fa7e3fd160a470e4e1dd2b4b3ceafabe",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-technical-390.png",
+      "width": 390,
+      "name": "detail-technical",
+      "type": "composition",
+      "sha256": "28124b0834d35c2271a59849f33f2f1efec5cd91356a9923c55dca38d57a69f1",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-long-390.png",
+      "width": 390,
+      "name": "detail-long",
+      "type": "composition",
+      "sha256": "f8e5359492fe7153ee8343981a92cf512546b3705107bcf57337d773808f865b",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-missing-390.png",
+      "width": 390,
+      "name": "detail-missing",
+      "type": "composition",
+      "sha256": "aac525d91a68b9b8c365666e6b5e003d5a6d6262ea349ae87e149a5194997460",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-empty-390.png",
+      "width": 390,
+      "name": "detail-empty",
+      "type": "composition",
+      "sha256": "9bb55789c261cfe8230a44f1937b016c441c462d99865af03eb0e5600ae579e0",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-request-copied-390.png",
+      "width": 390,
+      "name": "copy-request-copied",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "929afa68ac20535fbb7ca20d0580d3c0293775f43d46af2cfffb50eb2405c544",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-request-failed-390.png",
+      "width": 390,
+      "name": "copy-request-failed",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "deacd08361f96c33fa4732a9795c923032187721cc9a97b7b7e58eeba1335857",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-trace-copied-390.png",
+      "width": 390,
+      "name": "copy-trace-copied",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "28bdaca733e106e3c9cbe398adc244f801a62c7523edec7d313ceaffa27b9210",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-trace-failed-390.png",
+      "width": 390,
+      "name": "copy-trace-failed",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "5ca48e67fdaeccb50bb84ea0db806698d155146ba786dfc3768e6feeb2832fa4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-default-1440.png",
+      "width": 1440,
+      "name": "control-apply-default",
+      "control": "apply",
+      "visual": "default",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "a147f35eb6b769208b9b9774bee619b681cba8b3cf07875cb9bf1caebc41cda0",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-hover-1440.png",
+      "width": 1440,
+      "name": "control-apply-hover",
+      "control": "apply",
+      "visual": "hover",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "a967c45681bb8578bfa0e1daf7a02a1c5e7bb69aa8110fffe97356ef5ff520b2",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-focus-1440.png",
+      "width": 1440,
+      "name": "control-apply-focus",
+      "control": "apply",
+      "visual": "focus",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "1faa83039506cc062bb7282006691645172c583b7f708da250acc61d49ac0ee7",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-pressed-1440.png",
+      "width": 1440,
+      "name": "control-apply-pressed",
+      "control": "apply",
+      "visual": "pressed",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "352381de51ec058abef50e261767df33b6cac1c91730b1e99213d9a0e3c7bd7c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-apply-disabled-1440.png",
+      "width": 1440,
+      "name": "control-apply-disabled",
+      "control": "apply",
+      "visual": "disabled",
+      "source": "child:submitFilters",
+      "proposalOnly": false,
+      "sha256": "fd5e6dd57047aeed9de57b2fd72ff54724c3b0ef98b90c153b6eac98d5495b50",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-default-1440.png",
+      "width": 1440,
+      "name": "control-reset-default",
+      "control": "reset",
+      "visual": "default",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "06cb47fa07f7ae7825079a6195017f669cf57cf12b8b4f6367703253331d3e62",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-hover-1440.png",
+      "width": 1440,
+      "name": "control-reset-hover",
+      "control": "reset",
+      "visual": "hover",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "06cb47fa07f7ae7825079a6195017f669cf57cf12b8b4f6367703253331d3e62",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-focus-1440.png",
+      "width": 1440,
+      "name": "control-reset-focus",
+      "control": "reset",
+      "visual": "focus",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "d653beaac2a837891b58a420edc6cc215c0b93f036e9ce6733373a7005210bbf",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-pressed-1440.png",
+      "width": 1440,
+      "name": "control-reset-pressed",
+      "control": "reset",
+      "visual": "pressed",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "06cb47fa07f7ae7825079a6195017f669cf57cf12b8b4f6367703253331d3e62",
+      "approval": "pending"
+    },
+    {
+      "file": "control-reset-disabled-1440.png",
+      "width": 1440,
+      "name": "control-reset-disabled",
+      "control": "reset",
+      "visual": "disabled",
+      "source": "child:resetFilters",
+      "proposalOnly": false,
+      "sha256": "edb483210bc7d276f8b52b7d75c31e0b204fdc814a51b2a92d8aaac8b73f0424",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-default-1440.png",
+      "width": 1440,
+      "name": "control-advanced-closed-default",
+      "control": "advanced-closed",
+      "visual": "default",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "a5029b4e63b7539a58aba02d1aefbfb85f69aba2c258e11290032e348a44e066",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-hover-1440.png",
+      "width": 1440,
+      "name": "control-advanced-closed-hover",
+      "control": "advanced-closed",
+      "visual": "hover",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "a5029b4e63b7539a58aba02d1aefbfb85f69aba2c258e11290032e348a44e066",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-focus-1440.png",
+      "width": 1440,
+      "name": "control-advanced-closed-focus",
+      "control": "advanced-closed",
+      "visual": "focus",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "ac317b272d3f1873ed5a97f81e208f4087717f704747066250aea4fe32a54db6",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-closed-pressed-1440.png",
+      "width": 1440,
+      "name": "control-advanced-closed-pressed",
+      "control": "advanced-closed",
+      "visual": "pressed",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "a5029b4e63b7539a58aba02d1aefbfb85f69aba2c258e11290032e348a44e066",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-default-1440.png",
+      "width": 1440,
+      "name": "control-advanced-open-default",
+      "control": "advanced-open",
+      "visual": "default",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "259ecd6f381328b578b9b804898cf509de976d7847e0c23942208c6429d5c19c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-hover-1440.png",
+      "width": 1440,
+      "name": "control-advanced-open-hover",
+      "control": "advanced-open",
+      "visual": "hover",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "259ecd6f381328b578b9b804898cf509de976d7847e0c23942208c6429d5c19c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-focus-1440.png",
+      "width": 1440,
+      "name": "control-advanced-open-focus",
+      "control": "advanced-open",
+      "visual": "focus",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "6d9a5c15797386c6cc0d0fefb2ead3df48f49e5e0da442eadfc6277d8c57eec6",
+      "approval": "pending"
+    },
+    {
+      "file": "control-advanced-open-pressed-1440.png",
+      "width": 1440,
+      "name": "control-advanced-open-pressed",
+      "control": "advanced-open",
+      "visual": "pressed",
+      "source": "child:native advanced details",
+      "proposalOnly": false,
+      "sha256": "259ecd6f381328b578b9b804898cf509de976d7847e0c23942208c6429d5c19c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-default-1440.png",
+      "width": 1440,
+      "name": "control-system-closed-default",
+      "control": "system-closed",
+      "visual": "default",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "718b44e5f662d4dfb8ffd5633e01f9006fb28bafb57c69b6a8eca37424e070ba",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-hover-1440.png",
+      "width": 1440,
+      "name": "control-system-closed-hover",
+      "control": "system-closed",
+      "visual": "hover",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "1a9571c4180d31ffc5e31ccfcc6de252f6d3c232f8784f25d4e256e2cf3cc6df",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-focus-1440.png",
+      "width": 1440,
+      "name": "control-system-closed-focus",
+      "control": "system-closed",
+      "visual": "focus",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "8ae089d8139e5fd1bf3f76888526b73784ebd4f409e527bf864a01746d7867f5",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-closed-pressed-1440.png",
+      "width": 1440,
+      "name": "control-system-closed-pressed",
+      "control": "system-closed",
+      "visual": "pressed",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "65396f00e4fa3ecbef19fdb0c3a7dbd40980bee08112c782788d2d0c9de091b2",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-default-1440.png",
+      "width": 1440,
+      "name": "control-system-open-default",
+      "control": "system-open",
+      "visual": "default",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "8ce09541eacd55a383030f11791a191bc1f7e85933ddafcd66ea9e6770bbdbcf",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-hover-1440.png",
+      "width": 1440,
+      "name": "control-system-open-hover",
+      "control": "system-open",
+      "visual": "hover",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "087cf7d61ef8fc20a2c11fcd016fadcfc91540725ce5bd3ee7671e5f66f3320e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-focus-1440.png",
+      "width": 1440,
+      "name": "control-system-open-focus",
+      "control": "system-open",
+      "visual": "focus",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "5249f5cb22e63526b68c392aee272a886c71ab1233aaee3cd35bc048562fd2a0",
+      "approval": "pending"
+    },
+    {
+      "file": "control-system-open-pressed-1440.png",
+      "width": 1440,
+      "name": "control-system-open-pressed",
+      "control": "system-open",
+      "visual": "pressed",
+      "source": "child:systemEventsExpanded toggle",
+      "proposalOnly": false,
+      "sha256": "513513b0ca5eb4d52bc6ccbf6742b39bdf87dbb09d71cfa8d8e19f48c3d3d629",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-default-1440.png",
+      "width": 1440,
+      "name": "control-event-selected-default",
+      "control": "event-selected",
+      "visual": "default",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "87b9177f75473eeb93349358990898c935ec6a9ea1fd3c3b8596f363bba4325b",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-hover-1440.png",
+      "width": 1440,
+      "name": "control-event-selected-hover",
+      "control": "event-selected",
+      "visual": "hover",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "5397a7f5429427e3948a76d2ddfa3bf22410e64a0d5b5b350ec961066adf7b1d",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-focus-1440.png",
+      "width": 1440,
+      "name": "control-event-selected-focus",
+      "control": "event-selected",
+      "visual": "focus",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "a27c7151ebac157cce38470d7b7f5a29bba61d1f44a6835f48e4f71aba3e5a94",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-selected-pressed-1440.png",
+      "width": 1440,
+      "name": "control-event-selected-pressed",
+      "control": "event-selected",
+      "visual": "pressed",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "2ca9f528e15c5094541fd5cd7de0d20fd57bffc0f0e177215054feaa0b600899",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-default-1440.png",
+      "width": 1440,
+      "name": "control-event-unselected-default",
+      "control": "event-unselected",
+      "visual": "default",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "0bcf8fadc27646d1fb72cf08adac54aed04308ad9ade01fb1c02d8eeb782e3d4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-hover-1440.png",
+      "width": 1440,
+      "name": "control-event-unselected-hover",
+      "control": "event-unselected",
+      "visual": "hover",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "dfaf73f1fabb4977cfcc56d29ec912eb8900a443550240929e7bd37d13cf16a6",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-focus-1440.png",
+      "width": 1440,
+      "name": "control-event-unselected-focus",
+      "control": "event-unselected",
+      "visual": "focus",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "1a5d0cbcf69df2c49833f92700d776a32f6f8369c4ce7164aa94e7fa4ec3579b",
+      "approval": "pending"
+    },
+    {
+      "file": "control-event-unselected-pressed-1440.png",
+      "width": 1440,
+      "name": "control-event-unselected-pressed",
+      "control": "event-unselected",
+      "visual": "pressed",
+      "source": "child:choose(event)",
+      "proposalOnly": false,
+      "sha256": "b4d74f0d0a5a964b8310f3be1ee306662f7ad783fd8ee0ff8097f4edb2789008",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-default-1440.png",
+      "width": 1440,
+      "name": "control-more-default",
+      "control": "more",
+      "visual": "default",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "6598c15fb2b190b856c14dbf2f99d165b761edab049c2fcc771f22cdff940eca",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-hover-1440.png",
+      "width": 1440,
+      "name": "control-more-hover",
+      "control": "more",
+      "visual": "hover",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "821cfe69edc38346c47ad967a17f0a9aa910d331338294d3133e6e3061ce8410",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-focus-1440.png",
+      "width": 1440,
+      "name": "control-more-focus",
+      "control": "more",
+      "visual": "focus",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "6bab802cab207c18aeb58502f0c12ec6aafccab4129a7bae7e5f8a63b78475b7",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-pressed-1440.png",
+      "width": 1440,
+      "name": "control-more-pressed",
+      "control": "more",
+      "visual": "pressed",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "7aed598d1bdfa8b5a0a985cd73b88d68402e8a5f25fb20eb9b07ffa86c831964",
+      "approval": "pending"
+    },
+    {
+      "file": "control-more-disabled-1440.png",
+      "width": 1440,
+      "name": "control-more-disabled",
+      "control": "more",
+      "visual": "disabled",
+      "source": "child:loadMore prop",
+      "proposalOnly": false,
+      "sha256": "32ee47d1ad98fc45c2f598f66b256547c2f7fa7557d53e9fee914afe028d1672",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-default-1440.png",
+      "width": 1440,
+      "name": "control-refresh-default",
+      "control": "refresh",
+      "visual": "default",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "4f31bb2e79d6f121d04b9a699bfda6960e321cdb4d92d6924440af47c3f4d0e1",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-hover-1440.png",
+      "width": 1440,
+      "name": "control-refresh-hover",
+      "control": "refresh",
+      "visual": "hover",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "f47b0cfb41a58e771e8e88aeac65a3e6990fa0fdc2178434ce4a2d975af5ed93",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-focus-1440.png",
+      "width": 1440,
+      "name": "control-refresh-focus",
+      "control": "refresh",
+      "visual": "focus",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "3a310e3f22a98a9a52bceae29af7161eab1330f102c94c73d8f818ba9550ac47",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-pressed-1440.png",
+      "width": 1440,
+      "name": "control-refresh-pressed",
+      "control": "refresh",
+      "visual": "pressed",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "52317b1ecdc223d348e39e784b2eaef2bce43bbd065b02c3391907355b7c7aa4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-refresh-disabled-1440.png",
+      "width": 1440,
+      "name": "control-refresh-disabled",
+      "control": "refresh",
+      "visual": "disabled",
+      "source": "parent:load({background:true})",
+      "proposalOnly": false,
+      "sha256": "882120443770cd9716ac1a3c8583f8f50a6a162e5d5b24b066f3ce303a452171",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-default-1440.png",
+      "width": 1440,
+      "name": "control-retry-default",
+      "control": "retry",
+      "visual": "default",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "60711da6350f70cd789d221d3e217bb52e79b9544b78b4e5e936ddb9feb9ee2e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-hover-1440.png",
+      "width": 1440,
+      "name": "control-retry-hover",
+      "control": "retry",
+      "visual": "hover",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "4213c497022114c4343fec150e4b4e0c25e64215e4ca731753f7870da2128302",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-focus-1440.png",
+      "width": 1440,
+      "name": "control-retry-focus",
+      "control": "retry",
+      "visual": "focus",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "7c1f01ff9530b2602942f60dd5954f079ac8f5f5381e761abba66b921f8bd0fe",
+      "approval": "pending"
+    },
+    {
+      "file": "control-retry-pressed-1440.png",
+      "width": 1440,
+      "name": "control-retry-pressed",
+      "control": "retry",
+      "visual": "pressed",
+      "source": "parent:load()",
+      "proposalOnly": false,
+      "sha256": "df6e0d9f0e7fca5d2e5171db5affc793d8a9712744e659b9ce90e9bc3f851565",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-default-1440.png",
+      "width": 1440,
+      "name": "control-copy-request-default",
+      "control": "copy-request",
+      "visual": "default",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "f624f8af510ee1e7a129f65f62c89b99c9abefcd8ea542c74157002376a823ef",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-hover-1440.png",
+      "width": 1440,
+      "name": "control-copy-request-hover",
+      "control": "copy-request",
+      "visual": "hover",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "bde5c9409b6905ae1462825188371bc89c8e6c4004f75a42c9eea69dc6cf52a6",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-focus-1440.png",
+      "width": 1440,
+      "name": "control-copy-request-focus",
+      "control": "copy-request",
+      "visual": "focus",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "3ea66a2f2e9c6174564ff1066a408300ef025e0352a99cae049bdd7fac3c137e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-pressed-1440.png",
+      "width": 1440,
+      "name": "control-copy-request-pressed",
+      "control": "copy-request",
+      "visual": "pressed",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": false,
+      "sha256": "398c27f7bcd6058f41e883177990410d52d179ec693b13a65661ebb512d76457",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-request-disabled-1440.png",
+      "width": 1440,
+      "name": "control-copy-request-disabled",
+      "control": "copy-request",
+      "visual": "disabled",
+      "source": "child:copy(request_id,request)",
+      "proposalOnly": true,
+      "sha256": "422dbfcca85ef5066cd5dc0888d10cbe9860b74af3020c738810a8b3a3875b01",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-default-1440.png",
+      "width": 1440,
+      "name": "control-copy-trace-default",
+      "control": "copy-trace",
+      "visual": "default",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "fe1e8ce4d63584f50745cda1a4ee58ad6c3aa97c3f48850ea2ef773ab46aa546",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-hover-1440.png",
+      "width": 1440,
+      "name": "control-copy-trace-hover",
+      "control": "copy-trace",
+      "visual": "hover",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "28bbde3486b74d15ca7db6cc84c2876b5a58e3d8c0cc9363dd0e370ace2d6939",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-focus-1440.png",
+      "width": 1440,
+      "name": "control-copy-trace-focus",
+      "control": "copy-trace",
+      "visual": "focus",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "bd38390cdf997e3c89e330dcefd410529061d7e959a4f93cc3156ceaff2f5f7c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-pressed-1440.png",
+      "width": 1440,
+      "name": "control-copy-trace-pressed",
+      "control": "copy-trace",
+      "visual": "pressed",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": false,
+      "sha256": "729bab49d1ef2d27d28c7f9b906e1d34b532dda8decd42a5497ddc38cdb18f2c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-copy-trace-disabled-1440.png",
+      "width": 1440,
+      "name": "control-copy-trace-disabled",
+      "control": "copy-trace",
+      "visual": "disabled",
+      "source": "child:copy(trace_id,trace)",
+      "proposalOnly": true,
+      "sha256": "57ba9797ef20ad3254d5b65de6b3556e8cd669f5ed2f6e091b805a5899386095",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-default-1440.png",
+      "width": 1440,
+      "name": "control-technical-closed-default",
+      "control": "technical-closed",
+      "visual": "default",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "375fa480e5e8d690e7d9f09def25f6fd3513883bebe1ff4ce517d481faa626e1",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-hover-1440.png",
+      "width": 1440,
+      "name": "control-technical-closed-hover",
+      "control": "technical-closed",
+      "visual": "hover",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "f642b33dd7580201100ce70f715122d031ab23e172bc155b7d0fb8fc0eae277a",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-focus-1440.png",
+      "width": 1440,
+      "name": "control-technical-closed-focus",
+      "control": "technical-closed",
+      "visual": "focus",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "0098777bb62af47c23e91c69901321624d98e8a899e523b70acd322b7acea017",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-closed-pressed-1440.png",
+      "width": 1440,
+      "name": "control-technical-closed-pressed",
+      "control": "technical-closed",
+      "visual": "pressed",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "b56d9caa286cd306ba8d002b7dab0f972baaaa4928c8760c1fec83f8142f49d2",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-default-1440.png",
+      "width": 1440,
+      "name": "control-technical-open-default",
+      "control": "technical-open",
+      "visual": "default",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "5cd6edbb9eec71826c619e29f091314e0c68f87735730d0a3719ba0c755a1a98",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-hover-1440.png",
+      "width": 1440,
+      "name": "control-technical-open-hover",
+      "control": "technical-open",
+      "visual": "hover",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "e0880ed760cb15a92b818e8556b943b93846ac1435c0a322e1bb394ec8efae2c",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-focus-1440.png",
+      "width": 1440,
+      "name": "control-technical-open-focus",
+      "control": "technical-open",
+      "visual": "focus",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "e468d732f0e93f139e37e92f86094fc5428366ec105f56fbc4092ee0e5c83c46",
+      "approval": "pending"
+    },
+    {
+      "file": "control-technical-open-pressed-1440.png",
+      "width": 1440,
+      "name": "control-technical-open-pressed",
+      "control": "technical-open",
+      "visual": "pressed",
+      "source": "child:native technical details",
+      "proposalOnly": false,
+      "sha256": "8981150bb7051de5549c4e58d77800482e605c150f99287b9b8b7a4dbd9af1d2",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-default-1440.png",
+      "width": 1440,
+      "name": "control-clear-query-default",
+      "control": "clear-query",
+      "visual": "default",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "2166d29d7670114895f3d66ffa38aa5c5ca1c8e40d83e3d4a46a2537018e94e4",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-hover-1440.png",
+      "width": 1440,
+      "name": "control-clear-query-hover",
+      "control": "clear-query",
+      "visual": "hover",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "1f983f393f4942f920fc56cc3a05692548601a4527d1e888eef3221232b5156e",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-focus-1440.png",
+      "width": 1440,
+      "name": "control-clear-query-focus",
+      "control": "clear-query",
+      "visual": "focus",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "40d364040512d0d0bf316423954800e0767ade7b2dd1a88e9a20a9c43d6c9812",
+      "approval": "pending"
+    },
+    {
+      "file": "control-clear-query-pressed-1440.png",
+      "width": 1440,
+      "name": "control-clear-query-pressed",
+      "control": "clear-query",
+      "visual": "pressed",
+      "source": "proposal:local search clear",
+      "proposalOnly": true,
+      "sha256": "6016008e3cfecbac2dd8353473a64b200e6fd4c34848667e1259a2ed3dee6c97",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-normal-1440.png",
+      "width": 1440,
+      "name": "detail-normal",
+      "type": "composition",
+      "sha256": "7e5fe15fd49d9ac0446b8cfaa2515950efb2677ceea21b0d6b8570c9e25bb962",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-selected-1440.png",
+      "width": 1440,
+      "name": "detail-selected",
+      "type": "composition",
+      "sha256": "f586a332d492a3209ce46e7ea78435d9724b9e75f998e7c80e5203c298c9820c",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-technical-1440.png",
+      "width": 1440,
+      "name": "detail-technical",
+      "type": "composition",
+      "sha256": "8f65696b4e1ff6e74e1d39c3b49854ea9361a62579ce2d322bdf38ae1653d5f6",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-long-1440.png",
+      "width": 1440,
+      "name": "detail-long",
+      "type": "composition",
+      "sha256": "6d71719084e0d0ef185671bcd541626291addaeca50713d1e4423640cbf2dff6",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-missing-1440.png",
+      "width": 1440,
+      "name": "detail-missing",
+      "type": "composition",
+      "sha256": "5abb3ac5810e02bfb50b3ce42dd017d40c309db820eb8c52b1fcef2a16bc1454",
+      "approval": "pending"
+    },
+    {
+      "file": "detail-empty-1440.png",
+      "width": 1440,
+      "name": "detail-empty",
+      "type": "composition",
+      "sha256": "415f441e3ff0edb4ea9818152c6e2956aa29446298575e94d928c9b01f649d2b",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-request-copied-1440.png",
+      "width": 1440,
+      "name": "copy-request-copied",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "a18e1129566ba3b3e22a910ddeb72e88a6b75a7479a52e00467bf31eaaca69a3",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-request-failed-1440.png",
+      "width": 1440,
+      "name": "copy-request-failed",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "fa6ff38cbcf6568e9bbed0024c2cd6eebfdc93d7f7e54253097dc0229cbd2774",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-trace-copied-1440.png",
+      "width": 1440,
+      "name": "copy-trace-copied",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "a48a568497710e267e118c0d71c27cc7c99293e699f7435bf1cb4286a1ffc2e4",
+      "approval": "pending"
+    },
+    {
+      "file": "copy-trace-failed-1440.png",
+      "width": 1440,
+      "name": "copy-trace-failed",
+      "type": "composition",
+      "clipboard": "in-memory only",
+      "sha256": "c442b104487adf586cb2bb23eb5fe1760481bb46f7c427238baf15c86fb70650",
+      "approval": "pending"
+    }
+  ],
+  "scope": "Standalone synthetic proposal, not actual Vue/API/permission/OS clipboard/production proof. Missing-ID disabled and three convenience actions remain proposals. All visuals pending. Browsers closed, no server or temporary files.",
+  "sourceAssociation": {
+    "kind": "copy-feedback-only-current-source-historical-design-evidence",
+    "baselineCommit": "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+    "originalManifestHash": "40ec85fd1993d09855b22e4d9b2066889f4fba6f76f7ecfc87fda0d81a3354f5",
+    "historicalSourceHashes": {
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-controls/index.html": "3faeadabc587151c39f276456f68c3a0c25eecff6380b082377c582d0d6bbf2b",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-controls/controls.css": "b714535842d5bc6f220eca1fa794e05cfd659204d7dd2bb3f253fd4107b86dd7",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/index.html": "b91a65f21595a9f55ac8f818b8ab290e3185d1ed156ec058b66bdc36369ebfcf",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.css": "d624063a8fcc0707b712aa8e3a71df150299da932f09cf2419516c5a75814101",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.js": "9da43f94c0b8e6a18abfb72066a178ea858600805b7ed47a681e02643af7eb5f",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html": "b97a1c15dff7ffec7aa2ac03be156d8d6c76c43c2836b49d39a25cf7baaf4ec7",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.css": "6fb60d708949da6cbb4cc58e9df8a8ddc78118652839a42195581cd0c6190122",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.js": "c37158e37ba596bab736e3d73dddc548fd94736181b6ff9651c30f7eb3f99ede",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/data.js": "55140393af77c84207310badd4b497f70c486efa77dd146372d97ade27943aaf",
+      "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+      "scripts/lib/ui-phase2-audit-controls.mjs": "e7436e6d091a6f58076ab3276bf3c112665bc00bf591fe03301166cd0ec20421",
+      "scripts/lib/ui-phase2-org-audit-design-data.mjs": "f4e417f89d9a63c3b4067ead1ae0ee6f12536432368326c7fe0eb620f4fe7aa1",
+      "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb"
+    },
+    "historicalRetained": {
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/": {
+        "manifest": "06eafbe2dcc677992421e079759c2cb3b67293c23885f00697bf5c2e63cf5c70",
+        "images": 104
+      },
+      "output/playwright/p37-fields-review/": {
+        "manifest": "2a6be49266bef3c06bf6969d8759196a3c12ecff4ee94cefd707029d0b55b69f",
+        "images": 38
+      }
+    },
+    "proof": "scripts/lib/ui-phase2-audit-copy-baseline.mjs",
+    "proofHash": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527",
+    "currentCopyEvidence": "output/playwright/p37-copy-ownership-vue/evidence.json",
+    "images": "unchanged",
+    "template": "unchanged",
+    "approval": "unchanged",
+    "fixture": "original baseline functions and assertions; sourceChecks describe capture-time findings, not current copy behavior"
+  }
+}

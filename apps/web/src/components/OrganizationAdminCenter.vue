@@ -359,9 +359,19 @@ async function loadAuditPage(next: OrganizationAuditFilters, append = false) {
   if (busy.value) return;
   busy.value = true;
   auditFilters.value = { ...next };
+  const sequence = loadSequence,
+    initialData = data.value,
+    organizationId = props.organizationId,
+    routePath = props.routePath,
+    ownsRead = () =>
+      sequence === loadSequence &&
+      data.value === initialData &&
+      props.organizationId === organizationId &&
+      props.routePath === routePath;
   try {
     const cursor = append ? String(data.value?.nextCursor ?? "") : "",
       response = await api(auditPath(cursor));
+    if (!ownsRead()) return;
     data.value = append
       ? {
           items: [...(data.value?.items ?? []), ...(response.data?.items ?? [])],
@@ -373,6 +383,10 @@ async function loadAuditPage(next: OrganizationAuditFilters, append = false) {
     noticeKind.value = "info";
     state.value = "ready";
   } catch (error) {
+    if (!ownsRead()) {
+      rethrowUnexpectedError(error);
+      return;
+    }
     const failure = error instanceof ApiClientError ? error : null,
       replacePage =
         ["expired", "forbidden"].includes(failure?.kind ?? "") || !data.value?.items?.length;

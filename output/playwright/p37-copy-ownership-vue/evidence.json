@@ -1,0 +1,437 @@
+{
+  "kind": "P37-CURRENT-COPY-OWNERSHIP-VUE",
+  "scope": "Unmodified current SFCs mounted through actual Parent and Child in isolated Router/KeepAlive; synthetic audit GET and clipboard promises. Copy-feedback repair only, not full C implementation/backend/RBAC/OS clipboard/production acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/org-data-export-detail.css": "b258adf5f28ff62e553e4e3e925c38e243cfa0fd76240bb454bd6f821a248e98",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/lib/ui-phase2-audit-copy-baseline.mjs": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527",
+    "scripts/lib/ui-phase2-org-audit-design-data.mjs": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0",
+    "scripts/verify-ui-phase2-org-audit-copy.mjs": "68c5ba03b8287e66beea8970e90ccac5d55d5b5104078ac0314e3df4bdc6645a",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "actual-parent:50-rows"
+    },
+    {
+      "width": 390,
+      "name": "actual-parent:old-copy-does-not-label-new-record"
+    },
+    {
+      "width": 390,
+      "name": "actual-parent:exact-copied-value"
+    },
+    {
+      "width": 390,
+      "name": "actual-parent:new-record-value"
+    },
+    {
+      "width": 390,
+      "name": "parent-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "current-request:success"
+    },
+    {
+      "width": 390,
+      "name": "current-request-copied:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "current-trace:failure"
+    },
+    {
+      "width": 390,
+      "name": "current-trace-failed:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "newer-trace-survives-older-request-failure"
+    },
+    {
+      "width": 390,
+      "name": "newest-copy-wins:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "actual-parent:A-B-A-rejects-old-result"
+    },
+    {
+      "width": 390,
+      "name": "actual-parent:cached-return-ignores-old-result"
+    },
+    {
+      "width": 390,
+      "name": "cached-return-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "actual-parent:remount-no-old-feedback"
+    },
+    {
+      "width": 390,
+      "name": "remount-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:three-fixtures"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:search-fallback-ignores-old-result"
+    },
+    {
+      "width": 390,
+      "name": "search-fallback-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:same-ID-request_id-change-ignores-old-result"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:same-ID-trace_id-change-ignores-old-result"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:same-ID-organization_id-change-ignores-old-result"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:replacement-object-ignores-old-result"
+    },
+    {
+      "width": 390,
+      "name": "record-replacement-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:empty-list-no-copy-feedback"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:list-return-no-old-feedback"
+    },
+    {
+      "width": 390,
+      "name": "actual-child:fresh-copy-still-works"
+    },
+    {
+      "width": 390,
+      "name": "no-page-errors"
+    },
+    {
+      "width": 390,
+      "name": "no-forbidden-network"
+    },
+    {
+      "width": 390,
+      "name": "no-cookies"
+    },
+    {
+      "width": 390,
+      "name": "no-storage"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:50-rows"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:old-copy-does-not-label-new-record"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:exact-copied-value"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:new-record-value"
+    },
+    {
+      "width": 1440,
+      "name": "parent-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "current-request:success"
+    },
+    {
+      "width": 1440,
+      "name": "current-request-copied:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "current-trace:failure"
+    },
+    {
+      "width": 1440,
+      "name": "current-trace-failed:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "newer-trace-survives-older-request-failure"
+    },
+    {
+      "width": 1440,
+      "name": "newest-copy-wins:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:A-B-A-rejects-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:cached-return-ignores-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "cached-return-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "actual-parent:remount-no-old-feedback"
+    },
+    {
+      "width": 1440,
+      "name": "remount-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:three-fixtures"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:search-fallback-ignores-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "search-fallback-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:same-ID-request_id-change-ignores-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:same-ID-trace_id-change-ignores-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:same-ID-organization_id-change-ignores-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:replacement-object-ignores-old-result"
+    },
+    {
+      "width": 1440,
+      "name": "record-replacement-old-copy-ignored:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:empty-list-no-copy-feedback"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:list-return-no-old-feedback"
+    },
+    {
+      "width": 1440,
+      "name": "actual-child:fresh-copy-still-works"
+    },
+    {
+      "width": 1440,
+      "name": "no-page-errors"
+    },
+    {
+      "width": 1440,
+      "name": "no-forbidden-network"
+    },
+    {
+      "width": 1440,
+      "name": "no-cookies"
+    },
+    {
+      "width": 1440,
+      "name": "no-storage"
+    }
+  ],
+  "requests": [
+    {
+      "width": 390,
+      "method": "GET",
+      "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "width": 390,
+      "method": "GET",
+      "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "width": 1440,
+      "method": "GET",
+      "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "width": 1440,
+      "method": "GET",
+      "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+      "query": {
+        "limit": "50"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "parent-old-copy-ignored",
+      "width": 390,
+      "file": "parent-old-copy-ignored-390.png",
+      "sha256": "53d547edbe14e97f3f1557fbccbbacb36437a2126c67acaa0da76a4998a25786",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "current-request-copied",
+      "width": 390,
+      "file": "current-request-copied-390.png",
+      "sha256": "8fac830d0c66e6cfb37a8b5068c2a8373aa6b930437ab2440fcc55fe75b18038",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "current-trace-failed",
+      "width": 390,
+      "file": "current-trace-failed-390.png",
+      "sha256": "8daa105004144a427b414d621e5869aeae5151e2c033342afb41bffb547dd866",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "newest-copy-wins",
+      "width": 390,
+      "file": "newest-copy-wins-390.png",
+      "sha256": "477f488cb76c0c618e9370c210d74d9d33acc53a29462dff1265206a86a37c1b",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "cached-return-old-copy-ignored",
+      "width": 390,
+      "file": "cached-return-old-copy-ignored-390.png",
+      "sha256": "53d547edbe14e97f3f1557fbccbbacb36437a2126c67acaa0da76a4998a25786",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "remount-old-copy-ignored",
+      "width": 390,
+      "file": "remount-old-copy-ignored-390.png",
+      "sha256": "d0a3ad83f559b0022585f855ffc588e22091f39ac54934b61c0c6b5555fb75cd",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "search-fallback-old-copy-ignored",
+      "width": 390,
+      "file": "search-fallback-old-copy-ignored-390.png",
+      "sha256": "bab7d0b07af36d341b5406e1916f0bdc8844b2e8448eefad11d944e4891910f6",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "record-replacement-old-copy-ignored",
+      "width": 390,
+      "file": "record-replacement-old-copy-ignored-390.png",
+      "sha256": "c090af55db3ba52afce86623890da5c1be18708ac42e7c15760e163275ebf859",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "parent-old-copy-ignored",
+      "width": 1440,
+      "file": "parent-old-copy-ignored-1440.png",
+      "sha256": "bcd06721b4d065d395b5e5068bf6aabf69874606f3f8b10c0e4a1de2cb55dc3c",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "current-request-copied",
+      "width": 1440,
+      "file": "current-request-copied-1440.png",
+      "sha256": "8e9fe93d7343ea983e994a2e03c30891386547305b9d9ced4f9fb690998d4e5b",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "current-trace-failed",
+      "width": 1440,
+      "file": "current-trace-failed-1440.png",
+      "sha256": "27e91f103d37495b7bdd34dae566d633103b6d0837f0a063371c99a59c7d26b5",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "newest-copy-wins",
+      "width": 1440,
+      "file": "newest-copy-wins-1440.png",
+      "sha256": "3af84a8e6db1c0875e7c10dcd57a355b32ddd6442520783702754770a1dba0ff",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "cached-return-old-copy-ignored",
+      "width": 1440,
+      "file": "cached-return-old-copy-ignored-1440.png",
+      "sha256": "a3b4460c742b3e3323db0a37e3b002177680f5a145c03e14f2d31a1d6c1d7443",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "remount-old-copy-ignored",
+      "width": 1440,
+      "file": "remount-old-copy-ignored-1440.png",
+      "sha256": "a11b48ab0d6784e592b1bb1ed4ec6002ed05ed30e6e157ce082b454d2cf13941",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "search-fallback-old-copy-ignored",
+      "width": 1440,
+      "file": "search-fallback-old-copy-ignored-1440.png",
+      "sha256": "533923d85dec8b5390c3fa851204fa58a29072325c020c3f6d9f585c2220bda2",
+      "approval": "runtime-observation-not-C-design-approval"
+    },
+    {
+      "name": "record-replacement-old-copy-ignored",
+      "width": 1440,
+      "file": "record-replacement-old-copy-ignored-1440.png",
+      "sha256": "372031ab8baee04d2efc857ec7be1c378dfa353f7a2d28f9fae058eadc182252",
+      "approval": "runtime-observation-not-C-design-approval"
+    }
+  ],
+  "browserAndServerClosed": true,
+  "acceptanceComplete": false
+}

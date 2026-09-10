@@ -5,11 +5,11 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.css": "6fb60d708949da6cbb4cc58e9df8a8ddc78118652839a42195581cd0c6190122",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.js": "c37158e37ba596bab736e3d73dddc548fd94736181b6ff9651c30f7eb3f99ede",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/data.js": "55140393af77c84207310badd4b497f70c486efa77dd146372d97ade27943aaf",
-    "scripts/lib/ui-phase2-org-audit-design-data.mjs": "f4e417f89d9a63c3b4067ead1ae0ee6f12536432368326c7fe0eb620f4fe7aa1",
+    "scripts/lib/ui-phase2-org-audit-design-data.mjs": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0",
     "scripts/verify-ui-phase2-org-audit-c.mjs": "8d64850ea87c13a6b704677bdb6637024a87f774f652a4c1490f4c83bf0967d9",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
     "apps/api/src/audit-routes.ts": "0ce0d104039ea3afadb33a50628186c3f3f47b27764233d3ddee249b56919628",
     "apps/api/src/mysql-audit-repository.ts": "eb824d9cb1e08a945ea8237ec4a2510f78901496b206038645792ddb4bba23f8",
     "packages/audit/src/index.ts": "adb3e71ce14b01f8a473edff4f444639ced085d428f09b6e2ef6c1eadae080b8",
@@ -676,5 +676,32 @@
     "OG-G05 reproduced: pending old copy marks newly selected event copied; pending loadMore appends its old page onto a replaced shared list",
     "Actual repository list with inert query: UNION ALL, failed outcome excludes audit_logs, organization parameters, limit+1/cursor and missing cursor rejection; no SQL execution"
   ],
-  "scope": "Standalone synthetic read-only prototype. Inert source functions and query construction, not mounted Vue, SQL, authorization, real clipboard or production proof. All browser contexts closed."
+  "scope": "Standalone synthetic read-only prototype. Inert source functions and query construction, not mounted Vue, SQL, authorization, real clipboard or production proof. All browser contexts closed.",
+  "sourceAssociation": {
+    "kind": "copy-feedback-only-current-source-historical-design-evidence",
+    "baselineCommit": "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+    "originalManifestHash": "06eafbe2dcc677992421e079759c2cb3b67293c23885f00697bf5c2e63cf5c70",
+    "historicalSourceHashes": {
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html": "b97a1c15dff7ffec7aa2ac03be156d8d6c76c43c2836b49d39a25cf7baaf4ec7",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.css": "6fb60d708949da6cbb4cc58e9df8a8ddc78118652839a42195581cd0c6190122",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.js": "c37158e37ba596bab736e3d73dddc548fd94736181b6ff9651c30f7eb3f99ede",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/data.js": "55140393af77c84207310badd4b497f70c486efa77dd146372d97ade27943aaf",
+      "scripts/lib/ui-phase2-org-audit-design-data.mjs": "f4e417f89d9a63c3b4067ead1ae0ee6f12536432368326c7fe0eb620f4fe7aa1",
+      "scripts/verify-ui-phase2-org-audit-c.mjs": "8d64850ea87c13a6b704677bdb6637024a87f774f652a4c1490f4c83bf0967d9",
+      "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+      "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+      "apps/api/src/audit-routes.ts": "0ce0d104039ea3afadb33a50628186c3f3f47b27764233d3ddee249b56919628",
+      "apps/api/src/mysql-audit-repository.ts": "eb824d9cb1e08a945ea8237ec4a2510f78901496b206038645792ddb4bba23f8",
+      "packages/audit/src/index.ts": "adb3e71ce14b01f8a473edff4f444639ced085d428f09b6e2ef6c1eadae080b8",
+      "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+    },
+    "proof": "scripts/lib/ui-phase2-audit-copy-baseline.mjs",
+    "proofHash": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527",
+    "currentCopyEvidence": "output/playwright/p37-copy-ownership-vue/evidence.json",
+    "images": "unchanged",
+    "template": "unchanged",
+    "approval": "unchanged",
+    "fixture": "original baseline functions and assertions; sourceChecks describe capture-time findings, not current copy behavior"
+  }
 }

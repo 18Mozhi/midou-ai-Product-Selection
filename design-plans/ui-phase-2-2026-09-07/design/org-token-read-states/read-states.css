@@ -1,0 +1,373 @@
+:root {
+  --blue: #254a9c;
+  --deep: #193b80;
+  --ink: #202c3d;
+  --muted: #58677b;
+  --line: #dbe1e9;
+  --paper: #fff;
+  --canvas: #edf1f6;
+  --soft-blue: #eef3fc;
+  --disabled-ink: #647287;
+  color: var(--ink);
+  background: var(--canvas);
+  font:
+    16px/1.65 "Microsoft YaHei UI",
+    "Microsoft YaHei",
+    sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+select,
+summary {
+  font: inherit;
+  min-height: 44px;
+  min-width: 44px;
+}
+button {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+button:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+button.primary {
+  color: var(--paper);
+  background: var(--blue);
+  border-color: var(--blue);
+}
+button.primary:hover {
+  background: var(--deep);
+}
+button.primary:active {
+  background: #102b63;
+}
+button:disabled {
+  cursor: default;
+  color: var(--disabled-ink);
+  background: var(--canvas);
+  border-color: var(--line);
+}
+button:disabled:hover {
+  color: var(--disabled-ink);
+  background: var(--canvas);
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+.review-bar {
+  padding: 16px 24px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.review-bar p {
+  font-size: 13px;
+  color: var(--muted);
+}
+.review-bar label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.review-bar select {
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 6px;
+  max-width: 100%;
+}
+#demo-feedback {
+  width: 100%;
+  font-size: 13px;
+}
+#demo-feedback:empty {
+  display: none;
+}
+#surface {
+  max-width: 1180px;
+  padding: 32px;
+  margin: auto;
+}
+.page-heading {
+  background: var(--blue);
+  color: var(--paper);
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.page-heading .eyebrow {
+  color: #e4ecff;
+  margin-bottom: 6px;
+}
+.page-heading h1 {
+  font-size: 30px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+}
+.page-heading p:last-child {
+  margin-top: 8px;
+}
+.page-heading button {
+  flex-shrink: 0;
+  background: var(--paper);
+  color: var(--blue);
+  border-color: var(--paper);
+}
+.page-heading button:hover {
+  background: #e4ecff;
+}
+.page-heading button:active {
+  background: #d0ddf6;
+}
+.page-heading button:focus-visible {
+  outline-color: var(--paper);
+}
+.page-heading button:disabled {
+  color: var(--disabled-ink);
+  background: var(--canvas);
+  border-color: var(--canvas);
+}
+.read-card {
+  margin-top: 24px;
+  background: var(--paper);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 32px;
+}
+.read-context {
+  border-right: 1px solid var(--line);
+  padding-right: 24px;
+}
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+.read-context .eyebrow {
+  color: var(--blue);
+}
+.read-context strong {
+  display: block;
+  margin: 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.read-context small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.read-body {
+  min-width: 0;
+}
+.read-body h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 30em;
+}
+.read-description {
+  margin-top: 12px;
+  color: var(--muted);
+  max-width: 42em;
+}
+.content-boundary {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  background: var(--soft-blue);
+  margin-top: 24px;
+}
+.content-boundary::before {
+  content: "";
+  width: 3px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--blue);
+}
+.trace {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  color: var(--muted);
+}
+.trace summary {
+  cursor: pointer;
+  padding: 10px 2px;
+  width: fit-content;
+}
+.trace-body {
+  margin: 8px 0 0;
+  padding: 16px;
+  background: var(--canvas);
+  font-size: 13px;
+}
+.trace dt {
+  font-weight: 600;
+  margin-top: 10px;
+}
+.trace dt:first-child {
+  margin-top: 0;
+}
+.trace dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.trace code {
+  font:
+    13px/1.6 Consolas,
+    monospace;
+}
+.read-actions {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.read-actions p {
+  color: var(--muted);
+  font-size: 13px;
+}
+.retained {
+  margin-top: 24px;
+  background: var(--paper);
+  padding: 28px 32px;
+}
+.retained header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.retained h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.retained header span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.retained article {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.retained article:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.retained h3 {
+  font-size: 16px;
+}
+.retained article p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+.retained > p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 20px;
+}
+@media (max-width: 760px) {
+  .review-bar {
+    padding: 12px 20px;
+    gap: 12px;
+  }
+  .review-bar label {
+    flex-wrap: wrap;
+  }
+  #surface {
+    padding: 20px;
+  }
+  .page-heading {
+    padding: 24px;
+    display: block;
+  }
+  .page-heading h1 {
+    font-size: 26px;
+  }
+  .page-heading button {
+    width: 100%;
+    margin-top: 24px;
+  }
+  .read-card {
+    padding: 24px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    margin-top: 20px;
+  }
+  .read-context {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 0 20px;
+  }
+  .read-context strong {
+    display: inline;
+    font-size: 16px;
+    margin-left: 16px;
+  }
+  .read-context .eyebrow {
+    display: inline;
+  }
+  .read-context small {
+    display: block;
+    margin-top: 10px;
+  }
+  .read-body h2 {
+    font-size: 22px;
+  }
+  .content-boundary {
+    padding: 14px;
+  }
+  .read-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .read-actions button {
+    width: 100%;
+  }
+  .retained {
+    padding: 24px;
+  }
+  .retained header {
+    display: block;
+  }
+  .retained header span {
+    display: block;
+    margin-top: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+  }
+}

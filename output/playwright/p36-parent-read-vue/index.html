@@ -1,0 +1,29 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P36 父子读取实际状态核对</title>
+<style>body{margin:0;background:#f5f6f8;color:#202c3d;font:16px/1.6 system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:26px}a{color:#254a9c}a:focus-visible{outline:3px solid #254a9c;outline-offset:3px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:20px}figure{margin:0;background:white;border:1px solid #dbe1e9;padding:16px;min-width:0}figcaption{margin-bottom:12px}img{max-width:100%;height:auto}.note{padding:16px;background:#fff;border-left:4px solid #254a9c}</style>
+<main><h1>P36 · 真实父子组件读取状态</h1><p class="note">这是当前实际 Vue 的核对图，不是新 C 设计稿或批准记录。使用本地 GET 样例；未访问生产、未签发令牌。旧页头和错误区域仍保留原样。</p>
+<p>152 项检查，26 张局部或组件截图。历史查询及缓存返回存在 2 类已复现问题，尚未修复；整页验收未通过。截图不包含浏览器地址栏，URL 与字段差异见证据。</p><p><a href="evidence.json">读取完整验证记录</a></p><div class="grid"><figure><figcaption>首次读取等待 · 390px</figcaption><a href="initial-loading-390.png"><img loading="lazy" src="initial-loading-390.png" alt="首次读取等待，宽度390像素"></a></figure>
+<figure><figcaption>首次读取失败 · 390px</figcaption><a href="first-500-390.png"><img loading="lazy" src="first-500-390.png" alt="首次读取失败，宽度390像素"></a></figure>
+<figure><figcaption>首次权限拒绝 · 390px</figcaption><a href="first-403-390.png"><img loading="lazy" src="first-403-390.png" alt="首次权限拒绝，宽度390像素"></a></figure>
+<figure><figcaption>首次登录失效 · 390px</figcaption><a href="first-401-390.png"><img loading="lazy" src="first-401-390.png" alt="首次登录失效，宽度390像素"></a></figure>
+<figure><figcaption>首次版本冲突 · 390px</figcaption><a href="first-409-390.png"><img loading="lazy" src="first-409-390.png" alt="首次版本冲突，宽度390像素"></a></figure>
+<figure><figcaption>首次请求频繁 · 390px</figcaption><a href="first-429-390.png"><img loading="lazy" src="first-429-390.png" alt="首次请求频繁，宽度390像素"></a></figure>
+<figure><figcaption>首次服务不可用 · 390px</figcaption><a href="first-503-390.png"><img loading="lazy" src="first-503-390.png" alt="首次服务不可用，宽度390像素"></a></figure>
+<figure><figcaption>读取成功但没有令牌 · 390px</figcaption><a href="empty-response-390.png"><img loading="lazy" src="empty-response-390.png" alt="读取成功但没有令牌，宽度390像素"></a></figure>
+<figure><figcaption>后台刷新等待 · 页头区域 · 390px</figcaption><a href="background-loading-390.png"><img loading="lazy" src="background-loading-390.png" alt="后台刷新等待 · 页头区域，宽度390像素"></a></figure>
+<figure><figcaption>后台刷新失败 · 提示区域 · 390px</figcaption><a href="background500-notice-390.png"><img loading="lazy" src="background500-notice-390.png" alt="后台刷新失败 · 提示区域，宽度390像素"></a></figure>
+<figure><figcaption>后台刷新权限拒绝 · 390px</figcaption><a href="background-403-390.png"><img loading="lazy" src="background-403-390.png" alt="后台刷新权限拒绝，宽度390像素"></a></figure>
+<figure><figcaption>后台刷新登录失效 · 390px</figcaption><a href="background-401-390.png"><img loading="lazy" src="background-401-390.png" alt="后台刷新登录失效，宽度390像素"></a></figure>
+<figure><figcaption>历史查询不同步 · 筛选区域 · 390px</figcaption><a href="history-query-mismatch-390.png"><img loading="lazy" src="history-query-mismatch-390.png" alt="历史查询不同步 · 筛选区域，宽度390像素"></a></figure>
+<figure><figcaption>首次读取等待 · 1440px</figcaption><a href="initial-loading-1440.png"><img loading="lazy" src="initial-loading-1440.png" alt="首次读取等待，宽度1440像素"></a></figure>
+<figure><figcaption>首次读取失败 · 1440px</figcaption><a href="first-500-1440.png"><img loading="lazy" src="first-500-1440.png" alt="首次读取失败，宽度1440像素"></a></figure>
+<figure><figcaption>首次权限拒绝 · 1440px</figcaption><a href="first-403-1440.png"><img loading="lazy" src="first-403-1440.png" alt="首次权限拒绝，宽度1440像素"></a></figure>
+<figure><figcaption>首次登录失效 · 1440px</figcaption><a href="first-401-1440.png"><img loading="lazy" src="first-401-1440.png" alt="首次登录失效，宽度1440像素"></a></figure>
+<figure><figcaption>首次版本冲突 · 1440px</figcaption><a href="first-409-1440.png"><img loading="lazy" src="first-409-1440.png" alt="首次版本冲突，宽度1440像素"></a></figure>
+<figure><figcaption>首次请求频繁 · 1440px</figcaption><a href="first-429-1440.png"><img loading="lazy" src="first-429-1440.png" alt="首次请求频繁，宽度1440像素"></a></figure>
+<figure><figcaption>首次服务不可用 · 1440px</figcaption><a href="first-503-1440.png"><img loading="lazy" src="first-503-1440.png" alt="首次服务不可用，宽度1440像素"></a></figure>
+<figure><figcaption>读取成功但没有令牌 · 1440px</figcaption><a href="empty-response-1440.png"><img loading="lazy" src="empty-response-1440.png" alt="读取成功但没有令牌，宽度1440像素"></a></figure>
+<figure><figcaption>后台刷新等待 · 页头区域 · 1440px</figcaption><a href="background-loading-1440.png"><img loading="lazy" src="background-loading-1440.png" alt="后台刷新等待 · 页头区域，宽度1440像素"></a></figure>
+<figure><figcaption>后台刷新失败 · 提示区域 · 1440px</figcaption><a href="background500-notice-1440.png"><img loading="lazy" src="background500-notice-1440.png" alt="后台刷新失败 · 提示区域，宽度1440像素"></a></figure>
+<figure><figcaption>后台刷新权限拒绝 · 1440px</figcaption><a href="background-403-1440.png"><img loading="lazy" src="background-403-1440.png" alt="后台刷新权限拒绝，宽度1440像素"></a></figure>
+<figure><figcaption>后台刷新登录失效 · 1440px</figcaption><a href="background-401-1440.png"><img loading="lazy" src="background-401-1440.png" alt="后台刷新登录失效，宽度1440像素"></a></figure>
+<figure><figcaption>历史查询不同步 · 筛选区域 · 1440px</figcaption><a href="history-query-mismatch-1440.png"><img loading="lazy" src="history-query-mismatch-1440.png" alt="历史查询不同步 · 筛选区域，宽度1440像素"></a></figure></div></main></html>

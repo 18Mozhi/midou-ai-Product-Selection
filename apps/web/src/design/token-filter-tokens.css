@@ -1,0 +1,9 @@
+/* P36 approved mobile filter palette: component-lazy, local tokens only. */
+html #app .org-token-filters-c {
+  --so-token-filter-ink: #202c3d;
+  --so-token-filter-muted: #58677b;
+  --so-token-filter-blue: #254a9c;
+  --so-token-filter-border: #6680a2;
+  --so-token-filter-paper: #fff;
+  --so-token-filter-line: #dbe1e9;
+}

@@ -86,10 +86,24 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
+    if (paths[index] === "apps/web/src/design/export-detail-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html #app \[data-export-detail-c\] \.org-data-export-list\s*\{(?:\s*--so-export-detail-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/approval-read-failure-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^html #app \.org-approval-first-failure-c\s*\{(?:\s*--so-approval-failure-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/token-filter-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html #app \.org-token-filters-c\s*\{(?:\s*--so-token-filter-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }

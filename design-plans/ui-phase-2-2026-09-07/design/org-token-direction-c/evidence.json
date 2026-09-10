@@ -8,8 +8,8 @@
     "scripts/lib/ui-phase2-org-token-design-data.mjs": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
     "scripts/verify-ui-phase2-org-token-c.mjs": "e9432d22d284c2e965091bd76ef3e2d11f106a1ca03b25fd14dfc5d43e91583d",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "apps/web/src/components/OrganizationTokenPanel.vue": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
     "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
@@ -725,5 +725,14 @@
     "OG-G05 reproduced: old clipboard completion marks a replacement secret copied; active past-expiry hints retain today wording and ceil(-fraction) can enter expiring filter",
     "Actual parent create/rotate/revoke bodies and blank reasons; busy guards and three one-time secret generation cases run inertly, not mounted Vue or API proof"
   ],
-  "scope": "Standalone synthetic prototype. No mounted Vue, SQL, API, actual clipboard, production credentials, deployment or approval proof. All browser contexts closed."
+  "scope": "Standalone synthetic prototype. No mounted Vue, SQL, API, actual clipboard, production credentials, deployment or approval proof. All browser contexts closed.",
+  "sourceAssociation": {
+    "baselineCommit": "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+    "kind": "exact-mobile-presentation-and-query-sync-only",
+    "script": "query-sync-only",
+    "models": "capture-time-attributes-retained",
+    "approval": "unchanged",
+    "proof": "scripts/lib/ui-phase2-token-filter-delta.mjs",
+    "queryProof": "scripts/lib/ui-phase2-token-query-delta.mjs"
+  }
 }

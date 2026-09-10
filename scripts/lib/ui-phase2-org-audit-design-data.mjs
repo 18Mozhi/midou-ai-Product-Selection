@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
+import { historicalAuditSource } from "./ui-phase2-audit-copy-baseline.mjs";
 const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildOrgAuditDesignData(repo) {
   const read = (p) => readFile(path.join(repo, p), "utf8"),
@@ -59,7 +60,10 @@ export async function buildOrgAuditDesignData(repo) {
       occurred_to: "",
     }),
     child = parse(
-      (await read("apps/web/src/components/OrganizationAuditPanel.vue"))
+      historicalAuditSource(
+        "apps/web/src/components/OrganizationAuditPanel.vue",
+        await read("apps/web/src/components/OrganizationAuditPanel.vue"),
+      )
         .split(/<script setup[^>]*>/)[1]
         .split("</script>")[0],
     ),
@@ -232,7 +236,10 @@ export async function buildOrgAuditDesignData(repo) {
   assert.equal(urlHarness.h.loadedQuery.value, "失败");
   assert.equal(h.toIso("invalid-date"), "");
   const parent = parse(
-    (await read("apps/web/src/components/OrganizationAdminCenter.vue"))
+    historicalAuditSource(
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      await read("apps/web/src/components/OrganizationAdminCenter.vue"),
+    )
       .split(/<script setup[^>]*>/)[1]
       .split("</script>")[0],
   );

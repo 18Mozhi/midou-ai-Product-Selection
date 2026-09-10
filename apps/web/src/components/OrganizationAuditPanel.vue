@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import "../organization-audit.css";
 
@@ -134,6 +134,33 @@ watch(visibleEvents, (events) => {
   else if (!events.some((event) => event.id === selectedId.value)) selectedId.value = events[0].id;
 });
 
+const copyOwnerPath = route.path;
+let copyGeneration = 0,
+  copyActive = true;
+function invalidateCopy() {
+  copyGeneration++;
+  copyState.value = "";
+}
+watch(
+  [
+    selectedEvent,
+    () => selectedEvent.value?.id,
+    () => selectedEvent.value?.organization_id,
+    () => selectedEvent.value?.request_id,
+    () => selectedEvent.value?.trace_id,
+    () => route.path,
+  ],
+  invalidateCopy,
+  { flush: "sync" },
+);
+onActivated(() => (copyActive = true));
+function suspendCopy() {
+  copyActive = false;
+  invalidateCopy();
+}
+onDeactivated(suspendCopy);
+onBeforeUnmount(suspendCopy);
+
 function queryText(key: string, maximum: number) {
   const value = route.query[key];
   return typeof value === "string" ? value.slice(0, maximum) : "";
@@ -221,7 +248,7 @@ async function resetFilters() {
 }
 function choose(event: any) {
   selectedId.value = event.id;
-  copyState.value = "";
+  invalidateCopy();
 }
 function actionLabel(value: string) {
   return actionLabels[value] ?? "组织审计操作";
@@ -247,11 +274,24 @@ function sanitizeMetadata(value: unknown, depth = 0): unknown {
   );
 }
 async function copy(value: string, field: string) {
+  if (!copyActive || route.path !== copyOwnerPath) return;
+  invalidateCopy();
+  const generation = copyGeneration,
+    event = selectedEvent.value;
+  const settle = (result: "copied" | "failed") => {
+    if (
+      copyActive &&
+      copyGeneration === generation &&
+      route.path === copyOwnerPath &&
+      selectedEvent.value === event
+    )
+      copyState.value = `${field}:${result}`;
+  };
   try {
     await navigator.clipboard.writeText(value);
-    copyState.value = `${field}:copied`;
+    settle("copied");
   } catch {
-    copyState.value = `${field}:failed`;
+    settle("failed");
   }
 }
 </script>

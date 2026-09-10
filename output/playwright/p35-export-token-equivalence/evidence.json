@@ -1,0 +1,910 @@
+{
+  "kind": "P35-EXACT-TOKEN-EXTRACTION",
+  "baselineCommit": "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "scripts/lib/ui-phase2-export-detail-token-delta.mjs": "d8890feffe333c70bdaa50badf88c1dadc1484c68d9347e16278517e3691e54f",
+    "scripts/verify-ui-phase2-export-detail-tokens.mjs": "e523e01ccad2ff01ffdd37dd87cf6554d9265054d977139da86e480d3923421f",
+    "scripts/lib/ui-phase2-org-data-design-data.mjs": "4c6db4f4924384c2bf1361533798e829299d54a10b0cbc730633161afeac51cb",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "scene": "normal",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "normal",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "normal",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "normal",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "normal",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "zero",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "zero",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "zero",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "zero",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "zero",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "unknown",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "unknown",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "unknown",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "unknown",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "unknown",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "queued",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "queued",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "queued",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "queued",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "queued",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "retry_scheduled",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "retry_scheduled",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "retry_scheduled",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "retry_scheduled",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "retry_scheduled",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "succeeded",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "succeeded",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "succeeded",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "succeeded",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "succeeded",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "dead_letter",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "dead_letter",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "dead_letter",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "dead_letter",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "scene": "dead_letter",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 390,
+      "name": "no external/API requests or page errors"
+    },
+    {
+      "width": 760,
+      "scene": "normal",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "normal",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "normal",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "normal",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "normal",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "zero",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "zero",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "zero",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "zero",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "zero",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "unknown",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "unknown",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "unknown",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "unknown",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "unknown",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "queued",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "queued",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "queued",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "queued",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "queued",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "retry_scheduled",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "retry_scheduled",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "retry_scheduled",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "retry_scheduled",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "retry_scheduled",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "succeeded",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "succeeded",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "succeeded",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "succeeded",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "succeeded",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "dead_letter",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "dead_letter",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "dead_letter",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "dead_letter",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "scene": "dead_letter",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 760,
+      "name": "no external/API requests or page errors"
+    },
+    {
+      "width": 761,
+      "scene": "normal",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "normal",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "normal",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "normal",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "normal",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "zero",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "zero",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "zero",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "zero",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "zero",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "unknown",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "unknown",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "unknown",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "unknown",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "unknown",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "queued",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "queued",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "queued",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "queued",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "queued",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "retry_scheduled",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "retry_scheduled",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "retry_scheduled",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "retry_scheduled",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "retry_scheduled",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "succeeded",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "succeeded",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "succeeded",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "succeeded",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "succeeded",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "dead_letter",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "dead_letter",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "dead_letter",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "dead_letter",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "scene": "dead_letter",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 761,
+      "name": "no external/API requests or page errors"
+    },
+    {
+      "width": 1440,
+      "scene": "normal",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "normal",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "normal",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "normal",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "normal",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "zero",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "zero",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "zero",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "zero",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "zero",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "unknown",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "unknown",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "unknown",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "unknown",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "unknown",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "queued",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "queued",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "queued",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "queued",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "queued",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "retry_scheduled",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "retry_scheduled",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "retry_scheduled",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "retry_scheduled",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "retry_scheduled",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "succeeded",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "succeeded",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "succeeded",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "succeeded",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "succeeded",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "dead_letter",
+      "state": "closed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "dead_letter",
+      "state": "open",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "dead_letter",
+      "state": "focus",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "dead_letter",
+      "state": "hover",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "scene": "dead_letter",
+      "state": "pressed",
+      "name": "pixel-identical to pre-token current Vue"
+    },
+    {
+      "width": 1440,
+      "name": "no external/API requests or page errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal-open.png",
+      "width": 390,
+      "scene": "normal",
+      "sha256": "4bb2ed0a651a6db31588d624c0961165ad6efd29fc1a2c04b6f0f63a2c06cf6e"
+    },
+    {
+      "file": "390-zero-open.png",
+      "width": 390,
+      "scene": "zero",
+      "sha256": "4d9f22dddd4c73714a04c5021aae81213b8b1991a0c13bf8d99aec4358cd40ae"
+    },
+    {
+      "file": "760-normal-open.png",
+      "width": 760,
+      "scene": "normal",
+      "sha256": "8d84331f7ce50838a3df30b9015e5ed9de07dca735778c456637e6ff1794f228"
+    },
+    {
+      "file": "760-zero-open.png",
+      "width": 760,
+      "scene": "zero",
+      "sha256": "718e570ae681c263168f904ced37b2a44731984cb47352a03f6ded46bf574103"
+    }
+  ],
+  "browserAndServerClosed": true,
+  "appearanceChanged": false,
+  "acceptanceComplete": false
+}

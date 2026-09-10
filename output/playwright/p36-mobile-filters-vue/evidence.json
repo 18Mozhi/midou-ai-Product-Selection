@@ -1,0 +1,1261 @@
+{
+  "kind": "P36-MOBILE-FILTERS-VUE",
+  "boundary": "Actual child with isolated fixtures; approved mobile filter layout only. Exact scripts and non-target pixels preserved; no parent/API/MySQL/RBAC/OS clipboard or production proof.",
+  "baselineCommit": "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+  "baselineSha256": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "scripts/verify-ui-phase2-org-token-mobile-filters.mjs": "21e84adeb54e499e59076a55adae05a24f89e5eca96667d99dde6289a464a1bd",
+    "scripts/lib/ui-phase2-org-token-design-data.mjs": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
+    "scripts/lib/ui-phase2-token-query-delta.mjs": "930d7a33fb9c68d9f2738cddd568ffd21e913ad9c2af2e136ef52295245e785c",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "normal: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "normal: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "normal: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "normal: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "normal: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "normal: .org-token-list pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "org_token_query=不存在: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "org_token_query=不存在: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "org_token_query=不存在: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "org_token_query=不存在: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "org_token_query=不存在: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "org_token_query=不存在: .org-token-empty pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "busy=1: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "busy=1: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "busy=1: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "busy=1: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "busy=1: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "busy=1: .org-token-list pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "empty=1: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "empty=1: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "empty=1: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "empty=1: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "empty=1: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "empty=1: .org-token-empty pixel identical to baseline"
+    },
+    {
+      "width": 390,
+      "name": "four existing native fields"
+    },
+    {
+      "width": 390,
+      "name": "native rules unchanged"
+    },
+    {
+      "width": 390,
+      "name": "default reset does not force page one"
+    },
+    {
+      "width": 390,
+      "name": "reset defaults retained"
+    },
+    {
+      "width": 390,
+      "name": "label 0 remains exact"
+    },
+    {
+      "width": 390,
+      "name": "label 1 remains exact"
+    },
+    {
+      "width": 390,
+      "name": "label 2 remains exact"
+    },
+    {
+      "width": 390,
+      "name": "label 3 remains exact"
+    },
+    {
+      "width": 390,
+      "name": "description IDs resolve"
+    },
+    {
+      "width": 390,
+      "name": "single column 46px 16px fields"
+    },
+    {
+      "width": 390,
+      "name": "five nearby help lines visible"
+    },
+    {
+      "width": 390,
+      "name": "mobile approved palette"
+    },
+    {
+      "width": 390,
+      "name": "reset below explanation and full width"
+    },
+    {
+      "width": 390,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "生命周期 options unchanged"
+    },
+    {
+      "width": 390,
+      "name": "读取范围 options unchanged"
+    },
+    {
+      "width": 390,
+      "name": "排序 options unchanged"
+    },
+    {
+      "width": 390,
+      "name": "combined filter keeps actual matching token"
+    },
+    {
+      "width": 390,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "no match not validation error"
+    },
+    {
+      "width": 390,
+      "name": "zero result"
+    },
+    {
+      "width": 390,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "native Tab field 0"
+    },
+    {
+      "width": 390,
+      "name": "native Tab field 1"
+    },
+    {
+      "width": 390,
+      "name": "native Tab field 2"
+    },
+    {
+      "width": 390,
+      "name": "native Tab field 3"
+    },
+    {
+      "width": 390,
+      "name": "Tab ends at existing reset"
+    },
+    {
+      "width": 390,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "Enter reset restores defaults"
+    },
+    {
+      "width": 390,
+      "name": "reset preserves unrelated query"
+    },
+    {
+      "width": 390,
+      "name": "changed filters reset page one"
+    },
+    {
+      "width": 390,
+      "name": "full sorting created_desc page one"
+    },
+    {
+      "width": 390,
+      "name": "full sorting created_desc page two"
+    },
+    {
+      "width": 390,
+      "name": "full sorting expires_asc page one"
+    },
+    {
+      "width": 390,
+      "name": "full sorting expires_asc page two"
+    },
+    {
+      "width": 390,
+      "name": "full sorting last_used_desc page one"
+    },
+    {
+      "width": 390,
+      "name": "full sorting last_used_desc page two"
+    },
+    {
+      "width": 390,
+      "name": "full sorting name_asc page one"
+    },
+    {
+      "width": 390,
+      "name": "full sorting name_asc page two"
+    },
+    {
+      "width": 390,
+      "name": "full sorting status_asc page one"
+    },
+    {
+      "width": 390,
+      "name": "full sorting status_asc page two"
+    },
+    {
+      "width": 390,
+      "name": "status all full count"
+    },
+    {
+      "width": 390,
+      "name": "status active full count"
+    },
+    {
+      "width": 390,
+      "name": "status expiring full count"
+    },
+    {
+      "width": 390,
+      "name": "status never_used full count"
+    },
+    {
+      "width": 390,
+      "name": "status revoked full count"
+    },
+    {
+      "width": 390,
+      "name": "status rotated full count"
+    },
+    {
+      "width": 390,
+      "name": "status expired full count"
+    },
+    {
+      "width": 390,
+      "name": "technical ID excluded"
+    },
+    {
+      "width": 390,
+      "name": "native editing retains caret"
+    },
+    {
+      "width": 390,
+      "name": "busy filters remain editable"
+    },
+    {
+      "width": 390,
+      "name": "busy: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "busy reset remains local"
+    },
+    {
+      "width": 390,
+      "name": "local input 220 allowed"
+    },
+    {
+      "width": 390,
+      "name": "no business callbacks"
+    },
+    {
+      "width": 390,
+      "name": "no storage or OS clipboard"
+    },
+    {
+      "width": 390,
+      "name": "URL initial reader still truncates to200"
+    },
+    {
+      "width": 390,
+      "name": "zero API/external requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "zero cookies"
+    },
+    {
+      "width": 760,
+      "name": "normal: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "normal: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "normal: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "normal: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "normal: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "normal: .org-token-list pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "org_token_query=不存在: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "org_token_query=不存在: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "org_token_query=不存在: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "org_token_query=不存在: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "org_token_query=不存在: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "org_token_query=不存在: .org-token-empty pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "busy=1: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "busy=1: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "busy=1: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "busy=1: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "busy=1: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "busy=1: .org-token-list pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "empty=1: .org-token-overview pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "empty=1: .org-token-metrics pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "empty=1: .org-token-truth pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "empty=1: .org-token-create pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "empty=1: .org-token-ledger-heading pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "empty=1: .org-token-empty pixel identical to baseline"
+    },
+    {
+      "width": 760,
+      "name": "four existing native fields"
+    },
+    {
+      "width": 760,
+      "name": "native rules unchanged"
+    },
+    {
+      "width": 760,
+      "name": "default reset does not force page one"
+    },
+    {
+      "width": 760,
+      "name": "reset defaults retained"
+    },
+    {
+      "width": 760,
+      "name": "label 0 remains exact"
+    },
+    {
+      "width": 760,
+      "name": "label 1 remains exact"
+    },
+    {
+      "width": 760,
+      "name": "label 2 remains exact"
+    },
+    {
+      "width": 760,
+      "name": "label 3 remains exact"
+    },
+    {
+      "width": 760,
+      "name": "description IDs resolve"
+    },
+    {
+      "width": 760,
+      "name": "single column 46px 16px fields"
+    },
+    {
+      "width": 760,
+      "name": "five nearby help lines visible"
+    },
+    {
+      "width": 760,
+      "name": "mobile approved palette"
+    },
+    {
+      "width": 760,
+      "name": "reset below explanation and full width"
+    },
+    {
+      "width": 760,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "生命周期 options unchanged"
+    },
+    {
+      "width": 760,
+      "name": "读取范围 options unchanged"
+    },
+    {
+      "width": 760,
+      "name": "排序 options unchanged"
+    },
+    {
+      "width": 760,
+      "name": "combined filter keeps actual matching token"
+    },
+    {
+      "width": 760,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "no match not validation error"
+    },
+    {
+      "width": 760,
+      "name": "zero result"
+    },
+    {
+      "width": 760,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "native Tab field 0"
+    },
+    {
+      "width": 760,
+      "name": "native Tab field 1"
+    },
+    {
+      "width": 760,
+      "name": "native Tab field 2"
+    },
+    {
+      "width": 760,
+      "name": "native Tab field 3"
+    },
+    {
+      "width": 760,
+      "name": "Tab ends at existing reset"
+    },
+    {
+      "width": 760,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "Enter reset restores defaults"
+    },
+    {
+      "width": 760,
+      "name": "reset preserves unrelated query"
+    },
+    {
+      "width": 760,
+      "name": "changed filters reset page one"
+    },
+    {
+      "width": 760,
+      "name": "full sorting created_desc page one"
+    },
+    {
+      "width": 760,
+      "name": "full sorting created_desc page two"
+    },
+    {
+      "width": 760,
+      "name": "full sorting expires_asc page one"
+    },
+    {
+      "width": 760,
+      "name": "full sorting expires_asc page two"
+    },
+    {
+      "width": 760,
+      "name": "full sorting last_used_desc page one"
+    },
+    {
+      "width": 760,
+      "name": "full sorting last_used_desc page two"
+    },
+    {
+      "width": 760,
+      "name": "full sorting name_asc page one"
+    },
+    {
+      "width": 760,
+      "name": "full sorting name_asc page two"
+    },
+    {
+      "width": 760,
+      "name": "full sorting status_asc page one"
+    },
+    {
+      "width": 760,
+      "name": "full sorting status_asc page two"
+    },
+    {
+      "width": 760,
+      "name": "status all full count"
+    },
+    {
+      "width": 760,
+      "name": "status active full count"
+    },
+    {
+      "width": 760,
+      "name": "status expiring full count"
+    },
+    {
+      "width": 760,
+      "name": "status never_used full count"
+    },
+    {
+      "width": 760,
+      "name": "status revoked full count"
+    },
+    {
+      "width": 760,
+      "name": "status rotated full count"
+    },
+    {
+      "width": 760,
+      "name": "status expired full count"
+    },
+    {
+      "width": 760,
+      "name": "technical ID excluded"
+    },
+    {
+      "width": 760,
+      "name": "native editing retains caret"
+    },
+    {
+      "width": 760,
+      "name": "busy filters remain editable"
+    },
+    {
+      "width": 760,
+      "name": "busy: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "busy reset remains local"
+    },
+    {
+      "width": 760,
+      "name": "local input 220 allowed"
+    },
+    {
+      "width": 760,
+      "name": "no business callbacks"
+    },
+    {
+      "width": 760,
+      "name": "no storage or OS clipboard"
+    },
+    {
+      "width": 760,
+      "name": "URL initial reader still truncates to200"
+    },
+    {
+      "width": 760,
+      "name": "zero API/external requests"
+    },
+    {
+      "width": 760,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 760,
+      "name": "zero cookies"
+    },
+    {
+      "width": 761,
+      "name": "normal: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 761,
+      "name": "org_token_query=不存在: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 761,
+      "name": "busy=1: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 761,
+      "name": "empty=1: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 761,
+      "name": "four existing native fields"
+    },
+    {
+      "width": 761,
+      "name": "native rules unchanged"
+    },
+    {
+      "width": 761,
+      "name": "default reset does not force page one"
+    },
+    {
+      "width": 761,
+      "name": "reset defaults retained"
+    },
+    {
+      "width": 761,
+      "name": "label 0 remains exact"
+    },
+    {
+      "width": 761,
+      "name": "label 1 remains exact"
+    },
+    {
+      "width": 761,
+      "name": "label 2 remains exact"
+    },
+    {
+      "width": 761,
+      "name": "label 3 remains exact"
+    },
+    {
+      "width": 761,
+      "name": "description IDs resolve"
+    },
+    {
+      "width": 761,
+      "name": "desktop help hidden"
+    },
+    {
+      "width": 761,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "生命周期 options unchanged"
+    },
+    {
+      "width": 761,
+      "name": "读取范围 options unchanged"
+    },
+    {
+      "width": 761,
+      "name": "排序 options unchanged"
+    },
+    {
+      "width": 761,
+      "name": "combined filter keeps actual matching token"
+    },
+    {
+      "width": 761,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "no match not validation error"
+    },
+    {
+      "width": 761,
+      "name": "zero result"
+    },
+    {
+      "width": 761,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "native Tab field 0"
+    },
+    {
+      "width": 761,
+      "name": "native Tab field 1"
+    },
+    {
+      "width": 761,
+      "name": "native Tab field 2"
+    },
+    {
+      "width": 761,
+      "name": "native Tab field 3"
+    },
+    {
+      "width": 761,
+      "name": "Tab ends at existing reset"
+    },
+    {
+      "width": 761,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "Enter reset restores defaults"
+    },
+    {
+      "width": 761,
+      "name": "reset preserves unrelated query"
+    },
+    {
+      "width": 761,
+      "name": "changed filters reset page one"
+    },
+    {
+      "width": 761,
+      "name": "full sorting created_desc page one"
+    },
+    {
+      "width": 761,
+      "name": "full sorting created_desc page two"
+    },
+    {
+      "width": 761,
+      "name": "full sorting expires_asc page one"
+    },
+    {
+      "width": 761,
+      "name": "full sorting expires_asc page two"
+    },
+    {
+      "width": 761,
+      "name": "full sorting last_used_desc page one"
+    },
+    {
+      "width": 761,
+      "name": "full sorting last_used_desc page two"
+    },
+    {
+      "width": 761,
+      "name": "full sorting name_asc page one"
+    },
+    {
+      "width": 761,
+      "name": "full sorting name_asc page two"
+    },
+    {
+      "width": 761,
+      "name": "full sorting status_asc page one"
+    },
+    {
+      "width": 761,
+      "name": "full sorting status_asc page two"
+    },
+    {
+      "width": 761,
+      "name": "status all full count"
+    },
+    {
+      "width": 761,
+      "name": "status active full count"
+    },
+    {
+      "width": 761,
+      "name": "status expiring full count"
+    },
+    {
+      "width": 761,
+      "name": "status never_used full count"
+    },
+    {
+      "width": 761,
+      "name": "status revoked full count"
+    },
+    {
+      "width": 761,
+      "name": "status rotated full count"
+    },
+    {
+      "width": 761,
+      "name": "status expired full count"
+    },
+    {
+      "width": 761,
+      "name": "technical ID excluded"
+    },
+    {
+      "width": 761,
+      "name": "native editing retains caret"
+    },
+    {
+      "width": 761,
+      "name": "busy filters remain editable"
+    },
+    {
+      "width": 761,
+      "name": "busy: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "busy reset remains local"
+    },
+    {
+      "width": 761,
+      "name": "local input 220 allowed"
+    },
+    {
+      "width": 761,
+      "name": "no business callbacks"
+    },
+    {
+      "width": 761,
+      "name": "no storage or OS clipboard"
+    },
+    {
+      "width": 761,
+      "name": "URL initial reader still truncates to200"
+    },
+    {
+      "width": 761,
+      "name": "zero API/external requests"
+    },
+    {
+      "width": 761,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 761,
+      "name": "zero cookies"
+    },
+    {
+      "width": 1440,
+      "name": "normal: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 1440,
+      "name": "org_token_query=不存在: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 1440,
+      "name": "busy=1: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 1440,
+      "name": "empty=1: .org-token-panel pixel identical to baseline"
+    },
+    {
+      "width": 1440,
+      "name": "four existing native fields"
+    },
+    {
+      "width": 1440,
+      "name": "native rules unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "default reset does not force page one"
+    },
+    {
+      "width": 1440,
+      "name": "reset defaults retained"
+    },
+    {
+      "width": 1440,
+      "name": "label 0 remains exact"
+    },
+    {
+      "width": 1440,
+      "name": "label 1 remains exact"
+    },
+    {
+      "width": 1440,
+      "name": "label 2 remains exact"
+    },
+    {
+      "width": 1440,
+      "name": "label 3 remains exact"
+    },
+    {
+      "width": 1440,
+      "name": "description IDs resolve"
+    },
+    {
+      "width": 1440,
+      "name": "desktop help hidden"
+    },
+    {
+      "width": 1440,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "生命周期 options unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "读取范围 options unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "排序 options unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "combined filter keeps actual matching token"
+    },
+    {
+      "width": 1440,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no match not validation error"
+    },
+    {
+      "width": 1440,
+      "name": "zero result"
+    },
+    {
+      "width": 1440,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "native Tab field 0"
+    },
+    {
+      "width": 1440,
+      "name": "native Tab field 1"
+    },
+    {
+      "width": 1440,
+      "name": "native Tab field 2"
+    },
+    {
+      "width": 1440,
+      "name": "native Tab field 3"
+    },
+    {
+      "width": 1440,
+      "name": "Tab ends at existing reset"
+    },
+    {
+      "width": 1440,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "Enter reset restores defaults"
+    },
+    {
+      "width": 1440,
+      "name": "reset preserves unrelated query"
+    },
+    {
+      "width": 1440,
+      "name": "changed filters reset page one"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting created_desc page one"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting created_desc page two"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting expires_asc page one"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting expires_asc page two"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting last_used_desc page one"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting last_used_desc page two"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting name_asc page one"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting name_asc page two"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting status_asc page one"
+    },
+    {
+      "width": 1440,
+      "name": "full sorting status_asc page two"
+    },
+    {
+      "width": 1440,
+      "name": "status all full count"
+    },
+    {
+      "width": 1440,
+      "name": "status active full count"
+    },
+    {
+      "width": 1440,
+      "name": "status expiring full count"
+    },
+    {
+      "width": 1440,
+      "name": "status never_used full count"
+    },
+    {
+      "width": 1440,
+      "name": "status revoked full count"
+    },
+    {
+      "width": 1440,
+      "name": "status rotated full count"
+    },
+    {
+      "width": 1440,
+      "name": "status expired full count"
+    },
+    {
+      "width": 1440,
+      "name": "technical ID excluded"
+    },
+    {
+      "width": 1440,
+      "name": "native editing retains caret"
+    },
+    {
+      "width": 1440,
+      "name": "busy filters remain editable"
+    },
+    {
+      "width": 1440,
+      "name": "busy: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "busy reset remains local"
+    },
+    {
+      "width": 1440,
+      "name": "local input 220 allowed"
+    },
+    {
+      "width": 1440,
+      "name": "no business callbacks"
+    },
+    {
+      "width": 1440,
+      "name": "no storage or OS clipboard"
+    },
+    {
+      "width": 1440,
+      "name": "URL initial reader still truncates to200"
+    },
+    {
+      "width": 1440,
+      "name": "zero API/external requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero cookies"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "default-390.png",
+      "scene": "default",
+      "width": 390,
+      "sha256": "267c8414c42bc63904ac8acf4a0e15561a2c2aab9d0dc5a394951ae8fa0cb3c0",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "matching-390.png",
+      "scene": "matching",
+      "width": 390,
+      "sha256": "f83fa8e58ff4084cdef4962cb5f0d67d25194fb361d2df388fb6903bf8964249",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "no-result-390.png",
+      "scene": "no-result",
+      "width": 390,
+      "sha256": "d9f47d02dc349dd1a4663f28b2fa25c280ab55ca1f119915b8d7147e707d4aba",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "reset-focus-390.png",
+      "scene": "reset-focus",
+      "width": 390,
+      "sha256": "b9b4e87fdfa7661a2e39c1981a3d1a76081d03b058f8cd56db6c8a343e44bc74",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "busy-390.png",
+      "scene": "busy",
+      "width": 390,
+      "sha256": "445e674f4f9281233934ae3dbbea5f83c10a206a3592d8fa28149d886a887680",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "default-760.png",
+      "scene": "default",
+      "width": 760,
+      "sha256": "f883e48ee19c1e2e93411154bd139cafa112b0f46dd1e010d444c5dc94ee8101",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "matching-760.png",
+      "scene": "matching",
+      "width": 760,
+      "sha256": "ad3474bcc2feb80ef765b0024e6654bba07479b651a3316b2db9d76535d581f0",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "no-result-760.png",
+      "scene": "no-result",
+      "width": 760,
+      "sha256": "a04ed90e9a6ff9b8e1199db9aa805a354d8144efcd5c82f671cefa345cdacfe7",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "reset-focus-760.png",
+      "scene": "reset-focus",
+      "width": 760,
+      "sha256": "97bea86b4e7bd405254d52a4dd1cd7ec158a2796e78e7f1ccc65b60318526815",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    },
+    {
+      "file": "busy-760.png",
+      "scene": "busy",
+      "width": 760,
+      "sha256": "49a573a0306e482e457ab646692d0b63c9145775cb29dcc62cedf243b3a8c78f",
+      "scope": "mounted-child-fixture-mobile-filter-not-parent-API-or-production-acceptance"
+    }
+  ],
+  "sourceAssociation": {
+    "kind": "query-sync-only-after-live-replay",
+    "proof": "scripts/lib/ui-phase2-token-query-delta.mjs",
+    "pngRewritten": 0,
+    "checksReplayed": 290
+  }
+}

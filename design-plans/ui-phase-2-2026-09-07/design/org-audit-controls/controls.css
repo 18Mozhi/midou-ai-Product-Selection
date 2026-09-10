@@ -1,0 +1,49 @@
+:root {
+  --control-focus: #254a9c;
+  --control-hover: #e6edfb;
+  --control-pressed: #d7e1f7;
+  --control-disabled: #e8edf4;
+  --control-disabled-text: #58677b;
+}
+button,
+.technical summary {
+  min-height: 44px;
+  font-size: 16px;
+}
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--control-focus);
+  outline-offset: -4px;
+}
+.rail button:focus-visible,
+.rail summary:focus-visible {
+  outline-color: white;
+}
+.rail .apply:focus-visible {
+  outline-color: var(--control-focus);
+}
+.event-row:hover,
+.technical summary:hover {
+  background: var(--control-hover);
+}
+.event-row:active,
+.technical summary:active,
+.server-form .apply:active {
+  background: var(--control-pressed);
+}
+.rail #reset:disabled,
+button:disabled {
+  background: var(--control-disabled);
+  color: var(--control-disabled-text);
+  border-color: var(--line);
+  opacity: 1;
+  transform: none;
+}
+.technical summary {
+  padding: 8px;
+  border-radius: 4px;
+}
+.copy-feedback {
+  font-size: 14px;
+  line-height: 1.6;
+}

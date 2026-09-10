@@ -2,7 +2,7 @@
   "kind": "P34-RATE-LIMIT-VUE",
   "baselineCommit": "d2d566c2fceeef6ab1754f409475e2cf7582b8ef",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
     "scripts/verify-ui-phase2-org-approvals-rate-limit-vue.mjs": "c629867afb0c8cfd3a2cf7180d6d9d4c6ac953b902601d53f12011d89dd9200c",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",

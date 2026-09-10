@@ -2,17 +2,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 
 const output = "output/playwright/p35-parent-read-states";
 const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 
-test("P35 actual App/parent/child source and all128 state images are current", () => {
+test("P35 App/parent/child capture and128 images retain exact sources before equivalent token extraction", () => {
   assert.equal(e.kind, "P35-PARENT-READ-STATES");
   assert.equal(e.screenshots.length, 128);
   assert.equal(new Set(e.screenshots.map((s) => s.file)).size, 128);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(
+      capturedExportDetailHash(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")),
+      sha,
+      file,
+    );
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -86,6 +86,45 @@ try {
     assert.ok(
       (await page.locator(".vue-materials").textContent()).includes("不据此断言该页没有实现"),
     );
+    await page.locator("#page-search").fill("P36");
+    assert.equal(await page.locator(".vue-materials .material-card").count(), 1);
+    assert.equal(
+      await page
+        .locator(
+          '.vue-materials a[href="../../output/playwright/p36-mobile-filters-vue/index.html"]',
+        )
+        .count(),
+      1,
+    );
+    assert.ok(
+      (await page.locator(".vue-materials").innerText()).includes(
+        "本地拦截数据不代表真实后端或生产验收",
+      ),
+    );
+    assert.ok(
+      await page.evaluate(() =>
+        window.SCOUTOPS_PHASE2_EVIDENCE.pages
+          .find((p) => p.id === "P36")
+          .actualVue[0].scope.includes("不是父级/API/生产验收"),
+      ),
+    );
+    const gallery = await context.newPage();
+    try {
+      await gallery.goto(
+        pathToFileURL(path.join(repo, "output/playwright/p36-mobile-filters-vue/index.html")).href,
+      );
+      assert.equal(await gallery.locator("article img").count(), 10);
+      await gallery.locator("article img").last().scrollIntoViewIfNeeded();
+      // Load each lazy image by native scrolling; no replacement graphics or new PNG output.
+      for (const img of await gallery.locator("article img").all()) {
+        await img.scrollIntoViewIfNeeded();
+        await img.evaluate((n) => n.decode());
+        assert.ok(await img.evaluate((n) => n.naturalWidth > 0));
+      }
+      assert.ok(await gallery.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    } finally {
+      await gallery.close();
+    }
     // Preserve old notes even though the design evidence index is newer than the baseline.
     await page.evaluate(() =>
       localStorage.setItem(

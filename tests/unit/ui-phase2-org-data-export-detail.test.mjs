@@ -4,6 +4,11 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import postcss from "postcss";
+import { readBeforeAuditPage } from "../../scripts/lib/ui-phase2-audit-page-evidence.mjs";
+import {
+  capturedExportDetailHash,
+  undoExportDetailTokens,
+} from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 
 const component = "apps/web/src/components/OrganizationDataPanel.vue";
 const baseline = "d401ec95501555a458715ea3a610e61f5f8eead7";
@@ -25,7 +30,9 @@ test("P35 export detail changes only styling marker/import, not script, fields o
       .replace('\n<style src="../org-data-export-detail.css"></style>\n', ""),
     old(component),
   );
-  const css = postcss.parse(read("apps/web/src/org-data-export-detail.css"));
+  const css = postcss.parse(
+    undoExportDetailTokens(read("apps/web/src/org-data-export-detail.css")),
+  );
   assert.equal(css.nodes.filter((n) => n.type !== "comment").length, 1);
   assert.equal(css.nodes.find((n) => n.type === "atrule").params, "(max-width: 760px)");
   css.walkRules((rule) =>
@@ -123,7 +130,7 @@ test("P35 actual child proof covers mobile layout, null versus zero and desktop 
   assert.deepEqual([...new Set(e.screenshots.map((s) => s.width))].sort(), [390, 760]);
   assert.match(e.scope, /not-parent-API-SQL-production/);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assert.equal(capturedExportDetailHash(file, read(file)), sha, file);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(
@@ -140,7 +147,8 @@ test("P35 prior design evidence only updates the exact source association, prese
     "output/playwright/p35-controls-review",
   ]) {
     const before = JSON.parse(old(`${folder}/evidence.json`));
-    const after = JSON.parse(read(`${folder}/evidence.json`));
+    // Verify the original P35-only association after undoing the separately proven P37 layer.
+    const after = JSON.parse(readBeforeAuditPage(`${folder}/evidence.json`));
     assert.equal(before.sourceHashes[component], hash(old(component)));
     before.sourceHashes[component] = hash(read(component));
     assert.deepEqual(after, before, folder);

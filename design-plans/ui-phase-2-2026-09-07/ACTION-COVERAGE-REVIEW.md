@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1484；旧登记1477；新身份29，旧表独有身份22。签名变化不等于增删业务能力。
-- 已具体语义对应36页/745源位置/719组；其中路由动作598组，转发/容器关联66组，其余明确排除。其余37页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应38页/767源位置/754组；其中路由动作621组，转发/容器关联68组，其余明确排除。其余35页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -47,8 +47,8 @@
 | [P33 团队管理](page-specs/P33.md) | 162 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P34 审批模板](page-specs/P34.md) | 162 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P35 组织数据](page-specs/P35.md) | 162 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P37 组织审计](page-specs/P37.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P36 组织令牌](page-specs/P36.md) | 162 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 162 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P38 平台概览](page-specs/P38.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P39 账号与组织](page-specs/P39.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P40 组织管理](page-specs/P40.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2990,6 +2990,153 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 完整URL历史、缓存/多实例/组织切换、主题密度、200%缩放、真实API/SQL/RBAC和全73页生产验收待完成。
 - 源扫描4容器：2父共享/他页结构及2子行内说明，不等于P35有4个业务弹窗。
 - 子组件details、section、列表不是原生dialog或抽屉；父真实异常、路由归属和生命周期另验。
+
+## P36 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P36.json)：25个局部源位置 → 19组；3类写入，12组路由动作，2组转发/容器关联不重复计动作。13个本地v-model，6处调用/内嵌容器，9个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新令牌数据 / read | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-RETRY 重新读取 / read | 1处；source-current | [error · 1440](design/org-token-direction-c/1440-error.png) / [error · 390](design/org-token-direction-c/390-error.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| EX-P34-RETRY 审批专有转发排除 / excluded | 2处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| EX-P29-PROFILE 资料表单排除 / excluded | 3处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| EX-P30-MEMBERS 成员转发排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| EX-P31-ROLES 资源授权转发排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| EX-GENERIC-REASON 他页原因入口排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| W-K-REASON 原因窗父转发 / wiring | 2处；source-current | [reason_rotate · 1440](design/org-token-direction-c/1440-reason_rotate.png) / [reason_rotate · 390](design/org-token-direction-c/390-reason_rotate.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| W-K-ASK 轮换/撤销原因调用 / wiring | 1处；source-current | [reason_revoke · 1440](design/org-token-direction-c/1440-reason_revoke.png) / [reason_revoke · 390](design/org-token-direction-c/390-reason_revoke.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-COPY 复制明文 / local | 1处；source-current | [copy_success · 1440](design/org-token-direction-c/1440-copy_success.png) / [copy_success · 390](design/org-token-direction-c/390-copy_success.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-DISMISS 关闭本次明文 / local | 1处；source-current | [secret_dismissed · 1440](design/org-token-direction-c/1440-secret_dismissed.png) / [secret_dismissed · 390](design/org-token-direction-c/390-secret_dismissed.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-CREATE 创建组织令牌 / write | 2处；source-current | [create_draft · 1440](design/org-token-direction-c/1440-create_draft.png) / [create_draft · 390](design/org-token-direction-c/390-create_draft.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-SCOPE 选择读取范围 / local | 1处；source-current | [create_all_scopes · 1440](design/org-token-direction-c/1440-create_all_scopes.png) / [create_all_scopes · 390](design/org-token-direction-c/390-create_all_scopes.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-TTL 有效期快捷选择 / local | 1处；source-current | [create · 1440](design/org-token-direction-c/1440-create.png) / [create · 390](design/org-token-direction-c/390-create.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-FILTER 重置筛选 / local | 1处；source-current | [search · 1440](design/org-token-direction-c/1440-search.png) / [search · 390](design/org-token-direction-c/390-search.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-TECH 技术详情 / local | 1处；source-current | [technical · 1440](design/org-token-direction-c/1440-technical.png) / [technical · 390](design/org-token-direction-c/390-technical.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-ROTATE 轮换密钥 / write | 1处；source-current | [reason_rotate · 1440](design/org-token-direction-c/1440-reason_rotate.png) / [reason_rotate · 390](design/org-token-direction-c/390-reason_rotate.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-REVOKE 撤销访问 / write | 1处；source-current | [reason_revoke · 1440](design/org-token-direction-c/1440-reason_revoke.png) / [reason_revoke · 390](design/org-token-direction-c/390-reason_revoke.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OG-K-PAGE 前后分页 / local | 2处；source-current | [page_two · 1440](design/org-token-direction-c/1440-page_two.png) / [page_two · 390](design/org-token-direction-c/390-page_two.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| W-K-REASON | @submit / submitAuditedReason | OG-K-ROTATE、OG-K-REVOKE |
+| W-K-REASON | @cancel / cancelAuditedReason | OG-K-ROTATE、OG-K-REVOKE |
+| W-K-REASON | @submit / submitAuditedReason | OG-K-ROTATE、OG-K-REVOKE |
+| W-K-REASON | @cancel / cancelAuditedReason | OG-K-ROTATE、OG-K-REVOKE |
+| W-K-ASK | 容器定义，无额外事件 | OG-K-ROTATE、OG-K-REVOKE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / form.logo_url | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / form.timezone | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / form.reason | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / createForm.name | 名称required/max120，提交trim；等待仍可编辑 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / createForm.ttl_days | number模型，required/min1/max365；默认90，四快捷只改草稿 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / createForm.reason | 创建原因required/max500，提交trim；不等于共享原因窗上限 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / tokenQuery | 搜索名称/前缀/中文状态/scope，不搜索ID；本地无maxlength，URL初读200 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / statusFilter | all/active/expiring/never_used/revoked/rotated/expired；按已返回数据计算 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / scopeFilter | 全部及四固定scope，只筛选已有数据不更改授权 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / tokenSort | created_desc/expires_asc/last_used_desc/name_asc/status_asc，完整数组先排序再分页 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / summary-excluded | form-container / route-excluded-reference | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / rotate | native-reason-dialog / matching-dialog-scene | [reason_rotate · 1440](design/org-token-direction-c/1440-reason_rotate.png) / [reason_rotate · 390](design/org-token-direction-c/390-reason_rotate.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / revoke | native-reason-dialog / matching-dialog-scene | [reason_revoke · 1440](design/org-token-direction-c/1440-reason_revoke.png) / [reason_revoke · 390](design/org-token-direction-c/390-reason_revoke.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / aside.1 / security | inline-aside / related-scene-only | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / aside.2 / truth | inline-aside / related-scene-only | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / form.1 / draft | form-container / matching-inline-form-scene | [create_draft · 1440](design/org-token-direction-c/1440-create_draft.png) / [create_draft · 390](design/org-token-direction-c/390-create_draft.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / form.1 / busy-proposal-differs | form-container / proposal-shape-differs | [create_busy · 1440](design/org-token-direction-c/1440-create_busy.png) / [create_busy · 390](design/org-token-direction-c/390-create_busy.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / form.1 / failure | form-container / matching-inline-form-scene | [create_failure · 1440](design/org-token-direction-c/1440-create_failure.png) / [create_failure · 390](design/org-token-direction-c/390-create_failure.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / aside.3 / preview | inline-aside / related-scene-only | [create_draft · 1440](design/org-token-direction-c/1440-create_draft.png) / [create_draft · 390](design/org-token-direction-c/390-create_draft.png) | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+
+### 明确保留的边界
+
+- 本页仅手机四筛选字段/帮助/底部重置获局部批准并有真实子Vue证据；创建及其他控件问题仍待答。
+- 原662PNG与10实图分别关联，独立schema不强充统一六态slot，72个路由动作槽仍not-mapped。
+- 父级完整错误/刷新、URL历史、路由/组织/KeepAlive生命周期、OG-G05、真实MySQL/权限/审计/幂等与全73页部署验收仍待。
+- 既有P35颜色门失败仍未获修复授权；不以本登记通过代替完整测试或自动提交。
+- 6处caller结构不等于6个业务弹窗；共享原生原因窗仅两种上下文。
+- 共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。
+
+## P37 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P37.json)：23个局部源位置 → 16组；0类写入，11组路由动作，0组转发/容器关联不重复计动作。14个本地v-model，6处调用/内嵌容器，9个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新审计第一页 / read | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-RETRY 重新读取 / read | 1处；source-current | [error · 1440](design/org-audit-direction-c/1440-error.png) / [error · 390](design/org-audit-direction-c/390-error.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| EX-P34-RETRY 审批专有恢复排除 / excluded | 2处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| EX-P29-PROFILE 组织资料表单排除 / excluded | 3处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| EX-P31-ROLES 资源授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| EX-REASON 其他页面原因调用排除 / excluded | 4处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-FILTER 应用七项精确条件 / read | 2处；source-current | [advanced · 1440](design/org-audit-direction-c/1440-advanced.png) / [advanced · 390](design/org-audit-direction-c/390-advanced.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-ADVANCED 高级条件展开与收起 / local | 1处；source-current | [advanced · 1440](design/org-audit-direction-c/1440-advanced.png) / [advanced · 390](design/org-audit-direction-c/390-advanced.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-RESET 重置全部条件 / read | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-SYSTEM 系统连接记录开合 / local | 1处；source-current | [system_collapsed · 1440](design/org-audit-direction-c/1440-system_collapsed.png) / [system_collapsed · 390](design/org-audit-direction-c/390-system_collapsed.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-SELECT 选择审计记录 / local | 1处；source-current | [selected · 1440](design/org-audit-direction-c/1440-selected.png) / [selected · 390](design/org-audit-direction-c/390-selected.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-MORE 加载更多 / read | 1处；source-current | [more_busy · 1440](design/org-audit-direction-c/1440-more_busy.png) / [more_busy · 390](design/org-audit-direction-c/390-more_busy.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-COPY-REQUEST 复制请求ID / local | 1处；source-current | [request_copied · 1440](design/org-audit-direction-c/1440-request_copied.png) / [request_copied · 390](design/org-audit-direction-c/390-request_copied.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-AUD-COPY-TRACE 复制追踪ID / local | 1处；source-current | [trace_copied · 1440](design/org-audit-direction-c/1440-trace_copied.png) / [trace_copied · 390](design/org-audit-direction-c/390-trace_copied.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OG-TECH 技术详情 / local | 1处；source-current | [technical · 1440](design/org-audit-direction-c/1440-technical.png) / [technical · 390](design/org-audit-direction-c/390-technical.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | P29资料字段，本路由排除 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.logo_url | P29资料字段，本路由排除 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.timezone | P29资料字段，本路由排除 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | P29资料字段，本路由排除 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | P29资料字段，本路由排除 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.reason | P29资料字段，本路由排除 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / loadedQuery | 仅搜索已加载操作/对象类型/结果/request_id/trace_id；maxlength160；不检索metadata/actor或resource ID | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.action | maxlength128，trim后精确操作代码，不是中文模糊搜索 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.outcome | 空/succeeded/failed/blocked，原生select | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.resource_type | maxlength80，trim后精确类型，不是对象ID | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.request_id | maxlength128，trim后精确请求ID | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.trace_id | maxlength128，trim后精确追踪ID | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.occurred_from | datetime-local，max为结束，提交ISO；无默认必填 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.occurred_to | datetime-local，min为开始；两端存在且开始更晚时拒绝查询 | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / summary-excluded | form-container / route-excluded-reference | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / other-route-excluded | native-reason-dialog / route-excluded-reference | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / aside.1 / boundary | inline-aside / related-scene-only | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.1 / normal | form-container / proposal-shape-differs | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.1 / advanced | form-container / proposal-shape-differs | [advanced · 1440](design/org-audit-direction-c/1440-advanced.png) / [advanced · 390](design/org-audit-direction-c/390-advanced.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / form.1 / range | form-container / proposal-shape-differs | [range_error · 1440](design/org-audit-direction-c/1440-range_error.png) / [range_error · 390](design/org-audit-direction-c/390-range_error.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / aside.2 / selected | inline-aside / related-scene-only | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)、[selected · 1440](design/org-audit-direction-c/1440-selected.png) / [selected · 390](design/org-audit-direction-c/390-selected.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / aside.2 / technical | inline-aside / related-scene-only | [technical · 1440](design/org-audit-direction-c/1440-technical.png) / [technical · 390](design/org-audit-direction-c/390-technical.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| OrganizationAuditPanel.vue / aside.3 / empty | inline-aside / related-scene-only | [empty · 1440](design/org-audit-direction-c/1440-empty.png) / [empty · 390](design/org-audit-direction-c/390-empty.png) | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+
+### 明确保留的边界
+
+- 基础筛选和手机详情问题尚未回复，全部P37新图待审。
+- 19控件变体中的三个便捷动作和缺失ID禁用是提案，非生产规则。
+- 原104、字段38、控件172图分别关联，不把独立schema强充通用六态槽。
+- 复制及分页响应归属已做局部保护，不扩大为全部OG-G05通过；查询失败已用条件错位及URL反向恢复仍待处理。
+- P35既有颜色门授权待答；全73页C实施、部署和签收未完成。
+- 父共享原因的跨页遗留状态不在当前登记中验收。
+- 子源10候选、八模型和四结构都需真实Vue生命周期验证。
 
 ## P54 局部动作与共享消费者
 

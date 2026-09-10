@@ -1,0 +1,2482 @@
+{
+  "kind": "P36-READ-STATES-C-PROPOSAL",
+  "approval": "pending-user-review",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/data.js": "5ed377927e57ece618435f984ea238667400e87d93c85373ebd787d8f11ea405",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.css": "14a8ea8d27f328ff1442224772a263541d86df7f10ac7c70d9a59da34db8ded2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-read-states/index.html": "37ef014804b36d61009e5a64c432e25919b410d1996e6d6e152de9c0cdcad7e5",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-read-states/read-states.css": "3da184e8a2508f9f5c495f9ed6d8096dcebb2e50f8b173dfbb65cf4ac4357e79",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-read-states/read-states.js": "4cb5b30d6c91c6d43f3f89c9064d509390504e421b6f92faee526e6bbba42780",
+    "scripts/verify-ui-phase2-org-token-read-states.mjs": "c48fb1584d2679363d7f4fc3953e12c6bb2f2b3c382b16cd3d4a1aac836089d1"
+  },
+  "retained": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c": {
+      "manifest": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468",
+      "pngCount": 112
+    },
+    "output/playwright/p36-controls-review": {
+      "manifest": "23d5b2d58c30aa003e041095dc4c9121f5f4be70bcf834bcc3ddca16bd283013",
+      "pngCount": 354
+    },
+    "output/playwright/p36-fields-review": {
+      "manifest": "225b2f026f59f0c73a036752efd24e64c0ba6e4ec52a4403804d739f6a1f11ee",
+      "pngCount": 196
+    },
+    "output/playwright/p36-mobile-filters-vue": {
+      "manifest": "a37be7abf6ba29a38d88270558d30c1322aeeade03846ce873f597c196417baa",
+      "pngCount": 10
+    },
+    "output/playwright/p36-parent-read-vue": {
+      "manifest": "6738d428fd96687915467a67728de447458d129cad2922fa363bc90fba05b891",
+      "pngCount": 26
+    },
+    "output/playwright/p36-parent-read-vue-r2": {
+      "manifest": "0ce354238f17d477ff3095dd6ef43f3ab7f0d331c6a5d49753fc3299f161de60",
+      "pngCount": 28
+    }
+  },
+  "scenes": [
+    {
+      "id": "initial-loading",
+      "phase": "initial",
+      "kind": "loading"
+    },
+    {
+      "id": "background-loading",
+      "phase": "background",
+      "kind": "loading"
+    },
+    {
+      "id": "initial-error",
+      "phase": "initial",
+      "kind": "error"
+    },
+    {
+      "id": "background-error",
+      "phase": "background",
+      "kind": "error"
+    },
+    {
+      "id": "initial-forbidden",
+      "phase": "initial",
+      "kind": "forbidden"
+    },
+    {
+      "id": "background-forbidden",
+      "phase": "background",
+      "kind": "forbidden"
+    },
+    {
+      "id": "initial-expired",
+      "phase": "initial",
+      "kind": "expired"
+    },
+    {
+      "id": "background-expired",
+      "phase": "background",
+      "kind": "expired"
+    },
+    {
+      "id": "initial-conflict",
+      "phase": "initial",
+      "kind": "conflict"
+    },
+    {
+      "id": "background-conflict",
+      "phase": "background",
+      "kind": "conflict"
+    },
+    {
+      "id": "initial-rate_limited",
+      "phase": "initial",
+      "kind": "rate_limited"
+    },
+    {
+      "id": "background-rate_limited",
+      "phase": "background",
+      "kind": "rate_limited"
+    },
+    {
+      "id": "initial-blocked",
+      "phase": "initial",
+      "kind": "blocked"
+    },
+    {
+      "id": "background-blocked",
+      "phase": "background",
+      "kind": "blocked"
+    }
+  ],
+  "bindings": [
+    {
+      "scene": "initial-loading",
+      "refresh": "OG-REFRESH:disabled",
+      "retry": null,
+      "trace": null,
+      "retained": false,
+      "status": null
+    },
+    {
+      "scene": "background-loading",
+      "refresh": "OG-REFRESH:disabled",
+      "retry": null,
+      "trace": null,
+      "retained": true,
+      "status": null
+    },
+    {
+      "scene": "initial-error",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 500
+    },
+    {
+      "scene": "background-error",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": null,
+      "trace": "native details proposal only",
+      "retained": true,
+      "status": 500
+    },
+    {
+      "scene": "initial-forbidden",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 403
+    },
+    {
+      "scene": "background-forbidden",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 403
+    },
+    {
+      "scene": "initial-expired",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 401
+    },
+    {
+      "scene": "background-expired",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 401
+    },
+    {
+      "scene": "initial-conflict",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 409
+    },
+    {
+      "scene": "background-conflict",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": null,
+      "trace": "native details proposal only",
+      "retained": true,
+      "status": 409
+    },
+    {
+      "scene": "initial-rate_limited",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 429
+    },
+    {
+      "scene": "background-rate_limited",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": null,
+      "trace": "native details proposal only",
+      "retained": true,
+      "status": 429
+    },
+    {
+      "scene": "initial-blocked",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": "OG-RETRY:load()",
+      "trace": "native details proposal only",
+      "retained": false,
+      "status": 503
+    },
+    {
+      "scene": "background-blocked",
+      "refresh": "OG-REFRESH:load({background:true})",
+      "retry": null,
+      "trace": "native details proposal only",
+      "retained": true,
+      "status": 503
+    }
+  ],
+  "checks": [
+    {
+      "width": 390,
+      "name": "fourteen distinct phase and kind combinations"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading disabled native click does nothing"
+    },
+    {
+      "width": 390,
+      "name": "background-loading matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-loading retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-loading retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-loading refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-loading busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-loading trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-loading no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-loading no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-loading controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-loading main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-loading no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-loading no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-loading disabled native click does nothing"
+    },
+    {
+      "width": 390,
+      "name": "initial-error matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-error retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-error retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-error refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-error busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-error trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-error no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-error no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-error controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-error main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-error no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-error no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-error trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "initial-error raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "initial-error exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "background-error matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-error retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-error retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-error refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-error busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-error trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-error no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-error no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-error controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-error main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-error no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-error no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-error trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "background-error raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "background-error exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "background-forbidden exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "initial-expired exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "background-expired matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-expired retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-expired retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-expired refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-expired busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-expired trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-expired no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-expired no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-expired controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-expired main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-expired no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-expired no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-expired trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "background-expired raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "background-expired exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "initial-conflict exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "background-conflict exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate_limited exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "background-rate_limited exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked matches actual client failure kind"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked retained content follows actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked retry follows actual parent branch"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked busy attribute"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked trace omitted while no response"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked no secret or creation fields"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked controls at least44"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked main text at least16"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked no duplicate alert"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked no animated countdown"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked trace exposes existing request ID only"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked raw fixture retained in trace"
+    },
+    {
+      "width": 390,
+      "name": "background-blocked exact read-only intentions"
+    },
+    {
+      "width": 390,
+      "name": "refresh hover visible"
+    },
+    {
+      "width": 390,
+      "name": "refresh native keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "refresh focus width3"
+    },
+    {
+      "width": 390,
+      "name": "refresh pressed visible"
+    },
+    {
+      "width": 390,
+      "name": "retry hover visible"
+    },
+    {
+      "width": 390,
+      "name": "retry native keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "retry focus width3"
+    },
+    {
+      "width": 390,
+      "name": "retry pressed visible"
+    },
+    {
+      "width": 390,
+      "name": "trace focus native details state"
+    },
+    {
+      "width": 390,
+      "name": "trace open native details state"
+    },
+    {
+      "width": 390,
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "zero cookies"
+    },
+    {
+      "width": 390,
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "name": "fourteen distinct phase and kind combinations"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading disabled native click does nothing"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading disabled native click does nothing"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "initial-error exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background-error matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-error retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-error retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-error refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-error busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-error trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-error no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-error no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-error controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-error main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-error no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-error no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-error trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "background-error raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "background-error exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "background-forbidden exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "background-expired exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "initial-conflict exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "background-conflict exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate_limited exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate_limited exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked matches actual client failure kind"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked retained content follows actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked retry follows actual parent branch"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked busy attribute"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked trace omitted while no response"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked no secret or creation fields"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked controls at least44"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked main text at least16"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked no duplicate alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked no animated countdown"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked trace exposes existing request ID only"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked raw fixture retained in trace"
+    },
+    {
+      "width": 1440,
+      "name": "background-blocked exact read-only intentions"
+    },
+    {
+      "width": 1440,
+      "name": "refresh hover visible"
+    },
+    {
+      "width": 1440,
+      "name": "refresh native keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "refresh focus width3"
+    },
+    {
+      "width": 1440,
+      "name": "refresh pressed visible"
+    },
+    {
+      "width": 1440,
+      "name": "retry hover visible"
+    },
+    {
+      "width": 1440,
+      "name": "retry native keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "retry focus width3"
+    },
+    {
+      "width": 1440,
+      "name": "retry pressed visible"
+    },
+    {
+      "width": 1440,
+      "name": "trace focus native details state"
+    },
+    {
+      "width": 1440,
+      "name": "trace open native details state"
+    },
+    {
+      "width": 1440,
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero cookies"
+    },
+    {
+      "width": 1440,
+      "name": "zero storage"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "scene-initial-loading",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-loading-390.png",
+      "sha256": "e3ab93eb8b9e30198cf634b32e6724e1f2338a5e0418257fb5117e97729b77a1",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-loading",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-loading-390.png",
+      "sha256": "7a17510ba5f9e9cb65747f6620478d416b7313e0d0ff0fcb54b2b6393c214ac4",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-error",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-error-390.png",
+      "sha256": "9ef204210b1f1cde435b9fe9d21504c15f6cb37a73d85819ba1172716ebfecb9",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-error",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-error-390.png",
+      "sha256": "686ae0201f1d8b2b9ba5d155beebb2818206048bc63933f4358434dd7f63040b",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-forbidden",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-forbidden-390.png",
+      "sha256": "fb810cb1df6732d6db502beec4d3ce251adca4b110a84fbb74b183855aa6f6a0",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "panel-permission",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "panel-permission-390.png",
+      "sha256": "62b83d50059a513950ea1007626d45795150365dd7ad293e69ef7191c13f5762",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-forbidden",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-forbidden-390.png",
+      "sha256": "8cb64d6eeba8d10e76d21ac9918c7bdbb16ee80c53af88e768dab1a80c7771de",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-expired",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-expired-390.png",
+      "sha256": "469ce5d38e8d75507a78088789a71083ac207c7c1971cd8895e14e3c449f496b",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-expired",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-expired-390.png",
+      "sha256": "a95c6d0f4bfb2a5cc1a2f634f7cd9e1d7e3773f63bbeb981783682640eb23a04",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-conflict",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-conflict-390.png",
+      "sha256": "0f73815a102758076d4c8261121386787bea0fc3323ac3d0eb061b49f5137036",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-conflict",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-conflict-390.png",
+      "sha256": "ce0cafa53f59747c8a141fde291c5e1a0e291c2df367876797598ee6c1359a91",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-rate_limited",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-rate_limited-390.png",
+      "sha256": "8ce2766bc7854a98b8e10005ab4dfc2eb83c9859d47e9bee311361b4b3defb1b",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-rate_limited",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-rate_limited-390.png",
+      "sha256": "3d0c9aa51f7f66bbb8fad7d33bbd87bc7a2c98a208a70bf5bcf0d7ad86af0003",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-blocked",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-initial-blocked-390.png",
+      "sha256": "4a7a7e24eef6b42934851f1352fa24a13f4f5946e9de10e0cbcbde26ce16128f",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-blocked",
+      "width": 390,
+      "selector": "#surface",
+      "file": "scene-background-blocked-390.png",
+      "sha256": "08227d984f414f0e8ea70b5dd31b3577b776b782988e13060aa8d60626769d42",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-default",
+      "width": 390,
+      "selector": ".page-heading",
+      "file": "control-refresh-default-390.png",
+      "sha256": "470c6f41face28e5bdbb899b19269850ec14f1636c711bb866a133fcf82b6c04",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-hover",
+      "width": 390,
+      "selector": ".page-heading",
+      "file": "control-refresh-hover-390.png",
+      "sha256": "b48e1dd528c04b4403df810168bec2a669adb8261fdc0aa050d353fb85a787dd",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-focus",
+      "width": 390,
+      "selector": ".page-heading",
+      "file": "control-refresh-focus-390.png",
+      "sha256": "b543574641894f7aad5a514902be2c2ca64b30d581a8343fad1a6fd271feff89",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-pressed",
+      "width": 390,
+      "selector": ".page-heading",
+      "file": "control-refresh-pressed-390.png",
+      "sha256": "c039b9b0ce4e244305b15ef8f87a8883ab07df86f5e1ef3aaf05d1a6506e30dc",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-default",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "control-retry-default-390.png",
+      "sha256": "d90a57bdb6a602b1768c1f40639b3ae4d7d6b6bca1e3aed2d20c3fe0e236b8d3",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-hover",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "control-retry-hover-390.png",
+      "sha256": "699302c258b0904c44541f78ab1019302d867677d17fa238cb058e15c70951b4",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-focus",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "control-retry-focus-390.png",
+      "sha256": "1dcce76e06a1182da4211b69251418ef9c97e97e88d0151bf87c6aa4b9c5b712",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-pressed",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "control-retry-pressed-390.png",
+      "sha256": "9564396ce84df093bbfcffcc7c8e82e92dda09ec65953eb75af431501e5b4618",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "trace-focus",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "trace-focus-390.png",
+      "sha256": "dffcb7d3b99c0de5b3f4482eae49082e15efbdc6008b5c83033048b5202537b0",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "trace-open",
+      "width": 390,
+      "selector": ".read-card",
+      "file": "trace-open-390.png",
+      "sha256": "6bdf2dc0db43e59b1319f5a8fae12572ba993ab93e439dbbc68605a3921658d4",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-loading",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-loading-1440.png",
+      "sha256": "50d17d4a8c8956b58ecdfc86c36537daee41f9ca8ed2854ff131e6cd7e390305",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-loading",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-loading-1440.png",
+      "sha256": "f22c57ab1b0d7880bfa5e7b441b3f78055eacae5c7f964b34c0fcecc06b1110f",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-error",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-error-1440.png",
+      "sha256": "48bf9eec50dd51e74f9a08185a1b75c31dc4749815c625b6b70701f3c50d25d3",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-error",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-error-1440.png",
+      "sha256": "b8878f9948aa3cd5c72c03fa7a8e281ce148c4f558634eb59f9b850ff531aa3c",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-forbidden",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-forbidden-1440.png",
+      "sha256": "974591d5bd55628e236b600187c638b6c9f9dc04f12dbb0a60ab6b128139c40c",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "panel-permission",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "panel-permission-1440.png",
+      "sha256": "d191a08d1d0f17f08cec9f916ef981a9332261df9c0ab7e758ddda034ab4e6d8",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-forbidden",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-forbidden-1440.png",
+      "sha256": "1c2eacb368f23f2cc12ffe45f627924c73560869fbca3a0e7ef0ca8d60f949b0",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-expired",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-expired-1440.png",
+      "sha256": "81d99ddb461997b112fbe30343223dbf5f664fc1d8e31bb5f264bfa7204a5e57",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-expired",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-expired-1440.png",
+      "sha256": "cc3a6592fff732c20f823c22ea28edee5b27b95e7417b37aec2c4cca4236332d",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-conflict",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-conflict-1440.png",
+      "sha256": "c614794124191345907d1efe65aca9d9521e4c56235f4d069592e65a6f04e0a1",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-conflict",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-conflict-1440.png",
+      "sha256": "c9c215d1712f01a02a0adb7e8e8078d13d524ad631afe780e16ee5a95f34d32f",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-rate_limited",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-rate_limited-1440.png",
+      "sha256": "48337b60c8bbed5838dbff5e841fbc6600e6ab75dcb9bd26207555f21c060703",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-rate_limited",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-rate_limited-1440.png",
+      "sha256": "62c0850ecfd53ef035eafa7890eda9d2b2c954169cefe94ac81bcc70db9310d4",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-initial-blocked",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-initial-blocked-1440.png",
+      "sha256": "80b3ddfffd73785d911069c62feccbb2378cea4e31451ac153fe8fd14e09d2f6",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "scene-background-blocked",
+      "width": 1440,
+      "selector": "#surface",
+      "file": "scene-background-blocked-1440.png",
+      "sha256": "03588fc88707e15588585a5a8bd2bce8c2a56c7e5b92bc94808e87cd432b2c8c",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-default",
+      "width": 1440,
+      "selector": ".page-heading",
+      "file": "control-refresh-default-1440.png",
+      "sha256": "3067bda2af34265eb786fbc9ec99b29938f9904cf75662eda1fa2d9f529d9ba2",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-hover",
+      "width": 1440,
+      "selector": ".page-heading",
+      "file": "control-refresh-hover-1440.png",
+      "sha256": "1a8f318a1b305b0ba70244f913588a2a66565fb178ecec10ce7ef313729e36eb",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-focus",
+      "width": 1440,
+      "selector": ".page-heading",
+      "file": "control-refresh-focus-1440.png",
+      "sha256": "e1a9d07380ed478622c1295c2632a77697a81ac5f62301d0383d7ce598c506f0",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-refresh-pressed",
+      "width": 1440,
+      "selector": ".page-heading",
+      "file": "control-refresh-pressed-1440.png",
+      "sha256": "b997f85bc5beb33c40a944675d32a86235a5c341c5f3f6d741b1ddb30faaaad8",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-default",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "control-retry-default-1440.png",
+      "sha256": "0805a21640d855c4ffbfcf92ff7b32b7098e94d3dcde240e795eccae9e19baa8",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-hover",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "control-retry-hover-1440.png",
+      "sha256": "9b8ce441f9f42309a91236dc83470a50601cc170709aed6c74ceb832a1e47463",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-focus",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "control-retry-focus-1440.png",
+      "sha256": "e7354acb57334132ea03b65140a1b7b8f7d963a062529c84c18eb2486923f35c",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "control-retry-pressed",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "control-retry-pressed-1440.png",
+      "sha256": "6d208457cb85a371097f38ba517c8303cd6fc6c4c9294b1200a29f3dd470556e",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "trace-focus",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "trace-focus-1440.png",
+      "sha256": "e3441ec778057be7a01db3e40ca979f1521cee12e6ddfa90e562a1394d70bb84",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    },
+    {
+      "name": "trace-open",
+      "width": 1440,
+      "selector": ".read-card",
+      "file": "trace-open-1440.png",
+      "sha256": "c57a8d0799151a24c2516735832920c041f5d145cb52ad5cbe9f3c64b5cb4b91",
+      "approval": "pending-user-review",
+      "scope": "isolated C proposal, not actual Vue or production acceptance"
+    }
+  ],
+  "boundary": "14 isolated parent-region proposals. No actual Vue implementation, API, permissions, secrets, storage, production or whole-page acceptance. Retained list is two existing synthetic fixture rows, not an invented count.",
+  "browserClosed": true,
+  "sourceAssociation": {
+    "kind": "retained-P36-parent-import-association-only",
+    "originalManifestHash": "1eb324bd59fe75d4f199862fcacbbc6bc64cdaaff8f194e0be5ad9cae03965e6",
+    "historicalRetained": {
+      "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c": {
+        "manifest": "cb560247320ba15b54c80b95a3e97729a3807d269592bb61a726776454053332",
+        "pngCount": 112
+      },
+      "output/playwright/p36-controls-review": {
+        "manifest": "1316b1a2aa79254aba099cef14582d9c669ca22c52cbc4d2b8c843a462bed486",
+        "pngCount": 354
+      },
+      "output/playwright/p36-fields-review": {
+        "manifest": "e0459d9566ac7877935bfa5c9595313afb0bc2c7eb4bb3b6332d6f392a3c82ce",
+        "pngCount": 196
+      },
+      "output/playwright/p36-mobile-filters-vue": {
+        "manifest": "a37be7abf6ba29a38d88270558d30c1322aeeade03846ce873f597c196417baa",
+        "pngCount": 10
+      },
+      "output/playwright/p36-parent-read-vue": {
+        "manifest": "6738d428fd96687915467a67728de447458d129cad2922fa363bc90fba05b891",
+        "pngCount": 26
+      },
+      "output/playwright/p36-parent-read-vue-r2": {
+        "manifest": "72e982ea2507ea4a609f8906fdc3d4360ce9cbf37212384e6aff1bc851decf46",
+        "pngCount": 28
+      }
+    },
+    "images": "unchanged",
+    "approval": "unchanged"
+  }
+}

@@ -1,5 +1,7 @@
 # F04a 共享壳层、发现、角色与状态入口合同复核
 
+2026-09-11辅助父源关联更新：OrganizationAdminCenter仅loadAuditPage新增14行响应归属保护，精确逆向与原源一致，详见[P37分页证据](P37-PAGINATION-OWNERSHIP-REVIEW.md)。同步下表父源hash；六候选文件、70入口语义、原图与审批均不变，不代表新增共享壳层运行验收。
+
 2026-09-08 主题C提案：[THEME-C-r1](design/theme-direction-c/README.md)新增18场景/36图，非模态命名区域、三主题ID保留、新C配色/名称待审。永久助手执行真实主题控制器已复现UI2-SH03缺口：后一次PUT成功为cloud-white/version2，前一次迟到失败仍恢复deep-ocean，两请求expected_version均1；未修复，不将knownGap断言计作该卡通过。图稿不改原Vue、源表指纹或审批；键盘/关闭提议及真实跨壳层/卸载竞态继续待验。
 
 2026-09-08 发现入口C提案：[DISCOVERY-C-r1](design/discovery-direction-c/README.md)新增29场景/68图，覆盖下文Discovery搜索/创建的筛选、短词、最近使用、状态恢复与关闭合同。UI2-DI夹具和真实状态枚举由永久助手推导并深比较；本地计时模拟不替代UI2-DI真实HTTP/重试/权限验收。原源指纹、矩阵与用户审批未改，未修改生产Vue；上一导航批发现待办现有独立图稿，但仍未集成或获审。
@@ -32,7 +34,7 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 | apps/web/src/navigation-memory.ts | af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f |
 | apps/web/src/navigation-shell-permissions.ts | 8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1 |
 | apps/web/src/navigation-shell-route-state.ts | 40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974 |
-| apps/web/src/components/OrganizationAdminCenter.vue | 71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb |
+| apps/web/src/components/OrganizationAdminCenter.vue | 3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93 |
 | apps/web/src/App.vue | e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531 |
 | apps/web/src/router.ts | 67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4 |
 | apps/api/src/discovery-routes.ts | 7c281090d8f7e76121b0abcdf1c88b40d066cdcad38f5d9a4e6e2df29d886579 |

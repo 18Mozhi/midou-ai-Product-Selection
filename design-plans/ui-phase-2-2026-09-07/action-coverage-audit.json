@@ -68,16 +68,16 @@
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
     "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
-    "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
     "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
     "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
     "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
     "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
-    "apps/web/src/components/OrganizationTokenPanel.vue": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
     "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
     "apps/web/src/components/platform-management-presentation.ts": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133",
@@ -194,7 +194,7 @@
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "09124326e2db64b069941a69ac7161c94fd754015069ea47a24a9b433b3a8938",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "dfe9ea0a1064513435cf4e004233fd1bc64660a0b9a1ecbc3d380893159cad88",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "aae0afa73fcdba0e1e65d5b7e83ca9697bf84e5f056e6be0da0bf547bd1fd155",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "06c6f4f74e1d3eb091f74313ef6b48687cf6d01bc15eacba585d54256a3cb670",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "09ace54675cc37c8d5af01d1ba59a59b48ee672394b51a4cdb7b78f28666d9a1",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "74529109c7dd6373438b50a7121528953d172412ffc9e1eafea81e8f3155e64e",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "2cba8fb2525d35483ff8d2c29229e8068fedcb59a2921b9ea4ff519d294774ba",
@@ -241,9 +241,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/evidence.json": "a49ba0902fc80bab8f0099fb86f4cce033b52b873a442f7c924fe008c9c8ef33",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "fec49054a4c86198eddeb6be212e66398288f1bc87ebcd0f131819cfe60e7fab",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ce300e955c27fb5a1b9bf9da140d180928596752ff320cce065bde24d9c4d41f",
-    "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "c4578a4e3f84b91bc5d23170d99209eca5dfb4004d3683b427765ad65e5bef9d",
-    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "f3a5d32bff4b68215efeac9f9e7fbf436cbe34ab7013e68b8cb57b61138f9770",
-    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "879566c6681711f17e07ad4fce296ebe3b20de0bba02dd2ee0214f21195bf934",
+    "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "35518d351e96293ff0592e738c942bbb8f29cc334605b23b27ababb0afe85d6f",
+    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "9b185d008d6aed67bddffe22a29ac6507e15efddd14c9d976021040fdfda6a96",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "88f0f60d25df69964c57d95819a4b6a0294914a9680079147a6c4ad44881e46c",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "fe6a2e7df297fa4d285b11c1af15cfd6470547546ec648846b558a0b01937868",
@@ -252,16 +252,16 @@
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "d5b71880e481238471ea389d5a14b2df81cd8d713805b918f5dd0cb5f06eccc7",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "8c53d9e45959e48d37ec02f16b296a2a7b09b7a854387c194c21f544bae5315c",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "959361d3b06a5d6055b4c0bed5281caf3972d12c90c7d8d278705b90f20e1289",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "8a0db6c3b1abc964220e53316777d77f2229bf7d7b4af75d0e222b3efae72583",
-    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "06eafbe2dcc677992421e079759c2cb3b67293c23885f00697bf5c2e63cf5c70",
-    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "463865b09f19685088f4909876ab433a2cea9353f253ef6b341e4c54c808cdfa",
-    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "ae69d013cfcb8d622165515c9adfe54a8a99bb533a544f41cdd5c1696bf14f4b",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "a439a9cc2494eb1413ef3cf0dbed4520d15803d0e671fb306d6143b821fb6b33",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "86f81546cf9aae86bc26ec525193f31bc03c561206426ef923c196fa950d8596",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "800ea99cdeff67e6c1282bdd907cdca69b04641e5a76c2e6a676aa54f117f814",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "89018220b46583fb794728eafd02c92a88437cf06cbd229afc27dc7124e3cd50",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "006347e7e3cf6177b8cb956c0c1d16bac4b6e6195a22bacfe1230ca5d9868477",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "a3e853929804b3ff62a5e61a81063c6d143ef982e5a9577372d6dd94624daa59",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "0c96d81d75ccdf951b66adefb2bb46a3adfcc74331c1112b1c26e3c180edba54",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "e4dce1846ef3aa7c7451374f59e2637e73217dffee6e21b26f8b54ba1da7f607",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "27cd29ae3d121aa47a0e0d29865cb1aa9d008d96b43dd5a375e2101fc1fd7d30",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "0dc2ce32933ccde48cbc2e54a53b16705b7e0c6c4b5a739cf1ad0e657041368b",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "47b34807ffd53a92cb71c94a9558173aee52962a9490c875b96b73d1f2a8ca34",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
     "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
     "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/evidence.json": "a55004bd7f957bdd5e3dc8134114504f6e48b8cf44897ffd463cf71b97d0e272",
@@ -278,9 +278,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/evidence.json": "3949cb0a58724d5ff6b82722109c951c27645523a33dad2aaf31a295580b85e9",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/evidence.json": "b95c32558e798230dcacf691dbcb9b4b51e727ed6c4d55cc12d4623742e7d0a6",
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "950a4ccec1c625f788db47106bebe8ba8448b7cd300108eeaf9afb3935163ae0",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json": "0420dbaaa76dbaa26f1b265d3404c4842f6a99bf72689480571e573bffbefec7",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "a3da53ee11c9e8cb875afe5ba6ed7cef6db0f38c99ad6cbd6bb77fae874ffa31",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json": "43c87aa829d1d37a8774737930f5e6d81886735924577d322a3de2f5dc6a1cb9",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json": "d3bd4d84b67507c2280fe10099220b0c048161c133a11c97c33a9bf14ddc9963",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "b0f8c0df00f37c02e04dcdde85366b95e6682b1c73ce27d17925201663dff795",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json": "9e0f4e14fc685e0ad9e32680e8599d41c44ec7ff4f37c9871e5a9f39ba470b67",
     "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/evidence.json": "c41dae66423d75fa549f35d4322a750b868609d6a595b84002bfa0e1f544151e",
     "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/evidence.json": "998193f09224c3d87029ede4094856bc00c8407ea7d1374d275c23a3d986aa2d",
     "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json": "5f401727b28f442e07177f471b5450b41d9dc360e42f4dfd3cb401374972ee22",
@@ -291,18 +291,18 @@
     "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/evidence.json": "e55c94edb2bc36a9b53661ba6f1ba423fd20cb98c55c10893318426febaf327c",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/evidence.json": "7ed167b7e63539135e3fde6f1c569473f8910fe4dba3d7a95ca0b91612bf3b3f",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c-forms/evidence.json": "83f7768529bc472132c88a6e6fe68e8d2f40a6ccc5b93b96f5acccf6ab362c3d",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/evidence.json": "d09f77d05e64bb2e05ffad55bf4118af1f56e058b78a86108e0be59c7dc41995",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/evidence.json": "059a1334b209ff82fab0fe11b604a09deabff8334fe033f2e0ee97bef8aca57b",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/evidence.json": "6de63d177cfd786815f288943cd4dc240a67dcb64222745251a636c9cfb9b0f0",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/evidence.json": "b208df4321f013f4d1f51f4c155b4f5914e5948ececebd2fbf30c4ab4538d239",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/evidence.json": "6e0c46f381fbb064bc6b289dee6e958838708f2435aef1a6b3966f845af6b684",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/evidence.json": "4f9ce8529347282c71384f223654f7d5349a46b3e0b476b03770cd1ba1a5a547",
     "design-plans/ui-phase-2-2026-09-07/design/theme-direction-c/evidence.json": "cf3b090b8aeddc4179a056f1ad7820e65613b73582c73f044b7e60b78a540061",
     "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/evidence.json": "09802e81d0046ae2a604b24493a1ad8a1f333cf5fdacd86e324f51a229102f99",
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/evidence.json": "0d5e9180acae43b437ec03b2629974feec09c021c6f282c5236612fa90aebaac",
     "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/evidence.json": "affcc6c564f332485ea14fd28d1b7c1c7a74de565caeaa4c5b59ccfd1bcd1d48",
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "8ef74c4616d0ea506915374ef8cac6ef6e831fd7fcf4733c062bac5a17f910c3",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "595e2af796ded4d86262c2e5e11e48160c0a9beff440c4fd0fd09e97e3c9da26",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "b7a84f4a87c624a173de9ef81b8644d4be024e7f6bb051460be003bae2a2eba6",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "17da7683c99de342028bf4fe4bd9e18144fe57504e84baa94ca616405d2e38a1",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "89ebeff23a2436d113a2324dcbe286f79d8fa93af9af7f7eaf2e9e015fbbbda3",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "db49b60115d40a4b78c3d25b6b5ed85e19555bb08586fdd68b475165db678620",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "fb414c18e59348ec4fdc1c40f7962b7fea33417ce112ea8c103d1c23c0995510",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "44c638e5d9d79968a7e18a6a0632b70168b25c0dde27fda153d3b9cb804fc24d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "aa1f6f6104351672956368a32e011f880097271920b98b0344ea0fcfcc5f000a",
     "scripts/verify-ui-phase2-identity-source.mjs": "8ab750d0e68f0f198c72a7f3f4ce48eaf3c564efdf8924e520134ecc18b217f6",
     "scripts/verify-ui-phase2-identity-c.mjs": "e738ed2727df69f8a856bb951ee8ecae593d58600b2af9bf8c037f14a56ea874",
@@ -376,27 +376,31 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "79bfb96f492e1752f6f4bcd48b55869d749040974bfdecbbb67ab8c8798a5c3d",
     "scripts/verify-ui-phase2-report-c.mjs": "63c52224823743579af6909fbed606a9bc2ae2765de6f7fe887cc98f4102dbdb",
     "scripts/verify-ui-phase2-report-controls-c.mjs": "9e464c9d0749bb96bb7bdde89a09e24975e8a087ae4ad2b3b706afd7d86439e7",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "d22a2c919aa3902d2f0f6be85bec18a8a26c21e1219ca81e6cda4a811e8d6bea",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "d38d37966d856cfb67b846d973d147f21e1f70ce3e2053649c863981fabd9fc9",
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9d403f8dce915b0d3ac775b516ff9683eb4e17f045fa91ec29dbb950dffc8847",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "6541ac34164382e6cacc9f0050339e073cd74571a16f94ff7d9140754e7f653f",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "ebcbf64b6766a469460b806006b24343c8693c7c5ee65fecbf8f4ba197e1e7b6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "73c92f95e7ede2298bf2d61c786fcde575aae522cd6566da9e3f47b6084e74a6",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "9c589f41ea296ab3215fa057bbc7fd90bfb8c33a0cb0a9b0ae64354050d07081",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "1aca46b0dede83c04b796d639ac882288f9cb04284b2852d9b52fe243ee34257",
     "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
     "scripts/verify-ui-phase2-workspaces-controls-c.mjs": "5ed21d201b155ff5c2eb7a2062a5c7f0e7b162d93108a2c71ab5c3d0a8b3c846",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "044ced39997828e880fb4356afd643503b8f60977fa3fd76e12e36929ca91a2c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "176df062f9551126f18284cd2bea7692624d3807ec088aa302f63024ca934fbf",
     "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
     "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "8d61e919190bb8b982db2e24e0557e32f111e15653be4de7b0e08626cb24b285",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "7fddbd3669693633f5124d433e7bf8452d1bffd9e439d4a0168279cb37fed579",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "cb10358780c19c3912d9f5e378de9588cf0ba1d05b40c8420df355469a1c1f9f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "0debb82a32e070dbc5bf92891ab5832a1a0dcb7667a86bd65951ef006cc35842",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "3acde7cfa367adede7ec6c1d041be4e8d5d8c578f57082ff2b015f4fd6f4b1bb",
+    "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P37.json": "6f8a2f962bb309b17cc856a9d6a2bea0ee2a0a48fac68b1ce81416b52517ec77",
+    "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "7375ef991df97c88a0b2a3e7dcb200f26fbb8b5bd828ec96344d7291053c0598",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -488,14 +492,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 29,
     "oldOnlyIdentities": 22,
-    "reviewedPages": 36,
-    "explicitlyGroupedSourceSites": 745,
-    "semanticGroups": 719,
-    "routeActions": 598,
-    "wiringGroups": 66,
+    "reviewedPages": 38,
+    "explicitlyGroupedSourceSites": 767,
+    "semanticGroups": 754,
+    "routeActions": 621,
+    "wiringGroups": 68,
     "pagesWithoutExplicitSemanticReview": [
-      "P36",
-      "P37",
       "P38",
       "P39",
       "P40",
@@ -1801,26 +1803,71 @@
       "path": "/org-admin/tokens",
       "title": "组织令牌",
       "oldStaticAssociatedCandidates": 162,
-      "review": null,
+      "review": {
+        "pageId": "P36",
+        "sourceSites": 25,
+        "semanticGroups": 19,
+        "routeActions": 12,
+        "wiringGroups": 2,
+        "excludedGroups": 5,
+        "writeActions": 3,
+        "sourceInapplicableVisualSlots": 0,
+        "unmappedVisualSlots": 72,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 13,
+          "callerContainers": 6,
+          "consumerVariants": 9,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "org-token-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "本页仅手机四筛选字段/帮助/底部重置获局部批准并有真实子Vue证据；创建及其他控件问题仍待答。",
+        "原662PNG与10实图分别关联，独立schema不强充统一六态slot，72个路由动作槽仍not-mapped。",
+        "父级完整错误/刷新、URL历史、路由/组织/KeepAlive生命周期、OG-G05、真实MySQL/权限/审计/幂等与全73页部署验收仍待。",
+        "既有P35颜色门失败仍未获修复授权；不以本登记通过代替完整测试或自动提交。"
+      ]
     },
     {
       "id": "P37",
       "path": "/org-admin/audit",
       "title": "组织审计",
       "oldStaticAssociatedCandidates": 162,
-      "review": null,
+      "review": {
+        "pageId": "P37",
+        "sourceSites": 23,
+        "semanticGroups": 16,
+        "routeActions": 11,
+        "wiringGroups": 0,
+        "excludedGroups": 5,
+        "writeActions": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "unmappedVisualSlots": 66,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 14,
+          "callerContainers": 6,
+          "consumerVariants": 9,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "org-audit-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "基础筛选和手机详情问题尚未回复，全部P37新图待审。",
+        "19控件变体中的三个便捷动作和缺失ID禁用是提案，非生产规则。",
+        "原104、字段38、控件172图分别关联，不把独立schema强充通用六态槽。",
+        "复制及分页响应归属已做局部保护，不扩大为全部OG-G05通过；查询失败已用条件错位及URL反向恢复仍待处理。",
+        "P35既有颜色门授权待答；全73页C实施、部署和签收未完成。"
+      ]
     },
     {
       "id": "P38",
@@ -2939,6 +2986,42 @@
         "localModelBindings": 14,
         "callerContainers": 4,
         "consumerVariants": 4,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P36",
+      "sourceSites": 25,
+      "semanticGroups": 19,
+      "routeActions": 12,
+      "wiringGroups": 2,
+      "excludedGroups": 5,
+      "writeActions": 3,
+      "sourceInapplicableVisualSlots": 0,
+      "unmappedVisualSlots": 72,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 13,
+        "callerContainers": 6,
+        "consumerVariants": 9,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P37",
+      "sourceSites": 23,
+      "semanticGroups": 16,
+      "routeActions": 11,
+      "wiringGroups": 0,
+      "excludedGroups": 5,
+      "writeActions": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "unmappedVisualSlots": 66,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 14,
+        "callerContainers": 6,
+        "consumerVariants": 9,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -15175,7 +15258,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 48,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -15194,7 +15277,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 49,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -15274,7 +15357,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 50,
+          "line": 52,
           "jsonPointer": null
         }
       ],
@@ -15298,7 +15381,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 51,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -15322,7 +15405,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 52,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -15346,7 +15429,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 53,
+          "line": 55,
           "jsonPointer": null
         }
       ],
@@ -15374,7 +15457,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 54,
+          "line": 56,
           "jsonPointer": null
         }
       ],
@@ -15402,7 +15485,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 55,
+          "line": 57,
           "jsonPointer": null
         }
       ],
@@ -15426,7 +15509,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 56,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -17689,7 +17772,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 62,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -17769,7 +17852,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 63,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -17849,7 +17932,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 64,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -17934,7 +18017,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 65,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -18019,7 +18102,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 66,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -18108,7 +18191,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 67,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -18193,7 +18276,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 68,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -18278,7 +18361,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 69,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -18358,7 +18441,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 70,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -18447,7 +18530,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 71,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -18540,7 +18623,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 72,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -18629,7 +18712,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 73,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -18718,7 +18801,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 74,
+          "line": 76,
           "jsonPointer": null
         }
       ],
@@ -18807,7 +18890,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 75,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -18896,7 +18979,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 76,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -18985,7 +19068,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 77,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -19074,7 +19157,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 78,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -19163,7 +19246,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 79,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -19252,7 +19335,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 80,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -19341,7 +19424,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 81,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -19438,7 +19521,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 82,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -19527,7 +19610,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 83,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -19620,7 +19703,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 84,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -19709,7 +19792,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 85,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -19794,7 +19877,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 86,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -19879,7 +19962,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 87,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -19968,7 +20051,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 88,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -20053,7 +20136,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 89,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -20142,7 +20225,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 90,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -20227,7 +20310,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 91,
+          "line": 93,
           "jsonPointer": null
         }
       ],
@@ -20307,7 +20390,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 92,
+          "line": 94,
           "jsonPointer": null
         }
       ],
@@ -20387,7 +20470,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 93,
+          "line": 95,
           "jsonPointer": null
         }
       ],
@@ -20408,7 +20491,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 99,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -20429,7 +20512,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 100,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -20455,7 +20538,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 101,
+          "line": 103,
           "jsonPointer": null
         }
       ],
@@ -26738,7 +26821,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 953,
+      "line": 967,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
       "conditions": [],
@@ -26802,13 +26885,23 @@
           "pageId": "P35",
           "actionId": "OG-REFRESH",
           "kind": "read"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "OG-REFRESH",
+          "kind": "read"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "OG-REFRESH",
+          "kind": "read"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 971,
+      "line": 985,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -26871,13 +26964,23 @@
           "pageId": "P35",
           "actionId": "EX-P34-RETRY",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P34-RETRY",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P34-RETRY",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 985,
+      "line": 999,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -26940,13 +27043,23 @@
           "pageId": "P35",
           "actionId": "EX-P34-RETRY",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P34-RETRY",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P34-RETRY",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1022,
+      "line": 1036,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -27015,13 +27128,23 @@
           "pageId": "P35",
           "actionId": "OG-RETRY",
           "kind": "read"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "OG-RETRY",
+          "kind": "read"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "OG-RETRY",
+          "kind": "read"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1079,
+      "line": 1093,
       "kind": "form-event",
       "label": "更新组织资料 名称 Logo HTTPS 地址 仅支持 HTTPS；留空表示暂不设置 Logo。 时区 数据保留天数 默认工作区 请选择工作区 {{ workspace.name }} 变更原因 {{ busy ? \"正在保存…\" : \"保",
       "conditions": [
@@ -27094,13 +27217,23 @@
           "pageId": "P35",
           "actionId": "EX-P29-PROFILE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1093,
+      "line": 1107,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -27173,13 +27306,23 @@
           "pageId": "P35",
           "actionId": "EX-P29-PROFILE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1131,
+      "line": 1145,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"保存并审计\" }}",
       "conditions": [
@@ -27252,13 +27395,23 @@
           "pageId": "P35",
           "actionId": "EX-P29-PROFILE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1134,
+      "line": 1148,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -27331,13 +27484,23 @@
           "pageId": "P35",
           "actionId": "EX-P30-MEMBERS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P30-MEMBERS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P30-MEMBERS",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1196,
+      "line": 1210,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -27410,13 +27573,23 @@
           "pageId": "P35",
           "actionId": "EX-P31-ROLES",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-P31-ROLES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-P31-ROLES",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1269,
+      "line": 1283,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -27470,13 +27643,23 @@
           "pageId": "P35",
           "actionId": "EX-REASON-ORIGINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "W-K-REASON",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-REASON",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1269,
+      "line": 1283,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -27530,13 +27713,23 @@
           "pageId": "P35",
           "actionId": "EX-REASON-ORIGINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "W-K-REASON",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-REASON",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 492,
+      "line": 506,
       "kind": "dialog-script-call",
       "label": "askAuditedReason({ title: `${action}原因`, description: \"原因会与组织、操作者和目标对象一起写入审计记录。\", initialValue: action, ...(workspaceRes",
       "conditions": [],
@@ -27590,13 +27783,23 @@
           "pageId": "P35",
           "actionId": "EX-REASON-ORIGINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "EX-GENERIC-REASON",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-REASON",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 706,
+      "line": 720,
       "kind": "dialog-script-call",
       "label": "askAuditedReason({ title: rotating ? `轮换“${item.name}”密钥` : `撤销“${item.name}”访问`, description: rotating ? \"提交后旧令牌立即失效，新明",
       "conditions": [],
@@ -27659,6 +27862,16 @@
         {
           "pageId": "P35",
           "actionId": "EX-REASON-ORIGINS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P36",
+          "actionId": "W-K-ASK",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P37",
+          "actionId": "EX-REASON",
           "kind": "excluded"
         }
       ]
@@ -28299,7 +28512,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#632bdb5521e9f9f3.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 293,
+      "line": 333,
       "kind": "form-event",
       "label": "组织审计筛选",
       "conditions": [],
@@ -28323,12 +28536,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#1f900020f4fabd5a.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 338,
+      "line": 378,
       "kind": "control",
       "label": "高级追踪与时间筛选",
       "conditions": [],
@@ -28352,12 +28571,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-ADVANCED",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#34561042e3eccaf3.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 362,
+      "line": 402,
       "kind": "control",
       "label": "{{ busy ? \"正在查询…\" : \"应用筛选\" }}",
       "conditions": [],
@@ -28381,12 +28606,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#8b5af20889c64af3.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 363,
+      "line": 403,
       "kind": "control",
       "label": "重置筛选",
       "conditions": [],
@@ -28410,12 +28641,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#b521afa3371906f1.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 382,
+      "line": 422,
       "kind": "control",
       "label": "系统连接记录 {{ hiddenSystemEventCount }} 条 高频技术事件默认收起，不影响审计总数、筛选或追踪。 {{ systemEventsExpanded ? \"收起\" : \"展开\" }}",
       "conditions": [
@@ -28444,12 +28681,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-SYSTEM",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#82a3e8539a9df6fc.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 395,
+      "line": 435,
       "kind": "control",
       "label": "{{ outcomeLabel(event.outcome)[0] }} {{ actionLabel(event.action) }} {{ resourceLabel(event.resource_type) }} · {{ forma",
       "conditions": [
@@ -28478,12 +28721,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#7e32b2d5625cbb6d.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 434,
+      "line": 474,
       "kind": "control",
       "label": "{{ busy ? \"正在加载…\" : \"加载更多记录\" }}",
       "conditions": [
@@ -28512,12 +28761,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-MORE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#8c33330215c9d2a4.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 477,
+      "line": 517,
       "kind": "control",
       "label": "{{ copyState === \"request:copied\" ? \"已复制\" : copyState === \"request:failed\" ? \"复制失败\" : \"复制\" }}",
       "conditions": [
@@ -28546,12 +28801,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-COPY-REQUEST",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#84cc90836d3f1955.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 489,
+      "line": 529,
       "kind": "control",
       "label": "{{ copyState === \"trace:copied\" ? \"已复制\" : copyState === \"trace:failed\" ? \"复制失败\" : \"复制\" }}",
       "conditions": [
@@ -28580,12 +28841,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-AUD-COPY-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAuditPanel.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/OrganizationAuditPanel.vue",
-      "line": 501,
+      "line": 541,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -28614,7 +28881,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P37",
+          "actionId": "OG-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#0b065ffdf54ab12b.1",
@@ -29992,7 +30265,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 107,
+          "line": 109,
           "jsonPointer": null
         }
       ],
@@ -30045,7 +30318,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 108,
+          "line": 110,
           "jsonPointer": null
         }
       ],
@@ -30098,7 +30371,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 109,
+          "line": 111,
           "jsonPointer": null
         }
       ],
@@ -30147,7 +30420,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 110,
+          "line": 112,
           "jsonPointer": null
         }
       ],
@@ -30192,7 +30465,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 111,
+          "line": 113,
           "jsonPointer": null
         }
       ],
@@ -30241,7 +30514,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 112,
+          "line": 114,
           "jsonPointer": null
         }
       ],
@@ -30290,7 +30563,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 113,
+          "line": 115,
           "jsonPointer": null
         }
       ],
@@ -30339,7 +30612,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 114,
+          "line": 116,
           "jsonPointer": null
         }
       ],
@@ -30388,7 +30661,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 115,
+          "line": 117,
           "jsonPointer": null
         }
       ],
@@ -30437,7 +30710,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 116,
+          "line": 118,
           "jsonPointer": null
         }
       ],
@@ -30490,7 +30763,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 117,
+          "line": 119,
           "jsonPointer": null
         }
       ],
@@ -30543,7 +30816,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 118,
+          "line": 120,
           "jsonPointer": null
         }
       ],
@@ -30590,7 +30863,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 119,
+          "line": 121,
           "jsonPointer": null
         }
       ],
@@ -30647,7 +30920,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 120,
+          "line": 122,
           "jsonPointer": null
         }
       ],
@@ -30704,7 +30977,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 121,
+          "line": 123,
           "jsonPointer": null
         }
       ],
@@ -30753,7 +31026,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 122,
+          "line": 124,
           "jsonPointer": null
         }
       ],
@@ -30802,7 +31075,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 123,
+          "line": 125,
           "jsonPointer": null
         }
       ],
@@ -30855,7 +31128,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 124,
+          "line": 126,
           "jsonPointer": null
         }
       ],
@@ -30904,7 +31177,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 125,
+          "line": 127,
           "jsonPointer": null
         }
       ],
@@ -31626,7 +31899,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 313,
+      "line": 368,
       "kind": "control",
       "label": "复制明文",
       "conditions": [
@@ -31655,12 +31928,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-COPY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 314,
+      "line": 369,
       "kind": "control",
       "label": "我已安全保存",
       "conditions": [
@@ -31689,12 +31968,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-DISMISS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#ed5969fa99d64044.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 320,
+      "line": 375,
       "kind": "form-event",
       "label": "CREATE · 最小权限 创建组织令牌 明文只显示一次 令牌名称 使用系统或用途命名，不要填写密钥、密码或个人隐私。 允许读取的内容 必须明确选择；未选择时不会静默添加默认权限。 {{ scope.label }} {{ scope.de",
       "conditions": [],
@@ -31718,12 +32003,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 353,
+      "line": 408,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -31752,12 +32043,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-SCOPE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 374,
+      "line": 429,
       "kind": "control",
       "label": "{{ days }} 天",
       "conditions": [
@@ -31786,12 +32083,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-TTL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#073eb5c8ded40aa0.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 421,
+      "line": 476,
       "kind": "control",
       "label": "{{ busy ? \"正在创建并写入审计…\" : \"创建并显示一次明文\" }}",
       "conditions": [],
@@ -31815,12 +32118,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 471,
+      "line": 559,
       "kind": "control",
       "label": "重置筛选",
       "conditions": [],
@@ -31844,12 +32153,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 503,
+      "line": 591,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -31882,12 +32197,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 508,
+      "line": 596,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -31924,12 +32245,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-ROTATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 516,
+      "line": 604,
       "kind": "control",
       "label": "撤销访问",
       "conditions": [
@@ -31966,12 +32293,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-REVOKE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 546,
+      "line": 634,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -32000,12 +32333,18 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-PAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1",
       "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-      "line": 554,
+      "line": 642,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -32034,7 +32373,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P36",
+          "actionId": "OG-K-PAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#ee38194d65edc8d9.1",
@@ -54816,7 +55161,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 131,
+          "line": 133,
           "jsonPointer": null
         }
       ],
@@ -54842,7 +55187,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 132,
+          "line": 134,
           "jsonPointer": null
         }
       ],
@@ -54863,7 +55208,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 133,
+          "line": 135,
           "jsonPointer": null
         }
       ],
@@ -54884,7 +55229,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 134,
+          "line": 136,
           "jsonPointer": null
         }
       ],
@@ -54905,7 +55250,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 135,
+          "line": 137,
           "jsonPointer": null
         }
       ],
@@ -54926,7 +55271,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 136,
+          "line": 138,
           "jsonPointer": null
         }
       ],
@@ -55006,7 +55351,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
-          "line": 142,
+          "line": 144,
           "jsonPointer": null
         }
       ],

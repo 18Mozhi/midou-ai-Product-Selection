@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 type TokenStatusFilter =
@@ -49,6 +49,12 @@ const props = defineProps<{
   createForm = ref<CreateTokenInput>({ name: "", scopes: [], ttl_days: 90, reason: "" }),
   scopeError = ref(""),
   copyState = ref<"" | "copied" | "failed">("");
+
+const queryOwnerPath = route.path,
+  pendingQueryWrites = new Map<string, number>();
+let restoringQuery = false,
+  queryRestoreGeneration = 0,
+  queryWriteGeneration = 0;
 
 const pageSize = 6,
   scopeOptions = [
@@ -130,20 +136,30 @@ const activeTokens = computed(() => props.tokens.filter((item) => item.status ==
     filteredTokens.value.slice((tokenPage.value - 1) * pageSize, tokenPage.value * pageSize),
   );
 
-watch([tokenQuery, statusFilter, scopeFilter, tokenSort], () => (tokenPage.value = 1));
+watch([tokenQuery, statusFilter, scopeFilter, tokenSort], () => {
+  if (!restoringQuery) tokenPage.value = 1;
+});
 watch(pageCount, (count) => {
   if (tokenPage.value > count) tokenPage.value = count;
 });
 watch(
   [tokenQuery, statusFilter, scopeFilter, tokenSort, tokenPage],
   () => {
+    if (restoringQuery || route.path !== queryOwnerPath) return;
     const query = { ...route.query } as Record<string, string | string[] | null | undefined>;
     setQuery(query, "org_token_query", tokenQuery.value, "");
     setQuery(query, "org_token_status", statusFilter.value, "all");
     setQuery(query, "org_token_scope", scopeFilter.value, "all");
     setQuery(query, "org_token_sort", tokenSort.value, "created_desc");
     setQuery(query, "org_token_page", String(tokenPage.value), "1");
-    void router.replace({ query });
+    const key = queryFingerprint(query);
+    if (key === queryFingerprint(route.query)) return;
+    const generation = ++queryWriteGeneration;
+    pendingQueryWrites.set(key, generation);
+    const settled = () => {
+      if (pendingQueryWrites.get(key) === generation) pendingQueryWrites.delete(key);
+    };
+    void Promise.resolve(router.replace({ query })).then(settled, settled);
   },
   { flush: "post" },
 );
@@ -151,6 +167,45 @@ watch(
   () => props.secret,
   () => (copyState.value = ""),
 );
+
+watch(
+  [() => route.path, () => route.query],
+  async () => {
+    if (route.path !== queryOwnerPath || pendingQueryWrites.has(queryFingerprint(route.query)))
+      return;
+    const generation = ++queryRestoreGeneration;
+    restoringQuery = true;
+    tokenQuery.value = queryText("org_token_query");
+    statusFilter.value = queryChoice(
+      "org_token_status",
+      ["all", "active", "expiring", "never_used", "revoked", "rotated", "expired"],
+      "all",
+    ) as TokenStatusFilter;
+    scopeFilter.value = queryChoice(
+      "org_token_scope",
+      ["all", "task:read", "trend:read", "opportunity:read", "report:read"],
+      "all",
+    );
+    tokenSort.value = queryChoice(
+      "org_token_sort",
+      ["created_desc", "expires_asc", "last_used_desc", "name_asc", "status_asc"],
+      "created_desc",
+    );
+    tokenPage.value = queryPage("org_token_page");
+    // Keep the reset watcher and URL writer inside the same restoration batch.
+    await nextTick();
+    if (queryRestoreGeneration === generation) restoringQuery = false;
+  },
+  { flush: "sync" },
+);
+
+function queryFingerprint(query: Record<string, unknown>) {
+  return JSON.stringify(
+    Object.keys(query)
+      .sort()
+      .map((key) => [key, query[key]]),
+  );
+}
 
 function statusLabel(value: string) {
   return statusLabels[value] ?? `未知状态（${value || "空"}）`;
@@ -432,14 +487,27 @@ async function copySecret() {
           <span>共 {{ filteredTokens.length }} 条匹配记录</span>
         </header>
 
-        <div class="org-token-toolbar">
+        <div class="org-token-toolbar org-token-filters-c">
           <label class="org-token-search">
-            <span>搜索令牌</span>
-            <input v-model="tokenQuery" type="search" placeholder="名称、前缀、scope 或状态" />
+            <span id="org-token-query-label">搜索令牌</span>
+            <input
+              v-model="tokenQuery"
+              type="search"
+              placeholder="名称、前缀、scope 或状态"
+              aria-labelledby="org-token-query-label"
+              aria-describedby="org-token-query-help"
+            />
+            <small id="org-token-query-help" class="org-token-filter-help">
+              搜索名称、前缀、中文状态或读取范围，不搜索记录 ID。
+            </small>
           </label>
           <label>
-            <span>生命周期</span>
-            <select v-model="statusFilter">
+            <span id="org-token-status-label">生命周期</span>
+            <select
+              v-model="statusFilter"
+              aria-labelledby="org-token-status-label"
+              aria-describedby="org-token-status-help"
+            >
               <option value="all">全部状态</option>
               <option value="active">正常使用</option>
               <option value="expiring">7 天内到期</option>
@@ -448,26 +516,46 @@ async function copySecret() {
               <option value="rotated">已轮换</option>
               <option value="expired">已过期</option>
             </select>
+            <small id="org-token-status-help" class="org-token-filter-help">
+              生命周期来自已返回的记录，筛选不会撤销或轮换令牌。
+            </small>
           </label>
           <label>
-            <span>读取范围</span>
-            <select v-model="scopeFilter">
+            <span id="org-token-scope-label">读取范围</span>
+            <select
+              v-model="scopeFilter"
+              aria-labelledby="org-token-scope-label"
+              aria-describedby="org-token-scope-help"
+            >
               <option value="all">全部 scope</option>
               <option v-for="scope in scopeOptions" :key="scope.value" :value="scope.value">
                 {{ scope.label }}
               </option>
             </select>
+            <small id="org-token-scope-help" class="org-token-filter-help">
+              仅筛选已有读取范围，不更改令牌授权。
+            </small>
           </label>
           <label>
-            <span>排序</span>
-            <select v-model="tokenSort">
+            <span id="org-token-sort-label">排序</span>
+            <select
+              v-model="tokenSort"
+              aria-labelledby="org-token-sort-label"
+              aria-describedby="org-token-sort-help"
+            >
               <option value="created_desc">创建时间从新到旧</option>
               <option value="expires_asc">到期时间从近到远</option>
               <option value="last_used_desc">最近调用优先</option>
               <option value="name_asc">名称 A–Z</option>
               <option value="status_asc">状态排序</option>
             </select>
+            <small id="org-token-sort-help" class="org-token-filter-help">
+              只调整已加载记录的排列顺序。
+            </small>
           </label>
+          <small class="org-token-filter-help org-token-reset-help">
+            仅重置筛选和排序，不更改令牌。
+          </small>
           <button type="button" class="org-admin-secondary" @click="resetFilters">重置筛选</button>
         </div>
 
@@ -565,3 +653,76 @@ async function copySecret() {
     </div>
   </section>
 </template>
+
+<style src="../design/token-filter-tokens.css"></style>
+
+<style scoped>
+.org-token-filter-help {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .org-token-filters-c {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: var(--so-token-filter-paper);
+    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+  }
+
+  .org-token-filters-c label {
+    min-width: 0;
+    gap: 7px;
+  }
+
+  .org-token-filters-c .org-token-search {
+    grid-column: auto;
+  }
+
+  .org-token-filters-c label > span {
+    color: var(--so-token-filter-ink);
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .org-token-filters-c input,
+  .org-token-filters-c select,
+  .org-token-filters-c > button.org-admin-secondary {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    height: 46px;
+    padding: 8px 10px;
+    border: 1px solid var(--so-token-filter-border);
+    border-radius: 4px;
+    background: var(--so-token-filter-paper);
+    color: var(--so-token-filter-ink);
+    font: inherit;
+    font-size: 16px;
+  }
+
+  .org-token-filters-c > button.org-admin-secondary {
+    min-height: 44px;
+    height: 44px;
+    margin-top: -8px;
+    color: var(--so-token-filter-blue);
+  }
+
+  .org-token-filters-c .org-token-filter-help {
+    display: block;
+    margin: 0;
+    color: var(--so-token-filter-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .org-token-filters-c .org-token-reset-help {
+    padding-top: 16px;
+    border-top: 1px solid var(--so-token-filter-line);
+  }
+}
+</style>

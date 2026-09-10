@@ -1,0 +1,1545 @@
+{
+  "kind": "P36-PARENT-READ-VUE",
+  "scope": "Real parent, child and API client mounted in isolated router/KeepAlive host. GET fixtures only; shell guard, actual backend, scope switching, writes, RBAC and production excluded. Known defects are observations, not passed acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "87154ab6eca9e0ecebd387e10c99eb93ee1ab1a9816f869c8f79310d2f611815",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/org-data-export-detail.css": "b258adf5f28ff62e553e4e3e925c38e243cfa0fd76240bb454bd6f821a248e98",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/lib/ui-phase2-org-token-design-data.mjs": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
+    "scripts/verify-ui-phase2-org-token-parent-read.mjs": "6e07dfcc731803df75bd09966fc3ee2bc49bbbd9617cb92deac34fb4be48cb2d",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "initial refresh disabled"
+    },
+    {
+      "width": 390,
+      "name": "initial no token list"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial six visible records"
+    },
+    {
+      "width": 390,
+      "name": "first 500 hides token component"
+    },
+    {
+      "width": 390,
+      "name": "first 500 request trace visible"
+    },
+    {
+      "width": 390,
+      "name": "first 500 exact safe retry count"
+    },
+    {
+      "width": 390,
+      "name": "first 500 no P34 failure override"
+    },
+    {
+      "width": 390,
+      "name": "first-500 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "first 500 retry returns six records"
+    },
+    {
+      "width": 390,
+      "name": "first 500 retry clears notice"
+    },
+    {
+      "width": 390,
+      "name": "first 403 hides token component"
+    },
+    {
+      "width": 390,
+      "name": "first 403 request trace visible"
+    },
+    {
+      "width": 390,
+      "name": "first 403 exact safe retry count"
+    },
+    {
+      "width": 390,
+      "name": "first 403 no P34 failure override"
+    },
+    {
+      "width": 390,
+      "name": "first-403 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "first 403 retry returns six records"
+    },
+    {
+      "width": 390,
+      "name": "first 403 retry clears notice"
+    },
+    {
+      "width": 390,
+      "name": "first 401 hides token component"
+    },
+    {
+      "width": 390,
+      "name": "first 401 request trace visible"
+    },
+    {
+      "width": 390,
+      "name": "first 401 exact safe retry count"
+    },
+    {
+      "width": 390,
+      "name": "first 401 no P34 failure override"
+    },
+    {
+      "width": 390,
+      "name": "first-401 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "first 401 retry returns six records"
+    },
+    {
+      "width": 390,
+      "name": "first 401 retry clears notice"
+    },
+    {
+      "width": 390,
+      "name": "first 409 hides token component"
+    },
+    {
+      "width": 390,
+      "name": "first 409 request trace visible"
+    },
+    {
+      "width": 390,
+      "name": "first 409 exact safe retry count"
+    },
+    {
+      "width": 390,
+      "name": "first 409 no P34 failure override"
+    },
+    {
+      "width": 390,
+      "name": "first-409 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "first 409 retry returns six records"
+    },
+    {
+      "width": 390,
+      "name": "first 409 retry clears notice"
+    },
+    {
+      "width": 390,
+      "name": "first 429 hides token component"
+    },
+    {
+      "width": 390,
+      "name": "first 429 request trace visible"
+    },
+    {
+      "width": 390,
+      "name": "first 429 exact safe retry count"
+    },
+    {
+      "width": 390,
+      "name": "first 429 no P34 failure override"
+    },
+    {
+      "width": 390,
+      "name": "first-429 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "first 429 retry returns six records"
+    },
+    {
+      "width": 390,
+      "name": "first 429 retry clears notice"
+    },
+    {
+      "width": 390,
+      "name": "first 503 hides token component"
+    },
+    {
+      "width": 390,
+      "name": "first 503 request trace visible"
+    },
+    {
+      "width": 390,
+      "name": "first 503 exact safe retry count"
+    },
+    {
+      "width": 390,
+      "name": "first 503 no P34 failure override"
+    },
+    {
+      "width": 390,
+      "name": "first-503 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "first 503 retry returns six records"
+    },
+    {
+      "width": 390,
+      "name": "first 503 retry clears notice"
+    },
+    {
+      "width": 390,
+      "name": "empty response retains create form"
+    },
+    {
+      "width": 390,
+      "name": "empty response has no records"
+    },
+    {
+      "width": 390,
+      "name": "empty-response no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "background is busy"
+    },
+    {
+      "width": 390,
+      "name": "background retains filtered record"
+    },
+    {
+      "width": 390,
+      "name": "background disables create"
+    },
+    {
+      "width": 390,
+      "name": "background still permits local filter"
+    },
+    {
+      "width": 390,
+      "name": "background-loading no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "background500 keeps ready state"
+    },
+    {
+      "width": 390,
+      "name": "background500 preserves draft"
+    },
+    {
+      "width": 390,
+      "name": "background500 preserves query"
+    },
+    {
+      "width": 390,
+      "name": "background500 preserves results"
+    },
+    {
+      "width": 390,
+      "name": "background500-notice no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "background403 hides old content"
+    },
+    {
+      "width": 390,
+      "name": "background-403 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "background401 hides old content"
+    },
+    {
+      "width": 390,
+      "name": "background-401 no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "history probe preserves mounted field identity"
+    },
+    {
+      "width": 390,
+      "name": "history push reaches requested URL"
+    },
+    {
+      "width": 390,
+      "name": "history-query-mismatch no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "history back URL returns original filter"
+    },
+    {
+      "width": 390,
+      "name": "history forward URL restored"
+    },
+    {
+      "width": 390,
+      "name": "history navigation did not remount field"
+    },
+    {
+      "width": 390,
+      "name": "keepalive inactive parent absent from DOM"
+    },
+    {
+      "width": 390,
+      "name": "keepalive reuses actual parent-child nodes"
+    },
+    {
+      "width": 390,
+      "name": "all API reads carry request and trace IDs"
+    },
+    {
+      "width": 390,
+      "name": "no external or write requests"
+    },
+    {
+      "width": 390,
+      "name": "no browser errors"
+    },
+    {
+      "width": 390,
+      "name": "no cookies"
+    },
+    {
+      "width": 390,
+      "name": "no storage or clipboard"
+    },
+    {
+      "width": 1440,
+      "name": "initial refresh disabled"
+    },
+    {
+      "width": 1440,
+      "name": "initial no token list"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial six visible records"
+    },
+    {
+      "width": 1440,
+      "name": "first 500 hides token component"
+    },
+    {
+      "width": 1440,
+      "name": "first 500 request trace visible"
+    },
+    {
+      "width": 1440,
+      "name": "first 500 exact safe retry count"
+    },
+    {
+      "width": 1440,
+      "name": "first 500 no P34 failure override"
+    },
+    {
+      "width": 1440,
+      "name": "first-500 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first 500 retry returns six records"
+    },
+    {
+      "width": 1440,
+      "name": "first 500 retry clears notice"
+    },
+    {
+      "width": 1440,
+      "name": "first 403 hides token component"
+    },
+    {
+      "width": 1440,
+      "name": "first 403 request trace visible"
+    },
+    {
+      "width": 1440,
+      "name": "first 403 exact safe retry count"
+    },
+    {
+      "width": 1440,
+      "name": "first 403 no P34 failure override"
+    },
+    {
+      "width": 1440,
+      "name": "first-403 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first 403 retry returns six records"
+    },
+    {
+      "width": 1440,
+      "name": "first 403 retry clears notice"
+    },
+    {
+      "width": 1440,
+      "name": "first 401 hides token component"
+    },
+    {
+      "width": 1440,
+      "name": "first 401 request trace visible"
+    },
+    {
+      "width": 1440,
+      "name": "first 401 exact safe retry count"
+    },
+    {
+      "width": 1440,
+      "name": "first 401 no P34 failure override"
+    },
+    {
+      "width": 1440,
+      "name": "first-401 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first 401 retry returns six records"
+    },
+    {
+      "width": 1440,
+      "name": "first 401 retry clears notice"
+    },
+    {
+      "width": 1440,
+      "name": "first 409 hides token component"
+    },
+    {
+      "width": 1440,
+      "name": "first 409 request trace visible"
+    },
+    {
+      "width": 1440,
+      "name": "first 409 exact safe retry count"
+    },
+    {
+      "width": 1440,
+      "name": "first 409 no P34 failure override"
+    },
+    {
+      "width": 1440,
+      "name": "first-409 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first 409 retry returns six records"
+    },
+    {
+      "width": 1440,
+      "name": "first 409 retry clears notice"
+    },
+    {
+      "width": 1440,
+      "name": "first 429 hides token component"
+    },
+    {
+      "width": 1440,
+      "name": "first 429 request trace visible"
+    },
+    {
+      "width": 1440,
+      "name": "first 429 exact safe retry count"
+    },
+    {
+      "width": 1440,
+      "name": "first 429 no P34 failure override"
+    },
+    {
+      "width": 1440,
+      "name": "first-429 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first 429 retry returns six records"
+    },
+    {
+      "width": 1440,
+      "name": "first 429 retry clears notice"
+    },
+    {
+      "width": 1440,
+      "name": "first 503 hides token component"
+    },
+    {
+      "width": 1440,
+      "name": "first 503 request trace visible"
+    },
+    {
+      "width": 1440,
+      "name": "first 503 exact safe retry count"
+    },
+    {
+      "width": 1440,
+      "name": "first 503 no P34 failure override"
+    },
+    {
+      "width": 1440,
+      "name": "first-503 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first 503 retry returns six records"
+    },
+    {
+      "width": 1440,
+      "name": "first 503 retry clears notice"
+    },
+    {
+      "width": 1440,
+      "name": "empty response retains create form"
+    },
+    {
+      "width": 1440,
+      "name": "empty response has no records"
+    },
+    {
+      "width": 1440,
+      "name": "empty-response no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background is busy"
+    },
+    {
+      "width": 1440,
+      "name": "background retains filtered record"
+    },
+    {
+      "width": 1440,
+      "name": "background disables create"
+    },
+    {
+      "width": 1440,
+      "name": "background still permits local filter"
+    },
+    {
+      "width": 1440,
+      "name": "background-loading no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background500 keeps ready state"
+    },
+    {
+      "width": 1440,
+      "name": "background500 preserves draft"
+    },
+    {
+      "width": 1440,
+      "name": "background500 preserves query"
+    },
+    {
+      "width": 1440,
+      "name": "background500 preserves results"
+    },
+    {
+      "width": 1440,
+      "name": "background500-notice no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background403 hides old content"
+    },
+    {
+      "width": 1440,
+      "name": "background-403 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background401 hides old content"
+    },
+    {
+      "width": 1440,
+      "name": "background-401 no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "history probe preserves mounted field identity"
+    },
+    {
+      "width": 1440,
+      "name": "history push reaches requested URL"
+    },
+    {
+      "width": 1440,
+      "name": "history-query-mismatch no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "history back URL returns original filter"
+    },
+    {
+      "width": 1440,
+      "name": "history forward URL restored"
+    },
+    {
+      "width": 1440,
+      "name": "history navigation did not remount field"
+    },
+    {
+      "width": 1440,
+      "name": "keepalive inactive parent absent from DOM"
+    },
+    {
+      "width": 1440,
+      "name": "keepalive reuses actual parent-child nodes"
+    },
+    {
+      "width": 1440,
+      "name": "all API reads carry request and trace IDs"
+    },
+    {
+      "width": 1440,
+      "name": "no external or write requests"
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "no cookies"
+    },
+    {
+      "width": 1440,
+      "name": "no storage or clipboard"
+    }
+  ],
+  "findings": [
+    {
+      "id": "P36-HISTORY-01",
+      "width": 390,
+      "kind": "confirmed-current-defect",
+      "evidence": {
+        "urlQuery": "只读系统 2",
+        "field": "月度经营",
+        "rows": 1,
+        "sameInstance": true
+      },
+      "requirement": "same-instance URL and filter must agree",
+      "notFixed": true
+    },
+    {
+      "id": "P36-HISTORY-02",
+      "width": 390,
+      "kind": "confirmed-current-defect",
+      "evidence": {
+        "urlQuery": null,
+        "field": "月度经营",
+        "sameNode": true,
+        "additionalReads": 0
+      },
+      "requirement": "reactivated filter and current URL must agree",
+      "notFixed": true
+    },
+    {
+      "id": "P36-HISTORY-01",
+      "width": 1440,
+      "kind": "confirmed-current-defect",
+      "evidence": {
+        "urlQuery": "只读系统 2",
+        "field": "月度经营",
+        "rows": 1,
+        "sameInstance": true
+      },
+      "requirement": "same-instance URL and filter must agree",
+      "notFixed": true
+    },
+    {
+      "id": "P36-HISTORY-02",
+      "width": 1440,
+      "kind": "confirmed-current-defect",
+      "evidence": {
+        "urlQuery": null,
+        "field": "月度经营",
+        "sameNode": true,
+        "additionalReads": 0
+      },
+      "requirement": "reactivated filter and current URL must agree",
+      "notFixed": true
+    }
+  ],
+  "requestEvidence": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 500,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 403,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 401,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 409,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 429,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 429,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 429,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 503,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 503,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 503,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 500,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 403,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 401,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        }
+      ],
+      "forbidden": [],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 500,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 403,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 401,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 409,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 429,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 429,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 429,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 503,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 503,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 503,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 500,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 403,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 401,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "status": 200,
+          "hasRequestId": true,
+          "hasTraceId": true
+        }
+      ],
+      "forbidden": [],
+      "errors": []
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "initial-loading",
+      "width": 390,
+      "file": "initial-loading-390.png",
+      "sha256": "1bbcf341c3310a166af19f2f4821d8a0cfc8f7bb05ab63485a37687b9088eba5",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-500",
+      "width": 390,
+      "file": "first-500-390.png",
+      "sha256": "29ac4aa8e70a977f8f23a02f2b913c5300ba2bdf14db74d18a67f897142c3787",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-403",
+      "width": 390,
+      "file": "first-403-390.png",
+      "sha256": "e80e4b3bb12b7dc6422fc69982c4645f7ac4dad3bfba88cecd147b7c999a50cf",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-401",
+      "width": 390,
+      "file": "first-401-390.png",
+      "sha256": "fcd29e5f06d4d50228ea8ebb4bd5bf75a0e53e5dcdef870c96f88c9985fa504a",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-409",
+      "width": 390,
+      "file": "first-409-390.png",
+      "sha256": "8e6e20c9d2571b53c007f75b056c0b7a5a820ae5ad4532da431b865dc087f978",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-429",
+      "width": 390,
+      "file": "first-429-390.png",
+      "sha256": "af3826b25bd6172603ad2452f88ab30ed62fe9cdbb3f0f5d08bad097ae4f52cc",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-503",
+      "width": 390,
+      "file": "first-503-390.png",
+      "sha256": "0f347e87be51dd0afe1a4b828da8e9457764758966c2e5fa52f3540759c8310e",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "empty-response",
+      "width": 390,
+      "file": "empty-response-390.png",
+      "sha256": "1eef2fc77ea64510fdd39fc745a2f266d04d6fcc0ee85f7750d09eb203626498",
+      "selector": ".org-token-ledger",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background-loading",
+      "width": 390,
+      "file": "background-loading-390.png",
+      "sha256": "fbb41d59eb25e9decee0074b0dbabc048328ec8f5585ae5d0337c8cf007bb4f4",
+      "selector": ".org-admin-hero",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background500-notice",
+      "width": 390,
+      "file": "background500-notice-390.png",
+      "sha256": "971274ee4ef6123eee7ae977928f166a9f0d3dde912a1c907a29abc0b3b0259a",
+      "selector": ".org-admin-notice",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background-403",
+      "width": 390,
+      "file": "background-403-390.png",
+      "sha256": "b52a88eda48833a775b8a13c6a45ad4c33e6be3714c0a300afba7d2f72483b93",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background-401",
+      "width": 390,
+      "file": "background-401-390.png",
+      "sha256": "cc9544ef59e79cc3c433e5852de0746d1e8529f8ad32a7296005646b85e9eba1",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "history-query-mismatch",
+      "width": 390,
+      "file": "history-query-mismatch-390.png",
+      "sha256": "8a2dabdfc627e6b4ea0b1fd68b61be1fa838e69e24289dd56f876cd62506d114",
+      "selector": ".org-token-toolbar",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "initial-loading",
+      "width": 1440,
+      "file": "initial-loading-1440.png",
+      "sha256": "3cc5fb99234a0babc944da8e4c6a65c3343125ff18715a7bba838753856593ab",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-500",
+      "width": 1440,
+      "file": "first-500-1440.png",
+      "sha256": "a43bca13a2395252a668a569b9fd7dc0a4f80d6564b819781e2449d17ba549a8",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-403",
+      "width": 1440,
+      "file": "first-403-1440.png",
+      "sha256": "b5e632805c6c0d9a8c0ce67ee5506b0ca09f5a5368d41d965311888bc43482e9",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-401",
+      "width": 1440,
+      "file": "first-401-1440.png",
+      "sha256": "a62219fad964a7b4472620840b81ea8112c229e789eb95942c4b4f0a06dae5bd",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-409",
+      "width": 1440,
+      "file": "first-409-1440.png",
+      "sha256": "31f77b2bfa17b2e4776a0048ee5c943092d1547fad77ef2848775ea2d38bebf6",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-429",
+      "width": 1440,
+      "file": "first-429-1440.png",
+      "sha256": "b6a1b4475b0dfa8c9276174e21a676769d37706d0e93e5f5eff947b552d4b3e6",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "first-503",
+      "width": 1440,
+      "file": "first-503-1440.png",
+      "sha256": "d9f7df1531023b81c108520d6a9633497e375f8455b1bf693bfb0a2d8d7ef7f7",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "empty-response",
+      "width": 1440,
+      "file": "empty-response-1440.png",
+      "sha256": "c93de388b7d27e19da682d1c690168d0c99e24913987bfe98748097cecf4d2db",
+      "selector": ".org-token-ledger",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background-loading",
+      "width": 1440,
+      "file": "background-loading-1440.png",
+      "sha256": "39d1072d6f05006aea9d54fe8510e232a5b4c4ee7a9e513b7a414e8cab9fb739",
+      "selector": ".org-admin-hero",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background500-notice",
+      "width": 1440,
+      "file": "background500-notice-1440.png",
+      "sha256": "1b93bfe06d3cfe43287468783740153da7b3b2b052e063e797c65f7e181fb7ca",
+      "selector": ".org-admin-notice",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background-403",
+      "width": 1440,
+      "file": "background-403-1440.png",
+      "sha256": "6d19e44912f832532408fb7190ffb390e72987396fdd3ff458f41c2873222e4b",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "background-401",
+      "width": 1440,
+      "file": "background-401-1440.png",
+      "sha256": "631e7fb12b111e7f73135273e257a5da5dbd171e2fbf24721735335f43866f7d",
+      "selector": ".org-admin-center",
+      "approval": "pending; actual fixture observation only"
+    },
+    {
+      "name": "history-query-mismatch",
+      "width": 1440,
+      "file": "history-query-mismatch-1440.png",
+      "sha256": "60f9aa3712bdcbe28adc2fcaf42a1dc910bfd79d1be72a33631385115b51b546",
+      "selector": ".org-token-toolbar",
+      "approval": "pending; actual fixture observation only"
+    }
+  ],
+  "acceptanceComplete": false,
+  "browserAndServerClosed": true
+}

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 
 const output = "output/playwright/p35-parent-c-review";
 const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
@@ -14,7 +15,11 @@ test("P35 parent C proposal pins its actual-parent basis and every deliverable w
   assert.equal(e.scenes.length, 17);
   assert.equal(e.screenshots.length, 276);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(
+      capturedExportDetailHash(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")),
+      sha,
+      file,
+    );
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

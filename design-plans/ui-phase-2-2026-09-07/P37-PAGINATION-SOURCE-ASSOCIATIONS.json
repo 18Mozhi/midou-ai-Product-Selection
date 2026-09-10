@@ -1,0 +1,866 @@
+{
+  "kind": "P37-PAGINATION-SOURCE-ASSOCIATION",
+  "scope": "Exact loadAuditPage-only guard; inherited source hashes and retained-manifest links, no image/approval/content rewrites. Historical P36/P37 problem packages remain frozen.",
+  "proofFile": "scripts/lib/ui-phase2-audit-page-delta.mjs",
+  "proofHash": "d791e427d81972da931ae98b3a9784e50e2e6e88feb903323e66021e48f32574",
+  "runtimeProof": "output/playwright/p37-parent-read-vue-r2/evidence.json",
+  "runtimeProofHash": "9ca3a847d3b9a9548064446021cebad9f6418940f30248be4b8e1c39988f1492",
+  "sourceChanges": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": {
+      "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+      "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+    },
+    "scripts/lib/ui-phase2-org-audit-design-data.mjs": {
+      "before": "9c25c923669a385fcb860bb2568bcae48f0abba1a6b29a74060702e3b404c907",
+      "after": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0"
+    },
+    "scripts/lib/ui-phase2-audit-copy-baseline.mjs": {
+      "before": "f9546bdc544075a20f817c64aecdc3fd164c6c0f35aae5fbb4534c76c4e65546",
+      "after": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527"
+    }
+  },
+  "entries": [
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json",
+      "beforeHash": "c4578a4e3f84b91bc5d23170d99209eca5dfb4004d3683b427765ad65e5bef9d",
+      "afterHash": "35518d351e96293ff0592e738c942bbb8f29cc334605b23b27ababb0afe85d6f",
+      "images": 444,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json",
+      "beforeHash": "f3a5d32bff4b68215efeac9f9e7fbf436cbe34ab7013e68b8cb57b61138f9770",
+      "afterHash": "9b185d008d6aed67bddffe22a29ac6507e15efddd14c9d976021040fdfda6a96",
+      "images": 94,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json",
+      "beforeHash": "879566c6681711f17e07ad4fce296ebe3b20de0bba02dd2ee0214f21195bf934",
+      "afterHash": "88f0f60d25df69964c57d95819a4b6a0294914a9680079147a6c4ad44881e46c",
+      "images": 164,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json",
+      "beforeHash": "d5b71880e481238471ea389d5a14b2df81cd8d713805b918f5dd0cb5f06eccc7",
+      "afterHash": "89018220b46583fb794728eafd02c92a88437cf06cbd229afc27dc7124e3cd50",
+      "images": 244,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json",
+      "beforeHash": "8c53d9e45959e48d37ec02f16b296a2a7b09b7a854387c194c21f544bae5315c",
+      "afterHash": "006347e7e3cf6177b8cb956c0c1d16bac4b6e6195a22bacfe1230ca5d9868477",
+      "images": 90,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json",
+      "beforeHash": "959361d3b06a5d6055b4c0bed5281caf3972d12c90c7d8d278705b90f20e1289",
+      "afterHash": "a3e853929804b3ff62a5e61a81063c6d143ef982e5a9577372d6dd94624daa59",
+      "images": 150,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json",
+      "beforeHash": "8a0db6c3b1abc964220e53316777d77f2229bf7d7b4af75d0e222b3efae72583",
+      "afterHash": "0c96d81d75ccdf951b66adefb2bb46a3adfcc74331c1112b1c26e3c180edba54",
+      "images": 74,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "output/playwright/p34-parent-read-states/evidence.json"
+          ],
+          "before": "b55d01ef146c5eed1b10a68926e8d94771b842a15b48bc92a078026ac1c1512f",
+          "after": "31d5fcdc44694c6a09a5121e5dee6c18f4dcdbdb4d4715021e28fb78ead7a26d"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json",
+      "beforeHash": "b099bbdaba38eb45727c8b4f8853cb733cde6036ccb289dcf3cd0b1d6e42c268",
+      "afterHash": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
+      "images": 104,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "scripts/lib/ui-phase2-org-audit-design-data.mjs"
+          ],
+          "before": "9c25c923669a385fcb860bb2568bcae48f0abba1a6b29a74060702e3b404c907",
+          "after": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceAssociation",
+            "proofHash"
+          ],
+          "before": "f9546bdc544075a20f817c64aecdc3fd164c6c0f35aae5fbb4534c76c4e65546",
+          "after": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json",
+      "beforeHash": "463865b09f19685088f4909876ab433a2cea9353f253ef6b341e4c54c808cdfa",
+      "afterHash": "e4dce1846ef3aa7c7451374f59e2637e73217dffee6e21b26f8b54ba1da7f607",
+      "images": 94,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json",
+      "beforeHash": "cb560247320ba15b54c80b95a3e97729a3807d269592bb61a726776454053332",
+      "afterHash": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468",
+      "images": 112,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json",
+      "beforeHash": "a439a9cc2494eb1413ef3cf0dbed4520d15803d0e671fb306d6143b821fb6b33",
+      "afterHash": "27cd29ae3d121aa47a0e0d29865cb1aa9d008d96b43dd5a375e2101fc1fd7d30",
+      "images": 170,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json",
+      "beforeHash": "86f81546cf9aae86bc26ec525193f31bc03c561206426ef923c196fa950d8596",
+      "afterHash": "0dc2ce32933ccde48cbc2e54a53b16705b7e0c6c4b5a739cf1ad0e657041368b",
+      "images": 74,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json",
+      "beforeHash": "800ea99cdeff67e6c1282bdd907cdca69b04641e5a76c2e6a676aa54f117f814",
+      "afterHash": "47b34807ffd53a92cb71c94a9558173aee52962a9490c875b96b73d1f2a8ca34",
+      "images": 110,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json",
+      "beforeHash": "0420dbaaa76dbaa26f1b265d3404c4842f6a99bf72689480571e573bffbefec7",
+      "afterHash": "d3bd4d84b67507c2280fe10099220b0c048161c133a11c97c33a9bf14ddc9963",
+      "images": 378,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json",
+      "beforeHash": "a3da53ee11c9e8cb875afe5ba6ed7cef6db0f38c99ad6cbd6bb77fae874ffa31",
+      "afterHash": "b0f8c0df00f37c02e04dcdde85366b95e6682b1c73ce27d17925201663dff795",
+      "images": 48,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json",
+      "beforeHash": "43c87aa829d1d37a8774737930f5e6d81886735924577d322a3de2f5dc6a1cb9",
+      "afterHash": "9e0f4e14fc685e0ad9e32680e8599d41c44ec7ff4f37c9871e5a9f39ba470b67",
+      "images": 202,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/evidence.json",
+      "beforeHash": "d09f77d05e64bb2e05ffad55bf4118af1f56e058b78a86108e0be59c7dc41995",
+      "afterHash": "b208df4321f013f4d1f51f4c155b4f5914e5948ececebd2fbf30c4ab4538d239",
+      "images": 362,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/evidence.json",
+      "beforeHash": "059a1334b209ff82fab0fe11b604a09deabff8334fe033f2e0ee97bef8aca57b",
+      "afterHash": "6e0c46f381fbb064bc6b289dee6e958838708f2435aef1a6b3966f845af6b684",
+      "images": 96,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/evidence.json",
+      "beforeHash": "6de63d177cfd786815f288943cd4dc240a67dcb64222745251a636c9cfb9b0f0",
+      "afterHash": "4f9ce8529347282c71384f223654f7d5349a46b3e0b476b03770cd1ba1a5a547",
+      "images": 116,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json",
+      "beforeHash": "8ef74c4616d0ea506915374ef8cac6ef6e831fd7fcf4733c062bac5a17f910c3",
+      "afterHash": "89ebeff23a2436d113a2324dcbe286f79d8fa93af9af7f7eaf2e9e015fbbbda3",
+      "images": 296,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json",
+      "beforeHash": "595e2af796ded4d86262c2e5e11e48160c0a9beff440c4fd0fd09e97e3c9da26",
+      "afterHash": "db49b60115d40a4b78c3d25b6b5ed85e19555bb08586fdd68b475165db678620",
+      "images": 92,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json",
+      "beforeHash": "b7a84f4a87c624a173de9ef81b8644d4be024e7f6bb051460be003bae2a2eba6",
+      "afterHash": "fb414c18e59348ec4fdc1c40f7962b7fea33417ce112ea8c103d1c23c0995510",
+      "images": 84,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json",
+      "beforeHash": "17da7683c99de342028bf4fe4bd9e18144fe57504e84baa94ca616405d2e38a1",
+      "afterHash": "44c638e5d9d79968a7e18a6a0632b70168b25c0dde27fda153d3b9cb804fc24d",
+      "images": 20,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json"
+          ],
+          "before": "8ef74c4616d0ea506915374ef8cac6ef6e831fd7fcf4733c062bac5a17f910c3",
+          "after": "89ebeff23a2436d113a2324dcbe286f79d8fa93af9af7f7eaf2e9e015fbbbda3"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p31-approved-controls-review/evidence.json",
+      "beforeHash": "9d27364956c3b743a7f4624e54407e6c3cc7ee6c11438db75a7aecd3fe65e46b",
+      "afterHash": "914681f01abc086eb4c2398a2f6058d27c32242ae06ca132919d3e42f83bbc08",
+      "images": 22,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p32-approved-restore-review/evidence.json",
+      "beforeHash": "85dbd0c62a8dd192c7b9d77738438f483fae352fc9fbe7bdd3625fa54cad304e",
+      "afterHash": "bd094357766a04107aeee8358d6b1ea62b3b60836c3229ca5030eb3dfe7f691e",
+      "images": 20,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p34-parent-read-states/evidence.json",
+      "beforeHash": "b55d01ef146c5eed1b10a68926e8d94771b842a15b48bc92a078026ac1c1512f",
+      "afterHash": "31d5fcdc44694c6a09a5121e5dee6c18f4dcdbdb4d4715021e28fb78ead7a26d",
+      "images": 64,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p34-permission-tone-r2/evidence.json",
+      "beforeHash": "0f26301cc02c1dd32f338bb8e12b9fbe7cff0f03027f40ab3d2a0f22bfca5cc7",
+      "afterHash": "a8c68010fc27e7998ff14a8d95e9a4d697bc97744c8a622a41cb6473565835c3",
+      "images": 12,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "output/playwright/p34-parent-read-states/evidence.json"
+          ],
+          "before": "b55d01ef146c5eed1b10a68926e8d94771b842a15b48bc92a078026ac1c1512f",
+          "after": "31d5fcdc44694c6a09a5121e5dee6c18f4dcdbdb4d4715021e28fb78ead7a26d"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p34-rate-limit-vue/evidence.json",
+      "beforeHash": "90cebc50597b5d01fe4a2f800ade5f9e2546aed3f1cfe7619b47c1ce9403f2fe",
+      "afterHash": "75ba85c1dd9a2533d59657ebca39804b4443a2abd29ed8b476f4eaa3e258e388",
+      "images": 8,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p35-controls-review/evidence.json",
+      "beforeHash": "1d182db0b7960cf1b5c841412987838a49ab308af90e2cd47dde1fd1a624b10c",
+      "afterHash": "a99151114cfe641591a6a6c18f2a49fa8540bd5082f81fc4986de60bba961f5d",
+      "images": 192,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p35-export-detail-vue/evidence.json",
+      "beforeHash": "1a84bd08347f63f23073f0ae31103091365f58e616670e95a8cbc577eb20188a",
+      "afterHash": "339c7d0825e1b56699d21ad51d5f8f1576a48f5b5351c8daf8bf594db2a2035e",
+      "images": 24,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p35-fields-review/evidence.json",
+      "beforeHash": "8d047a6f7f02bc2fcc67671465c5376b4219f18e199cefd578e12106bd791fc6",
+      "afterHash": "48faee5d7261fcd7f280580ad3a187e3c03f2566659a706af38b04585816474e",
+      "images": 140,
+      "changes": [
+        {
+          "keys": [
+            "retained",
+            "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c",
+            "manifest"
+          ],
+          "before": "463865b09f19685088f4909876ab433a2cea9353f253ef6b341e4c54c808cdfa",
+          "after": "e4dce1846ef3aa7c7451374f59e2637e73217dffee6e21b26f8b54ba1da7f607"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p35-controls-review",
+            "manifest"
+          ],
+          "before": "1d182db0b7960cf1b5c841412987838a49ab308af90e2cd47dde1fd1a624b10c",
+          "after": "a99151114cfe641591a6a6c18f2a49fa8540bd5082f81fc4986de60bba961f5d"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p35-export-detail-vue",
+            "manifest"
+          ],
+          "before": "1a84bd08347f63f23073f0ae31103091365f58e616670e95a8cbc577eb20188a",
+          "after": "339c7d0825e1b56699d21ad51d5f8f1576a48f5b5351c8daf8bf594db2a2035e"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p35-parent-c-review/evidence.json",
+      "beforeHash": "a9ba1b44a4f89f9fdd85089c99b90e3d575b195573357ecdeaa15df876242b21",
+      "afterHash": "886461923b7d9cb1da90f0b7d9bce4a323b7fddd1182f8b8a54d6d74730c0d98",
+      "images": 276,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "output/playwright/p35-parent-read-states/evidence.json"
+          ],
+          "before": "87b5f77e04949323dab8e3fdd57a1f326b66753f0baa681b34e62c62e8733456",
+          "after": "45fc289df73ae49c0952b9200b159812b76dbd182409965c44c0c4df6085c887"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p35-parent-read-states/evidence.json",
+      "beforeHash": "87b5f77e04949323dab8e3fdd57a1f326b66753f0baa681b34e62c62e8733456",
+      "afterHash": "45fc289df73ae49c0952b9200b159812b76dbd182409965c44c0c4df6085c887",
+      "images": 128,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p36-controls-review/evidence.json",
+      "beforeHash": "1316b1a2aa79254aba099cef14582d9c669ca22c52cbc4d2b8c843a462bed486",
+      "afterHash": "23d5b2d58c30aa003e041095dc4c9121f5f4be70bcf834bcc3ddca16bd283013",
+      "images": 354,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p36-fields-review/evidence.json",
+      "beforeHash": "e0459d9566ac7877935bfa5c9595313afb0bc2c7eb4bb3b6332d6f392a3c82ce",
+      "afterHash": "225b2f026f59f0c73a036752efd24e64c0ba6e4ec52a4403804d739f6a1f11ee",
+      "images": 196,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "retained",
+            "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c",
+            "manifest"
+          ],
+          "before": "cb560247320ba15b54c80b95a3e97729a3807d269592bb61a726776454053332",
+          "after": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p36-controls-review",
+            "manifest"
+          ],
+          "before": "1316b1a2aa79254aba099cef14582d9c669ca22c52cbc4d2b8c843a462bed486",
+          "after": "23d5b2d58c30aa003e041095dc4c9121f5f4be70bcf834bcc3ddca16bd283013"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p36-parent-read-vue-r2/evidence.json",
+      "beforeHash": "cdba72d60408b64edf7ed84771c913aa7e26880814bca586ba2440546b4edc6e",
+      "afterHash": "0ce354238f17d477ff3095dd6ef43f3ab7f0d331c6a5d49753fc3299f161de60",
+      "images": 28,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceAssociation",
+            "proofHash"
+          ],
+          "before": "f9546bdc544075a20f817c64aecdc3fd164c6c0f35aae5fbb4534c76c4e65546",
+          "after": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p36-read-states-review/evidence.json",
+      "beforeHash": "33aeaea335297010c20e747c0219261a83c0ba275b2c1cbf03795b04bd93adfb",
+      "afterHash": "7c07ac5242ec1a0fa737b8f8382a627b0bb0f9d0badc4536d21d0e8c01268ec3",
+      "images": 50,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "retained",
+            "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c",
+            "manifest"
+          ],
+          "before": "cb560247320ba15b54c80b95a3e97729a3807d269592bb61a726776454053332",
+          "after": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p36-controls-review",
+            "manifest"
+          ],
+          "before": "1316b1a2aa79254aba099cef14582d9c669ca22c52cbc4d2b8c843a462bed486",
+          "after": "23d5b2d58c30aa003e041095dc4c9121f5f4be70bcf834bcc3ddca16bd283013"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p36-fields-review",
+            "manifest"
+          ],
+          "before": "e0459d9566ac7877935bfa5c9595313afb0bc2c7eb4bb3b6332d6f392a3c82ce",
+          "after": "225b2f026f59f0c73a036752efd24e64c0ba6e4ec52a4403804d739f6a1f11ee"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p36-parent-read-vue-r2",
+            "manifest"
+          ],
+          "before": "cdba72d60408b64edf7ed84771c913aa7e26880814bca586ba2440546b4edc6e",
+          "after": "0ce354238f17d477ff3095dd6ef43f3ab7f0d331c6a5d49753fc3299f161de60"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p37-controls-review/evidence.json",
+      "beforeHash": "e2c7ac982a7a6a5c2f318456459298183eb515693071c03e6085377fb05eb9e6",
+      "afterHash": "675bf387d974109afbaec49115ce388d8e1efd260f000f058935a891fd10d9e1",
+      "images": 172,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "scripts/lib/ui-phase2-org-audit-design-data.mjs"
+          ],
+          "before": "9c25c923669a385fcb860bb2568bcae48f0abba1a6b29a74060702e3b404c907",
+          "after": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0"
+        },
+        {
+          "keys": [
+            "retained",
+            "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/",
+            "manifest"
+          ],
+          "before": "b099bbdaba38eb45727c8b4f8853cb733cde6036ccb289dcf3cd0b1d6e42c268",
+          "after": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125"
+        },
+        {
+          "keys": [
+            "retained",
+            "output/playwright/p37-fields-review/",
+            "manifest"
+          ],
+          "before": "4999860f0dc514d6b384e5073e5968a0c7f22f857d2598c1db82825e93fa1366",
+          "after": "aeae7c35fe16617505326ffa5e71811d97c603a30210badda0de66db876f1e34"
+        },
+        {
+          "keys": [
+            "sourceAssociation",
+            "proofHash"
+          ],
+          "before": "f9546bdc544075a20f817c64aecdc3fd164c6c0f35aae5fbb4534c76c4e65546",
+          "after": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p37-copy-ownership-vue/evidence.json",
+      "beforeHash": "74fac5377ccaf68c0641e8e0c6e2a5d9dde882cd4b154524c91543d013642827",
+      "afterHash": "ea4bd0333847c101873e5c5dc8770b2ab736e7b835bfa520a15b4cd627b6b464",
+      "images": 16,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "scripts/lib/ui-phase2-audit-copy-baseline.mjs"
+          ],
+          "before": "f9546bdc544075a20f817c64aecdc3fd164c6c0f35aae5fbb4534c76c4e65546",
+          "after": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "scripts/lib/ui-phase2-org-audit-design-data.mjs"
+          ],
+          "before": "9c25c923669a385fcb860bb2568bcae48f0abba1a6b29a74060702e3b404c907",
+          "after": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0"
+        }
+      ]
+    },
+    {
+      "file": "output/playwright/p37-fields-review/evidence.json",
+      "beforeHash": "4999860f0dc514d6b384e5073e5968a0c7f22f857d2598c1db82825e93fa1366",
+      "afterHash": "aeae7c35fe16617505326ffa5e71811d97c603a30210badda0de66db876f1e34",
+      "images": 38,
+      "changes": [
+        {
+          "keys": [
+            "sourceHashes",
+            "apps/web/src/components/OrganizationAdminCenter.vue"
+          ],
+          "before": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+          "after": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93"
+        },
+        {
+          "keys": [
+            "sourceHashes",
+            "scripts/lib/ui-phase2-org-audit-design-data.mjs"
+          ],
+          "before": "9c25c923669a385fcb860bb2568bcae48f0abba1a6b29a74060702e3b404c907",
+          "after": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0"
+        },
+        {
+          "keys": [
+            "retainedManifest"
+          ],
+          "before": "b099bbdaba38eb45727c8b4f8853cb733cde6036ccb289dcf3cd0b1d6e42c268",
+          "after": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125"
+        },
+        {
+          "keys": [
+            "sourceAssociation",
+            "proofHash"
+          ],
+          "before": "f9546bdc544075a20f817c64aecdc3fd164c6c0f35aae5fbb4534c76c4e65546",
+          "after": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527"
+        }
+      ]
+    }
+  ]
+}

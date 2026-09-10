@@ -1,0 +1,2156 @@
+{
+  "kind": "P37-PARENT-READ-VUE-r2",
+  "scope": "Actual parent/child/API client in isolated Router/KeepAlive host; synthetic GET fixtures only. Not real backend/RBAC/shell/production or C design acceptance. Current pagination ownership and copy regressions pass; two history restoration classes remain unresolved. Not whole-page acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/org-data-export-detail.css": "b258adf5f28ff62e553e4e3e925c38e243cfa0fd76240bb454bd6f821a248e98",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/lib/ui-phase2-audit-copy-baseline.mjs": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527",
+    "scripts/lib/ui-phase2-audit-page-delta.mjs": "d791e427d81972da931ae98b3a9784e50e2e6e88feb903323e66021e48f32574",
+    "scripts/lib/ui-phase2-org-audit-design-data.mjs": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0",
+    "scripts/verify-ui-phase2-org-audit-read-r2.mjs": "965f71286d671a06132420f7ce05c480123a4666ac97870b4284a232843c1c85",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "initial:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial:50"
+    },
+    {
+      "width": 390,
+      "name": "initial:one-audit-only"
+    },
+    {
+      "width": 390,
+      "name": "first:500:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "first:500:attempts"
+    },
+    {
+      "width": 390,
+      "name": "first-500:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "first:500:recovers"
+    },
+    {
+      "width": 390,
+      "name": "first:403:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "first:403:attempts"
+    },
+    {
+      "width": 390,
+      "name": "first-403:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "first:403:recovers"
+    },
+    {
+      "width": 390,
+      "name": "first:401:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "first:401:attempts"
+    },
+    {
+      "width": 390,
+      "name": "first-401:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "first:401:recovers"
+    },
+    {
+      "width": 390,
+      "name": "first:409:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "first:409:attempts"
+    },
+    {
+      "width": 390,
+      "name": "first-409:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "first:409:recovers"
+    },
+    {
+      "width": 390,
+      "name": "first:429:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "first:429:attempts"
+    },
+    {
+      "width": 390,
+      "name": "first-429:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "first:429:recovers"
+    },
+    {
+      "width": 390,
+      "name": "first:503:hides-child"
+    },
+    {
+      "width": 390,
+      "name": "first:503:attempts"
+    },
+    {
+      "width": 390,
+      "name": "first-503:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "first:503:recovers"
+    },
+    {
+      "width": 390,
+      "name": "empty:child-visible"
+    },
+    {
+      "width": 390,
+      "name": "empty:no-rows"
+    },
+    {
+      "width": 390,
+      "name": "empty-response:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "background:500:visible-rows"
+    },
+    {
+      "width": 390,
+      "name": "background-500:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "background:403:visible-rows"
+    },
+    {
+      "width": 390,
+      "name": "background-403:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "background:401:visible-rows"
+    },
+    {
+      "width": 390,
+      "name": "background-401:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "filter:trimmed-param"
+    },
+    {
+      "width": 390,
+      "name": "filter:real-response-row-count"
+    },
+    {
+      "width": 390,
+      "name": "reset:first-page-query"
+    },
+    {
+      "width": 390,
+      "name": "local:no-request"
+    },
+    {
+      "width": 390,
+      "name": "local:failed-count"
+    },
+    {
+      "width": 390,
+      "name": "history:source-still-empty-query"
+    },
+    {
+      "width": 390,
+      "name": "history:source-still-empty-action"
+    },
+    {
+      "width": 390,
+      "name": "history:no-read"
+    },
+    {
+      "width": 390,
+      "name": "history-url-fields-mismatch:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "cached-return:stale-search"
+    },
+    {
+      "width": 390,
+      "name": "normal-page:55-rows"
+    },
+    {
+      "width": 390,
+      "name": "normal-page:exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "normal-page:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-new-first:latest-row-count"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-new-first:never-append-old-five"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-new-first:no-stale-error"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-new-first:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-old-first:latest-row-count"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-old-first:never-append-old-five"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-old-first:no-stale-error"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-200-old-first:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 390,
+      "name": "page-403-refresh-200-new-first:latest-row-count"
+    },
+    {
+      "width": 390,
+      "name": "page-403-refresh-200-new-first:never-append-old-five"
+    },
+    {
+      "width": 390,
+      "name": "page-403-refresh-200-new-first:no-stale-error"
+    },
+    {
+      "width": 390,
+      "name": "page-403-refresh-200-new-first:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 390,
+      "name": "page-500-refresh-200-new-first:latest-row-count"
+    },
+    {
+      "width": 390,
+      "name": "page-500-refresh-200-new-first:never-append-old-five"
+    },
+    {
+      "width": 390,
+      "name": "page-500-refresh-200-new-first:no-stale-error"
+    },
+    {
+      "width": 390,
+      "name": "page-500-refresh-200-new-first:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-500-new-first:latest-row-count"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-500-new-first:never-append-old-five"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-500-new-first:new-notice-retained"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-500-new-first:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 390,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-403-new-first:latest-row-count"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-403-new-first:never-append-old-five"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-403-new-first:permission-state-retained"
+    },
+    {
+      "width": 390,
+      "name": "page-200-refresh-403-new-first:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy:old-feedback-ignored"
+    },
+    {
+      "width": 390,
+      "name": "copy:old-value"
+    },
+    {
+      "width": 390,
+      "name": "copy:new-record-displays"
+    },
+    {
+      "width": 390,
+      "name": "late-copy-ignored:no-overflow"
+    },
+    {
+      "width": 390,
+      "name": "requests:read-only-audit"
+    },
+    {
+      "width": 390,
+      "name": "requests:correlation"
+    },
+    {
+      "width": 390,
+      "name": "no-forbidden-network"
+    },
+    {
+      "width": 390,
+      "name": "no-page-errors"
+    },
+    {
+      "width": 390,
+      "name": "no-cookies"
+    },
+    {
+      "width": 390,
+      "name": "no-storage"
+    },
+    {
+      "width": 1440,
+      "name": "initial:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial:50"
+    },
+    {
+      "width": 1440,
+      "name": "initial:one-audit-only"
+    },
+    {
+      "width": 1440,
+      "name": "first:500:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "first:500:attempts"
+    },
+    {
+      "width": 1440,
+      "name": "first-500:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first:500:recovers"
+    },
+    {
+      "width": 1440,
+      "name": "first:403:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "first:403:attempts"
+    },
+    {
+      "width": 1440,
+      "name": "first-403:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first:403:recovers"
+    },
+    {
+      "width": 1440,
+      "name": "first:401:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "first:401:attempts"
+    },
+    {
+      "width": 1440,
+      "name": "first-401:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first:401:recovers"
+    },
+    {
+      "width": 1440,
+      "name": "first:409:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "first:409:attempts"
+    },
+    {
+      "width": 1440,
+      "name": "first-409:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first:409:recovers"
+    },
+    {
+      "width": 1440,
+      "name": "first:429:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "first:429:attempts"
+    },
+    {
+      "width": 1440,
+      "name": "first-429:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first:429:recovers"
+    },
+    {
+      "width": 1440,
+      "name": "first:503:hides-child"
+    },
+    {
+      "width": 1440,
+      "name": "first:503:attempts"
+    },
+    {
+      "width": 1440,
+      "name": "first-503:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first:503:recovers"
+    },
+    {
+      "width": 1440,
+      "name": "empty:child-visible"
+    },
+    {
+      "width": 1440,
+      "name": "empty:no-rows"
+    },
+    {
+      "width": 1440,
+      "name": "empty-response:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background:500:visible-rows"
+    },
+    {
+      "width": 1440,
+      "name": "background-500:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background:403:visible-rows"
+    },
+    {
+      "width": 1440,
+      "name": "background-403:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background:401:visible-rows"
+    },
+    {
+      "width": 1440,
+      "name": "background-401:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "filter:trimmed-param"
+    },
+    {
+      "width": 1440,
+      "name": "filter:real-response-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "reset:first-page-query"
+    },
+    {
+      "width": 1440,
+      "name": "local:no-request"
+    },
+    {
+      "width": 1440,
+      "name": "local:failed-count"
+    },
+    {
+      "width": 1440,
+      "name": "history:source-still-empty-query"
+    },
+    {
+      "width": 1440,
+      "name": "history:source-still-empty-action"
+    },
+    {
+      "width": 1440,
+      "name": "history:no-read"
+    },
+    {
+      "width": 1440,
+      "name": "history-url-fields-mismatch:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "cached-return:stale-search"
+    },
+    {
+      "width": 1440,
+      "name": "normal-page:55-rows"
+    },
+    {
+      "width": 1440,
+      "name": "normal-page:exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "normal-page:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-new-first:latest-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-new-first:never-append-old-five"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-new-first:no-stale-error"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-new-first:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-old-first:latest-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-old-first:never-append-old-five"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-old-first:no-stale-error"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-200-old-first:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 1440,
+      "name": "page-403-refresh-200-new-first:latest-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "page-403-refresh-200-new-first:never-append-old-five"
+    },
+    {
+      "width": 1440,
+      "name": "page-403-refresh-200-new-first:no-stale-error"
+    },
+    {
+      "width": 1440,
+      "name": "page-403-refresh-200-new-first:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 1440,
+      "name": "page-500-refresh-200-new-first:latest-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "page-500-refresh-200-new-first:never-append-old-five"
+    },
+    {
+      "width": 1440,
+      "name": "page-500-refresh-200-new-first:no-stale-error"
+    },
+    {
+      "width": 1440,
+      "name": "page-500-refresh-200-new-first:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-500-new-first:latest-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-500-new-first:never-append-old-five"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-500-new-first:new-notice-retained"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-500-new-first:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "race:old-exact-cursor"
+    },
+    {
+      "width": 1440,
+      "name": "race:no-duplicate-page"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-403-new-first:latest-row-count"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-403-new-first:never-append-old-five"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-403-new-first:permission-state-retained"
+    },
+    {
+      "width": 1440,
+      "name": "page-200-refresh-403-new-first:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy:old-feedback-ignored"
+    },
+    {
+      "width": 1440,
+      "name": "copy:old-value"
+    },
+    {
+      "width": 1440,
+      "name": "copy:new-record-displays"
+    },
+    {
+      "width": 1440,
+      "name": "late-copy-ignored:no-overflow"
+    },
+    {
+      "width": 1440,
+      "name": "requests:read-only-audit"
+    },
+    {
+      "width": 1440,
+      "name": "requests:correlation"
+    },
+    {
+      "width": 1440,
+      "name": "no-forbidden-network"
+    },
+    {
+      "width": 1440,
+      "name": "no-page-errors"
+    },
+    {
+      "width": 1440,
+      "name": "no-cookies"
+    },
+    {
+      "width": 1440,
+      "name": "no-storage"
+    }
+  ],
+  "findings": [
+    {
+      "width": 390,
+      "id": "P37-HISTORY-01",
+      "urlQuery": "失败",
+      "visibleQuery": "",
+      "urlAction": "synthetic.history-filter",
+      "visibleAction": "",
+      "requestsAdded": 0
+    },
+    {
+      "width": 390,
+      "id": "P37-HISTORY-02",
+      "urlQuery": "成功",
+      "visibleQuery": ""
+    },
+    {
+      "width": 1440,
+      "id": "P37-HISTORY-01",
+      "urlQuery": "失败",
+      "visibleQuery": "",
+      "urlAction": "synthetic.history-filter",
+      "visibleAction": "",
+      "requestsAdded": 0
+    },
+    {
+      "width": 1440,
+      "id": "P37-HISTORY-02",
+      "urlQuery": "成功",
+      "visibleQuery": ""
+    }
+  ],
+  "requestEvidence": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 401,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 409,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 429,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 429,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 429,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 503,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 503,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 503,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 401,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "action": "organization.member.invited"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        }
+      ],
+      "forbidden": [],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 401,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 409,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 429,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 429,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 429,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 503,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 503,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 503,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 401,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "action": "organization.member.invited"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 500,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 403,
+          "requestId": true,
+          "traceId": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          },
+          "status": 200,
+          "requestId": true,
+          "traceId": true
+        }
+      ],
+      "forbidden": [],
+      "errors": []
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "initial-loading",
+      "width": 390,
+      "file": "initial-loading-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "39bcff635c916cf4726c3ee7ff165dedb94e24255f83daf133a3f0ee90d5ff54",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-500",
+      "width": 390,
+      "file": "first-500-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "0a1f8986142599a9ecac8c2c4a1fd1f07c863090f82a9c951d28a2882ec7ab84",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-403",
+      "width": 390,
+      "file": "first-403-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "6a39a009dff6537a849e4c5def50c6667fd048597275d549c40b6f784ef0ed46",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-401",
+      "width": 390,
+      "file": "first-401-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "448a832854d24281f6e92340a399cd0f8eaf2aaa5932241e10c4644072b35103",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-409",
+      "width": 390,
+      "file": "first-409-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "b2d4b87b9523e4627f97f510dda5ac73a42d9b2260369e111ab93656e48890a0",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-429",
+      "width": 390,
+      "file": "first-429-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "9efa4656ea835cb43e61d83fd7bb5e19e5d5cc4a93b445df4b046b7c8c26f728",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-503",
+      "width": 390,
+      "file": "first-503-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "ec6fc257cc3912a7344ab7c9d7480290e9553111634d18f73a61c006baf3ff27",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "empty-response",
+      "width": 390,
+      "file": "empty-response-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "935aae0e04332f0b575ec978c87cfd3378bb4ba9f7017e9c95c4e1a58062767e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "background-500",
+      "width": 390,
+      "file": "background-500-390.png",
+      "selector": ".org-admin-notice",
+      "sha256": "49b75003c904ca360145fbe44e038074a8fa26b55157eddd4d1e57961d9b83aa",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "background-403",
+      "width": 390,
+      "file": "background-403-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "6a39a009dff6537a849e4c5def50c6667fd048597275d549c40b6f784ef0ed46",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "background-401",
+      "width": 390,
+      "file": "background-401-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "448a832854d24281f6e92340a399cd0f8eaf2aaa5932241e10c4644072b35103",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "history-url-fields-mismatch",
+      "width": 390,
+      "file": "history-url-fields-mismatch-390.png",
+      "selector": ".org-audit-filters",
+      "sha256": "3105be28435371a4c347f6c2854de8886ee07b2fdb46df0b767d4d2035552e61",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "normal-page",
+      "width": 390,
+      "file": "normal-page-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "72da24c20548dd425cad0e6736af8aa4d209a174a5e78dae87728e9b4d28bc78",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-200-new-first",
+      "width": 390,
+      "file": "page-200-refresh-200-new-first-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "45d1978b67331b37b7c42d682c1b994e1350ff58817ac6369872d3c192c49c3e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-200-old-first",
+      "width": 390,
+      "file": "page-200-refresh-200-old-first-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "45d1978b67331b37b7c42d682c1b994e1350ff58817ac6369872d3c192c49c3e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-403-refresh-200-new-first",
+      "width": 390,
+      "file": "page-403-refresh-200-new-first-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "45d1978b67331b37b7c42d682c1b994e1350ff58817ac6369872d3c192c49c3e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-500-refresh-200-new-first",
+      "width": 390,
+      "file": "page-500-refresh-200-new-first-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "45d1978b67331b37b7c42d682c1b994e1350ff58817ac6369872d3c192c49c3e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-500-new-first",
+      "width": 390,
+      "file": "page-200-refresh-500-new-first-390.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "f5fa9e5c4757f6f334d8d47365f6dc636679de2b2b1fdf13d8860d4473175555",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-403-new-first",
+      "width": 390,
+      "file": "page-200-refresh-403-new-first-390.png",
+      "selector": ".org-admin-center",
+      "sha256": "6a39a009dff6537a849e4c5def50c6667fd048597275d549c40b6f784ef0ed46",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "late-copy-ignored",
+      "width": 390,
+      "file": "late-copy-ignored-390.png",
+      "selector": ".org-audit-detail",
+      "sha256": "188a5fcb12ae14f5a71e3fe91fdee6ffac57ef29de59de0d7336f1abb61e8462",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "initial-loading",
+      "width": 1440,
+      "file": "initial-loading-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "6bca5520d63f6f9fe3daba92721938f8491c2d5466ca8cd1767834a84ca480da",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-500",
+      "width": 1440,
+      "file": "first-500-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "680c54b10d6cdbff481bd21c8a0a270e697ce3fdd48d78752750e19a12bc4b5e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-403",
+      "width": 1440,
+      "file": "first-403-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "769ccb0086f8c9a22d125c0af4b4d9d4da0b99870dd2e009975dbc2db1a97480",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-401",
+      "width": 1440,
+      "file": "first-401-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "dd1bd040503a5f1285fbd175fb386e4ffa0f46e187799a058e8745ba823b14c6",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-409",
+      "width": 1440,
+      "file": "first-409-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "8a5b234a6edee5e3916ebfecf1630b014df42692bacce463018ca302b5ba1927",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-429",
+      "width": 1440,
+      "file": "first-429-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "1be9bf5b14d58bfbbdb0508424d045a6414a784a69151a5d021d832f6328bd60",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "first-503",
+      "width": 1440,
+      "file": "first-503-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "e50f8f107dd31065b817b2bbade28f9a01865ccc5321b493039aa6a129253f4b",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "empty-response",
+      "width": 1440,
+      "file": "empty-response-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "d6aa94a21feb5b961805c29735f8ebbcacff9188480278a9ab9739f427169aef",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "background-500",
+      "width": 1440,
+      "file": "background-500-1440.png",
+      "selector": ".org-admin-notice",
+      "sha256": "51bf811c80e36f717ef396eb467a7469d861b530887949d3326229b85d18934e",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "background-403",
+      "width": 1440,
+      "file": "background-403-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "769ccb0086f8c9a22d125c0af4b4d9d4da0b99870dd2e009975dbc2db1a97480",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "background-401",
+      "width": 1440,
+      "file": "background-401-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "dd1bd040503a5f1285fbd175fb386e4ffa0f46e187799a058e8745ba823b14c6",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "history-url-fields-mismatch",
+      "width": 1440,
+      "file": "history-url-fields-mismatch-1440.png",
+      "selector": ".org-audit-filters",
+      "sha256": "8faa939e2d8f97734394c812c6fdb56180fcf64188f014ffc1f8670df23a126f",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "normal-page",
+      "width": 1440,
+      "file": "normal-page-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "cb823f12e31122b6e472ac9a769608cb14e888f7359402be80201d686fcb89d7",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-200-new-first",
+      "width": 1440,
+      "file": "page-200-refresh-200-new-first-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "3664218c79a0919d702e612cc883c15c0ebea6c758f668a4a79ab7a49e92219b",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-200-old-first",
+      "width": 1440,
+      "file": "page-200-refresh-200-old-first-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "3664218c79a0919d702e612cc883c15c0ebea6c758f668a4a79ab7a49e92219b",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-403-refresh-200-new-first",
+      "width": 1440,
+      "file": "page-403-refresh-200-new-first-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "3664218c79a0919d702e612cc883c15c0ebea6c758f668a4a79ab7a49e92219b",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-500-refresh-200-new-first",
+      "width": 1440,
+      "file": "page-500-refresh-200-new-first-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "3664218c79a0919d702e612cc883c15c0ebea6c758f668a4a79ab7a49e92219b",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-500-new-first",
+      "width": 1440,
+      "file": "page-200-refresh-500-new-first-1440.png",
+      "selector": ".org-audit-ledger",
+      "sha256": "f5ecac7ffb567ec0430c1efa055fee5f1804e76f68b76811efb2cb7582067583",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "page-200-refresh-403-new-first",
+      "width": 1440,
+      "file": "page-200-refresh-403-new-first-1440.png",
+      "selector": ".org-admin-center",
+      "sha256": "769ccb0086f8c9a22d125c0af4b4d9d4da0b99870dd2e009975dbc2db1a97480",
+      "approval": "observation-only-not-design-approval"
+    },
+    {
+      "name": "late-copy-ignored",
+      "width": 1440,
+      "file": "late-copy-ignored-1440.png",
+      "selector": ".org-audit-detail",
+      "sha256": "df0d41dcb001fece12853bce7721ce5e40e9a4e237b2aff9fab79a8c6720ca23",
+      "approval": "observation-only-not-design-approval"
+    }
+  ],
+  "acceptanceComplete": false,
+  "browserAndServerClosed": true
+}

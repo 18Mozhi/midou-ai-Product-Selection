@@ -1,0 +1,254 @@
+{
+  "proposal": "P38-PROVIDER-DETAIL-C-r1",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-provider-detail/index.html": "29ad69b36bd23f2b7de58a24779f099797a361fbd50bb0cc5800193c0c7e0764",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-provider-detail/detail.css": "eaabbbb669ef361af9e6e311b686c4319ac27c6138556efad5beb1485ff53e16",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-provider-detail/detail.js": "49a54eb58e74e17f5caf07f93fc624a5dfec3907936ee6f6cecba35363fe741d",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/overview.js": "97f69f050c71a8bb73d7d04496480948ecd12eac2b646b75bcf098e314968589",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/overview.css": "f4a2f6804eb31d9c851a9462a72f5c351807f1202931699e78ab99d0cb5d2584",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/data.js": "b6907abfa5fcea460b0e985b7dce0a575b77699ce96092044d737d4b66cd183f",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/evidence.json": "db2015fd2810444aa20234404e2296c76bcd9623987a742ff39f7002ebd0d39a",
+    "apps/web/src/components/PlatformDashboard.vue": "7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "scripts/verify-ui-phase2-platform-provider-detail.mjs": "ef70a7f7e5f3a9bf79facc9105ff93087ef9c4b147bb2b975b76b4d701d98712",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "Non-target attention region pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "Original fields, dialog name and initial focus: normal"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: close-focus"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: preview-collapsed"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: preview-expanded"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: technical-focus"
+    },
+    {
+      "width": 390,
+      "name": "Tab and Shift+Tab wrap within modal"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: close-hover"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: close-pressed"
+    },
+    {
+      "width": 390,
+      "name": "Escape closes and restores original trigger"
+    },
+    {
+      "width": 390,
+      "name": "Original fields, dialog name and initial focus: unknown_provider"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: unknown-expanded"
+    },
+    {
+      "width": 390,
+      "name": "Original fields, dialog name and initial focus: long_fields"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: long-top"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: long-bottom"
+    },
+    {
+      "width": 390,
+      "name": "Readable scoped composition: short-screen"
+    },
+    {
+      "width": 390,
+      "name": "Long identifiers wrap; short viewport retains visible close action"
+    },
+    {
+      "width": 390,
+      "name": "No HTTP requests or browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "Non-target attention region pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "Readable scoped composition: table-default"
+    },
+    {
+      "width": 1440,
+      "name": "Readable scoped composition: columns-expanded"
+    },
+    {
+      "width": 1440,
+      "name": "Readable scoped composition: last-column-disabled"
+    },
+    {
+      "width": 1440,
+      "name": "Four source columns; last selected disabled; first visible column frozen"
+    },
+    {
+      "width": 1440,
+      "name": "Readable scoped composition: freeze-focus"
+    },
+    {
+      "width": 1440,
+      "name": "Readable scoped composition: unfrozen"
+    },
+    {
+      "width": 1440,
+      "name": "Readable scoped composition: compact"
+    },
+    {
+      "width": 1440,
+      "name": "Freeze and density are local display changes; no read intents"
+    },
+    {
+      "width": 1440,
+      "name": "No HTTP requests or browser errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-close-focus.png",
+      "width": 390,
+      "name": "close-focus",
+      "selector": "dialog",
+      "sha256": "ef2841b1047e65e3b18a290ee5d2d1c31836e30011e3b82928af7eda0f8e13b9"
+    },
+    {
+      "file": "390-preview-collapsed.png",
+      "width": 390,
+      "name": "preview-collapsed",
+      "selector": "dialog",
+      "sha256": "ef2841b1047e65e3b18a290ee5d2d1c31836e30011e3b82928af7eda0f8e13b9"
+    },
+    {
+      "file": "390-preview-expanded.png",
+      "width": 390,
+      "name": "preview-expanded",
+      "selector": "dialog",
+      "sha256": "3f7fb2425059c371e526756bcc17687d8e76307712ca3c922f29600747cb529e"
+    },
+    {
+      "file": "390-technical-focus.png",
+      "width": 390,
+      "name": "technical-focus",
+      "selector": "dialog",
+      "sha256": "73d82c84b6d770ce7877e2ff73ffd289a87e6bcaf0c2ebd62d42f3a463d8fdcd"
+    },
+    {
+      "file": "390-close-hover.png",
+      "width": 390,
+      "name": "close-hover",
+      "selector": "dialog",
+      "sha256": "7a26116041178ac0e87020e5dd8c14bad74f574ef19c182e53e8cdd20ac30d41"
+    },
+    {
+      "file": "390-close-pressed.png",
+      "width": 390,
+      "name": "close-pressed",
+      "selector": "dialog",
+      "sha256": "30983ce685820ffed303d4ce8f1900cca0fbf5de79af1c0e16640454eb16fd0f"
+    },
+    {
+      "file": "390-unknown-expanded.png",
+      "width": 390,
+      "name": "unknown-expanded",
+      "selector": "dialog",
+      "sha256": "5f593b25828a18a2620f68f482c643ddcabefd07b006e157838edb475fd7df10"
+    },
+    {
+      "file": "390-long-top.png",
+      "width": 390,
+      "name": "long-top",
+      "selector": "dialog",
+      "sha256": "779eb1242790828e54181e4d3e687e97ecda94eb3d62ae9f02cad652c59aca9b"
+    },
+    {
+      "file": "390-long-bottom.png",
+      "width": 390,
+      "name": "long-bottom",
+      "selector": "dialog",
+      "sha256": "f9954cfe069b04555071bfd102423232a914daae2ff68726b10dcbd44d56c6d5"
+    },
+    {
+      "file": "390-short-screen.png",
+      "width": 390,
+      "name": "short-screen",
+      "selector": "dialog",
+      "sha256": "ab72315f5a9f986f382ecf3a720784eee48bf7a8c4604f435a0be622df25d4c9"
+    },
+    {
+      "file": "1440-table-default.png",
+      "width": 1440,
+      "name": "table-default",
+      "selector": "#providers",
+      "sha256": "95e4ba7cca61ea03fbf598b609f29d12ef8ddfd7ee52b78a0198b6d7a369e1c3"
+    },
+    {
+      "file": "1440-columns-expanded.png",
+      "width": 1440,
+      "name": "columns-expanded",
+      "selector": "#providers",
+      "sha256": "0047df9ad0510794665afa2e01762566413819d221f98766b71c377bbdacee52"
+    },
+    {
+      "file": "1440-last-column-disabled.png",
+      "width": 1440,
+      "name": "last-column-disabled",
+      "selector": "#providers",
+      "sha256": "08197ef6d3fe3bce790767375597ce0d81095ad7006840e12d8f72c746ef59fe"
+    },
+    {
+      "file": "1440-freeze-focus.png",
+      "width": 1440,
+      "name": "freeze-focus",
+      "selector": "#providers",
+      "sha256": "d7e2267cba449d7733d6a653dacdf51f4d1e3b4ce9d29fcefc5b4ed53179d42c"
+    },
+    {
+      "file": "1440-unfrozen.png",
+      "width": 1440,
+      "name": "unfrozen",
+      "selector": "#providers",
+      "sha256": "7cc4ffb66e3d989b148bb1478a06155553fda6f3ba7bb12982add7779ab1a2d8"
+    },
+    {
+      "file": "1440-compact.png",
+      "width": 1440,
+      "name": "compact",
+      "selector": "#providers",
+      "sha256": "b57ea8d4f5059f61aaa58c0ccb445c854c42d6402bbddb174a71107bd1c3d38c"
+    }
+  ],
+  "retainedOriginalImages": 91,
+  "acceptanceComplete": false,
+  "userApproved": false,
+  "limitations": [
+    "Offline proposal, not mounted Vue",
+    "No backend, permissions, production or native zoom verification",
+    "Original unknown-status/raw-code proposal retained, not new runtime behavior"
+  ],
+  "browserClosed": true
+}

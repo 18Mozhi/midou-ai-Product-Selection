@@ -15,15 +15,15 @@
   },
   "retained": {
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c": {
-      "manifest": "463865b09f19685088f4909876ab433a2cea9353f253ef6b341e4c54c808cdfa",
+      "manifest": "e4dce1846ef3aa7c7451374f59e2637e73217dffee6e21b26f8b54ba1da7f607",
       "pngCount": 94
     },
     "output/playwright/p35-controls-review": {
-      "manifest": "1d182db0b7960cf1b5c841412987838a49ab308af90e2cd47dde1fd1a624b10c",
+      "manifest": "a99151114cfe641591a6a6c18f2a49fa8540bd5082f81fc4986de60bba961f5d",
       "pngCount": 192
     },
     "output/playwright/p35-export-detail-vue": {
-      "manifest": "1a84bd08347f63f23073f0ae31103091365f58e616670e95a8cbc577eb20188a",
+      "manifest": "339c7d0825e1b56699d21ad51d5f8f1576a48f5b5351c8daf8bf594db2a2035e",
       "pngCount": 24
     }
   },

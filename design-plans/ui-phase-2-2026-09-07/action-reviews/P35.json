@@ -6,7 +6,7 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
     "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478"
   },
   "actions": [
@@ -17,11 +17,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
       ],
-      "sourceContractKeys": ["OG-REFRESH"],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "loading或refreshing禁用",
       "handler": "load({background:true})并行读取summary和data；只在已有data与summary时走后台保留分支",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -51,11 +55,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
       ],
-      "sourceContractKeys": ["OG-RETRY"],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "error/blocked/expired/forbidden/rate_limited/conflict父错误分支",
       "handler": "load()重新读取summary和data；当前GET客户端重试策略不由图稿决定",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -86,11 +94,15 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
       ],
-      "sourceContractKeys": ["OG-RETRY"],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "view===approvals且首次500/429",
       "handler": "P35不挂载这两个失败组件转发，不把P34已批准白区移到P35",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -122,11 +134,16 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
       ],
-      "sourceContractKeys": ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
+      "sourceContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "仅summary分支",
       "handler": "不计资料保存或Logo有效性事件",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -156,11 +173,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
       ],
-      "sourceContractKeys": ["P30全部成员事件父转发，复用M语义"],
+      "sourceContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "仅members分支",
       "handler": "无成员邀请/变更",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -190,11 +211,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
       ],
-      "sourceContractKeys": ["P31资源授权父转发，复用已有合同"],
+      "sourceContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "仅roles分支",
       "handler": "无资源授权写入",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -236,7 +261,9 @@
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "父共享原因窗挂载，但P35无发起入口",
       "handler": "不推断跨页已打开窗口的生命周期；不算本页业务弹窗",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -266,11 +293,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationDataPanel.vue#cd1df6927d5a68fd.1"
       ],
-      "sourceContractKeys": ["OG-D-REPORT"],
+      "sourceContractKeys": [
+        "OG-D-REPORT"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "固定RouterLink",
       "handler": "/reports导航，不生成文件或携带下载地址",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -301,11 +332,15 @@
         "apps/web/src/components/OrganizationDataPanel.vue#874d2aeb7a9f46f2.1",
         "apps/web/src/components/OrganizationDataPanel.vue#26b1ac38e04c362f.1"
       ],
-      "sourceContractKeys": ["OG-D-VIEW"],
+      "sourceContractKeys": [
+        "OG-D-VIEW"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "两按钮无busy禁用",
       "handler": "view本地更新并写原URL键，保留各自筛选，不切会话工作区",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -335,11 +370,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationDataPanel.vue#3638b3e1e1d8cad7.1"
       ],
-      "sourceContractKeys": ["OG-D-W-FILTER重置"],
+      "sourceContractKeys": [
+        "OG-D-W-FILTER重置"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "工作区视图",
       "handler": "resetWorkspaces只清本视图名称/状态/排序，watch回第一页",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -370,11 +409,15 @@
         "apps/web/src/components/OrganizationDataPanel.vue#a3740ac6cf7e5072.1",
         "apps/web/src/components/OrganizationDataPanel.vue#595d56ce2159fb14.1"
       ],
-      "sourceContractKeys": ["OG-D-W-PAGE"],
+      "sourceContractKeys": [
+        "OG-D-W-PAGE"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "有匹配项；首尾边界禁用",
       "handler": "本地8条一页，workspacePage更新原URL，无服务端分页请求",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -404,11 +447,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationDataPanel.vue#000799abd17373dd.1"
       ],
-      "sourceContractKeys": ["OG-D-E-FILTER重置"],
+      "sourceContractKeys": [
+        "OG-D-E-FILTER重置"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "导出视图",
       "handler": "resetExports清本视图五条件，保留工作区比较筛选",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -439,11 +486,15 @@
         "apps/web/src/components/OrganizationDataPanel.vue#ad756c5bd12f75ea.1",
         "apps/web/src/components/OrganizationDataPanel.vue#17620112cb625463.1"
       ],
-      "sourceContractKeys": ["OG-D-E-PAGE"],
+      "sourceContractKeys": [
+        "OG-D-E-PAGE"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "有匹配项；首尾边界禁用",
       "handler": "本地10条一页，不扩大后端最近100条读取范围",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -473,11 +524,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationDataPanel.vue#1c008f867673db60.1"
       ],
-      "sourceContractKeys": ["OG-TECH"],
+      "sourceContractKeys": [
+        "OG-TECH"
+      ],
       "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
       "condition": "每条可见导出内原生details",
       "handler": "summary展开记录ID，不请求API、不复制、不下载，不把渲染行数计为新动作",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-data-direction-c",
@@ -540,31 +595,40 @@
   "externalEvidence": {
     "controls": {
       "file": "output/playwright/p35-controls-review/evidence.json",
-      "sha256": "1d182db0b7960cf1b5c841412987838a49ab308af90e2cd47dde1fd1a624b10c"
+      "sha256": "a99151114cfe641591a6a6c18f2a49fa8540bd5082f81fc4986de60bba961f5d"
     },
     "fields": {
       "file": "output/playwright/p35-fields-review/evidence.json",
-      "sha256": "8d047a6f7f02bc2fcc67671465c5376b4219f18e199cefd578e12106bd791fc6"
+      "sha256": "48faee5d7261fcd7f280580ad3a187e3c03f2566659a706af38b04585816474e"
     },
     "implementation": {
       "file": "output/playwright/p35-export-detail-vue/evidence.json",
-      "sha256": "1a84bd08347f63f23073f0ae31103091365f58e616670e95a8cbc577eb20188a"
+      "sha256": "339c7d0825e1b56699d21ad51d5f8f1576a48f5b5351c8daf8bf594db2a2035e"
     },
     "parent": {
       "file": "output/playwright/p35-parent-read-states/evidence.json",
-      "sha256": "87b5f77e04949323dab8e3fdd57a1f326b66753f0baa681b34e62c62e8733456"
+      "sha256": "45fc289df73ae49c0952b9200b159812b76dbd182409965c44c0c4df6085c887"
     },
     "parentDesign": {
       "file": "output/playwright/p35-parent-c-review/evidence.json",
-      "sha256": "a9ba1b44a4f89f9fdd85089c99b90e3d575b195573357ecdeaa15df876242b21"
+      "sha256": "886461923b7d9cb1da90f0b7d9bce4a323b7fddd1182f8b8a54d6d74730c0d98"
     }
   },
   "externalControlBindings": [
     {
       "id": "refresh",
       "selector": "#refresh",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "busy"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
       "proposalOnly": false,
       "actionId": "OG-REFRESH",
       "sourceCandidateIds": [
@@ -627,8 +691,13 @@
     {
       "id": "refresh-loading",
       "selector": "#refresh",
-      "widths": [1440, 390],
-      "states": ["disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "disabled"
+      ],
       "proposalOnly": false,
       "actionId": "OG-REFRESH",
       "sourceCandidateIds": [
@@ -651,8 +720,16 @@
     {
       "id": "retry-error",
       "selector": "#retry",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-RETRY",
       "sourceCandidateIds": [
@@ -705,8 +782,16 @@
     {
       "id": "retry-forbidden",
       "selector": "#retry",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-RETRY",
       "sourceCandidateIds": [
@@ -759,8 +844,16 @@
     {
       "id": "retry-expired",
       "selector": "#retry",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-RETRY",
       "sourceCandidateIds": [
@@ -813,8 +906,16 @@
     {
       "id": "retry-rate_limited",
       "selector": "#retry",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-RETRY",
       "sourceCandidateIds": [
@@ -867,8 +968,16 @@
     {
       "id": "view-workspaces-available",
       "selector": "[data-view=\"workspaces\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-VIEW",
       "sourceCandidateIds": [
@@ -921,8 +1030,16 @@
     {
       "id": "view-workspaces-selected",
       "selector": "[data-view=\"workspaces\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-VIEW",
       "sourceCandidateIds": [
@@ -975,8 +1092,16 @@
     {
       "id": "view-exports-available",
       "selector": "[data-view=\"exports\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-VIEW",
       "sourceCandidateIds": [
@@ -1029,8 +1154,16 @@
     {
       "id": "view-exports-selected",
       "selector": "[data-view=\"exports\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-VIEW",
       "sourceCandidateIds": [
@@ -1083,8 +1216,16 @@
     {
       "id": "workspace-reset",
       "selector": "#reset",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-W-FILTER",
       "sourceCandidateIds": [
@@ -1137,8 +1278,16 @@
     {
       "id": "workspace-clear-empty",
       "selector": "#clear-filter",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "actionId": null,
       "sourceCandidateIds": [],
@@ -1189,8 +1338,17 @@
     {
       "id": "workspace-previous",
       "selector": "[data-page=\"-1\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-W-PAGE",
       "sourceCandidateIds": [
@@ -1253,8 +1411,17 @@
     {
       "id": "workspace-next",
       "selector": "[data-page=\"1\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-W-PAGE",
       "sourceCandidateIds": [
@@ -1317,8 +1484,15 @@
     {
       "id": "workspace-filters-closed",
       "selector": "#filters-toggle",
-      "widths": [390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "actionId": null,
       "sourceCandidateIds": [],
@@ -1349,8 +1523,15 @@
     {
       "id": "workspace-filters-open",
       "selector": "#filters-toggle",
-      "widths": [390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "actionId": null,
       "sourceCandidateIds": [],
@@ -1381,8 +1562,16 @@
     {
       "id": "export-reset",
       "selector": "#reset",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-E-FILTER",
       "sourceCandidateIds": [
@@ -1435,8 +1624,16 @@
     {
       "id": "export-clear-empty",
       "selector": "#clear-filter",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "actionId": null,
       "sourceCandidateIds": [],
@@ -1487,8 +1684,17 @@
     {
       "id": "export-previous",
       "selector": "[data-page=\"-1\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-E-PAGE",
       "sourceCandidateIds": [
@@ -1551,8 +1757,17 @@
     {
       "id": "export-next",
       "selector": "[data-page=\"1\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-E-PAGE",
       "sourceCandidateIds": [
@@ -1615,8 +1830,15 @@
     {
       "id": "export-filters-closed",
       "selector": "#filters-toggle",
-      "widths": [390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "actionId": null,
       "sourceCandidateIds": [],
@@ -1647,8 +1869,15 @@
     {
       "id": "export-filters-open",
       "selector": "#filters-toggle",
-      "widths": [390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "actionId": null,
       "sourceCandidateIds": [],
@@ -1679,8 +1908,16 @@
     {
       "id": "technical-closed",
       "selector": ".technical summary",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-TECH",
       "sourceCandidateIds": [
@@ -1733,8 +1970,16 @@
     {
       "id": "technical-open",
       "selector": ".technical summary",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-TECH",
       "sourceCandidateIds": [
@@ -1787,8 +2032,16 @@
     {
       "id": "reports",
       "selector": "#reports",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "actionId": "OG-D-REPORT",
       "sourceCandidateIds": [
@@ -2067,7 +2320,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
       "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478"
     },
     "inputs": [
@@ -2925,7 +3178,9 @@
       "子组件details、section、列表不是原生dialog或抽屉；父真实异常、路由归属和生命周期另验。"
     ]
   },
-  "approvalRecords": ["P35-MOBILE-EXPORT-DETAIL-APPROVAL.md"],
+  "approvalRecords": [
+    "P35-MOBILE-EXPORT-DETAIL-APPROVAL.md"
+  ],
   "compositionGaps": [
     "独立控件/字段图通过额外精确验证关联；未改旧清单格式或冒充统一六态图包，因此通用六态槽继续not-mapped。",
     "父级七类故障/刷新/鉴权替换已有实际App矩阵及独立276张C设计图；新区域待审、实际实施未完成，不能用P34区域批准代替。",

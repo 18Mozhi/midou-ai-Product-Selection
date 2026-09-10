@@ -1,0 +1,5182 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P36",
+  "route": "/org-admin/tokens",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d"
+  },
+  "actions": [
+    {
+      "actionId": "OG-REFRESH",
+      "label": "刷新令牌数据",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+      ],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "loading或refreshing禁用",
+      "handler": "load({background:true})读取summary和tokens；真实GET会处理到期状态，不是数据库纯读",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-RETRY",
+      "label": "重新读取",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "父error/blocked/expired/forbidden/rate_limited/conflict分支",
+      "handler": "load()重读，保留原重试策略；不套用P34专有白区",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-P34-RETRY",
+      "label": "审批专有转发排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "仅approvals首次500/429",
+      "handler": "P36不挂载这两个专有失败组件",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-P29-PROFILE",
+      "label": "资料表单排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "仅summary",
+      "handler": "保存资料/Logo检查不属本页",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-P30-MEMBERS",
+      "label": "成员转发排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
+      ],
+      "sourceContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "仅members",
+      "handler": "不计成员邀请、角色或成员变更",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-P31-ROLES",
+      "label": "资源授权转发排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
+      ],
+      "sourceContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "仅roles",
+      "handler": "不计资源授权创建/延期/撤销",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-GENERIC-REASON",
+      "label": "他页原因入口排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "非tokenAction路径",
+      "handler": "令牌调用独立ask入口，不复用通用初始原因action值",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "W-K-REASON",
+      "label": "原因窗父转发",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON提交/取消父转发",
+        "D-OG-REASON组件调用"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "共享窗口挂载",
+      "handler": "submit/cancel解析等待的原因请求，取消不发令牌POST",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "reason_rotate"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+      "forwardsTo": [
+        "OG-K-ROTATE",
+        "OG-K-REVOKE"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
+          "event": "@submit",
+          "handler": "submitAuditedReason",
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
+          "event": "@cancel",
+          "handler": "cancelAuditedReason",
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
+          "event": "@submit",
+          "handler": "submitAuditedReason",
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
+          "event": "@cancel",
+          "handler": "cancelAuditedReason",
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "W-K-ASK",
+      "label": "轮换/撤销原因调用",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON令牌轮换/撤销调用"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "tokenAction调用",
+      "handler": "initialValue空，未覆写minimumLength；分别标题/描述后复用原POST",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "reason_revoke"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+      "forwardsTo": [
+        "OG-K-ROTATE",
+        "OG-K-REVOKE"
+      ],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "OG-K-COPY",
+      "label": "复制明文",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-COPY"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "secret非空",
+      "handler": "copySecret调用浏览器剪贴板；旧Promise反馈归属问题OG-G05仍待，不从提案推断已修复",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "copy_success"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-DISMISS",
+      "label": "关闭本次明文",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-DISMISS"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "secret非空",
+      "handler": "dismissSecret→dismissTokenSecret增加generation并清secret，不是服务器撤销",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "secret_dismissed"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-CREATE",
+      "label": "创建组织令牌",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ed5969fa99d64044.1",
+        "apps/web/src/components/OrganizationTokenPanel.vue#073eb5c8ded40aa0.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-CREATE"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "原生required/范围及scope自校验；submit由busy禁用",
+      "handler": "submitCreate调用createToken精确name/scopes/ttl_days/reason；失败留草稿，成功重置90和空scope",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "create_draft"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-SCOPE",
+      "label": "选择读取范围",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-SCOPE四种"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "四固定复选框，等待时仍可编辑",
+      "handler": "toggleScope只编辑草稿scope数组，不直接发授权请求",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "create_all_scopes"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-TTL",
+      "label": "有效期快捷选择",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-TTL四快捷"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "30/90/180/365与aria-pressed",
+      "handler": "只赋createForm.ttl_days，等待仍可编辑",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "create"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-FILTER",
+      "label": "重置筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-FILTER重置"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "本地四条件，等待可用",
+      "handler": "resetFilters清四条件；条件变化watch才回第一页，默认条件不强制翻页",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "search"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-TECH",
+      "label": "技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "OG-TECH"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "可见记录的原生details",
+      "handler": "展示记录ID/版本/时间，不请求、复制或打开业务弹窗",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-ROTATE",
+      "label": "轮换密钥",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-ROTATE"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "active且非busy",
+      "handler": "performTokenAction(item,'rotate')→tokenAction；原因确认后POST action/expected_version/reason",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "reason_rotate"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-REVOKE",
+      "label": "撤销访问",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-REVOKE"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "active且非busy",
+      "handler": "performTokenAction(item,'revoke')→tokenAction；取消返回false，不发POST",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "reason_revoke"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "OG-K-PAGE",
+      "label": "前后分页",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1",
+        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-PAGE"
+      ],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "首尾按钮禁用",
+      "handler": "本地6条一页，更新原URL，不新增服务端分页",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "page_two"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "内联创建表单，不是创建弹窗；原共享原因窗用于轮换/撤销两种上下文。共享控件单列，不按两次消费翻倍计全站源。"
+  },
+  "inputs": {
+    "OrganizationAdminCenter.vue": [
+      "form.name",
+      "form.logo_url",
+      "form.timezone",
+      "form.data_retention_days",
+      "form.default_workspace_id",
+      "form.reason"
+    ],
+    "OrganizationTokenPanel.vue": [
+      "createForm.name",
+      "createForm.ttl_days",
+      "createForm.reason",
+      "tokenQuery",
+      "statusFilter",
+      "scopeFilter",
+      "tokenSort"
+    ]
+  },
+  "propBindings": [
+    {
+      "component": "OrganizationTokenPanel",
+      "condition": "view === 'tokens'",
+      "props": {
+        "tokens": "Array.isArray(data) ? data : []",
+        "secret": "secret",
+        "busy": "busy || refreshing",
+        "format-time": "fmt",
+        "create-token": "createOrganizationToken",
+        "perform-token-action": "tokenAction",
+        "dismiss-secret": "dismissTokenSecret"
+      },
+      "events": []
+    }
+  ],
+  "functionProps": [
+    {
+      "prop": "createToken",
+      "parentHandler": "createOrganizationToken",
+      "actions": [
+        "OG-K-CREATE"
+      ],
+      "effect": "清旧secret后POST /org/admin/tokens，原value和preserveForm:true"
+    },
+    {
+      "prop": "performTokenAction",
+      "parentHandler": "tokenAction",
+      "actions": [
+        "OG-K-ROTATE",
+        "OG-K-REVOKE"
+      ],
+      "effect": "空初始原因，确认后POST /org/admin/tokens/:id/actions含action/expected_version/reason"
+    },
+    {
+      "prop": "dismissSecret",
+      "parentHandler": "dismissTokenSecret",
+      "actions": [
+        "OG-K-DISMISS"
+      ],
+      "effect": "generation加一并清明文，不请求服务器"
+    }
+  ],
+  "externalEvidence": {
+    "controls": {
+      "file": "output/playwright/p36-controls-review/evidence.json",
+      "sha256": "23d5b2d58c30aa003e041095dc4c9121f5f4be70bcf834bcc3ddca16bd283013"
+    },
+    "fields": {
+      "file": "output/playwright/p36-fields-review/evidence.json",
+      "sha256": "225b2f026f59f0c73a036752efd24e64c0ba6e4ec52a4403804d739f6a1f11ee"
+    },
+    "implementation": {
+      "file": "output/playwright/p36-mobile-filters-vue/evidence.json",
+      "sha256": "a37be7abf6ba29a38d88270558d30c1322aeeade03846ce873f597c196417baa"
+    }
+  },
+  "externalControlBindings": [
+    {
+      "id": "catalog-nav",
+      "selector": "[data-anchor=\"catalog-title\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": true,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": null,
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-default-1440.png",
+          "width": 1440,
+          "sha256": "d5c6b93d0e7b565a35e3c33c6b59a1da77dba0f0c8c88757f05585edcd2c1e6e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-hover-1440.png",
+          "width": 1440,
+          "sha256": "b0f935367f38a54d529f696997d625b973624f2b6ee952e9e62e1ff8bf62e0dd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-focus-1440.png",
+          "width": 1440,
+          "sha256": "ddeb75c34147a77cfa888a057beee44c378fbf214e05c92e5fe9c4a59253ed48"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-pressed-1440.png",
+          "width": 1440,
+          "sha256": "b0f935367f38a54d529f696997d625b973624f2b6ee952e9e62e1ff8bf62e0dd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-default-390.png",
+          "width": 390,
+          "sha256": "e23309f0a487bda3e6ef3bb51bcc21b6e4f2deeabf03de04519ac846ebdd3e47"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-hover-390.png",
+          "width": 390,
+          "sha256": "f21922d5a4f76cdfe7d4ff133e97193b60a81e72c9d107ca09850c7e79ce02f9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-focus-390.png",
+          "width": 390,
+          "sha256": "54719ebbdf4552c1c84c83096a2e379471fa6ed0d2777d5d1f8d1543ca3602eb"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/catalog-nav-pressed-390.png",
+          "width": 390,
+          "sha256": "f21922d5a4f76cdfe7d4ff133e97193b60a81e72c9d107ca09850c7e79ce02f9"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "create-nav",
+      "selector": "[data-anchor=\"create-name\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": true,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": null,
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-default-1440.png",
+          "width": 1440,
+          "sha256": "351d3675cc7fb8c0c899faed423e70d48ffd38025eb0df708bb55ba88a5a6ba7"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-hover-1440.png",
+          "width": 1440,
+          "sha256": "58092882b86e056e31311d7ca0a56c3e3c4ada138ea8cced74719d12bf8651dd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-focus-1440.png",
+          "width": 1440,
+          "sha256": "e0a0bfb2e84220f09d4aff2b5a2a5dfa7b0c3e5143d160df4378b572f873af30"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-pressed-1440.png",
+          "width": 1440,
+          "sha256": "58092882b86e056e31311d7ca0a56c3e3c4ada138ea8cced74719d12bf8651dd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-default-390.png",
+          "width": 390,
+          "sha256": "d80dea645eee88dbd733f3f9d04488d3fc24c6adcdcf4717ba587c5fb993c8dd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-hover-390.png",
+          "width": 390,
+          "sha256": "a9bbbc825b2a04ac0526842d9efc74fbedbdfef791881db05be08833b852802b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-focus-390.png",
+          "width": 390,
+          "sha256": "8030602f65aa29a0210c2380f4f79ae6460da1f9b4ea5e3de31d60bc54ffd3c9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-nav-pressed-390.png",
+          "width": 390,
+          "sha256": "a9bbbc825b2a04ac0526842d9efc74fbedbdfef791881db05be08833b852802b"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "refresh",
+      "selector": "#refresh",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": true,
+      "actionId": "OG-REFRESH",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/refresh-default-1440.png",
+          "width": 1440,
+          "sha256": "19f725c5f9940474981a08eaeeb82b3b1cd7aca0b6c388e70ddf1fde83652657"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-hover-1440.png",
+          "width": 1440,
+          "sha256": "982e118d12e0b0fdcdd0611762e70b02c3a1afc700a969d235810a675677dc2a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-focus-1440.png",
+          "width": 1440,
+          "sha256": "9c29ecd66be58724a9387d84595b12120ae2853c2ef39229ba3acc161ef07b88"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-pressed-1440.png",
+          "width": 1440,
+          "sha256": "01ad7e94bd782496efbb5b4ee80e79eab9dc89790028aa359e7f94c5d82091c2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-busy-1440.png",
+          "width": 1440,
+          "sha256": "f01d58289e8b8391cfea77e46ef1170e5cdd369fdff086bdead6f1d34ebbc513"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-default-390.png",
+          "width": 390,
+          "sha256": "68ca54b87675d6282c9e074fdbbf48eb039d745f2acdd0122457e0e29cbf6183"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-hover-390.png",
+          "width": 390,
+          "sha256": "ef597f485321784976babd09cf9978bebe0dd7f452d702975168295ae9accdf6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-focus-390.png",
+          "width": 390,
+          "sha256": "bb1ec6d6ec5bbf3bf0ab1d58fed0b7f617d661c17affc09a3217d44946566dcc"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-pressed-390.png",
+          "width": 390,
+          "sha256": "2feb130ee1c8734de389097998ac561f3fb65d69f9d213652d35024d502fb194"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/refresh-busy-390.png",
+          "width": 390,
+          "sha256": "83ad5cb8de9962dd841ad69db90899ebee9a349cf6abfdfd022f3355c3b63c8d"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "retry",
+      "selector": "#retry",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": true,
+      "actionId": "OG-RETRY",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/retry-default-1440.png",
+          "width": 1440,
+          "sha256": "d37aa10fd70ed284cbaf9c46d9cf9699af254ac920e1a287f8a4e1b714d1b0c9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-hover-1440.png",
+          "width": 1440,
+          "sha256": "a64da456c35df1e6c1694d61b3f754bf4813d5e2c0e9867669324b03e8aa6644"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-focus-1440.png",
+          "width": 1440,
+          "sha256": "4a89796e0aa98ebc1e9f79137137d11890d94e87814b77e8bebae35b94375c53"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-pressed-1440.png",
+          "width": 1440,
+          "sha256": "b2b6fe2b93c0271efad0480ef20ef65490a98b1229e4c3115ff4114720a8909c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-default-390.png",
+          "width": 390,
+          "sha256": "725e929d76e7d7fedfaea47a2b3102f0afe8680ad1d738a8401817e5af9f0b0b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-hover-390.png",
+          "width": 390,
+          "sha256": "7d1fb76d5eea48f26660b1bce15fcff979d82200b3fdb452c3b7d4833dc2672e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-focus-390.png",
+          "width": 390,
+          "sha256": "bd7fae539fc688f13d881644c19c6c7d39c060e1c2f51bd0e9e89973d4661e13"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/retry-pressed-390.png",
+          "width": 390,
+          "sha256": "11a94570d3c6ea6684d3b21e851d06cbd43ad645c1561bd721dd857a4bf83b12"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "create-jump",
+      "selector": "#new-token",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": true,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": null,
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-default-1440.png",
+          "width": 1440,
+          "sha256": "73b20458115dd01502e0c4fe48b4c6d67fdeff7198ab8356f545bd4d8d0a5608"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-hover-1440.png",
+          "width": 1440,
+          "sha256": "1e0afdd8fab2b9496550a063681ad3937dd2a7975d5c54e16b715792ada8ccc7"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-focus-1440.png",
+          "width": 1440,
+          "sha256": "2aaa7609f6716856bd0cdc18226263784cb5ffbc51f8df601db83d9152fb727d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-pressed-1440.png",
+          "width": 1440,
+          "sha256": "d1bc7ae0ce2d1d57a65b72adcc166c6f815aef915a10b1881f08d19b66277f65"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-default-390.png",
+          "width": 390,
+          "sha256": "31eeed473fc542dbc5c27f97207bb1f66ce748afc1e05829b96474ae2578587a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-hover-390.png",
+          "width": 390,
+          "sha256": "76daba2d9f118df88e1c75fe21258720d158344cd441fba28e0048b4dcbb9bf9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-focus-390.png",
+          "width": 390,
+          "sha256": "7cf6a18b07e6d33540768eb00c5d952c2a94a14870c1a1f567d23b308527e7e0"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-jump-pressed-390.png",
+          "width": 390,
+          "sha256": "62281762eea2a0b6e02228322cf0a75679041b96c6e2882ed92daebf14c3941b"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "reset",
+      "selector": "#reset",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-FILTER",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/reset-default-1440.png",
+          "width": 1440,
+          "sha256": "fb1ef50cf4b26196182de03a54cba5b2dc0cea2cbea949c96f2f4617732469f2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-hover-1440.png",
+          "width": 1440,
+          "sha256": "5fd11992371f37032ac5713e3fb14d35f9fe6cdfa6319a1ed2c925c49275068a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-focus-1440.png",
+          "width": 1440,
+          "sha256": "b6466412bc4f27ed636e34d3644b52d5f74e45183fac5fe025109a36bc653de5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-pressed-1440.png",
+          "width": 1440,
+          "sha256": "ad88865da9a883fe8ca5b9d278f75a1575f92c8d11dfbb660edaa647442c27d9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-default-390.png",
+          "width": 390,
+          "sha256": "5ffcc977781d91d9103d1dc48ff5b435859ee5bc770b76f3982d828e61447fd7"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-hover-390.png",
+          "width": 390,
+          "sha256": "ec3a9f15e51bc2a11bca6894b00662772f37cb75be32f871f80d9744427c310d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-focus-390.png",
+          "width": 390,
+          "sha256": "65375a95f41f697538c29868ad6eba95ee971a79d51e963f3ddb9dbc7368ff40"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/reset-pressed-390.png",
+          "width": 390,
+          "sha256": "87b249a4afa5c20d4b8b38bebb14fc57b850717a7c70fc00078b62dfe6471c06"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "clear",
+      "selector": "#clear-filter",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": true,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": null,
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/clear-default-1440.png",
+          "width": 1440,
+          "sha256": "a7bfb12d2b297372444ae13efb342d15d4b803e4ee279ec59ae111c9d58ac8d9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-hover-1440.png",
+          "width": 1440,
+          "sha256": "6d75bff673eb1013fef50bc59ee7bce2c1a6d3fb9bb475e6dfdcd9bccdbccf96"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-focus-1440.png",
+          "width": 1440,
+          "sha256": "4ef54c2911d9c2a616b217a3074bb5d71d8569342fde9b901d7fa909e74ec4f3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-pressed-1440.png",
+          "width": 1440,
+          "sha256": "c685007fa5bfc1b6155dc79d3ba7292e8269a87beea9213412fafbebe61959fe"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-default-390.png",
+          "width": 390,
+          "sha256": "a7bfb12d2b297372444ae13efb342d15d4b803e4ee279ec59ae111c9d58ac8d9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-hover-390.png",
+          "width": 390,
+          "sha256": "6d75bff673eb1013fef50bc59ee7bce2c1a6d3fb9bb475e6dfdcd9bccdbccf96"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-focus-390.png",
+          "width": 390,
+          "sha256": "4ef54c2911d9c2a616b217a3074bb5d71d8569342fde9b901d7fa909e74ec4f3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/clear-pressed-390.png",
+          "width": 390,
+          "sha256": "c685007fa5bfc1b6155dc79d3ba7292e8269a87beea9213412fafbebe61959fe"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "technical-closed",
+      "selector": ".technical summary",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-TECH",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-default-1440.png",
+          "width": 1440,
+          "sha256": "650aa502c0b9f8fd4d2fba94ae473c798eb205aa39bf26148ed83c33c606931e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-hover-1440.png",
+          "width": 1440,
+          "sha256": "bd3248888503c1ca1fea00d8d54d8c0ae3e0f662361db0fc32702415c55cfead"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-focus-1440.png",
+          "width": 1440,
+          "sha256": "e516a6440764f3b8d17be462d29fedf492069088f5df4ad2b1056052577ac1f5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-pressed-1440.png",
+          "width": 1440,
+          "sha256": "f15bd7a9972654b5576a160860d6e46b1597c1af82a9f99df8057eac7cb11c5a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-default-390.png",
+          "width": 390,
+          "sha256": "2cc7a321d43e24ca58521ae85b556316791512df417a210f33a2217fce84bfaa"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-hover-390.png",
+          "width": 390,
+          "sha256": "3f0375183eb3ac70112a9fcf60239e98a388fd88c0972652eb0868701be296d8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-focus-390.png",
+          "width": 390,
+          "sha256": "4caa77b873611d06b1df714f73d5e1926f3609f7c906e3783298e3a61a5b16ef"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-closed-pressed-390.png",
+          "width": 390,
+          "sha256": "e951044c7f3efaec7156a96e2b80497e5f253106ed796bb6a97a3d6ae60cfe2c"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "technical-open",
+      "selector": ".technical summary",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-TECH",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-default-1440.png",
+          "width": 1440,
+          "sha256": "f435d2afe784e4d51c34d419d436abb0365e6e7ee7765f48ef6d416c811c2f65"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-hover-1440.png",
+          "width": 1440,
+          "sha256": "385f8a9a2e325c2eb493d25dd9e24f0931cdf8a9e040825c4e67a3ce9573e736"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-focus-1440.png",
+          "width": 1440,
+          "sha256": "cd99b7c4a2915fae7f7771ff150efa2c3cfab2b0e5fd66305184443913f4539a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-pressed-1440.png",
+          "width": 1440,
+          "sha256": "d7d4ec127ea0ecffff8a240192260711fa8ba080b0970b53b2ed0b889feaea79"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-default-390.png",
+          "width": 390,
+          "sha256": "ba75ee020358f8ef45bccd7b0a99ce9f4edfdfd2ad8157f94f167bc6225ea82a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-hover-390.png",
+          "width": 390,
+          "sha256": "634793496def1737180aae56f3fb4600f1c09a2549fcc9b254c7573fe739ec9b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-focus-390.png",
+          "width": 390,
+          "sha256": "6f142010b4fa0b7633df798594ac84daa80a39a0bf0ea35376597878c9ee70db"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/technical-open-pressed-390.png",
+          "width": 390,
+          "sha256": "4a7b620bf8b427e1a458104d492bd1b5b752cc4f6e384dbf0164b0d60a72e5d3"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "previous",
+      "selector": "[data-page=\"-1\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-PAGE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/previous-default-1440.png",
+          "width": 1440,
+          "sha256": "b76d23a9a7ad9ac8b925338a7be18c2cab7cedf0e9cdaf4f1d8185c2e2e66657"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-hover-1440.png",
+          "width": 1440,
+          "sha256": "3e7ddf63379dc28a4f6ebb84834c32c5a08ea61c0402c71ff18909aac48f685f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-focus-1440.png",
+          "width": 1440,
+          "sha256": "1d9cc115edd19859939d62ceaf3b463d754ebca4dddba76abe2feb4c9bca64e4"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-pressed-1440.png",
+          "width": 1440,
+          "sha256": "a4af3292c08e1867f933dc2753a631be36bdb791893e954b2581b206b7f63ed0"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-default-390.png",
+          "width": 390,
+          "sha256": "be8a18580d21fcc97f9278d244eb24f30a6331f8d3f535911d3d5d09486124d8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-hover-390.png",
+          "width": 390,
+          "sha256": "f82f225dd5d82e4baf1cd8e9999e69261342bf518d9e55956e89c4fc2a6dc267"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-focus-390.png",
+          "width": 390,
+          "sha256": "fc69d6c64746f42e7c293e78197b89b90e9fed95914850236b8286a611288ce5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-pressed-390.png",
+          "width": 390,
+          "sha256": "4a2dda04b566600166d4ae9345d11a76710dc5baebec9f7146e57de684d1c2d5"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "previous-disabled",
+      "selector": "[data-page=\"-1\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "disabled"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-PAGE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/previous-disabled-disabled-1440.png",
+          "width": 1440,
+          "sha256": "9e00a29129f7c5ab77e1458b3682a61ddba48e1cd2a96b64333fa1e96ce2b000"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/previous-disabled-disabled-390.png",
+          "width": 390,
+          "sha256": "9e00a29129f7c5ab77e1458b3682a61ddba48e1cd2a96b64333fa1e96ce2b000"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "next",
+      "selector": "[data-page=\"1\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-PAGE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/next-default-1440.png",
+          "width": 1440,
+          "sha256": "c5190622722a58242a74c57892e8bcae18541e2a0d399a38aae1780946603eb3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-hover-1440.png",
+          "width": 1440,
+          "sha256": "b13df1a47fe1b580f19b370aee8b09f0fd57702fd83533cc78f2e596284b7b87"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-focus-1440.png",
+          "width": 1440,
+          "sha256": "24b0d9089cfcc4a38eb782cfce8cf04b2664cdd905c3c6091d80dbf01df46c5b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-pressed-1440.png",
+          "width": 1440,
+          "sha256": "0b216713f1ee5dccb222b47634119b9aa49b22dae56eef28bb3bf432477ea6c8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-default-390.png",
+          "width": 390,
+          "sha256": "c5190622722a58242a74c57892e8bcae18541e2a0d399a38aae1780946603eb3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-hover-390.png",
+          "width": 390,
+          "sha256": "b13df1a47fe1b580f19b370aee8b09f0fd57702fd83533cc78f2e596284b7b87"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-focus-390.png",
+          "width": 390,
+          "sha256": "24b0d9089cfcc4a38eb782cfce8cf04b2664cdd905c3c6091d80dbf01df46c5b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-pressed-390.png",
+          "width": 390,
+          "sha256": "acbc20b6bb52176d8e60290ae69e7b1f4ad45e51b4c7fd85f11f990711442410"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "next-disabled",
+      "selector": "[data-page=\"1\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "disabled"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-PAGE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/next-disabled-disabled-1440.png",
+          "width": 1440,
+          "sha256": "42eb4458dd39c059bedc67d147b4f74dfc246278e26fe7d94914222d88e6ee08"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/next-disabled-disabled-390.png",
+          "width": 390,
+          "sha256": "555c68496f048a62f2f757ad491f0954f464546c9b7386025a79a8726760b228"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "create",
+      "selector": "#create-submit",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-CREATE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ed5969fa99d64044.1",
+        "apps/web/src/components/OrganizationTokenPanel.vue#073eb5c8ded40aa0.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/create-default-1440.png",
+          "width": 1440,
+          "sha256": "242b47413495f857e042757770c46acf5e45952e1fcf5fb2ad56d9eaa90257cb"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-hover-1440.png",
+          "width": 1440,
+          "sha256": "1e6bc60f86abeff6e9bbce095fea22bc6b1449600d71d761d3fd6cffe3d3bf65"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-focus-1440.png",
+          "width": 1440,
+          "sha256": "4d122fa3e21c3564eaf3e63b7885ec4ca236d1c0b89180227c2bf66a90a57fbb"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-pressed-1440.png",
+          "width": 1440,
+          "sha256": "2460504ada155efec4cda3d39e29ee9ae754d17d35e26eeb5efc28cee73517aa"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-busy-1440.png",
+          "width": 1440,
+          "sha256": "409c51ed7f00dd1916a324ddc258d4fb485c57b7860441b2df49adfd520a5361"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-default-390.png",
+          "width": 390,
+          "sha256": "ba552f5fd6a0d5e4a0d25f344dcd26fe465860d708b411bd38881ff06a417507"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-hover-390.png",
+          "width": 390,
+          "sha256": "3509ea748de93dc7228785db1b9f78f64b931d95c74915a6b6e12db57bcc8f12"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-focus-390.png",
+          "width": 390,
+          "sha256": "5ba9622b2b6fe9abd55b2f7522ddd4d1b7ff43002f1d8a31437108a05e0d5818"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-pressed-390.png",
+          "width": 390,
+          "sha256": "a8e3debbffc9b2ad06f881420ddd9805503d957ad22a5717f1422137c3d13c50"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/create-busy-390.png",
+          "width": 390,
+          "sha256": "5da36f56f9b86d7520ebc76792aafe8bbaf1b7586943404382c49d5534a4ecf0"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-30-unselected",
+      "selector": "[data-ttl=\"30\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-default-1440.png",
+          "width": 1440,
+          "sha256": "6b6c0638dab79381553c9bd7ad16f16a95f31ca059114f2e6f744a50b3e7e3a5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-hover-1440.png",
+          "width": 1440,
+          "sha256": "0afa7275b673dd308b3b2fbd7f009a4376dcb1dea6e771abe142335f1ab0fe71"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-focus-1440.png",
+          "width": 1440,
+          "sha256": "7efa50ccd23f3ccb5c1d96dccca88bce25fe017ed4f41df68b20be580708fdd9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "74a4933747fcee7f2c96da7827a2a20bab847251074b92e1acec82c6d2b65186"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-default-390.png",
+          "width": 390,
+          "sha256": "a6637b9285d09e489a25e641ef7b1b44b3ef9350db27b2a503cf08ec0d24748d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-hover-390.png",
+          "width": 390,
+          "sha256": "6e26ec6c486821598d9a42b00ac8f7fd2e7df36c6a92e4059c4b4f3602c40b45"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-focus-390.png",
+          "width": 390,
+          "sha256": "21c12db531316983cbc39223878c8ce6bfc00d768b34ee1940e969aa146fd2f6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-unselected-pressed-390.png",
+          "width": 390,
+          "sha256": "3aec237afdbdf976840a4dd93d57e8eabcd675ece6aa05d3fdf9f19c6713594c"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-30-selected",
+      "selector": "[data-ttl=\"30\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-default-1440.png",
+          "width": 1440,
+          "sha256": "d298e48c75083da5aeb5263cca109efd5652971b5d457ed79cf284210c590f69"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-hover-1440.png",
+          "width": 1440,
+          "sha256": "d298e48c75083da5aeb5263cca109efd5652971b5d457ed79cf284210c590f69"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-focus-1440.png",
+          "width": 1440,
+          "sha256": "ffa42c61ebf87387bcdd8eb52f3b731161f946c05e9395f0d13571d7874f170d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "02d813320f5d025259de9d81160ddf27ef087265127bf2850231e08b051f7d92"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-default-390.png",
+          "width": 390,
+          "sha256": "259b625ea07f70bcf103fc5043073b576f05483baeb09ccb1ff5bfd3ed219345"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-hover-390.png",
+          "width": 390,
+          "sha256": "259b625ea07f70bcf103fc5043073b576f05483baeb09ccb1ff5bfd3ed219345"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-focus-390.png",
+          "width": 390,
+          "sha256": "5b1e5e5e1274d6a3a0a8ad6bbaf8bc799f9ad9c2d75fc2c27e12f13abe32db5f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-30-selected-pressed-390.png",
+          "width": 390,
+          "sha256": "439416e13452dd068b1b20df35499bb97f396518dc92d553fc267c3df3323167"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-90-unselected",
+      "selector": "[data-ttl=\"90\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-default-1440.png",
+          "width": 1440,
+          "sha256": "1e68fc36a5d088d2bec018c10e6b330a2fda49a9f4a1cf3f7c933ce3af93397c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-hover-1440.png",
+          "width": 1440,
+          "sha256": "37d6101e89d90d0f885110bf65c45ec70d00b57cfd2d8733eabe16db973dd177"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-focus-1440.png",
+          "width": 1440,
+          "sha256": "f2e56e00ff7afcabb77f1885cfdd46cd786958fb1a2d8bf23c8f9bdc2400de29"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "707ccc031ca72cd84cb9fede1358ddfd52d8795099797a44c40509d092df5604"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-default-390.png",
+          "width": 390,
+          "sha256": "76036e47a3e3f5672d9616b7db385e02fa209bb46f87a52610b906283dabdb06"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-hover-390.png",
+          "width": 390,
+          "sha256": "7ba4824be2680d721d9f2f564e6dc16c7355ad70c4f090235e012c07ac0691f6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-focus-390.png",
+          "width": 390,
+          "sha256": "6b6873647815a14a09c9bffb8f83889918b8145b18a785b0692984c7224029b4"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-unselected-pressed-390.png",
+          "width": 390,
+          "sha256": "b0ba322ecb795a16c1aad3ef0f095a3d3754501132d4f648a412452612f04548"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-90-selected",
+      "selector": "[data-ttl=\"90\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-default-1440.png",
+          "width": 1440,
+          "sha256": "5665c90fe1a1a2f805b9bd2c82f863f81a1e684ea2b0cfcef94c9c7110ea09fd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-hover-1440.png",
+          "width": 1440,
+          "sha256": "5665c90fe1a1a2f805b9bd2c82f863f81a1e684ea2b0cfcef94c9c7110ea09fd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-focus-1440.png",
+          "width": 1440,
+          "sha256": "944fd2aee0368f1492a7ffb5e99094c38645f08c8f995245c701bdfa6286d47d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "2e88069194d08422ede73ca91fbeb0f51491408a7e261ac3af61cf1724d49fac"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-default-390.png",
+          "width": 390,
+          "sha256": "7ae0499162b2b5da86fac6f343c1a07f73b874c58428a7ad013ebf9291e28df3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-hover-390.png",
+          "width": 390,
+          "sha256": "7ae0499162b2b5da86fac6f343c1a07f73b874c58428a7ad013ebf9291e28df3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-focus-390.png",
+          "width": 390,
+          "sha256": "b6bc80e0a8df53ff3648b3c6ed6962542b65c13b9b7e54bc94cd81254fb5604a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-90-selected-pressed-390.png",
+          "width": 390,
+          "sha256": "60dc860aad5103da06398af55be5292d4c5ed20c393c2169880c22e8bcae5f44"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-180-unselected",
+      "selector": "[data-ttl=\"180\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-default-1440.png",
+          "width": 1440,
+          "sha256": "31fdc6a80f587f6915f7d81f6fd8385076094bbf48d19dfcea02ed576b88b003"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-hover-1440.png",
+          "width": 1440,
+          "sha256": "1e286f55d8a964dfb248792db793f79e1495a9f873a4bb640b766dd4e41d3a23"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-focus-1440.png",
+          "width": 1440,
+          "sha256": "e6337ca9a1ec3039cb25f20df1d325224a561e84f7b7e17a9a8faf74fdc055d5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "001d6305fdfc67f382ccafceda7ebaddcf09da316260d55b67f0a290a099e457"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-default-390.png",
+          "width": 390,
+          "sha256": "13155a70507e7c4f4f773bd8d861efdbe3b1c851bc5c81c16d4ca56463ded662"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-hover-390.png",
+          "width": 390,
+          "sha256": "62fc5768a5e403244f8ea98af3408372238a9d03e359538a0fa132f868def3cd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-focus-390.png",
+          "width": 390,
+          "sha256": "46f3b69b509d51c2981af543aee9bbd096e8c258401c35669ff115d994a1c41c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-unselected-pressed-390.png",
+          "width": 390,
+          "sha256": "55eec18b9183642ce703bccf6a8eb86abba3211b2637f9da14a30dbf60ea535c"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-180-selected",
+      "selector": "[data-ttl=\"180\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-default-1440.png",
+          "width": 1440,
+          "sha256": "2099e728c62beae7b3a85ffea0bc568db5ff0cdf5460f03540b4d44ce0703243"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-hover-1440.png",
+          "width": 1440,
+          "sha256": "2099e728c62beae7b3a85ffea0bc568db5ff0cdf5460f03540b4d44ce0703243"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-focus-1440.png",
+          "width": 1440,
+          "sha256": "3833662ab5c17bbf83f9f80be614ab57c5a694f1b54a837686cb13974b788bed"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "7de2f1db2c0cce4c8a9715e2cecbdef3f99d5a58c756da4cd7c5d419b43d6d90"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-default-390.png",
+          "width": 390,
+          "sha256": "fdb79f65b13fb0e6a0e18e84b427405e2ca3513e6983ff7876e0f7c3a51c653f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-hover-390.png",
+          "width": 390,
+          "sha256": "fdb79f65b13fb0e6a0e18e84b427405e2ca3513e6983ff7876e0f7c3a51c653f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-focus-390.png",
+          "width": 390,
+          "sha256": "41134911bbba87f50a091cd4e854a69fb7e489c0d7b0e9d4232549ccd99047f0"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-180-selected-pressed-390.png",
+          "width": 390,
+          "sha256": "53f451d4a8c622584a320351543ad0913d1f476b3a30e0445b9faae1dc1331af"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-365-unselected",
+      "selector": "[data-ttl=\"365\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-default-1440.png",
+          "width": 1440,
+          "sha256": "80acdb0f0771f56fd286d201376a10031e7c6bbc0623c4cd2fab1ce94879ed55"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-hover-1440.png",
+          "width": 1440,
+          "sha256": "e5c40cc53e6dff2bad465a920c97f99b595b637fedcd4ff9423a4509ff516d82"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-focus-1440.png",
+          "width": 1440,
+          "sha256": "c893015145c23e2f489986a8e5d3db16f22c47e6fdefdf2c2ff47e5813e01b24"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "913550f7ac9ec175ba1696e45a5fb630d798c048edc3bed5c619b275a114f149"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-default-390.png",
+          "width": 390,
+          "sha256": "8865370899107309c43d768076dee9792b3a137279e1d0279491192aa03b8a5e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-hover-390.png",
+          "width": 390,
+          "sha256": "ca952d1cc7f90f3ebe5e058a4190925c8f0c5598f8b84d543eca9a7537c02893"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-focus-390.png",
+          "width": 390,
+          "sha256": "0c1c91a5f29cda86a628f0ad8ffd47b17a3f9b61542d793ae5611795f7ebbd27"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-unselected-pressed-390.png",
+          "width": 390,
+          "sha256": "4db275f44cfd07ea2a7a0d24a335619a0dbb20513712e3df3d828cce42fc27b7"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "ttl-365-selected",
+      "selector": "[data-ttl=\"365\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-TTL",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-default-1440.png",
+          "width": 1440,
+          "sha256": "308dc2340766ee31579287925a29e96b52019e83be35939bfd259fe23fdf07b5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-hover-1440.png",
+          "width": 1440,
+          "sha256": "308dc2340766ee31579287925a29e96b52019e83be35939bfd259fe23fdf07b5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-focus-1440.png",
+          "width": 1440,
+          "sha256": "07795508132fde2807c2037ac9a5b07fcb3d279531100a3d87cbd4916447cf8a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-pressed-1440.png",
+          "width": 1440,
+          "sha256": "e8a8ec77ca8b15a2ee016977e24b01c42656abe5fe0acaf443a7cce017ba4261"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-default-390.png",
+          "width": 390,
+          "sha256": "7a569f502765ad3a650ec961bfa1aa2a206b81bbc2092685c905694ca7444a03"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-hover-390.png",
+          "width": 390,
+          "sha256": "7a569f502765ad3a650ec961bfa1aa2a206b81bbc2092685c905694ca7444a03"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-focus-390.png",
+          "width": 390,
+          "sha256": "51c2e1733c37bd3d0bbb7d0f4bf6d008af0fb38c27142d496823fa999c89b6a2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/ttl-365-selected-pressed-390.png",
+          "width": 390,
+          "sha256": "e2cd2c2040b70bb502502e604d944dc5e111162c1128664270aaa7b79dee13f5"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-0-unchecked",
+      "selector": "#scope-0",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-default-1440.png",
+          "width": 1440,
+          "sha256": "97905093cc757d8fc69eaf5f257d3c5d4401b23825d33d14c247450ccfafafa1"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-hover-1440.png",
+          "width": 1440,
+          "sha256": "d61004441c8122c0bf70bef44c15136a073515c3721c1a4b9edea13430bb6348"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-focus-1440.png",
+          "width": 1440,
+          "sha256": "1b906e25d03f9cd5eaaf481fd17894c3345ba910c9a1486b6b706927177a1570"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "758cdce5b23d96182d1eef5fc73e07e2c5659ed5d590e525a608b32207b16f0d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-default-390.png",
+          "width": 390,
+          "sha256": "93ee860cead17806494109a47fb913700446ee67bd974747e2fac7e41a42920c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-hover-390.png",
+          "width": 390,
+          "sha256": "d80cda007f9b988cd877604768bcf7587fc2754ddbf62fc066652c5d557181f8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-focus-390.png",
+          "width": 390,
+          "sha256": "26402adbe962d55fc01ce545ac389b29e0d414d8e1a2407b79fd9b61526a180c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-unchecked-pressed-390.png",
+          "width": 390,
+          "sha256": "c674220d5e78cf098f4e14150feda4ee227509d2a897892c0cd075b639141e03"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-0-checked",
+      "selector": "#scope-0",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-default-1440.png",
+          "width": 1440,
+          "sha256": "6fb3011efd3331ccb7b47b3d3888ae96632416791ba9bdc46bb8a6f78c374911"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-hover-1440.png",
+          "width": 1440,
+          "sha256": "23499ca35fac2d845c201dd712c9d132a5d3572528e4c4b58ac8ebe15277559b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-focus-1440.png",
+          "width": 1440,
+          "sha256": "eb54ed6211cd8ad0e3d1d3953905c7b13d28865ffb8c2474047866e05218e1a6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "2dabc4f12692ac0f70532aa3b2fb6e3040aa72a2a30fc20648680c35c9fcb0ab"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-default-390.png",
+          "width": 390,
+          "sha256": "1220941b1b736e766326f767c1f777c0ace88332a89753722e985803fb00507f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-hover-390.png",
+          "width": 390,
+          "sha256": "3c3c7afb0c53670c3a29b3629d8813cb5af95d555dd9cd4c24fae1b34011a144"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-focus-390.png",
+          "width": 390,
+          "sha256": "8db402b3b4ff2dae3931ff6344a6526a2bf94ed624bf2bc70076b51cb51154ef"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-0-checked-pressed-390.png",
+          "width": 390,
+          "sha256": "7797cefd120fc163997edcdae3a7bd16a1189712961d9dab73f0c441236564f4"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-1-unchecked",
+      "selector": "#scope-1",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-default-1440.png",
+          "width": 1440,
+          "sha256": "e9e9571848cace5018e33b3842fcc2a755f365b5eb63467469930216e18bb8a8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-hover-1440.png",
+          "width": 1440,
+          "sha256": "68a91119bfd60d81ab540e91a63c22523a7fbf649558254ae5e3d53b2222d857"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-focus-1440.png",
+          "width": 1440,
+          "sha256": "1b9683d8ad018ee8e9d08cd5968b934f8b891813315be7dd934c1069ae9fc5a1"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "fb5ae52dec6143886f15456e8ebdda93e6baa55b7e9a220acb16edcacc59d976"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-default-390.png",
+          "width": 390,
+          "sha256": "ca4dec3119860fd23ea3632f08f0f8bb2025261697cbfad4c0984f126c7e40d7"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-hover-390.png",
+          "width": 390,
+          "sha256": "dd3548329a24099f2d647fa823513b02ae2e3745f792755d4b79af71e27584b0"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-focus-390.png",
+          "width": 390,
+          "sha256": "94ef7c7a1029d6798d9b183a2e3d32510adad6ca3a64cfa594cc9b551cb82f36"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-unchecked-pressed-390.png",
+          "width": 390,
+          "sha256": "e5a61343bb3bdddf9360db7209036eb6f01e1810da86dc89f19d5c6291ccda92"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-1-checked",
+      "selector": "#scope-1",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-default-1440.png",
+          "width": 1440,
+          "sha256": "2df7b23b4b9d9c4ac0718f8fce18ac105b86df29e0218c8eef55df870f37d6b3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-hover-1440.png",
+          "width": 1440,
+          "sha256": "5507886eab0a908241f88ccb6a6a5044f1667aecadb2e238ca0dd714583e6c98"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-focus-1440.png",
+          "width": 1440,
+          "sha256": "809c93fa26b702bdbcb57a51088dda385228a5cae6e4153667ffbc706da32413"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "ef298a81eca3fa9d6d9ab0e7c80c1a63941c780abdffbb9719d5335456cec414"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-default-390.png",
+          "width": 390,
+          "sha256": "15036c278a0dee271fe11d8d5257de193624748e3bcc67603d4b1c0c98ddf1bf"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-hover-390.png",
+          "width": 390,
+          "sha256": "5a069829093023ec27803b6191ccf68f672e87b2663aff4399cc60037a60dd4c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-focus-390.png",
+          "width": 390,
+          "sha256": "3791ea5a1c179d14ffa95ba2d3d369726f2b41e702b2f9eb5b199952134028bd"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-1-checked-pressed-390.png",
+          "width": 390,
+          "sha256": "d0acd708fc38902a52eeec2bec53e7f7324324bd150013177c67705ba503df61"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-2-unchecked",
+      "selector": "#scope-2",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-default-1440.png",
+          "width": 1440,
+          "sha256": "04480f7f96e02010df17dac99a3a23d7d29bcb5cb52f98f71d618fba3417249e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-hover-1440.png",
+          "width": 1440,
+          "sha256": "77190006c43c4cd823b786101b0c0e5ff4257a8deb8a78f8a5cfc9b79b28d12d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-focus-1440.png",
+          "width": 1440,
+          "sha256": "7d07d375fbbaea60438164d45b4528013d4f6bba55e062670c5646fa5faea8f6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "5861748ac775999217a4c573da781602c69fd1a513519f7999e1afa247e653db"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-default-390.png",
+          "width": 390,
+          "sha256": "921f59926621f1388a599026e474f2e0679656e66e272eee13dd0b8077e4b9f8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-hover-390.png",
+          "width": 390,
+          "sha256": "8875e415870636528959c4e93cc0b84df2541d1c7fbf8e998b59af81bb2e85a5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-focus-390.png",
+          "width": 390,
+          "sha256": "96d295b2a620f4abf99eb7aa9f87215e62a19b86b4e636cd42533535e0c916f9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-unchecked-pressed-390.png",
+          "width": 390,
+          "sha256": "e697c250c9c903de1c6938324fc83af1b4691575b5593a011c103f51fa579e09"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-2-checked",
+      "selector": "#scope-2",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-default-1440.png",
+          "width": 1440,
+          "sha256": "32641b1bb4745c986132a8053017b99d37ddb829effb85e96aea33fd0503d629"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-hover-1440.png",
+          "width": 1440,
+          "sha256": "ad0e451d7324e66f476d93af3aaf2adc63035b3252d15d2ad56d328ed99ca4ce"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-focus-1440.png",
+          "width": 1440,
+          "sha256": "1045f4903de134ea1adb5f7a06279b1d315c460d18c2762474686d4678fbb629"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "a3b0c252ba6d68d492ece97270d06eec6c726aef1cf59eef376522980a798d77"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-default-390.png",
+          "width": 390,
+          "sha256": "00b3ddd378275b0857195bbeeec882352449d91596be80efcb6dca9052a509d1"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-hover-390.png",
+          "width": 390,
+          "sha256": "9b31b59810570aaab6c270eedc05bc85465ea420929c0d155210a6fa37f9cc7f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-focus-390.png",
+          "width": 390,
+          "sha256": "986de3fcf38220fa7c7572ddfab74be26343edd6da99a5ec51d03cdb40c988df"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-2-checked-pressed-390.png",
+          "width": 390,
+          "sha256": "ea0e1d323ad909c40e1f1736744c1fe529ea67ace10a944d2f6cc4ce9ac5f524"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-3-unchecked",
+      "selector": "#scope-3",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-default-1440.png",
+          "width": 1440,
+          "sha256": "352854290910bcbebbaf096c79ee73597e810228b3006b9a3d8186de0752a37d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-hover-1440.png",
+          "width": 1440,
+          "sha256": "33b53b7aa10b8821fa809169405701047e4e823abd64388b1b3e939da29a0329"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-focus-1440.png",
+          "width": 1440,
+          "sha256": "5a591fa198443b6d10ac3c1253b87308ee4d6a59572a9cd5be10d802fb942262"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "62f9cc97d9efd6473944512ebf443478b56b4be7c87c20fac0b3b17a7379f824"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-default-390.png",
+          "width": 390,
+          "sha256": "6131e8ccfe10d381a913442d8a987f164f030504af8148684cb02317c8116ab3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-hover-390.png",
+          "width": 390,
+          "sha256": "3188e0b0dfbeaefda7b21e739c2c0437b0cc258ad5d71f5f0f9e81c778a7f603"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-focus-390.png",
+          "width": 390,
+          "sha256": "639df6a88e80ffccc451654dc1b5c0c9e76668a950dcd811c90ac1f25899809a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-unchecked-pressed-390.png",
+          "width": 390,
+          "sha256": "f25922ad199ec6d01f4b108883d7cdf1341f44f98cd9bdda572ce2aed8b51263"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "scope-3-checked",
+      "selector": "#scope-3",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-SCOPE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-default-1440.png",
+          "width": 1440,
+          "sha256": "c1055d50d8dd365931a118f0fa00bc4abd726337cc0d89bb36973c297872414c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-hover-1440.png",
+          "width": 1440,
+          "sha256": "3095f79cd5083fa5d2fb1fbdcc5e6067ba499d9e84264da26c59d39966170ae1"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-focus-1440.png",
+          "width": 1440,
+          "sha256": "9a92978ee82757b980e16f52bbbae4cc8a839fafec4088549d72088459ce9010"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-pressed-1440.png",
+          "width": 1440,
+          "sha256": "bf36a5c92b3935ea983102a76ef7dadb78b7785e80b796a95aa444fa9c29c6ee"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-default-390.png",
+          "width": 390,
+          "sha256": "1fb234efea682bc1d56f529a670fb0b620c331bb335b5f1a3f51c568903e3bf4"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-hover-390.png",
+          "width": 390,
+          "sha256": "c57de164bb9ff7ee26c5d1830c07eec2a85155b22704037a34b2bf49e9d3a2f1"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-focus-390.png",
+          "width": 390,
+          "sha256": "f8ab2245c526327173f62aa0443d94e0220db3d452224d02b63142ef7e16dc94"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/scope-3-checked-pressed-390.png",
+          "width": 390,
+          "sha256": "af07b70ad3daec19c02a20882a95f681d26b40efd60d877e24f02786df482bbb"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "copy",
+      "selector": "#copy",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-COPY",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/copy-default-1440.png",
+          "width": 1440,
+          "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-hover-1440.png",
+          "width": 1440,
+          "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-focus-1440.png",
+          "width": 1440,
+          "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-pressed-1440.png",
+          "width": 1440,
+          "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-default-390.png",
+          "width": 390,
+          "sha256": "416c1f04ef0139b496745fdbf455b406642007c982678c99809d35e4d385a64d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-hover-390.png",
+          "width": 390,
+          "sha256": "6679c43b758bb11c12a2e6a3a43ee6eb735a5d8748ba95f6a1a7dd623c714fdc"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-focus-390.png",
+          "width": 390,
+          "sha256": "476d752fc3bfad3c98d136e21077312369211b9dafa10581029e58152ca65099"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-pressed-390.png",
+          "width": 390,
+          "sha256": "d642eeeabcf7db7ea0f3c8405d2274c4a3889c8fcf2ed979fa5e05da5909653b"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "copy-copied",
+      "selector": "#copy",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-COPY",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-default-1440.png",
+          "width": 1440,
+          "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-hover-1440.png",
+          "width": 1440,
+          "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-focus-1440.png",
+          "width": 1440,
+          "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-pressed-1440.png",
+          "width": 1440,
+          "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-default-390.png",
+          "width": 390,
+          "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-hover-390.png",
+          "width": 390,
+          "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-focus-390.png",
+          "width": 390,
+          "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-copied-pressed-390.png",
+          "width": 390,
+          "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "copy-failed",
+      "selector": "#copy",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-COPY",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-default-1440.png",
+          "width": 1440,
+          "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-hover-1440.png",
+          "width": 1440,
+          "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-focus-1440.png",
+          "width": 1440,
+          "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-pressed-1440.png",
+          "width": 1440,
+          "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-default-390.png",
+          "width": 390,
+          "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-hover-390.png",
+          "width": 390,
+          "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-focus-390.png",
+          "width": 390,
+          "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/copy-failed-pressed-390.png",
+          "width": 390,
+          "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "dismiss",
+      "selector": "#dismiss",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-DISMISS",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-default-1440.png",
+          "width": 1440,
+          "sha256": "1c3f716c893b8b3ead1efbdd5b5555d26c3e2ae0a737f30d3ad629c9b237c95f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-hover-1440.png",
+          "width": 1440,
+          "sha256": "6cbc2001a2276a04d80615653ea64f9f2623c41e5f686ecf6421bf275ecfce37"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-focus-1440.png",
+          "width": 1440,
+          "sha256": "8d3f5f7e4d4f2109a510f9337503b1bf391e43ad8b8926a41ea28ba2ed0d3b59"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-pressed-1440.png",
+          "width": 1440,
+          "sha256": "99fce97cbfdfcfc43cb90f97f12b4abc9d6f75aecbaf307c7819d11fb1eb71dc"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-default-390.png",
+          "width": 390,
+          "sha256": "26aec03595ca6cb07990fa592696b83557cf041cc9dcb690ff4974b509fddb1c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-hover-390.png",
+          "width": 390,
+          "sha256": "8206cfc2342b325b4ab4491369259f4ddf1a9b1b9a1bb54d027598f9fdc457bb"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-focus-390.png",
+          "width": 390,
+          "sha256": "7451077ba30b432e6a36ae64f5678bec7bbb9dd0418d656598c434b80042dd84"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/dismiss-pressed-390.png",
+          "width": 390,
+          "sha256": "095f9ce5deffacc5958db01c5318ebf4c5b2c122647bb18db5ec80c53f73f04d"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "rotate",
+      "selector": "[data-action=\"rotate\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-ROTATE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/rotate-default-1440.png",
+          "width": 1440,
+          "sha256": "79c429e735551592770c001c7ea8fccd34fc2cd86aa67088ebe4cc0a6b544a4a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-hover-1440.png",
+          "width": 1440,
+          "sha256": "0a43ab1bf429eeb94b0043749759eaab2dc266e4d92763ea0f5e512696b51b88"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-focus-1440.png",
+          "width": 1440,
+          "sha256": "895127205caa7ccf12ec3a93ff790f2f2924c1890c5725257535e171b0c4e96a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-pressed-1440.png",
+          "width": 1440,
+          "sha256": "fd2ceaaac6d05c8429f2e6daf8d83e71de96c45b0ce9cd7208b9d6045992ed4b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-busy-1440.png",
+          "width": 1440,
+          "sha256": "c735f11a2a31bef244b857182698e225b068ceab646c1e65f0376507477b7bb9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-default-390.png",
+          "width": 390,
+          "sha256": "79c429e735551592770c001c7ea8fccd34fc2cd86aa67088ebe4cc0a6b544a4a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-hover-390.png",
+          "width": 390,
+          "sha256": "b3101e0bc656fba9c4ce8ca92e18c6b42e7c8398e3ac34ba6a1a6b1bccc753b9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-focus-390.png",
+          "width": 390,
+          "sha256": "63a7238b94473ccbc177e558e21d82ef85f500594f02f5a21e572c5130dc1b7e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-pressed-390.png",
+          "width": 390,
+          "sha256": "e7333146bb8c6cb6905698a854984723ca6fa7e22a6d250a1ea9988878d516c2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-busy-390.png",
+          "width": 390,
+          "sha256": "4f82fe3367faece6d1c9b5a708bd40b3ebddf824cc081d8731d9b55518ecd416"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "rotate-close",
+      "selector": "#reason-close",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": true,
+      "parentReference": false,
+      "actionId": "OG-K-ROTATE",
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"
+      ],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-default-1440.png",
+          "width": 1440,
+          "sha256": "41d96bcb96722478213b280856444e34416a033a0e87fd263acee0d9387bab84"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-hover-1440.png",
+          "width": 1440,
+          "sha256": "8d766f5b1f1de562fa66172272db100ac7b007ab68f9df1548c5f24c11603418"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-focus-1440.png",
+          "width": 1440,
+          "sha256": "b900fdaa8e368b3fa983ed3445a9ba2aab89d9487f95d4b26d47158341dfbeaf"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-pressed-1440.png",
+          "width": 1440,
+          "sha256": "9efe726f6f6df5f1028c5612bc8c9c8e7acb5149677c9c990de3f6f330def658"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-default-390.png",
+          "width": 390,
+          "sha256": "7b16a265f1538e969194f94d1d96f09a19fca1decf748d4cedd9ee14718510e6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-hover-390.png",
+          "width": 390,
+          "sha256": "cc669cff6182e15fe9ccafdb467681ad97d02fb23ff6b87fc40d363a9c931967"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-focus-390.png",
+          "width": 390,
+          "sha256": "709e4b9f7e63f90512e341fae68eb7ad62866bf3e1ec8bf84c354c3e71d53f9e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-close-pressed-390.png",
+          "width": 390,
+          "sha256": "ee97c6d1751b6bc6a7c7ec34c724e68d7e9e19f2b92520384b8aca1f9a7b0370"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "rotate-cancel",
+      "selector": "#reason-cancel",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": true,
+      "parentReference": false,
+      "actionId": "OG-K-ROTATE",
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"
+      ],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-default-1440.png",
+          "width": 1440,
+          "sha256": "be944af3bd097f2a597f809949a768a05b46217341c1bad940117b5de5be3714"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-hover-1440.png",
+          "width": 1440,
+          "sha256": "c02eff4d4ca4a53594729c44ab2f3ab5a0ad4d8ac58c575d246c82170c5254f2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-focus-1440.png",
+          "width": 1440,
+          "sha256": "f6e5001c060b163462d9dff71a9e5f6be3b7362fce1c929254c319f775147b21"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-pressed-1440.png",
+          "width": 1440,
+          "sha256": "c27baa6d735eacc5749db2e8892aca9f69b6782868365edf6b60e1f152d798f4"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-default-390.png",
+          "width": 390,
+          "sha256": "9a4d199c1fec1d63fe161659fc1e840f7dccdd965832eecf9a6bcd2b26cfb38d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-hover-390.png",
+          "width": 390,
+          "sha256": "2497642019a8e2540217bc9ebed80e0e7ed9ab2f7eea7a3b6bf1377070143ea3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-focus-390.png",
+          "width": 390,
+          "sha256": "0c42c4ad3c14259c07f8b32825582dfb5378064872c441664c9b37d3b623a005"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-cancel-pressed-390.png",
+          "width": 390,
+          "sha256": "99d1fb0458d8ba204902a37c4bae2634f6f457f83a00061c45b1e1eff47c331b"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "rotate-submit",
+      "selector": "#reason-submit",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "proposalOnly": false,
+      "sharedReason": true,
+      "parentReference": false,
+      "actionId": "OG-K-ROTATE",
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#e571bad78d52022e.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
+      ],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-default-1440.png",
+          "width": 1440,
+          "sha256": "9df5ff276d16fe08d3933161ab4f4e821d5e47920da7d11dcca012cbf9a98336"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-hover-1440.png",
+          "width": 1440,
+          "sha256": "dc89daa40485bcfecab2af510070ffded813b463696ee5f54f8a7dfd43d73f6f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-focus-1440.png",
+          "width": 1440,
+          "sha256": "f3e8addac66934648353cd86f4178b17804b39cc66b43bd3024f505791a36a4f"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-pressed-1440.png",
+          "width": 1440,
+          "sha256": "fb781209dc556cd9f86e4a5879bd730a4ab5cbe4accff8ddcb692a2b90318504"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-disabled-1440.png",
+          "width": 1440,
+          "sha256": "c896bc7300d91e203f78451db4da379b8a9eb9d801cf810628eac4607eb6fe7c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-default-390.png",
+          "width": 390,
+          "sha256": "33c9b825d2073241e4e0e10de41ebfc40a113232f79d7ab39c72253a9d293888"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-hover-390.png",
+          "width": 390,
+          "sha256": "ccc6816d3ed8a73f1065173382dbe97c1988b6bec830525316cf182898511de6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-focus-390.png",
+          "width": 390,
+          "sha256": "0c42c89e09e549a7c1c4cb46febbe359c17f9dc370c8e38485b2fd73d2fc1ea2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-pressed-390.png",
+          "width": 390,
+          "sha256": "9a88361a7b4f2a5e37a6f94f1e4a9cd373ad95b47c23fc21c1b9b1b00984d033"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/rotate-submit-disabled-390.png",
+          "width": 390,
+          "sha256": "e9479f65048784c9014c2a6eeb9ce736b0ebe22f19926e632dcdba1acf72a902"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "revoke",
+      "selector": "[data-action=\"revoke\"]",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "proposalOnly": false,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": "OG-K-REVOKE",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
+      ],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/revoke-default-1440.png",
+          "width": 1440,
+          "sha256": "58529521e9c4a950dbf6e9c7f80f842a5164f2b06c10148994ff59e8597ffbce"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-hover-1440.png",
+          "width": 1440,
+          "sha256": "0c8a92cb0bdedd2cc4d6206b9c13ef33720de476ed75f3f9bc3f4205a8bd201a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-focus-1440.png",
+          "width": 1440,
+          "sha256": "d83ae766ab42bfff4de60a956021c013b6f472ceb760ff1b435febc6e83b5403"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-pressed-1440.png",
+          "width": 1440,
+          "sha256": "f399b38fe0a6090e9eb224991373b41684ef707ed07c59c6b219debd776b5dd3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-busy-1440.png",
+          "width": 1440,
+          "sha256": "806fe5ef52c5003da6194a770c97dcba6567bc3342ee54371bf23ba9b78ffe1d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-default-390.png",
+          "width": 390,
+          "sha256": "58529521e9c4a950dbf6e9c7f80f842a5164f2b06c10148994ff59e8597ffbce"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-hover-390.png",
+          "width": 390,
+          "sha256": "0c8a92cb0bdedd2cc4d6206b9c13ef33720de476ed75f3f9bc3f4205a8bd201a"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-focus-390.png",
+          "width": 390,
+          "sha256": "d83ae766ab42bfff4de60a956021c013b6f472ceb760ff1b435febc6e83b5403"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-pressed-390.png",
+          "width": 390,
+          "sha256": "f4d1b7783d2fab7d379f9f2cdfd6458153dd94c6b6db16d79fe30d7af8c9cd98"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-busy-390.png",
+          "width": 390,
+          "sha256": "e3a37ba81fac8f4fe8e5d3ffd8d55231a8d9d5a85b1d47632a4522597056a2e0"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "revoke-close",
+      "selector": "#reason-close",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": true,
+      "parentReference": false,
+      "actionId": "OG-K-REVOKE",
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"
+      ],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-default-1440.png",
+          "width": 1440,
+          "sha256": "41d96bcb96722478213b280856444e34416a033a0e87fd263acee0d9387bab84"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-hover-1440.png",
+          "width": 1440,
+          "sha256": "8d766f5b1f1de562fa66172272db100ac7b007ab68f9df1548c5f24c11603418"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-focus-1440.png",
+          "width": 1440,
+          "sha256": "b900fdaa8e368b3fa983ed3445a9ba2aab89d9487f95d4b26d47158341dfbeaf"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-pressed-1440.png",
+          "width": 1440,
+          "sha256": "9efe726f6f6df5f1028c5612bc8c9c8e7acb5149677c9c990de3f6f330def658"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-default-390.png",
+          "width": 390,
+          "sha256": "7b16a265f1538e969194f94d1d96f09a19fca1decf748d4cedd9ee14718510e6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-hover-390.png",
+          "width": 390,
+          "sha256": "cc669cff6182e15fe9ccafdb467681ad97d02fb23ff6b87fc40d363a9c931967"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-focus-390.png",
+          "width": 390,
+          "sha256": "709e4b9f7e63f90512e341fae68eb7ad62866bf3e1ec8bf84c354c3e71d53f9e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-close-pressed-390.png",
+          "width": 390,
+          "sha256": "ee97c6d1751b6bc6a7c7ec34c724e68d7e9e19f2b92520384b8aca1f9a7b0370"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "revoke-cancel",
+      "selector": "#reason-cancel",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": false,
+      "sharedReason": true,
+      "parentReference": false,
+      "actionId": "OG-K-REVOKE",
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"
+      ],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-default-1440.png",
+          "width": 1440,
+          "sha256": "2f2c4b4f519524f67ff296457a89b303fd0555ab07ebfb3f16ea6307883f4eb5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-hover-1440.png",
+          "width": 1440,
+          "sha256": "5fcc5be37342887b5556a4f2e3b462f53dcfe30c0e9328515a9ee96189dc5b70"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-focus-1440.png",
+          "width": 1440,
+          "sha256": "882802cf5c4c896668083fbbea00c747f3f0528df5cea76975d014bc0d74615c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-pressed-1440.png",
+          "width": 1440,
+          "sha256": "ffca22f03a29a77db23c7ebd3c83c63909956c4a9bb31505cbc2ecfb98c31d62"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-default-390.png",
+          "width": 390,
+          "sha256": "9a4d199c1fec1d63fe161659fc1e840f7dccdd965832eecf9a6bcd2b26cfb38d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-hover-390.png",
+          "width": 390,
+          "sha256": "2497642019a8e2540217bc9ebed80e0e7ed9ab2f7eea7a3b6bf1377070143ea3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-focus-390.png",
+          "width": 390,
+          "sha256": "0c42c4ad3c14259c07f8b32825582dfb5378064872c441664c9b37d3b623a005"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-cancel-pressed-390.png",
+          "width": 390,
+          "sha256": "99d1fb0458d8ba204902a37c4bae2634f6f457f83a00061c45b1e1eff47c331b"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "revoke-submit",
+      "selector": "#reason-submit",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "proposalOnly": false,
+      "sharedReason": true,
+      "parentReference": false,
+      "actionId": "OG-K-REVOKE",
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#e571bad78d52022e.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
+      ],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-default-1440.png",
+          "width": 1440,
+          "sha256": "b1a94ebc74f269c3eecbb4e8958bbe6d2f14b6ce2a6b89239accaf02d2420ab5"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-hover-1440.png",
+          "width": 1440,
+          "sha256": "03da84df80ccaf430f3de4267fceb5b3c0ecce793347ee3950d52c4526389ccb"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-focus-1440.png",
+          "width": 1440,
+          "sha256": "904afe14f408a94dd2a4089dfccc3450b5c115abd2d8173a71d1f7576d6d46cf"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-pressed-1440.png",
+          "width": 1440,
+          "sha256": "c848e0b52680a01b1c77ef579c3420dea18069781589f7da10cb602d7a77ec2b"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-disabled-1440.png",
+          "width": 1440,
+          "sha256": "4d8f2c96ecb314067c0782df2ae343100c2b484299a0449cb564d68f3af539d9"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-default-390.png",
+          "width": 390,
+          "sha256": "73afff638b8341f0e7e58c876628b930c283ca7b03de4e53d9d24071ff57900c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-hover-390.png",
+          "width": 390,
+          "sha256": "d4f9703963c416130c153fc6e90afb9f29cdf69994305606b8e7f57c9804a681"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-focus-390.png",
+          "width": 390,
+          "sha256": "537bc00fd2558090540354c9955573a9503043e34695b6457b6f3478aebb0b9d"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-pressed-390.png",
+          "width": 390,
+          "sha256": "5bb6198b29e7c4512bbee8eb52090a9194eeb7b0abb2e0dc8e78ca0b3e7875c3"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/revoke-submit-disabled-390.png",
+          "width": 390,
+          "sha256": "e9479f65048784c9014c2a6eeb9ce736b0ebe22f19926e632dcdba1acf72a902"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "filters-closed",
+      "selector": "#filters-toggle",
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": true,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": null,
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/filters-closed-default-390.png",
+          "width": 390,
+          "sha256": "659db2dcb65e5ef1b22bd86f0351690e1f8305a8e6f7c0ed85482f2599e9261c"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/filters-closed-hover-390.png",
+          "width": 390,
+          "sha256": "0ba5e3c68737583c52b87cb599035128e044ca28986aa9fa147c0a3ca953fdd8"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/filters-closed-focus-390.png",
+          "width": 390,
+          "sha256": "b3fe4db8715964e835eb52cb79c2c12cfdbe05692c8d4dbc44de514a05c9c7e6"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/filters-closed-pressed-390.png",
+          "width": 390,
+          "sha256": "9af084e004c0043fea06c483d4720d5cc92b521e0ba52d0cf068b36ad22348da"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    },
+    {
+      "id": "filters-open",
+      "selector": "#filters-toggle",
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "proposalOnly": true,
+      "sharedReason": false,
+      "parentReference": false,
+      "actionId": null,
+      "sourceCandidateIds": [],
+      "sharedSourceIds": [],
+      "screenshots": [
+        {
+          "file": "output/playwright/p36-controls-review/filters-open-default-390.png",
+          "width": 390,
+          "sha256": "bebd7c0632db7a8eb46b3f696e0a5bf02336f60b9f5f432c02d5b8bde6f68ef2"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/filters-open-hover-390.png",
+          "width": 390,
+          "sha256": "38d89f3b293c8547a982d25e00a5f8d119c5861572feb32de1549add8facb863"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/filters-open-focus-390.png",
+          "width": 390,
+          "sha256": "1a3ccc8d6b6546cbc7cfe763342ba693f5743a496407197f69fe1bb9c79abc9e"
+        },
+        {
+          "file": "output/playwright/p36-controls-review/filters-open-pressed-390.png",
+          "width": 390,
+          "sha256": "a550fa79b23230572a582798f659e6f9c538f4e9bf0e2fa49c17675641530b90"
+        }
+      ],
+      "scope": "独立控件原生图，不是全组适用性/实际Vue或批准"
+    }
+  ],
+  "externalControlCompositions": [
+    {
+      "file": "output/playwright/p36-controls-review/rotate-reason-composition-1440.png",
+      "width": 1440,
+      "sha256": "5712e5991d79b8cb234a18bf46f4834635737218dfbcf97334cbe4cb6382703a"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/revoke-reason-composition-1440.png",
+      "width": 1440,
+      "sha256": "3098f4b73787e95d8d023881341a763a492dd969903d8451d70f928e84451ac3"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/copy-composition-1440.png",
+      "width": 1440,
+      "sha256": "226c77ba851bd2d3fcf4921d5c2744fa64a8334bd38b94d70f9491ec34ee2e9e"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/copy-copied-composition-1440.png",
+      "width": 1440,
+      "sha256": "596f72749ced86d9ca36bcd2a6f46015ebfae65e9bc81df85909cd4b2298f399"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/copy-failed-composition-1440.png",
+      "width": 1440,
+      "sha256": "a5e7da423bb2537c8a47b0552dac181c0fb2fa7cbd0390a5add6b1e4918bfcc7"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/rotate-reason-composition-390.png",
+      "width": 390,
+      "sha256": "b48c563f82eb7b0d2d0e785baa3023c5816379a1e9aced24b50ff17908b10d7b"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/revoke-reason-composition-390.png",
+      "width": 390,
+      "sha256": "67637ad81684c72d948af99896de2ec61e6b58bcb6935890065acfdef11bdbd3"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/copy-composition-390.png",
+      "width": 390,
+      "sha256": "fc3cfab250a441e7a21bc8375f16a6087c2c9a702919b65688898c2dacd9e8ac"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/copy-copied-composition-390.png",
+      "width": 390,
+      "sha256": "e9495b9343f6b0f3e776a21bec51ca42bb55c3cad173fa8c30463001e06fd8e9"
+    },
+    {
+      "file": "output/playwright/p36-controls-review/copy-failed-composition-390.png",
+      "width": 390,
+      "sha256": "80df60c7ecf099f9a1a8c489168e531f357fa707d276da2047231b368a57ef2d"
+    }
+  ],
+  "externalFieldCompositions": [
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-default-1440.png",
+      "width": 1440,
+      "sha256": "fd73231cbfa45912d3db1498f43c4573bad064f4667f5a9628f2b3b39b772140"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-search-1440.png",
+      "width": 1440,
+      "sha256": "1b91fb0e7f175a3eb069cddd2fafe2e352f9bd97a90a3e807989312b5255dfd4"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-empty-1440.png",
+      "width": 1440,
+      "sha256": "2740edf2b0dc5445695a73588ea09e24bbbe50628f20dc5ac81da428260ac4ec"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-refreshing-1440.png",
+      "width": 1440,
+      "sha256": "ce1e005e51c1c19439289d503d66361742ca3f01723387df5b4be6faf4ebd748"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create-1440.png",
+      "width": 1440,
+      "sha256": "75c3741094320d2750e4f892b55a9ac6f2700e6294918d1329bbf11eb4e02777"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_draft-1440.png",
+      "width": 1440,
+      "sha256": "29808cdcad7c863d95f56ec1ff60febc967090000e917ccef5d9d4a8bca82df6"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_all_scopes-1440.png",
+      "width": 1440,
+      "sha256": "8a98a7536fb6554818da29d77fed473e85d851bac71815dabfc77d6d62574fb0"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_required-1440.png",
+      "width": 1440,
+      "sha256": "241fb2e0981759acf375d7218c94eb09202f80cff1be5bdde5b06b408b3faa6e"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_busy-1440.png",
+      "width": 1440,
+      "sha256": "a13eba4788e842ebebadb7dd807491c71611cccaef4d7bc0419aff76d4a9db5f"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_failure-1440.png",
+      "width": 1440,
+      "sha256": "65231c20620ccc0d9c1f35a62314028de1813abba9440a9569179edfc30c4bef"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_long-1440.png",
+      "width": 1440,
+      "sha256": "1092f160d9f8a5b44330dd313ae61736f1e1f3cd9bb5376236ce924d43e3249d"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_ttl_error-1440.png",
+      "width": 1440,
+      "sha256": "20712b4422f916da06916463740e629e180421ec393d0d79fe2ac2a2fa86c795"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-default-1440.png",
+      "width": 1440,
+      "sha256": "66516153001c2da91f84767b7cabe047229462611f91df511872e17e2948c907"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-short-1440.png",
+      "width": 1440,
+      "sha256": "58492c249835e967583be3b84292e7b1eaafc982446b4ebcc94572c6835659dc"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-valid-1440.png",
+      "width": 1440,
+      "sha256": "f394be1c9b0449d5ae60ac2ee33634e9efaf63a2f37fa73fd4064ecaf90309ab"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-limit-1440.png",
+      "width": 1440,
+      "sha256": "f043d2b6a7fcf2627c83d5dc5eb2620835de61c2c9d5e97421aeedebfe8ce00c"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-default-1440.png",
+      "width": 1440,
+      "sha256": "30233b0e57230afb8950b4f1cc2c4829540acd0e31f14c2bc7737935ab71f7a9"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-short-1440.png",
+      "width": 1440,
+      "sha256": "a493945ac71806724f3f73910bd86683817827dc5a4d99a973376f82d055bf50"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-valid-1440.png",
+      "width": 1440,
+      "sha256": "39d877e95e09a67d74de892d1a7723f098920efa7f0cde52ef2e4d390d72162c"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-limit-1440.png",
+      "width": 1440,
+      "sha256": "a6dff24d3b65c2a30535f75289a8ff35404410222fc97e8da9bf798f5e490f92"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-default-390.png",
+      "width": 390,
+      "sha256": "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-search-390.png",
+      "width": 390,
+      "sha256": "fa4e4aadeb00886b1b1a65b1416a8be9dde2b253f31f971a13431ddefa5b30f6"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-empty-390.png",
+      "width": 390,
+      "sha256": "c137c337ad667bee7e10867ed382178c2264632480f858b6cc86e0e4fec24e12"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-filters-refreshing-390.png",
+      "width": 390,
+      "sha256": "291e2e5a982252feff72ca3ce4937eb17ec12ab4c49749fa3c92900f4f0bb3ed"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create-390.png",
+      "width": 390,
+      "sha256": "bcf90c21a627e809ec5911182ddd6feae03c5a4a4cfda0ce66e2324809e5b7e2"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_draft-390.png",
+      "width": 390,
+      "sha256": "9c4c3d38c828dedb86af10706c92acb5db0813ddb17bd1058a91c26036ccbf0e"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_all_scopes-390.png",
+      "width": 390,
+      "sha256": "ed74e0b7e2a0b20d7ee5b34e8e9ea0dbd95810d8c071fe24983001271984baf3"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_required-390.png",
+      "width": 390,
+      "sha256": "4f2f4f2845012124a0c259f8b65f03133140fbe1bd5e1d189aa7103b0f526c78"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_busy-390.png",
+      "width": 390,
+      "sha256": "ca5ca9e5d4feabcedd4acaa31b919f6ed3d8d3b16f98979c4670d87ffe45008a"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_failure-390.png",
+      "width": 390,
+      "sha256": "df15391dac0bd25259568ae5ec0d10082c42bd105efb1e0d4c204b7226816054"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_long-390.png",
+      "width": 390,
+      "sha256": "0c99346f89aabead68c7ce18f7983f0c428c36a12adf7098b3618ea37cc57c3e"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-create_ttl_error-390.png",
+      "width": 390,
+      "sha256": "26c9cf86777eb0af3384c1b9def84b8c0cf302a15f38ed348712eabeb9e7a755"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-default-390.png",
+      "width": 390,
+      "sha256": "ddc5006b54ef5f0dff5aaab358a6e57e535698626502c07a2679037f198369c6"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-short-390.png",
+      "width": 390,
+      "sha256": "0d6f1f5b4671b35250cd987dc10fdd9a9323f4cb95dd651bb96060ca52af901a"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-valid-390.png",
+      "width": 390,
+      "sha256": "42046c8a548f68397ff28c9638e162fdabb5dcb5026e58972e494c3a044048c5"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-rotate-limit-390.png",
+      "width": 390,
+      "sha256": "6a2dc9df2e65bf8655ae0981e39922e3be96de208680a6e28b483f16927fdac1"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-default-390.png",
+      "width": 390,
+      "sha256": "379b8a81e58b3837d7f75f1e1bb97bdaa40f3d3395ced592209b9e556ea9090a"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-short-390.png",
+      "width": 390,
+      "sha256": "3f0b980f6ab8679224936dc71cafa6400e3ded8fbdb217f40f84b45b955480ed"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-valid-390.png",
+      "width": 390,
+      "sha256": "414f134780e67ac1ca7b26084792ffee92e961516ca8c971c6ceeab7d5c58480"
+    },
+    {
+      "file": "output/playwright/p36-fields-review/composition-revoke-limit-390.png",
+      "width": 390,
+      "sha256": "75cf90d1d073108423be75bd9db4b76a2c62ce0defabd7567575fb81eced4252"
+    }
+  ],
+  "externalImplementationImages": [
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/default-390.png",
+      "width": 390,
+      "sha256": "267c8414c42bc63904ac8acf4a0e15561a2c2aab9d0dc5a394951ae8fa0cb3c0"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/matching-390.png",
+      "width": 390,
+      "sha256": "f83fa8e58ff4084cdef4962cb5f0d67d25194fb361d2df388fb6903bf8964249"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/no-result-390.png",
+      "width": 390,
+      "sha256": "d9f47d02dc349dd1a4663f28b2fa25c280ab55ca1f119915b8d7147e707d4aba"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/reset-focus-390.png",
+      "width": 390,
+      "sha256": "b9b4e87fdfa7661a2e39c1981a3d1a76081d03b058f8cd56db6c8a343e44bc74"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/busy-390.png",
+      "width": 390,
+      "sha256": "445e674f4f9281233934ae3dbbea5f83c10a206a3592d8fa28149d886a887680"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/default-760.png",
+      "width": 760,
+      "sha256": "f883e48ee19c1e2e93411154bd139cafa112b0f46dd1e010d444c5dc94ee8101"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/matching-760.png",
+      "width": 760,
+      "sha256": "ad3474bcc2feb80ef765b0024e6654bba07479b651a3316b2db9d76535d581f0"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/no-result-760.png",
+      "width": 760,
+      "sha256": "a04ed90e9a6ff9b8e1199db9aa805a354d8144efcd5c82f671cefa345cdacfe7"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/reset-focus-760.png",
+      "width": 760,
+      "sha256": "97bea86b4e7bd405254d52a4dd1cd7ec158a2796e78e7f1ccc65b60318526815"
+    },
+    {
+      "file": "output/playwright/p36-mobile-filters-vue/busy-760.png",
+      "width": 760,
+      "sha256": "49a573a0306e482e457ab646692d0b63c9145775cb29dcc62cedf243b3a8c78f"
+    }
+  ],
+  "actualVueMobileFilters": {
+    "evidence": "output/playwright/p36-mobile-filters-vue/evidence.json",
+    "review": "P36-MOBILE-FILTER-VUE-REVIEW.md",
+    "scope": "仅已批准手机筛选区的真实子Vue；290检查/10图，不是父级/API/生产验收",
+    "approval": "仅手机四字段/帮助/底部重置局部批准；其他状态和整页待审"
+  },
+  "nonModelFields": [
+    {
+      "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+      "binding": "createForm.scopes",
+      "kind": "checked/change-not-v-model",
+      "actionId": "OG-K-SCOPE",
+      "meaning": "固定四种scope，非静默默认；原草稿等待可编辑，独立稿busy锁定只是提案",
+      "fieldEvidence": {
+        "id": "field-scopes",
+        "selector": "#field-scopes",
+        "screenshots": [
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-empty-1440.png",
+            "width": 1440,
+            "sha256": "9673a5e04772c545e6aa2f14b85ec299373c05795faebf36c10ff7e92b82be05"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-one-1440.png",
+            "width": 1440,
+            "sha256": "351348759ebb55dbdf7ed3181bf47cf87d92ed154f60fa64bacac191eb38120c"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-all-1440.png",
+            "width": 1440,
+            "sha256": "52b71a4ad360d8e4091b9cb713b780a3b26008d0d0bc5d53da64da02f6d8dda7"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-error-1440.png",
+            "width": 1440,
+            "sha256": "f0eb21c92c724d4cf2322886804ee50abfc9cf867b39a70522fc31d17ba7b5df"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-busy-1440.png",
+            "width": 1440,
+            "sha256": "8ba5f4c08b35024affd439d7daf43a09e7103a6645aeacb9b7a1bb99a66ac2dc"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-empty-390.png",
+            "width": 390,
+            "sha256": "390eea8e301842c83753e0913f623baf1a8761e16a52eaa30bab220cb98160d0"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-one-390.png",
+            "width": 390,
+            "sha256": "c6afd7e395b5aa1ea3f8fde56d23c88e69436b1963fa5dd34e23ab91edd07b2c"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-all-390.png",
+            "width": 390,
+            "sha256": "8e0d483150c67e09a822a1879cd06927ceecc7a15da0e9f8c7d358f9a15dbfe7"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-error-390.png",
+            "width": 390,
+            "sha256": "887355aa7eb4a08c56011b13118b872cdd7a4bacacba633811a9f8859ee13e39"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/field-scopes-busy-390.png",
+            "width": 390,
+            "sha256": "a72f8f76b2c59a348b67c19bd14a2418dc714bce2ebdc44374be4a9e8f7c5498"
+          }
+        ]
+      }
+    }
+  ],
+  "sharedReasonReview": {
+    "sourceHashes": {
+      "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+      "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
+    },
+    "scope": "P36消费上下文，不将共享源加入本页唯一按钮分母",
+    "sourceSites": [
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#0a9c82c5c5fb1fd7.1",
+        "tag": "dialog",
+        "kind": "dialog-definition",
+        "events": {}
+      },
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#0b86489e495d6b17.1",
+        "tag": "dialog",
+        "kind": "event-binding",
+        "events": {
+          "@cancel": "handleCancel",
+          "@keydown": "handleTab"
+        }
+      },
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#e571bad78d52022e.1",
+        "tag": "form",
+        "kind": "form-event",
+        "events": {
+          "@submit.prevent": "submit"
+        }
+      },
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1",
+        "tag": "button",
+        "kind": "control",
+        "events": {
+          "@click": "$emit('cancel')"
+        }
+      },
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1",
+        "tag": "button",
+        "kind": "control",
+        "events": {
+          "@click": "$emit('cancel')"
+        }
+      },
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1",
+        "tag": "button",
+        "kind": "control",
+        "events": {}
+      }
+    ],
+    "input": {
+      "file": "apps/web/src/components/AuditedReasonDialog.vue",
+      "binding": "reason",
+      "minimum": 2,
+      "maxlength": null,
+      "initialValue": "",
+      "meaning": "当前Vue没有maxlength；原提案500上限未获业务批准"
+    },
+    "contexts": [
+      {
+        "action": "rotate",
+        "fieldId": "reason-rotate",
+        "selector": "#reason-input",
+        "screenshots": [
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-default-1440.png",
+            "width": 1440,
+            "sha256": "7d229b6b85a8ed7763ba40a2bd1cda24a83f3422d15f28282697e0ebe3bcf9fc"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-hover-1440.png",
+            "width": 1440,
+            "sha256": "e9e95f66cb46e186453f061a07a10ea74cdf83e8739578d6943bacc0774387b5"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-focus-1440.png",
+            "width": 1440,
+            "sha256": "20d71858c8ee84b32b01b5622045238407eae0cc0e1c40d046300d477c342e24"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-short-1440.png",
+            "width": 1440,
+            "sha256": "66449c27b513b86644ae49c0384e888f9a6aede4e5b77b729afb1973298f3db0"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-valid-1440.png",
+            "width": 1440,
+            "sha256": "c9ef165ccfe4c11fd4039f087596770640877fb28afce19c209fb7e58a2b7a8a"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-limit-1440.png",
+            "width": 1440,
+            "sha256": "dd416ebec4dcf9679c7c2d3739013fd785abf016ccae0dfe5e774077b3f4e16b"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-default-390.png",
+            "width": 390,
+            "sha256": "846f9dccfbfe2e28082fbe5eba1db870555cdd874aa0f33449ad1c98926ecae4"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-hover-390.png",
+            "width": 390,
+            "sha256": "430952c9dae060d014a6da08fa5dee2655d4bd3633cca5d28a22924d52faef01"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-focus-390.png",
+            "width": 390,
+            "sha256": "90625475cc8197b5c9e5363a23b666a98472671bba4323db414f8256042fe953"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-short-390.png",
+            "width": 390,
+            "sha256": "47f095ff78783bd349e0f1c4efda36054d6483d97366acb2cac0741bbab64667"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-valid-390.png",
+            "width": 390,
+            "sha256": "99715b98a6f2aa176b578e5bc69f65615ec2e2a737e26d6018fc3b085c6b35eb"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-rotate-limit-390.png",
+            "width": 390,
+            "sha256": "98c1b05d956373fbb306db8fecc899164821e0dde2d7c927987a3fcf130ba3c5"
+          }
+        ]
+      },
+      {
+        "action": "revoke",
+        "fieldId": "reason-revoke",
+        "selector": "#reason-input",
+        "screenshots": [
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-default-1440.png",
+            "width": 1440,
+            "sha256": "589337e90efe02d922e6172f9fbce5fd83cb2968a98be6227e8c85c725c90c04"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-hover-1440.png",
+            "width": 1440,
+            "sha256": "6f6013ecc0c21596e40bdd32369d402799b74eaf8e8014bd6f069fb42ce709f6"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-focus-1440.png",
+            "width": 1440,
+            "sha256": "aaf3bf539ebb1e6459f4c4af17ca3f5eef4bb2be626f137f3acaded98c2c52f3"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-short-1440.png",
+            "width": 1440,
+            "sha256": "ec57f4cc0f1cfa82395e00768628e73623ab4f89394b22eed6e5762e08ad7fc0"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-valid-1440.png",
+            "width": 1440,
+            "sha256": "e03248cee615889518efa9b06747429e78742c24d85dc6e4011c60ad9dac5099"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-limit-1440.png",
+            "width": 1440,
+            "sha256": "e181016e1770956317614e9ba3fdb329670ed7474031fd5dc6534a906d714cd2"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-default-390.png",
+            "width": 390,
+            "sha256": "846f9dccfbfe2e28082fbe5eba1db870555cdd874aa0f33449ad1c98926ecae4"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-hover-390.png",
+            "width": 390,
+            "sha256": "430952c9dae060d014a6da08fa5dee2655d4bd3633cca5d28a22924d52faef01"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-focus-390.png",
+            "width": 390,
+            "sha256": "90625475cc8197b5c9e5363a23b666a98472671bba4323db414f8256042fe953"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-short-390.png",
+            "width": 390,
+            "sha256": "47f095ff78783bd349e0f1c4efda36054d6483d97366acb2cac0741bbab64667"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-valid-390.png",
+            "width": 390,
+            "sha256": "99715b98a6f2aa176b578e5bc69f65615ec2e2a737e26d6018fc3b085c6b35eb"
+          },
+          {
+            "file": "output/playwright/p36-fields-review/reason-revoke-limit-390.png",
+            "width": 390,
+            "sha256": "98c1b05d956373fbb306db8fecc899164821e0dde2d7c927987a3fcf130ba3c5"
+          }
+        ]
+      }
+    ],
+    "remaining": "原生窗口开合/焦点/取消来自共享组件和useModalDialog；不是共享组件全调用方生命周期验收。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationTokenPanel.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+      "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.name",
+        "meaning": "P29资料分支，本页排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.logo_url",
+        "meaning": "P29资料分支，本页排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.timezone",
+        "meaning": "P29资料分支，本页排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.data_retention_days",
+        "meaning": "P29资料分支，本页排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.default_workspace_id",
+        "meaning": "P29资料分支，本页排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.reason",
+        "meaning": "P29资料分支，本页排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "createForm.name",
+        "meaning": "名称required/max120，提交trim；等待仍可编辑",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "create-name",
+          "selector": "#create-name",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/create-name-default-1440.png",
+              "width": 1440,
+              "sha256": "abfda97a264dfaad9652a1876f1de09e5864c86618774fdfd819708727849deb"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-hover-1440.png",
+              "width": 1440,
+              "sha256": "17679e209705510577418d1fa7b9069d7b676cfc407bcd4d01d5c2a00a2a23c5"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-focus-1440.png",
+              "width": 1440,
+              "sha256": "185a7297425170522a5cf46b23cf9006e00ec2f1e6c45c367e3d4d0eec0e4703"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-filled-1440.png",
+              "width": 1440,
+              "sha256": "49b718aa2cb08853982d31f96df98a5e5d618985834931f3ba08848249bbfeac"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-limit-1440.png",
+              "width": 1440,
+              "sha256": "6a7f8a0efc944b9904b07140d587585deecee3712ce4c570fe3c511ab735ee2d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-spaces-1440.png",
+              "width": 1440,
+              "sha256": "79e8cebcc9e9a1ceee509f2e6989c992290099b935e964521c69e2be2a2750cf"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-error-1440.png",
+              "width": 1440,
+              "sha256": "bd5631d26d0ff7cafa2f9ee5809c3cf13b513ad52f085f3bd39afe225321b978"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-busy-1440.png",
+              "width": 1440,
+              "sha256": "d9b8b6b38196502815a63bcb7eccc5c5e6b20aae5b8b6c82e610025c6e06c77f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-default-390.png",
+              "width": 390,
+              "sha256": "cc710db0e12b21698ffd9feaa3a3170ecab2dec87194957bd7385806f42dbe7e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-hover-390.png",
+              "width": 390,
+              "sha256": "93137222dca2d739d05053687ac40e03cb3717d237b7f7189fc7d98c053b7cba"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-focus-390.png",
+              "width": 390,
+              "sha256": "83c1ce1ec55e4a710d475170a63c4e814ec5b100ffbff511e3c1b271796d391f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-filled-390.png",
+              "width": 390,
+              "sha256": "6a1d868d50a02981d6de179367e13bfdc283cf14b4834e34ee35cea6b84d2cab"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-limit-390.png",
+              "width": 390,
+              "sha256": "0824cc9fb40897d0a0e1726b7ef158e10583e322c6988b5fe8de133551e46354"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-spaces-390.png",
+              "width": 390,
+              "sha256": "1510d70079ecff9bc8fdbfee7edc88fcba73d8d888c1e65e288e9e6216903750"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-error-390.png",
+              "width": 390,
+              "sha256": "ab0ecf2cbb2f63c75000a822ef6a2e96ee8b2628022e212e5204d5d1d1a61bb8"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-busy-390.png",
+              "width": 390,
+              "sha256": "6f1d7004b44e0464b067cc29cb37da504696f42d4fff8c16def279125a783c96"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "createForm.ttl_days",
+        "meaning": "number模型，required/min1/max365；默认90，四快捷只改草稿",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "create-ttl",
+          "selector": "#create-ttl",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-default-1440.png",
+              "width": 1440,
+              "sha256": "31b117002ab04e4dabf260b8a23fc1f16bef64e6b335aa250494d784f3b473ce"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-hover-1440.png",
+              "width": 1440,
+              "sha256": "c859fc2abc1b148aac902d958fa6ebcb41cdd5d7761cb71c2c3de238cd916f4d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-focus-1440.png",
+              "width": 1440,
+              "sha256": "c1f25663d6c7b8aff99b84e23164e9fdc6a295ae10e9bcb429c8e2c540ef21e8"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-minimum-1440.png",
+              "width": 1440,
+              "sha256": "db55f6f4270bee780c7b6ecac47dbbe4fc38a8880224364d6b4d849175921724"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-maximum-1440.png",
+              "width": 1440,
+              "sha256": "bba1aca22391ac50ff2d471769b50ed4b74e5712df7ba38c1407524550a7c922"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-zero-1440.png",
+              "width": 1440,
+              "sha256": "c147251018175a0865f736a0d02659767bb6687f2822cf28548de14b2c4abc0d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-over-1440.png",
+              "width": 1440,
+              "sha256": "b0524b0a225729d32f4c65659fcd941b72a9e5a46a81cd8afa862ca6d279a33b"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-fraction-1440.png",
+              "width": 1440,
+              "sha256": "cd164102e0d59233d436116dd829526473aee1e38038c27bf326af03fde77bab"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-empty-1440.png",
+              "width": 1440,
+              "sha256": "18a178fe9fcb44f5542351c3df5f8d532df7c7d379572ee661aa7fa0e6e20418"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-error-1440.png",
+              "width": 1440,
+              "sha256": "ae919d976f751cee65eafb5a41546de552e32b22fdee94d15583a4cfe643cbb3"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-busy-1440.png",
+              "width": 1440,
+              "sha256": "a7690c1b9775388779d22912c2169859c6c27adebb0b3f9343d64257d75312da"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-default-390.png",
+              "width": 390,
+              "sha256": "d5112389ca193be2bbbebc242bc5e94f74130a372a4fc9525a8ae88bf92e3b46"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-hover-390.png",
+              "width": 390,
+              "sha256": "d8c2e7dbee45fa326ed6acac9cc6f92063c753eb508454eb1cc30b984b190d10"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-focus-390.png",
+              "width": 390,
+              "sha256": "5dd7a93a281983baee171d8bee2a71019f3050fb4141918b8418ba42d2607893"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-minimum-390.png",
+              "width": 390,
+              "sha256": "c5e815968a384e299bd068ccfeae05eef31ba8f8865609cd84789966a4979315"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-maximum-390.png",
+              "width": 390,
+              "sha256": "297053edc217f84a297890fdc39f7db627d0333e7c18fedf15d51403bd379760"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-zero-390.png",
+              "width": 390,
+              "sha256": "9a92258a706d977e56ecdb4b7635696b01bbf8c182677e73653ecf74ac1e897d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-over-390.png",
+              "width": 390,
+              "sha256": "e67567c9f4ae4d710a2f81f93c08ea6580bb50ca3e62805f5d3297ef7936f498"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-fraction-390.png",
+              "width": 390,
+              "sha256": "4e42df58c7eb60422acc9a35139936d541ce9b50897e026675b9a4cc1428879c"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-empty-390.png",
+              "width": 390,
+              "sha256": "7bdb7c96520df3801b092111b772df7d7937ebebd8b31d176571fb0b7bde6acd"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-error-390.png",
+              "width": 390,
+              "sha256": "b496f7d412c8f501bc0ebe74044591458d772273b51e60d58dfaa92b29ccb4f1"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-busy-390.png",
+              "width": 390,
+              "sha256": "dbae8bffdd8a5fc78e07b77e9154fa77ab6b2c43a221e838b46006f7e8d31de9"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "createForm.reason",
+        "meaning": "创建原因required/max500，提交trim；不等于共享原因窗上限",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "create-reason",
+          "selector": "#create-reason",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-default-1440.png",
+              "width": 1440,
+              "sha256": "1824f36c4202b559d952f647b9e77faf56c5b04bd6810958f8f5a4f95d89ba14"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-hover-1440.png",
+              "width": 1440,
+              "sha256": "230901835927ab98c19cf9f621a77e6717e90455be98f861b0c60ecf6247e06f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-focus-1440.png",
+              "width": 1440,
+              "sha256": "33441804054a476268df92dd6eec73961a885b8e236a7b13bb0eee7875fbab77"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-filled-1440.png",
+              "width": 1440,
+              "sha256": "9a349cec74a809d787f312b29dc3e2c1fa6e2c20835242b8bf9b667a5c044bb2"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-limit-1440.png",
+              "width": 1440,
+              "sha256": "173854344478b635948e0f91a2f9af7e4e5894b1bdca24652a4ad3023f1048cf"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-spaces-1440.png",
+              "width": 1440,
+              "sha256": "85a5bc40c0cb24fd3cc8afc5e1bbed91b06a5863c95d0b46fc89afcd0a32ae87"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-error-1440.png",
+              "width": 1440,
+              "sha256": "4b9af0e29ba2c5890dd6a012f181add7e2812771f4b91c48e0036e8d9e0de460"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-busy-1440.png",
+              "width": 1440,
+              "sha256": "7cc40fd36c29585233576b92859fa991ae84e97a798285c05cff0c240b303b27"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-default-390.png",
+              "width": 390,
+              "sha256": "d2fd8cb9bdb5b4609f84af70c7336c66f07019c3649f55046e2398fb5cbf2b4d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-hover-390.png",
+              "width": 390,
+              "sha256": "4f30bd6001d1bcb2b22fc02f9e088f3a1ae7c632e8171af22bea06f19528d5bc"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-focus-390.png",
+              "width": 390,
+              "sha256": "7ddf6b293bada08f80ce7991921adcfad91dd2415fa1c1f94dca653e6fcbf82d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-filled-390.png",
+              "width": 390,
+              "sha256": "1ec6565797214de689396dc4c484e735b389611beb8b483ef1553fb7815dfcc3"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-limit-390.png",
+              "width": 390,
+              "sha256": "ffa8ee6e424aad7407a7a096d5257a6ee790429ab65c732ff3c296b539b7d2f7"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-spaces-390.png",
+              "width": 390,
+              "sha256": "b01594935529d6d50469a72bce452e4525eef39eef0371ce2fe0a45e183b4023"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-error-390.png",
+              "width": 390,
+              "sha256": "45d3fc446fa664a8021305c4904ce6ab50505a339cd1f127a871bab134f1f63e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-busy-390.png",
+              "width": 390,
+              "sha256": "042c778cc1b002d9c546cc83960656c3245c668445ecaaa7d688ccf943ae2213"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "tokenQuery",
+        "meaning": "搜索名称/前缀/中文状态/scope，不搜索ID；本地无maxlength，URL初读200",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "filter-query",
+          "selector": "#filter-query",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-default-1440.png",
+              "width": 1440,
+              "sha256": "542275037d568e5c973bbbe69ae68f091ef94f93efe936c5e80d09ea411c3b69"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-hover-1440.png",
+              "width": 1440,
+              "sha256": "cad022977d168e2dd4c73de8fed2264dd30b65ed7862758a940278e10061739b"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-focus-1440.png",
+              "width": 1440,
+              "sha256": "cc8affa0f4c7fcdb45d3d9c7045ec74bd3675fe7583bc9d18fff66793b68a052"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-filled-1440.png",
+              "width": 1440,
+              "sha256": "a18fae40f11efc1a593af9f448e8b5fb7e67532d618124eac33928e9915bef70"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-spaces-1440.png",
+              "width": 1440,
+              "sha256": "26f2a89152f9cbbe69ef9b3d5ba5ba9bbc8ff63ded8ff183037820c90e160a8f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-long-1440.png",
+              "width": 1440,
+              "sha256": "fb51053041a5b683abf9918ebf111ae94976a52f2835cc7468b7a2cdb257dd11"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-empty-result-1440.png",
+              "width": 1440,
+              "sha256": "fd097594ac514b00d3f6c04d9a71382f94e42f459e5b4f36a148a45dca2db7f6"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-id-excluded-1440.png",
+              "width": 1440,
+              "sha256": "5412de4df66d42524b35800d9d939b8864fc621f0bb8da13129c52864e15e5ab"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-default-390.png",
+              "width": 390,
+              "sha256": "07873ddb0b8c6cb31ffeafb685f22d3679fec4156f3be2147184c846fc9e76bd"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-hover-390.png",
+              "width": 390,
+              "sha256": "33cdc46b451236b2447921cd0a01610752e5e4a64785edbb765c597d41fb2df6"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-focus-390.png",
+              "width": 390,
+              "sha256": "5257ea993f0824a9f8d07d2fbce2231f1f242b3c91fdc37bdde3e658b3acb36c"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-filled-390.png",
+              "width": 390,
+              "sha256": "eabd0aedf301fc4b9e3bda15a042b6425a7eb4d85913d27f5b405c883e8f7452"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-spaces-390.png",
+              "width": 390,
+              "sha256": "26ddd8f6904422b31bcb9b7c4801f40fda0f61fd4c7729a253ed42bdfd8d4efe"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-long-390.png",
+              "width": 390,
+              "sha256": "ef1a6c92cc21f94dd831e0ac42ca7749dc348bfd3ff0fe2ac08f9164d5aa00d1"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-empty-result-390.png",
+              "width": 390,
+              "sha256": "8ef696b5bcb18dc319331911d80450adf2f7e45cbf3105c463f01e9cb1f21cfe"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-query-id-excluded-390.png",
+              "width": 390,
+              "sha256": "a80044126d4a940cab22e4c0b32ca9bea15e3cc633fc33cc128ce2826e79301a"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "statusFilter",
+        "meaning": "all/active/expiring/never_used/revoked/rotated/expired；按已返回数据计算",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "filter-status",
+          "selector": "#filter-status",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-default-1440.png",
+              "width": 1440,
+              "sha256": "e2edab99ff5bb66e8dc03a84f15f80c8240dca78d5bd71e86cf64496298bb6d2"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-hover-1440.png",
+              "width": 1440,
+              "sha256": "17c0646f8d3f867c7b098af6ede58df139925cb5eb8a646449b01136b1fea596"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-focus-1440.png",
+              "width": 1440,
+              "sha256": "c7fc082316fe6c75a106bb0b05dca095ff2fe0d8d79901102a1f0a86a2a304f7"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-all-1440.png",
+              "width": 1440,
+              "sha256": "e2edab99ff5bb66e8dc03a84f15f80c8240dca78d5bd71e86cf64496298bb6d2"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-active-1440.png",
+              "width": 1440,
+              "sha256": "347db4ffc960e6331d767587f0fdc8df0f1dfff3ba65ca648ed597aa707068a2"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-expiring-1440.png",
+              "width": 1440,
+              "sha256": "105485fddddd9ecc0da8ea036147a0a5f45a68ba4584eae219756b8ac58e7029"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-never_used-1440.png",
+              "width": 1440,
+              "sha256": "1a22994489a866f2724a46e90261fd6fc88c3422c7a241c97c2615b8b17062fc"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-revoked-1440.png",
+              "width": 1440,
+              "sha256": "cafdd4d036beac632970782e9a6ddfbf0030b29419ad4ed4135f37ab61cb9cd9"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-rotated-1440.png",
+              "width": 1440,
+              "sha256": "fa071e4b007856f1e503a98df8d4deeee4cf61e734fc8ce53a1cbc4a5f47a67e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-expired-1440.png",
+              "width": 1440,
+              "sha256": "2f93a63d68f24647c51fd734148f862d7d1609f821134effe573e5eba5cdb9a5"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-default-390.png",
+              "width": 390,
+              "sha256": "cb5e0db289e4eb0009e2f485333dd641cfebc6fa65c8ad129f71773c807aba9f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-hover-390.png",
+              "width": 390,
+              "sha256": "b8c0483837788a4ef868cffcee9762239ee0627ab7ba27a8be2c9208a32aed88"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-focus-390.png",
+              "width": 390,
+              "sha256": "ae100ca0f747a4eb58fe0b08ca270893813bbe8794fc7762390ba4e8a9ad2120"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-all-390.png",
+              "width": 390,
+              "sha256": "cb5e0db289e4eb0009e2f485333dd641cfebc6fa65c8ad129f71773c807aba9f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-active-390.png",
+              "width": 390,
+              "sha256": "2aaa59342b7022b06fa7c20ecff039a0003f5e221c1fb107937e8a99aa2501ac"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-expiring-390.png",
+              "width": 390,
+              "sha256": "fb73b468614f65a144a1443a2bc53aec5d98522cad2d5c0dc28210e9a003664e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-never_used-390.png",
+              "width": 390,
+              "sha256": "41ea4b51443c4d6507b5520054fa328cf093c61065b7d03f1633693eb79dafad"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-revoked-390.png",
+              "width": 390,
+              "sha256": "1977cefd2fa9a58157e0e3c63206a48a9d759184c2cc0433aee2115b998a1e14"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-rotated-390.png",
+              "width": 390,
+              "sha256": "a6d0ef835e3ee9d2d2ccf270d611ed37cda8ceb7efb645344a76439605dbcd3a"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-status-option-expired-390.png",
+              "width": 390,
+              "sha256": "1fef77b5db7913809ceeb1af50099fc0c6bac11d4a63aae2846006f3d8bb777b"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "scopeFilter",
+        "meaning": "全部及四固定scope，只筛选已有数据不更改授权",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "filter-scope",
+          "selector": "#filter-scope",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-default-1440.png",
+              "width": 1440,
+              "sha256": "842b9b1156641f4b1a810798a8904cf163f3234f4d9f527936b027db0902367b"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-hover-1440.png",
+              "width": 1440,
+              "sha256": "640f4f0af44fa87ebc30ac895f99f2eaf01382b80480df681d1a31bdcd8a84be"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-focus-1440.png",
+              "width": 1440,
+              "sha256": "c19c2f09284f1ce4735d53d0a77edf0032eb1f40c0edac9c92b63df734275e7d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-all-1440.png",
+              "width": 1440,
+              "sha256": "842b9b1156641f4b1a810798a8904cf163f3234f4d9f527936b027db0902367b"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-task-read-1440.png",
+              "width": 1440,
+              "sha256": "54d51c0dd5a84d461d5b3df73427d73ae53bc448457553dd66eb60bc066bde37"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-trend-read-1440.png",
+              "width": 1440,
+              "sha256": "ec17a0ee30bd7a2cb9e29d7ccb057e602011bbd3e3499cf38820072f15361b86"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-opportunity-read-1440.png",
+              "width": 1440,
+              "sha256": "6a11faec24fdce1cab3a9ec8bb9f1cada76ae27bea1a1f6648d86fe14071079c"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-report-read-1440.png",
+              "width": 1440,
+              "sha256": "17d65ad8f17b786c60dc5eab40cb83af52c78849a320a36f5c6ea4e68051a30f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-default-390.png",
+              "width": 390,
+              "sha256": "02b9e4bf4e572203d8d8b90d9e892fb357e8c6a8c8e9244fc7a0d2ccf95182a6"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-hover-390.png",
+              "width": 390,
+              "sha256": "c1f6ee1b25e7b474b9945f4e5659c9313eb464675161ecad88d486848edb7c25"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-focus-390.png",
+              "width": 390,
+              "sha256": "7ff567e600531210eb5d61104a57e1e3c04308d80e8fae951ab0cd7f8706cdbd"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-all-390.png",
+              "width": 390,
+              "sha256": "02b9e4bf4e572203d8d8b90d9e892fb357e8c6a8c8e9244fc7a0d2ccf95182a6"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-task-read-390.png",
+              "width": 390,
+              "sha256": "af19aa729189809871946e745a62391bc9ad0dddcdf3afce06b93d197eea2328"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-trend-read-390.png",
+              "width": 390,
+              "sha256": "a938ceee3dec8870b3c87dd066b76a7eb3d9c3ea0a6c8011b25aab0b698b06da"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-opportunity-read-390.png",
+              "width": 390,
+              "sha256": "9b79cd3788c66ef3dd3d2af255fde0d1cfab58584e986af93fac3f5a69a4a34e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-scope-option-report-read-390.png",
+              "width": 390,
+              "sha256": "60ca3f19d3938b387d9737d3ef0fe33d8c8b7d3bec7ad52daccbc935b8d21f94"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "tokenSort",
+        "meaning": "created_desc/expires_asc/last_used_desc/name_asc/status_asc，完整数组先排序再分页",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "filter-sort",
+          "selector": "#filter-sort",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-default-1440.png",
+              "width": 1440,
+              "sha256": "2ce4e6cee5f3acd6ba985ea90e656c0c9d5207388f3344778a87043ebed1f713"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-hover-1440.png",
+              "width": 1440,
+              "sha256": "af21234f1f2a620b2f77245278735e5afc697984eda78a9696640196c54bc5e0"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-focus-1440.png",
+              "width": 1440,
+              "sha256": "65ee524f0697cdd1407c0d19877b20c0c4c2c6f21566423494225f61cafd78c7"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-created_desc-1440.png",
+              "width": 1440,
+              "sha256": "2ce4e6cee5f3acd6ba985ea90e656c0c9d5207388f3344778a87043ebed1f713"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-expires_asc-1440.png",
+              "width": 1440,
+              "sha256": "33a28d8a651de4118e441173531b362d94f221a6017eb4817f5899de6817f5cc"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-last_used_desc-1440.png",
+              "width": 1440,
+              "sha256": "64b6866c20d8abceeff7b0b15349ad57f577c5a9d97fbd3b45bc9d3bbb56f15b"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-name_asc-1440.png",
+              "width": 1440,
+              "sha256": "c7fb86f79659223920b82f5f06f882b75ad8f2777ffdef6b6fd9cf1b26b05902"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-status_asc-1440.png",
+              "width": 1440,
+              "sha256": "43a0fe7fefb4dfebc94a7401ad1541ac4d08d150578c5c4371ae2805200d80d4"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-default-390.png",
+              "width": 390,
+              "sha256": "410d95d9adcc5a3419cd5cff6b5376d2b6051504b5371acd97c65028cf3b6f73"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-hover-390.png",
+              "width": 390,
+              "sha256": "aabe46739e94d7e723fa5f37426dbefef86f0c09a72b24d3452ea03f4e4aaa61"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-focus-390.png",
+              "width": 390,
+              "sha256": "40a75af770bcf57da6d772037a83394a50b539e9ebb68a735d930981d0605631"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-created_desc-390.png",
+              "width": 390,
+              "sha256": "410d95d9adcc5a3419cd5cff6b5376d2b6051504b5371acd97c65028cf3b6f73"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-expires_asc-390.png",
+              "width": 390,
+              "sha256": "ff7e4688b610a57603bf1ff5d9ffb6e37ff7c7adf1941b3f85f1c0b0617523ac"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-last_used_desc-390.png",
+              "width": 390,
+              "sha256": "e1e33f27caff8870cbb45f5850fabd32b875f2033262d8eb8b3335a1bc8a2c87"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-name_asc-390.png",
+              "width": 390,
+              "sha256": "534c672b08c273e7f2141cb7cac76d9960f8f21ab445ecd9bdb7fd4b54fc86bc"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/filter-sort-option-status_asc-390.png",
+              "width": 390,
+              "sha256": "7fa90a15714d376fcf515f0b9150dd302fe1bb5d43b4a2ea7d1e214e118ccb09"
+            }
+          ]
+        }
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "summary资料表单排除",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "variants": [
+          {
+            "name": "summary-excluded",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+            "exclusionReason": "仅summary非tokens"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "tokenAction等待同一共享窗，轮换/撤销空初始值",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "variants": [
+          {
+            "name": "rotate",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "reason_rotate"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          },
+          {
+            "name": "revoke",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "reason_revoke"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "顶部固定只读scope和明文边界说明",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "variants": [
+          {
+            "name": "security",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "组织权限说明，非弹窗/关闭通知",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "variants": [
+          {
+            "name": "truth",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "始终行内创建，实际busy只禁submit不锁草稿",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "variants": [
+          {
+            "name": "draft",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "create_draft"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          },
+          {
+            "name": "busy-proposal-differs",
+            "evidenceScope": "proposal-shape-differs",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "create_busy"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          },
+          {
+            "name": "failure",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "create_failure"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "创建预览只解释草稿范围和预计到期，不是真实响应",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "variants": [
+          {
+            "name": "preview",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "org-token-direction-c",
+                "scene": "create_draft"
+              }
+            ],
+            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "6处caller结构不等于6个业务弹窗；共享原生原因窗仅两种上下文。",
+      "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。"
+    ]
+  },
+  "approvalRecords": [
+    "P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"
+  ],
+  "compositionGaps": [
+    "本页仅手机四筛选字段/帮助/底部重置获局部批准并有真实子Vue证据；创建及其他控件问题仍待答。",
+    "原662PNG与10实图分别关联，独立schema不强充统一六态slot，72个路由动作槽仍not-mapped。",
+    "父级完整错误/刷新、URL历史、路由/组织/KeepAlive生命周期、OG-G05、真实MySQL/权限/审计/幂等与全73页部署验收仍待。",
+    "既有P35颜色门失败仍未获修复授权；不以本登记通过代替完整测试或自动提交。"
+  ],
+  "limits": [
+    "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+    "本登记不改生产代码/API/env/依赖/权限或数据库，不授予批准。"
+  ]
+}

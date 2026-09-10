@@ -1,0 +1,17 @@
+/* P35 approved mobile detail palette; loaded only with its existing detail stylesheet. */
+html #app [data-export-detail-c] .org-data-export-list {
+  --so-export-detail-ink: #202c3d;
+  --so-export-detail-muted: #58677b;
+  --so-export-detail-blue: #254a9c;
+  --so-export-detail-line: #dbe1e9;
+  --so-export-detail-paper: #fff;
+  --so-export-detail-neutral: #edf1f6;
+  --so-export-detail-success-ink: #236951;
+  --so-export-detail-success-bg: #e7f2ee;
+  --so-export-detail-info-bg: #e8eefb;
+  --so-export-detail-danger-ink: #9e3f3d;
+  --so-export-detail-danger-bg: #fbeeed;
+  --so-export-detail-pressed: #dbe7fb;
+  --so-export-detail-focus: #285ec7;
+  --so-export-detail-technical: #f3f5f9;
+}

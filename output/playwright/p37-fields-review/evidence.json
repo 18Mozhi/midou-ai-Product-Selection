@@ -1,0 +1,352 @@
+{
+  "proposal": "P37-FIELDS-C-r1",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/index.html": "b91a65f21595a9f55ac8f818b8ab290e3185d1ed156ec058b66bdc36369ebfcf",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.css": "d624063a8fcc0707b712aa8e3a71df150299da932f09cf2419516c5a75814101",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.js": "9da43f94c0b8e6a18abfb72066a178ea858600805b7ed47a681e02643af7eb5f",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html": "b97a1c15dff7ffec7aa2ac03be156d8d6c76c43c2836b49d39a25cf7baaf4ec7",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.css": "6fb60d708949da6cbb4cc58e9df8a8ddc78118652839a42195581cd0c6190122",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.js": "c37158e37ba596bab736e3d73dddc548fd94736181b6ff9651c30f7eb3f99ede",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/data.js": "55140393af77c84207310badd4b497f70c486efa77dd146372d97ade27943aaf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "scripts/lib/ui-phase2-org-audit-design-data.mjs": "1d920bd23768d112aaa833d48b5b66fdc333e5e806ea9d6f2077628348ef5ab0",
+    "scripts/verify-ui-phase2-org-audit-fields.mjs": "38728503e17404d7aa9a164c42fbd5832e8a0303fdcfa9b72196bd528187d61b"
+  },
+  "retainedManifest": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
+  "retainedImages": 104,
+  "checks": 175,
+  "screenshots": [
+    {
+      "file": "field-action-focus-390.png",
+      "width": 390,
+      "name": "field-action-focus",
+      "selector": "label[for=\"filter-action\"]",
+      "sha256": "5e43bdf08fef594ff6d8996a04bcc85b45d5678c5b38ccb0b631331b9e2f5cde",
+      "approval": "pending"
+    },
+    {
+      "file": "field-outcome-focus-390.png",
+      "width": 390,
+      "name": "field-outcome-focus",
+      "selector": "label[for=\"filter-outcome\"]",
+      "sha256": "f8d27d64174774a0fef372d35a1cf17090a5cefd34e0d6e896b13e827e066758",
+      "approval": "pending"
+    },
+    {
+      "file": "field-resource_type-focus-390.png",
+      "width": 390,
+      "name": "field-resource_type-focus",
+      "selector": "label[for=\"filter-resource_type\"]",
+      "sha256": "a40dac7b3e972bee74ee22e81b78babb50567a201dac6a6da95444f744a01103",
+      "approval": "pending"
+    },
+    {
+      "file": "field-request_id-focus-390.png",
+      "width": 390,
+      "name": "field-request_id-focus",
+      "selector": "label[for=\"filter-request_id\"]",
+      "sha256": "64ec90659ad38d82b5fc1af88e52eaa52a97862909c950eaf95d73748b418c9d",
+      "approval": "pending"
+    },
+    {
+      "file": "field-trace_id-focus-390.png",
+      "width": 390,
+      "name": "field-trace_id-focus",
+      "selector": "label[for=\"filter-trace_id\"]",
+      "sha256": "22104664c1a270a4e6216deab05fcdbb08b16bc891be53c16f7d9ab0f40e4ca5",
+      "approval": "pending"
+    },
+    {
+      "file": "field-occurred_from-focus-390.png",
+      "width": 390,
+      "name": "field-occurred_from-focus",
+      "selector": "label[for=\"filter-occurred_from\"]",
+      "sha256": "e8c5848dbe1b238a31b1efae6fd848d1d8a85b45875022e3ea85474d3f77f4f9",
+      "approval": "pending"
+    },
+    {
+      "file": "field-occurred_to-focus-390.png",
+      "width": 390,
+      "name": "field-occurred_to-focus",
+      "selector": "label[for=\"filter-occurred_to\"]",
+      "sha256": "98efa3ea445aaf1186ccc23680b34d139ca0ebe4cbf789ae8fa266f0f5644dac",
+      "approval": "pending"
+    },
+    {
+      "file": "field-action-maximum-390.png",
+      "width": 390,
+      "name": "field-action-maximum",
+      "selector": "label[for=\"filter-action\"]",
+      "sha256": "09583fd7d5cb84facac38d6d7337bdef8e94e869c2b0d4f1d5ec9c1d1946757c",
+      "approval": "pending"
+    },
+    {
+      "file": "field-resource_type-maximum-390.png",
+      "width": 390,
+      "name": "field-resource_type-maximum",
+      "selector": "label[for=\"filter-resource_type\"]",
+      "sha256": "b1700af29d22d4815e68c36fc734ab7d59d29fbbd2dcf297863be64edc52275a",
+      "approval": "pending"
+    },
+    {
+      "file": "field-request_id-maximum-390.png",
+      "width": 390,
+      "name": "field-request_id-maximum",
+      "selector": "label[for=\"filter-request_id\"]",
+      "sha256": "6b6c4a87e92baf8b2de5e2caa6bcb6f2b74f04182054c9d8d13c4c9b0a23d23c",
+      "approval": "pending"
+    },
+    {
+      "file": "field-trace_id-maximum-390.png",
+      "width": 390,
+      "name": "field-trace_id-maximum",
+      "selector": "label[for=\"filter-trace_id\"]",
+      "sha256": "a0956c0c29ed840364a7a9069d38b090338281582ba70f165f076ed94858332e",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-normal-390.png",
+      "width": 390,
+      "name": "combination-normal",
+      "selector": "#server-form",
+      "sha256": "1df902080eabf6851d3572369def1d0127757091c8a495f721f533a37e7a87cb",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-exact_draft-390.png",
+      "width": 390,
+      "name": "combination-exact_draft",
+      "selector": "#server-form",
+      "sha256": "4bd93ef96e8df85af1864bb70bc4fbf01eb328be1c10dc35aecbb4810e2693ba",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-advanced-390.png",
+      "width": 390,
+      "name": "combination-advanced",
+      "selector": "#server-form",
+      "sha256": "9944c33546347c02c8498719de967f8978a39b48d363c77c2514a856be771a3f",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-range_error-390.png",
+      "width": 390,
+      "name": "combination-range_error",
+      "selector": "#server-form",
+      "sha256": "5c3ab2d4475139e3763aabcd70c894321773bbf1109872f2596c499f2c1fd775",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-filter_busy-390.png",
+      "width": 390,
+      "name": "combination-filter_busy",
+      "selector": "#server-form",
+      "sha256": "1c6e6d1982c672560a97f32e00dc5b7b48ad4849634de495d3f50462e4aed61e",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-filter_failure-390.png",
+      "width": 390,
+      "name": "combination-filter_failure",
+      "selector": "#server-form",
+      "sha256": "4bd93ef96e8df85af1864bb70bc4fbf01eb328be1c10dc35aecbb4810e2693ba",
+      "approval": "pending"
+    },
+    {
+      "file": "local-search-filled-390.png",
+      "width": 390,
+      "name": "local-search-filled",
+      "selector": ".loaded-search",
+      "sha256": "35740af3f49033ada9b4219f0add90c2fd729b7b0094f800521c585e11fb4bfe",
+      "approval": "pending"
+    },
+    {
+      "file": "local-search-maximum-390.png",
+      "width": 390,
+      "name": "local-search-maximum",
+      "selector": ".loaded-search",
+      "sha256": "d3631d34d50a9e017e16ebabf77de28f9fbb7e3b74943cf1947cfae63bba02ca",
+      "approval": "pending"
+    },
+    {
+      "file": "field-action-focus-1440.png",
+      "width": 1440,
+      "name": "field-action-focus",
+      "selector": "label[for=\"filter-action\"]",
+      "sha256": "0a5484c812271d03eda6de3a457e6063b69a0a8ce54620c7d1ca648e90070334",
+      "approval": "pending"
+    },
+    {
+      "file": "field-outcome-focus-1440.png",
+      "width": 1440,
+      "name": "field-outcome-focus",
+      "selector": "label[for=\"filter-outcome\"]",
+      "sha256": "703f468e88da5421c5ed04927058eca9a730cb4b5a5570df260348246deb7d28",
+      "approval": "pending"
+    },
+    {
+      "file": "field-resource_type-focus-1440.png",
+      "width": 1440,
+      "name": "field-resource_type-focus",
+      "selector": "label[for=\"filter-resource_type\"]",
+      "sha256": "be8e3f844f46cabd5d22e878c1e346069ad5ceae0862b3471a5ec3b5b03bc40c",
+      "approval": "pending"
+    },
+    {
+      "file": "field-request_id-focus-1440.png",
+      "width": 1440,
+      "name": "field-request_id-focus",
+      "selector": "label[for=\"filter-request_id\"]",
+      "sha256": "e9c9f13603ff2229b00656cd1f60eee7030150812dc37bb7cfc1256e60e4bba9",
+      "approval": "pending"
+    },
+    {
+      "file": "field-trace_id-focus-1440.png",
+      "width": 1440,
+      "name": "field-trace_id-focus",
+      "selector": "label[for=\"filter-trace_id\"]",
+      "sha256": "e0d1683dd577447b1c1e9a1efe934112dc602916f212d77e93ea79848eb97e14",
+      "approval": "pending"
+    },
+    {
+      "file": "field-occurred_from-focus-1440.png",
+      "width": 1440,
+      "name": "field-occurred_from-focus",
+      "selector": "label[for=\"filter-occurred_from\"]",
+      "sha256": "cd4939fe763ddf4b7afd5b56a69701c6e9aff26117ca383f6b5cf936289953b7",
+      "approval": "pending"
+    },
+    {
+      "file": "field-occurred_to-focus-1440.png",
+      "width": 1440,
+      "name": "field-occurred_to-focus",
+      "selector": "label[for=\"filter-occurred_to\"]",
+      "sha256": "f8f30ed2e90d617bedbcfba4754e6a15b1bfab183059bd71b1adf5d2cc33c7b6",
+      "approval": "pending"
+    },
+    {
+      "file": "field-action-maximum-1440.png",
+      "width": 1440,
+      "name": "field-action-maximum",
+      "selector": "label[for=\"filter-action\"]",
+      "sha256": "00cbca351e58cb1bf8b554e0fd217fbe643874b5b28b501eba7f593f2f1a2ce0",
+      "approval": "pending"
+    },
+    {
+      "file": "field-resource_type-maximum-1440.png",
+      "width": 1440,
+      "name": "field-resource_type-maximum",
+      "selector": "label[for=\"filter-resource_type\"]",
+      "sha256": "4c3c3ac7849e1dbf4930d8bdea27d067c477b757c1efd0cc0797caa37b5e28a2",
+      "approval": "pending"
+    },
+    {
+      "file": "field-request_id-maximum-1440.png",
+      "width": 1440,
+      "name": "field-request_id-maximum",
+      "selector": "label[for=\"filter-request_id\"]",
+      "sha256": "9254108c0c7ae76e935c494ba7f63950d4fd95af75ff9da2bc928cd8b2548ab1",
+      "approval": "pending"
+    },
+    {
+      "file": "field-trace_id-maximum-1440.png",
+      "width": 1440,
+      "name": "field-trace_id-maximum",
+      "selector": "label[for=\"filter-trace_id\"]",
+      "sha256": "16e7f26337a6935a4e42a3c362edb83de649fdf95fc2624890eef4f0d963883a",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-normal-1440.png",
+      "width": 1440,
+      "name": "combination-normal",
+      "selector": "#server-form",
+      "sha256": "2c4a6a25a5fe1ad822b632cf4be767befad680b7cccb96b436784d91b4f8cfd5",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-exact_draft-1440.png",
+      "width": 1440,
+      "name": "combination-exact_draft",
+      "selector": "#server-form",
+      "sha256": "6c3effb048b179ff6d65287c019abf1f46f266a745e92f6c85096a90f4f64d98",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-advanced-1440.png",
+      "width": 1440,
+      "name": "combination-advanced",
+      "selector": "#server-form",
+      "sha256": "8b004b77960b748945186d1c60b9836c6d57a10c7cd79bd5b370f60f521b8b03",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-range_error-1440.png",
+      "width": 1440,
+      "name": "combination-range_error",
+      "selector": "#server-form",
+      "sha256": "c8549f07b9949aa33f960507b3c6fcf6ab52bf1bfd7d01337c687a947b63f3bf",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-filter_busy-1440.png",
+      "width": 1440,
+      "name": "combination-filter_busy",
+      "selector": "#server-form",
+      "sha256": "45e18bfe15a0a0c15c11e0e239a6517277fc936d845ad983c9ef89492ad25778",
+      "approval": "pending"
+    },
+    {
+      "file": "combination-filter_failure-1440.png",
+      "width": 1440,
+      "name": "combination-filter_failure",
+      "selector": "#server-form",
+      "sha256": "6c3effb048b179ff6d65287c019abf1f46f266a745e92f6c85096a90f4f64d98",
+      "approval": "pending"
+    },
+    {
+      "file": "local-search-filled-1440.png",
+      "width": 1440,
+      "name": "local-search-filled",
+      "selector": ".loaded-search",
+      "sha256": "e9c41c3dfd0fb3e85a5d30f652b120278e8a7fe0a0026c522c88ffe00080790d",
+      "approval": "pending"
+    },
+    {
+      "file": "local-search-maximum-1440.png",
+      "width": 1440,
+      "name": "local-search-maximum",
+      "selector": ".loaded-search",
+      "sha256": "06523d6bbb722b77b8f042fdd76af7ec61a1aa482356373b9164f6a21aef1761",
+      "approval": "pending"
+    }
+  ],
+  "scope": "Synthetic prototype only; not actual Vue, backend, authorization or production acceptance. All images pending review. Browser closed; no server started.",
+  "sourceAssociation": {
+    "kind": "copy-feedback-only-current-source-historical-design-evidence",
+    "baselineCommit": "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+    "originalManifestHash": "2a6be49266bef3c06bf6969d8759196a3c12ecff4ee94cefd707029d0b55b69f",
+    "historicalSourceHashes": {
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/index.html": "b91a65f21595a9f55ac8f818b8ab290e3185d1ed156ec058b66bdc36369ebfcf",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.css": "d624063a8fcc0707b712aa8e3a71df150299da932f09cf2419516c5a75814101",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/fields.js": "9da43f94c0b8e6a18abfb72066a178ea858600805b7ed47a681e02643af7eb5f",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html": "b97a1c15dff7ffec7aa2ac03be156d8d6c76c43c2836b49d39a25cf7baaf4ec7",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.css": "6fb60d708949da6cbb4cc58e9df8a8ddc78118652839a42195581cd0c6190122",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/audit.js": "c37158e37ba596bab736e3d73dddc548fd94736181b6ff9651c30f7eb3f99ede",
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/data.js": "55140393af77c84207310badd4b497f70c486efa77dd146372d97ade27943aaf",
+      "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+      "scripts/lib/ui-phase2-org-audit-design-data.mjs": "f4e417f89d9a63c3b4067ead1ae0ee6f12536432368326c7fe0eb620f4fe7aa1",
+      "scripts/verify-ui-phase2-org-audit-fields.mjs": "38728503e17404d7aa9a164c42fbd5832e8a0303fdcfa9b72196bd528187d61b"
+    },
+    "historicalRetainedManifest": "06eafbe2dcc677992421e079759c2cb3b67293c23885f00697bf5c2e63cf5c70",
+    "proof": "scripts/lib/ui-phase2-audit-copy-baseline.mjs",
+    "proofHash": "df3969f95ac7c635143cb38c540bac464202e70984e4b27542a46fcaab953527",
+    "currentCopyEvidence": "output/playwright/p37-copy-ownership-vue/evidence.json",
+    "images": "unchanged",
+    "template": "unchanged",
+    "approval": "unchanged",
+    "fixture": "original baseline functions and assertions; sourceChecks describe capture-time findings, not current copy behavior"
+  }
+}
