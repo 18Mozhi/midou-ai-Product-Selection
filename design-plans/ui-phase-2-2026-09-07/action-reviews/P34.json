@@ -1,0 +1,2373 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P34",
+  "route": "/org-admin/approvals",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "2bda7b1e4c04d4dfe751e396bbb2d762cbe7654986b5d5c48446300f57605327"
+  },
+  "actions": [
+    {
+      "actionId": "OG-REFRESH",
+      "label": "刷新组织审批",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+      ],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "loading或refreshing禁用",
+      "handler": "load({background:true})并行summary与approvals；普通后台失败保留两份旧数据，401/403替换内容",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-busy"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-loading-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-default",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-hover",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-focus",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-pressed",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "busy": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "refresh-busy",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "refresh",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#refresh",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+          ],
+          "states": {
+            "default": "refresh-default",
+            "hover": "refresh-hover",
+            "focus": "refresh-focus",
+            "pressed": "refresh-pressed",
+            "busy": "refresh-busy"
+          }
+        },
+        {
+          "id": "refresh-loading",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#refresh",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+          ],
+          "states": {
+            "disabled": "refresh-loading-disabled"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-RETRY",
+      "label": "错误后重新加载",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
+        "apps/web/src/components/OrganizationApprovalFirstFailure.vue#54b14787946c2f69.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY",
+        "OG-RETRY 手机首次500恢复按钮"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "父错误分支；新增F仅首次无data/HTTP500/手机可见，桌面保留原按钮",
+      "handler": "新F仅emit reload；父原load()，没有新的请求策略、权限或自动倒计时",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-forbidden-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-forbidden-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-forbidden-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-forbidden-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-expired-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-expired-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-expired-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-expired-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-rate_limited-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-rate_limited-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-rate_limited-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-rate_limited-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-default",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-hover",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-focus",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "retry-error-pressed",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "retry-error",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#retry",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+          ],
+          "states": {
+            "default": "retry-error-default",
+            "hover": "retry-error-hover",
+            "focus": "retry-error-focus",
+            "pressed": "retry-error-pressed"
+          }
+        },
+        {
+          "id": "retry-forbidden",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#retry",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+          ],
+          "states": {
+            "default": "retry-forbidden-default",
+            "hover": "retry-forbidden-hover",
+            "focus": "retry-forbidden-focus",
+            "pressed": "retry-forbidden-pressed"
+          }
+        },
+        {
+          "id": "retry-expired",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#retry",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+          ],
+          "states": {
+            "default": "retry-expired-default",
+            "hover": "retry-expired-hover",
+            "focus": "retry-expired-focus",
+            "pressed": "retry-expired-pressed"
+          }
+        },
+        {
+          "id": "retry-rate_limited",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#retry",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+          ],
+          "states": {
+            "default": "retry-rate_limited-default",
+            "hover": "retry-rate_limited-hover",
+            "focus": "retry-rate_limited-focus",
+            "pressed": "retry-rate_limited-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "WIRE-P34-RETRY",
+      "label": "失败区域重试转发",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "仅P34/error/无data/HTTP500分支",
+      "handler": "@reload原样转发load()；不是第三个业务读取动作",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "forwardsTo": [
+        "OG-RETRY"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
+          "event": "@reload",
+          "handler": "load()",
+          "targets": [
+            "OG-RETRY"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "EX-P29-PROFILE",
+      "label": "组织资料排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "仅summary非approvals",
+      "handler": "不计P29资料保存与Logo校验",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+    },
+    {
+      "actionId": "EX-P30-MEMBERS",
+      "label": "成员事件排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
+      ],
+      "sourceContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "仅members",
+      "handler": "本页不邀请或修改成员",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+    },
+    {
+      "actionId": "EX-P31-ROLES",
+      "label": "授权事件排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
+      ],
+      "sourceContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "仅roles",
+      "handler": "本页不创建或修改授权",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+    },
+    {
+      "actionId": "EX-REASON-ORIGINS",
+      "label": "其他页原因窗调用排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON提交/取消父转发",
+        "D-OG-REASON组件调用",
+        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用",
+        "D-OG-REASON令牌轮换/撤销调用"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "P34无原因窗发起入口，父仍挂载共享组件",
+      "handler": "不把其他页调用算本页弹窗；跨页已打开窗口归属仍另验",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+    },
+    {
+      "actionId": "OG-A-VIEW",
+      "label": "记录/模板阅读视图",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue#00f81ad5e8a2f732.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#86f59f25b64551b6.1"
+      ],
+      "sourceContractKeys": [
+        "OG-A-VIEW"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "无busy禁用，保留各自筛选",
+      "handler": "section写入原URL键；不发审批或模板写入",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-selected-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-selected-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-selected-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-selected-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-available-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-available-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-available-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-available-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-selected-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-selected-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-selected-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-templates-selected-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-default",
+          "selector": "[data-view=\"requests\"]",
+          "catalogControlId": "view-requests-available"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-hover",
+          "selector": "[data-view=\"requests\"]",
+          "catalogControlId": "view-requests-available"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-focus",
+          "selector": "[data-view=\"requests\"]",
+          "catalogControlId": "view-requests-available"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "view-requests-available-pressed",
+          "selector": "[data-view=\"requests\"]",
+          "catalogControlId": "view-requests-available"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "view-requests-available",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-view=\"requests\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#00f81ad5e8a2f732.1"
+          ],
+          "states": {
+            "default": "view-requests-available-default",
+            "hover": "view-requests-available-hover",
+            "focus": "view-requests-available-focus",
+            "pressed": "view-requests-available-pressed"
+          }
+        },
+        {
+          "id": "view-requests-selected",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-view=\"requests\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "view-requests-selected-default",
+            "hover": "view-requests-selected-hover",
+            "focus": "view-requests-selected-focus",
+            "pressed": "view-requests-selected-pressed"
+          }
+        },
+        {
+          "id": "view-templates-available",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-view=\"templates\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#86f59f25b64551b6.1"
+          ],
+          "states": {
+            "default": "view-templates-available-default",
+            "hover": "view-templates-available-hover",
+            "focus": "view-templates-available-focus",
+            "pressed": "view-templates-available-pressed"
+          }
+        },
+        {
+          "id": "view-templates-selected",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-view=\"templates\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "view-templates-selected-default",
+            "hover": "view-templates-selected-hover",
+            "focus": "view-templates-selected-focus",
+            "pressed": "view-templates-selected-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-A-REQUEST-FILTER",
+      "label": "审批重置与分页",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue#f376017b5e1818c0.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#184674807c82ee93.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#3169b6613d3ce948.1"
+      ],
+      "sourceContractKeys": [
+        "OG-A-REQUEST-FILTER重置/分页"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "筛选字段无busy禁用；分页按边界禁用，8行一页",
+      "handler": "resetRequests只清本视图五条件；翻页仅本地列表及URL，不扩最近100条读取上限",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-previous-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-previous-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-previous-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-previous-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-previous-disabled"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-next-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-next-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-next-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-next-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-next-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-default",
+          "selector": "#reset",
+          "catalogControlId": "request-reset"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-hover",
+          "selector": "#reset",
+          "catalogControlId": "request-reset"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-focus",
+          "selector": "#reset",
+          "catalogControlId": "request-reset"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-reset-pressed",
+          "selector": "#reset",
+          "catalogControlId": "request-reset"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "request-reset",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#reset",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#f376017b5e1818c0.1"
+          ],
+          "states": {
+            "default": "request-reset-default",
+            "hover": "request-reset-hover",
+            "focus": "request-reset-focus",
+            "pressed": "request-reset-pressed"
+          }
+        },
+        {
+          "id": "request-previous",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-page=\"-1\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#184674807c82ee93.1"
+          ],
+          "states": {
+            "default": "request-previous-default",
+            "hover": "request-previous-hover",
+            "focus": "request-previous-focus",
+            "pressed": "request-previous-pressed",
+            "disabled": "request-previous-disabled"
+          }
+        },
+        {
+          "id": "request-next",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-page=\"1\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#3169b6613d3ce948.1"
+          ],
+          "states": {
+            "default": "request-next-default",
+            "hover": "request-next-hover",
+            "focus": "request-next-focus",
+            "pressed": "request-next-pressed",
+            "disabled": "request-next-disabled"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-A-TEMPLATE-FILTER",
+      "label": "模板重置、清除与分页",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue#2a3781fdd41e7df6.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#97e57c58af0dc63f.1"
+      ],
+      "sourceContractKeys": [
+        "OG-A-TEMPLATE-FILTER重置/分页/已批准手机空结果清除；清除后焦点回搜索，不写业务数据"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "6行一页；新清除仅模板非空且无匹配、手机可见",
+      "handler": "resetTemplates保留记录条件；已实施空结果清除回焦搜索，不扩大为桌面新增动作",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-previous-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-previous-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-previous-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-previous-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-previous-disabled"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-next-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-next-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-next-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-next-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-next-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-default",
+          "selector": "#reset",
+          "catalogControlId": "template-reset"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-hover",
+          "selector": "#reset",
+          "catalogControlId": "template-reset"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-focus",
+          "selector": "#reset",
+          "catalogControlId": "template-reset"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-reset-pressed",
+          "selector": "#reset",
+          "catalogControlId": "template-reset"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "template-reset",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "#reset",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#2a3781fdd41e7df6.1"
+          ],
+          "states": {
+            "default": "template-reset-default",
+            "hover": "template-reset-hover",
+            "focus": "template-reset-focus",
+            "pressed": "template-reset-pressed"
+          }
+        },
+        {
+          "id": "template-previous",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-page=\"-1\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1"
+          ],
+          "states": {
+            "default": "template-previous-default",
+            "hover": "template-previous-hover",
+            "focus": "template-previous-focus",
+            "pressed": "template-previous-pressed",
+            "disabled": "template-previous-disabled"
+          }
+        },
+        {
+          "id": "template-next",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-page=\"1\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1"
+          ],
+          "states": {
+            "default": "template-next-default",
+            "hover": "template-next-hover",
+            "focus": "template-next-focus",
+            "pressed": "template-next-pressed",
+            "disabled": "template-next-disabled"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-A-SELECT",
+      "label": "选择模板版本详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue#f6777d94811ef9af.1"
+      ],
+      "sourceContractKeys": [
+        "OG-A-SELECT"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "当前页模板按钮；归档仍可读，无busy禁用",
+      "handler": "selectedTemplateId；详情从全部filteredTemplates取选中或首项，翻页不保证选中属于当前页",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-current-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-current-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-current-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-current-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-archived-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-archived-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-archived-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-archived-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-default",
+          "selector": "[data-select][aria-pressed=\"false\"]",
+          "catalogControlId": "select"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-hover",
+          "selector": "[data-select][aria-pressed=\"false\"]",
+          "catalogControlId": "select"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-focus",
+          "selector": "[data-select][aria-pressed=\"false\"]",
+          "catalogControlId": "select"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "select-pressed",
+          "selector": "[data-select][aria-pressed=\"false\"]",
+          "catalogControlId": "select"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "select",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-select][aria-pressed=\"false\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#f6777d94811ef9af.1"
+          ],
+          "states": {
+            "default": "select-default",
+            "hover": "select-hover",
+            "focus": "select-focus",
+            "pressed": "select-pressed"
+          }
+        },
+        {
+          "id": "select-current",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-select][aria-pressed=\"true\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "select-current-default",
+            "hover": "select-current-hover",
+            "focus": "select-current-focus",
+            "pressed": "select-current-pressed"
+          }
+        },
+        {
+          "id": "select-archived",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "[data-select][aria-pressed=\"true\"]",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "select-archived-default",
+            "hover": "select-archived-hover",
+            "focus": "select-archived-focus",
+            "pressed": "select-archived-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-TECH",
+      "label": "折叠技术详情与请求追踪",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.2",
+        "apps/web/src/components/OrganizationApprovalFirstFailure.vue#479570dac45574ea.1"
+      ],
+      "sourceContractKeys": [
+        "OG-TECH审批/模板",
+        "OG-TECH 真实请求追踪展开/折叠，无API"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "审批/模板details；新F追踪仅真实requestId非空",
+      "handler": "原生details，本页不复制、不弹窗、不发API；新F不是旧子技术详情图的获批范围",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-open-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-open-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-open-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-open-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-closed-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-closed-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-closed-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-closed-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-open-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-open-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-open-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "template-technical-open-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-default",
+          "selector": ".technical summary",
+          "catalogControlId": "request-technical-closed"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-hover",
+          "selector": ".technical summary",
+          "catalogControlId": "request-technical-closed"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-focus",
+          "selector": ".technical summary",
+          "catalogControlId": "request-technical-closed"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "request-technical-closed-pressed",
+          "selector": ".technical summary",
+          "catalogControlId": "request-technical-closed"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "request-technical-closed",
+          "package": "org-approvals-controls-direction-c",
+          "selector": ".technical summary",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.1"
+          ],
+          "states": {
+            "default": "request-technical-closed-default",
+            "hover": "request-technical-closed-hover",
+            "focus": "request-technical-closed-focus",
+            "pressed": "request-technical-closed-pressed"
+          }
+        },
+        {
+          "id": "request-technical-open",
+          "package": "org-approvals-controls-direction-c",
+          "selector": ".technical summary",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "request-technical-open-default",
+            "hover": "request-technical-open-hover",
+            "focus": "request-technical-open-focus",
+            "pressed": "request-technical-open-pressed"
+          }
+        },
+        {
+          "id": "template-technical-closed",
+          "package": "org-approvals-controls-direction-c",
+          "selector": ".technical summary",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.2"
+          ],
+          "states": {
+            "default": "template-technical-closed-default",
+            "hover": "template-technical-closed-hover",
+            "focus": "template-technical-closed-focus",
+            "pressed": "template-technical-closed-pressed"
+          }
+        },
+        {
+          "id": "template-technical-open",
+          "package": "org-approvals-controls-direction-c",
+          "selector": ".technical summary",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "template-technical-open-default",
+            "hover": "template-technical-open-hover",
+            "focus": "template-technical-open-focus",
+            "pressed": "template-technical-open-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-A-LINK",
+      "label": "审批工作台与组织审计",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue#cb237b82e3d08902.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#a8c2e662cd00ee63.1"
+      ],
+      "sourceContractKeys": [
+        "OG-A-LINK审批/审计"
+      ],
+      "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
+      "condition": "只读页面底部RouterLink",
+      "handler": "固定/tasks/approvals和/org-admin/audit，不切工作区、不携审批ID，不承诺精准直达",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-approvals-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-pressed"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "audit-default"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "audit-hover"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "audit-focus"
+        },
+        {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "audit-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+      "visualStateReferences": {
+        "default": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-default",
+          "selector": "a[href='/tasks/approvals']",
+          "catalogControlId": "approvals"
+        },
+        "hover": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-hover",
+          "selector": "a[href='/tasks/approvals']",
+          "catalogControlId": "approvals"
+        },
+        "focus": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-focus",
+          "selector": "a[href='/tasks/approvals']",
+          "catalogControlId": "approvals"
+        },
+        "pressed": {
+          "package": "org-approvals-controls-direction-c",
+          "scene": "approvals-pressed",
+          "selector": "a[href='/tasks/approvals']",
+          "catalogControlId": "approvals"
+        }
+      },
+      "representativeBoundary": "六态仅此旧稿代表控件；不自动覆盖其他入口、新F区域或全状态适用性。",
+      "controlCatalogBindings": [
+        {
+          "id": "approvals",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "a[href='/tasks/approvals']",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#cb237b82e3d08902.1"
+          ],
+          "states": {
+            "default": "approvals-default",
+            "hover": "approvals-hover",
+            "focus": "approvals-focus",
+            "pressed": "approvals-pressed"
+          }
+        },
+        {
+          "id": "audit",
+          "package": "org-approvals-controls-direction-c",
+          "selector": "a[href='/org-admin/audit']",
+          "widths": [
+            1440,
+            390
+          ],
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationApprovalPanel.vue#a8c2e662cd00ee63.1"
+          ],
+          "states": {
+            "default": "audit-default",
+            "hover": "audit-hover",
+            "focus": "audit-focus",
+            "pressed": "audit-pressed"
+          }
+        }
+      ]
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P34无业务弹窗。共享父原因窗无本页发起入口；模板详情article、技术details和aside说明都不是弹窗。"
+  },
+  "inputs": {
+    "OrganizationAdminCenter.vue": [
+      "form.name",
+      "form.logo_url",
+      "form.timezone",
+      "form.data_retention_days",
+      "form.default_workspace_id",
+      "form.reason"
+    ],
+    "OrganizationApprovalPanel.vue": [
+      "requestQuery",
+      "requestStatus",
+      "requestWorkspace",
+      "requestResource",
+      "requestSort",
+      "templateQuery",
+      "templateStatus",
+      "templateWorkspace",
+      "templateResource",
+      "templateSort"
+    ],
+    "OrganizationApprovalFirstFailure.vue": []
+  },
+  "propBindings": [
+    {
+      "component": "OrganizationApprovalPanel",
+      "condition": "view===approvals",
+      "props": {
+        "templates": "data?.templates ?? []",
+        "approvals": "rows",
+        "summary": "data?.summary ?? {}",
+        "status-text": "statusText",
+        "summary-text": "summaryText",
+        "format-time": "fmt"
+      },
+      "events": [],
+      "meaning": "被动读取，无新增函数prop业务动作，也无busy传入；普通后台失败时筛选继续可用"
+    }
+  ],
+  "proposalOnlyControls": [
+    {
+      "id": "request-clear-empty",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        1440,
+        390
+      ],
+      "selector": "#clear-filter",
+      "states": {
+        "default": "request-clear-empty-default",
+        "hover": "request-clear-empty-hover",
+        "focus": "request-clear-empty-focus",
+        "pressed": "request-clear-empty-pressed"
+      },
+      "reason": "提案新增便捷结构，尚未成为本页真实源动作"
+    },
+    {
+      "id": "request-filters-closed",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        390
+      ],
+      "selector": "#filters-toggle",
+      "states": {
+        "default": "request-filters-closed-default",
+        "hover": "request-filters-closed-hover",
+        "focus": "request-filters-closed-focus",
+        "pressed": "request-filters-closed-pressed"
+      },
+      "reason": "提案新增便捷结构，尚未成为本页真实源动作"
+    },
+    {
+      "id": "request-filters-open",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        390
+      ],
+      "selector": "#filters-toggle",
+      "states": {
+        "default": "request-filters-open-default",
+        "hover": "request-filters-open-hover",
+        "focus": "request-filters-open-focus",
+        "pressed": "request-filters-open-pressed"
+      },
+      "reason": "提案新增便捷结构，尚未成为本页真实源动作"
+    },
+    {
+      "id": "template-clear-empty",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        1440,
+        390
+      ],
+      "selector": "#clear-filter",
+      "states": {
+        "default": "template-clear-empty-default",
+        "hover": "template-clear-empty-hover",
+        "focus": "template-clear-empty-focus",
+        "pressed": "template-clear-empty-pressed"
+      },
+      "reason": "历史提案标记保留；仅手机默认空结果组合已单独实施，不外推桌面或所有按钮状态"
+    },
+    {
+      "id": "template-filters-closed",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        390
+      ],
+      "selector": "#filters-toggle",
+      "states": {
+        "default": "template-filters-closed-default",
+        "hover": "template-filters-closed-hover",
+        "focus": "template-filters-closed-focus",
+        "pressed": "template-filters-closed-pressed"
+      },
+      "reason": "提案新增便捷结构，尚未成为本页真实源动作"
+    },
+    {
+      "id": "template-filters-open",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        390
+      ],
+      "selector": "#filters-toggle",
+      "states": {
+        "default": "template-filters-open-default",
+        "hover": "template-filters-open-hover",
+        "focus": "template-filters-open-focus",
+        "pressed": "template-filters-open-pressed"
+      },
+      "reason": "提案新增便捷结构，尚未成为本页真实源动作"
+    },
+    {
+      "id": "back-directory",
+      "package": "org-approvals-controls-direction-c",
+      "widths": [
+        390
+      ],
+      "selector": "#back-directory",
+      "states": {
+        "default": "back-directory-default",
+        "hover": "back-directory-hover",
+        "focus": "back-directory-focus",
+        "pressed": "back-directory-pressed"
+      },
+      "reason": "提案新增便捷结构，尚未成为本页真实源动作"
+    }
+  ],
+  "implementedBindings": [
+    {
+      "sourceSignature": "97e57c58af0dc63f.1",
+      "proposalControlId": "template-clear-empty",
+      "selector": ".org-template-empty-clear",
+      "widths": [
+        390
+      ],
+      "scope": "mobile-only-implemented-binding-original-proposal-images-retained"
+    }
+  ],
+  "parentStates": [
+    {
+      "id": "initial-loading",
+      "phase": null,
+      "replace": true,
+      "failure": null,
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-loading"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "ready",
+      "phase": null,
+      "replace": false,
+      "failure": null,
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "ready"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-refreshing",
+      "phase": null,
+      "replace": false,
+      "failure": null,
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-refreshing"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-server-error",
+      "phase": "initial",
+      "replace": true,
+      "failure": "server-error",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-server-error"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-service-blocked",
+      "phase": "initial",
+      "replace": true,
+      "failure": "service-blocked",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-service-blocked"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-version-conflict",
+      "phase": "initial",
+      "replace": true,
+      "failure": "version-conflict",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-version-conflict"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-rate-limited",
+      "phase": "initial",
+      "replace": true,
+      "failure": "rate-limited",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-rate-limited"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-session-expired",
+      "phase": "initial",
+      "replace": true,
+      "failure": "session-expired",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-session-expired"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-permission-forbidden",
+      "phase": "initial",
+      "replace": true,
+      "failure": "permission-forbidden",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-permission-forbidden"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "initial-network-unavailable",
+      "phase": "initial",
+      "replace": true,
+      "failure": "network-unavailable",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "initial-network-unavailable"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-server-error",
+      "phase": "background",
+      "replace": false,
+      "failure": "server-error",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-server-error"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-service-blocked",
+      "phase": "background",
+      "replace": false,
+      "failure": "service-blocked",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-service-blocked"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-version-conflict",
+      "phase": "background",
+      "replace": false,
+      "failure": "version-conflict",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-version-conflict"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-rate-limited",
+      "phase": "background",
+      "replace": false,
+      "failure": "rate-limited",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-rate-limited"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-session-expired",
+      "phase": "background",
+      "replace": true,
+      "failure": "session-expired",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-session-expired"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-permission-forbidden",
+      "phase": "background",
+      "replace": true,
+      "failure": "permission-forbidden",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-permission-forbidden"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    },
+    {
+      "id": "background-network-unavailable",
+      "phase": "background",
+      "replace": false,
+      "failure": "network-unavailable",
+      "scene": {
+        "package": "org-approvals-parent-direction-c",
+        "scene": "background-network-unavailable"
+      },
+      "scope": "替换/保留行为依据真实父测试；外观仍逐区域审核"
+    }
+  ],
+  "fieldCompositions": [
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "request-filters-default"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "request-filters-matching"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "request-filters-empty"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "request-filters-refreshing"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "template-filters-default"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "template-filters-matching"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "template-filters-empty"
+    },
+    {
+      "package": "org-approvals-fields-direction-c",
+      "scene": "template-filters-refreshing"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationApprovalPanel.vue",
+      "apps/web/src/components/OrganizationApprovalFirstFailure.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+      "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+      "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "2bda7b1e4c04d4dfe751e396bbb2d762cbe7654986b5d5c48446300f57605327"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.name",
+        "meaning": "P29资料分支，P34排除",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.logo_url",
+        "meaning": "P29资料分支，P34排除",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.timezone",
+        "meaning": "P29资料分支，P34排除",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.data_retention_days",
+        "meaning": "P29资料分支，P34排除",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.default_workspace_id",
+        "meaning": "P29资料分支，P34排除",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.reason",
+        "meaning": "P29资料分支，P34排除",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "requestQuery",
+        "meaning": "标题/模板名/工作区名，trim中文小写；不搜索技术ID，无输入maxlength，URL恢复截200 UTF-16单位",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "request-query",
+          "selector": "#request-query",
+          "states": {
+            "default": "request-query-default",
+            "focus": "request-query-focus",
+            "matching": "request-query-matching",
+            "whitespace": "request-query-whitespace",
+            "no-result": "request-query-no-result",
+            "hidden-id": "request-query-hidden-id",
+            "length-200": "request-query-length-200",
+            "length-220": "request-query-length-220",
+            "restored-200": "request-query-restored-200",
+            "refreshing": "request-query-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "requestStatus",
+        "meaning": "all/pending/approved/rejected/cancelled；改变条件回第一页",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "request-status",
+          "selector": "#request-status",
+          "states": {
+            "default": "request-status-default",
+            "focus": "request-status-focus",
+            "option-1": "request-status-option-1",
+            "option-2": "request-status-option-2",
+            "option-3": "request-status-option-3",
+            "option-4": "request-status-option-4",
+            "refreshing": "request-status-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "requestWorkspace",
+        "meaning": "按已返回模板的工作区名称筛选；同名合并，不伪造工作区ID选项",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "request-workspace",
+          "selector": "#request-workspace",
+          "states": {
+            "default": "request-workspace-default",
+            "focus": "request-workspace-focus",
+            "option-1": "request-workspace-option-1",
+            "option-2": "request-workspace-option-2",
+            "no-workspaces": "request-workspace-no-workspaces",
+            "refreshing": "request-workspace-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "requestResource",
+        "meaning": "all/task/opportunity_decision；未知类型只能在all内显示",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "request-resource",
+          "selector": "#request-resource",
+          "states": {
+            "default": "request-resource-default",
+            "focus": "request-resource-focus",
+            "option-1": "request-resource-option-1",
+            "option-2": "request-resource-option-2",
+            "refreshing": "request-resource-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "requestSort",
+        "meaning": "created_desc/created_asc/title_asc/status_asc；状态按显示文案排序",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "request-sort",
+          "selector": "#request-sort",
+          "states": {
+            "default": "request-sort-default",
+            "focus": "request-sort-focus",
+            "option-1": "request-sort-option-1",
+            "option-2": "request-sort-option-2",
+            "option-3": "request-sort-option-3",
+            "refreshing": "request-sort-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "templateQuery",
+        "meaning": "模板名/工作区名，trim中文小写；不搜索节点或ID，无输入maxlength，URL恢复截200 UTF-16单位",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "template-query",
+          "selector": "#template-query",
+          "states": {
+            "default": "template-query-default",
+            "focus": "template-query-focus",
+            "matching": "template-query-matching",
+            "whitespace": "template-query-whitespace",
+            "no-result": "template-query-no-result",
+            "hidden-id": "template-query-hidden-id",
+            "length-200": "template-query-length-200",
+            "length-220": "template-query-length-220",
+            "restored-200": "template-query-restored-200",
+            "refreshing": "template-query-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "templateStatus",
+        "meaning": "all/published/draft/archived；归档模板可阅读",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "template-status",
+          "selector": "#template-status",
+          "states": {
+            "default": "template-status-default",
+            "focus": "template-status-focus",
+            "option-1": "template-status-option-1",
+            "option-2": "template-status-option-2",
+            "option-3": "template-status-option-3",
+            "refreshing": "template-status-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "templateWorkspace",
+        "meaning": "已返回模板工作区名称去重；同名合并，非新业务筛选规则",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "template-workspace",
+          "selector": "#template-workspace",
+          "states": {
+            "default": "template-workspace-default",
+            "focus": "template-workspace-focus",
+            "option-1": "template-workspace-option-1",
+            "option-2": "template-workspace-option-2",
+            "no-workspaces": "template-workspace-no-workspaces",
+            "refreshing": "template-workspace-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "templateResource",
+        "meaning": "all/task/opportunity_decision，不修改会话工作区",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "template-resource",
+          "selector": "#template-resource",
+          "states": {
+            "default": "template-resource-default",
+            "focus": "template-resource-focus",
+            "option-1": "template-resource-option-1",
+            "option-2": "template-resource-option-2",
+            "refreshing": "template-resource-refreshing"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "binding": "templateSort",
+        "meaning": "name_asc/updated_desc/nodes_desc/workspace_asc；updated_desc按current_version而不是更新时间",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "fieldEvidence": {
+          "package": "org-approvals-fields-direction-c",
+          "id": "template-sort",
+          "selector": "#template-sort",
+          "states": {
+            "default": "template-sort-default",
+            "focus": "template-sort-focus",
+            "option-1": "template-sort-option-1",
+            "option-2": "template-sort-option-2",
+            "option-3": "template-sort-option-3",
+            "refreshing": "template-sort-refreshing"
+          }
+        }
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "summary组织资料表单，P34不展示",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "variants": [
+          {
+            "name": "summary-excluded",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "view===summary非approvals",
+            "scenes": [
+              {
+                "package": "org-approvals-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "父共享组件仍挂载，但P34无原因发起动作；不推断跨页已打开窗口终态",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "variants": [
+          {
+            "name": "no-local-origin",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "本页只有读/局部筛选/导航，没有ask调用入口",
+            "scenes": [
+              {
+                "package": "org-approvals-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "持续的只读组织治理说明，无关闭动作；不是抽屉或对话框",
+        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+        "variants": [
+          {
+            "name": "readonly-notice",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "org-approvals-direction-c",
+                "scene": "normal"
+              },
+              {
+                "package": "org-approvals-direction-c",
+                "scene": "templates"
+              }
+            ],
+            "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "三个结构记录不等于三个本页弹窗；本页业务弹窗为0。",
+      "模板详情article不被结构扫描当dialog；首版/无变化/差异阅读保持只读。"
+    ]
+  },
+  "implementationEvidence": [
+    {
+      "review": "P34-MOBILE-EMPTY-VUE-REVIEW.md",
+      "evidence": "output/playwright/p34-mobile-template-filters/evidence.json",
+      "scope": "已批准手机筛选与空结果；以该报告列出的实际证据路径为准，不代表全页"
+    },
+    {
+      "review": "P34-FIRST-FAILURE-VUE-REVIEW.md",
+      "evidence": "output/playwright/p34-first-failure-vue/evidence.json",
+      "scope": "仅首次无data/HTTP500/<=760；156检查52基线像素对比，非其他状态"
+    },
+    {
+      "review": "P34-PARENT-READ-STATES-REVIEW.md",
+      "evidence": "output/playwright/p34-parent-read-states/evidence.json",
+      "scope": "实际App隔离HTTP56场景712检查；不是后端SQL/权限/真实网络或整页C批准"
+    }
+  ],
+  "approvalRecords": [
+    "P34-MOBILE-FILTER-COMPOSITION-APPROVAL.md",
+    "P34-MOBILE-EMPTY-COMPOSITION-APPROVAL.md",
+    "P34-MOBILE-FIRST-FAILURE-COMPOSITION-APPROVAL.md",
+    "P34-PERMISSION-TONE-R2-APPROVAL.md",
+    "P34-MOBILE-RATE-LIMIT-COMPOSITION-APPROVAL.md"
+  ],
+  "compositionGaps": [
+    "顶部刷新仍待审；权限r2仅措辞批准，限流仅手机白区组合批准，都未接入生产Vue。",
+    "新失败F的其他按钮态、17父状态适用性及手机返回目录/筛选折叠尚未完整实施批准。",
+    "同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。",
+    "source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。"
+  ],
+  "limits": [
+    "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
+    "不修改API/OpenAPI/环境/依赖/数据库或部署；不以图册数量代替完整状态分母。"
+  ]
+}

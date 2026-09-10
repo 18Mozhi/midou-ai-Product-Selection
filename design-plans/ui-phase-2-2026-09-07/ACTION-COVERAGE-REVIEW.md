@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1483；旧登记1477；新身份28，旧表独有身份22。签名变化不等于增删业务能力。
-- 已具体语义对应34页/718源位置/692组；其中路由动作581组，转发/容器关联65组，其余明确排除。其余39页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应35页/734源位置/705组；其中路由动作589组，转发/容器关联66组，其余明确排除。其余38页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -45,7 +45,7 @@
 | [P31 角色与权限](page-specs/P31.md) | 162 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P32 工作区管理](page-specs/P32.md) | 162 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P33 团队管理](page-specs/P33.md) | 162 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P34 审批模板](page-specs/P34.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P34 审批模板](page-specs/P34.md) | 162 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P35 组织数据](page-specs/P35.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P36 组织令牌](page-specs/P36.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P37 组织审计](page-specs/P37.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2863,6 +2863,72 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 代表六态未映射部分仍需适用性审查，不把179个列明控件状态当全部状态空间。
 - 原型不是完整Vue响应性、原生缩放、多主题、多角色或真实权限/审计证明。
 - 成员操作选择区不是原生form，不计第四表单；两张成员组合单独关联该字段。
+
+## P34 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P34.json)：28个局部源位置 → 13组；0类写入，8组路由动作，1组转发/容器关联不重复计动作。16个本地v-model，3处调用/内嵌容器，3个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有15个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新组织审批 / read | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[refresh-default · 1440](design/org-approvals-controls-direction-c/refresh-default-1440.png) / [refresh-default · 390](design/org-approvals-controls-direction-c/refresh-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-RETRY 错误后重新加载 / read | 2处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[retry-error-default · 1440](design/org-approvals-controls-direction-c/retry-error-default-1440.png) / [retry-error-default · 390](design/org-approvals-controls-direction-c/retry-error-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| WIRE-P34-RETRY 失败区域重试转发 / wiring | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| EX-P29-PROFILE 组织资料排除 / excluded | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| EX-P31-ROLES 授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| EX-REASON-ORIGINS 其他页原因窗调用排除 / excluded | 4处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-A-VIEW 记录/模板阅读视图 / local | 2处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[view-requests-available-default · 1440](design/org-approvals-controls-direction-c/view-requests-available-default-1440.png) / [view-requests-available-default · 390](design/org-approvals-controls-direction-c/view-requests-available-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-A-REQUEST-FILTER 审批重置与分页 / local | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[request-reset-default · 1440](design/org-approvals-controls-direction-c/request-reset-default-1440.png) / [request-reset-default · 390](design/org-approvals-controls-direction-c/request-reset-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-A-TEMPLATE-FILTER 模板重置、清除与分页 / local | 4处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[template-reset-default · 1440](design/org-approvals-controls-direction-c/template-reset-default-1440.png) / [template-reset-default · 390](design/org-approvals-controls-direction-c/template-reset-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-A-SELECT 选择模板版本详情 / local | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[select-default · 1440](design/org-approvals-controls-direction-c/select-default-1440.png) / [select-default · 390](design/org-approvals-controls-direction-c/select-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-TECH 折叠技术详情与请求追踪 / local | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[request-technical-closed-default · 1440](design/org-approvals-controls-direction-c/request-technical-closed-default-1440.png) / [request-technical-closed-default · 390](design/org-approvals-controls-direction-c/request-technical-closed-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-A-LINK 审批工作台与组织审计 / navigation | 2处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[approvals-default · 1440](design/org-approvals-controls-direction-c/approvals-default-1440.png) / [approvals-default · 390](design/org-approvals-controls-direction-c/approvals-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| WIRE-P34-RETRY | @reload / load() | OG-RETRY |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | P29资料分支，P34排除 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationAdminCenter.vue / form.logo_url | P29资料分支，P34排除 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationAdminCenter.vue / form.timezone | P29资料分支，P34排除 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | P29资料分支，P34排除 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | P29资料分支，P34排除 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationAdminCenter.vue / form.reason | P29资料分支，P34排除 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / requestQuery | 标题/模板名/工作区名，trim中文小写；不搜索技术ID，无输入maxlength，URL恢复截200 UTF-16单位 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / requestStatus | all/pending/approved/rejected/cancelled；改变条件回第一页 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / requestWorkspace | 按已返回模板的工作区名称筛选；同名合并，不伪造工作区ID选项 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / requestResource | all/task/opportunity_decision；未知类型只能在all内显示 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / requestSort | created_desc/created_asc/title_asc/status_asc；状态按显示文案排序 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / templateQuery | 模板名/工作区名，trim中文小写；不搜索节点或ID，无输入maxlength，URL恢复截200 UTF-16单位 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / templateStatus | all/published/draft/archived；归档模板可阅读 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / templateWorkspace | 已返回模板工作区名称去重；同名合并，非新业务筛选规则 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / templateResource | all/task/opportunity_decision，不修改会话工作区 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / templateSort | name_asc/updated_desc/nodes_desc/workspace_asc；updated_desc按current_version而不是更新时间 | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / summary-excluded | form-container / route-excluded-reference | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png) | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / no-local-origin | native-reason-dialog / route-excluded-reference | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png) | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OrganizationApprovalPanel.vue / aside.1 / readonly-notice | inline-aside / related-scene-only | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[templates · 1440](design/org-approvals-direction-c/1440-templates.png) / [templates · 390](design/org-approvals-direction-c/390-templates.png) | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+
+### 明确保留的边界
+
+- 顶部刷新仍待审；权限r2仅措辞批准，限流仅手机白区组合批准，都未接入生产Vue。
+- 新失败F的其他按钮态、17父状态适用性及手机返回目录/筛选折叠尚未完整实施批准。
+- 同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。
+- source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。
+- 三个结构记录不等于三个本页弹窗；本页业务弹窗为0。
+- 模板详情article不被结构扫描当dialog；首版/无变化/差异阅读保持只读。
 
 ## P54 局部动作与共享消费者
 

@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "10c3f863a06c3a049ed91a65db953ab627d9036d3ab0aeeb45edc2888f223682",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "49218f41232d33aabfa3ab4899846386306de709b5ee533d7a5b3f6505469033",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -143,6 +143,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "671cc1bc0718ab3092f3697783d1c34255c1cf28f1b927965b81fea8e904c764",
     "output/playwright/p32-approved-restore-review/evidence.json": "ddd40dc22bce790425b73062245709e6adcdbd6cbd2027ceebc86003c8cc5278",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "47382254c7b10f6b6d3c815b4ea7fec527d850112d380e79990f36f7f878d110",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "195175a25ca5f9b79aac0f62abc16e240a6abf4f52c56899f0afd8b96f2f6ecb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "7375ef991df97c88a0b2a3e7dcb200f26fbb8b5bd828ec96344d7291053c0598"
   },
   "summary": {
