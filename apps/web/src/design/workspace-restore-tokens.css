@@ -1,0 +1,16 @@
+/* P32 approved restore composition only; other audited-reason callers retain their theme. */
+html #app dialog.workspace-restore-reason {
+  --so-font-meta: 16px;
+  --so-restore-surface: #ffffff;
+  --so-restore-text: #202c3d;
+  --so-restore-target: #f3f6fc;
+  --so-restore-line: #d5dfed;
+  --so-restore-input-border: #6680a2;
+  --so-restore-help: #5d708b;
+  --so-restore-primary: #254a9c;
+  --so-restore-on-primary: #ffffff;
+  --so-restore-disabled-bg: #e6ebf1;
+  --so-restore-disabled-text: #526176;
+  --so-restore-disabled-border: #a1aec0;
+  --so-restore-focus: #285ec7;
+}

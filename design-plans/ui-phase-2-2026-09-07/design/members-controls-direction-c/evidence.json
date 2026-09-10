@@ -6,10 +6,10 @@
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.css": "0e8003bb6d7e83c19aa476714e2b89b187640ad9535a635582cdcefe450c7321",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.js": "7ff3f1996d6b4eba1ad9b3c4965cbeaaf3b2bb45f8e89950fb02786548c765b4",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/data.js": "1b77035c84b821f261fa335073bd3553ef9a98f6839cd8ffec2a252f78404f57",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
-    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
-    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
@@ -10085,7 +10085,7 @@
       "file": "retry-error-focus-1440.png",
       "width": 1440,
       "scene": "retry-error-focus",
-      "sha256": "cfd410d800e9ce010694f5e321c8d38d6bfcbd280b85267038a3d2fc7f90a61d",
+      "sha256": "c6a35ea5f79e82b650e7d9b77fca0a5c9ce7ffece7fdac7dc8f6236fd7c334ba",
       "control": {
         "key": "P30-retry-error",
         "actionId": "OG-RETRY",
@@ -10098,7 +10098,7 @@
       "file": "retry-error-pressed-1440.png",
       "width": 1440,
       "scene": "retry-error-pressed",
-      "sha256": "e163980a4c4ffd4753e8ec40b3496026c847c26351839d430e55fdbb4f4801e1",
+      "sha256": "ab74a042616e52909b38dd272546f0c1b816290bf0467e99174b4fbeccbbd752",
       "control": {
         "key": "P30-retry-error",
         "actionId": "OG-RETRY",
@@ -10241,7 +10241,7 @@
       "file": "retry-forbidden-focus-1440.png",
       "width": 1440,
       "scene": "retry-forbidden-focus",
-      "sha256": "e13d70ea5fd38a3b2398909672dfd4e52de81e70d0067535ab32e280698831ca",
+      "sha256": "1fb6a4eaf7145e20dd4d942f946cf1db6b56925e864df747f80f763df9bd1756",
       "control": {
         "key": "P30-retry-forbidden",
         "actionId": "OG-RETRY",
@@ -10254,7 +10254,7 @@
       "file": "retry-forbidden-pressed-1440.png",
       "width": 1440,
       "scene": "retry-forbidden-pressed",
-      "sha256": "a4a4ac8beae4c757f07c98117b0a19da29fcbbba61e641f972cf70a756d34e47",
+      "sha256": "26af71c6a68c418b7536e80fa31c99b8610f8531f716ace1f36431a1b1200186",
       "control": {
         "key": "P30-retry-forbidden",
         "actionId": "OG-RETRY",
@@ -10293,7 +10293,7 @@
       "file": "retry-rate_limited-focus-1440.png",
       "width": 1440,
       "scene": "retry-rate_limited-focus",
-      "sha256": "bf9ebb935d430e57d55def30c6db9c596555f11ab00502c3e0af7ebac0fdf3e1",
+      "sha256": "755b29245a0f92896599aae2dc23a482288c8e79295b7d2f2ea2e39635bbbdea",
       "control": {
         "key": "P30-retry-rate_limited",
         "actionId": "OG-RETRY",
@@ -10306,7 +10306,7 @@
       "file": "retry-rate_limited-pressed-1440.png",
       "width": 1440,
       "scene": "retry-rate_limited-pressed",
-      "sha256": "e78980037d44a00ac71e8f70d4dc6b29061ab178a51018c20c0a2db7a94dbf86",
+      "sha256": "a9e355300c16515790aea19807a926a8c90741f985b4d34939e76f2c2b7261e2",
       "control": {
         "key": "P30-retry-rate_limited",
         "actionId": "OG-RETRY",
@@ -10345,7 +10345,7 @@
       "file": "invite-focus-1440.png",
       "width": 1440,
       "scene": "invite-focus",
-      "sha256": "2aacfb047c691be3379270571834eb10378b1828e959fa40836bfe733763299a",
+      "sha256": "a71dffaaa48d26ae8669d8774868486653b16be64e47450184bd54c46d6d4fa5",
       "control": {
         "key": "P30-invite",
         "actionId": "OG-M-INVITE",
@@ -10436,7 +10436,7 @@
       "file": "invite_partial-pressed-1440.png",
       "width": 1440,
       "scene": "invite_partial-pressed",
-      "sha256": "1a40472833a4f31cb57659383a714f2e86548d7b63a05d1038090e9dbf723820",
+      "sha256": "c6ac3db10faa541971f9b1d72e74c26d9a351db58718164fe91b6a6a9e88b6e4",
       "control": {
         "key": "P30-invite_partial",
         "actionId": "OG-M-INVITE",
@@ -10475,7 +10475,7 @@
       "file": "invite_interrupted-focus-1440.png",
       "width": 1440,
       "scene": "invite_interrupted-focus",
-      "sha256": "3264b2e6b5f3bc4d773f1e639be1a73387429795bef7ad02c5f19c480e9f3641",
+      "sha256": "b077d8860d078184a694ed29fd9aaed40bb000f391ad8f6f9034b1ed4bf2a6c4",
       "control": {
         "key": "P30-invite_interrupted",
         "actionId": "OG-M-INVITE",
@@ -10527,7 +10527,7 @@
       "file": "tab-pending-available-focus-1440.png",
       "width": 1440,
       "scene": "tab-pending-available-focus",
-      "sha256": "579988d6ca665c90d42e002f862f5b53f4cd95fff8349d798a6d525dd234ed35",
+      "sha256": "c57f328f6505d05606a32ad9a6b80ac6a72592dd634ca0786149235098544829",
       "control": {
         "key": "P30-tab-pending-available",
         "actionId": "OG-M-TAB-PENDING",
@@ -10579,7 +10579,7 @@
       "file": "tab-pending-selected-focus-1440.png",
       "width": 1440,
       "scene": "tab-pending-selected-focus",
-      "sha256": "905691fb0da4beee9b1fd3f0de5d810a3e2818271ebbba41c0c275da7c713ebd",
+      "sha256": "3abafc3308f78000d48b8652fb71f219030b6193de01cf25f628588da1ad3bbf",
       "control": {
         "key": "P30-tab-pending-selected",
         "actionId": "OG-M-TAB-PENDING",
@@ -10631,7 +10631,7 @@
       "file": "tab-expired-available-focus-1440.png",
       "width": 1440,
       "scene": "tab-expired-available-focus",
-      "sha256": "8940689c77b943c802236c51d9efe708ab4b8a009328d0a985459c629cbd1b7d",
+      "sha256": "a540e3e4ae76c9f9e243414ea32ed39f978f05d05c97a6126faeefc68fc7645d",
       "control": {
         "key": "P30-tab-expired-available",
         "actionId": "OG-M-TAB-EXPIRED",
@@ -10683,7 +10683,7 @@
       "file": "tab-expired-selected-focus-1440.png",
       "width": 1440,
       "scene": "tab-expired-selected-focus",
-      "sha256": "bcade5c9b22551fbeb0f371b8593f77dbeb5cde67b21238445bbfe83225d545e",
+      "sha256": "9f77fabcddc93c8c9b4767293555e77e6b227d7be6d2ec55b68dd0a5e008c6ad",
       "control": {
         "key": "P30-tab-expired-selected",
         "actionId": "OG-M-TAB-EXPIRED",
@@ -10735,7 +10735,7 @@
       "file": "revoke-normal-focus-1440.png",
       "width": 1440,
       "scene": "revoke-normal-focus",
-      "sha256": "32550c41addb31fc476cf15e1a8fba946e701a4337041c807ff157a02444942d",
+      "sha256": "3c32a03ee8785357cb91acc9ca4aabf387053b17af35222b6e0cd5edc7ac18bf",
       "control": {
         "key": "P30-revoke-normal",
         "actionId": "OG-M-INVITATION-REVOKE",
@@ -10826,7 +10826,7 @@
       "file": "revoke-invite_acceptance-pressed-1440.png",
       "width": 1440,
       "scene": "revoke-invite_acceptance-pressed",
-      "sha256": "720f7c8d54fd80d6dd1b361e1ce9d11ddd0b2346ff65cb5d14faaa36eeb8a280",
+      "sha256": "682091a60ec9fd0dbe1f5712e1b163b5c53bb56b1c4ae2cb4dfd1f45ef76a482",
       "control": {
         "key": "P30-revoke-invite_acceptance",
         "actionId": "OG-M-INVITATION-REVOKE",
@@ -10982,7 +10982,7 @@
       "file": "filter-role-focus-1440.png",
       "width": 1440,
       "scene": "filter-role-focus",
-      "sha256": "0de70080ed1fa62141f95d798911e41f5694fb2578de2a15692616288f9cbe53",
+      "sha256": "c0f71cb2decbb0a3e1bd7c1af843776827bcdef613a77294e726579a3e1e1f8f",
       "control": {
         "key": "P30-filter-role",
         "actionId": "OG-M-ROLE-FILTER",
@@ -11021,7 +11021,7 @@
       "file": "filter-team-focus-1440.png",
       "width": 1440,
       "scene": "filter-team-focus",
-      "sha256": "2d0ee23923cd77364b0a8113776be446c46dba110835770189f0598677c03eeb",
+      "sha256": "f2504552d1520090b3ff9ff2a8a239585ef28ea0265f4e1b105b848daa1f45e6",
       "control": {
         "key": "P30-filter-team",
         "actionId": "OG-M-TEAM-FILTER",
@@ -11034,7 +11034,7 @@
       "file": "filter-sort-default-1440.png",
       "width": 1440,
       "scene": "filter-sort-default",
-      "sha256": "ef6c534cb545c68bc6a95ac6facf2b39899c186e6e157d73f3e5b28fb6565805",
+      "sha256": "38a4217ec7b3095ffb5d0bc982e000ba5d2667f8c64a914a90f6684264794982",
       "control": {
         "key": "P30-filter-sort",
         "actionId": "OG-M-SORT",
@@ -11060,7 +11060,7 @@
       "file": "filter-sort-focus-1440.png",
       "width": 1440,
       "scene": "filter-sort-focus",
-      "sha256": "4e7c038fb628b626fc115a7a2dc22f568c9d7069e22e95a89efc7a9fb1fc6374",
+      "sha256": "c40da776ca616a2237a1e4dafbb9b082845eb0f6608151f98115213da89c1def",
       "control": {
         "key": "P30-filter-sort",
         "actionId": "OG-M-SORT",
@@ -11112,7 +11112,7 @@
       "file": "reset-default-1440.png",
       "width": 1440,
       "scene": "reset-default",
-      "sha256": "38a4217ec7b3095ffb5d0bc982e000ba5d2667f8c64a914a90f6684264794982",
+      "sha256": "ef6c534cb545c68bc6a95ac6facf2b39899c186e6e157d73f3e5b28fb6565805",
       "control": {
         "key": "P30-reset",
         "actionId": "OG-M-RESET",
@@ -11138,7 +11138,7 @@
       "file": "reset-focus-1440.png",
       "width": 1440,
       "scene": "reset-focus",
-      "sha256": "99e36c7649bf9309b9a757621e402eb2d49eba4eceaae870f3b2a10665917ba9",
+      "sha256": "d0e2c9a041f1552f7ed82c1fca0d57b33092e80a9be120134364fd0273528150",
       "control": {
         "key": "P30-reset",
         "actionId": "OG-M-RESET",
@@ -11190,7 +11190,7 @@
       "file": "reset-empty-focus-1440.png",
       "width": 1440,
       "scene": "reset-empty-focus",
-      "sha256": "8eead61765c153f5ce82955dd3104e95823def6d13033a5f18758adf783f73e8",
+      "sha256": "6365b90c355e6390e2a906685390e51e5294036c82bdfd9a2d5e4880612b69d1",
       "control": {
         "key": "P30-reset-empty",
         "actionId": "PROPOSAL-RESET-EMPTY",
@@ -11242,7 +11242,7 @@
       "file": "technical-closed-focus-1440.png",
       "width": 1440,
       "scene": "technical-closed-focus",
-      "sha256": "cbc472359e542a97ad249123559c2506783a063564f2df0abb14e11d03b0452e",
+      "sha256": "4e4d9a389af4a29ee334951a96854367790e67e72ba26bdf8ba68ac4c3095d0a",
       "control": {
         "key": "P30-technical-closed",
         "actionId": "OG-TECH",
@@ -11294,7 +11294,7 @@
       "file": "technical-open-focus-1440.png",
       "width": 1440,
       "scene": "technical-open-focus",
-      "sha256": "f26e46db60034d15a12cd6b65672a26ddd9a5002ca74bcf5b2f429578281e4ed",
+      "sha256": "73aa2194e4f5fb1f28ac2afa6ff0974c2a4d6a8a9a90f5bddd8337031f151101",
       "control": {
         "key": "P30-technical-open",
         "actionId": "OG-TECH",
@@ -11346,7 +11346,7 @@
       "file": "assign-role-focus-1440.png",
       "width": 1440,
       "scene": "assign-role-focus",
-      "sha256": "8868b3c3f5716f2eb04136659ad9fddc03255a0c1fd73924af795e9612a282a7",
+      "sha256": "ee5c94d4985c6eeb4727fb3b0b71b75145712a1b8ac28f39ac301fd9808001bc",
       "control": {
         "key": "P30-assign-role",
         "actionId": "OG-M-ROLE-ASSIGN",
@@ -11424,7 +11424,7 @@
       "file": "disable-focus-1440.png",
       "width": 1440,
       "scene": "disable-focus",
-      "sha256": "c28172a2d75ceaf23b5ba566ec8de11a495f0aa7a390f096a19f30be1ff7a543",
+      "sha256": "dea1d8d5963c76d3b6972c70fb9f21f9cdd82847c034ecbdae12f4eee54466e2",
       "control": {
         "key": "P30-disable",
         "actionId": "OG-M-STATE",
@@ -11502,7 +11502,7 @@
       "file": "restore-focus-1440.png",
       "width": 1440,
       "scene": "restore-focus",
-      "sha256": "e2b848af5ec67d0638806c96d6166e6aebf54c990a63ac19832105c4f8f3be4e",
+      "sha256": "be87582d0a41182878a926d9398c8030efdb6875f044573c74767e01ad6fa1aa",
       "control": {
         "key": "P30-restore",
         "actionId": "OG-M-STATE",
@@ -11580,7 +11580,7 @@
       "file": "prev-focus-1440.png",
       "width": 1440,
       "scene": "prev-focus",
-      "sha256": "ef7d05504f1d1c48ce956e341cc69fd287dbabecb9143f86774db2f8695e8520",
+      "sha256": "956f1f7fcac590a88880bd61bebc1673dad19ad489623a635abffd9b0e92e3c1",
       "control": {
         "key": "P30-prev",
         "actionId": "OG-M-PREV",
@@ -11645,7 +11645,7 @@
       "file": "next-focus-1440.png",
       "width": 1440,
       "scene": "next-focus",
-      "sha256": "a8771b34c6082f0270a49bc92451fa236813e71453748f53e74210de7376e4bc",
+      "sha256": "3e812bfb537dd969b395be4804355fccfc9d332a20c0538a294e273a284a5eee",
       "control": {
         "key": "P30-next",
         "actionId": "OG-M-NEXT",
@@ -11710,7 +11710,7 @@
       "file": "reason-disable-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-disable-confirm-focus",
-      "sha256": "59abf7971170c7ca599d1ee14fc34d6dd50234013663072351d70cc1b0265865",
+      "sha256": "7a28bbcdc32efd2465f38ff98e433f7153856566379284fbd3f301bdab3be393",
       "control": {
         "key": "P30-reason-disable-confirm",
         "actionId": "D-OG-REASON",
@@ -11775,7 +11775,7 @@
       "file": "reason-disable-cancel-focus-1440.png",
       "width": 1440,
       "scene": "reason-disable-cancel-focus",
-      "sha256": "24e8279d7aecbe4428e3571029e035dabc1dc211173ddc815686b4170c506f3e",
+      "sha256": "83ebe6a0965c4723a9cc0701be8ac70913477374728fbd95f019240e547141aa",
       "control": {
         "key": "P30-reason-disable-cancel",
         "actionId": "D-OG-REASON",
@@ -11788,7 +11788,7 @@
       "file": "reason-disable-cancel-pressed-1440.png",
       "width": 1440,
       "scene": "reason-disable-cancel-pressed",
-      "sha256": "a18897b7c038c4030fba3e1e6ddad60b0ed62674f5314c4b2e2711ce1b9a6fc3",
+      "sha256": "c0364ae2bac37fcf0d13e9184b224a64774bdf0aabbb425380eafa8142c909a6",
       "control": {
         "key": "P30-reason-disable-cancel",
         "actionId": "D-OG-REASON",
@@ -11827,7 +11827,7 @@
       "file": "reason-disable-close-focus-1440.png",
       "width": 1440,
       "scene": "reason-disable-close-focus",
-      "sha256": "d9ba6f682e18526f98eb91a4d9ba4f4f96dab944edb6b4f36159e32b56fd1ba2",
+      "sha256": "d5c28503327242e0d6c0fa8e2b49451a0805c902a9a894580dd4eb7d8832b9e9",
       "control": {
         "key": "P30-reason-disable-close",
         "actionId": "D-OG-REASON",
@@ -11879,7 +11879,7 @@
       "file": "reason-restore-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-restore-confirm-focus",
-      "sha256": "7d1e5b5fc558f2b6204a4bd73ee169fd7ca1de49beccde1fa4d4e1886cc2ac7d",
+      "sha256": "c30f84be1df3377ca58c32407335117036e8dec163014a519c44450cba13aa67",
       "control": {
         "key": "P30-reason-restore-confirm",
         "actionId": "D-OG-REASON",
@@ -11944,7 +11944,7 @@
       "file": "reason-restore-cancel-focus-1440.png",
       "width": 1440,
       "scene": "reason-restore-cancel-focus",
-      "sha256": "14988227bfc2633d924d93576c59fa975e97341a57f49ff7d28094aaa3bd316f",
+      "sha256": "a35a50be0787abfb9f1bfe6f55067d4379306be4c2640b41d0ff17ec3df62811",
       "control": {
         "key": "P30-reason-restore-cancel",
         "actionId": "D-OG-REASON",
@@ -11957,7 +11957,7 @@
       "file": "reason-restore-cancel-pressed-1440.png",
       "width": 1440,
       "scene": "reason-restore-cancel-pressed",
-      "sha256": "9a3c18074702b51a8d9dfe94b76176c78d37ba408f745adc00857d59a6ad0f59",
+      "sha256": "6a9d72c35f66d4eb273c6305736bfb1da14d7b4e409d7b40eac6549a39e0ba7f",
       "control": {
         "key": "P30-reason-restore-cancel",
         "actionId": "D-OG-REASON",
@@ -12048,7 +12048,7 @@
       "file": "reason-role-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-role-confirm-focus",
-      "sha256": "f8afc1b1714fa3da574bbfdc5be358c833a632b5adfe0eb12efaa19fe2018525",
+      "sha256": "8f9a778d4cfd6f6d8e063c269a33802f31557921f612f5d17ea2346b6d7540cd",
       "control": {
         "key": "P30-reason-role-confirm",
         "actionId": "D-OG-REASON",
@@ -12126,7 +12126,7 @@
       "file": "reason-role-cancel-pressed-1440.png",
       "width": 1440,
       "scene": "reason-role-cancel-pressed",
-      "sha256": "8650e6dcceb4a15289978bc13ad45b47234f89c10e71851ad32b295ab8aa68ab",
+      "sha256": "f8fe04cb14935e88d136827526c5ec6c1445d71b68ab6a8ef9dd615b27dd0656",
       "control": {
         "key": "P30-reason-role-cancel",
         "actionId": "D-OG-REASON",
@@ -12217,7 +12217,7 @@
       "file": "reason-revoke-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-revoke-confirm-focus",
-      "sha256": "bde04866271512973a92c0273e8b52344119a2340989659181e32d55ae37a31d",
+      "sha256": "d01bd3f07c10d20cf1a3173123f3ad783ceb3c65e3f9e270efcf7ba9e70e3f35",
       "control": {
         "key": "P30-reason-revoke-confirm",
         "actionId": "D-OG-REASON",
@@ -12230,7 +12230,7 @@
       "file": "reason-revoke-confirm-pressed-1440.png",
       "width": 1440,
       "scene": "reason-revoke-confirm-pressed",
-      "sha256": "dfb8da275a3da0a229021ec4162a7cf9c4d29151815ff74095a98c431fdc0f2e",
+      "sha256": "21870a4dc907c481840a6f7244182a391c1fd492faac7ba6e20fc7117b8f7559",
       "control": {
         "key": "P30-reason-revoke-confirm",
         "actionId": "D-OG-REASON",
@@ -12308,7 +12308,7 @@
       "file": "reason-revoke-close-default-1440.png",
       "width": 1440,
       "scene": "reason-revoke-close-default",
-      "sha256": "344ad1a935a4820b11ed116b6b4de414bb0acad51c7e9eae1c3c2f30b6cef4d4",
+      "sha256": "26c7368d977ccc2806c313e79d0502d441262a827cc453abcb42b2cb768d840f",
       "control": {
         "key": "P30-reason-revoke-close",
         "actionId": "D-OG-REASON",
@@ -12438,7 +12438,7 @@
       "file": "directory-member-section-selected-focus-1440.png",
       "width": 1440,
       "scene": "directory-member-section-selected-focus",
-      "sha256": "7393e64a8ae5371b96c8b252123ec58f4ef73da20eade13d381ffa283f12c4ab",
+      "sha256": "73ae7100c054eba5c2e415ac07b1daca2eeede0ef2c5b78137bce87da5c5c31a",
       "control": {
         "key": "P30-directory-member-section-selected",
         "actionId": "PROPOSAL-DIRECTORY",
@@ -12490,7 +12490,7 @@
       "file": "directory-invitation-section-available-focus-1440.png",
       "width": 1440,
       "scene": "directory-invitation-section-available-focus",
-      "sha256": "00613a1ef73ac599e19074b13fe4ce97b0001d15b5bf36387b1792b64d79f5b0",
+      "sha256": "8e170217562bb80f0eaf4419f3c86bc55898d346d62fba4bc1511d64715780de",
       "control": {
         "key": "P30-directory-invitation-section-available",
         "actionId": "PROPOSAL-DIRECTORY",
@@ -13208,7 +13208,7 @@
       "file": "invite-pressed-390.png",
       "width": 390,
       "scene": "invite-pressed",
-      "sha256": "828792fc9a567d3c94f2c66da0b943635e357a7c91fa5febe010afad13ba817e",
+      "sha256": "47e56cac779f31f216d0e39a52cb86730725d6743682a4a3a1d370d03b9b9e7c",
       "control": {
         "key": "P30-invite",
         "actionId": "OG-M-INVITE",
@@ -13286,7 +13286,7 @@
       "file": "invite_partial-pressed-390.png",
       "width": 390,
       "scene": "invite_partial-pressed",
-      "sha256": "74f24d1c6986cc50a86f4163212b91899f3e3981f0ec3638000c11f89979df9b",
+      "sha256": "6bb5929a3ea8a365ee2c8fbe55cc347ddf16c202216a7f215d929e9c53334b7f",
       "control": {
         "key": "P30-invite_partial",
         "actionId": "OG-M-INVITE",
@@ -13338,7 +13338,7 @@
       "file": "invite_interrupted-pressed-390.png",
       "width": 390,
       "scene": "invite_interrupted-pressed",
-      "sha256": "6a8d8504e51b8ad233c7ce98f56da13aa1390feebaa71cb6ed95744624111e68",
+      "sha256": "a06b1fed9b9e83ddf7425528116377c22c52e4cffa5da55f5277427e3ad9dd3c",
       "control": {
         "key": "P30-invite_interrupted",
         "actionId": "OG-M-INVITE",
@@ -13390,7 +13390,7 @@
       "file": "tab-pending-available-pressed-390.png",
       "width": 390,
       "scene": "tab-pending-available-pressed",
-      "sha256": "63451e58e1e43a614ca3409b9da457cba39b2afd3e0d8f05a3ad1c7a862dd931",
+      "sha256": "456a99c697d40f483d5ce775cc4d574a9168a808403190778308a23abc3fd7af",
       "control": {
         "key": "P30-tab-pending-available",
         "actionId": "OG-M-TAB-PENDING",
@@ -13429,7 +13429,7 @@
       "file": "tab-pending-selected-focus-390.png",
       "width": 390,
       "scene": "tab-pending-selected-focus",
-      "sha256": "fd56746b27c755b48150e6610db0c1c92b2f7061f61a63badd0edfd7ece31175",
+      "sha256": "44e24fc5c0a14965344965f845f29df90fba06fe408560b50d547eba01e4394d",
       "control": {
         "key": "P30-tab-pending-selected",
         "actionId": "OG-M-TAB-PENDING",
@@ -13494,7 +13494,7 @@
       "file": "tab-expired-available-pressed-390.png",
       "width": 390,
       "scene": "tab-expired-available-pressed",
-      "sha256": "460705458907fb6953ec501fe5435fdbf957a66377becf091cdaf4cc7df007b8",
+      "sha256": "1ec5e79bb4fb963a472a9623808e061741d28261f1ab46928f8b7d5f21421303",
       "control": {
         "key": "P30-tab-expired-available",
         "actionId": "OG-M-TAB-EXPIRED",
@@ -13598,7 +13598,7 @@
       "file": "revoke-normal-pressed-390.png",
       "width": 390,
       "scene": "revoke-normal-pressed",
-      "sha256": "07a05448deb1f4e1f7a3aab89bcc97736d8aeebe10bf8772c2c14d2471b2ba9e",
+      "sha256": "e463b1396414b0a8e6e6ac5043897700f270fa628de75502d07d355b3178b3f5",
       "control": {
         "key": "P30-revoke-normal",
         "actionId": "OG-M-INVITATION-REVOKE",
@@ -13754,7 +13754,7 @@
       "file": "search-pressed-390.png",
       "width": 390,
       "scene": "search-pressed",
-      "sha256": "3b9bbe8542c0f7aeeb272a7eed63c22f824e8ef0e9b2fd5016b341d847df9d8e",
+      "sha256": "3c9ac2d59751dd88797ac680b48c12219ed7fc50e8c0d8e8f652cf6298a66e54",
       "control": {
         "key": "P30-search",
         "actionId": "OG-M-SEARCH",
@@ -13871,7 +13871,7 @@
       "file": "filter-team-focus-390.png",
       "width": 390,
       "scene": "filter-team-focus",
-      "sha256": "7fa4a59605f04254c28f6a916b4582c71ed626f1b27f64274b2624f4fd827f5b",
+      "sha256": "44cacafc1946770883d3efa0bf5a4ae9641eb38eddff5507ba3d406ceb9913f7",
       "control": {
         "key": "P30-filter-team",
         "actionId": "OG-M-TEAM-FILTER",
@@ -14430,7 +14430,7 @@
       "file": "prev-focus-390.png",
       "width": 390,
       "scene": "prev-focus",
-      "sha256": "879474306b301d8db35b343e9dc63af241e9671babd7a3e24a5c59abfbe302f0",
+      "sha256": "5c800eb8ce31978a2c0874b5edd02154534dcec2d234eafc850c4351f3c70edc",
       "control": {
         "key": "P30-prev",
         "actionId": "OG-M-PREV",
@@ -14495,7 +14495,7 @@
       "file": "next-focus-390.png",
       "width": 390,
       "scene": "next-focus",
-      "sha256": "1e7197063558846222373899d546d641d2b22bc62da2b56d6ae1198a621169cc",
+      "sha256": "6959598a31b56f8bc929598e1b7a6efe1d0f84c804d91b86a8c34d353a5424fa",
       "control": {
         "key": "P30-next",
         "actionId": "OG-M-NEXT",
@@ -15509,7 +15509,7 @@
       "file": "filters-open-pressed-390.png",
       "width": 390,
       "scene": "filters-open-pressed",
-      "sha256": "b0e4e7caf49960fc1228ee403263199ddd32e4a146312ef75b83b91f1417a2dc",
+      "sha256": "5e5e8103c1b438a9e59eb60bb91d9ca7eab38e70f53ac5b82ed5c28bcddf2abe",
       "control": {
         "key": "P30-filters-open",
         "actionId": "PROPOSAL-FILTER-DISCLOSURE",

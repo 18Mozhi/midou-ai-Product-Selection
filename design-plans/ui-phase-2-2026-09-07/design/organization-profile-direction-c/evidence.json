@@ -5,7 +5,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.css": "8af2ac98bed39b910555fbf4dee23b33cae4ac944bc10a56e730be51115f9817",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.js": "e97992f37b251be8dc91342259b8a9001bc33db72ca5867c34b57c25e66aef99",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/data.js": "e6933867dba51bcaf548815b3f943ef6558c519719cd7103707e413ff78ee770",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",

@@ -38,9 +38,9 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | C | 1cbd108c64b5230c.1 | OG-PROFILE-LOGO浏览器有效性 |
 | C | 6a563eeaa67fea90.1 | P30全部成员事件父转发，复用M语义 |
 | C | b09d7923228aabe6.1 | P31资源授权父转发，复用已有合同 |
-| C | 56b1761955b256ef.1 | D-OG-REASON提交/取消父转发 |
-| C | f3515ca45998a840.1 | D-OG-REASON组件调用 |
-| C | 7a51bff83af3db69.1 | D-OG-REASON通用成员/邀请/工作区/团队及P31调用 |
+| C | 773c2105d1d0d008.1 | D-OG-REASON提交/取消父转发 |
+| C | 35233f910d34fac6.1 | D-OG-REASON组件调用 |
+| C | ab6191688d424055.1 | D-OG-REASON通用成员/邀请/工作区/团队及P31调用 |
 | C | e828f4ab0fdb0415.1 | D-OG-REASON令牌轮换/撤销调用 |
 | M | 3faa2495a550b3c6.1,0589c9bc31734883.1 | OG-M-INVITE |
 | M | 171dd535ef8757aa.1,5fa949f2fa7f314d.1 | OG-M-INVITATION-TAB |
@@ -162,7 +162,7 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174` |
@@ -170,9 +170,11 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 | `apps/web/src/components/OrganizationDataPanel.vue` | `575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2` |
 | `apps/web/src/components/OrganizationTokenPanel.vue` | `cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725` |
 | `apps/web/src/components/OrganizationAuditPanel.vue` | `b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a` |
-| `apps/web/src/components/AuditedReasonDialog.vue` | `270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00` |
-| `apps/web/src/use-audited-reason.ts` | `113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8` |
+| `apps/web/src/components/AuditedReasonDialog.vue` | `b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb` |
+| `apps/web/src/use-audited-reason.ts` | `e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab` |
 | `apps/web/src/use-modal-dialog.ts` | `08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f` |
 | `apps/web/src/api-client.ts` | `953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff` |
 | `apps/web/src/organization-admin.css` | `831b6561d1cbc5c46e6b3f9a2092c21685a8d8bcebd436e4c33fa2f3ae1248ee` |
 | `apps/web/src/organization-audit.css` | `383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d` |
+
+2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。

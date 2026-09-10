@@ -191,14 +191,14 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | apps/api/src/data-quality-service.ts | 39bcb82436d7b520e4597bbe8e1bc8e2930e260f564050cd17790c943659a6fc |
 | apps/api/src/mysql-data-quality-repository.ts | 43e62fdd3a08b3866a66c1e4e7d6c528365edbf2db72716d596e91323b414cd2 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
-| apps/web/src/use-audited-reason.ts | 113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8 |
+| apps/web/src/use-audited-reason.ts | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
 | apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
 | apps/web/src/ui/state-contract.ts | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
-| apps/web/src/components/AuditedReasonDialog.vue | 270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00 |
+| apps/web/src/components/AuditedReasonDialog.vue | b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb |
 | apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
 | apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
@@ -206,3 +206,5 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | tests/e2e/m03-06-evidence-data-quality.spec.ts | e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb |
 | tests/unit/platform-data-center.test.mjs | dd0629fc25dbefe1e4e14458bfcc68cba707f1d2f515e545fad0e24c6af533ac |
 | tests/unit/platform-governance.test.mjs | 282907ebf35a276e8e5112a832f12592153b848e08c056f354f61fed71213bbd |
+
+2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。

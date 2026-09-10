@@ -5,10 +5,10 @@
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.css": "f6560bf294e02d891ac65777bdd0976970b4f70c76e7f48dd15d5095962ed333",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.js": "871b281952fe5f95462d00326b059a94e22cdf5450ccaab6e15f1fc50361af36",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/data.js": "d4dd20ec9d48d4fbf81587e84ab275cdc6f7687d6555dbbd3d2df2888b9a8f2e",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
-    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
-    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
@@ -5329,7 +5329,7 @@
       "scene": "refresh-pressed",
       "width": 1440,
       "file": "refresh-pressed-1440.png",
-      "sha256": "18d14972b783cefd93157f6920de3d42ffb38085c59b2d1cf9f5e7cd17f775a4",
+      "sha256": "a46b6d05d8121f16acf633532891015de2a60f5f5cfb69b216bb81c5b3e901bc",
       "control": {
         "selector": "#refresh",
         "actionId": "OG-REFRESH",
@@ -5450,7 +5450,7 @@
       "scene": "open-default",
       "width": 1440,
       "file": "open-default-1440.png",
-      "sha256": "0c91d23c88e17fd3b677be202509317b3b7863ff068b50cecbdc1acb5d635616",
+      "sha256": "0c7c0f6a37cad5fb225c250cf68cc1efc464b8681615fb27ea77a39d259fd220",
       "control": {
         "selector": ".head-actions [data-create]",
         "actionId": "OG-W-OPEN",
@@ -5461,7 +5461,7 @@
       "scene": "open-hover",
       "width": 1440,
       "file": "open-hover-1440.png",
-      "sha256": "11103b912b6ae33f55d70f51e9810846c8a497e879876bb98aefec4f3b17585e",
+      "sha256": "066b8d6463e0d756b0ba49462de0465a179682a9c51cffd1f05ba38766e5f805",
       "control": {
         "selector": ".head-actions [data-create]",
         "actionId": "OG-W-OPEN",
@@ -5527,7 +5527,7 @@
       "scene": "create-focus",
       "width": 1440,
       "file": "create-focus-1440.png",
-      "sha256": "6d829cd7f0309fed199fa3f353bc397fc41d205ea08726dcc17d39a83f45661e",
+      "sha256": "fc889bfa467ee042276db363c24421a774b1d4ab21b09862fb62c1ab0799f840",
       "control": {
         "selector": "#create-submit",
         "actionId": "OG-W-CREATE",
@@ -5538,7 +5538,7 @@
       "scene": "create-pressed",
       "width": 1440,
       "file": "create-pressed-1440.png",
-      "sha256": "4f8207bc5a23f8d8a2d79fb59caed6a0dc013b76ea30c56483e4a48ff7bb5067",
+      "sha256": "28f4afbdeea3521564ab5f4cafa1ccb9d48501d76a9678a8b1e3c4c5de01824b",
       "control": {
         "selector": "#create-submit",
         "actionId": "OG-W-CREATE",
@@ -5582,7 +5582,7 @@
       "scene": "cancel-create-focus",
       "width": 1440,
       "file": "cancel-create-focus-1440.png",
-      "sha256": "2cd577070ef937b9a784770873f8fd0342ae32d80f77f1a14f7b9f1108656bba",
+      "sha256": "ab75ea6bed43525e60bdd7771dc7bfb5d6bfd127f9891a53a65bb517b064c7f8",
       "control": {
         "selector": "#cancel-create",
         "actionId": "OG-W-CANCEL",
@@ -5769,7 +5769,7 @@
       "scene": "reset-focus",
       "width": 1440,
       "file": "reset-focus-1440.png",
-      "sha256": "0689c9527f685ef9f80d2d3f0067b0ec991215d555e28868c5810be5ba793597",
+      "sha256": "954b4dffb9f9b0e472223d04b7f761a3b9ba3fae8b162b2adc04532f24d957da",
       "control": {
         "selector": ".filter-fields [data-reset]",
         "actionId": "OG-W-RESET",
@@ -5780,7 +5780,7 @@
       "scene": "reset-pressed",
       "width": 1440,
       "file": "reset-pressed-1440.png",
-      "sha256": "d6758f0b33a0cacede2fb20075976a3b557b700aa6259cefd826bd467e818b32",
+      "sha256": "4487bf51b26ff442052a05965f7c404d1a6a908b89217347bd042d578fc43ce0",
       "control": {
         "selector": ".filter-fields [data-reset]",
         "actionId": "OG-W-RESET",
@@ -5813,7 +5813,7 @@
       "scene": "clear-empty-focus",
       "width": 1440,
       "file": "clear-empty-focus-1440.png",
-      "sha256": "224069610bf55fd0ffeb02f045d624c9cd1cc720421df7b71b97980aa1202ebf",
+      "sha256": "692d46312e599eb3244976b9674340f6d31bf4f21c2e770c4549ede3827de932",
       "control": {
         "selector": ".empty [data-reset]",
         "actionId": "OG-W-CLEAR-EMPTY",
@@ -5901,7 +5901,7 @@
       "scene": "previous-focus",
       "width": 1440,
       "file": "previous-focus-1440.png",
-      "sha256": "7fc00e3c652e4e83a8c8214d9a98db52397450fb9b8cdc57f8f5b88a27b704bf",
+      "sha256": "415f9db0632adac18bc268d762a3585665b6fbece79fb0d96114c8009c45e84f",
       "control": {
         "selector": ".pagination button:first-child",
         "actionId": "OG-W-PREVIOUS",
@@ -5912,7 +5912,7 @@
       "scene": "previous-pressed",
       "width": 1440,
       "file": "previous-pressed-1440.png",
-      "sha256": "120f2b5e22d99da39a16277ee9ec81f61189f40dadfd53daa50500e953ecffcd",
+      "sha256": "29c38eaf0077f9117f19722e540d29075ca4213f9657983825dd8c7f1c3b7fb1",
       "control": {
         "selector": ".pagination button:first-child",
         "actionId": "OG-W-PREVIOUS",
@@ -6044,7 +6044,7 @@
       "scene": "teams-default",
       "width": 1440,
       "file": "teams-default-1440.png",
-      "sha256": "798af262124f94b0115bef4d2a6fff06d174ce3b0cfa9bc8596936135ab58b16",
+      "sha256": "bab71f657f972103eae9648a909802b960bf449662fe1df6f9fed3e81f1eb592",
       "control": {
         "selector": "a[data-route][href='/org-admin/teams']",
         "actionId": "OG-W-TEAMS",
@@ -6121,7 +6121,7 @@
       "scene": "profile-pressed",
       "width": 1440,
       "file": "profile-pressed-1440.png",
-      "sha256": "39595b10a56e3bd171de30da9692c837d9e3935bcb0ba6b53e59c3c06a69483a",
+      "sha256": "a3596c07f49c1d08b12e13f86d429c3a9c58708fd001a2b3d67bd02d35741bc3",
       "control": {
         "selector": "a[data-route][href='/org-admin']",
         "actionId": "OG-W-PROFILE",
@@ -6154,7 +6154,7 @@
       "scene": "technical-focus",
       "width": 1440,
       "file": "technical-focus-1440.png",
-      "sha256": "e3c5e51fe0aa0c208cd6b6642425e190c68f77b65da64f7bc0374ddf9a02885a",
+      "sha256": "caada3fbd24228180df871cc68fe60322ee9104b1d7bc890b130a33c99eb7570",
       "control": {
         "selector": "#technical summary",
         "actionId": "OG-W-TECH",
@@ -6200,7 +6200,7 @@
       "scene": "open-empty-focus",
       "width": 1440,
       "file": "open-empty-focus-1440.png",
-      "sha256": "284f7eb280fcd4886c85fb2ee0486c3fbaa2c26299db333e3c48bde94e8ee48b",
+      "sha256": "61ab01869178f21aa2ed6efe56ce392f499102e0e2d323e5108610e166c193ae",
       "control": {
         "selector": ".empty [data-create]",
         "actionId": "OG-W-OPEN",
@@ -6212,7 +6212,7 @@
       "scene": "open-empty-pressed",
       "width": 1440,
       "file": "open-empty-pressed-1440.png",
-      "sha256": "648e89366ae6cc6c2c1e4ae73f4ab14fc376802f50a9aa2c45908f0fa93040d7",
+      "sha256": "70a6b1ae495ac8be4805d9ecbed279f965a109518ff53c7c51e9000d4f45fd57",
       "control": {
         "selector": ".empty [data-create]",
         "actionId": "OG-W-OPEN",
@@ -6548,7 +6548,7 @@
       "scene": "status-archived-selected-focus",
       "width": 1440,
       "file": "status-archived-selected-focus-1440.png",
-      "sha256": "9956d5e7afea723e0db40695ad5b77c923dae03925fa0e440cf70631f2fe3295",
+      "sha256": "57bfa26222a2dd5fe9f66bd702eaa3750390e9bd21673c1b283b01b57bf715fa",
       "control": {
         "selector": "[data-status='archived']",
         "actionId": "OG-W-STATUS-ARCHIVED",
@@ -6572,7 +6572,7 @@
       "scene": "select-current-default",
       "width": 1440,
       "file": "select-current-default-1440.png",
-      "sha256": "2881bddfb7113cfd3282e6f3841f240210a226557ec09447eedbd0856e8bde83",
+      "sha256": "bab71f657f972103eae9648a909802b960bf449662fe1df6f9fed3e81f1eb592",
       "control": {
         "selector": ".workspace-list button[aria-pressed='true']",
         "actionId": "OG-W-SELECT",
@@ -6596,7 +6596,7 @@
       "scene": "select-current-focus",
       "width": 1440,
       "file": "select-current-focus-1440.png",
-      "sha256": "bae30e5fc16e0a05b24e891e765a29a005e1b8167c95644b09721313e506674a",
+      "sha256": "1910534caf6e189b15a54da4c3b5d362d52998be4ed8fd396272db4892712562",
       "control": {
         "selector": ".workspace-list button[aria-pressed='true']",
         "actionId": "OG-W-SELECT",
@@ -6608,7 +6608,7 @@
       "scene": "select-current-pressed",
       "width": 1440,
       "file": "select-current-pressed-1440.png",
-      "sha256": "798af262124f94b0115bef4d2a6fff06d174ce3b0cfa9bc8596936135ab58b16",
+      "sha256": "bab71f657f972103eae9648a909802b960bf449662fe1df6f9fed3e81f1eb592",
       "control": {
         "selector": ".workspace-list button[aria-pressed='true']",
         "actionId": "OG-W-SELECT",
@@ -6704,7 +6704,7 @@
       "scene": "technical-open-focus",
       "width": 1440,
       "file": "technical-open-focus-1440.png",
-      "sha256": "a9110cd82f286464e404023eb091449c6f289a26d9cd7d254d925eeead0392b2",
+      "sha256": "95cb3cf9be316761c64c0913f0018ec3ff42379b48667dc28c66b0e2928da575",
       "control": {
         "selector": "#technical summary",
         "actionId": "OG-W-TECH",
@@ -6982,7 +6982,7 @@
       "scene": "refresh-default",
       "width": 390,
       "file": "refresh-default-390.png",
-      "sha256": "4e7302d975f7554a8d7228a72485fcf15169b902083325dae0c75fc88ac605f4",
+      "sha256": "51ee306e7073bbe71b6c40067b6b9a2f00be69f5cc23e9c285fcc2ce74febee9",
       "control": {
         "selector": "#refresh",
         "actionId": "OG-REFRESH",
@@ -7279,7 +7279,7 @@
       "scene": "cancel-create-pressed",
       "width": 390,
       "file": "cancel-create-pressed-390.png",
-      "sha256": "26c65de2e9cc01a5c93f5a527cfb611c7c79e8cdfaa775deda949ec11f1f0dce",
+      "sha256": "9aa2294a66a075ef4356b80eb7a36621859a22dc49b2327d872c784aba912089",
       "control": {
         "selector": "#cancel-create",
         "actionId": "OG-W-CANCEL",
@@ -7499,7 +7499,7 @@
       "scene": "clear-empty-focus",
       "width": 390,
       "file": "clear-empty-focus-390.png",
-      "sha256": "b5a02bb4e2c94640b5fdcae9b6dcf81f5fdc75b4c3bfe841564661f60efa9dba",
+      "sha256": "53b8bc2ca3e940ff94e92818f359e3a4b62475c8ee63460453c12642685b792c",
       "control": {
         "selector": ".empty [data-reset]",
         "actionId": "OG-W-CLEAR-EMPTY",
@@ -7587,7 +7587,7 @@
       "scene": "previous-focus",
       "width": 390,
       "file": "previous-focus-390.png",
-      "sha256": "767c0afdd030c79a0174b19cf8ec63c48ff6f7632ed8c1a428e231605faf7dba",
+      "sha256": "4a80f31614611ec2c9d0fa3b60f3029855bbf42be981114c0de7c5b7d5e3409d",
       "control": {
         "selector": ".pagination button:first-child",
         "actionId": "OG-W-PREVIOUS",
@@ -7886,7 +7886,7 @@
       "scene": "open-empty-focus",
       "width": 390,
       "file": "open-empty-focus-390.png",
-      "sha256": "f485aba08e08a4a24393b38b475e998148c9996e585bc6aea3ca1e4427984589",
+      "sha256": "8a980e1290a1796127963b259baa8f7d780c0fe55840af290032de8138f18f28",
       "control": {
         "selector": ".empty [data-create]",
         "actionId": "OG-W-OPEN",
@@ -8282,7 +8282,7 @@
       "scene": "select-current-focus",
       "width": 390,
       "file": "select-current-focus-390.png",
-      "sha256": "a9f706d1c919aecc34b744a03c8924b2275626fa60e21ee6e320d68b84facff0",
+      "sha256": "d6858de90d568b6bd4919819cd86f29b3527e475bf746792c0b21460ef8fab77",
       "control": {
         "selector": ".workspace-list button[aria-pressed='true']",
         "actionId": "OG-W-SELECT",

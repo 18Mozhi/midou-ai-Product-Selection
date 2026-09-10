@@ -83,7 +83,7 @@ const definitions = [
     "EX-REASON-ORIGINS",
     "共享原因窗的其他页调用",
     "excluded",
-    ["56b1761955b256ef.1", "f3515ca45998a840.1", "7a51bff83af3db69.1", "e828f4ab0fdb0415.1"],
+    ["773c2105d1d0d008.1", "35233f910d34fac6.1", "ab6191688d424055.1", "e828f4ab0fdb0415.1"],
     [
       "D-OG-REASON提交/取消父转发",
       "D-OG-REASON组件调用",

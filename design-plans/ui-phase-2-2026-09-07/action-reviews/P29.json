@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
   },
   "actions": [
     {
@@ -406,7 +406,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
         }
       }
     },
@@ -706,7 +706,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
         }
       }
     },
@@ -807,9 +807,9 @@
       "label": "共享原因窗的其他页调用",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#56b1761955b256ef.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#f3515ca45998a840.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#7a51bff83af3db69.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
       ],
       "sourceContractKeys": [
@@ -876,7 +876,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
     },
     "inputs": [
       {

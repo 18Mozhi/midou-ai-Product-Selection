@@ -15,7 +15,7 @@
 | d6b520278ab3dd57.1、1cbd108c64b5230c.1、5878e30377f290ae.1 | summary资料三位置排除 | EX-P29-PROFILE |
 | 6a563eeaa67fea90.1 | members事件转发排除 | EX-P30-MEMBERS |
 | b09d7923228aabe6.1 | 六事件转发八目标；父busy或refreshing均传子busy | WIRE-ROLES |
-| 56b1761955b256ef.1、f3515ca45998a840.1、7a51bff83af3db69.1 | 通用原因调用及确认/取消转发；本页仅撤销发起 | D-OG-REASON |
+| 773c2105d1d0d008.1、35233f910d34fac6.1、ab6191688d424055.1 | 通用原因调用及确认/取消转发；本页仅撤销发起 | D-OG-REASON |
 | e828f4ab0fdb0415.1 | 令牌原因调用排除 | EX-P36-TOKEN-REASON |
 
 ## apps/web/src/components/OrganizationRolePanel.vue

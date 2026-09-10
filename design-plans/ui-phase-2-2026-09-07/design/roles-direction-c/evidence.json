@@ -4,7 +4,7 @@
   "pageId": "P31",
   "approval": "pending-user-review",
   "reviewClock": "2026-08-28T10:00:00.000Z",
-  "capturedAt": "2026-09-10T03:23:43.982Z",
+  "capturedAt": "2026-09-10T04:44:08.239Z",
   "browser": "151.0.7922.34",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/index.html": "7bd156d20d1ddb1b7fb45618974cfcf04f53d07d7114aea0e981ba23848c3656",
@@ -12,10 +12,10 @@
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/roles.js": "c2c0e61ad2e47c4996633605d275aa8c093e3760e2d033dab7cc014e83ac5be5",
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/roles.css": "05aab6c2df11deee185fa1be1eaccc706791ef70e178336513c7b4bd6c3acad4",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
-    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
-    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c"

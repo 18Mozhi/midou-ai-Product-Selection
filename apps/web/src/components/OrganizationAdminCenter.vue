@@ -6,7 +6,7 @@ import {
   rethrowUnexpectedError,
   type ApiRequestOptions,
 } from "../api-client";
-import { useAuditedReason } from "../use-audited-reason";
+import { useAuditedReason, type WorkspaceRestoreReasonContext } from "../use-audited-reason";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import OrganizationAuditPanel from "./OrganizationAuditPanel.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
@@ -484,12 +484,13 @@ async function inviteMembers() {
     busy.value = false;
   }
 }
-async function auditedReason(action: string) {
+async function auditedReason(action: string, workspaceRestore?: WorkspaceRestoreReasonContext) {
   return (
     (await askAuditedReason({
       title: `${action}原因`,
       description: "原因会与组织、操作者和目标对象一起写入审计记录。",
       initialValue: action,
+      ...(workspaceRestore ? { workspaceRestore } : {}),
     })) ?? ""
   );
 }
@@ -641,7 +642,12 @@ async function revokeResourceGrant(grant: any) {
 }
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
-  const reason = await auditedReason(action === "archive" ? "归档工作区" : "恢复工作区");
+  const reason = await auditedReason(
+    action === "archive" ? "归档工作区" : "恢复工作区",
+    action === "restore"
+      ? { name: item.name, version: item.version, memberCount: item.member_count }
+      : undefined,
+  );
   if (!reason) return false;
   const succeeded = await submit(
     `/org/admin/workspaces/${item.id}/actions`,
@@ -1228,6 +1234,7 @@ onMounted(() => void load());
       :description="auditedReasonRequest?.description || ''"
       :initial-value="auditedReasonRequest?.initialValue"
       :minimum-length="auditedReasonRequest?.minimumLength"
+      :workspace-restore="auditedReasonRequest?.workspaceRestore"
       @submit="submitAuditedReason"
       @cancel="cancelAuditedReason"
     />

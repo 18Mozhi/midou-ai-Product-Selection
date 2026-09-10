@@ -86,6 +86,14 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
+    if (paths[index] === "apps/web/src/design/workspace-restore-tokens.css") {
+      // P32 palette is opt-in to one reason variant; reject ordinary rules or broader selectors.
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html #app dialog\.workspace-restore-reason\s*\{\s*--so-font-meta:\s*16px;(?:\s*--so-restore-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/roles-tokens.css") {
       // Like P16, this page-lazy palette may declare scoped tokens only, not styling rules.
       assert.match(

@@ -1,7 +1,7 @@
 {
   "version": "REVIEW-C-r1",
   "approval": "pending",
-  "capturedAt": "2026-09-08T10:40:13.400Z",
+  "capturedAt": "2026-09-10T04:42:03.538Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/index.html": "15f90ea562fa58660478d2ecf0b1fcbab1762867a60ef1d78499013190308a66",
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/data.js": "b0a453f03ab492d27e6b30c02eab7f675a105ffd4e7c8b0859afe46f4c74afa1",
@@ -15,8 +15,8 @@
     "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
     "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
     "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
-    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
-    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/api/src/opportunity-service.ts": "a43b52911778c4e85a84dd0d25607fab481a358441ad1b5254f770f19cca820e",
     "apps/api/src/mysql-opportunity-repository.ts": "43929fd67d85b38b6e882d9221e0a657dfc7e99a54b405ffae6d35627037793f",
     "apps/api/src/opportunity-routes.ts": "d65b60404750432d0290c0e71f22c0d4c09756fed95914063b78ac03a41e5546",

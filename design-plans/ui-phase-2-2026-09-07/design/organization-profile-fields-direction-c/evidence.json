@@ -6,7 +6,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.css": "8af2ac98bed39b910555fbf4dee23b33cae4ac944bc10a56e730be51115f9817",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.js": "e97992f37b251be8dc91342259b8a9001bc33db72ca5867c34b57c25e66aef99",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/data.js": "e6933867dba51bcaf548815b3f943ef6558c519719cd7103707e413ff78ee770",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
@@ -2131,7 +2131,7 @@
       "scene": "name-hover",
       "width": 1440,
       "file": "name-hover-1440.png",
-      "sha256": "ec428106df6c13002796dd33b22d1240497832373592d453d4fe6a033e99b88c",
+      "sha256": "94f26335662f47b92913fda9f5f978132bd10089eead96f57e7f23ca12935362",
       "control": {
         "selector": "#name",
         "binding": "form.name",
@@ -2318,7 +2318,7 @@
       "scene": "timezone-focus",
       "width": 1440,
       "file": "timezone-focus-1440.png",
-      "sha256": "09b33d2c43373b921d753918919cea216438396d506ac459036fac347265a0d4",
+      "sha256": "93d8680e8ece97dc15ef6b9040c2aee8345e06632d26a102248ed3d4df02dd66",
       "control": {
         "selector": "#timezone",
         "binding": "form.timezone",
@@ -2373,7 +2373,7 @@
       "scene": "timezone-save_editable",
       "width": 1440,
       "file": "timezone-save_editable-1440.png",
-      "sha256": "3d84f2a20bf414e28926370f79c434d07994d45080ac2502511516fc3a910abe",
+      "sha256": "dd262a1a08b434430673f9a374b6a8d8d51aad01c5596b2af38122d5a51a65f7",
       "control": {
         "selector": "#timezone",
         "binding": "form.timezone",
@@ -2406,7 +2406,7 @@
       "scene": "data_retention_days-focus",
       "width": 1440,
       "file": "data_retention_days-focus-1440.png",
-      "sha256": "300e186b0bee3c57468ed7e8b0d248495e7f3b53ba0739ac311da0b7d088d7e8",
+      "sha256": "94eefc3e2beccd4ab9b6aef652b540a06fb64c72feb2ac53e8cc1016b8e8e3ef",
       "control": {
         "selector": "#data_retention_days",
         "binding": "form.data_retention_days",
@@ -2450,7 +2450,7 @@
       "scene": "data_retention_days-corrected",
       "width": 1440,
       "file": "data_retention_days-corrected-1440.png",
-      "sha256": "ce9f28a09bc2ff81f77d3813e5cb4c0a76e31007b6b40f7479a675af38db8ec9",
+      "sha256": "c482ab743d1bf5525a88617dcd4b254634de7c54c4a24b696cbc6e94ff9e2017",
       "control": {
         "selector": "#data_retention_days",
         "binding": "form.data_retention_days",
@@ -2461,7 +2461,7 @@
       "scene": "data_retention_days-save_editable",
       "width": 1440,
       "file": "data_retention_days-save_editable-1440.png",
-      "sha256": "c4a06e7dc52d0f911bb34bc7bfc16daa26bc936474df2e1cc514fb79a43c83d1",
+      "sha256": "0e4193f371aa3b6a5cf9364260e161562d01a86e4922de5f2979ddacc8c4c378",
       "control": {
         "selector": "#data_retention_days",
         "binding": "form.data_retention_days",
@@ -2494,7 +2494,7 @@
       "scene": "default_workspace_id-focus",
       "width": 1440,
       "file": "default_workspace_id-focus-1440.png",
-      "sha256": "63d3d44d11d3b26154ecbed0fdf7ab2199a1f9d5c1a989892dc7ec08ffaa1b47",
+      "sha256": "06ef92640a0894b3899321c5fd9f28ed656e527c4bbfdd80ad520e546c1d82fa",
       "control": {
         "selector": "#default_workspace_id",
         "binding": "form.default_workspace_id",
@@ -2582,7 +2582,7 @@
       "scene": "reason-pressed",
       "width": 1440,
       "file": "reason-pressed-1440.png",
-      "sha256": "717e306f4949ce010151ab4acd04cbffe0cd8d3189386c77b6f78653ed12c19a",
+      "sha256": "c3bd2b6e21751c891d47916ea3b9f41add5063fc04e78c67ccfccdab5b520745",
       "control": {
         "selector": "#reason",
         "binding": "form.reason",
@@ -2803,7 +2803,7 @@
       "scene": "logo_url-focus",
       "width": 390,
       "file": "logo_url-focus-390.png",
-      "sha256": "e05b353bda8f68db0d7efbed07b2bcbc8be559b083e0e24d758cbce5bacb07ea",
+      "sha256": "cb8ed216a8fbbdc34da2eeeaa8744ddbf1d5ed7f9b7ad61512697e569ba92e0b",
       "control": {
         "selector": "#logo_url",
         "binding": "form.logo_url",
@@ -2979,7 +2979,7 @@
       "scene": "data_retention_days-focus",
       "width": 390,
       "file": "data_retention_days-focus-390.png",
-      "sha256": "31f215475f148385c9541d5342c0346a42b41c85db268e027ee41f04afd677e3",
+      "sha256": "d65b26dc884e584e381e50da373fbf6425b40dc50655eb718d64d872af37faaf",
       "control": {
         "selector": "#data_retention_days",
         "binding": "form.data_retention_days",
@@ -3199,7 +3199,7 @@
       "scene": "reason-save_editable",
       "width": 390,
       "file": "reason-save_editable-390.png",
-      "sha256": "99c782c6756e9a342a08018fd22b28b59ea2a338c38aa6adc5a47d786daacb75",
+      "sha256": "8ff039fe9466e1d460bc828bb565dc907720c10ef64ab72dd4e6c8fc5f13445d",
       "control": {
         "selector": "#reason",
         "binding": "form.reason",

@@ -78,7 +78,7 @@ const definitions = [
     "D-OG-REASON",
     "归档与恢复原因",
     "local",
-    ["56b1761955b256ef.1", "f3515ca45998a840.1", "7a51bff83af3db69.1"],
+    ["773c2105d1d0d008.1", "35233f910d34fac6.1", "ab6191688d424055.1"],
     [
       "D-OG-REASON提交/取消父转发",
       "D-OG-REASON组件调用",
@@ -527,6 +527,13 @@ export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
       scenes: [{ package: controlsPackage, scene: `composition-${kind}` }],
       remaining: "仅原因窗局部组合提案，字段边界与真实生命周期未获批准。",
     });
+  result.actualVueRestore = {
+    scope:
+      "Approved P32 mobile restore composition only; default shared callers and original API retained",
+    approval: "mobile-proposal-composition-approved-real-Vue-and-desktop-review-pending",
+    review: "P32-VUE-RESTORE-REVIEW.md",
+    evidence: "output/playwright/p32-approved-restore-review/evidence.json",
+  };
   return result;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

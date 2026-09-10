@@ -176,6 +176,7 @@ window.PN_SOURCE = (b) => {
         description: input.description ?? "原因会写入审计记录。",
         initialValue: input.initialValue ?? "",
         minimumLength: input.minimumLength ?? 2,
+        ...(input.workspaceRestore ? { workspaceRestore: { ...input.workspaceRestore } } : {}),
       };
       return new Promise((resolve) => {
         resolveRequest = resolve;

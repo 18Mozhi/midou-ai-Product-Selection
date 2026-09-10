@@ -30,8 +30,8 @@
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
-    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
-    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
     "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
     "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
     "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
@@ -46,7 +46,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/notifications.css": "ab78d0924615fb04491747910ee1c4fe97f993c5893a7b6207d47bd9d2ab123d",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/notifications.js": "28126223dd1d1ebc32ff5263b6a2fdd062c6c99f379b3e848b06e3a62e75fc6b",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/data.js": "c718a3daedc64513b54e8f400428b94353d58b54569878e6150e5502cd0f1a93",
-    "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/source-logic.js": "e56691514beff6e51df17aacc28f53087ca69a714925039c0db97521e45c54d0"
+    "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/source-logic.js": "82ee18d15a7e02fcde2bf44076c97d5bfc8c80ee17622796f7ee6c722329b496"
   },
   "sourceChecks": [
     "Actual list: 15s/single-flight skips second request but mutable query reaches success URL; stop ignored-abort updates refs; creating resets message page only; first failure falsely claims retained data; both empty hides auxiliary panels in parent. Not production fixes.",

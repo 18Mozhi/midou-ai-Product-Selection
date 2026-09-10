@@ -6,7 +6,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.css": "8af2ac98bed39b910555fbf4dee23b33cae4ac944bc10a56e730be51115f9817",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.js": "e97992f37b251be8dc91342259b8a9001bc33db72ca5867c34b57c25e66aef99",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/data.js": "e6933867dba51bcaf548815b3f943ef6558c519719cd7103707e413ff78ee770",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
@@ -2767,7 +2767,7 @@
       "scene": "save-focus",
       "width": 1440,
       "file": "save-focus-1440.png",
-      "sha256": "0373a1080597e737510313e87fa578cf65849d1fc989753fb2bece687b33ac8d",
+      "sha256": "73e4ad9fd3b9fbe5c7d0b454d75eabd61daa878662b5794ba9f48c86d7968913",
       "control": {
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
@@ -3093,7 +3093,7 @@
       "scene": "retry-rate_limited-focus",
       "width": 1440,
       "file": "retry-rate_limited-focus-1440.png",
-      "sha256": "3217d19d11f068e5a5357e8eb3591ca5787ed3327b8b5a6f562b29d1a165d386",
+      "sha256": "b8225850086a5a0e415e74324a15b539cbcc218f06f7826ad250a7370ca7d5c1",
       "control": {
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
@@ -3243,7 +3243,7 @@
       "scene": "nav-identity-selected-focus",
       "width": 1440,
       "file": "nav-identity-selected-focus-1440.png",
-      "sha256": "825cb21e31bdc692d07c8927f4dc51993c11e6ce2e5ae029e13a3ec91b1c4841",
+      "sha256": "49c36457870a05ba381d9166d15eb8754a0085bbd842e77a25eee2c9fa0ab659",
       "control": {
         "selector": ".directory nav a[href='#identity']",
         "actionId": "PROPOSAL-NAV",
@@ -3387,7 +3387,7 @@
       "scene": "nav-summary-available-focus",
       "width": 1440,
       "file": "nav-summary-available-focus-1440.png",
-      "sha256": "49fd7c667af3ad55f8a3a60528e449d3f980f2ee05818a24771151f19a578d7f",
+      "sha256": "7c2869a1970a9210b4b3913b3c97a6591aab3fddcd366be6290e7f54f6b5f72c",
       "control": {
         "selector": ".directory nav a[href='#summary']",
         "actionId": "PROPOSAL-NAV",
@@ -3629,7 +3629,7 @@
       "scene": "save_error-focus",
       "width": 1440,
       "file": "save_error-focus-1440.png",
-      "sha256": "5c146865e07fa2f3c46b25eb9fa366126329e106bf8eef560bafe2cc839b7f3e",
+      "sha256": "2e89b8c00fc547cbadfd7394ac2094eb6b4a3a90d61b338e30522b312d159faf",
       "control": {
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",

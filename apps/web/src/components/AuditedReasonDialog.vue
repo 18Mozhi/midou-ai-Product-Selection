@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
+import type { WorkspaceRestoreReasonContext } from "../use-audited-reason";
+import "../design/workspace-restore-tokens.css";
 
 const props = defineProps<{
   open: boolean;
@@ -8,6 +10,7 @@ const props = defineProps<{
   description: string;
   initialValue?: string;
   minimumLength?: number;
+  workspaceRestore?: WorkspaceRestoreReasonContext;
 }>();
 const emit = defineEmits<{ submit: [value: string]; cancel: [] }>();
 const reason = ref("");
@@ -56,19 +59,31 @@ function handleTab(event: KeyboardEvent) {
   <dialog
     ref="dialogElement"
     class="audited-reason-dialog"
+    :class="{ 'workspace-restore-reason': Boolean(workspaceRestore) }"
     :aria-label="title"
+    :aria-describedby="workspaceRestore ? 'workspace-restore-target' : undefined"
     @cancel="handleCancel"
     @keydown="handleTab"
   >
     <form @submit.prevent="submit">
       <header>
         <div>
-          <p>审计原因</p>
+          <p v-if="!workspaceRestore">审计原因</p>
           <h3>{{ title }}</h3>
         </div>
-        <button type="button" aria-label="关闭原因填写" @click="$emit('cancel')">×</button>
+        <button type="button" aria-label="关闭原因填写" @click="$emit('cancel')">
+          {{ workspaceRestore ? "关闭" : "×" }}
+        </button>
       </header>
-      <p>{{ description }}</p>
+      <section v-if="workspaceRestore" id="workspace-restore-target">
+        <strong>{{ workspaceRestore.name }}</strong>
+        <p>恢复授权范围内的使用，不自动恢复已移除的成员或团队。</p>
+        <p>
+          第 {{ workspaceRestore.version ?? "未提供" }} 版；明确范围成员
+          {{ workspaceRestore.memberCount ?? "未提供" }}。
+        </p>
+      </section>
+      <p v-else>{{ description }}</p>
       <label>
         原因（至少 {{ minimumLength ?? 2 }} 个字）
         <textarea
@@ -136,5 +151,98 @@ textarea {
 }
 footer {
   justify-content: flex-end;
+}
+.audited-reason-dialog.workspace-restore-reason {
+  width: min(700px, calc(100vw - 36px));
+  max-height: calc(100dvh - 36px);
+  border: 0;
+  border-radius: 12px;
+  background: var(--so-restore-surface);
+  color: var(--so-restore-text);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.audited-reason-dialog.workspace-restore-reason form {
+  gap: 18px;
+  padding: 20px 18px 16px;
+}
+.audited-reason-dialog.workspace-restore-reason header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--so-restore-line);
+}
+.audited-reason-dialog.workspace-restore-reason h3 {
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--so-restore-text);
+}
+.audited-reason-dialog.workspace-restore-reason #workspace-restore-target {
+  padding: 18px;
+  background: var(--so-restore-target);
+  overflow-wrap: anywhere;
+}
+.audited-reason-dialog.workspace-restore-reason #workspace-restore-target strong {
+  font-size: 20px;
+}
+.audited-reason-dialog.workspace-restore-reason #workspace-restore-target p {
+  margin: 8px 0 0;
+  font-size: 16px;
+}
+.audited-reason-dialog.workspace-restore-reason label {
+  gap: 6px;
+  font-size: 16px;
+}
+.audited-reason-dialog.workspace-restore-reason textarea {
+  min-height: 150px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-restore-input-border);
+  border-radius: 6px;
+  background: var(--so-restore-surface);
+  color: var(--so-restore-text);
+  font: inherit;
+}
+.audited-reason-dialog.workspace-restore-reason small {
+  color: var(--so-restore-help);
+  font-size: 16px;
+}
+.audited-reason-dialog.workspace-restore-reason button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--so-restore-input-border);
+  border-radius: 6px;
+  background: var(--so-restore-surface);
+  color: var(--so-restore-text);
+  font: inherit;
+  box-shadow: none;
+}
+.audited-reason-dialog.workspace-restore-reason footer {
+  gap: 12px;
+  margin-top: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--so-restore-line);
+}
+.audited-reason-dialog.workspace-restore-reason footer button {
+  flex: 1;
+  color: var(--so-restore-primary);
+}
+.audited-reason-dialog.workspace-restore-reason button[type="submit"] {
+  background: var(--so-restore-primary);
+  color: var(--so-restore-on-primary);
+  border-color: var(--so-restore-primary);
+}
+.audited-reason-dialog.workspace-restore-reason button:disabled {
+  opacity: 1;
+  background: var(--so-restore-disabled-bg);
+  color: var(--so-restore-disabled-text);
+  border-color: var(--so-restore-disabled-border);
+  cursor: not-allowed;
+}
+.audited-reason-dialog.workspace-restore-reason :is(button, textarea):focus-visible {
+  outline: 3px solid var(--so-restore-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px var(--so-restore-surface);
 }
 </style>

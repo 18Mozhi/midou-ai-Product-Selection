@@ -119,12 +119,12 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号 | 行 | 类型 | 语义/消费者 |
 | --- | --- | --- | --- |
-| b4d0faa980ae141b.1 | 56 | dialog-definition | LG62-REASON 原生dialog定义 |
-| feaf794106e5776d.1 | 56 | event-binding | LG62-REASON Escape转发及可用控件首末Tab循环 |
-| 86c4d6d0ad7b5fb8.1 | 63 | form-event | LG62-REASON 表单提交 |
-| f850a4abcc7ccc3a.1 | 69 | control | LG62-REASON 顶部取消 |
-| 8724bc1f65aaf63a.1 | 85 | control | LG62-REASON 底部取消 |
-| e7e63c4215a43738.1 | 86 | control | LG62-REASON 同form确认 |
+| 0a9c82c5c5fb1fd7.1 | 59 | dialog-definition | LG62-REASON 原生dialog定义；可选P32恢复上下文不改变本调用 |
+| 0b86489e495d6b17.1 | 59 | event-binding | LG62-REASON Escape转发及可用控件首末Tab循环；处理函数不变 |
+| e571bad78d52022e.1 | 68 | form-event | LG62-REASON 表单提交；增加可选P32展示文本，默认校验/submit不变 |
+| f850a4abcc7ccc3a.1 | 74 | control | LG62-REASON 顶部取消 |
+| 8724bc1f65aaf63a.1 | 100 | control | LG62-REASON 底部取消 |
+| e7e63c4215a43738.1 | 101 | control | LG62-REASON 同form确认 |
 
 | v-model | 属性行 | 元素 |
 | --- | --- | --- |
@@ -179,12 +179,12 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/PlatformLogCenter.vue | 4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d |
 | apps/web/src/components/BackupRecoveryCenter.vue | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
 | apps/web/src/components/ReleaseRolloutCenter.vue | 0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1 |
-| apps/web/src/components/AuditedReasonDialog.vue | 270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00 |
+| apps/web/src/components/AuditedReasonDialog.vue | b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
-| apps/web/src/use-audited-reason.ts | 113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8 |
+| apps/web/src/use-audited-reason.ts | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
 | apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/api/src/platform-dashboard-routes.ts | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
@@ -199,3 +199,5 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | packages/config/src/index.ts | 7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11 |
 | tests/e2e/m07-04-backup-recovery.spec.ts | f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53 |
+
+2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。

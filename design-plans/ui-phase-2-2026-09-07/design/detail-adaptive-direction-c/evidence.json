@@ -7,7 +7,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/detail-assembly-direction-c/data.js": "3148790a608566bb2e8a829723f74edf53a0058a944bdc20fadc442c7a0feb40",
     "design-plans/ui-phase-2-2026-09-07/design/detail-assembly-direction-c/assembly.js": "0622098c1270f56e32d906252e3c769eccdd485873b88d02a2bd3d5178f816b6",
     "design-plans/ui-phase-2-2026-09-07/design/detail-assembly-direction-c/assembly.css": "6969884bd5d48fa9708932302b3c01a9d1ca08bcf7aa9f525dab99df6d60ce14",
-    "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "600c1743f86d66f5840f4b9813966e74df2cbc231fc3b0e0fff6328c440a6bf6",
+    "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "950a4ccec1c625f788db47106bebe8ba8448b7cd300108eeaf9afb3935163ae0",
     "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
     "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
@@ -15,8 +15,8 @@
     "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
     "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
     "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
-    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
-    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/api/src/opportunity-service.ts": "a43b52911778c4e85a84dd0d25607fab481a358441ad1b5254f770f19cca820e",
     "apps/api/src/mysql-opportunity-repository.ts": "43929fd67d85b38b6e882d9221e0a657dfc7e99a54b405ffae6d35627037793f",
     "apps/api/src/opportunity-routes.ts": "d65b60404750432d0290c0e71f22c0d4c09756fed95914063b78ac03a41e5546",
@@ -31,7 +31,7 @@
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/lib/ui-phase2-detail-assembly-data.mjs": "18b867fa44ae2dd44bebeee5cf43e6f25755df939125ac940d50d128b1fca613",
     "scripts/verify-ui-phase2-detail-assembly-c.mjs": "912b0aab6dbf9bdef9649ecc1d5648082a25607432539e8e0693bf7bdcc58e58",
-    "design-plans/ui-phase-2-2026-09-07/design/detail-assembly-direction-c/evidence.json": "72b9e9d20311ef242ce9d59b153e5243972a7b6fc4e856e91190aa8be1784027",
+    "design-plans/ui-phase-2-2026-09-07/design/detail-assembly-direction-c/evidence.json": "e0f5bee94f37f33c4c6a3dbba686371936187437594c47fd6e3c1d9d5d8828cd",
     "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/index.html": "eb6893a64c22b101819aa53b7fe8a423c7e2112d2d32bd62e49642716fd68fa7",
     "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/adaptive.css": "665b78017304e4ff02633f7d03f4a5dc210d170c6ea9541ae24f9eec0c32ea44",
     "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/adaptive.js": "91c5617dbbf259df8a7914cb222278068927355ed06b34fb8c0ea8ac7e6ea004",
@@ -1283,7 +1283,7 @@
         "minimum": 4.823681461003198,
         "violations": []
       },
-      "sha256": "90f9dd9b5f2d5238c3c12812ca068bd49c28556243c56e0ae629d7d2c87ff705"
+      "sha256": "c3c4ad374ecd74c42ce243f545612e86d84527796dca62bb641545be078b422c"
     },
     {
       "file": "1440-ai-reject-dialog--long.png",
@@ -1427,7 +1427,7 @@
         "minimum": 4.823681461003198,
         "violations": []
       },
-      "sha256": "012a6d239b26065084f6af9137c94e5374a7864dce4d993f4f5a32b8956d3d1b"
+      "sha256": "955133e91c81718ae6d3867f532b6fbc1b938211db651dc71de9ba180532de68"
     },
     {
       "file": "1440-technical-open.png",
@@ -1739,7 +1739,7 @@
         "minimum": 5.767562858375838,
         "violations": []
       },
-      "sha256": "af21f79bcb91dd53d4d5e60a3360c421fec9161be52b7663692c542b0f2aa89f"
+      "sha256": "8c784444caca997138fe3ec5b8ca3d31b9d344ddcdd55aa4fbf5f6b6d4090bcb"
     },
     {
       "file": "1440-approve-dialog-light-comfortable.png",
@@ -1763,7 +1763,7 @@
         "minimum": 5.767562858375838,
         "violations": []
       },
-      "sha256": "abab516eb0a6101253454f9ee2d642ce69d780d863a58003dd7989f47cf33eaf"
+      "sha256": "65ffcec1e9cea1b1ab04cc9ec4a1b083a6d27e8abf418a8d7574a3eaaa41e7a4"
     },
     {
       "file": "1440-ai-reject-dialog-light-comfortable.png",
@@ -1787,7 +1787,7 @@
         "minimum": 5.767562858375838,
         "violations": []
       },
-      "sha256": "02f0f13d77dc888dee5f6f53611a4b866e546b0d7f4ff9349f756a720deb373b"
+      "sha256": "deb847659d485d915e3cd450dc2eeeef56e5424f6442a2604af06872a59f7020"
     },
     {
       "file": "1440-feedback-long-light-comfortable.png",
@@ -2147,7 +2147,7 @@
         "minimum": 5.767562858375838,
         "violations": []
       },
-      "sha256": "3cd8d72f41dfdde0c06673b54b349eb0324fe74b8ecde3494b094cf6bd77da0b"
+      "sha256": "890a888dc3e2a6a56820005434cdbc1d54adb6192de91d5ada434bc4809949b6"
     },
     {
       "file": "1440-feedback-long-light-compact.png",
@@ -2459,7 +2459,7 @@
         "minimum": 8.273466608002094,
         "violations": []
       },
-      "sha256": "a0163080d98a75dc05f7b47209befb17de703d7546a5df88884b089470af69e8"
+      "sha256": "42e1b1733ba352f98f20b5d23bab60bcce7c80f045cddc21032e1a58a4e5e8d8"
     },
     {
       "file": "1440-approve-dialog-dark-comfortable.png",
@@ -2483,7 +2483,7 @@
         "minimum": 8.273466608002094,
         "violations": []
       },
-      "sha256": "02c6156191716daeee7f3499cdaf375adf17a4f1c578f4af32604d4cc530c08e"
+      "sha256": "2af59bc7d96659ff4215b5bec23915b2b5b31d16850f830a0f3646e5087094c7"
     },
     {
       "file": "1440-ai-reject-dialog-dark-comfortable.png",
@@ -2867,7 +2867,7 @@
         "minimum": 8.273466608002094,
         "violations": []
       },
-      "sha256": "689ecc85e355795fe8fa7bf11b7736ba2e8f2494d427ecbffbeb690ad31387ca"
+      "sha256": "79f3a9ce8c3035c4d47b12cd376c1579a547a32b10f2dfd63b0aefeb0735b92e"
     },
     {
       "file": "1440-feedback-long-dark-compact.png",
@@ -3203,7 +3203,7 @@
         "minimum": 10.250243846171879,
         "violations": []
       },
-      "sha256": "b7b9e91edc3a66e02a5951ccc04317e2068937931632a898a7e6aa14c4b5089d"
+      "sha256": "25525434ac62f54a53993e93fa4d3d7a06123221d3a1016e5ee1654dde977a1c"
     },
     {
       "file": "1440-ai-reject-dialog-contrast-comfortable.png",
@@ -5651,7 +5651,7 @@
         "minimum": 4.823681461003198,
         "violations": []
       },
-      "sha256": "2a62a265956f26f86a7847defa99c69902748f51bfce49a40d7101440149c464"
+      "sha256": "c95722eff93c7145f2a2c969c46a2a87dc0d3f7914500bcb70282427868bf22d"
     },
     {
       "file": "390-technical-open.png",

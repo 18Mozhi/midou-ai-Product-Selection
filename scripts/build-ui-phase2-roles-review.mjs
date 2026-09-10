@@ -79,7 +79,7 @@ const definitions = [
     "D-OG-REASON",
     "撤销原因确认调用",
     "local",
-    ["56b1761955b256ef.1", "f3515ca45998a840.1", "7a51bff83af3db69.1"],
+    ["773c2105d1d0d008.1", "35233f910d34fac6.1", "ab6191688d424055.1"],
     [
       "D-OG-REASON提交/取消父转发",
       "D-OG-REASON组件调用",

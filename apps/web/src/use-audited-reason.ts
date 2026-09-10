@@ -1,10 +1,17 @@
 import { computed, ref } from "vue";
 
+export interface WorkspaceRestoreReasonContext {
+  name: string;
+  version?: number;
+  memberCount?: number;
+}
+
 interface ReasonRequest {
   title: string;
   description: string;
   initialValue: string;
   minimumLength: number;
+  workspaceRestore?: WorkspaceRestoreReasonContext;
 }
 
 export function useAuditedReason() {
@@ -18,6 +25,7 @@ export function useAuditedReason() {
     description?: string;
     initialValue?: string;
     minimumLength?: number;
+    workspaceRestore?: WorkspaceRestoreReasonContext;
   }) {
     if (resolveRequest) resolveRequest(null);
     request.value = {
@@ -25,6 +33,7 @@ export function useAuditedReason() {
       description: input.description ?? "原因会写入审计记录。",
       initialValue: input.initialValue ?? "",
       minimumLength: input.minimumLength ?? 2,
+      ...(input.workspaceRestore ? { workspaceRestore: { ...input.workspaceRestore } } : {}),
     };
     return new Promise<string | null>((resolve) => {
       resolveRequest = resolve;
