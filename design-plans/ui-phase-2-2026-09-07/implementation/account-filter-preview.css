@@ -1,0 +1,148 @@
+/* P39 review-only composition. Not imported by production. */
+body.p39-filter-preview {
+  --p39-ink: #202c3d;
+  --p39-muted: #58677b;
+  --p39-blue: #254a9c;
+  --p39-line: #6680a2;
+  --p39-paper: #fff;
+  --p39-rule: #dbe1e9;
+  --p39-hover: #f0f5ff;
+  --p39-pressed: #193b80;
+  --p39-disabled: #edf1f6;
+}
+.p39-filter-preview main {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 18px;
+}
+.p39-filter-preview .preview-disclaimer {
+  color: var(--p39-muted);
+  font-size: 13px;
+}
+html body.p39-filter-preview .account-filter {
+  --so-disabled-opacity: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 0.65fr);
+  gap: 24px;
+  padding: 24px;
+  align-self: start;
+  border: 1px solid var(--p39-rule);
+  border-radius: 12px;
+  background: var(--p39-paper);
+  color: var(--p39-ink);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+html body.p39-filter-preview .account-filter :is(label, span, small, input, select, button) {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+.p39-filter-preview .p39-filter-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  align-content: start;
+}
+.p39-filter-preview .p39-filter-field > span {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--p39-ink);
+}
+.p39-filter-preview .p39-filter-field > small {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--p39-muted);
+}
+.p39-filter-preview .account-filter input,
+.p39-filter-preview .account-filter select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--p39-line);
+  border-radius: 8px;
+  background: var(--p39-paper);
+  color: var(--p39-ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.p39-filter-preview .account-filter input::placeholder {
+  color: var(--p39-muted);
+  opacity: 1;
+}
+.p39-filter-preview .p39-filter-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--p39-rule);
+}
+html body.p39-filter-preview .account-filter button {
+  min-width: 112px;
+  min-height: 48px;
+  padding: 11px 20px;
+  border: 1px solid var(--p39-blue);
+  border-radius: 8px;
+  color: var(--p39-paper);
+  background: var(--p39-blue);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 1;
+  box-shadow: none;
+  transform: none;
+}
+html body.p39-filter-preview .account-filter button.secondary {
+  color: var(--p39-blue);
+  background: var(--p39-paper);
+}
+.p39-filter-preview .account-filter :is(input, select, button):focus-visible {
+  outline: 3px solid var(--p39-blue);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .p39-filter-preview .account-filter :is(input, select, button) {
+    transition: none;
+  }
+}
+.p39-filter-preview .account-filter :is(input, select):hover {
+  background: var(--p39-hover);
+}
+.p39-filter-preview .account-filter button:not(:disabled):hover {
+  background: var(--p39-pressed);
+}
+.p39-filter-preview .account-filter button.secondary:not(:disabled):hover {
+  background: var(--p39-hover);
+}
+html body.p39-filter-preview .account-filter button:not(:disabled):active {
+  background: var(--p39-pressed);
+  box-shadow: inset 0 0 0 2px var(--p39-paper);
+  transform: none;
+}
+.p39-filter-preview .account-filter button.secondary:not(:disabled):active {
+  background: var(--p39-disabled);
+}
+html body.p39-filter-preview .account-filter button:disabled {
+  color: var(--p39-muted);
+  background: var(--p39-disabled);
+  border-color: var(--p39-rule);
+  opacity: 1;
+  cursor: not-allowed;
+  outline: none;
+  box-shadow: none;
+}
+@media (max-width: 760px) {
+  html body.p39-filter-preview .account-filter {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px 16px;
+    gap: 24px;
+  }
+  .p39-filter-preview .p39-filter-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .p39-filter-preview .account-filter button {
+    width: 100%;
+  }
+}
