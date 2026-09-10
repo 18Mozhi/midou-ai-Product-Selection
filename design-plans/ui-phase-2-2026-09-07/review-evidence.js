@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "0d792238c9e7b6cb216fc236546621e17e3c820c4e9e5c80eb6df19d8070d0ea",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "1e990dd6abc818b870d5e885b1799322213c655dba0b22e4a8e773e797751462",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -58,6 +58,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "05ff6a6c011859e0abce43257938f5532b1aa65faf77537ca6b4f4966df84893",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "9593402df2b45815e12b530ec39fae0446549d1a49d75e5eb323d7265f2c0a35",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "119ca340a2f968edb025abc720085cc1540638686dd79ed4c35aa3c7ebe0754d",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "fcdd574a8a73c82d14260a1060f0d5b039c6e6fddbcaf4b58d6fac53ce5025b0",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "ff82e9bf86a14443ef2273a9871dd8937cae0d461447a24bc277338cbea6995e",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "b633f59f44962017305897434f7956b31b16da17fbdab5218499c59d785d1e68",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "92db772cdceb7a1e74e265c027502814f49a355a6629e95908e2a5a880ad1b94",
@@ -150,16 +151,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 101,
+    "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 959,
-    "sourceBindings": 1960,
+    "uniqueBoundFiles": 973,
+    "sourceBindings": 1988,
     "sourceDrift": 0,
-    "pngs": 14995,
+    "pngs": 15069,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10094,
+    "readmeLinksChecked": 10100,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -512,6 +513,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P34",
       "spec": "page-specs/P34.md",
       "packages": [
+        "org-approvals-parent-direction-c",
         "org-approvals-fields-direction-c",
         "org-approvals-controls-direction-c",
         "org-approvals-direction-c"
@@ -1321,6 +1323,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/org-approvals-fields-direction-c/evidence.json",
       "prototype": "design/org-approvals-fields-direction-c/index.html",
       "gallery": "design/org-approvals-fields-direction-c/gallery.html"
+    },
+    "org-approvals-parent-direction-c": {
+      "id": "org-approvals-parent-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 74,
+      "readme": "design/org-approvals-parent-direction-c/README.md",
+      "evidence": "design/org-approvals-parent-direction-c/evidence.json",
+      "prototype": "design/org-approvals-parent-direction-c/index.html",
+      "gallery": "design/org-approvals-parent-direction-c/gallery.html"
     },
     "org-audit-direction-c": {
       "id": "org-audit-direction-c",

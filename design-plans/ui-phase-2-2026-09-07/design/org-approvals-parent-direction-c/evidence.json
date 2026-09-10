@@ -1,0 +1,2199 @@
+{
+  "kind": "P34-PARENT-DIRECTION-C-r1",
+  "approval": "pending-concrete-parent-section-review",
+  "boundary": "Offline HTML proposal reuses existing child prototype; actual parent behavior linked,not production Vue or authorization proof. New parent wording,trace fold and placement require review. 409 is synthetic client classification. No new endpoints or business dialogs.",
+  "sourceHashes": {
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/verify-ui-phase2-org-approvals-parent.mjs": "6583104963edf56593467a048c81df0e9f355816d0468d9f295bd2b97dbb5dba",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "output/playwright/p34-parent-read-states/evidence.json": "854ed2c068e2ac847e0f52bd160694efd39451f11a101e8f88105d8fd8ebe1fb",
+    "scripts/verify-ui-phase2-org-approvals-parent-c.mjs": "a20a118cc6e02fef71b0482116928766c26147a0ae350712a38e8c655e5089f1",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/index.html": "5358791ced1f7d13a8b4f36863fb13b13563885bc64088e79ff85205a6436931",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/parent.css": "c59100b53f5a14d52457033ab971511d0ead6c6f40a83ca690f5a697e7a0897b",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/parent.js": "94461f3a2445dc08617284c4378f5d75c52fad335f8a68f622e45d315b73d7c4",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/approvals.css": "3be4abdd5b5da99a65af4dad58768d7d01f89fe5c78ed009338bd82a79e2a939",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/approvals.js": "9c540d872ff310e3518b9000e9ac0e38c1a2eec3381ef014d4fc78a8602d89b2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/data.js": "31ea1b44acd786ce73e5ec75646ebbda7e4bb70baf736c9c9c7be0857f4c1a38",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.css": "55f3c91d48b07bbb7005ed99ff74efa8f74bf21d533b683307e465e78cd8ef84",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.css": "63f3feeefc1141d3da7698ebd726bf040a618f15bcf0ccf02e4b80a66254dcb9",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.js": "ca3071a5dabae14d272428c6175972afc1f3ca3630fccf4b561c960e1bee6458"
+  },
+  "scenes": [
+    {
+      "id": "initial-loading",
+      "label": "首次加载",
+      "busy": true,
+      "replace": true
+    },
+    {
+      "id": "ready",
+      "label": "读取成功",
+      "busy": false,
+      "replace": false
+    },
+    {
+      "id": "background-refreshing",
+      "label": "后台刷新中",
+      "busy": true,
+      "replace": false
+    },
+    {
+      "id": "initial-server-error",
+      "label": "首次失败 · 组织后台暂不可用",
+      "phase": "initial",
+      "failure": {
+        "id": "server-error",
+        "status": 500,
+        "kind": "error",
+        "title": "组织后台暂不可用",
+        "message": "本次读取未完成，请稍后重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "initial-service-blocked",
+      "label": "首次失败 · 组织数据暂不可用",
+      "phase": "initial",
+      "failure": {
+        "id": "service-blocked",
+        "status": 503,
+        "kind": "blocked",
+        "title": "组织数据暂不可用",
+        "message": "当前读取暂未恢复，请稍后重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "initial-version-conflict",
+      "label": "首次失败 · 数据版本已变化",
+      "phase": "initial",
+      "failure": {
+        "id": "version-conflict",
+        "status": 409,
+        "kind": "conflict",
+        "title": "数据版本已变化",
+        "message": "数据已被其他操作更新，请先刷新并确认最新内容。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "initial-rate-limited",
+      "label": "首次失败 · 请求过于频繁",
+      "phase": "initial",
+      "failure": {
+        "id": "rate-limited",
+        "status": 429,
+        "kind": "rate_limited",
+        "title": "请求过于频繁",
+        "message": "本轮读取未成功，请稍后重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "initial-session-expired",
+      "label": "首次失败 · 登录已失效",
+      "phase": "initial",
+      "failure": {
+        "id": "session-expired",
+        "status": 401,
+        "kind": "expired",
+        "title": "登录已失效",
+        "message": "当前会话无法完成读取，恢复登录状态后可重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "initial-permission-forbidden",
+      "label": "首次失败 · 无权管理当前组织",
+      "phase": "initial",
+      "failure": {
+        "id": "permission-forbidden",
+        "status": 403,
+        "kind": "forbidden",
+        "title": "无权管理当前组织",
+        "message": "当前请求被拒绝，权限恢复后可重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "initial-network-unavailable",
+      "label": "首次失败 · 网络连接暂不可用",
+      "phase": "initial",
+      "failure": {
+        "id": "network-unavailable",
+        "status": 0,
+        "kind": "blocked",
+        "title": "网络连接暂不可用",
+        "message": "请检查网络后重试；系统已完成安全的读取重试。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "background-server-error",
+      "label": "刷新失败 · 组织后台暂不可用",
+      "phase": "background",
+      "failure": {
+        "id": "server-error",
+        "status": 500,
+        "kind": "error",
+        "title": "组织后台暂不可用",
+        "message": "本次读取未完成，请稍后重新加载。"
+      },
+      "busy": false,
+      "replace": false
+    },
+    {
+      "id": "background-service-blocked",
+      "label": "刷新失败 · 组织数据暂不可用",
+      "phase": "background",
+      "failure": {
+        "id": "service-blocked",
+        "status": 503,
+        "kind": "blocked",
+        "title": "组织数据暂不可用",
+        "message": "当前读取暂未恢复，请稍后重新加载。"
+      },
+      "busy": false,
+      "replace": false
+    },
+    {
+      "id": "background-version-conflict",
+      "label": "刷新失败 · 数据版本已变化",
+      "phase": "background",
+      "failure": {
+        "id": "version-conflict",
+        "status": 409,
+        "kind": "conflict",
+        "title": "数据版本已变化",
+        "message": "数据已被其他操作更新，请先刷新并确认最新内容。"
+      },
+      "busy": false,
+      "replace": false
+    },
+    {
+      "id": "background-rate-limited",
+      "label": "刷新失败 · 请求过于频繁",
+      "phase": "background",
+      "failure": {
+        "id": "rate-limited",
+        "status": 429,
+        "kind": "rate_limited",
+        "title": "请求过于频繁",
+        "message": "本轮读取未成功，请稍后重新加载。"
+      },
+      "busy": false,
+      "replace": false
+    },
+    {
+      "id": "background-session-expired",
+      "label": "刷新失败 · 登录已失效",
+      "phase": "background",
+      "failure": {
+        "id": "session-expired",
+        "status": 401,
+        "kind": "expired",
+        "title": "登录已失效",
+        "message": "当前会话无法完成读取，恢复登录状态后可重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "background-permission-forbidden",
+      "label": "刷新失败 · 无权管理当前组织",
+      "phase": "background",
+      "failure": {
+        "id": "permission-forbidden",
+        "status": 403,
+        "kind": "forbidden",
+        "title": "无权管理当前组织",
+        "message": "当前请求被拒绝，权限恢复后可重新加载。"
+      },
+      "busy": false,
+      "replace": true
+    },
+    {
+      "id": "background-network-unavailable",
+      "label": "刷新失败 · 网络连接暂不可用",
+      "phase": "background",
+      "failure": {
+        "id": "network-unavailable",
+        "status": 0,
+        "kind": "blocked",
+        "title": "网络连接暂不可用",
+        "message": "请检查网络后重试；系统已完成安全的读取重试。"
+      },
+      "busy": false,
+      "replace": false
+    }
+  ],
+  "checks": [
+    {
+      "width": 1440,
+      "name": "initial-loading: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "ready: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "ready: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "ready: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "ready: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "ready: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "ready: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "ready: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-service-blocked: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-version-conflict: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-rate-limited: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-session-expired: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-permission-forbidden: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "initial-network-unavailable: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "background-server-error: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "background-service-blocked: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "background-version-conflict: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "background-rate-limited: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "background-session-expired: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: no stale summary"
+    },
+    {
+      "width": 1440,
+      "name": "background-permission-forbidden: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: actual both-read evidence exists"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: visibility agrees with actual parent"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: busy semantics"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: refresh disabled only while reading"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: only existing retry entry"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: error alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: local search editable"
+    },
+    {
+      "width": 1440,
+      "name": "background-network-unavailable: keyboard focus ring"
+    },
+    {
+      "width": 1440,
+      "name": "failed refresh keeps edited filter"
+    },
+    {
+      "width": 1440,
+      "name": "new refresh retains edited filter"
+    },
+    {
+      "width": 1440,
+      "name": "new refresh records only both existing GET intentions"
+    },
+    {
+      "width": 1440,
+      "name": "pending refresh is native disabled"
+    },
+    {
+      "width": 1440,
+      "name": "initial-server-error: pressed native state"
+    },
+    {
+      "width": 1440,
+      "name": "ready: pressed native state"
+    },
+    {
+      "width": 1440,
+      "name": "trace example expands without request"
+    },
+    {
+      "width": 1440,
+      "name": "no fabricated business dialog"
+    },
+    {
+      "width": 1440,
+      "name": "no external or API requests"
+    },
+    {
+      "width": 1440,
+      "name": "no page errors"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "ready: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "ready: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "ready: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "ready: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "ready: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "ready: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "ready: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-service-blocked: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-version-conflict: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-rate-limited: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-session-expired: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-permission-forbidden: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: error alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "initial-network-unavailable: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "background-server-error: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "background-service-blocked: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "background-version-conflict: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "background-rate-limited: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "background-session-expired: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: no stale summary"
+    },
+    {
+      "width": 390,
+      "name": "background-permission-forbidden: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: actual both-read evidence exists"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: visibility agrees with actual parent"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: busy semantics"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: refresh disabled only while reading"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: only existing retry entry"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: error alert"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: local search editable"
+    },
+    {
+      "width": 390,
+      "name": "background-network-unavailable: keyboard focus ring"
+    },
+    {
+      "width": 390,
+      "name": "failed refresh keeps edited filter"
+    },
+    {
+      "width": 390,
+      "name": "new refresh retains edited filter"
+    },
+    {
+      "width": 390,
+      "name": "new refresh records only both existing GET intentions"
+    },
+    {
+      "width": 390,
+      "name": "pending refresh is native disabled"
+    },
+    {
+      "width": 390,
+      "name": "initial-server-error: pressed native state"
+    },
+    {
+      "width": 390,
+      "name": "ready: pressed native state"
+    },
+    {
+      "width": 390,
+      "name": "trace example expands without request"
+    },
+    {
+      "width": 390,
+      "name": "no fabricated business dialog"
+    },
+    {
+      "width": 390,
+      "name": "no external or API requests"
+    },
+    {
+      "width": 390,
+      "name": "no page errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "initial-loading-1440.png",
+      "scene": "initial-loading",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "414ba77543d6c7394a41afdcd707ec28ca8315b895d5971e5d818a3eebfa4af5"
+    },
+    {
+      "file": "ready-1440.png",
+      "scene": "ready",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "48695e4e8497622cd13e1d6e69a5d51b9381be88000692e85c92c93ba64a4874"
+    },
+    {
+      "file": "ready-focus-1440.png",
+      "scene": "ready-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "40cf66016f8e25fce3802b425a1dc87dada6592a94c1f0ea54ea3c0bd526e100"
+    },
+    {
+      "file": "background-refreshing-1440.png",
+      "scene": "background-refreshing",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "0d5331df8fb7d382d53c1a2cf288cb49d44fc34797ae226117c2b2bfebef382a"
+    },
+    {
+      "file": "initial-server-error-1440.png",
+      "scene": "initial-server-error",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "e3db596d6f5f0f4d53f2ab8e24a2c368019b853108e6dc3da2e315c61017a3d3"
+    },
+    {
+      "file": "initial-server-error-focus-1440.png",
+      "scene": "initial-server-error-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "6248cbc4f58f13562f5ec56f6d47b77451f93fd9b4b3bd4f0f466f57376c1281"
+    },
+    {
+      "file": "initial-service-blocked-1440.png",
+      "scene": "initial-service-blocked",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "b762c559d3d046aed46ace1aa17ca74fc8dc701e7bac153ec8e9aa81afa2401a"
+    },
+    {
+      "file": "initial-service-blocked-focus-1440.png",
+      "scene": "initial-service-blocked-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "0c10bf5ff25f70959093c7ac6c4968bc423e1a7162531ca94bcd095920be6fce"
+    },
+    {
+      "file": "initial-version-conflict-1440.png",
+      "scene": "initial-version-conflict",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "afe3247a55747a74a4955d42c67bd81ee045696846470895dba50ba23baa1c4e"
+    },
+    {
+      "file": "initial-version-conflict-focus-1440.png",
+      "scene": "initial-version-conflict-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "64a855174cda94e634f81cdb13546c67a2d14fc9d64e5fd14500a677d6f009c2"
+    },
+    {
+      "file": "initial-rate-limited-1440.png",
+      "scene": "initial-rate-limited",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "1786064cca74d7e97240770fc157916eb6c3b849398bbf6eec978a9942122229"
+    },
+    {
+      "file": "initial-rate-limited-focus-1440.png",
+      "scene": "initial-rate-limited-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "e92640d2abd79613640e03b30be0eeb70e74a144669ca12eddf2d55296f491f8"
+    },
+    {
+      "file": "initial-session-expired-1440.png",
+      "scene": "initial-session-expired",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "90de5cd025aaa6da0f1af338c978ac89a95342f47093d66abc4890a3cceb5900"
+    },
+    {
+      "file": "initial-session-expired-focus-1440.png",
+      "scene": "initial-session-expired-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "7ac3d7a4ceefc20b0b98bf7c9a693c7f75551c3c4886d41eea6a5229e68a2a33"
+    },
+    {
+      "file": "initial-permission-forbidden-1440.png",
+      "scene": "initial-permission-forbidden",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "c2d28c3be9276e46d0f579e654838460378bc09700753d9b615d39deff73cf60"
+    },
+    {
+      "file": "initial-permission-forbidden-focus-1440.png",
+      "scene": "initial-permission-forbidden-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "2d55a0c7875110cf6874cc3c5c04f7ccd569f393cfdf41d2fbee76fc13bf1f83"
+    },
+    {
+      "file": "initial-network-unavailable-1440.png",
+      "scene": "initial-network-unavailable",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "9d7fa466888ac1184ce4932d5366be7a0ad492894dd864c24aff53cbfc663e8b"
+    },
+    {
+      "file": "initial-network-unavailable-focus-1440.png",
+      "scene": "initial-network-unavailable-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "de2cf8f4e899fe10728dfe8cc1be66041fd33a270e46ccbe077b81f75b0ebab1"
+    },
+    {
+      "file": "background-server-error-1440.png",
+      "scene": "background-server-error",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "8eceeca32303dce8fd4b7d1a26434d0a0690d6624464fa87227f34773b7f2a7d"
+    },
+    {
+      "file": "background-server-error-focus-1440.png",
+      "scene": "background-server-error-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d14b92eca90cb13abcbac4e3c71890cfca5b4d910eddab23b878c96e5d2c5e68"
+    },
+    {
+      "file": "background-service-blocked-1440.png",
+      "scene": "background-service-blocked",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "480212265f8ed0fbe3f1e30e21deb8a8036eedaeacd7f8ae160962dddd30d952"
+    },
+    {
+      "file": "background-service-blocked-focus-1440.png",
+      "scene": "background-service-blocked-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d14b92eca90cb13abcbac4e3c71890cfca5b4d910eddab23b878c96e5d2c5e68"
+    },
+    {
+      "file": "background-version-conflict-1440.png",
+      "scene": "background-version-conflict",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "6343751e8360d381d29e948536011c588c6154bef921eb23afabc40aecdd7e67"
+    },
+    {
+      "file": "background-version-conflict-focus-1440.png",
+      "scene": "background-version-conflict-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d14b92eca90cb13abcbac4e3c71890cfca5b4d910eddab23b878c96e5d2c5e68"
+    },
+    {
+      "file": "background-rate-limited-1440.png",
+      "scene": "background-rate-limited",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "535f35b9ded443289da995f0005180f11b2d739a8c13b29bc3045151753e0ca5"
+    },
+    {
+      "file": "background-rate-limited-focus-1440.png",
+      "scene": "background-rate-limited-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d14b92eca90cb13abcbac4e3c71890cfca5b4d910eddab23b878c96e5d2c5e68"
+    },
+    {
+      "file": "background-session-expired-1440.png",
+      "scene": "background-session-expired",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "bfd5b9331a30b9ee584b93145692fbd8120e90c8c250788f0157fbf091417e61"
+    },
+    {
+      "file": "background-session-expired-focus-1440.png",
+      "scene": "background-session-expired-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "fa86ff0355bc12699911b3bba9e7156e5b6584ad9ee19b0dc9264e34b9e7f015"
+    },
+    {
+      "file": "background-permission-forbidden-1440.png",
+      "scene": "background-permission-forbidden",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "08c0a50c5c13a289bb5487a399801992725ef8936862a5b850ed140138bba212"
+    },
+    {
+      "file": "background-permission-forbidden-focus-1440.png",
+      "scene": "background-permission-forbidden-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "6cdd3b89d1f955c3e97b6b9886cc7990c9f97ed1d204b0ede35bfa6b538bf653"
+    },
+    {
+      "file": "background-network-unavailable-1440.png",
+      "scene": "background-network-unavailable",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "7b9005dbd441c93ae70eb93668533fc5f8425c73a09e04e24bd974f0a07ef339"
+    },
+    {
+      "file": "background-network-unavailable-focus-1440.png",
+      "scene": "background-network-unavailable-focus",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d14b92eca90cb13abcbac4e3c71890cfca5b4d910eddab23b878c96e5d2c5e68"
+    },
+    {
+      "file": "initial-server-error-hover-1440.png",
+      "scene": "initial-server-error-hover",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "4b66a2029fafdde88c691a941ac94ab56655fe00f16a33cdccc81b3adb9c40b1"
+    },
+    {
+      "file": "initial-server-error-pressed-1440.png",
+      "scene": "initial-server-error-pressed",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "39c600b85a5655c06eed5a1b5d3ed3bb46dbe8a4cce50d423c893dac7c9be84e"
+    },
+    {
+      "file": "ready-hover-1440.png",
+      "scene": "ready-hover",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d2a5f33ea6ff1e96d37dacfe6867ddbe546642a62f08c72ef2556e27b6e80bfb"
+    },
+    {
+      "file": "ready-pressed-1440.png",
+      "scene": "ready-pressed",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "b12e931a0a1df42128cddc9f7d2eac62025e2c1700617b573582c1826a0251a6"
+    },
+    {
+      "file": "initial-permission-forbidden-trace-1440.png",
+      "scene": "initial-permission-forbidden-trace",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "628397215bf860555261c7f157ce00d3d4c042f9f3459956e59d955923dbb48e"
+    },
+    {
+      "file": "initial-loading-390.png",
+      "scene": "initial-loading",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "d6a3ca2e6858e6cc1bef3b1459eeb8677d6614d8f30f527d909659a2d1cbbbfc"
+    },
+    {
+      "file": "ready-390.png",
+      "scene": "ready",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "43f82369471e56525737ee134d0325e91648a5ccb01476d61e7877bd00e17116"
+    },
+    {
+      "file": "ready-focus-390.png",
+      "scene": "ready-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "5629eafe309f56d79b9bcb36f092fcbebaede70e546803d7d16bf74e66144118"
+    },
+    {
+      "file": "background-refreshing-390.png",
+      "scene": "background-refreshing",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "deb466b157c21b936af4b49527fb10e4a69f6bb8019b9b4c7de426d7c4b3664c"
+    },
+    {
+      "file": "initial-server-error-390.png",
+      "scene": "initial-server-error",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "44e14492c3d39be78b50ec6c0536000065a003c585e2a54f5523ab150ede0c30"
+    },
+    {
+      "file": "initial-server-error-focus-390.png",
+      "scene": "initial-server-error-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "f30d1159bceac1bc28c0a93103be9ef5f14f5a881938e73d5dc715b52cfd8009"
+    },
+    {
+      "file": "initial-service-blocked-390.png",
+      "scene": "initial-service-blocked",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "b5943eb79eea89c9219dc31ed9f233108f4ed61a98411b945220835e4096ee0d"
+    },
+    {
+      "file": "initial-service-blocked-focus-390.png",
+      "scene": "initial-service-blocked-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "af6ba653ef803667f816622aa66ab0c0bbcfa8d82a33f74e5097e5ce63f31b88"
+    },
+    {
+      "file": "initial-version-conflict-390.png",
+      "scene": "initial-version-conflict",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "1dd2c710358b999619f5097aa4b6f42d70d944f8dde2c2a943138a33fbc7541b"
+    },
+    {
+      "file": "initial-version-conflict-focus-390.png",
+      "scene": "initial-version-conflict-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "536bfc192e6088f7812b0b7097d297ddc5a68a2159e98a4cf97384c519e37ea5"
+    },
+    {
+      "file": "initial-rate-limited-390.png",
+      "scene": "initial-rate-limited",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "de8e853182d5cffae40d5ff1b3f8a4063637663f8237ceda572c5865d6396792"
+    },
+    {
+      "file": "initial-rate-limited-focus-390.png",
+      "scene": "initial-rate-limited-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "97c6aa7824a4ad9b99f0075fffd0547cff6a5a71c3170faa45033d85328ba24c"
+    },
+    {
+      "file": "initial-session-expired-390.png",
+      "scene": "initial-session-expired",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "e5d1f90c40fdc964044ea38510709f95acc3c2cde482370b930136bc8bdb5a8d"
+    },
+    {
+      "file": "initial-session-expired-focus-390.png",
+      "scene": "initial-session-expired-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "38c3c960fd5e93205fb62a52d18f1f3e312ebaeef55330e9b4e924787df01aca"
+    },
+    {
+      "file": "initial-permission-forbidden-390.png",
+      "scene": "initial-permission-forbidden",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "49789f4de37dba41c6861c7aeaa8ee9ee16694722c7814cd5a23094609242ac4"
+    },
+    {
+      "file": "initial-permission-forbidden-focus-390.png",
+      "scene": "initial-permission-forbidden-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "b704de0fecfa5d672b6bcf82120453dbb453699bb2aad0e16272dfaa209410fe"
+    },
+    {
+      "file": "initial-network-unavailable-390.png",
+      "scene": "initial-network-unavailable",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "fe8c1cbbca1c615414da42b079aa1241a99902560337ddd9697f14ad3cc391c4"
+    },
+    {
+      "file": "initial-network-unavailable-focus-390.png",
+      "scene": "initial-network-unavailable-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "08445825aa9babcf4db3c0cfd6d1d4cb5ecd70d259bdd3de588978aad29a4afb"
+    },
+    {
+      "file": "background-server-error-390.png",
+      "scene": "background-server-error",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "34b6fd69625f1781f8382dd6c2b1a6ab6b26f3609197c31a9bd7d054cf4456ba"
+    },
+    {
+      "file": "background-server-error-focus-390.png",
+      "scene": "background-server-error-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ade95142bcc743c1084f559243f37c2008f0b5d9683a4697b162ca383a7961f6"
+    },
+    {
+      "file": "background-service-blocked-390.png",
+      "scene": "background-service-blocked",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "86be44acd7f7e477e8735b971ba0574984e0e0cee4bb6f951904f2136f2d170e"
+    },
+    {
+      "file": "background-service-blocked-focus-390.png",
+      "scene": "background-service-blocked-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ade95142bcc743c1084f559243f37c2008f0b5d9683a4697b162ca383a7961f6"
+    },
+    {
+      "file": "background-version-conflict-390.png",
+      "scene": "background-version-conflict",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "8dcda5f486f63fc24c1928feb5a6f0c0d712f300849b05ee11da298d7ccdace1"
+    },
+    {
+      "file": "background-version-conflict-focus-390.png",
+      "scene": "background-version-conflict-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ade95142bcc743c1084f559243f37c2008f0b5d9683a4697b162ca383a7961f6"
+    },
+    {
+      "file": "background-rate-limited-390.png",
+      "scene": "background-rate-limited",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "2dee388c8010eb31af4622b53e3b6abafbff6c15e39311b932293909c0abb3b9"
+    },
+    {
+      "file": "background-rate-limited-focus-390.png",
+      "scene": "background-rate-limited-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ade95142bcc743c1084f559243f37c2008f0b5d9683a4697b162ca383a7961f6"
+    },
+    {
+      "file": "background-session-expired-390.png",
+      "scene": "background-session-expired",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "bf2badd5f890a850638c2ec22bfeb9af5464908805edabc0c1c13f1f0dea91c2"
+    },
+    {
+      "file": "background-session-expired-focus-390.png",
+      "scene": "background-session-expired-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ff695bda3f526d4e5267ecc94c60b4cfed0564e29c314add74b5ab8821d3a643"
+    },
+    {
+      "file": "background-permission-forbidden-390.png",
+      "scene": "background-permission-forbidden",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "e254ffab7a2472474b53ea8223020cd9454e88085d9722f007b3e8f09b087755"
+    },
+    {
+      "file": "background-permission-forbidden-focus-390.png",
+      "scene": "background-permission-forbidden-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ec9a3d9c909a2386ee6cae41533fe3203e21b23920e82d819da6ee1555474bef"
+    },
+    {
+      "file": "background-network-unavailable-390.png",
+      "scene": "background-network-unavailable",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "607206daab8ce3259dd87654a2a89471f756c0d9b88e20616b1d5b2e01fe271e"
+    },
+    {
+      "file": "background-network-unavailable-focus-390.png",
+      "scene": "background-network-unavailable-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "ade95142bcc743c1084f559243f37c2008f0b5d9683a4697b162ca383a7961f6"
+    },
+    {
+      "file": "initial-server-error-hover-390.png",
+      "scene": "initial-server-error-hover",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "c541529b66344cd862c638074221309aa77c72f631767006a50f1d5a1288dad0"
+    },
+    {
+      "file": "initial-server-error-pressed-390.png",
+      "scene": "initial-server-error-pressed",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "26bd0067564267749f174abb682f43be07b88ca0e2721d19194a699eeacff3a6"
+    },
+    {
+      "file": "ready-hover-390.png",
+      "scene": "ready-hover",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "304a3dfc30a248c1d4feaa70524c8d064ec178e79a6a41e6e8c0ce87a8f6f315"
+    },
+    {
+      "file": "ready-pressed-390.png",
+      "scene": "ready-pressed",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "1411f916ebdb09a74ed48a0efe0cd2d1cb1337a5cf5716fd1033ef318b49b5bb"
+    },
+    {
+      "file": "initial-permission-forbidden-trace-390.png",
+      "scene": "initial-permission-forbidden-trace",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "parent-section-proposal-not-production-or-user-approval",
+      "sha256": "4e93fa43eff15f195a63e1396e5d2b76aa5f32b8b1e7990cce090e7a3da06b63"
+    }
+  ]
+}

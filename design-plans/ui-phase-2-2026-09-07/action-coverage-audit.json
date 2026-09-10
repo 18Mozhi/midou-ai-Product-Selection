@@ -254,6 +254,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "05ff6a6c011859e0abce43257938f5532b1aa65faf77537ca6b4f4966df84893",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "9593402df2b45815e12b530ec39fae0446549d1a49d75e5eb323d7265f2c0a35",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "119ca340a2f968edb025abc720085cc1540638686dd79ed4c35aa3c7ebe0754d",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "fcdd574a8a73c82d14260a1060f0d5b039c6e6fddbcaf4b58d6fac53ce5025b0",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "ff82e9bf86a14443ef2273a9871dd8937cae0d461447a24bc277338cbea6995e",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "b633f59f44962017305897434f7956b31b16da17fbdab5218499c59d785d1e68",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "92db772cdceb7a1e74e265c027502814f49a355a6629e95908e2a5a880ad1b94",
@@ -429,7 +430,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "947dbf0bc440200cc64474ae2f51716f29111a21072715a91a6c60be814515e1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "716d2faab84015c8a9f999d7888b74571a738a58a062448780bfb6ec1fcbe4ea",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "99dbe7bd37443547b5e536c9139f7a2e3c6c2b2278dea690810a5f62194685cb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "2544651366c246efd7d0c4c75aa6a6c45707eda6753ca5b1938e698936507818",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "a8df7e333ab9b58f1a91edaf0fe5dfcca17fa662152576441bd9c36f93ed1073",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "122a75f10073b9a4d964175636fe84d7747534f2af78d777d1b6b4f4b0302ae8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "a3eedde42a68aa1b7203fe559da370cf7c6c855c68c5a34bcefddc65619cca68",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P37.md": "016ad982e719dc19228975508a1257bd9a704941fa3065b1bea61ed3d78942c2",
@@ -1726,6 +1727,7 @@
       "oldStaticAssociatedCandidates": 162,
       "review": null,
       "proposalPackages": [
+        "org-approvals-parent-direction-c",
         "org-approvals-fields-direction-c",
         "org-approvals-controls-direction-c",
         "org-approvals-direction-c"

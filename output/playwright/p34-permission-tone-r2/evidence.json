@@ -1,0 +1,282 @@
+{
+  "kind": "P34-PERMISSION-TONE-r2",
+  "approval": "pending-specific-r2-review",
+  "boundary": "Four copy slots only; layout,buttons,focus and permission behavior unchanged. Offline proposal,not production.",
+  "sourceHashes": {
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/verify-ui-phase2-org-approvals-parent.mjs": "6583104963edf56593467a048c81df0e9f355816d0468d9f295bd2b97dbb5dba",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "output/playwright/p34-parent-read-states/evidence.json": "854ed2c068e2ac847e0f52bd160694efd39451f11a101e8f88105d8fd8ebe1fb",
+    "scripts/verify-ui-phase2-org-approvals-parent-c.mjs": "a20a118cc6e02fef71b0482116928766c26147a0ae350712a38e8c655e5089f1",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/index.html": "5358791ced1f7d13a8b4f36863fb13b13563885bc64088e79ff85205a6436931",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/parent.css": "c59100b53f5a14d52457033ab971511d0ead6c6f40a83ca690f5a697e7a0897b",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/parent.js": "94461f3a2445dc08617284c4378f5d75c52fad335f8a68f622e45d315b73d7c4",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/approvals.css": "3be4abdd5b5da99a65af4dad58768d7d01f89fe5c78ed009338bd82a79e2a939",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/approvals.js": "9c540d872ff310e3518b9000e9ac0e38c1a2eec3381ef014d4fc78a8602d89b2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/data.js": "31ea1b44acd786ce73e5ec75646ebbda7e4bb70baf736c9c9c7be0857f4c1a38",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.css": "55f3c91d48b07bbb7005ed99ff74efa8f74bf21d533b683307e465e78cd8ef84",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.css": "63f3feeefc1141d3da7698ebd726bf040a618f15bcf0ccf02e4b80a66254dcb9",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.js": "ca3071a5dabae14d272428c6175972afc1f3ca3630fccf4b561c960e1bee6458",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/permission-tone-r2.html": "c15fc8540ed7462e9953bc93238374fbad295435abf2031ccd24f3c0f36cbca7",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/permission-tone-r2.js": "c10f42982bfc5da1b2591d1867d6c0894abbb65b44c84c2421a5e4667925c470",
+    "scripts/verify-ui-phase2-org-approvals-permission-tone-r2.mjs": "6b5fa40d1c35ee87b5236d10165ade158696a3c266cd5625e43e756c91bdc232"
+  },
+  "retainedImages": {
+    "initial-server-error-390.png": "44e14492c3d39be78b50ec6c0536000065a003c585e2a54f5523ab150ede0c30",
+    "background-permission-forbidden-focus-390.png": "ec9a3d9c909a2386ee6cae41533fe3203e21b23920e82d819da6ee1555474bef"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "initial: only four text slots change"
+    },
+    {
+      "width": 1440,
+      "name": "initial: header unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "initial: button styling unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "initial: softened copy"
+    },
+    {
+      "width": 1440,
+      "name": "initial: no content exposed"
+    },
+    {
+      "width": 1440,
+      "name": "initial: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial: keyboard focus retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial: retry still only existing read intentions"
+    },
+    {
+      "width": 1440,
+      "name": "background: only four text slots change"
+    },
+    {
+      "width": 1440,
+      "name": "background: header unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "background: button styling unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "background: softened copy"
+    },
+    {
+      "width": 1440,
+      "name": "background: no content exposed"
+    },
+    {
+      "width": 1440,
+      "name": "background: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background: keyboard focus retained"
+    },
+    {
+      "width": 1440,
+      "name": "background: retry still only existing read intentions"
+    },
+    {
+      "width": 1440,
+      "name": "approved first failure wording untouched"
+    },
+    {
+      "width": 1440,
+      "name": "zero requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero page errors"
+    },
+    {
+      "width": 390,
+      "name": "initial: only four text slots change"
+    },
+    {
+      "width": 390,
+      "name": "initial: header unchanged"
+    },
+    {
+      "width": 390,
+      "name": "initial: button styling unchanged"
+    },
+    {
+      "width": 390,
+      "name": "initial: softened copy"
+    },
+    {
+      "width": 390,
+      "name": "initial: no content exposed"
+    },
+    {
+      "width": 390,
+      "name": "initial: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial: keyboard focus retained"
+    },
+    {
+      "width": 390,
+      "name": "initial: retry still only existing read intentions"
+    },
+    {
+      "width": 390,
+      "name": "background: only four text slots change"
+    },
+    {
+      "width": 390,
+      "name": "background: header unchanged"
+    },
+    {
+      "width": 390,
+      "name": "background: button styling unchanged"
+    },
+    {
+      "width": 390,
+      "name": "background: softened copy"
+    },
+    {
+      "width": 390,
+      "name": "background: no content exposed"
+    },
+    {
+      "width": 390,
+      "name": "background: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background: keyboard focus retained"
+    },
+    {
+      "width": 390,
+      "name": "background: retry still only existing read intentions"
+    },
+    {
+      "width": 390,
+      "name": "approved first failure wording untouched"
+    },
+    {
+      "width": 390,
+      "name": "zero requests"
+    },
+    {
+      "width": 390,
+      "name": "zero page errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "initial-permission-forbidden-r2-page-1440.png",
+      "scene": "initial-permission-forbidden-r2-page",
+      "width": 1440,
+      "sha256": "5ee81ebe7722e527ddb8f9829a2ee57cfc9985f08c78209bbbca7beb69a6a687",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "initial-permission-forbidden-r2-region-1440.png",
+      "scene": "initial-permission-forbidden-r2-region",
+      "width": 1440,
+      "sha256": "c57200c712654ec06b65817fecff54230213143e3c287e3cfff1651a4360e2fb",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "initial-permission-forbidden-r2-focus-1440.png",
+      "scene": "initial-permission-forbidden-r2-focus",
+      "width": 1440,
+      "sha256": "d682e75d5f8a8d770661bb4b9eac137fdb6f7d017723c10c0c176aa007fbdf66",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "background-permission-forbidden-r2-page-1440.png",
+      "scene": "background-permission-forbidden-r2-page",
+      "width": 1440,
+      "sha256": "74875236b9465d3f1484b838ae6aabb4bc32d34058a946192e02dffed68c24c9",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "background-permission-forbidden-r2-region-1440.png",
+      "scene": "background-permission-forbidden-r2-region",
+      "width": 1440,
+      "sha256": "c57200c712654ec06b65817fecff54230213143e3c287e3cfff1651a4360e2fb",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "background-permission-forbidden-r2-focus-1440.png",
+      "scene": "background-permission-forbidden-r2-focus",
+      "width": 1440,
+      "sha256": "d682e75d5f8a8d770661bb4b9eac137fdb6f7d017723c10c0c176aa007fbdf66",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "initial-permission-forbidden-r2-page-390.png",
+      "scene": "initial-permission-forbidden-r2-page",
+      "width": 390,
+      "sha256": "c33c462e793bc4a30dcbb681ac11911b05d05ac086b7721b870657e05a0ffb6c",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "initial-permission-forbidden-r2-region-390.png",
+      "scene": "initial-permission-forbidden-r2-region",
+      "width": 390,
+      "sha256": "c04ea994eb10dfa4214554328f83ec55f4e3b9adff0b009b529d377722a88e22",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "initial-permission-forbidden-r2-focus-390.png",
+      "scene": "initial-permission-forbidden-r2-focus",
+      "width": 390,
+      "sha256": "64e7e7d7ab7e2971599d1db317aa03967abbb4b74f63298fe8254d5719220acd",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "background-permission-forbidden-r2-page-390.png",
+      "scene": "background-permission-forbidden-r2-page",
+      "width": 390,
+      "sha256": "26f4a11ceacd915bb71c5edd206f2ab6c5c395c3c16fbf14d4790088b959c1b0",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "background-permission-forbidden-r2-region-390.png",
+      "scene": "background-permission-forbidden-r2-region",
+      "width": 390,
+      "sha256": "c04ea994eb10dfa4214554328f83ec55f4e3b9adff0b009b529d377722a88e22",
+      "scope": "permission-tone-only-r2-proposal"
+    },
+    {
+      "file": "background-permission-forbidden-r2-focus-390.png",
+      "scene": "background-permission-forbidden-r2-focus",
+      "width": 390,
+      "sha256": "64e7e7d7ab7e2971599d1db317aa03967abbb4b74f63298fe8254d5719220acd",
+      "scope": "permission-tone-only-r2-proposal"
+    }
+  ]
+}

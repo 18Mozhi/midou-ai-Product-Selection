@@ -1,0 +1,267 @@
+.parent-tools {
+  background: #fff;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.parent-tools summary {
+  cursor: pointer;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+.parent-tools select {
+  max-width: 640px;
+  margin: 8px 0;
+}
+.parent-tools output {
+  display: block;
+  color: var(--deep);
+}
+.shell {
+  grid-template-columns: 244px minmax(0, 1fr);
+  min-height: calc(100vh - 53px);
+}
+.rail {
+  padding: 40px 26px;
+}
+.rail .scope-label {
+  color: #e0e8fc;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+.rail h2 {
+  margin-bottom: 18px;
+}
+.rail p {
+  font-size: 16px;
+}
+.scope-note {
+  margin-top: 64px;
+  border-top: 1px solid #7691c9;
+  padding-top: 20px;
+  font-size: 13px;
+  color: #e0e8fc;
+  display: grid;
+  gap: 8px;
+}
+.scope-note strong {
+  font-size: 16px;
+  color: #fff;
+}
+.main {
+  padding: 36px 40px;
+}
+.heading {
+  align-items: start;
+  margin-bottom: 28px;
+}
+.heading .parent-eyebrow {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+.heading h1 {
+  font-size: 30px;
+  line-height: 1.35;
+}
+.parent-action {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+.read-status {
+  font-size: 13px;
+  color: var(--muted);
+}
+.parent-action button {
+  min-width: 132px;
+}
+.parent-region {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+  margin-bottom: 24px;
+}
+.replacement {
+  min-height: 440px;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  padding: 40px 48px;
+}
+.state-symbol {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #edf3ff;
+  color: var(--blue);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.state-kicker {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.parent-region h2 {
+  font-size: 24px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+.state-copy {
+  max-width: 650px;
+  font-size: 16px;
+}
+.data-boundary {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 620px;
+  margin-top: 12px;
+}
+.trace {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.trace summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: list-item;
+  padding: 10px 0;
+}
+.trace code {
+  display: block;
+}
+#parent-retry {
+  margin-top: 18px;
+  min-width: 132px;
+  border-radius: 8px;
+}
+#parent-refresh {
+  border-radius: 8px;
+}
+.inline-state {
+  padding: 20px 24px;
+  border-radius: 12px;
+  border-left: 4px solid var(--blue);
+  background: #f1f5fd;
+  display: flex;
+  gap: 18px;
+  align-items: start;
+}
+.inline-state .state-symbol {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  font-size: 20px;
+  margin: 0;
+  background: #fff;
+}
+.inline-state h2 {
+  font-size: 19px;
+  margin-bottom: 6px;
+}
+.inline-state[role="alert"] {
+  background: #fff8ee;
+  border-left-color: #996014;
+}
+.inline-state[role="alert"] .state-symbol {
+  color: #815010;
+}
+.loading-lines {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 440px);
+  margin-top: 30px;
+}
+.loading-lines i {
+  display: block;
+  background: #edf1f6;
+  height: 12px;
+  border-radius: 8px;
+}
+.loading-lines i:nth-child(2) {
+  width: 80%;
+}
+.loading-lines i:nth-child(3) {
+  width: 55%;
+}
+.retained-content {
+  min-width: 0;
+}
+@media (max-width: 760px) {
+  .parent-tools {
+    padding: 8px 18px;
+  }
+  .shell {
+    display: block;
+  }
+  .rail {
+    padding: 18px 22px;
+  }
+  .rail .scope-label {
+    margin: 0 0 6px;
+  }
+  .rail h2 {
+    font-size: 22px;
+    margin: 0;
+  }
+  .rail > p:not(.scope-label),
+  .scope-note {
+    display: none;
+  }
+  .main {
+    padding: 24px 18px;
+  }
+  .heading {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .heading h1 {
+    font-size: 27px;
+  }
+  .parent-action {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: start;
+  }
+  .parent-action button {
+    min-width: 120px;
+  }
+  .replacement {
+    min-height: 390px;
+    padding: 28px 22px;
+    border-radius: 16px;
+  }
+  .parent-region h2 {
+    font-size: 22px;
+  }
+  .inline-state {
+    padding: 18px;
+    gap: 12px;
+  }
+  .inline-state h2 {
+    font-size: 19px;
+  }
+  .state-symbol {
+    margin-bottom: 18px;
+  }
+  #parent-retry {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

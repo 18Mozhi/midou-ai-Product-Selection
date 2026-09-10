@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P34 · 权限提示语气 r2</title>
+    <link rel="stylesheet" href="../org-approvals-direction-c/approvals.css" />
+    <link rel="stylesheet" href="../org-approvals-controls-direction-c/controls.css" />
+    <link rel="stylesheet" href="../org-approvals-fields-direction-c/fields.css" />
+    <link rel="stylesheet" href="parent.css" />
+    <script defer src="../org-approvals-direction-c/data.js"></script>
+    <script defer src="../org-approvals-direction-c/approvals.js"></script>
+    <script defer src="../org-approvals-fields-direction-c/fields.js"></script>
+    <script defer src="parent.js"></script>
+    <script defer src="permission-tone-r2.js"></script>
+  </head>
+  <body>
+    <details class="parent-tools">
+      <summary>P34 权限提示语气 r2 · 审核工具，非业务入口</summary>
+      <label for="parent-picker">状态组合</label
+      ><select id="parent-picker"></select>
+      <p>仅调整权限拒绝区域的语气；其他状态沿用r1。未连接后端。</p>
+      <a href="gallery.html">查看原状态图册</a><output id="intent-log" aria-live="polite"></output>
+    </details>
+    <details class="control-tools" hidden>
+      <summary>已有字段工具</summary>
+      <select id="field-picker"></select
+      ><button id="field-show">展示</button>
+    </details>
+    <div id="app"></div>
+  </body>
+</html>
