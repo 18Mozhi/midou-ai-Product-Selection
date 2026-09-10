@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "approval": "pending",
-  "sourceCommit": "e704cd2438deb3af7515bbae09f184c60cf07da0",
+  "sourceCommit": "3023a0300d265ee27a9a932a5e29a244e6d1ea17",
   "scope": "Actual Vue toolbar with fixture GET and scoped review CSS; not native popup, full page, real RBAC/API, MySQL or production acceptance",
   "checks": [
     {
@@ -142,7 +142,7 @@
     "scripts/lib/ui-phase2-platform-overview-design-data.mjs": "838e4970f3e643620c01dd0e9e430974fc64f703e88b68b3626fc862946d9bda",
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
-    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
@@ -167,7 +167,7 @@
       "routeId": "P38",
       "state": "normal",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -177,14 +177,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:40.765Z",
+      "capturedAt": "2026-09-10T19:30:05.411Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-normal",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-range-hover.png",
@@ -194,7 +194,7 @@
       "routeId": "P38",
       "state": "range-hover",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -204,14 +204,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:40.931Z",
+      "capturedAt": "2026-09-10T19:30:05.578Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-range-hover",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-range-focus.png",
@@ -221,7 +221,7 @@
       "routeId": "P38",
       "state": "range-focus",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -231,14 +231,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:41.052Z",
+      "capturedAt": "2026-09-10T19:30:05.678Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-range-focus",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-refresh-hover.png",
@@ -248,7 +248,7 @@
       "routeId": "P38",
       "state": "refresh-hover",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -258,14 +258,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:41.182Z",
+      "capturedAt": "2026-09-10T19:30:05.811Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-hover",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-refresh-focus.png",
@@ -275,7 +275,7 @@
       "routeId": "P38",
       "state": "refresh-focus",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -285,14 +285,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:41.298Z",
+      "capturedAt": "2026-09-10T19:30:05.929Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-focus",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-refresh-pressed.png",
@@ -302,7 +302,7 @@
       "routeId": "P38",
       "state": "refresh-pressed",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -312,14 +312,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:41.465Z",
+      "capturedAt": "2026-09-10T19:30:06.078Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-pressed",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-refresh-loading.png",
@@ -329,7 +329,7 @@
       "routeId": "P38",
       "state": "refresh-loading",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -339,14 +339,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:41.582Z",
+      "capturedAt": "2026-09-10T19:30:06.178Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-loading",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-refresh-failed.png",
@@ -356,7 +356,7 @@
       "routeId": "P38",
       "state": "refresh-failed",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -366,14 +366,14 @@
         "width": 374,
         "height": 488
       },
-      "capturedAt": "2026-09-10T18:47:41.917Z",
+      "capturedAt": "2026-09-10T19:30:06.498Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-failed",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "390-range-7d.png",
@@ -383,7 +383,7 @@
       "routeId": "P38",
       "state": "range-7d",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=7d&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=7d&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 390,
@@ -393,14 +393,14 @@
         "width": 374,
         "height": 359
       },
-      "capturedAt": "2026-09-10T18:47:42.080Z",
+      "capturedAt": "2026-09-10T19:30:06.661Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-range-7d",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-normal.png",
@@ -410,7 +410,7 @@
       "routeId": "P38",
       "state": "normal",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -420,14 +420,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.014Z",
+      "capturedAt": "2026-09-10T19:30:10.412Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-normal",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-range-hover.png",
@@ -437,7 +437,7 @@
       "routeId": "P38",
       "state": "range-hover",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -447,14 +447,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.163Z",
+      "capturedAt": "2026-09-10T19:30:10.561Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-range-hover",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-range-focus.png",
@@ -464,7 +464,7 @@
       "routeId": "P38",
       "state": "range-focus",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -474,14 +474,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.281Z",
+      "capturedAt": "2026-09-10T19:30:10.678Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-range-focus",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-refresh-hover.png",
@@ -491,7 +491,7 @@
       "routeId": "P38",
       "state": "refresh-hover",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -501,14 +501,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.432Z",
+      "capturedAt": "2026-09-10T19:30:10.827Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-hover",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-refresh-focus.png",
@@ -518,7 +518,7 @@
       "routeId": "P38",
       "state": "refresh-focus",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -528,14 +528,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.547Z",
+      "capturedAt": "2026-09-10T19:30:10.928Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-focus",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-refresh-pressed.png",
@@ -545,7 +545,7 @@
       "routeId": "P38",
       "state": "refresh-pressed",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -555,14 +555,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.730Z",
+      "capturedAt": "2026-09-10T19:30:11.111Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-pressed",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-refresh-loading.png",
@@ -572,7 +572,7 @@
       "routeId": "P38",
       "state": "refresh-loading",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -582,14 +582,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:46.847Z",
+      "capturedAt": "2026-09-10T19:30:11.228Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-loading",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-refresh-failed.png",
@@ -599,7 +599,7 @@
       "routeId": "P38",
       "state": "refresh-failed",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=24h&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=24h&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -609,14 +609,14 @@
         "width": 1392,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:47.186Z",
+      "capturedAt": "2026-09-10T19:30:11.563Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-refresh-failed",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     },
     {
       "file": "1440-range-7d.png",
@@ -626,7 +626,7 @@
       "routeId": "P38",
       "state": "range-7d",
       "role": "fixture platform:operate; no real authentication",
-      "concreteUrl": "http://127.0.0.1:51020/platform-admin?window=7d&keep=toolbar",
+      "concreteUrl": "http://127.0.0.1:54606/platform-admin?window=7d&keep=toolbar",
       "theme": "review-only C blue-white",
       "viewport": {
         "width": 1440,
@@ -636,14 +636,14 @@
         "width": 264,
         "height": 418
       },
-      "capturedAt": "2026-09-10T18:47:47.381Z",
+      "capturedAt": "2026-09-10T19:30:11.711Z",
       "browser": "Chromium 151.0.7922.34",
       "os": "win32 10.0.19045",
       "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
       "buildSha": null,
       "buildScope": "Vite development host; no production build",
       "caseId": "P38-toolbar-range-7d",
-      "sourceSha": "21325ac627970181e31249d9104057d20d5689d7c285e04cbf2bdf6fa871f64c"
+      "sourceSha": "28c28854b21ec345764e7b0474ca8dfdc7fb685bb57cb41233ea41906cf00280"
     }
   ],
   "processesClosed": true

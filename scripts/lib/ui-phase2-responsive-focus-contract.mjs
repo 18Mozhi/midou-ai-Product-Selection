@@ -7,7 +7,7 @@ export const responsiveFocusRevision = Object.freeze({
   file: "apps/web/src/components/ResponsiveDataView.vue",
   baseline: "ea005452",
   before: "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
-  after: "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+  after: "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -27,6 +27,12 @@ export function responsiveFocusContractHash(file, expected) {
     revision.before,
   );
   assert.equal(hash(read(file)), revision.after, "unreviewed responsive-view revision");
+  const lifecycle = JSON.parse(read("output/playwright/p38-shell-lifecycle/current/evidence.json"));
+  assert.equal(lifecycle.mode, "current-regression");
+  assert.equal(lifecycle.sourceHashes[file], revision.after);
+  assert.equal(lifecycle.processesClosed, true);
+  assert.equal(lifecycle.observations.length, 8);
+  assert.ok(lifecycle.observations.every((v) => v.dialogs === 0 && v.appInert === false));
   const evidence = JSON.parse(read("output/playwright/responsive-data-view-focus/evidence.json"));
   assert.equal(evidence.sourceHashes[file], revision.after);
   assert.equal(evidence.checks.length, 10);

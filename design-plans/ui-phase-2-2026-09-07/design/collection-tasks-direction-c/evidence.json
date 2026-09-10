@@ -1,11 +1,11 @@
 {
   "proposal": "COLLECTION-TASKS-C-r1",
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
     "apps/web/src/components/CollectionTaskCenter.vue": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
     "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
-    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/api/src/collection-task-service.ts": "e2be97bceb32547991fe08c629d5459b686bd1672278366e7e3919321af81684",
@@ -419,7 +419,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 1,
-      "sha256": "17a59a525054d0a9262b2af35fae2249085cd0504f5d992d59abe89188f412cb"
+      "sha256": "09ef5d79637a10d8e8469f72930b04a230e47821cd5564edce50efc4cb8fbd5a"
     },
     {
       "file": "1440-reason-filled.png",

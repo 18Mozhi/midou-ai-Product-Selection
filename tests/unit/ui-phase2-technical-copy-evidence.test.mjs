@@ -54,6 +54,9 @@ test("current recapture chain accepts only 29 measured differences across 13 pro
     path.join(path.dirname(require.resolve("playwright-core/package.json")), "lib/utilsBundle.js"),
   );
   const changed = [];
+  const lifecycleReview = JSON.parse(
+    read("design-plans/ui-phase-2-2026-09-07/detail-lifecycle-capture-review.json"),
+  );
   for (const manifest of review.manifests) {
     const previous = JSON.parse(
       execFileSync("git", ["show", `e704cd24:${manifest}`], { encoding: "utf8" }),
@@ -65,9 +68,19 @@ test("current recapture chain accepts only 29 measured differences across 13 pro
     );
     for (const shot of previous.screenshots) {
       const file = `${path.posix.dirname(manifest)}/${shot.file}`;
-      const bytes = readFileSync(file),
-        fingerprint = hash(bytes);
-      assert.equal(current.screenshots.find((s) => s.file === shot.file).sha256, fingerprint);
+      const currentBytes = readFileSync(file),
+        currentFingerprint = hash(currentBytes);
+      assert.equal(
+        current.screenshots.find((s) => s.file === shot.file).sha256,
+        currentFingerprint,
+      );
+      const lifecycle = lifecycleReview.differences.find((item) => item.file === file);
+      if (lifecycle) assert.equal(currentFingerprint, lifecycle.afterSha256);
+      const bytes = lifecycle
+        ? execFileSync("git", ["show", `3023a030:${file}`], { maxBuffer: 20_000_000 })
+        : currentBytes;
+      const fingerprint = hash(bytes);
+      if (lifecycle) assert.equal(fingerprint, lifecycle.beforeSha256);
       if (fingerprint === shot.sha256) continue;
       changed.push(file);
       const entry = review.differences.find((d) => d.file === file);

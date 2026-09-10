@@ -7,7 +7,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
-    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
   },
@@ -520,7 +520,7 @@
         "apps/web/src/components/ResponsiveDataView.vue#847801b2ac6e7a17.1"
       ],
       "condition": "selected存在；遮罩tabindex=-1",
-      "handler": "close清selectedKey；Esc关闭、Tab/Shift+Tab循环，关闭返焦；背景inert及嵌套确认挂起见共享验证",
+      "handler": "close清selectedKey；Esc关闭、Tab/Shift+Tab循环，关闭返焦；停用时清选择/旧触发器并释放背景，完整P38缓存链见lifecycleEvidence",
       "variants": [
         "c182428cb2c0ed66.1",
         "988131834dc4bd6f.1",
@@ -803,7 +803,7 @@
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
-      "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+      "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
       "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
       "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
     },
@@ -891,11 +891,11 @@
       "capabilities": "input.capabilities"
     },
     "sourcePath": "route.meta.surface → surfaceComponents → lazy(PlatformDashboard) → KeepAlive component; selectedSurfaceProps由surfaceProps传递allCapabilities",
-    "boundary": "父层routeAllowed及KeepAlive只核对源码接线；浏览器夹具未挂载完整父壳、真实登录或RBAC。"
+    "boundary": "入口图夹具未挂载完整父壳；独立lifecycleEvidence覆盖实际P38与来源频道缓存往返，不覆盖真实登录/RBAC或所有父壳路径。"
   },
   "actualEntryEvidence": {
     "file": "output/playwright/p38-entry-links/evidence.json",
-    "sha256": "eb9d9fc96de57c46ae852543a39e372c3d133f8d0e7ca3e95c8e2b7e40db4b24",
+    "sha256": "ad42f8848476dfc692bb4ad06c0f59d73524c62042e174973d0de7f629b127bd",
     "sourceCandidateIds": [
       "apps/web/src/components/PlatformDashboard.vue#5587941412d5210f.1",
       "apps/web/src/components/PlatformDashboard.vue#65c09ba74ca8870b.1",
@@ -918,14 +918,21 @@
     "scope": "related-composition-not-per-control-state-acceptance",
     "approval": "pending"
   },
+  "lifecycleEvidence": {
+    "file": "output/playwright/p38-shell-lifecycle/current/evidence.json",
+    "sha256": "fc8bb0c03b7275ea7670ad77a54461dff11486cdf9d345cc1dd00e082ddc31cc",
+    "report": "design-plans/ui-phase-2-2026-09-07/P38-SHELL-LIFECYCLE-REVIEW.md",
+    "scope": "actual-App-NavigationShell-KeepAlive-fixture-P38-to-provider-source-only",
+    "approval": "not-requested-current-behavior-evidence"
+  },
   "compositionGaps": [
     "8张入口组合待审，不填充通用六态，也不抵扣其他未审构图。",
     "ready刷新401/403旧快照展示策略已询问、待用户决策；本轮保持现状。",
-    "全父壳/KeepAlive、真实角色与目标页业务、全主题/密度/缩放和生产验收仍待完成。"
+    "除P38至来源频道缓存往返外，其他父壳/KeepAlive、真实角色与目标页业务、全主题/密度/缩放和生产验收仍待完成。"
   ],
   "limits": [
     "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。",
     "0类页面写入动作不等于GET无数据库副作用：真实读取写入平台观测与审计。本轮只mock GET，不接触数据库。",
-    "不修改生产Vue/CSS、API/OpenAPI、环境、依赖或权限；无部署/重启。"
+    "P38页面源/CSS不改；共享详情窗仅修复停用清理，见lifecycleEvidence。API/OpenAPI、环境、依赖或权限不变；本轮无部署/重启。"
   ]
 }

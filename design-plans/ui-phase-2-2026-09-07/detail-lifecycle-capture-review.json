@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "3023a030",
+  "approvedByUser": false,
+  "scope": "Exact recapture differences only; existing styles/content unchanged. Not visual approval, not a general pixel tolerance. New baseline/current bug evidence is separate.",
+  "manifests": [
+    "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json",
+    "output/playwright/responsive-data-view-focus/evidence.json",
+    "output/playwright/p38-vue-c-preview/evidence.json",
+    "output/playwright/p38-toolbar-compositions/evidence.json",
+    "output/playwright/p38-entry-links/evidence.json",
+    "output/playwright/p38-provider-compositions/evidence.json"
+  ],
+  "images": 3511,
+  "differences": [
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-reason-one-part1.png",
+      "beforeSha256": "17a59a525054d0a9262b2af35fae2249085cd0504f5d992d59abe89188f412cb",
+      "afterSha256": "09ef5d79637a10d8e8469f72930b04a230e47821cd5564edce50efc4cb8fbd5a",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        28,
+        524,
+        29,
+        651
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-filter-close-focus.png",
+      "beforeSha256": "d7f7b8e1abbc51b8bc89a22d06a57eed156a0cf157d10b26e310860aa9793d49",
+      "afterSha256": "186c6293a789d4f81b317f8ca72361baa92ecdf290a279c8767f85890862f865",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 1,
+      "maxChannelDelta": 7,
+      "bounds": [
+        980,
+        368,
+        980,
+        368
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-export-open-focus.png",
+      "beforeSha256": "b17494c207e7d73b67fd2ed4d00950a9ac007e5fae79618a971b6023ec8932a1",
+      "afterSha256": "e7c7f65d8f97cf0b099cfb50b5da7bccbb717186b9dc3eec36425086b83adf95",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 2,
+      "maxChannelDelta": 5,
+      "bounds": [
+        1272,
+        256,
+        1275,
+        256
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-record-retry-focus.png",
+      "beforeSha256": "0f09df35b8e762fdd3ab7531f389a18c7ab1fb5eb130eff82e078345892dfaed",
+      "afterSha256": "b8cf28763bf0f277c369ea149244b8ead349306c3d0ced03b19ec77cb4fc8d3f",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 2,
+      "maxChannelDelta": 5,
+      "bounds": [
+        593,
+        481,
+        596,
+        481
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-quality-retry-focus.png",
+      "beforeSha256": "66fb8b8320441875aaa37ff4d5ba286cac0592c12da08615238eff6785b2ead2",
+      "afterSha256": "0b1c89b27c6cc3b2094221915af44a755681a7be94ff508ef4b375ee5a7feffa",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 1,
+      "maxChannelDelta": 1,
+      "bounds": [
+        64,
+        483,
+        64,
+        483
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-quality-evidence-focus.png",
+      "beforeSha256": "c2bf0464d136e1a697a3c118c84bf13207dc5c95e628503264415908dd208a88",
+      "afterSha256": "58a4f8d679e0de49bf1ea6bdf45e931fabd5912d99a46c04723112ddb89685d8",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 8,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        101,
+        34,
+        142
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-quality-runs-default.png",
+      "beforeSha256": "4b18d89c351820b1ae36625fe2722355fd26ce92460a37de36e5804793f96f9d",
+      "afterSha256": "2e2e73176f8d0f22ccbf151405be9454f056416008156c615996f8801d682547",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 8,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        101,
+        34,
+        142
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-quality-runs-focus.png",
+      "beforeSha256": "26569153c2d439ee49ab7a70e1cbf65dc00186f16594cce6172cae729ee61a3f",
+      "afterSha256": "80d8432748b55a279993810747540c785e8d5a714ad074fb9ac555471a4ffebe",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 9,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        101,
+        88,
+        520
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-evidence-lineage-default.png",
+      "beforeSha256": "f4833dd7024c2e86742c2dbdc7917de1ebe3281047916264a7c723c37790edc5",
+      "afterSha256": "38a1c2d0f25954a20eddd436b02dd8cb57bd3a532dc89d10bef18b4dd64d833a",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-evidence-lineage-focus.png",
+      "beforeSha256": "a7c29063d557ef574dcabecab5147f50f18d519bcf7113afa9f364b1451c9645",
+      "afterSha256": "9a38611be860bab4a556674d77c46cac5e7fcaa8255074a26997b30847bc800d",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 79,
+      "maxChannelDelta": 7,
+      "bounds": [
+        33,
+        123,
+        848,
+        740
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-evidence-close-default.png",
+      "beforeSha256": "cec701c048d2aa2529130bf0fb566f67aab99119f0ac37b7ba0036182732c22b",
+      "afterSha256": "3712a05239c8eb75df17a8509d088ca97b30cb17ce58c46331ef90fdb8a9bbb2",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-evidence-close-focus.png",
+      "beforeSha256": "2f4084a1f66fc399b28a61a2d9ec66e3cadb1519c4f22c814173be364e117af7",
+      "afterSha256": "7755eb081a576bc03aa4c7c4c0e557580b0c9201bb40867368dc5608e0fe561a",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 5,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        50,
+        1014,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-issue-evidence-default.png",
+      "beforeSha256": "4b1a8d9be267c07cb60228ef2fdc430e1b836af71ad58af99e298169427a7554",
+      "afterSha256": "122580cb848cd46adb2402a5ffdd237b7a1f87070d5f5f45e6d743e616039b64",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-issue-evidence-focus.png",
+      "beforeSha256": "97382c17e8c84650b6edea385884b44e304e0bc42a7ca3f7fc8727720d982ca8",
+      "afterSha256": "8a57c7bf891dac628fdc59f092c5b0446e3d9ff309adf90d0c9e1d2f4de8556c",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-download-submit-default.png",
+      "beforeSha256": "832abbfbdddacb2ed3ecf93393d6d94e46a1e9d6e348ca298adea459fad2b4b5",
+      "afterSha256": "65b5f54ca362a8780b4dfb2fc4b2ff4948cb1c3400cf9e8edcd927169c03291d",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-download-submit-focus.png",
+      "beforeSha256": "b88849431a8ede186bb78b1c258c68b501d1021ffddd77a874aecb7d676a317c",
+      "afterSha256": "6e25e8dbc837315f0d50eb15c1ff7ab44c0484d22742b5914f4e6a9be68a6371",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-download-submit-disabled.png",
+      "beforeSha256": "8a4a5b91113a16fc9865da7bdf4d0d630f7ea4ae5be1738f2678a0959a507b7a",
+      "afterSha256": "9aebe11254069339fd4c5df17dd92d0960c4b3aff1a8c700e5bd336752ab9a40",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [
+        33,
+        123,
+        34,
+        164
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-batch-submit-focus.png",
+      "beforeSha256": "de1f0dd41bbeae597f9a3932e6a519a862117a39de01315765c940e0967670d5",
+      "afterSha256": "aa844880b24911258298d5dc1e0b6304e7908cbf08a28d0ab9558502bd474ae6",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 13,
+      "maxChannelDelta": 2,
+      "bounds": [
+        365,
+        690,
+        370,
+        695
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-batch-preview-focus.png",
+      "beforeSha256": "85afd9fbab380724599eba3324a35d12de709da7f5d770caa50fa809102c20b5",
+      "afterSha256": "c58fefe37558e96bd06fa9898d00d8c8460cb20713b2621bf66f8274499759cc",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 101,
+      "maxChannelDelta": 7,
+      "bounds": [
+        359,
+        484,
+        1074,
+        783
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-batch-back-focus.png",
+      "beforeSha256": "6d1ecf9e13e76b53645baad3e3ca68adb0cd595094820248ef94fe7a7c76d1d1",
+      "afterSha256": "319d131956e53dadda02f50011602ab8e3d7d4ceb9316e7b4f5473ddf72f2bc0",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 63,
+      "maxChannelDelta": 7,
+      "bounds": [
+        359,
+        652,
+        1074,
+        802
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-resolve-submit-focus.png",
+      "beforeSha256": "e30ae88caad9469a3f439c42a50e4b9dd322b23dee832d5d3e96c290cba1f5b2",
+      "afterSha256": "c4fa00b1792f428f8c17aef74d61f520f64ad4343da6e8b7e97be34e6e8ebbf7",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 13,
+      "maxChannelDelta": 2,
+      "bounds": [
+        365,
+        690,
+        370,
+        695
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-resolve-preview-focus.png",
+      "beforeSha256": "c64674e9f0f50153c72015a4ca82ff3ee6caaf52bb8ceffe87eb8812ecf55b44",
+      "afterSha256": "a13b039500fe45a922308977826d931ff95f094ed94ca7d921298185c863e3ba",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 66,
+      "maxChannelDelta": 7,
+      "bounds": [
+        359,
+        519,
+        1074,
+        749
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-resolve-back-focus.png",
+      "beforeSha256": "3f1d329d5b6b6a044c3f2ed92657d6976c028596a30c2c483b909028dc9df01b",
+      "afterSha256": "21ed47872ee74f27fb9660052353f132d1cc6a9e201f0a7a6a25c2e6b3ceae8d",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 63,
+      "maxChannelDelta": 7,
+      "bounds": [
+        359,
+        652,
+        1074,
+        802
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-workspace-records-focus.png",
+      "beforeSha256": "f76e0b42ad787f375ceaecc0af9f894186644becb8b54e12e0966a8ff2d1a724",
+      "afterSha256": "2ed36c13bcf2ecf9c3dac8d6d2e993cb46916b90c077d131599d7195df9c0681",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 6,
+      "maxChannelDelta": 2,
+      "bounds": [
+        202,
+        186,
+        205,
+        187
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-workspace-records-pressed.png",
+      "beforeSha256": "c4fbe3ba27678852932ca0cd40753739d1b864db35ec217192a16dcfb34c7676",
+      "afterSha256": "d252b1c4e14af54bee4171300cbec57f5a179541022f58984d8f8b7ac42ac451",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 6,
+      "maxChannelDelta": 2,
+      "bounds": [
+        202,
+        186,
+        205,
+        187
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-filter-close-focus.png",
+      "beforeSha256": "1f8658609cd53e6a0af5fda34a2e0d31837cbdaab6b63f0b4aabd9ae501c0577",
+      "afterSha256": "64dd3d03d098696e32fdcd3e87dfd437f82aa59772a01dc2cc6cbef01d26627b",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 42,
+      "maxChannelDelta": 2,
+      "bounds": [
+        20,
+        778,
+        189,
+        823
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-export-submit-focus.png",
+      "beforeSha256": "bb4219b0c220152bbc5907bf5d4dd6d777b4562328bc00aa6318937867b5ed62",
+      "afterSha256": "9288a3032b7969292c374fbb90cc87a990efed6d6dfee478a7279b24fcfe65af",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 13,
+      "maxChannelDelta": 2,
+      "bounds": [
+        20,
+        823,
+        24,
+        827
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-record-retry-focus.png",
+      "beforeSha256": "a4a4ff41861a894f1bba541f8793b6f67d66afdfbf21f3cccebd99fe950fb8c6",
+      "afterSha256": "94920917dcbfcc574486bafd2f3384ca6118e467471cbec67f01da5d0031047e",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 2,
+      "maxChannelDelta": 2,
+      "bounds": [
+        43,
+        403,
+        46,
+        403
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-record-technical-focus.png",
+      "beforeSha256": "b8a6752fb6f28d8c9b067545716a997ce163dde8b67413e4e8074f5e86199a49",
+      "afterSha256": "21a212cf1a1af44dc5839b15600cf56dd64cdf497ccca8f9f1163c4a124d2604",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 22,
+      "maxChannelDelta": 6,
+      "bounds": [
+        14,
+        699,
+        375,
+        706
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-quality-runs-focus.png",
+      "beforeSha256": "4e9772040a9cab6706de3b451e7933019dcc2b170b64e8e4309ba178bb955786",
+      "afterSha256": "2797a720622597d7cc4b0905f2ad638c79a37c38c3e0018c8eccb887c896dfa1",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 3,
+      "maxChannelDelta": 13,
+      "bounds": [
+        131,
+        401,
+        131,
+        442
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-run-clear-focus.png",
+      "beforeSha256": "6d3d4fa3fe3169657381f336c76b648d009b8f128c82837d5a5bbb6e8b88758a",
+      "afterSha256": "c855989deac7ecf6bdd74a443d875057791c84edb851c60e1835736760d6cf1f",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 1,
+      "maxChannelDelta": 1,
+      "bounds": [
+        30,
+        405,
+        30,
+        405
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-issue-select-focus.png",
+      "beforeSha256": "e01527169b88a81ac9fcc8ccb182601925632ebfa1080a26358dcd6127efacbe",
+      "afterSha256": "9dfd3d2bf5fdc3c7f8db6a6c4653abc4a9e0e6abd49a8da4171ade9a3657fa30",
+      "dimensions": [
+        390,
+        844
+      ],
+      "changedPixels": 21,
+      "maxChannelDelta": 1,
+      "bounds": [
+        354,
+        150,
+        356,
+        261
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/1440-export-over.png",
+      "beforeSha256": "b9e6bb40ef257c3a54cd50c978ca72b1189d95f28fc8016b7d4b74504cdce85b",
+      "afterSha256": "65f49e4535b342a054df0b2a3f4ae1f4dcf0c13841cca3ef84e7f1ecd818d4ea",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 13,
+      "maxChannelDelta": 1,
+      "bounds": [
+        22,
+        538,
+        248,
+        757
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/1440-forbidden.png",
+      "beforeSha256": "ba044b4bef22b104005afbed52cd82117364aec8e3a2ebb8c95e9b1a98c4f76e",
+      "afterSha256": "0169030cbe09a0eb597de725a4d12451bff1d0899c700f3c67659bbc9cf60ef3",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 14,
+      "maxChannelDelta": 1,
+      "bounds": [
+        22,
+        140,
+        24,
+        231
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/1440-form-client-revoke.png",
+      "beforeSha256": "5db703454e0b46f4543f4003432ed2ce03fad5241fc81d5a4737d2664b98d1e2",
+      "afterSha256": "7696258dc732f1e210e62301498c6ff5f5aea253372280c4fdc6975f3aa86457",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 8,
+      "maxChannelDelta": 1,
+      "bounds": [
+        22,
+        141,
+        23,
+        231
+      ]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/1440-form-webhook-enable.png",
+      "beforeSha256": "d9b853def258c8ba319049ec095f5f5c073bd2dc5ef96766f4ebb3fe62fce1d9",
+      "afterSha256": "e4c8a9b5ccc7cdf964dd35eb87fd2ef0116b32a43404c74321e2cc3a16b36ff9",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "changedPixels": 8,
+      "maxChannelDelta": 1,
+      "bounds": [
+        22,
+        143,
+        23,
+        231
+      ]
+    },
+    {
+      "file": "output/playwright/responsive-data-view-focus/390-close-focus.png",
+      "beforeSha256": "ce9b7f6c717bfde3feea8a17f2bef0af277ddd4a23b4e8f4aff285d53c0bb185",
+      "afterSha256": "ed7b8531f3860bfe9c4231a439dbaae084f61969cc479f2d81f36239a3314945",
+      "dimensions": [
+        390,
+        900
+      ],
+      "changedPixels": 2,
+      "maxChannelDelta": 3,
+      "bounds": [
+        321,
+        37,
+        323,
+        37
+      ]
+    }
+  ]
+}

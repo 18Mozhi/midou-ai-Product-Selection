@@ -1886,7 +1886,7 @@
     "dependencyHashes": {
       "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
       "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
-      "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+      "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
       "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
       "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
@@ -2204,6 +2204,7 @@
       }
     ],
     "sharedRemaining": [
+      "共享详情窗新增停用清理，释放旧选中与背景隔离；完整壳层验证来自P38缓存返回链，不代替P54三处调用的所有业务流程。P54模板/源、原图与批准不变。",
       "2026-09-11仅同步既有共享修复的当前依赖指纹：e845daca手机预览焦点隔离、fae70505复制拒绝及旧回执保护。P54页面源、原图和批准不变；共享测试不替代P54三个调用/六种内容变体的真实流程验收。",
       "PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。",
       "ConfirmDialog共享typedText适用，acknowledged因本页destructive=false不显示；AuditedReasonDialog内部reason与质量reason分域；TableViewControls密度字段未冒充本页7个v-model。",

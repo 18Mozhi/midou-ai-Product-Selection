@@ -46,7 +46,7 @@
   ],
   "sourceHashes": {
     "scripts/verify-responsive-data-view-focus.mjs": "f891a55fde3c5732f05e19266a4396a25280308d322cdbd3aba5bf2bfd6ae2ef",
-    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
@@ -69,7 +69,7 @@
       "width": 390,
       "state": "close-focus",
       "kind": "vue-isolated",
-      "sha256": "ce9b7f6c717bfde3feea8a17f2bef0af277ddd4a23b4e8f4aff285d53c0bb185"
+      "sha256": "ed7b8531f3860bfe9c4231a439dbaae084f61969cc479f2d81f36239a3314945"
     },
     {
       "file": "390-expanded-control-focus.png",

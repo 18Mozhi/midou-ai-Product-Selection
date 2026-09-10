@@ -1,14 +1,14 @@
 {
   "proposal": "BROWSER-RUNTIME-C-r1",
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
     "tests/e2e/m03-04-playwright-crawler.spec.ts": "8f648aee8d5cb1cdffc4534be30e5e64c18702567aeb3cb953cd6db7f5db695b",
     "apps/web/src/components/CollectionRuntimeCenter.vue": "e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4",
     "apps/api/src/crawler-runtime-service.ts": "7dda282fdefdd95a9d49ec4be11cc2f67e723122264da54b5de45cadae62f69a",
     "apps/api/src/mysql-crawler-runtime-repository.ts": "ac4cc7dab79a4baccb55ecaff7582790a67b6eaab616ef096a9b63e2d9e8e518",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/api/src/crawler-runtime-routes.ts": "69f5e8f0e9c5529aec86ed8c39ad2638551a4dffb6a1f43469b2b3dba8450477",
-    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",

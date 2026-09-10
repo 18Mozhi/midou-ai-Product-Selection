@@ -7,7 +7,7 @@
 | 文件 | LF SHA256 |
 | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 |
-| apps/web/src/components/ResponsiveDataView.vue | 95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87 |
+| apps/web/src/components/ResponsiveDataView.vue | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 
@@ -35,11 +35,11 @@
 | apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.1 | 458 | control | 来源与告警原生技术折叠 | PA38-TECH |
 | apps/web/src/components/PlatformDashboard.vue#d604390773d9cd06.1 | 472 | control | 来源展开收起 | PA38-PROVIDERS |
 | apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.2 | 538 | control | 来源与告警原生技术折叠 | PA38-TECH |
-| apps/web/src/components/ResponsiveDataView.vue#6da4dad42cb34c8d.1 | 124 | control | 手机记录预览 | PA38-PREVIEW-OPEN |
-| apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1 | 131 | event-binding | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
-| apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1 | 138 | control | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
-| apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1 | 145 | dialog-definition | 共享预览容器关联 | PA38-PREVIEW-DIALOG |
-| apps/web/src/components/ResponsiveDataView.vue#847801b2ac6e7a17.1 | 157 | control | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
+| apps/web/src/components/ResponsiveDataView.vue#6da4dad42cb34c8d.1 | 129 | control | 手机记录预览 | PA38-PREVIEW-OPEN |
+| apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1 | 136 | event-binding | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
+| apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1 | 143 | control | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
+| apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1 | 150 | dialog-definition | 共享预览容器关联 | PA38-PREVIEW-DIALOG |
+| apps/web/src/components/ResponsiveDataView.vue#847801b2ac6e7a17.1 | 162 | control | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
 | apps/web/src/components/TableViewControls.vue#e2fd0d02cbd9f684.1 | 78 | control | 列设置展开 | PA38-COLUMNS |
 | apps/web/src/components/TableViewControls.vue#921f4be18a3fe814.1 | 82 | event-binding | 切换来源显示列 | PA38-COLUMN-TOGGLE |
 | apps/web/src/components/TableViewControls.vue#d09cd5524db7bee5.1 | 95 | control | 冻结首个可见列 | PA38-FREEZE |

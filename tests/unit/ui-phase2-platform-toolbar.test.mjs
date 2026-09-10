@@ -82,7 +82,6 @@ test("P38 toolbar styling stays review-scoped and preserves unrelated sources an
   for (const file of [
     "apps/web/src/main.ts",
     "apps/web/src/components/PlatformDashboard.vue",
-    "apps/web/src/components/ResponsiveDataView.vue",
     "apps/web/src/components/TableViewControls.vue",
     "apps/web/src/api-client.ts",
     "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css",
@@ -94,8 +93,18 @@ test("P38 toolbar styling stays review-scoped and preserves unrelated sources an
     const captureReview = JSON.parse(
       read("design-plans/ui-phase-2-2026-09-07/technical-copy-capture-review.json"),
     );
+    const lifecycleReview = JSON.parse(
+      read("design-plans/ui-phase-2-2026-09-07/detail-lifecycle-capture-review.json"),
+    );
     assert.deepEqual(
       JSON.parse(read(file)).screenshots.map(({ file, sha256 }) => {
+        const lifecycle = lifecycleReview.differences.find(
+          (d) => d.file === `output/playwright/${directory}/${file}`,
+        );
+        if (lifecycle) {
+          assert.equal(sha256, lifecycle.afterSha256);
+          sha256 = lifecycle.beforeSha256;
+        }
         const difference = captureReview.differences.find(
           (d) => d.file === `output/playwright/${directory}/${file}`,
         );

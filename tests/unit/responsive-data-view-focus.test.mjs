@@ -96,6 +96,9 @@ test("recaptured proposals allow only exact recorded edge-pixel differences, not
   const nextReview = JSON.parse(
     read("design-plans/ui-phase-2-2026-09-07/technical-copy-capture-review.json"),
   );
+  const lifecycleReview = JSON.parse(
+    read("design-plans/ui-phase-2-2026-09-07/detail-lifecycle-capture-review.json"),
+  );
   assert.equal(nextReview.baselineCommit, "e704cd24");
   for (const manifest of review.manifests) {
     const current = JSON.parse(read(manifest)),
@@ -104,6 +107,11 @@ test("recaptured proposals allow only exact recorded edge-pixel differences, not
       let now = current.screenshots.find((item) => item.file === shot.file);
       assert.ok(now, `${manifest}:${shot.file}`);
       const file = `${path.posix.dirname(manifest)}/${shot.file}`;
+      const lifecycle = lifecycleReview.differences.find((item) => item.file === file);
+      if (lifecycle) {
+        assert.equal(now.sha256, lifecycle.afterSha256);
+        now = { ...now, sha256: lifecycle.beforeSha256 };
+      }
       const next = nextReview.differences.find((item) => item.file === file);
       if (next) {
         assert.equal(now.sha256, next.afterSha256);
@@ -118,7 +126,9 @@ test("recaptured proposals allow only exact recorded edge-pixel differences, not
       const old = execFileSync("git", ["show", `ea005452:${file}`], { maxBuffer: 20_000_000 }),
         bytes = next
           ? execFileSync("git", ["show", `e704cd24:${file}`], { maxBuffer: 20_000_000 })
-          : readFileSync(file);
+          : lifecycle
+            ? execFileSync("git", ["show", `3023a030:${file}`], { maxBuffer: 20_000_000 })
+            : readFileSync(file);
       assert.equal(hash(bytes), entry.afterSha256);
       const a = PNG.sync.read(old),
         b = PNG.sync.read(bytes);

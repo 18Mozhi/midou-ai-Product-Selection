@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="DataRow extends Record<string, any>">
-import { computed, nextTick, onBeforeUnmount, shallowRef, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onDeactivated, shallowRef, watch } from "vue";
 import TableViewControls from "./TableViewControls.vue";
 
 const props = defineProps<{
@@ -31,6 +31,11 @@ function releaseBackground() {
   background.clear();
 }
 onBeforeUnmount(releaseBackground);
+onDeactivated(() => {
+  selectedKey.value = null;
+  trigger = null;
+  releaseBackground();
+});
 
 function show(row: DataRow, event: MouseEvent) {
   trigger = event.currentTarget as HTMLButtonElement;

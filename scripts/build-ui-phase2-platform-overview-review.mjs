@@ -151,7 +151,7 @@ const definitions = [
     "local",
     ids(1, "c182428cb2c0ed66.1", "988131834dc4bd6f.1", "847801b2ac6e7a17.1"),
     "selected存在；遮罩tabindex=-1",
-    "close清selectedKey；Esc关闭、Tab/Shift+Tab循环，关闭返焦；背景inert及嵌套确认挂起见共享验证",
+    "close清selectedKey；Esc关闭、Tab/Shift+Tab循环，关闭返焦；停用时清选择/旧触发器并释放背景，完整P38缓存链见lifecycleEvidence",
     ["normal", "long_fields"],
   ],
   [
@@ -318,7 +318,7 @@ export function buildPlatformReview(inputs) {
       sourcePath:
         "route.meta.surface → surfaceComponents → lazy(PlatformDashboard) → KeepAlive component; selectedSurfaceProps由surfaceProps传递allCapabilities",
       boundary:
-        "父层routeAllowed及KeepAlive只核对源码接线；浏览器夹具未挂载完整父壳、真实登录或RBAC。",
+        "入口图夹具未挂载完整父壳；独立lifecycleEvidence覆盖实际P38与来源频道缓存往返，不覆盖真实登录/RBAC或所有父壳路径。",
     },
     actualEntryEvidence: {
       file: evidenceFile,
@@ -331,15 +331,22 @@ export function buildPlatformReview(inputs) {
       scope: "related-composition-not-per-control-state-acceptance",
       approval: "pending",
     },
+    lifecycleEvidence: {
+      file: "output/playwright/p38-shell-lifecycle/current/evidence.json",
+      sha256: hash(read("output/playwright/p38-shell-lifecycle/current/evidence.json")),
+      report: base + "/P38-SHELL-LIFECYCLE-REVIEW.md",
+      scope: "actual-App-NavigationShell-KeepAlive-fixture-P38-to-provider-source-only",
+      approval: "not-requested-current-behavior-evidence",
+    },
     compositionGaps: [
       "8张入口组合待审，不填充通用六态，也不抵扣其他未审构图。",
       "ready刷新401/403旧快照展示策略已询问、待用户决策；本轮保持现状。",
-      "全父壳/KeepAlive、真实角色与目标页业务、全主题/密度/缩放和生产验收仍待完成。",
+      "除P38至来源频道缓存往返外，其他父壳/KeepAlive、真实角色与目标页业务、全主题/密度/缩放和生产验收仍待完成。",
     ],
     limits: [
       remaining,
       "0类页面写入动作不等于GET无数据库副作用：真实读取写入平台观测与审计。本轮只mock GET，不接触数据库。",
-      "不修改生产Vue/CSS、API/OpenAPI、环境、依赖或权限；无部署/重启。",
+      "P38页面源/CSS不改；共享详情窗仅修复停用清理，见lifecycleEvidence。API/OpenAPI、环境、依赖或权限不变；本轮无部署/重启。",
     ],
   });
 }

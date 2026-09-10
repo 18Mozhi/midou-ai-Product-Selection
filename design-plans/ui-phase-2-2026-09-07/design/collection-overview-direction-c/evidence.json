@@ -1,7 +1,7 @@
 {
   "proposal": "COLLECTION-OVERVIEW-C-r1",
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
     "tests/e2e/m06-03-collection-console.spec.ts": "66d280b839d4a9b203fa165fa56e7aaa02a9b120e304bb69b752752c9fd57a41",
     "apps/web/src/components/CollectionOperationsConsole.vue": "0e22a3d1ae404c05b96b321424be8489c6c3bd21f2223e33af09c3eebef3b856",
     "apps/web/src/ui/status-labels.ts": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a",
@@ -10,7 +10,7 @@
     "apps/api/src/collection-console-routes.ts": "e728860cac1614245115e5bf43d90ba0ad31115e07e58e845c8b73129962eac2",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "scripts/lib/ui-phase2-collection-overview-design-data.mjs": "a4a4e7beed01a3c983444d32c770a61f2374b418e05be8b5d2186f1974227912",
     "scripts/verify-ui-phase2-collection-overview-c.mjs": "27b4cffb47f37cb7f84cb6fe75d568221b4b4c36b2fd7983f29103221befcce1",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",

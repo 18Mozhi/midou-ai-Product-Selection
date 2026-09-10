@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual application and router, synthetic navigation/data GETs. Existing styling, not C design implementation, real RBAC or production acceptance. Baseline replays only the exact old shared component; all other files use recorded current sources.",
+  "approval": "not-requested-current-behavior-evidence",
+  "mode": "current-regression",
+  "baselineReplay": null,
+  "sourceHashes": {
+    "scripts/verify-ui-phase2-platform-shell-lifecycle.mjs": "6be1887073998abb7fc79e1b8f301fff118852c9191f06d0199eb6b3c2ca0f1b",
+    "scripts/lib/ui-phase2-platform-overview-design-data.mjs": "838e4970f3e643620c01dd0e9e430974fc64f703e88b68b3626fc862946d9bda",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "packages/config/src/browser.ts": "b718e5f47e7a28b7ea6130c884cb93d002f250665c5ab08b7143ecd6ae07c092",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "real App/route catalog/NavigationShell/cache preserved DOM; source→overview→history back/forward; reopen/Esc/focus or desktop density/freeze preserved; 7d query and request",
+      "requests": [
+        "GET /api/v1/me/navigation?shell=platform_admin",
+        "GET /api/v1/platform/provider-sources",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=7d"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "real App/route catalog/NavigationShell/cache preserved DOM; source→overview→history back/forward; reopen/Esc/focus or desktop density/freeze preserved; 7d query and request",
+      "requests": [
+        "GET /api/v1/me/navigation?shell=platform_admin",
+        "GET /api/v1/platform/provider-sources",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=7d"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "real App/route catalog/NavigationShell/cache preserved DOM; source→overview→history back/forward; reopen/Esc/focus or desktop density/freeze preserved; 7d query and request",
+      "requests": [
+        "GET /api/v1/me/navigation?shell=platform_admin",
+        "GET /api/v1/platform/provider-sources",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=7d"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "real App/route catalog/NavigationShell/cache preserved DOM; source→overview→history back/forward; reopen/Esc/focus or desktop density/freeze preserved; 7d query and request",
+      "requests": [
+        "GET /api/v1/me/navigation?shell=platform_admin",
+        "GET /api/v1/platform/provider-sources",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=24h",
+        "GET /api/v1/platform/dashboard?window=7d"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "state": "left-overview",
+      "url": "/platform-admin/providers/sources",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 390,
+      "state": "returned-overview",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 760,
+      "state": "left-overview",
+      "url": "/platform-admin/providers/sources",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 760,
+      "state": "returned-overview",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 761,
+      "state": "left-overview",
+      "url": "/platform-admin/providers/sources",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 761,
+      "state": "returned-overview",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 1440,
+      "state": "left-overview",
+      "url": "/platform-admin/providers/sources",
+      "dialogs": 0,
+      "appInert": false
+    },
+    {
+      "width": 1440,
+      "state": "returned-overview",
+      "dialogs": 0,
+      "appInert": false
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-ready.png",
+      "state": "ready",
+      "width": 390,
+      "sha256": "1874716ef84160c0b7bba13460abee9710cb983c8da3a59cdab4b0c062ba8404",
+      "kind": "actual-app-fixture-not-C-approval",
+      "url": "http://127.0.0.1:54158/platform-admin",
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-09-10T19:25:49.402Z"
+    },
+    {
+      "file": "390-preview-open.png",
+      "state": "preview-open",
+      "width": 390,
+      "sha256": "1748273185cc4db06a942229876543e86a0e5eaa586bc09bcaed23ba7cfc1976",
+      "kind": "actual-app-fixture-not-C-approval",
+      "url": "http://127.0.0.1:54158/platform-admin",
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-09-10T19:25:49.564Z"
+    },
+    {
+      "file": "390-left-overview.png",
+      "state": "left-overview",
+      "width": 390,
+      "sha256": "e297ec5642448422cd82cd964477f3231103ea6a0aa4f4a136e6a98066b99a92",
+      "kind": "actual-app-fixture-not-C-approval",
+      "url": "http://127.0.0.1:54158/platform-admin/providers/sources",
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-09-10T19:25:49.690Z"
+    },
+    {
+      "file": "1440-ready.png",
+      "state": "ready",
+      "width": 1440,
+      "sha256": "028ac3ed62f55178363747cfacf18d7dad364abb2f7e03d87f118a1253bd9bd6",
+      "kind": "actual-app-fixture-not-C-approval",
+      "url": "http://127.0.0.1:54158/platform-admin",
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-09-10T19:25:52.638Z"
+    },
+    {
+      "file": "1440-left-overview.png",
+      "state": "left-overview",
+      "width": 1440,
+      "sha256": "cefc00c5083b725fae1be47aeb30b15edb94179973ab8031b0e370328ee89729",
+      "kind": "actual-app-fixture-not-C-approval",
+      "url": "http://127.0.0.1:54158/platform-admin/providers/sources",
+      "browser": "151.0.7922.34",
+      "capturedAt": "2026-09-10T19:25:52.839Z"
+    }
+  ],
+  "processesClosed": true
+}
