@@ -1,0 +1,1054 @@
+{
+  "schemaVersion": 1,
+  "approval": "pending",
+  "scope": "Full P39 parent-component review composition; original script and control bindings with review-only template grouping/copy and CSS. Prior filter/create styles composed unchanged. Not complete app shell, real RBAC/backend/filtering, production implementation or all-state acceptance.",
+  "sourceCommit": "6e01d1cfeb22edd7346770d47340e8bd9c9f1d0f",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/platform-account-types.ts": "7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css": "3ca6614eb37eec2deb65fc3dec5db9b946db5d1d35fc9dad78994438d34a2650",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-filter-preview.css": "da58782137fbcf8b489e51dcce69e9af573dac83e356c6b6f98d84d77c887b79",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-page-preview.css": "fc8c02e1b07df9e7d85712ec1bf702b576a80603cf72732fbdd0152d140b5f9b",
+    "scripts/lib/ui-phase2-account-filter-preview.mjs": "c2e406a8516e19bd0fe9ef44f3f3ef11769bfe309e0811c9b6caae58d07bdeea",
+    "scripts/lib/ui-phase2-account-overview-design-data.mjs": "df765906f1eda3eb7c1c4158ee5e808796024df6bba3a841ce7ceaa3f2a7ba93",
+    "scripts/lib/ui-phase2-account-page-preview.mjs": "ebc3ebccafb395f1f861a7bcd430f8936b08b820d55153667c8e74815f5c788f",
+    "scripts/verify-ui-phase2-account-page-preview.mjs": "ec25ad701c7577d3f30ada275f6701ce25c37743ea63fa5d9d95e4f38b69ded7",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedSourceHash": "f05896d134ee86ca5e3254dd79cb73a7c100a79c8fc958a134331f3176938a82",
+  "checks": [
+    {
+      "width": 390,
+      "name": "actual original global summary remains independent of one organization row"
+    },
+    {
+      "width": 390,
+      "name": "exact three original management links"
+    },
+    {
+      "width": 390,
+      "name": "refresh moved without duplicating action"
+    },
+    {
+      "width": 390,
+      "name": "C directory/result responsive separation"
+    },
+    {
+      "width": 390,
+      "name": "normal no page horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "blue scope title has explicit white text"
+    },
+    {
+      "width": 390,
+      "name": "normal visible interactive targets at least44px and16px text"
+    },
+    {
+      "width": 390,
+      "name": "first real organization starts inside mobile first viewport"
+    },
+    {
+      "width": 390,
+      "name": "long organization does not overflow page"
+    },
+    {
+      "width": 390,
+      "name": "record preview opens without reading or writing"
+    },
+    {
+      "width": 390,
+      "name": "record close restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "background read keeps original global counts"
+    },
+    {
+      "width": 390,
+      "name": "refresh failure retains snapshot and explicit original notice"
+    },
+    {
+      "width": 390,
+      "name": "empty organization array does not zero independent global totals"
+    },
+    {
+      "width": 390,
+      "name": "first read failure does not invent zero global counts"
+    },
+    {
+      "width": 390,
+      "name": "no unexpected writes/external requests or browser errors"
+    },
+    {
+      "width": 759,
+      "name": "actual original global summary remains independent of one organization row"
+    },
+    {
+      "width": 759,
+      "name": "exact three original management links"
+    },
+    {
+      "width": 759,
+      "name": "refresh moved without duplicating action"
+    },
+    {
+      "width": 759,
+      "name": "C directory/result responsive separation"
+    },
+    {
+      "width": 759,
+      "name": "normal no page horizontal overflow"
+    },
+    {
+      "width": 759,
+      "name": "blue scope title has explicit white text"
+    },
+    {
+      "width": 759,
+      "name": "normal visible interactive targets at least44px and16px text"
+    },
+    {
+      "width": 760,
+      "name": "actual original global summary remains independent of one organization row"
+    },
+    {
+      "width": 760,
+      "name": "exact three original management links"
+    },
+    {
+      "width": 760,
+      "name": "refresh moved without duplicating action"
+    },
+    {
+      "width": 760,
+      "name": "C directory/result responsive separation"
+    },
+    {
+      "width": 760,
+      "name": "normal no page horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "blue scope title has explicit white text"
+    },
+    {
+      "width": 760,
+      "name": "normal visible interactive targets at least44px and16px text"
+    },
+    {
+      "width": 761,
+      "name": "actual original global summary remains independent of one organization row"
+    },
+    {
+      "width": 761,
+      "name": "exact three original management links"
+    },
+    {
+      "width": 761,
+      "name": "refresh moved without duplicating action"
+    },
+    {
+      "width": 761,
+      "name": "C directory/result responsive separation"
+    },
+    {
+      "width": 761,
+      "name": "normal no page horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "blue scope title has explicit white text"
+    },
+    {
+      "width": 761,
+      "name": "normal visible interactive targets at least44px and16px text"
+    },
+    {
+      "width": 1024,
+      "name": "actual original global summary remains independent of one organization row"
+    },
+    {
+      "width": 1024,
+      "name": "exact three original management links"
+    },
+    {
+      "width": 1024,
+      "name": "refresh moved without duplicating action"
+    },
+    {
+      "width": 1024,
+      "name": "C directory/result responsive separation"
+    },
+    {
+      "width": 1024,
+      "name": "normal no page horizontal overflow"
+    },
+    {
+      "width": 1024,
+      "name": "blue scope title has explicit white text"
+    },
+    {
+      "width": 1024,
+      "name": "normal visible interactive targets at least44px and16px text"
+    },
+    {
+      "width": 1440,
+      "name": "actual original global summary remains independent of one organization row"
+    },
+    {
+      "width": 1440,
+      "name": "exact three original management links"
+    },
+    {
+      "width": 1440,
+      "name": "refresh moved without duplicating action"
+    },
+    {
+      "width": 1440,
+      "name": "C directory/result responsive separation"
+    },
+    {
+      "width": 1440,
+      "name": "normal no page horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "blue scope title has explicit white text"
+    },
+    {
+      "width": 1440,
+      "name": "normal visible interactive targets at least44px and16px text"
+    },
+    {
+      "width": 1440,
+      "name": "long organization does not overflow page"
+    },
+    {
+      "width": 1440,
+      "name": "background read keeps original global counts"
+    },
+    {
+      "width": 1440,
+      "name": "refresh failure retains snapshot and explicit original notice"
+    },
+    {
+      "width": 1440,
+      "name": "empty organization array does not zero independent global totals"
+    },
+    {
+      "width": 1440,
+      "name": "first read failure does not invent zero global counts"
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected writes/external requests or browser errors"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "multi",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "empty",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {
+            "query": "不存在"
+          },
+          "variant": "empty",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 500
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        }
+      ],
+      "scope": "GET fixtures only; full P39 parent composition, not App/NavigationShell, destination route rendering, real filtering or production"
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "multi",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "empty",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {
+            "query": "不存在"
+          },
+          "variant": "empty",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 500
+        },
+        {
+          "method": "GET",
+          "query": {},
+          "variant": "normal",
+          "status": 200
+        }
+      ],
+      "scope": "GET fixtures only; full P39 parent composition, not App/NavigationShell, destination route rendering, real filtering or production"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal.png",
+      "label": "原始单条组织 · 全局汇总独立",
+      "state": "normal",
+      "sha256": "6faf748b135df5a0d7b053146b15cdbc497bdcbf5bc3290d5f0508ee9c1f9749",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 916
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:08.944Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-long.png",
+      "label": "长组织名称 · 合成数据",
+      "state": "long",
+      "sha256": "e6ed2655431df460e3be5e4cb7c5d6131d123f310c853fa2e98dda325e060d87",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1042
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:09.196Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-multiple.png",
+      "label": "三条组织 · 明确合成变体",
+      "state": "multiple",
+      "sha256": "3c227e60a7e6a291283c3fe5afcefd386e461197f36cbe5c7745df1d9049f23e",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1087
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:09.447Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-filters.png",
+      "label": "原生移动筛选层与新组合",
+      "state": "filters",
+      "sha256": "bf973b08b75f9a688384b2c0631bf0c6631c8a2ab42610b441b0e546e511361e",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:09.725Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-record-preview.png",
+      "label": "组织记录预览 · 非组织详情路由",
+      "state": "record-preview",
+      "sha256": "df6dba75ec623caed74a742ab5a3dfc1039c48bed98a6156f612e5e0e525b598",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:09.824Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-record-technical.png",
+      "label": "记录预览技术详情",
+      "state": "record-technical",
+      "sha256": "1099c512e8310031a0a30753b957ed4462d8d1545a8a567c4f3b624711b81bb2",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:09.907Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-create-user.png",
+      "label": "同一页面打开新建用户",
+      "state": "create-user",
+      "sha256": "f00576a514fbfaa29892f5fa7002b6521fa09be98416eac031537cba6bcf3adf",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:10.029Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-refreshing.png",
+      "label": "后台读取 · 保留原数据",
+      "state": "refreshing",
+      "sha256": "4256b5a7c4ec1c436eb8ca2922cbe1ba6b620bee29f1827f0c15151ccb3e255c",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 916
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:10.144Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-refresh-failed.png",
+      "label": "刷新失败 · 原快照保留",
+      "state": "refresh-failed",
+      "sha256": "3281fe3e5c792000da0fde6dc163f89625d181fd4aab91b8a66b46285e9d4810",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1000
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:10.230Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-empty.png",
+      "label": "当前返回无组织 · 全局汇总仍独立",
+      "state": "empty",
+      "sha256": "cb0228b5a8fe40fbbbbe7151bbc6839bb13baa5da29603a32d4d97fe54e492e8",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 965
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:10.496Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-no-results.png",
+      "label": "已筛选但返回无组织 · 测试响应",
+      "state": "no-results",
+      "sha256": "a080373c4a4c89dac13823cf2482852ee3ee68a9cc4c58f0923a4be6e2fe92f6",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1017
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?query=%E4%B8%8D%E5%AD%98%E5%9C%A8&keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:10.748Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-first-failure.png",
+      "label": "首次读取失败 · 无伪造汇总",
+      "state": "first-failure",
+      "sha256": "2ffc439e7f117e8957ddf256cb06785656d1ba56ca1ba001a482f03332107f0a",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 916
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:10.994Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "390-loading.png",
+      "label": "首次读取中",
+      "state": "loading",
+      "sha256": "e0007756487a4cdd537e20204336f618b31ebfe1dc57990863484fa396ab18c3",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:11.210Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "759-normal.png",
+      "label": "原始单条组织 · 全局汇总独立",
+      "state": "normal",
+      "sha256": "62a1093a50e132ded3f4933abe622d8b46584892471c9117ecb025362699a4f4",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 759,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 759,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:11.850Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "760-normal.png",
+      "label": "原始单条组织 · 全局汇总独立",
+      "state": "normal",
+      "sha256": "8951254e6fc54ff0f1d0e5b771506f0960714fcf03d20a9e25a907c1cf57bb84",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:12.418Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "761-normal.png",
+      "label": "原始单条组织 · 全局汇总独立",
+      "state": "normal",
+      "sha256": "f111272d7bf3a58225615339fc67f69098cd0557d2aedf80ab4cc91cc2b80aa4",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1177
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:13.015Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1024-normal.png",
+      "label": "原始单条组织 · 全局汇总独立",
+      "state": "normal",
+      "sha256": "8de6cee6d48979bef8fd3c4795a09dcfe8a244c9ae09061cf5f06383d27b05f5",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1024,
+        "height": 1158
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:13.650Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-normal.png",
+      "label": "原始单条组织 · 全局汇总独立",
+      "state": "normal",
+      "sha256": "95a57dd2195779ef9e62739d04252d44e70846db3645006b19a23004e3d02595",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 914
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:14.272Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-long.png",
+      "label": "长组织名称 · 合成数据",
+      "state": "long",
+      "sha256": "11addbddbc74766a17773875ae4b92e4ea6cfb3bd8294bd35ebdc387364a3746",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 914
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:14.572Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-multiple.png",
+      "label": "三条组织 · 明确合成变体",
+      "state": "multiple",
+      "sha256": "3162f2613e000a9ec072905e1ce3e622da4b0d1c5d8f0e86c56ca44d8fe87e9b",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1025
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:14.879Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-columns.png",
+      "label": "桌面列设置",
+      "state": "columns",
+      "sha256": "a245c634c9d39c7fa6a5721dcf936010a453a31f418fe3d1c4d46d552a205aa3",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 976
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:15.229Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-create-user.png",
+      "label": "同一页面打开新建用户",
+      "state": "create-user",
+      "sha256": "815f2762d6021d4525049030d127215647c81655b94baf52d007369e15814886",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:15.390Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "label": "后台读取 · 保留原数据",
+      "state": "refreshing",
+      "sha256": "776266bacf119863d0946e5859cdbdfdb8667448c268d58cb63d390491644238",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 914
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:15.519Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-refresh-failed.png",
+      "label": "刷新失败 · 原快照保留",
+      "state": "refresh-failed",
+      "sha256": "359fbe2b3cfe58ebac4ee023328fc2e3b2befdd893601a138e509d58424bb842",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 933
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:15.624Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-empty.png",
+      "label": "当前返回无组织 · 全局汇总仍独立",
+      "state": "empty",
+      "sha256": "1da1d1cb1f0fd7eacb6d4f6e5dd526c448f34521947a8c0f294eb18e4073c19c",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 914
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:15.920Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-no-results.png",
+      "label": "已筛选但返回无组织 · 测试响应",
+      "state": "no-results",
+      "sha256": "e0b33b6f023baf76a186e117dce4acb2a1b8b6411b421f525bbc6652d472bc90",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 914
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?query=%E4%B8%8D%E5%AD%98%E5%9C%A8&keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:16.204Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-first-failure.png",
+      "label": "首次读取失败 · 无伪造汇总",
+      "state": "first-failure",
+      "sha256": "494fd9fb1feb24072ca71d736012221fe7fbe596ca69368abf6f8bb5884027a4",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:16.466Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    },
+    {
+      "file": "1440-loading.png",
+      "label": "首次读取中",
+      "state": "loading",
+      "sha256": "7120ca38fe96cb90cd81326615313a1b79bb676fc70f9dd41623ae1ddaeb8320",
+      "kind": "vue-review-template-composed",
+      "routeId": "P39",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:59295/platform-admin/accounts?keep=composed",
+      "role": "fixture data without authentication",
+      "theme": "review-only C blue-white",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:24:16.683Z",
+      "sourceSha": "af1d98b8815802cfcefb7cefcd1f566210d63e07b5dc4f750cbf2600b8a53b3d"
+    }
+  ],
+  "processesClosed": true
+}
