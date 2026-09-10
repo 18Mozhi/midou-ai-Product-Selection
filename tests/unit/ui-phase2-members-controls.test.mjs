@@ -5,11 +5,16 @@ import { createHash } from "node:crypto";
 import {
   base,
   dependencies,
-  buildMembersReview,
+  buildMembersReview as buildReview,
 } from "../../scripts/build-ui-phase2-members-review.mjs";
 const root = `${base}/design/members-controls-direction-c`;
 const evidence = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const parent = JSON.parse(readFileSync(`${base}/design/members-direction-c/evidence.json`, "utf8"));
+const fieldEvidence = JSON.parse(
+  readFileSync(`${base}/design/members-fields-direction-c/evidence.json`, "utf8"),
+);
+const buildMembersReview = (sources, parent, controls) =>
+  buildReview(sources, parent, controls, fieldEvidence);
 const sources = Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")]));
 const values = Object.values(evidence.controlReferences);
 const total = (refs) =>

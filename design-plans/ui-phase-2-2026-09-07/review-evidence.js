@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "d62c4c7c3174f0385787f5663db5c57f56e99b24c3d437cfd8836cdbadc7b76c",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "d5e8e18addfcf7cb6cac06e5ab92ef02f2018a4ef509700d465606f59c344e95",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -46,6 +46,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "48992c30bc94a6751450ace4e9b4c9f72e25f902ddb1cf826cbdc8cd4f136257",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "dc5c077338988517d4ffbaaf52245e8eeee09c9e050ee9b9dab7e679f325a54d",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "fe6a2e7df297fa4d285b11c1af15cfd6470547546ec648846b558a0b01937868",
@@ -126,7 +127,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "873cc1947c923bc7269b767b29bb8002d8d27cfc38494cde1a6125b8be82b255",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "79bfb96f492e1752f6f4bcd48b55869d749040974bfdecbbb67ab8c8798a5c3d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "cd3b657b5c6baee30237855171bf6cd8282f1815c800c6b15bd286e5cc72fe17",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "1cf25f3e288413ef619ffc176390a571f88da883e2b39c8072cf879d31f0be6e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9ce4a6c7e507d3cab1074c9eabece32967cc83c6d71fcb975ad2b39e269bda1e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -135,16 +136,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 91,
+    "packages": 92,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 916,
-    "sourceBindings": 1757,
+    "uniqueBoundFiles": 920,
+    "sourceBindings": 1778,
     "sourceDrift": 0,
-    "pngs": 12979,
+    "pngs": 13143,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 9459,
+    "readmeLinksChecked": 9464,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -438,6 +439,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P30",
       "spec": "page-specs/P30.md",
       "packages": [
+        "members-fields-direction-c",
         "members-controls-direction-c",
         "members-direction-c"
       ],
@@ -1170,6 +1172,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/members-direction-c/evidence.json",
       "prototype": "design/members-direction-c/index.html",
       "gallery": null
+    },
+    "members-fields-direction-c": {
+      "id": "members-fields-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 164,
+      "readme": "design/members-fields-direction-c/README.md",
+      "evidence": "design/members-fields-direction-c/evidence.json",
+      "prototype": "design/members-fields-direction-c/index.html",
+      "gallery": "design/members-fields-direction-c/gallery.html"
     },
     "mysql-direction-c": {
       "id": "mysql-direction-c",

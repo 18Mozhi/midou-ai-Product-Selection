@@ -2840,18 +2840,95 @@
         "file": "apps/web/src/components/OrganizationMemberPanel.vue",
         "binding": "form.emails",
         "meaning": "邀请邮箱textarea必填；无maxlength；分隔/邮箱254边界由父函数校验",
+        "visualReferences": {
+          "package": "members-fields-direction-c",
+          "pageId": "P30",
+          "label": "邀请邮箱",
+          "selector": "#invite-emails",
+          "scope": "source-field-proposal-not-Vue",
+          "options": [],
+          "states": {
+            "default": "emails-default",
+            "focus": "emails-focus",
+            "empty": "emails-empty",
+            "invalid": "emails-invalid",
+            "mixed": "emails-mixed",
+            "normalized": "emails-normalized",
+            "boundary254": "emails-boundary254",
+            "boundary255": "emails-boundary255",
+            "corrected": "emails-corrected",
+            "editable": "emails-editable"
+          }
+        },
         "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
       },
       {
         "file": "apps/web/src/components/OrganizationMemberPanel.vue",
         "binding": "form.role_code",
         "meaning": "必填固定五角色select；选择本身不写入",
+        "visualReferences": {
+          "package": "members-fields-direction-c",
+          "pageId": "P30",
+          "label": "邀请角色",
+          "selector": "#invite-role",
+          "scope": "source-field-proposal-not-Vue",
+          "options": [
+            {
+              "value": "member",
+              "label": "普通成员"
+            },
+            {
+              "value": "selection_manager",
+              "label": "选品经理"
+            },
+            {
+              "value": "procurement_member",
+              "label": "采购成员"
+            },
+            {
+              "value": "organization_admin",
+              "label": "组织管理员"
+            },
+            {
+              "value": "auditor",
+              "label": "审计员"
+            }
+          ],
+          "states": {
+            "default": "invite-role-default",
+            "focus": "invite-role-focus",
+            "editable": "invite-role-editable",
+            "option_0": "invite-role-option_0",
+            "option_1": "invite-role-option_1",
+            "option_2": "invite-role-option_2",
+            "option_3": "invite-role-option_3",
+            "option_4": "invite-role-option_4"
+          }
+        },
         "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
       },
       {
         "file": "apps/web/src/components/OrganizationMemberPanel.vue",
         "binding": "form.reason",
         "meaning": "邀请原因必填maxlength500，父函数trim后1–500；不是共享窗的至少2字规则",
+        "visualReferences": {
+          "package": "members-fields-direction-c",
+          "pageId": "P30",
+          "label": "邀请原因",
+          "selector": "#invite-reason",
+          "scope": "source-field-proposal-not-Vue",
+          "options": [],
+          "states": {
+            "default": "invite-reason-default",
+            "focus": "invite-reason-focus",
+            "empty": "invite-reason-empty",
+            "whitespace": "invite-reason-whitespace",
+            "boundary500": "invite-reason-boundary500",
+            "injected501": "invite-reason-injected501",
+            "corrected": "invite-reason-corrected",
+            "editable": "invite-reason-editable"
+          }
+        },
         "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
       }
     ],
@@ -2893,6 +2970,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "reason_disable"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "reason_disable-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -2904,6 +2985,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "reason_restore"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "reason_restore-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -2915,6 +3000,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "reason_role"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "reason_role-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -2926,6 +3015,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "reason_revoke"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "reason_revoke-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -2958,6 +3051,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "invite_invalid"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "invite_invalid-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -2969,6 +3066,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "invite_partial"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "invite_partial-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -2980,6 +3081,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "invite_busy"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "invite_busy-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -3002,6 +3107,10 @@
               {
                 "package": "members-direction-c",
                 "scene": "invite_success"
+              },
+              {
+                "package": "members-fields-direction-c",
+                "scene": "invite_success-form"
               }
             ],
             "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
@@ -3041,36 +3150,227 @@
       "file": "apps/web/src/components/OrganizationMemberPanel.vue",
       "value": "memberQuery",
       "actionId": "OG-M-SEARCH",
+      "visualReferences": {
+        "package": "members-fields-direction-c",
+        "pageId": "P30",
+        "label": "姓名或邮箱搜索",
+        "selector": "#filter-query",
+        "scope": "source-field-proposal-not-Vue",
+        "options": [],
+        "states": {
+          "default": "query-default",
+          "focus": "query-focus",
+          "empty": "query-empty",
+          "typed": "query-typed",
+          "no_result": "query-no_result",
+          "editable": "query-editable"
+        }
+      },
       "persistence": "parent-ref-only-not-URL-or-storage"
     },
     {
       "file": "apps/web/src/components/OrganizationMemberPanel.vue",
       "value": "memberStatus",
       "actionId": "OG-M-STATUS-FILTER",
+      "visualReferences": {
+        "package": "members-fields-direction-c",
+        "pageId": "P30",
+        "label": "有效状态",
+        "selector": "#filter-status",
+        "scope": "source-field-proposal-not-Vue",
+        "options": [
+          {
+            "value": "",
+            "label": "全部状态"
+          },
+          {
+            "value": "active",
+            "label": "正常使用"
+          },
+          {
+            "value": "disabled",
+            "label": "已停用"
+          },
+          {
+            "value": "locked",
+            "label": "已锁定"
+          }
+        ],
+        "states": {
+          "default": "status-default",
+          "focus": "status-focus",
+          "editable": "status-editable",
+          "option_0": "status-option_0",
+          "option_1": "status-option_1",
+          "option_2": "status-option_2",
+          "option_3": "status-option_3"
+        }
+      },
       "persistence": "parent-ref-only-not-URL-or-storage"
     },
     {
       "file": "apps/web/src/components/OrganizationMemberPanel.vue",
       "value": "memberRole",
       "actionId": "OG-M-ROLE-FILTER",
+      "visualReferences": {
+        "package": "members-fields-direction-c",
+        "pageId": "P30",
+        "label": "角色筛选",
+        "selector": "#filter-role",
+        "scope": "source-field-proposal-not-Vue",
+        "options": [
+          {
+            "value": "",
+            "label": "全部角色"
+          },
+          {
+            "value": "member",
+            "label": "普通成员"
+          },
+          {
+            "value": "selection_manager",
+            "label": "选品经理"
+          },
+          {
+            "value": "procurement_member",
+            "label": "采购成员"
+          },
+          {
+            "value": "organization_admin",
+            "label": "组织管理员"
+          },
+          {
+            "value": "auditor",
+            "label": "审计员"
+          }
+        ],
+        "states": {
+          "default": "role-default",
+          "focus": "role-focus",
+          "editable": "role-editable",
+          "option_0": "role-option_0",
+          "option_1": "role-option_1",
+          "option_2": "role-option_2",
+          "option_3": "role-option_3",
+          "option_4": "role-option_4",
+          "option_5": "role-option_5"
+        }
+      },
       "persistence": "parent-ref-only-not-URL-or-storage"
     },
     {
       "file": "apps/web/src/components/OrganizationMemberPanel.vue",
       "value": "memberTeam",
       "actionId": "OG-M-TEAM-FILTER",
+      "visualReferences": {
+        "package": "members-fields-direction-c",
+        "pageId": "P30",
+        "label": "团队筛选",
+        "selector": "#filter-team",
+        "scope": "source-field-proposal-not-Vue",
+        "options": [
+          {
+            "value": "",
+            "label": "全部团队"
+          },
+          {
+            "value": "治理组",
+            "label": "治理组"
+          },
+          {
+            "value": "采购协作组",
+            "label": "采购协作组"
+          }
+        ],
+        "states": {
+          "default": "team-default",
+          "focus": "team-focus",
+          "editable": "team-editable",
+          "option_0": "team-option_0",
+          "option_1": "team-option_1",
+          "option_2": "team-option_2"
+        }
+      },
       "persistence": "parent-ref-only-not-URL-or-storage"
     },
     {
       "file": "apps/web/src/components/OrganizationMemberPanel.vue",
       "value": "memberSort",
       "actionId": "OG-M-SORT",
+      "visualReferences": {
+        "package": "members-fields-direction-c",
+        "pageId": "P30",
+        "label": "成员排序",
+        "selector": "#filter-sort",
+        "scope": "source-field-proposal-not-Vue",
+        "options": [
+          {
+            "value": "name_asc",
+            "label": "姓名 / 邮箱升序"
+          },
+          {
+            "value": "joined_desc",
+            "label": "最近加入"
+          },
+          {
+            "value": "status_asc",
+            "label": "状态优先"
+          }
+        ],
+        "states": {
+          "default": "sort-default",
+          "focus": "sort-focus",
+          "editable": "sort-editable",
+          "option_0": "sort-option_0",
+          "option_1": "sort-option_1",
+          "option_2": "sort-option_2"
+        }
+      },
       "persistence": "parent-ref-only-not-URL-or-storage"
     },
     {
       "file": "apps/web/src/components/OrganizationMemberPanel.vue",
       "value": "memberRoles[member.id] || member.roles[0] || 'member'",
       "actionId": "OG-M-ROLE-SELECT",
+      "visualReferences": {
+        "package": "members-fields-direction-c",
+        "pageId": "P30",
+        "label": "单行角色选择",
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "scope": "source-field-proposal-not-Vue",
+        "options": [
+          {
+            "value": "member",
+            "label": "普通成员"
+          },
+          {
+            "value": "selection_manager",
+            "label": "选品经理"
+          },
+          {
+            "value": "procurement_member",
+            "label": "采购成员"
+          },
+          {
+            "value": "organization_admin",
+            "label": "组织管理员"
+          },
+          {
+            "value": "auditor",
+            "label": "审计员"
+          }
+        ],
+        "states": {
+          "default": "row-role-default",
+          "focus": "row-role-focus",
+          "editable": "row-role-editable",
+          "option_0": "row-role-option_0",
+          "option_1": "row-role-option_1",
+          "option_2": "row-role-option_2",
+          "option_3": "row-role-option_3",
+          "option_4": "row-role-option_4"
+        }
+      },
       "persistence": "parent-memberRoles-ref-only"
     }
   ],
@@ -3079,6 +3379,22 @@
     "binding": "reason",
     "minimumLength": 2,
     "maximumLength": null,
+    "visualReferences": {
+      "package": "members-fields-direction-c",
+      "pageId": "P30",
+      "label": "共享审计原因",
+      "selector": "#reason-input",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [],
+      "states": {
+        "default": "shared-reason-default",
+        "focus": "shared-reason-focus",
+        "empty": "shared-reason-empty",
+        "short": "shared-reason-short",
+        "corrected": "shared-reason-corrected",
+        "long501": "shared-reason-long501"
+      }
+    },
     "sourceMeaning": "shared source has no maxlength; proposal500 is not production behavior"
   },
   "proposalOnlyControls": [
@@ -3204,6 +3520,7 @@
     }
   ],
   "compositionGaps": [
+    "十字段74代表状态/八表单组合双端164图已绑定；该新子稿按真实共享前端取消旧提案500上限，仅记录离线意图，不代表服务接受501字或生产已改。全部组合、主题/密度/软键盘仍待。",
     "94旧图保留上下文；新444图绑定19代表动作84状态、22附加变体92状态，另10纯提案40状态和6反馈上下文。仍有30代表槽未映射，不补造native select按下弹出或原因窗提交busy。",
     "独立提案复用busy，而实际父源refreshing与写busy分离；当前只核对被选目标，不代表全页忙碌生命周期或全部字段/角色/主题/密度/软键盘组合通过。",
     "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。"

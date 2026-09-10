@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P30 成员与邀请 / 字段状态待审</title>
+    <link rel="stylesheet" href="../members-direction-c/members.css" />
+    <link rel="stylesheet" href="../members-controls-direction-c/controls.css" />
+    <link rel="stylesheet" href="fields.css" />
+    <script defer src="../members-direction-c/data.js"></script>
+    <script defer src="../members-direction-c/members.js"></script>
+    <script defer src="fields.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>P30 字段状态待审 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">页面状态</label
+      ><select id="scene-picker"></select>
+      <label for="field-select">字段</label
+      ><select id="field-select"></select>
+      <label for="field-mode">字段状态</label
+      ><select id="field-mode"></select>
+      <button id="show-field" type="button">定位字段</button>
+      <p id="field-note" role="status"></p>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="app">
+      <aside class="directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>成员与邀请</h1>
+        <nav aria-label="本页目录">
+          <a href="#member-section" aria-current="true">组织成员</a
+          ><a href="#invitation-section">邀请成员</a>
+        </nav>
+        <p class="directory-note">角色分配与成员关系管理<br />账号锁定不在本页解除</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <div>
+            <p>审计原因</p>
+            <h2 id="reason-title"></h2>
+          </div>
+          <button id="reason-close" type="button" aria-label="关闭原因填写">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少 2 个字）</label>
+        <textarea
+          id="reason-input"
+          required
+          minlength="2"
+          rows="4"
+          aria-describedby="reason-help"
+        ></textarea>
+        <p id="reason-help">请说明本次调整的具体依据。提交后会与操作者、时间和目标对象一起保留。</p>
+        <footer>
+          <button id="reason-cancel" type="button">取消</button
+          ><button id="reason-confirm" class="primary" type="submit" aria-describedby="reason-help">
+            确认提交
+          </button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

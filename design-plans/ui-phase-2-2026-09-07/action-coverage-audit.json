@@ -241,6 +241,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
     "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "48992c30bc94a6751450ace4e9b4c9f72e25f902ddb1cf826cbdc8cd4f136257",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "1b3a9ae17937fb79dc3eca851721f00bf52db990f22cebddf25551ddf0b87ae6",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "fe6a2e7df297fa4d285b11c1af15cfd6470547546ec648846b558a0b01937868",
@@ -367,7 +368,7 @@
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "1cf25f3e288413ef619ffc176390a571f88da883e2b39c8072cf879d31f0be6e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9ce4a6c7e507d3cab1074c9eabece32967cc83c6d71fcb975ad2b39e269bda1e",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
@@ -404,7 +405,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "d99d66fec022fe8eabceaccaa52683e8de640190857b28da49b0940edade1549",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "24d40460e447eb5ed672eafd17f1cb1cf47133e41aa3d4d89931279bf57e3f6a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "a118eb7a0301a847ec9a48f7232f83e3b13b2fc3fb1ea528f471aa72f286021c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8a5c6548419549e83e3b1762a44f40982306285a52155e9e1e532dcca618527b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "3e1736e0e74f9b7dc4aafad8f750eafcc3ff48628060a4c36119ac010f7b0911",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "96faebd57a156fffedf3a60f1feddb8be4644b8851100b6b64bb5f26d8c9a5e2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "7033fd42ed0b5654f922ae10643fdc50234059680a7a1b936fa81710b8397291",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "7ebc9f00d7cbd16fe1574c7656b42f1968e32a6248860a4bc146ad8b4088f4d2",
@@ -1579,12 +1580,14 @@
         }
       },
       "proposalPackages": [
+        "members-fields-direction-c",
         "members-controls-direction-c",
         "members-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
+        "十字段74代表状态/八表单组合双端164图已绑定；该新子稿按真实共享前端取消旧提案500上限，仅记录离线意图，不代表服务接受501字或生产已改。全部组合、主题/密度/软键盘仍待。",
         "94旧图保留上下文；新444图绑定19代表动作84状态、22附加变体92状态，另10纯提案40状态和6反馈上下文。仍有30代表槽未映射，不补造native select按下弹出或原因窗提交busy。",
         "独立提案复用busy，而实际父源refreshing与写busy分离；当前只核对被选目标，不代表全页忙碌生命周期或全部字段/角色/主题/密度/软键盘组合通过。",
         "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。"

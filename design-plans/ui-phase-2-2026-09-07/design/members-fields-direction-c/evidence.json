@@ -1,0 +1,5741 @@
+{
+  "version": "MEMBERS-FIELDS-C-r1",
+  "scope": "proposal-not-Vue-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/index.html": "0feec698d0a746c55d4a03330e26e3ad59cb4fbbfd50920ea0246f77c9375ff5",
+    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.css": "0e8003bb6d7e83c19aa476714e2b89b187640ad9535a635582cdcefe450c7321",
+    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.js": "7ff3f1996d6b4eba1ad9b3c4965cbeaaf3b2bb45f8e89950fb02786548c765b4",
+    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/data.js": "1b77035c84b821f261fa335073bd3553ef9a98f6839cd8ffec2a252f78404f57",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-members-design-data.mjs": "9a7089274376dabacb9854d71234ab2e989ee49ab7f26b2387ee8ae70e697e8e",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/index.html": "8f536f18bbaa9bac8d748e959a374311b10413d41c2c70995aa9c07da01763ed",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/fields.css": "927b29a0b8431d0f43bbc7b89c7e299766da4430574b8343aab38322b0706891",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/fields.js": "14ec95186beab8a8b86313e769875a0dfa49d3d8a3c82b2187eab56ef010b6d1",
+    "scripts/verify-ui-phase2-members-fields-c.mjs": "e345b2c0056c05402a7d581f3a0ee32ec26eabfab44347f242b38877c50d58c8",
+    "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/controls.css": "5a756ee44a40f58995609594c427b0c27ebbc4aaab18390978add3f6a2202220"
+  },
+  "catalog": [
+    {
+      "id": "emails",
+      "label": "邀请邮箱",
+      "selector": "#invite-emails",
+      "binding": "form.emails",
+      "help": "支持换行、逗号或分号；重复邮箱合并。格式不合格的项单独报错，合法项仍按原流程处理。",
+      "scene": "invite_form",
+      "select": false,
+      "options": [],
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "invalid",
+        "mixed",
+        "normalized",
+        "boundary254",
+        "boundary255",
+        "corrected",
+        "editable"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "empty": "留空",
+        "invalid": "邮箱格式错误",
+        "mixed": "合法与无效混合",
+        "normalized": "大小写与重复",
+        "boundary254": "单邮箱254字符",
+        "boundary255": "单邮箱255字符",
+        "corrected": "修正后",
+        "editable": "写入中仍可编辑"
+      }
+    },
+    {
+      "id": "invite-role",
+      "label": "邀请角色",
+      "selector": "#invite-role",
+      "binding": "form.role_code",
+      "help": "固定五种角色；创建邀请不等于已发送邮件。",
+      "scene": "invite_form",
+      "select": true,
+      "options": [
+        {
+          "value": "member",
+          "label": "普通成员"
+        },
+        {
+          "value": "selection_manager",
+          "label": "选品经理"
+        },
+        {
+          "value": "procurement_member",
+          "label": "采购成员"
+        },
+        {
+          "value": "organization_admin",
+          "label": "组织管理员"
+        },
+        {
+          "value": "auditor",
+          "label": "审计员"
+        }
+      ],
+      "states": [
+        "default",
+        "focus",
+        "editable",
+        "option_0",
+        "option_1",
+        "option_2",
+        "option_3",
+        "option_4"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "editable": "写入中仍可编辑",
+        "option_0": "选中：普通成员",
+        "option_1": "选中：选品经理",
+        "option_2": "选中：采购成员",
+        "option_3": "选中：组织管理员",
+        "option_4": "选中：审计员"
+      }
+    },
+    {
+      "id": "invite-reason",
+      "label": "邀请原因",
+      "selector": "#invite-reason",
+      "binding": "form.reason",
+      "help": "必填，去掉首尾空白后 1–500 个字符。与共享原因窗的规则不同。",
+      "scene": "invite_form",
+      "select": false,
+      "options": [],
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "whitespace",
+        "boundary500",
+        "injected501",
+        "corrected",
+        "editable"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "empty": "留空",
+        "whitespace": "仅空白",
+        "boundary500": "500字符",
+        "injected501": "脚本写入501字符（非用户输入）",
+        "corrected": "修正后",
+        "editable": "写入中仍可编辑"
+      }
+    },
+    {
+      "id": "query",
+      "label": "姓名或邮箱搜索",
+      "selector": "#filter-query",
+      "binding": "memberQuery",
+      "help": "只搜索已加载成员的姓名或邮箱，不请求其他字段。",
+      "scene": "filters_open",
+      "select": false,
+      "options": [],
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "typed",
+        "no_result",
+        "editable"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "empty": "留空",
+        "typed": "输入姓名",
+        "no_result": "未命中",
+        "editable": "写入中仍可编辑"
+      }
+    },
+    {
+      "id": "status",
+      "label": "有效状态",
+      "selector": "#filter-status",
+      "binding": "memberStatus",
+      "help": "成员关系状态优先，再考虑账号锁定或停用。",
+      "scene": "filters_open",
+      "select": true,
+      "options": [
+        {
+          "value": "",
+          "label": "全部状态"
+        },
+        {
+          "value": "active",
+          "label": "正常使用"
+        },
+        {
+          "value": "disabled",
+          "label": "已停用"
+        },
+        {
+          "value": "locked",
+          "label": "已锁定"
+        }
+      ],
+      "states": [
+        "default",
+        "focus",
+        "editable",
+        "option_0",
+        "option_1",
+        "option_2",
+        "option_3"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "editable": "写入中仍可编辑",
+        "option_0": "选中：全部状态",
+        "option_1": "选中：正常使用",
+        "option_2": "选中：已停用",
+        "option_3": "选中：已锁定"
+      }
+    },
+    {
+      "id": "role",
+      "label": "角色筛选",
+      "selector": "#filter-role",
+      "binding": "memberRole",
+      "help": "按成员角色集合筛选，不改变成员角色。",
+      "scene": "filters_open",
+      "select": true,
+      "options": [
+        {
+          "value": "",
+          "label": "全部角色"
+        },
+        {
+          "value": "member",
+          "label": "普通成员"
+        },
+        {
+          "value": "selection_manager",
+          "label": "选品经理"
+        },
+        {
+          "value": "procurement_member",
+          "label": "采购成员"
+        },
+        {
+          "value": "organization_admin",
+          "label": "组织管理员"
+        },
+        {
+          "value": "auditor",
+          "label": "审计员"
+        }
+      ],
+      "states": [
+        "default",
+        "focus",
+        "editable",
+        "option_0",
+        "option_1",
+        "option_2",
+        "option_3",
+        "option_4",
+        "option_5"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "editable": "写入中仍可编辑",
+        "option_0": "选中：全部角色",
+        "option_1": "选中：普通成员",
+        "option_2": "选中：选品经理",
+        "option_3": "选中：采购成员",
+        "option_4": "选中：组织管理员",
+        "option_5": "选中：审计员"
+      }
+    },
+    {
+      "id": "team",
+      "label": "团队筛选",
+      "selector": "#filter-team",
+      "binding": "memberTeam",
+      "help": "选项只来自已加载成员的团队，不读取团队目录。",
+      "scene": "filters_open",
+      "select": true,
+      "options": [
+        {
+          "value": "",
+          "label": "全部团队"
+        },
+        {
+          "value": "治理组",
+          "label": "治理组"
+        },
+        {
+          "value": "采购协作组",
+          "label": "采购协作组"
+        }
+      ],
+      "states": [
+        "default",
+        "focus",
+        "editable",
+        "option_0",
+        "option_1",
+        "option_2"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "editable": "写入中仍可编辑",
+        "option_0": "选中：全部团队",
+        "option_1": "选中：治理组",
+        "option_2": "选中：采购协作组"
+      }
+    },
+    {
+      "id": "sort",
+      "label": "成员排序",
+      "selector": "#filter-sort",
+      "binding": "memberSort",
+      "help": "只对当前已加载成员排序，筛选变化回到第一页。",
+      "scene": "filters_open",
+      "select": true,
+      "options": [
+        {
+          "value": "name_asc",
+          "label": "姓名 / 邮箱升序"
+        },
+        {
+          "value": "joined_desc",
+          "label": "最近加入"
+        },
+        {
+          "value": "status_asc",
+          "label": "状态优先"
+        }
+      ],
+      "states": [
+        "default",
+        "focus",
+        "editable",
+        "option_0",
+        "option_1",
+        "option_2"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "editable": "写入中仍可编辑",
+        "option_0": "选中：姓名 / 邮箱升序",
+        "option_1": "选中：最近加入",
+        "option_2": "选中：状态优先"
+      }
+    },
+    {
+      "id": "row-role",
+      "label": "单行角色选择",
+      "selector": "#role-00000000-0000-4000-8000-000000000612",
+      "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+      "help": "选择不立即写入；分配角色需要原因确认，且会替换已有角色。",
+      "scene": "normal",
+      "select": true,
+      "options": [
+        {
+          "value": "member",
+          "label": "普通成员"
+        },
+        {
+          "value": "selection_manager",
+          "label": "选品经理"
+        },
+        {
+          "value": "procurement_member",
+          "label": "采购成员"
+        },
+        {
+          "value": "organization_admin",
+          "label": "组织管理员"
+        },
+        {
+          "value": "auditor",
+          "label": "审计员"
+        }
+      ],
+      "states": [
+        "default",
+        "focus",
+        "editable",
+        "option_0",
+        "option_1",
+        "option_2",
+        "option_3",
+        "option_4"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "editable": "写入中仍可编辑",
+        "option_0": "选中：普通成员",
+        "option_1": "选中：选品经理",
+        "option_2": "选中：采购成员",
+        "option_3": "选中：组织管理员",
+        "option_4": "选中：审计员"
+      }
+    },
+    {
+      "id": "shared-reason",
+      "label": "共享审计原因",
+      "selector": "#reason-input",
+      "binding": "reason",
+      "help": "去掉首尾空白后至少 2 个字，请填写本次调整的具体依据。",
+      "scene": "reason_role",
+      "select": false,
+      "options": [],
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "short",
+        "corrected",
+        "long501"
+      ],
+      "stateLabels": {
+        "default": "默认",
+        "focus": "键盘焦点",
+        "empty": "留空",
+        "short": "不足2字",
+        "corrected": "修正后",
+        "long501": "501字符无前端上限"
+      }
+    }
+  ],
+  "fieldVisualReferences": {
+    "form.emails": {
+      "pageId": "P30",
+      "label": "邀请邮箱",
+      "selector": "#invite-emails",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [],
+      "states": {
+        "default": "emails-default",
+        "focus": "emails-focus",
+        "empty": "emails-empty",
+        "invalid": "emails-invalid",
+        "mixed": "emails-mixed",
+        "normalized": "emails-normalized",
+        "boundary254": "emails-boundary254",
+        "boundary255": "emails-boundary255",
+        "corrected": "emails-corrected",
+        "editable": "emails-editable"
+      }
+    },
+    "form.role_code": {
+      "pageId": "P30",
+      "label": "邀请角色",
+      "selector": "#invite-role",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [
+        {
+          "value": "member",
+          "label": "普通成员"
+        },
+        {
+          "value": "selection_manager",
+          "label": "选品经理"
+        },
+        {
+          "value": "procurement_member",
+          "label": "采购成员"
+        },
+        {
+          "value": "organization_admin",
+          "label": "组织管理员"
+        },
+        {
+          "value": "auditor",
+          "label": "审计员"
+        }
+      ],
+      "states": {
+        "default": "invite-role-default",
+        "focus": "invite-role-focus",
+        "editable": "invite-role-editable",
+        "option_0": "invite-role-option_0",
+        "option_1": "invite-role-option_1",
+        "option_2": "invite-role-option_2",
+        "option_3": "invite-role-option_3",
+        "option_4": "invite-role-option_4"
+      }
+    },
+    "form.reason": {
+      "pageId": "P30",
+      "label": "邀请原因",
+      "selector": "#invite-reason",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [],
+      "states": {
+        "default": "invite-reason-default",
+        "focus": "invite-reason-focus",
+        "empty": "invite-reason-empty",
+        "whitespace": "invite-reason-whitespace",
+        "boundary500": "invite-reason-boundary500",
+        "injected501": "invite-reason-injected501",
+        "corrected": "invite-reason-corrected",
+        "editable": "invite-reason-editable"
+      }
+    },
+    "memberQuery": {
+      "pageId": "P30",
+      "label": "姓名或邮箱搜索",
+      "selector": "#filter-query",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [],
+      "states": {
+        "default": "query-default",
+        "focus": "query-focus",
+        "empty": "query-empty",
+        "typed": "query-typed",
+        "no_result": "query-no_result",
+        "editable": "query-editable"
+      }
+    },
+    "memberStatus": {
+      "pageId": "P30",
+      "label": "有效状态",
+      "selector": "#filter-status",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [
+        {
+          "value": "",
+          "label": "全部状态"
+        },
+        {
+          "value": "active",
+          "label": "正常使用"
+        },
+        {
+          "value": "disabled",
+          "label": "已停用"
+        },
+        {
+          "value": "locked",
+          "label": "已锁定"
+        }
+      ],
+      "states": {
+        "default": "status-default",
+        "focus": "status-focus",
+        "editable": "status-editable",
+        "option_0": "status-option_0",
+        "option_1": "status-option_1",
+        "option_2": "status-option_2",
+        "option_3": "status-option_3"
+      }
+    },
+    "memberRole": {
+      "pageId": "P30",
+      "label": "角色筛选",
+      "selector": "#filter-role",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [
+        {
+          "value": "",
+          "label": "全部角色"
+        },
+        {
+          "value": "member",
+          "label": "普通成员"
+        },
+        {
+          "value": "selection_manager",
+          "label": "选品经理"
+        },
+        {
+          "value": "procurement_member",
+          "label": "采购成员"
+        },
+        {
+          "value": "organization_admin",
+          "label": "组织管理员"
+        },
+        {
+          "value": "auditor",
+          "label": "审计员"
+        }
+      ],
+      "states": {
+        "default": "role-default",
+        "focus": "role-focus",
+        "editable": "role-editable",
+        "option_0": "role-option_0",
+        "option_1": "role-option_1",
+        "option_2": "role-option_2",
+        "option_3": "role-option_3",
+        "option_4": "role-option_4",
+        "option_5": "role-option_5"
+      }
+    },
+    "memberTeam": {
+      "pageId": "P30",
+      "label": "团队筛选",
+      "selector": "#filter-team",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [
+        {
+          "value": "",
+          "label": "全部团队"
+        },
+        {
+          "value": "治理组",
+          "label": "治理组"
+        },
+        {
+          "value": "采购协作组",
+          "label": "采购协作组"
+        }
+      ],
+      "states": {
+        "default": "team-default",
+        "focus": "team-focus",
+        "editable": "team-editable",
+        "option_0": "team-option_0",
+        "option_1": "team-option_1",
+        "option_2": "team-option_2"
+      }
+    },
+    "memberSort": {
+      "pageId": "P30",
+      "label": "成员排序",
+      "selector": "#filter-sort",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [
+        {
+          "value": "name_asc",
+          "label": "姓名 / 邮箱升序"
+        },
+        {
+          "value": "joined_desc",
+          "label": "最近加入"
+        },
+        {
+          "value": "status_asc",
+          "label": "状态优先"
+        }
+      ],
+      "states": {
+        "default": "sort-default",
+        "focus": "sort-focus",
+        "editable": "sort-editable",
+        "option_0": "sort-option_0",
+        "option_1": "sort-option_1",
+        "option_2": "sort-option_2"
+      }
+    },
+    "memberRoles[member.id] || member.roles[0] || 'member'": {
+      "pageId": "P30",
+      "label": "单行角色选择",
+      "selector": "#role-00000000-0000-4000-8000-000000000612",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [
+        {
+          "value": "member",
+          "label": "普通成员"
+        },
+        {
+          "value": "selection_manager",
+          "label": "选品经理"
+        },
+        {
+          "value": "procurement_member",
+          "label": "采购成员"
+        },
+        {
+          "value": "organization_admin",
+          "label": "组织管理员"
+        },
+        {
+          "value": "auditor",
+          "label": "审计员"
+        }
+      ],
+      "states": {
+        "default": "row-role-default",
+        "focus": "row-role-focus",
+        "editable": "row-role-editable",
+        "option_0": "row-role-option_0",
+        "option_1": "row-role-option_1",
+        "option_2": "row-role-option_2",
+        "option_3": "row-role-option_3",
+        "option_4": "row-role-option_4"
+      }
+    },
+    "reason": {
+      "pageId": "P30",
+      "label": "共享审计原因",
+      "selector": "#reason-input",
+      "scope": "source-field-proposal-not-Vue",
+      "options": [],
+      "states": {
+        "default": "shared-reason-default",
+        "focus": "shared-reason-focus",
+        "empty": "shared-reason-empty",
+        "short": "shared-reason-short",
+        "corrected": "shared-reason-corrected",
+        "long501": "shared-reason-long501"
+      }
+    }
+  },
+  "combinations": [
+    "invite_invalid",
+    "invite_partial",
+    "invite_busy",
+    "invite_success",
+    "reason_disable",
+    "reason_restore",
+    "reason_role",
+    "reason_revoke"
+  ],
+  "checks": [
+    {
+      "field": "emails",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "empty",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "invalid",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "mixed",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "normalized",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "boundary254",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "boundary255",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "corrected",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_0",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_1",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_2",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_3",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_4",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "empty",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "whitespace",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "boundary500",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "injected501",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "corrected",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 447.09375,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "empty",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "typed",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "no_result",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_0",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_1",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_2",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_3",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_0",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_1",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_2",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_3",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_4",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_5",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "option_0",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "option_1",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "option_2",
+      "width": 1440,
+      "metrics": {
+        "width": 530,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "option_0",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "option_1",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "option_2",
+      "width": 1440,
+      "metrics": {
+        "width": 265,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "editable",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_0",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_1",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_2",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_3",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_4",
+      "width": 1440,
+      "metrics": {
+        "width": 270.421875,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "default",
+      "width": 1440,
+      "metrics": {
+        "width": 598,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "focus",
+      "width": 1440,
+      "metrics": {
+        "width": 598,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "empty",
+      "width": 1440,
+      "metrics": {
+        "width": 598,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "short",
+      "width": 1440,
+      "metrics": {
+        "width": 598,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "corrected",
+      "width": 1440,
+      "metrics": {
+        "width": 598,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "long501",
+      "width": 1440,
+      "metrics": {
+        "width": 598,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "empty",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "invalid",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "mixed",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "normalized",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "boundary254",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "boundary255",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "corrected",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "emails",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "邮箱（每行一个）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_0",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_1",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_2",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_3",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-role",
+      "state": "option_4",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "empty",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "whitespace",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "boundary500",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "injected501",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "corrected",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "invite-reason",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 110,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "empty",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "typed",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "no_result",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "query",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "搜索",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_0",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_1",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_2",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "status",
+      "state": "option_3",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "状态全部状态正常使用已停用已锁定",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_0",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_1",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_2",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_3",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_4",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "role",
+      "state": "option_5",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "角色全部角色普通成员选品经理采购成员组织管理员审计员",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "option_0",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "option_1",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "team",
+      "state": "option_2",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "团队全部团队治理组采购协作组",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "option_0",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "option_1",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "sort",
+      "state": "option_2",
+      "width": 390,
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "排序姓名 / 邮箱升序最近加入状态优先",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "editable",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_0",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_1",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_2",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_3",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "row-role",
+      "state": "option_4",
+      "width": 390,
+      "metrics": {
+        "width": 223,
+        "height": 45.59375,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "选择 陈采购 的角色",
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "default",
+      "width": 390,
+      "metrics": {
+        "width": 316,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "focus",
+      "width": 390,
+      "metrics": {
+        "width": 316,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "empty",
+      "width": 390,
+      "metrics": {
+        "width": 316,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "short",
+      "width": 390,
+      "metrics": {
+        "width": 316,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(159, 48, 28)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "corrected",
+      "width": 390,
+      "metrics": {
+        "width": 316,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "shared-reason",
+      "state": "long501",
+      "width": 390,
+      "metrics": {
+        "width": 316,
+        "height": 150,
+        "font": 16,
+        "border": "rgb(115, 129, 155)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "label": "原因（至少 2 个字）",
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "described": true,
+        "overflow": false
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "width": 1440,
+      "kind": "mixed",
+      "intents": [
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "good@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "kind": "normalized",
+      "intents": [
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "good@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        },
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "second@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "kind": "boundary254",
+      "intents": [
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "kind": "boundary255",
+      "intents": []
+    },
+    {
+      "width": 1440,
+      "kind": "reason_disable_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 1440,
+      "kind": "reason_restore_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 1440,
+      "kind": "reason_role_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 1440,
+      "kind": "reason_revoke_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 390,
+      "kind": "mixed",
+      "intents": [
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "good@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "kind": "normalized",
+      "intents": [
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "good@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        },
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "second@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "kind": "boundary254",
+      "intents": [
+        {
+          "url": "/org/admin/invitations",
+          "method": "POST",
+          "body": {
+            "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.test",
+            "role_code": "member",
+            "reason": "核验后邀请协作成员"
+          }
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "kind": "boundary255",
+      "intents": []
+    },
+    {
+      "width": 390,
+      "kind": "reason_disable_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 390,
+      "kind": "reason_restore_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 390,
+      "kind": "reason_role_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    },
+    {
+      "width": 390,
+      "kind": "reason_revoke_501",
+      "length": 501,
+      "closed": true,
+      "intentionsOnly": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "emails-default-1440.png",
+      "scene": "emails-default",
+      "width": 1440,
+      "sha256": "5905c11922f1f6ee86093fb8f6e44675e4afd96eaf575c8ea9dffd329b53f988",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "default"
+      }
+    },
+    {
+      "file": "emails-focus-1440.png",
+      "scene": "emails-focus",
+      "width": 1440,
+      "sha256": "ce9153e8b7c83c5859739d6008a348805fdbcf9e271e79b68ab81dbeb006fed0",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "emails-empty-1440.png",
+      "scene": "emails-empty",
+      "width": 1440,
+      "sha256": "dad9988abbc72831a5388dcea975314949b1610225d2d2b4c82a7f126df1fb3e",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "emails-invalid-1440.png",
+      "scene": "emails-invalid",
+      "width": 1440,
+      "sha256": "2202b420d581c6408d32f2ee94dce2ff1e1d3d0fca3080da43d91dbfc9ead4ea",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "invalid"
+      }
+    },
+    {
+      "file": "emails-mixed-1440.png",
+      "scene": "emails-mixed",
+      "width": 1440,
+      "sha256": "8998856e042a14822dc480d0099cd72759611b78a0480107183d42b9155f6c6b",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "mixed"
+      }
+    },
+    {
+      "file": "emails-normalized-1440.png",
+      "scene": "emails-normalized",
+      "width": 1440,
+      "sha256": "2cb0bbaed698a083b3fa7f30439616da5da72af3a7148e20be3e487b55783a94",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "normalized"
+      }
+    },
+    {
+      "file": "emails-boundary254-1440.png",
+      "scene": "emails-boundary254",
+      "width": 1440,
+      "sha256": "28b2d3deb3093ab6f20af6f275ad18fcfb248e15abea91f8d126be391bba873a",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "boundary254"
+      }
+    },
+    {
+      "file": "emails-boundary255-1440.png",
+      "scene": "emails-boundary255",
+      "width": 1440,
+      "sha256": "6bc2c5150be616148f6b5800bca3c69998960cbc787bdc00bf032b925057830d",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "boundary255"
+      }
+    },
+    {
+      "file": "emails-corrected-1440.png",
+      "scene": "emails-corrected",
+      "width": 1440,
+      "sha256": "a529a2b6c567389fd637ef813c9ba7a68b9e01f1c00bd50b0f591b28c1c04e00",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "corrected"
+      }
+    },
+    {
+      "file": "emails-editable-1440.png",
+      "scene": "emails-editable",
+      "width": 1440,
+      "sha256": "b7a786bcb3b2f148c534e78fd81e609dab1f92973deae8de7305d5c05fede65c",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "invite-role-default-1440.png",
+      "scene": "invite-role-default",
+      "width": 1440,
+      "sha256": "66384a63a0a3c14ed8ffd69603b99a6bcbea1c36c4f7fd856fdf242058b55530",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "default"
+      }
+    },
+    {
+      "file": "invite-role-focus-1440.png",
+      "scene": "invite-role-focus",
+      "width": 1440,
+      "sha256": "957b958cc0176cd3640f48982b59f4a3428798b69cab9574a9ffc9e162e4f111",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "invite-role-editable-1440.png",
+      "scene": "invite-role-editable",
+      "width": 1440,
+      "sha256": "877c47a67e809094308151a4814e1071430b209bba4b986587ab7c1799c072c8",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "invite-role-option_0-1440.png",
+      "scene": "invite-role-option_0",
+      "width": 1440,
+      "sha256": "66384a63a0a3c14ed8ffd69603b99a6bcbea1c36c4f7fd856fdf242058b55530",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "invite-role-option_1-1440.png",
+      "scene": "invite-role-option_1",
+      "width": 1440,
+      "sha256": "7774cb7d2c05ed71093f0d0daec59c4d0f5b8e5f28777366e2d97cd36d81c2dc",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "invite-role-option_2-1440.png",
+      "scene": "invite-role-option_2",
+      "width": 1440,
+      "sha256": "6486a74fbe75ec19af43211e67b1437db04e8a052a39330360b5924d3fd6a880",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "invite-role-option_3-1440.png",
+      "scene": "invite-role-option_3",
+      "width": 1440,
+      "sha256": "13d6f939cdcc1495aa06779cd2ce4b1c1be5496d6ad4f0fd182b6d8fc9bb0f72",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "invite-role-option_4-1440.png",
+      "scene": "invite-role-option_4",
+      "width": 1440,
+      "sha256": "6ab8e08eb0f490515df9c8bd4dcf568d23ec71d5d0cb800b2a6925512a33e7e1",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_4"
+      }
+    },
+    {
+      "file": "invite-reason-default-1440.png",
+      "scene": "invite-reason-default",
+      "width": 1440,
+      "sha256": "66384a63a0a3c14ed8ffd69603b99a6bcbea1c36c4f7fd856fdf242058b55530",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "invite-reason-focus-1440.png",
+      "scene": "invite-reason-focus",
+      "width": 1440,
+      "sha256": "5a78408f2e7843cfc1f30a8f31916fa7b55c0ee8ee1964ab20729411dc3242b5",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "invite-reason-empty-1440.png",
+      "scene": "invite-reason-empty",
+      "width": 1440,
+      "sha256": "961337a8a2608bcda783f9a69a53408d5d29ee2d1c2ede2262e249c9ee5527d0",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "invite-reason-whitespace-1440.png",
+      "scene": "invite-reason-whitespace",
+      "width": 1440,
+      "sha256": "4538df2c4e49d4591f7888e4627b9df6f79a8097f831a7ed0f39ebba9c095afe",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "whitespace"
+      }
+    },
+    {
+      "file": "invite-reason-boundary500-1440.png",
+      "scene": "invite-reason-boundary500",
+      "width": 1440,
+      "sha256": "9f3e85c8bc4980889334f516ef690d6a18ba76fa7928d56b5fa72968922f6624",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "boundary500"
+      }
+    },
+    {
+      "file": "invite-reason-injected501-1440.png",
+      "scene": "invite-reason-injected501",
+      "width": 1440,
+      "sha256": "3472fc999764a51818a7238f2f4ff1c49a261f95e676a3f58f20282b7682edf5",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "injected501"
+      }
+    },
+    {
+      "file": "invite-reason-corrected-1440.png",
+      "scene": "invite-reason-corrected",
+      "width": 1440,
+      "sha256": "2b733140da0ad40a3cc9ef7938bb636c84c6cb2e2e45eb7525addd4f44b0b05c",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "corrected"
+      }
+    },
+    {
+      "file": "invite-reason-editable-1440.png",
+      "scene": "invite-reason-editable",
+      "width": 1440,
+      "sha256": "a29d4adc607043dcf2957a87039181377774a5e428b09e9b0d8f2cc7162bfd29",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "query-default-1440.png",
+      "scene": "query-default",
+      "width": 1440,
+      "sha256": "54ed9b1ef6e0a7279aedf3dece85d3102afba63a28e2bcfccb3ee5b01df37504",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "default"
+      }
+    },
+    {
+      "file": "query-focus-1440.png",
+      "scene": "query-focus",
+      "width": 1440,
+      "sha256": "eb470c7e14443a73043f65ccfb7b18e2ea7d82580f6dd141b88ff9a20cbcadd3",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "query-empty-1440.png",
+      "scene": "query-empty",
+      "width": 1440,
+      "sha256": "54ed9b1ef6e0a7279aedf3dece85d3102afba63a28e2bcfccb3ee5b01df37504",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "query-typed-1440.png",
+      "scene": "query-typed",
+      "width": 1440,
+      "sha256": "88c16e7c63dd72909e8d0ec4b68ef6e57cc14a575fac68ae27604cb9813b0358",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "typed"
+      }
+    },
+    {
+      "file": "query-no_result-1440.png",
+      "scene": "query-no_result",
+      "width": 1440,
+      "sha256": "6c150f6481f64680fc5163abbc25798964ba4b7cdd31322188a307365d981930",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "no_result"
+      }
+    },
+    {
+      "file": "query-editable-1440.png",
+      "scene": "query-editable",
+      "width": 1440,
+      "sha256": "6e0ce479d8b1b16c256728c64f2bcd0d5c79fcc409536f821a38e993ea368254",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "status-default-1440.png",
+      "scene": "status-default",
+      "width": 1440,
+      "sha256": "1d1b8bf6848a95ac767f07edd114515e2e503be7e82b00f44751ca88f615eda8",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "default"
+      }
+    },
+    {
+      "file": "status-focus-1440.png",
+      "scene": "status-focus",
+      "width": 1440,
+      "sha256": "d03d902e6f81aa91ceeb85532566d8be7f55703e79cde0c4eb0e4a1b07b50a61",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "status-editable-1440.png",
+      "scene": "status-editable",
+      "width": 1440,
+      "sha256": "08b2d25d71850e1510bff521651d4fe7e44543fcb76576ab7558448c64ef9046",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "status-option_0-1440.png",
+      "scene": "status-option_0",
+      "width": 1440,
+      "sha256": "1d1b8bf6848a95ac767f07edd114515e2e503be7e82b00f44751ca88f615eda8",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "status-option_1-1440.png",
+      "scene": "status-option_1",
+      "width": 1440,
+      "sha256": "fc721b764836debeac8e759ff49d06e1a1e8446b06c589283c50bf70c5d1a488",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "status-option_2-1440.png",
+      "scene": "status-option_2",
+      "width": 1440,
+      "sha256": "fc1cb03deb15daf9076914057ebba9be8db8e877341f00e85c2558ca706fba12",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "status-option_3-1440.png",
+      "scene": "status-option_3",
+      "width": 1440,
+      "sha256": "b634529e897d024a61b6dcea5b86fd88eed6c1fbad463b5fb5526092b7496861",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "role-default-1440.png",
+      "scene": "role-default",
+      "width": 1440,
+      "sha256": "1d1b8bf6848a95ac767f07edd114515e2e503be7e82b00f44751ca88f615eda8",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "default"
+      }
+    },
+    {
+      "file": "role-focus-1440.png",
+      "scene": "role-focus",
+      "width": 1440,
+      "sha256": "a4706e56d9fa3dc2f621e5ab689a5cc483abb4fb5263247b9adcfa26f8021280",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "role-editable-1440.png",
+      "scene": "role-editable",
+      "width": 1440,
+      "sha256": "d0bdf3a629ce259823a24d02df2762233556abc451341d87f8dc24056b6ab7b2",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "role-option_0-1440.png",
+      "scene": "role-option_0",
+      "width": 1440,
+      "sha256": "1d1b8bf6848a95ac767f07edd114515e2e503be7e82b00f44751ca88f615eda8",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "role-option_1-1440.png",
+      "scene": "role-option_1",
+      "width": 1440,
+      "sha256": "1538a3a3cbac4bd49b71f639f5129fad9065e41ba0a2d5b579d30ef7d66f2d9c",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "role-option_2-1440.png",
+      "scene": "role-option_2",
+      "width": 1440,
+      "sha256": "934c65fce285248dc9927f3c472291de3ca72cf03ce149adf49f4721814eb6c1",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "role-option_3-1440.png",
+      "scene": "role-option_3",
+      "width": 1440,
+      "sha256": "a89234199272288f491a46adb78f63212ab21cc9a6d0529f56fb22f6056a9931",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "role-option_4-1440.png",
+      "scene": "role-option_4",
+      "width": 1440,
+      "sha256": "ab7628313a510799f44e33d008c10f332cbb5f5a8dd425ff59c01bb0b8dd6f61",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_4"
+      }
+    },
+    {
+      "file": "role-option_5-1440.png",
+      "scene": "role-option_5",
+      "width": 1440,
+      "sha256": "d0bdf3a629ce259823a24d02df2762233556abc451341d87f8dc24056b6ab7b2",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_5"
+      }
+    },
+    {
+      "file": "team-default-1440.png",
+      "scene": "team-default",
+      "width": 1440,
+      "sha256": "36aa187c31a289a6a2b7ee0ab607767eb145d399e9ce7b9a11ceeefbb8c36d5c",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "default"
+      }
+    },
+    {
+      "file": "team-focus-1440.png",
+      "scene": "team-focus",
+      "width": 1440,
+      "sha256": "f6c4907ece9bb68fad084872762b3832f6084ece7ffae9e16cd67c71c24eb95a",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "team-editable-1440.png",
+      "scene": "team-editable",
+      "width": 1440,
+      "sha256": "e85bc43146489a3c6e31e32b5c4e9096096126fbbd3ec13e67f86e51353ee7b0",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "team-option_0-1440.png",
+      "scene": "team-option_0",
+      "width": 1440,
+      "sha256": "36aa187c31a289a6a2b7ee0ab607767eb145d399e9ce7b9a11ceeefbb8c36d5c",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "team-option_1-1440.png",
+      "scene": "team-option_1",
+      "width": 1440,
+      "sha256": "6d52b6c426ada128349f9e121b65d4d8e311313a3608ebb4e716cfb41fe71c03",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "team-option_2-1440.png",
+      "scene": "team-option_2",
+      "width": 1440,
+      "sha256": "72de0eeb26c673b388c49bce1e0e922ad8392e3115716cf199aab27c7e04ec2a",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "sort-default-1440.png",
+      "scene": "sort-default",
+      "width": 1440,
+      "sha256": "36aa187c31a289a6a2b7ee0ab607767eb145d399e9ce7b9a11ceeefbb8c36d5c",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "default"
+      }
+    },
+    {
+      "file": "sort-focus-1440.png",
+      "scene": "sort-focus",
+      "width": 1440,
+      "sha256": "cf9db32ef5be470ca60c23e96fb408788c8c67be447e7b794d1c37b7e6ba64fe",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "sort-editable-1440.png",
+      "scene": "sort-editable",
+      "width": 1440,
+      "sha256": "c3ee2d0e6c371977f5e6946666b30351a1f87f38ba7428cf2aa339c1a6b21b3f",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "sort-option_0-1440.png",
+      "scene": "sort-option_0",
+      "width": 1440,
+      "sha256": "36aa187c31a289a6a2b7ee0ab607767eb145d399e9ce7b9a11ceeefbb8c36d5c",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "sort-option_1-1440.png",
+      "scene": "sort-option_1",
+      "width": 1440,
+      "sha256": "e55656b2564ac3d991f67542358285a7cdacfcada190b1a8bcac1b2f138cb80e",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "sort-option_2-1440.png",
+      "scene": "sort-option_2",
+      "width": 1440,
+      "sha256": "e0b6e97df5322f4d573123483c64dbdba9bbc3046159085fd20f194f814fb380",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "row-role-default-1440.png",
+      "scene": "row-role-default",
+      "width": 1440,
+      "sha256": "12f17f0ee59e332f9cc4d824bdb14aea847a3a9e4d2ac2aad2bc1a0a6f150aaf",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "default"
+      }
+    },
+    {
+      "file": "row-role-focus-1440.png",
+      "scene": "row-role-focus",
+      "width": 1440,
+      "sha256": "a466896b070e1cee2904a714b1911f54894d3cc5bde068ea713661379e44a7b2",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "row-role-editable-1440.png",
+      "scene": "row-role-editable",
+      "width": 1440,
+      "sha256": "e7c93b6d0d94c958683f297ee84d875f8097d262ef72d3b32e17ca8f82ec67a8",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "row-role-option_0-1440.png",
+      "scene": "row-role-option_0",
+      "width": 1440,
+      "sha256": "6e9f2d485d4f8b9bd2c95ee2ec62546b365f50357767c6af99ce70c07a08a41b",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "row-role-option_1-1440.png",
+      "scene": "row-role-option_1",
+      "width": 1440,
+      "sha256": "d3d1c0122e23f1543388f4dfe483759ae71fe960703b37756a23e657f7f05976",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "row-role-option_2-1440.png",
+      "scene": "row-role-option_2",
+      "width": 1440,
+      "sha256": "12f17f0ee59e332f9cc4d824bdb14aea847a3a9e4d2ac2aad2bc1a0a6f150aaf",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "row-role-option_3-1440.png",
+      "scene": "row-role-option_3",
+      "width": 1440,
+      "sha256": "047e2eecd55c7b137b6c3641625659e4167c3a268e14e1120161d4105749c034",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "row-role-option_4-1440.png",
+      "scene": "row-role-option_4",
+      "width": 1440,
+      "sha256": "afa48458e80d289dd2eee01c8a4716f9442a75ce786e4f7a87ab9b557859f7c9",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_4"
+      }
+    },
+    {
+      "file": "shared-reason-default-1440.png",
+      "scene": "shared-reason-default",
+      "width": 1440,
+      "sha256": "3690f8218dfa170567e951f35f4f601a4ecce5be38bbc1b55879b7cc1948c9d9",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "shared-reason-focus-1440.png",
+      "scene": "shared-reason-focus",
+      "width": 1440,
+      "sha256": "4678164ea81d47db670a8935818fd30d8420e50b43747b6570a82f7e0f26b889",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "shared-reason-empty-1440.png",
+      "scene": "shared-reason-empty",
+      "width": 1440,
+      "sha256": "6ecfc4ff2263c118cb4a66a386a2da670b60830f26380ba44f18ec6f8f236368",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "shared-reason-short-1440.png",
+      "scene": "shared-reason-short",
+      "width": 1440,
+      "sha256": "ffb56545631a86afcfc749385c780de1962bdf4da1e58d52d8d250370994d3f7",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "short"
+      }
+    },
+    {
+      "file": "shared-reason-corrected-1440.png",
+      "scene": "shared-reason-corrected",
+      "width": 1440,
+      "sha256": "3d72bfa1f84e524f200b6f94c3a191da845308c5779e2318ccc42316e06e8b01",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "corrected"
+      }
+    },
+    {
+      "file": "shared-reason-long501-1440.png",
+      "scene": "shared-reason-long501",
+      "width": 1440,
+      "sha256": "4a510bceb2b186550b87bba1ed86573b1ee5b77de3a710e25d2bf6c471d76d59",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "long501"
+      }
+    },
+    {
+      "file": "invite_invalid-form-1440.png",
+      "scene": "invite_invalid-form",
+      "width": 1440,
+      "sha256": "0cfd2931692cbd894ac91b97882f835938d8d73a2ff0879b4a4ea9cd13dca07c",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "invite_partial-form-1440.png",
+      "scene": "invite_partial-form",
+      "width": 1440,
+      "sha256": "e145e4bf163b56578718f3cbe9b43ce27e35a64f956aacad577cbc3cd47c7a0e",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "invite_busy-form-1440.png",
+      "scene": "invite_busy-form",
+      "width": 1440,
+      "sha256": "255f32291cecf15ab13eb36b6702d944ead27284769c7fbfb3723b7c224ebabd",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "invite_success-form-1440.png",
+      "scene": "invite_success-form",
+      "width": 1440,
+      "sha256": "297b67484194e744e9d99a3fc7aa9aa3ced5a87c18dd5654f5fa2ff152e87491",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_disable-form-1440.png",
+      "scene": "reason_disable-form",
+      "width": 1440,
+      "sha256": "e208d73f766f7e58b0003f0bd90cb51d6eb411420502f49f92d3d5f680fbc844",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_restore-form-1440.png",
+      "scene": "reason_restore-form",
+      "width": 1440,
+      "sha256": "d5b46f14f2aa0cfc4ed339a16d33cec6accf61e0cccff120d5ca242aa40568c3",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_role-form-1440.png",
+      "scene": "reason_role-form",
+      "width": 1440,
+      "sha256": "5484cfdf435a55e0bc3b4e0cc2b49e0494d1b477fb666a66d689f3e63a657948",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_revoke-form-1440.png",
+      "scene": "reason_revoke-form",
+      "width": 1440,
+      "sha256": "d4ea356195db433f9014ac02cf98f8bf0eae4afcbbb6fd7645f3af40846234a3",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "emails-default-390.png",
+      "scene": "emails-default",
+      "width": 390,
+      "sha256": "10e61437eefec8eef8f8d99cd5b4aba80c36d36d801af17cf4d6a09e372f71b4",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "default"
+      }
+    },
+    {
+      "file": "emails-focus-390.png",
+      "scene": "emails-focus",
+      "width": 390,
+      "sha256": "38023ad177d880fa37b585aa48f6391204254219419608c733fd39ec8dd576c9",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "emails-empty-390.png",
+      "scene": "emails-empty",
+      "width": 390,
+      "sha256": "858bd68960085f7c1c014bcd84fb1c69f2002e259f657402c63031942dcae284",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "emails-invalid-390.png",
+      "scene": "emails-invalid",
+      "width": 390,
+      "sha256": "a59c4b647ef186ee1bc8763dbfe281f5c75b57eadda1a5a8b00a82253ec48233",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "invalid"
+      }
+    },
+    {
+      "file": "emails-mixed-390.png",
+      "scene": "emails-mixed",
+      "width": 390,
+      "sha256": "eb111f48128271be1a1125f6e9fff02caa80613c10d15c8fcc385ef567902697",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "mixed"
+      }
+    },
+    {
+      "file": "emails-normalized-390.png",
+      "scene": "emails-normalized",
+      "width": 390,
+      "sha256": "d6f82d171f41c56e239c8c902f0194229438550391172a2bfe1e228e9136c52c",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "normalized"
+      }
+    },
+    {
+      "file": "emails-boundary254-390.png",
+      "scene": "emails-boundary254",
+      "width": 390,
+      "sha256": "7c7b0f74a5df6b3392352d4b534d618a261774b347c73ed8f47c4f0fb7f720e9",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "boundary254"
+      }
+    },
+    {
+      "file": "emails-boundary255-390.png",
+      "scene": "emails-boundary255",
+      "width": 390,
+      "sha256": "455c2c699d9abb19e16df4bb2e519a4019aed6fb8f3be7dbca601bc6481512e5",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "boundary255"
+      }
+    },
+    {
+      "file": "emails-corrected-390.png",
+      "scene": "emails-corrected",
+      "width": 390,
+      "sha256": "71eebb0fd7e932bfa3b5b5482eb26e2711f6607c29f50b4426ddefaec18e5256",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "corrected"
+      }
+    },
+    {
+      "file": "emails-editable-390.png",
+      "scene": "emails-editable",
+      "width": 390,
+      "sha256": "578e8f2ac474945e65ee5acb693a4a91231a27ff9917fb292f1bfde3d5b7b2b7",
+      "control": {
+        "selector": "#invite-emails",
+        "binding": "form.emails",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "invite-role-default-390.png",
+      "scene": "invite-role-default",
+      "width": 390,
+      "sha256": "55d547fd860634025e9183278a072d96528bb45213bd64db8d3ca9d7b35a71e9",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "default"
+      }
+    },
+    {
+      "file": "invite-role-focus-390.png",
+      "scene": "invite-role-focus",
+      "width": 390,
+      "sha256": "b9c4a8062866df3fb599ed64898394cf7c88f665f74977c28bdc3c25a18cdc5d",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "invite-role-editable-390.png",
+      "scene": "invite-role-editable",
+      "width": 390,
+      "sha256": "122e9c13d2db1a2b336bace4f852114bf5e8d0077aee95739fddacb2a822404a",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "invite-role-option_0-390.png",
+      "scene": "invite-role-option_0",
+      "width": 390,
+      "sha256": "55d547fd860634025e9183278a072d96528bb45213bd64db8d3ca9d7b35a71e9",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "invite-role-option_1-390.png",
+      "scene": "invite-role-option_1",
+      "width": 390,
+      "sha256": "9a8d9fa5956aebe1cc4a26524bfd5d994c4aa2158b9ec9dd965370f46bf9b0be",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "invite-role-option_2-390.png",
+      "scene": "invite-role-option_2",
+      "width": 390,
+      "sha256": "3e2691770d93424587223c6d77d9794ad175e11ebb450fd4380336fb49965c99",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "invite-role-option_3-390.png",
+      "scene": "invite-role-option_3",
+      "width": 390,
+      "sha256": "bf690dfb7f1d79e11475d18ba554c189d27a5ec060f795e8f5e86f03b27d86ed",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "invite-role-option_4-390.png",
+      "scene": "invite-role-option_4",
+      "width": 390,
+      "sha256": "b69112e939d9f2d959f61bbe6a5f961b2f5e1cf60b88686cd22d54b2686f5a5e",
+      "control": {
+        "selector": "#invite-role",
+        "binding": "form.role_code",
+        "state": "option_4"
+      }
+    },
+    {
+      "file": "invite-reason-default-390.png",
+      "scene": "invite-reason-default",
+      "width": 390,
+      "sha256": "ab87db659887a7932e59984582ec005343514c8d63d3bf8b2f0cde8973c21c37",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "invite-reason-focus-390.png",
+      "scene": "invite-reason-focus",
+      "width": 390,
+      "sha256": "19e9504b09ce3652e6fe37574990e94b29e3a2954431bb47afa75b55f6374389",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "invite-reason-empty-390.png",
+      "scene": "invite-reason-empty",
+      "width": 390,
+      "sha256": "a436fa8634fc3a9ce42275e323c68c0d1ef6dcd034dcdcb17932130337ddcb00",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "invite-reason-whitespace-390.png",
+      "scene": "invite-reason-whitespace",
+      "width": 390,
+      "sha256": "1f1d769295033ae2cb3ae6d0f1482919231da9b188031a047783b6e79beab4a1",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "whitespace"
+      }
+    },
+    {
+      "file": "invite-reason-boundary500-390.png",
+      "scene": "invite-reason-boundary500",
+      "width": 390,
+      "sha256": "05a48b5437c67c88c048d56a4bc9c76a6401ccc8cfcfd67a16ae612a8915581c",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "boundary500"
+      }
+    },
+    {
+      "file": "invite-reason-injected501-390.png",
+      "scene": "invite-reason-injected501",
+      "width": 390,
+      "sha256": "458ed8e0c75c72cf8326c8844879b2ec1888bbf45130f3db3135e6529972a75a",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "injected501"
+      }
+    },
+    {
+      "file": "invite-reason-corrected-390.png",
+      "scene": "invite-reason-corrected",
+      "width": 390,
+      "sha256": "40459edf952c0ad6013177ade0a0b8f103d014365997e093e6fcc345211aa71d",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "corrected"
+      }
+    },
+    {
+      "file": "invite-reason-editable-390.png",
+      "scene": "invite-reason-editable",
+      "width": 390,
+      "sha256": "456bd0ac98c75873605f5ee746896a36551160ea9f69670576e2e3effee721a4",
+      "control": {
+        "selector": "#invite-reason",
+        "binding": "form.reason",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "query-default-390.png",
+      "scene": "query-default",
+      "width": 390,
+      "sha256": "a83da3704ba4c96cbb2b289c3bdffaf8719dd4e804615d09c5146d8687e98745",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "default"
+      }
+    },
+    {
+      "file": "query-focus-390.png",
+      "scene": "query-focus",
+      "width": 390,
+      "sha256": "4fd6931316f6fb447a3477d686cc3af8910f916b9c937758d5aac7630d63e12d",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "query-empty-390.png",
+      "scene": "query-empty",
+      "width": 390,
+      "sha256": "a83da3704ba4c96cbb2b289c3bdffaf8719dd4e804615d09c5146d8687e98745",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "query-typed-390.png",
+      "scene": "query-typed",
+      "width": 390,
+      "sha256": "4da4f0310cba683d9326ace547daf4386636ad78cbf133b7fdd4139aea0786b0",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "typed"
+      }
+    },
+    {
+      "file": "query-no_result-390.png",
+      "scene": "query-no_result",
+      "width": 390,
+      "sha256": "3417427ce6091d6dc61d95a2a8a1ae0362fa7d67926bc93aad5658acbb67e85d",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "no_result"
+      }
+    },
+    {
+      "file": "query-editable-390.png",
+      "scene": "query-editable",
+      "width": 390,
+      "sha256": "4da4f0310cba683d9326ace547daf4386636ad78cbf133b7fdd4139aea0786b0",
+      "control": {
+        "selector": "#filter-query",
+        "binding": "memberQuery",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "status-default-390.png",
+      "scene": "status-default",
+      "width": 390,
+      "sha256": "db61458a17e25e27f6859049e9f79ce515ba60c75ed27ef38e9a2c1668885233",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "default"
+      }
+    },
+    {
+      "file": "status-focus-390.png",
+      "scene": "status-focus",
+      "width": 390,
+      "sha256": "1c9558457abdb82bad0bb84e01b4a3c414d861288c5c7d7fa2d05c0d342b1bf8",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "status-editable-390.png",
+      "scene": "status-editable",
+      "width": 390,
+      "sha256": "b9303c94569bc894b40bec7a4da4fec778332a0bd71e3c42167ccdbd94bfceff",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "status-option_0-390.png",
+      "scene": "status-option_0",
+      "width": 390,
+      "sha256": "db61458a17e25e27f6859049e9f79ce515ba60c75ed27ef38e9a2c1668885233",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "status-option_1-390.png",
+      "scene": "status-option_1",
+      "width": 390,
+      "sha256": "020af674f90d0213ca4c24947a392b8e318c541e827dd355b9ecf5ebb686792b",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "status-option_2-390.png",
+      "scene": "status-option_2",
+      "width": 390,
+      "sha256": "62e773520c3177a982b223299e1a98f45992a7090ce2e786d128cb7f88c64a39",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "status-option_3-390.png",
+      "scene": "status-option_3",
+      "width": 390,
+      "sha256": "b9303c94569bc894b40bec7a4da4fec778332a0bd71e3c42167ccdbd94bfceff",
+      "control": {
+        "selector": "#filter-status",
+        "binding": "memberStatus",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "role-default-390.png",
+      "scene": "role-default",
+      "width": 390,
+      "sha256": "5a864706e655e99b9a5a7b7af639256f918e928f3f0d240bfde7ac3fd478dbd6",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "default"
+      }
+    },
+    {
+      "file": "role-focus-390.png",
+      "scene": "role-focus",
+      "width": 390,
+      "sha256": "c3041b0f7e06e44516e978d25897f488b549881fb5236351236ab48d6c341b4c",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "role-editable-390.png",
+      "scene": "role-editable",
+      "width": 390,
+      "sha256": "1725f02979c9fba9dfe8959f1dfb5fba2810fa386ad7d6f999516d2a33b76015",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "role-option_0-390.png",
+      "scene": "role-option_0",
+      "width": 390,
+      "sha256": "5a864706e655e99b9a5a7b7af639256f918e928f3f0d240bfde7ac3fd478dbd6",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "role-option_1-390.png",
+      "scene": "role-option_1",
+      "width": 390,
+      "sha256": "79306f611f8f4a8310e315a71a6087b47027e3dd389b477ae8d7ed86dcb04d63",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "role-option_2-390.png",
+      "scene": "role-option_2",
+      "width": 390,
+      "sha256": "78c8124ccfa9ff50b6d2dc6cddf63e767313469c4a4533eb881130dbae734680",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "role-option_3-390.png",
+      "scene": "role-option_3",
+      "width": 390,
+      "sha256": "9c04bac6a2091e100d97e0d2eddde1913ccaff2f4ee09d34ee55604b55524c00",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "role-option_4-390.png",
+      "scene": "role-option_4",
+      "width": 390,
+      "sha256": "cb988c02a72a585395292cf729d05354774ad7931bd46189cbf80b56319ffdfe",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_4"
+      }
+    },
+    {
+      "file": "role-option_5-390.png",
+      "scene": "role-option_5",
+      "width": 390,
+      "sha256": "1725f02979c9fba9dfe8959f1dfb5fba2810fa386ad7d6f999516d2a33b76015",
+      "control": {
+        "selector": "#filter-role",
+        "binding": "memberRole",
+        "state": "option_5"
+      }
+    },
+    {
+      "file": "team-default-390.png",
+      "scene": "team-default",
+      "width": 390,
+      "sha256": "1054309372fa495cf63c90faadde95f88a8b5926ca314ede830fc84b3d684b3c",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "default"
+      }
+    },
+    {
+      "file": "team-focus-390.png",
+      "scene": "team-focus",
+      "width": 390,
+      "sha256": "665e1100367b49c7216fc3048d1ce243ca6fc734d6fc42c8361a99d8494c6548",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "team-editable-390.png",
+      "scene": "team-editable",
+      "width": 390,
+      "sha256": "84f9fe474ec6372d7dfb5b61e0303e439ee7aa81bd9cbec4ff15a3eae5812746",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "team-option_0-390.png",
+      "scene": "team-option_0",
+      "width": 390,
+      "sha256": "1054309372fa495cf63c90faadde95f88a8b5926ca314ede830fc84b3d684b3c",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "team-option_1-390.png",
+      "scene": "team-option_1",
+      "width": 390,
+      "sha256": "cc67387c0a04c9854e0a6175c1557208cb24e68a96eec6bac88bb6af0a48224b",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "team-option_2-390.png",
+      "scene": "team-option_2",
+      "width": 390,
+      "sha256": "84f9fe474ec6372d7dfb5b61e0303e439ee7aa81bd9cbec4ff15a3eae5812746",
+      "control": {
+        "selector": "#filter-team",
+        "binding": "memberTeam",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "sort-default-390.png",
+      "scene": "sort-default",
+      "width": 390,
+      "sha256": "2640daa0ccdf862241baf7f575ba9ea7d7b32cab1f3639fe312a2ca21bf06915",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "default"
+      }
+    },
+    {
+      "file": "sort-focus-390.png",
+      "scene": "sort-focus",
+      "width": 390,
+      "sha256": "fd2e77b605ca120d50e02fd06c0afa3f81063ade9ebb840eefa0ace3a328aedf",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "sort-editable-390.png",
+      "scene": "sort-editable",
+      "width": 390,
+      "sha256": "6a7e70651fce2b3503fd21912d35c69f5822ec0bdd74a4efcd1406624b80cae2",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "sort-option_0-390.png",
+      "scene": "sort-option_0",
+      "width": 390,
+      "sha256": "2640daa0ccdf862241baf7f575ba9ea7d7b32cab1f3639fe312a2ca21bf06915",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "sort-option_1-390.png",
+      "scene": "sort-option_1",
+      "width": 390,
+      "sha256": "b4763d26276268a556741a408be1a25286d62c9786d177578667be04bc5c1bce",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "sort-option_2-390.png",
+      "scene": "sort-option_2",
+      "width": 390,
+      "sha256": "6a7e70651fce2b3503fd21912d35c69f5822ec0bdd74a4efcd1406624b80cae2",
+      "control": {
+        "selector": "#filter-sort",
+        "binding": "memberSort",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "row-role-default-390.png",
+      "scene": "row-role-default",
+      "width": 390,
+      "sha256": "04abdba6c4a4cf73da7147f728969d0fb619d8c14aebef5f65c5baa5a1f11fe5",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "default"
+      }
+    },
+    {
+      "file": "row-role-focus-390.png",
+      "scene": "row-role-focus",
+      "width": 390,
+      "sha256": "42e98667b62c4ab3d078f97a2c4caf99af0b1b02d05dd9ef371f7c8f5887c530",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "row-role-editable-390.png",
+      "scene": "row-role-editable",
+      "width": 390,
+      "sha256": "da14e0e2e135c8cd7ff8fd5a31f40cb58995e71680fbe03b212ff2be5695e9e5",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "editable"
+      }
+    },
+    {
+      "file": "row-role-option_0-390.png",
+      "scene": "row-role-option_0",
+      "width": 390,
+      "sha256": "0502925576fc1d9f0ed543b5be960236a56533f48024572b6c99455ee1b56544",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_0"
+      }
+    },
+    {
+      "file": "row-role-option_1-390.png",
+      "scene": "row-role-option_1",
+      "width": 390,
+      "sha256": "57daa27f8b96d438b030bfd198a1134264a39cd9fde337fed33b5dafe1f721aa",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_1"
+      }
+    },
+    {
+      "file": "row-role-option_2-390.png",
+      "scene": "row-role-option_2",
+      "width": 390,
+      "sha256": "04abdba6c4a4cf73da7147f728969d0fb619d8c14aebef5f65c5baa5a1f11fe5",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_2"
+      }
+    },
+    {
+      "file": "row-role-option_3-390.png",
+      "scene": "row-role-option_3",
+      "width": 390,
+      "sha256": "3836566664db01b2849df80d9d7a117b5d2f2433421f880737af92bbbcfb5bb4",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_3"
+      }
+    },
+    {
+      "file": "row-role-option_4-390.png",
+      "scene": "row-role-option_4",
+      "width": 390,
+      "sha256": "a746979769b43a47f2ecaac032c9193a66ea69e4e2cccb38990222cf5a482231",
+      "control": {
+        "selector": "#role-00000000-0000-4000-8000-000000000612",
+        "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
+        "state": "option_4"
+      }
+    },
+    {
+      "file": "shared-reason-default-390.png",
+      "scene": "shared-reason-default",
+      "width": 390,
+      "sha256": "85f91a2927d7da1363e9ce86947a459780cde0c5aa6965ec218dc32db715121b",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "default"
+      }
+    },
+    {
+      "file": "shared-reason-focus-390.png",
+      "scene": "shared-reason-focus",
+      "width": 390,
+      "sha256": "90538cb094984224c883c5dc76dbf5d22e004726124014a692a2a62404eb6de1",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "focus"
+      }
+    },
+    {
+      "file": "shared-reason-empty-390.png",
+      "scene": "shared-reason-empty",
+      "width": 390,
+      "sha256": "9477257613ca0d2270eee81a98989a7e2a3a713ef30bb40d8d7922e7c04a61e8",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "empty"
+      }
+    },
+    {
+      "file": "shared-reason-short-390.png",
+      "scene": "shared-reason-short",
+      "width": 390,
+      "sha256": "d7309e50671f11b074789b9cee970f55e529a9c324d1a97c940dd33e12828cc0",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "short"
+      }
+    },
+    {
+      "file": "shared-reason-corrected-390.png",
+      "scene": "shared-reason-corrected",
+      "width": 390,
+      "sha256": "5b17c3365656e77f828d64d4d59e66152124a5eb25b9eff8f09255143c7b669d",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "corrected"
+      }
+    },
+    {
+      "file": "shared-reason-long501-390.png",
+      "scene": "shared-reason-long501",
+      "width": 390,
+      "sha256": "b7971a8c9d946affacf5f0eb94e682d4183b8f5c6609d33a189a2e5c7a35d541",
+      "control": {
+        "selector": "#reason-input",
+        "binding": "reason",
+        "state": "long501"
+      }
+    },
+    {
+      "file": "invite_invalid-form-390.png",
+      "scene": "invite_invalid-form",
+      "width": 390,
+      "sha256": "6528e8b1a68ab9096c640340837f242de833d80714ccf0918cd498fa4e41cbbb",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "invite_partial-form-390.png",
+      "scene": "invite_partial-form",
+      "width": 390,
+      "sha256": "7049a7aaf653d078608894fb4a7dc287c985885c81cddfa5a51d359d902c042a",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "invite_busy-form-390.png",
+      "scene": "invite_busy-form",
+      "width": 390,
+      "sha256": "b271314390eb62df95d1e3a3d9f6a2fc349b8aedc51fea64b3d42d8df1e89555",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "invite_success-form-390.png",
+      "scene": "invite_success-form",
+      "width": 390,
+      "sha256": "04a771a47ced5d9ba012aa8095011ba1574cc504f3cb9080d740346b3b17643c",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_disable-form-390.png",
+      "scene": "reason_disable-form",
+      "width": 390,
+      "sha256": "024a24b88c8e693127191b9f7442b4f8a5070c649789fb78bb21db26a604ddca",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_restore-form-390.png",
+      "scene": "reason_restore-form",
+      "width": 390,
+      "sha256": "05f1d56b4f728d019ef3610a212e65eeffc3c721ea0a7e3cb6eb20f2e1da9516",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_role-form-390.png",
+      "scene": "reason_role-form",
+      "width": 390,
+      "sha256": "91ef009a4c9fb9e764f34f65e38fb8e468e57f2ebdd08674bc863ec78bed6a3c",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "file": "reason_revoke-form-390.png",
+      "scene": "reason_revoke-form",
+      "width": 390,
+      "sha256": "a20aa9f9e4d3a27ce14d797326ea7ec61b3ce50fa5d7ee546a1c84786e104ba1",
+      "scope": "form-combination-not-all-runtime-states"
+    }
+  ]
+}

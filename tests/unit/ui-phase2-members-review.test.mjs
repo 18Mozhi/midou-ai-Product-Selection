@@ -28,10 +28,15 @@ const evidence = JSON.parse(
 const controlsEvidence = JSON.parse(
   readFileSync(`${base}/design/members-controls-direction-c/evidence.json`, "utf8"),
 );
-const buildMembersReview = (sources, evidence) => buildReview(sources, evidence, controlsEvidence);
+const fieldEvidence = JSON.parse(
+  readFileSync(`${base}/design/members-fields-direction-c/evidence.json`, "utf8"),
+);
+const buildMembersReview = (sources, evidence) =>
+  buildReview(sources, evidence, controlsEvidence, fieldEvidence);
 const packages = new Map([
   ["members-direction-c", evidence],
   ["members-controls-direction-c", controlsEvidence],
+  ["members-fields-direction-c", fieldEvidence],
 ]);
 const context = {
   candidates: [parentFile, childFile].flatMap((file) => scanSource(sources[file], file).candidates),

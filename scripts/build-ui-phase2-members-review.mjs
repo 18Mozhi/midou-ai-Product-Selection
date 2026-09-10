@@ -16,6 +16,7 @@ export const dependencies = [
 ];
 const pkg = "members-direction-c";
 const controls = "members-controls-direction-c";
+const fields = "members-fields-direction-c";
 const remaining =
   "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。";
 const filterKey = "OG-M-FILTER搜索/状态/角色/团队/排序/重置";
@@ -337,16 +338,37 @@ const visibleInputs = [
   ["form.role_code", "必填固定五角色select；选择本身不写入"],
   ["form.reason", "邀请原因必填maxlength500，父函数trim后1–500；不是共享窗的至少2字规则"],
 ];
-export function buildMembersReview(sources, evidence, controlsEvidence) {
+export function buildMembersReview(sources, evidence, controlsEvidence, fieldEvidence) {
   const dependencyHashes = Object.fromEntries(
     dependencies.map((file) => {
       assert.equal(typeof sources[file], "string", `missing source ${file}`);
       const sha = createHash("sha256").update(sources[file].replaceAll("\r\n", "\n")).digest("hex");
       assert.equal(evidence.sourceHashes[file], sha, "verify current members proposal");
       assert.equal(controlsEvidence.sourceHashes[file], sha, "verify current members controls");
+      assert.equal(fieldEvidence.sourceHashes[file], sha, "verify current members fields");
       return [file, sha];
     }),
   );
+  assert.deepEqual(
+    Object.keys(fieldEvidence.fieldVisualReferences).sort(),
+    [
+      "form.emails",
+      "form.role_code",
+      "form.reason",
+      "memberQuery",
+      "memberStatus",
+      "memberRole",
+      "memberTeam",
+      "memberSort",
+      "memberRoles[member.id] || member.roles[0] || 'member'",
+      "reason",
+    ].sort(),
+    "exact ten members fields",
+  );
+  const fieldRef = (binding) => ({
+    package: fields,
+    ...fieldEvidence.fieldVisualReferences[binding],
+  });
   const actions = definitions.map(
     ([
       file,
@@ -439,7 +461,12 @@ export function buildMembersReview(sources, evidence, controlsEvidence) {
   const variant = (name, evidenceScope) => ({
     name,
     evidenceScope,
-    scenes: [{ package: pkg, scene: name }],
+    scenes: [
+      { package: pkg, scene: name },
+      ...(fieldEvidence.combinations.includes(name)
+        ? [{ package: fields, scene: `${name}-form` }]
+        : []),
+    ],
     remaining,
   });
   return {
@@ -491,6 +518,7 @@ export function buildMembersReview(sources, evidence, controlsEvidence) {
           file: childFile,
           binding,
           meaning: inputMeaning[binding],
+          visualReferences: fieldRef(binding),
           remaining,
         })),
       ],
@@ -556,12 +584,14 @@ export function buildMembersReview(sources, evidence, controlsEvidence) {
         file: childFile,
         value,
         actionId,
+        visualReferences: fieldRef(value),
         persistence: "parent-ref-only-not-URL-or-storage",
       })),
       {
         file: childFile,
         value: "memberRoles[member.id] || member.roles[0] || 'member'",
         actionId: "OG-M-ROLE-SELECT",
+        visualReferences: fieldRef("memberRoles[member.id] || member.roles[0] || 'member'"),
         persistence: "parent-memberRoles-ref-only",
       },
     ],
@@ -570,6 +600,7 @@ export function buildMembersReview(sources, evidence, controlsEvidence) {
       binding: "reason",
       minimumLength: 2,
       maximumLength: null,
+      visualReferences: fieldRef("reason"),
       sourceMeaning: "shared source has no maxlength; proposal500 is not production behavior",
     },
     proposalOnlyControls: Object.entries(controlsEvidence.controlReferences)
@@ -582,6 +613,7 @@ export function buildMembersReview(sources, evidence, controlsEvidence) {
         reason: "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。",
       })),
     compositionGaps: [
+      "十字段74代表状态/八表单组合双端164图已绑定；该新子稿按真实共享前端取消旧提案500上限，仅记录离线意图，不代表服务接受501字或生产已改。全部组合、主题/密度/软键盘仍待。",
       "94旧图保留上下文；新444图绑定19代表动作84状态、22附加变体92状态，另10纯提案40状态和6反馈上下文。仍有30代表槽未映射，不补造native select按下弹出或原因窗提交busy。",
       "独立提案复用busy，而实际父源refreshing与写busy分离；当前只核对被选目标，不代表全页忙碌生命周期或全部字段/角色/主题/密度/软键盘组合通过。",
       "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。",
@@ -599,6 +631,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")])),
     JSON.parse(readFileSync(`${base}/design/${pkg}/evidence.json`, "utf8")),
     JSON.parse(readFileSync(`${base}/design/${controls}/evidence.json`, "utf8")),
+    JSON.parse(readFileSync(`${base}/design/${fields}/evidence.json`, "utf8")),
   );
   const target = `${base}/action-reviews/P30.json`;
   if (process.argv.includes("--write"))

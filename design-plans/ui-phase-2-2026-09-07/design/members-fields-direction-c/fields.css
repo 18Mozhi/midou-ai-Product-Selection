@@ -1,0 +1,48 @@
+/* Field-only C proposal: explicit guidance without changing source business validation. */
+#workspace input,
+#workspace select,
+#workspace textarea,
+#reason-input {
+  border-color: #73819b;
+  color: #202c3d;
+  background: #fff;
+}
+.field-help,
+.field-error,
+.field-count,
+#reason-help {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 6px 0 12px;
+  overflow-wrap: anywhere;
+}
+.field-help,
+.field-count {
+  color: #445779;
+}
+.field-error {
+  color: #9f301c;
+  padding-left: 10px;
+  border-left: 3px solid #9f301c;
+}
+.field-count {
+  text-align: right;
+}
+[aria-invalid="true"] {
+  border-color: #9f301c !important;
+}
+.field-error[hidden] {
+  display: none;
+}
+#invite-form .field-count {
+  margin-top: -8px;
+}
+#reason-form .field-help {
+  display: none;
+}
+.field-group {
+  min-width: 0;
+}
+#invite-help {
+  display: none;
+}
