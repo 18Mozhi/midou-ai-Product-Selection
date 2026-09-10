@@ -14,7 +14,7 @@ test("P34 mobile first rate-limit approval pins one region without changing runt
   assert.ok(record.includes(sha));
   assert.match(record, /这张组合通过，继续其他状态/);
   assert.match(record, /排除：顶部/);
-  assert.match(record, /该429区域尚未接入真实Vue/);
+  assert.match(record, /局部接入真实Vue，未部署/);
   const evidence = JSON.parse(
     readFileSync(`${base}/design/org-approvals-parent-direction-c/evidence.json`, "utf8"),
   );

@@ -93,7 +93,7 @@ const plain = (v) => JSON.parse(JSON.stringify(v));
 test("P31 covers 30 sites with 20 actions, six exact forwards and no implied approval", () => {
   const r = review(),
     result = validateActionReview(r, context);
-  assert.equal(result.sourceSites, 31);
+  assert.equal(result.sourceSites, 32);
   assert.equal(result.semanticGroups, 25);
   assert.equal(result.routeActions, 20);
   assert.equal(result.writeActions, 3);

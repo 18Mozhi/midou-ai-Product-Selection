@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
@@ -33,7 +34,7 @@ const copy = (v) => JSON.parse(JSON.stringify(v));
 test("P34 maps all28 source sites into8 read-only page actions,one forwarding and4 exclusions", () => {
   const review = build(),
     r = validateActionReview(review, context);
-  assert.equal(r.sourceSites, 28);
+  assert.equal(r.sourceSites, 29);
   assert.equal(r.semanticGroups, 13);
   assert.equal(r.routeActions, 8);
   assert.equal(r.wiringGroups, 1);
@@ -56,7 +57,7 @@ test("P34 distinguishes25 existing control variants,7 historical proposal contro
   assert.deepEqual(validateOrgApprovalsBindings(build(), packages), {
     controls: 25,
     proposalOnlyControls: 7,
-    sourceSites: 28,
+    sourceSites: 29,
     fields: 10,
     fieldStates: 67,
     fieldCompositions: 8,
@@ -156,8 +157,16 @@ test("P34 implementation evidence and narrow approval records resolve without pr
   for (const ref of r.implementationEvidence) {
     assert.ok(existsSync(`${base}/${ref.review}`));
     const e = JSON.parse(readFileSync(ref.evidence, "utf8"));
-    for (const [f, h] of Object.entries(e.sourceHashes))
-      assert.equal(sha(readFileSync(f, "utf8")), h, f);
+    if (ref.asOfCommit) {
+      assert.equal(ref.evidence, "output/playwright/p34-first-failure-vue/evidence.json");
+      assert.equal(ref.asOfCommit, "d2d566c2fceeef6ab1754f409475e2cf7582b8ef");
+    }
+    for (const [f, h] of Object.entries(e.sourceHashes)) {
+      const source = ref.asOfCommit
+        ? execFileSync("git", ["show", `${ref.asOfCommit}:${f}`], { encoding: "utf8" })
+        : readFileSync(f, "utf8");
+      assert.equal(sha(source), h, f);
+    }
   }
   for (const file of r.approvalRecords) assert.ok(existsSync(`${base}/${file}`));
   assert.equal(packages.get(packageNames[3]).approval, "pending-concrete-parent-section-review");

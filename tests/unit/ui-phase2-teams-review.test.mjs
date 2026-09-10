@@ -39,7 +39,7 @@ test("P33 registers all 29 parent and child sites without counting function prop
     result = validateActionReview(r, context);
   assert.deepEqual(result, {
     pageId: "P33",
-    sourceSites: 30,
+    sourceSites: 31,
     semanticGroups: 17,
     routeActions: 12,
     wiringGroups: 0,

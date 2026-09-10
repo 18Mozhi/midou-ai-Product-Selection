@@ -38,7 +38,7 @@ const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P29.json`, 
 
 test("P29 maps all eleven parent sites to three business actions, Logo validity and three exclusions", () => {
   const r = validateActionReview(review(), context);
-  assert.equal(r.sourceSites, 12);
+  assert.equal(r.sourceSites, 13);
   assert.equal(r.semanticGroups, 8);
   assert.equal(r.routeActions, 4); // Includes the local field callback, not four business buttons.
   assert.equal(r.excludedGroups, 4);

@@ -138,7 +138,7 @@ test("P32 source and review preserve explicit inherited proposal differences", (
 test("P32 explicitly covers 28 source sites and 18 actions without granting approval", () => {
   const r = review(),
     result = validateActionReview(r, context);
-  assert.equal(result.sourceSites, 29);
+  assert.equal(result.sourceSites, 30);
   assert.equal(result.semanticGroups, 23);
   assert.equal(result.routeActions, 18);
   assert.equal(result.excludedGroups, 5);

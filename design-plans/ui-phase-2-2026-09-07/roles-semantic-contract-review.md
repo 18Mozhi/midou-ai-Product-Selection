@@ -13,6 +13,7 @@
 | b11692c0597885e3.1 | 背景刷新角色/授权复合读取 | OG-REFRESH |
 | 97ed4772fb320d6c.1 | 错误页重新加载，不绕过权限 | OG-RETRY |
 | 5ae31bc55551b1dc.1 | P34首次500恢复转发，P31不渲染该分支 | EX-P34-FIRST-FAILURE |
+| 08a59be6f793cde6.1 | P34首次429恢复转发，P31不渲染该分支 | EX-P34-FIRST-FAILURE |
 | d6b520278ab3dd57.1、1cbd108c64b5230c.1、5878e30377f290ae.1 | summary资料三位置排除 | EX-P29-PROFILE |
 | 6a563eeaa67fea90.1 | members事件转发排除 | EX-P30-MEMBERS |
 | b09d7923228aabe6.1 | 六事件转发八目标；父busy或refreshing均传子busy | WIRE-ROLES |

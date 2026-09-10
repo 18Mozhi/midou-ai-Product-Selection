@@ -6,9 +6,9 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
-    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "2bda7b1e4c04d4dfe751e396bbb2d762cbe7654986b5d5c48446300f57605327"
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36"
   },
   "actions": [
     {
@@ -152,10 +152,10 @@
       ],
       "sourceContractKeys": [
         "OG-RETRY",
-        "OG-RETRY 手机首次500恢复按钮"
+        "OG-RETRY 手机首次500/429恢复按钮"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
-      "condition": "父错误分支；新增F仅首次无data/HTTP500/手机可见，桌面保留原按钮",
+      "condition": "父错误分支；F仅首次无data/HTTP500或429/手机可见，桌面保留原按钮",
       "handler": "新F仅emit reload；父原load()，没有新的请求策略、权限或自动倒计时",
       "variants": [
         "source-current"
@@ -352,13 +352,14 @@
       "label": "失败区域重试转发",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
       ],
       "sourceContractKeys": [
         "OG-RETRY"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
-      "condition": "仅P34/error/无data/HTTP500分支",
+      "condition": "仅P34无data，error/HTTP500或rate_limited/HTTP429分支",
       "handler": "@reload原样转发load()；不是第三个业务读取动作",
       "variants": [
         "source-current"
@@ -390,6 +391,14 @@
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
+          "event": "@reload",
+          "handler": "load()",
+          "targets": [
+            "OG-RETRY"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
           "event": "@reload",
           "handler": "load()",
           "targets": [
@@ -2021,9 +2030,9 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
       "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
-      "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "2bda7b1e4c04d4dfe751e396bbb2d762cbe7654986b5d5c48446300f57605327"
+      "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36"
     },
     "inputs": [
       {
@@ -2345,7 +2354,13 @@
     {
       "review": "P34-FIRST-FAILURE-VUE-REVIEW.md",
       "evidence": "output/playwright/p34-first-failure-vue/evidence.json",
-      "scope": "仅首次无data/HTTP500/<=760；156检查52基线像素对比，非其他状态"
+      "asOfCommit": "d2d566c2fceeef6ab1754f409475e2cf7582b8ef",
+      "scope": "历史首次500实施证据，固定在限流接入前提交；156检查52基线像素对比。当前500未变由新限流基线比较证明，不重标旧图为当前全状态验证"
+    },
+    {
+      "review": "P34-RATE-LIMIT-VUE-REVIEW.md",
+      "evidence": "output/playwright/p34-rate-limit-vue/evidence.json",
+      "scope": "仅首次无data/HTTP429/<=760；176检查52基线对比，保留旧500及其他状态；未生产验收"
     },
     {
       "review": "P34-PARENT-READ-STATES-REVIEW.md",
@@ -2361,7 +2376,7 @@
     "P34-MOBILE-RATE-LIMIT-COMPOSITION-APPROVAL.md"
   ],
   "compositionGaps": [
-    "顶部刷新仍待审；权限r2仅措辞批准，限流仅手机白区组合批准，都未接入生产Vue。",
+    "顶部刷新仍待审；权限r2仅措辞批准未实施；限流手机白区组合已局部接入Vue，未部署。",
     "新失败F的其他按钮态、17父状态适用性及手机返回目录/筛选折叠尚未完整实施批准。",
     "同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。",
     "source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。"

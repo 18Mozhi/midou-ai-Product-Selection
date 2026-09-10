@@ -41,8 +41,8 @@ const definitions = [
     "错误后重新加载",
     "read",
     [...C("97ed4772fb320d6c.1"), ...F("54b14787946c2f69.1")],
-    ["OG-RETRY", "OG-RETRY 手机首次500恢复按钮"],
-    "父错误分支；新增F仅首次无data/HTTP500/手机可见，桌面保留原按钮",
+    ["OG-RETRY", "OG-RETRY 手机首次500/429恢复按钮"],
+    "父错误分支；F仅首次无data/HTTP500或429/手机可见，桌面保留原按钮",
     "新F仅emit reload；父原load()，没有新的请求策略、权限或自动倒计时",
     "retry-error",
   ],
@@ -50,9 +50,9 @@ const definitions = [
     "WIRE-P34-RETRY",
     "失败区域重试转发",
     "wiring",
-    C("5ae31bc55551b1dc.1"),
+    C("5ae31bc55551b1dc.1", "08a59be6f793cde6.1"),
     ["OG-RETRY"],
-    "仅P34/error/无data/HTTP500分支",
+    "仅P34无data，error/HTTP500或rate_limited/HTTP429分支",
     "@reload原样转发load()；不是第三个业务读取动作",
     null,
   ],
@@ -237,14 +237,12 @@ export function buildOrgApprovalsReview(sources, packages) {
       };
       if (kind === "wiring") {
         action.forwardsTo = ["OG-RETRY"];
-        action.forwardBindings = [
-          {
-            candidateId: sourceCandidateIds[0],
-            event: "@reload",
-            handler: "load()",
-            targets: ["OG-RETRY"],
-          },
-        ];
+        action.forwardBindings = sourceCandidateIds.map((candidateId) => ({
+          candidateId,
+          event: "@reload",
+          handler: "load()",
+          targets: ["OG-RETRY"],
+        }));
       }
       if (representative) {
         const control = controls.controls.find((c) => c.id === representative);
@@ -433,7 +431,14 @@ export function buildOrgApprovalsReview(sources, packages) {
       {
         review: "P34-FIRST-FAILURE-VUE-REVIEW.md",
         evidence: "output/playwright/p34-first-failure-vue/evidence.json",
-        scope: "仅首次无data/HTTP500/<=760；156检查52基线像素对比，非其他状态",
+        asOfCommit: "d2d566c2fceeef6ab1754f409475e2cf7582b8ef",
+        scope:
+          "历史首次500实施证据，固定在限流接入前提交；156检查52基线像素对比。当前500未变由新限流基线比较证明，不重标旧图为当前全状态验证",
+      },
+      {
+        review: "P34-RATE-LIMIT-VUE-REVIEW.md",
+        evidence: "output/playwright/p34-rate-limit-vue/evidence.json",
+        scope: "仅首次无data/HTTP429/<=760；176检查52基线对比，保留旧500及其他状态；未生产验收",
       },
       {
         review: "P34-PARENT-READ-STATES-REVIEW.md",
@@ -449,7 +454,7 @@ export function buildOrgApprovalsReview(sources, packages) {
       "P34-MOBILE-RATE-LIMIT-COMPOSITION-APPROVAL.md",
     ],
     compositionGaps: [
-      "顶部刷新仍待审；权限r2仅措辞批准，限流仅手机白区组合批准，都未接入生产Vue。",
+      "顶部刷新仍待审；权限r2仅措辞批准未实施；限流手机白区组合已局部接入Vue，未部署。",
       "新失败F的其他按钮态、17父状态适用性及手机返回目录/筛选折叠尚未完整实施批准。",
       "同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。",
       "source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。",

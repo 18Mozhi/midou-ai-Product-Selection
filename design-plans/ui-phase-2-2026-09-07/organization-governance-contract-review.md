@@ -1,5 +1,7 @@
 # F04 组织治理八页事实与交互合同
 
+2026-09-10 P34首次429真实Vue接续：已批准手机限流白区接入，新增C 08a59be6f793cde6.1转发，仍调用原load；共享F支持可选标题且500默认不变。当前P34为29源入口/8本页动作/1接线组/4排除组，原自动重试与业务/权限不改。[176项与52基线对比](P34-RATE-LIMIT-VUE-REVIEW.md)证明四断点及500/后台/相邻页保持；未部署，非整页批准。
+
 2026-09-10 P34首次失败真实Vue增量：手机且首次未取得数据、HTTP500时，将用户已批准的白色恢复区域接入原父notice。真实错误说明/action_hint继续展示，真实requestId折叠；新F组件按钮和父reload转发同属OG-RETRY，只调用原load()两项GET；新增原生summary归OG-TECH。三个新增源位置不新增业务写入/权限/弹窗。详见[P34-FIRST-FAILURE-VUE-REVIEW](P34-FIRST-FAILURE-VUE-REVIEW.md)；原108候选等是历史计数。
 
 2026-09-10 P29逐按钮增量：[ORG-PROFILE-CONTROLS-C-r1](design/organization-profile-controls-direction-c/README.md)。170张图分别记录162控件呈现和8完整表单反馈，22控件/变体不作22业务动作。OG-PROFILE-SAVE/REFRESH/RETRY沿既有合同，Logo事件是字段校验；新目录、技术详情和结果待核验禁用明确只作提案。复用原74图/controller/数据，未改真实Vue或API；正式逐页源注册、OG-G修复与完整实际链/用户审核/部署继续待办。
@@ -37,7 +39,8 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | C | b11692c0597885e3.1 | OG-REFRESH |
 | C | 97ed4772fb320d6c.1 | OG-RETRY |
 | C | 5ae31bc55551b1dc.1 | OG-RETRY · 父reload转发，复用原load() |
-| F | 54b14787946c2f69.1 | OG-RETRY 手机首次500恢复按钮 |
+| C | 08a59be6f793cde6.1 | OG-RETRY · 手机首次429区域父reload转发，复用原load() |
+| F | 54b14787946c2f69.1 | OG-RETRY 手机首次500/429恢复按钮 |
 | F | 479570dac45574ea.1 | OG-TECH 真实请求追踪展开/折叠，无API |
 | C | d6b520278ab3dd57.1,5878e30377f290ae.1 | OG-PROFILE-SAVE |
 | C | 1cbd108c64b5230c.1 | OG-PROFILE-LOGO浏览器有效性 |
@@ -167,7 +170,7 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174` |

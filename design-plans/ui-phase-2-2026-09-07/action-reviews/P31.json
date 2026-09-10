@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
     "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415"
   },
   "actions": [
@@ -14,7 +14,8 @@
       "label": "P34首次读取失败转发（非本页）",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
       ],
       "sourceContractKeys": [
         "EX-P34-FIRST-FAILURE"
@@ -23,7 +24,7 @@
         "OG-RETRY"
       ],
       "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
-      "condition": "仅view===approvals且error、无data、HTTP500；非P31",
+      "condition": "仅view===approvals、无data，error/HTTP500或rate_limited/HTTP429；非P31",
       "handler": "P31不渲染此分支；P34复用原load()，不计入本页动作",
       "variants": [
         "roles"
@@ -2829,7 +2830,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
       "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
       "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",

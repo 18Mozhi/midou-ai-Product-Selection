@@ -933,7 +933,10 @@ onMounted(() => void load());
     class="org-admin-center"
     :data-state="state"
     :data-approval-first-failure="
-      view === 'approvals' && state === 'error' && !data && lastReadFailureStatus === 500
+      view === 'approvals' &&
+      !data &&
+      ((state === 'error' && lastReadFailureStatus === 500) ||
+        (state === 'rate_limited' && lastReadFailureStatus === 429))
     "
     :aria-busy="state === 'loading' || refreshing || (view === 'audit' && busy)"
   >
@@ -966,6 +969,21 @@ onMounted(() => void load());
         v-if="view === 'approvals' && state === 'error' && !data && lastReadFailureStatus === 500"
       >
         <OrganizationApprovalFirstFailure
+          :notice="notice"
+          :request-id="requestId"
+          @reload="load()"
+        />
+        <span class="org-approval-first-failure-legacy">
+          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+        </span>
+      </template>
+      <template
+        v-else-if="
+          view === 'approvals' && state === 'rate_limited' && !data && lastReadFailureStatus === 429
+        "
+      >
+        <OrganizationApprovalFirstFailure
+          title="请求过于频繁"
           :notice="notice"
           :request-id="requestId"
           @reload="load()"
