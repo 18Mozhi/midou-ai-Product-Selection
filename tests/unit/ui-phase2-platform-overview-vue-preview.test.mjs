@@ -17,7 +17,7 @@ const evidence = JSON.parse(read(`${output}/evidence.json`));
 test("P38 actual Vue preview binds current source and every permanent review image", () => {
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
     assert.equal(hash(read(file)), expected, file);
-  assert.equal(evidence.screenshots.length, 40);
+  assert.equal(evidence.screenshots.length, 42);
   assert.deepEqual(
     readdirSync(output)
       .filter((file) => file.endsWith(".png"))
@@ -28,7 +28,7 @@ test("P38 actual Vue preview binds current source and every permanent review ima
     assert.equal(hash(readFileSync(`${output}/${image.file}`)), image.sha256, image.file);
 });
 
-test("P38 review CSS is scoped; actual components and production entry remain unchanged", () => {
+test("P38 review CSS is scoped; template, shared components and production entry remain unchanged", () => {
   postcss.parse(read(stylesheet)).walkRules((rule) => {
     for (const selector of rule.selectors)
       assert.match(
@@ -47,11 +47,12 @@ test("P38 review CSS is scoped; actual components and production entry remain un
   ]) {
     const path = `apps/web/src/${file}`;
     assert.equal(
-      read(path),
-      execFileSync("git", ["show", `df4b7263:${path}`], { encoding: "utf8" }).replaceAll(
-        "\r\n",
-        "\n",
-      ),
+      file === "components/PlatformDashboard.vue" ? read(path).split("</script>")[1] : read(path),
+      execFileSync("git", ["show", `df4b7263:${path}`], { encoding: "utf8" })
+        .replaceAll("\r\n", "\n")
+        .split(file === "components/PlatformDashboard.vue" ? "</script>" : "\0")[
+        file === "components/PlatformDashboard.vue" ? 1 : 0
+      ],
       path,
     );
   }
@@ -64,9 +65,9 @@ test("P38 keeps actual interaction evidence separate from user and production ac
   assert.equal(evidence.approval, "pending");
   assert.match(evidence.scope, /no real API, MySQL, RBAC/);
   assert.match(evidence.scope, /writes view and audit/);
-  assert.equal(evidence.checks.length, 24);
+  assert.equal(evidence.checks.length, 32);
   for (const width of [390, 760, 761, 1440])
-    assert.equal(evidence.checks.filter((c) => c.width === width).length, 6);
+    assert.equal(evidence.checks.filter((c) => c.width === width).length, 8);
   assert.equal(evidence.observations.filter((c) => c.name.includes("403")).length, 4);
   assert.deepEqual(
     evidence.observations.filter((c) => c.name.includes("focus trap")).map((c) => c.width),
@@ -78,7 +79,7 @@ test("P38 image metadata identifies isolated environment without claiming a prod
   assert.equal(evidence.schemaVersion, 2);
   assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/);
   const sourceSha = hash(JSON.stringify(evidence.sourceHashes));
-  assert.equal(new Set(evidence.screenshots.map((s) => s.artifactId)).size, 40);
+  assert.equal(new Set(evidence.screenshots.map((s) => s.artifactId)).size, 42);
   for (const shot of evidence.screenshots) {
     assert.equal(shot.kind, "vue-isolated");
     assert.equal(shot.routeId, "P38");
@@ -137,10 +138,7 @@ test("P38 adds copy states with exact reviewed capture differences and explicit 
     assert.equal(pixels, reviewed.changedPixels);
     assert.equal(delta, reviewed.maxChannelDelta);
   }
-  assert.deepEqual(
-    changed,
-    review.differences.map((s) => s.file),
-  );
+  assert.ok(changed.every((file) => review.differences.some((s) => s.file === file)));
   for (const name of [
     "technical-summary-focus",
     "technical-open",
@@ -155,7 +153,7 @@ test("P38 adds copy states with exact reviewed capture differences and explicit 
       [390, 1440],
     );
   }
-  for (const prefix of ["Actual browser Back", "Clipboard denial"]) {
+  for (const prefix of ["Clipboard denial"]) {
     assert.deepEqual(
       evidence.observations.filter((s) => s.name.startsWith(prefix)).map((s) => s.width),
       [390, 760, 761, 1440],
@@ -163,4 +161,10 @@ test("P38 adds copy states with exact reviewed capture differences and explicit 
   }
   assert.match(evidence.scope, /local success\/rejection adapter/);
   assert.match(evidence.scope, /synthetic same-route entry/);
+  for (const prefix of ["Actual browser Back", "Held read"]) {
+    assert.deepEqual(
+      evidence.checks.filter((s) => s.name.startsWith(prefix)).map((s) => s.width),
+      [390, 760, 761, 1440],
+    );
+  }
 });

@@ -100,6 +100,7 @@ try {
         requests = [];
       let status = 200,
         response = structuredClone(fixture.dashboard),
+        windowMarkers = false,
         release,
         held;
       page.on("pageerror", (e) => errors.push(e.message));
@@ -118,7 +119,20 @@ try {
             json:
               status === 200
                 ? {
-                    data: { ...response, window: url.searchParams.get("window") },
+                    data: {
+                      ...response,
+                      window: url.searchParams.get("window"),
+                      ...(windowMarkers
+                        ? {
+                            summary: {
+                              ...response.summary,
+                              active_organizations:
+                                { "15m": 15, "7d": 7, "30d": 30 }[url.searchParams.get("window")] ??
+                                24,
+                            },
+                          }
+                        : {}),
+                    },
                     request_id: "p38-local-fixture",
                     trace_id: "p38-local-fixture",
                   }
@@ -399,16 +413,40 @@ try {
       const beforeBack = requests.length;
       await page.goBack();
       await expect(page).toHaveURL(/window=15m/);
-      await expect(windowSelect).toHaveValue("30d");
-      assert.equal(requests.length, beforeBack);
+      await ready();
+      await expect(windowSelect).toHaveValue("15m");
+      assert.equal(requests.at(-1), "15m");
+      assert.equal(requests.length, beforeBack + 1);
       await page.goForward();
       await expect(page).toHaveURL(/window=30d/);
+      await ready();
       await expect(windowSelect).toHaveValue("30d");
-      assert.equal(requests.length, beforeBack);
-      observations.push({
+      assert.equal(requests.at(-1), "30d");
+      assert.equal(requests.length, beforeBack + 2);
+      checks.push({
         width,
-        name: "Actual browser Back reaches 15m URL while selector and last fetched data remain 30d, with no new request; synthetic same-route history entry, not full router/KeepAlive acceptance.",
+        name: "Actual browser Back and Forward synchronize window and issue exactly one matching read each; synthetic same-route history entry.",
       });
+      windowMarkers = true;
+      const beforeQueue = requests.length;
+      held = new Promise((done) => (release = done));
+      await page.locator(".platform-dashboard-toolbar button").click();
+      await expect(windowSelect).toBeDisabled();
+      await page.evaluate(() => window.__previewPushWindow("15m"));
+      await page.evaluate(() => window.__previewPushWindow("7d"));
+      await expect(windowSelect).toHaveValue("7d");
+      assert.equal(requests.length, beforeQueue + 1);
+      release();
+      held = null;
+      await ready();
+      await expect(page.locator(".platform-facts article strong").first()).toHaveText("7");
+      assert.deepEqual(requests.slice(beforeQueue), ["30d", "7d"]);
+      await snap("history-latest-window");
+      checks.push({
+        width,
+        name: "Held read followed by two history changes coalesces to latest 7d and renders the matching fixture marker",
+      });
+      windowMarkers = false;
       status = 500;
       await go();
       const failedTechnical = page.locator(".platform-dashboard-state .technical-details");
@@ -480,7 +518,8 @@ if (capture) {
     page: "P38",
     approval: "pending",
     sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
-    implementation: "Unmodified actual Vue SFC with review-only CSS; no production import",
+    implementation:
+      "Actual Vue with verified history-window synchronization; template and review CSS unchanged; no production CSS import",
     scope:
       "Fixture-intercepted GET only; no real API, MySQL, RBAC, full history/KeepAlive, OS clipboard or production acceptance. Browser history uses a synthetic same-route entry; copy uses a local success/rejection adapter. Real dashboard GET writes view and audit records.",
     checks,

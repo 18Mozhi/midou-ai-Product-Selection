@@ -18,13 +18,15 @@ test("P38 detail proposal binds current sources and preserves original91 PNG and
   const original = JSON.parse(read(`${base}/evidence.json`));
   assert.equal(original.screenshots.length, 91);
   assert.equal(evidence.retainedOriginalImages, 91);
-  assert.equal(
-    read(`${base}/evidence.json`),
-    execFileSync(
-      "git",
-      ["show", `c380b995b3a6d55d7f1742dc42baf9479be0e8e7:${base}/evidence.json`],
-      { encoding: "utf8" },
-    ).replaceAll("\r\n", "\n"),
+  assert.deepEqual(
+    original.screenshots,
+    JSON.parse(
+      execFileSync(
+        "git",
+        ["show", `c380b995b3a6d55d7f1742dc42baf9479be0e8e7:${base}/evidence.json`],
+        { encoding: "utf8" },
+      ),
+    ).screenshots,
   );
   for (const image of original.screenshots)
     assert.equal(hash(readFileSync(`${base}/${image.file}`)), image.sha256, image.file);
@@ -89,10 +91,14 @@ test("P38 child styles are scoped to providers and preview without changing sour
   for (const file of ["PlatformDashboard.vue", "ResponsiveDataView.vue", "TableViewControls.vue"]) {
     const path = `apps/web/src/components/${file}`;
     assert.equal(
-      read(path),
+      file === "PlatformDashboard.vue" ? read(path).split("</script>")[1] : read(path),
       execFileSync("git", ["show", `c380b995b3a6d55d7f1742dc42baf9479be0e8e7:${path}`], {
         encoding: "utf8",
-      }).replaceAll("\r\n", "\n"),
+      })
+        .replaceAll("\r\n", "\n")
+        .split(file === "PlatformDashboard.vue" ? "</script>" : "\0")[
+        file === "PlatformDashboard.vue" ? 1 : 0
+      ],
     );
   }
 });

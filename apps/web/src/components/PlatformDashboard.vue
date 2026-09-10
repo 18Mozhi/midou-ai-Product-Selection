@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -20,6 +20,9 @@ const state = ref<State>("loading"),
   pending = ref(false),
   refreshError = ref(""),
   providerHealthExpanded = ref(false);
+let disposed = false;
+let activeController: AbortController | null = null;
+const isDashboardRoute = () => ["/platform-admin", "/platform-admin/"].includes(route.path);
 const providerHealthLimit = 8,
   providerHealthRows = computed(() =>
     [...(data.value?.provider_health ?? [])].sort((left: any, right: any) => {
@@ -144,7 +147,8 @@ const trendPoints = (key: "succeeded" | "failed") => {
     .join(" ");
 };
 async function load() {
-  if (pending.value) return;
+  if (pending.value || disposed || !isDashboardRoute()) return;
+  const readingWindow = windowCode.value;
   pending.value = true;
   refreshError.value = "";
   hint.value = "";
@@ -153,15 +157,17 @@ async function load() {
     requestId.value = "";
   }
   const controller = new AbortController();
+  activeController = controller;
   let timedOut = false;
   const timeout = window.setTimeout(() => {
     timedOut = true;
     controller.abort();
   }, 12000);
   try {
-    const response = await request<any>(`/platform/dashboard?window=${windowCode.value}`, {
+    const response = await request<any>(`/platform/dashboard?window=${readingWindow}`, {
       signal: controller.signal,
     });
+    if (disposed || !isDashboardRoute() || readingWindow !== windowCode.value) return;
     requestId.value = response.request_id;
     data.value = response.data;
     const summary = response.data?.summary ?? {},
@@ -174,6 +180,7 @@ async function load() {
         (response.data?.alerts?.length ?? 0);
     state.value = factual === 0 ? "empty" : "ready";
   } catch (error) {
+    if (disposed || !isDashboardRoute() || readingWindow !== windowCode.value) return;
     const failure = error instanceof ApiClientError ? error : null;
     if (data.value && state.value === "ready") {
       refreshError.value = timedOut
@@ -194,7 +201,9 @@ async function load() {
     }
   } finally {
     window.clearTimeout(timeout);
+    activeController = null;
     pending.value = false;
+    if (!disposed && isDashboardRoute() && readingWindow !== windowCode.value) void load();
   }
 }
 async function changeWindow() {
@@ -202,6 +211,21 @@ async function changeWindow() {
   await load();
 }
 onMounted(load);
+watch(
+  () => [route.path, route.query.window] as const,
+  ([path, value], [previousPath]) => {
+    if (!isDashboardRoute() || disposed) return;
+    const requested = String(value ?? "24h") as WindowCode;
+    const next = windows.has(requested) ? requested : "24h";
+    if (next === windowCode.value && path === previousPath) return;
+    windowCode.value = next;
+    void load();
+  },
+);
+onUnmounted(() => {
+  disposed = true;
+  activeController?.abort();
+});
 </script>
 <template>
   <section class="platform-dashboard" aria-live="polite" :aria-busy="pending">

@@ -74,7 +74,7 @@ export async function buildPlatformOverviewDesignData(repo) {
         "\nglobalThis.__result={data,state,windowCode,pending,requestId,refreshError,load,changeWindow,providerHealthExpanded,providerHealthRows,visibleProviderHealth,hiddenProviderHealthCount,bytes,queueText,signalText,signalValue,alertText,trendTotals,successRateText,trendPoints};",
       {
         defineProps: () => ({ apiBaseUrl: "fixture" }),
-        useRoute: () => ({ query: { window: windowCode, keep: "yes" } }),
+        useRoute: () => ({ path: "/platform-admin", query: { window: windowCode, keep: "yes" } }),
         useRouter: () => ({ replace: async (v) => replacements.push(plain(v)) }),
         ref: (value) => ({ value }),
         computed: (fn) => ({
@@ -83,6 +83,8 @@ export async function buildPlatformOverviewDesignData(repo) {
           },
         }),
         onMounted: () => {},
+        onUnmounted: () => {},
+        watch: () => {},
         ApiClientError,
         AbortController,
         window: {
