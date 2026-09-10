@@ -7,7 +7,7 @@
     "apps/web/src/components/CapacityBoundaryCenter.vue": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
     "tests/e2e/m08-06-capacity-boundary.spec.ts": "a0168954da211a90ff349842302adde110a2834cbd4617a0a5c8a0f0d2e4e249",
     "packages/config/src/index.ts": "7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11",
     "infra/baota/capacity-boundary-manifest.json": "926141266e85c130983268b265bd4418b13543fb9f9f2e01f7c05df6d329f666",

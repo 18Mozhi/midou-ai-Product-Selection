@@ -19,7 +19,7 @@ window.RELEASE_DATA = {
     "Actual Vue script: single-flight, exact GET/IDs, 15-second abort, first failure vs retained snapshot, 401/403 clearing, retryable retention, unmount abort, zero/unknown duration and SHA10 truncation. Current-missing fixture has neither of the old UI alignment blockers; old card would say consistent. Superadmin link condition statically bound; no mounted Vue/auth/cache lifecycle proof.",
     "Actual repository read only: recent10 release query and matching gate join/order, nullable numeric mapping, latest-history audit target, commit and audit-failure rollback/release with inert SQL connection. No real database transaction or write-probe.",
     "Actual GET handler with inert auth/service/reply and manual timer: authorization before read, private/no-store, 14-second timeout/abort, dependency503 mapping and finish removes close handler. POST write-probe registration recorded but never invoked; no server/network or real authorization test.",
-    "Actual TechnicalDetails.copy rejects on denied clipboard with no local error state. Prototype feedback remains a design proposal; no operating-system clipboard call.",
+    "Actual TechnicalDetails.copy handles denied clipboard with local failure feedback. Full lifecycle coverage is in technical-copy-feedback evidence; no operating-system clipboard call.",
     "Static current manifest/bootstrap/config: one Baota Node project and fixed root, percentages5/25/100 read policy, config/source SHA fallback. Manifest historical deployed flag is not a live health verification. No deployer, historical runner or probe signing executed.",
   ],
   datasets: {

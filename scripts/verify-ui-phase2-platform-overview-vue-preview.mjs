@@ -474,17 +474,16 @@ try {
       await page.evaluate(() => {
         window.__previewClipboard.deny = true;
       });
-      const denied = page.waitForEvent("pageerror", {
-        predicate: (error) => error.message === "P38 synthetic clipboard denied",
-      });
       await failedCopy.click();
-      await denied;
       await expect(failedCopy).toHaveText("复制");
-      assert.deepEqual(errors, ["P38 synthetic clipboard denied"]);
+      await expect(failedTechnical.getByRole("status")).toHaveText(
+        "暂时无法复制请求编号，可以选中上方内容后手动复制。",
+      );
+      assert.deepEqual(errors, []);
       assert.deepEqual(unexpected, []);
-      observations.push({
+      checks.push({
         width,
-        name: "Clipboard denial remains an uncaught page error with no user-facing failure feedback; deliberate local adapter rejection, not a pass.",
+        name: "Clipboard denial has local accessible feedback and no page error; deliberate local adapter rejection, not OS clipboard proof.",
       });
     } finally {
       await context.close();

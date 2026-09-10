@@ -1,5 +1,7 @@
 # B2a · 数据中心与治理目录事实合同
 
+2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
+
 2026-09-09 P55追加：[GOVERNANCE-C-r1](design/governance-direction-c/README.md)五分类版本目录、双端详情、筛选/保留范围及原模块入口首轮具体稿待审。原始两类夹具与合成其他类别分开；6组源Vue/service/repository惰性检查覆盖25状态组合、10失败状态、分页和计数，不执行真实SQL/RBAC/业务导航。移动完整自动化字段及模态焦点是提案；零频控源truthy隐藏、权限失败保留和忽略abort后的更新仍明确列为边界。历史25源hash及ff46bfe9追溯不变。下一设计P56，具体批准、DG-G01–07及全站实现部署仍待办；下文“P55正式图未交”为历史状态。
 
 2026-09-09 P54质量段追加：[DATA-QUALITY-C-r1](design/data-quality-direction-c/README.md)首轮双端具体稿待审，与近期记录段分开验收。原始夹具不含成员/开放与严重COUNT，回退必须标本页；新稿保持证据/问题分页与最近20核对、七指标及到期风险边界。源隔离执行复现迟到详情、重复授权/解决、写成功覆盖读取失败、筛选隐藏选择、批预览超限及成员/动作漂移；手机批选、模态和固定提交只在原型。服务下载错误图不冒充window.location.assign后的应用回执，真实文件/授权/审计未执行。25历史源绑定沿用ff46bfe9追溯，不修改旧表。DG-G01–07、具体批准及全站实现部署待办；下一设计P55。下文“质量段未交”为历史状态。
@@ -197,7 +199,7 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
-| apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/components/AuditedReasonDialog.vue | b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb |
 | apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
 | apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |

@@ -41,7 +41,6 @@ test("P38 review CSS is scoped; dashboard template and unrelated shared componen
     "main.ts",
     "components/PlatformDashboard.vue",
     "components/TableViewControls.vue",
-    "components/TechnicalDetails.vue",
     "api-client.ts",
   ]) {
     const path = `apps/web/src/${file}`;
@@ -64,9 +63,9 @@ test("P38 keeps actual interaction evidence separate from user and production ac
   assert.equal(evidence.approval, "pending");
   assert.match(evidence.scope, /no real API, MySQL, RBAC/);
   assert.match(evidence.scope, /writes view and audit/);
-  assert.equal(evidence.checks.length, 32);
+  assert.equal(evidence.checks.length, 36);
   for (const width of [390, 760, 761, 1440])
-    assert.equal(evidence.checks.filter((c) => c.width === width).length, 8);
+    assert.equal(evidence.checks.filter((c) => c.width === width).length, 9);
   assert.equal(evidence.observations.filter((c) => c.name.includes("403")).length, 4);
   assert.equal(evidence.observations.filter((c) => c.name.includes("focus trap")).length, 0);
   assert.deepEqual(
@@ -155,7 +154,7 @@ test("P38 adds copy states with exact reviewed capture differences and explicit 
   }
   for (const prefix of ["Clipboard denial"]) {
     assert.deepEqual(
-      evidence.observations.filter((s) => s.name.startsWith(prefix)).map((s) => s.width),
+      evidence.checks.filter((s) => s.name.startsWith(prefix)).map((s) => s.width),
       [390, 760, 761, 1440],
     );
   }

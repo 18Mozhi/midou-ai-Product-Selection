@@ -21,7 +21,7 @@
     "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
-    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
     "scripts/lib/ui-phase2-data-records-design-data.mjs": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
     "scripts/verify-ui-phase2-data-records-c.mjs": "53e4d63125bc3f3aa69f18f13bd39a98e77ec496766bd623d0a5039dbd3bfdd9",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",

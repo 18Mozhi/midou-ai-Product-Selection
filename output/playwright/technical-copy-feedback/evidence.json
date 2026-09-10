@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "approval": "pending",
+  "scope": "Actual shared Vue in P38-styled isolated fixture; no OS clipboard, API, RBAC, full page or production acceptance.",
+  "baseline": {
+    "commit": "e704cd24",
+    "file": "apps/web/src/components/TechnicalDetails.vue",
+    "sha256": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0"
+  },
+  "sourceHashes": {
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "scripts/verify-technical-copy-feedback.mjs": "b4a71e1ef2ad9e4f252bdabb5200e5e96b89a22e504079780341539bb54ba115",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css": "b074ad6bb00cc99acdf7e6b79b9912d9a5d60d4f9a8f4f606279e7050ac738ce",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "comparisons": [
+    {
+      "width": 390,
+      "current": "ef8e0cac49c7565e4ab3a18aa2ef3c4334f7adac260d3f27e1def4d77d67251b",
+      "baseline": "ef8e0cac49c7565e4ab3a18aa2ef3c4334f7adac260d3f27e1def4d77d67251b"
+    },
+    {
+      "width": 760,
+      "current": "54ce72f8b813eb03d0eabe0426dd60eba1d22fef4dc9e30ed4463f3168dabdb0",
+      "baseline": "54ce72f8b813eb03d0eabe0426dd60eba1d22fef4dc9e30ed4463f3168dabdb0"
+    },
+    {
+      "width": 761,
+      "current": "521cb2976eb5db19e7d8f31411ac82bf9748c6db335a52e3b111a8d49e231ae9",
+      "baseline": "521cb2976eb5db19e7d8f31411ac82bf9748c6db335a52e3b111a8d49e231ae9"
+    },
+    {
+      "width": 1440,
+      "current": "38a6676fbdf971c195a5ea4a5bd62ea24be67c0adf5207f17d23a4f8e9d8fd3d",
+      "baseline": "38a6676fbdf971c195a5ea4a5bd62ea24be67c0adf5207f17d23a4f8e9d8fd3d"
+    }
+  ],
+  "checks": [
+    {
+      "width": 390,
+      "name": "denial and missing Clipboard API handled; exact text, retained focus, retry, 1500ms expiry"
+    },
+    {
+      "width": 390,
+      "name": "failure names attempted row; new displayed content clears old feedback"
+    },
+    {
+      "width": 390,
+      "name": "old content and reordered copy receipts cannot claim latest feedback"
+    },
+    {
+      "width": 390,
+      "name": "real KeepAlive deactivation suppresses old failure; no overflow, page error, API or external requests"
+    },
+    {
+      "width": 760,
+      "name": "denial and missing Clipboard API handled; exact text, retained focus, retry, 1500ms expiry"
+    },
+    {
+      "width": 760,
+      "name": "failure names attempted row; new displayed content clears old feedback"
+    },
+    {
+      "width": 760,
+      "name": "old content and reordered copy receipts cannot claim latest feedback"
+    },
+    {
+      "width": 760,
+      "name": "real KeepAlive deactivation suppresses old failure; no overflow, page error, API or external requests"
+    },
+    {
+      "width": 761,
+      "name": "denial and missing Clipboard API handled; exact text, retained focus, retry, 1500ms expiry"
+    },
+    {
+      "width": 761,
+      "name": "failure names attempted row; new displayed content clears old feedback"
+    },
+    {
+      "width": 761,
+      "name": "old content and reordered copy receipts cannot claim latest feedback"
+    },
+    {
+      "width": 761,
+      "name": "real KeepAlive deactivation suppresses old failure; no overflow, page error, API or external requests"
+    },
+    {
+      "width": 1440,
+      "name": "denial and missing Clipboard API handled; exact text, retained focus, retry, 1500ms expiry"
+    },
+    {
+      "width": 1440,
+      "name": "failure names attempted row; new displayed content clears old feedback"
+    },
+    {
+      "width": 1440,
+      "name": "old content and reordered copy receipts cannot claim latest feedback"
+    },
+    {
+      "width": 1440,
+      "name": "real KeepAlive deactivation suppresses old failure; no overflow, page error, API or external requests"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-denied.png",
+      "sha256": "587606caf6567a71cf658b8d862a9b7d2f2f8a6063b46c98e018da713ffc43bd",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "denied",
+      "approval": "pending",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 515
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:19.985Z",
+      "buildSha": null,
+      "caseId": "technical-copy-390-denied",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "390-retry-success.png",
+      "sha256": "f4a30cfd4009731ff26d75f111109d4167e7055c474ec53b064ea2e9b0b180ef",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "retry-success",
+      "approval": "pending",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 452
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:20.185Z",
+      "buildSha": null,
+      "caseId": "technical-copy-390-retry-success",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "390-trace-denied.png",
+      "sha256": "27dbd75e94bd9e474a6ddb946483737c658a7c0f3c075bbaab0a9f275aa4b1de",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "trace-denied",
+      "approval": "pending",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 515
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:22.137Z",
+      "buildSha": null,
+      "caseId": "technical-copy-390-trace-denied",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "390-changed-content.png",
+      "sha256": "200c49514ca9ded61cfa818d4f36bbabdb20d5e12ca3cb325b014999307b0f01",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "changed-content",
+      "approval": "pending",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 452
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:22.218Z",
+      "buildSha": null,
+      "caseId": "technical-copy-390-changed-content",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "1440-denied.png",
+      "sha256": "405acb26fc34f0cc1e85d0bafa4f40179a273fa8c77fc7f373ff1e5773c85e7f",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "denied",
+      "approval": "pending",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 408
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:28.592Z",
+      "buildSha": null,
+      "caseId": "technical-copy-1440-denied",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "1440-retry-success.png",
+      "sha256": "9f84bf2caace43f62067b68eff3be2a0e0501ec18222fa49bda98a97dfbde6f8",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "retry-success",
+      "approval": "pending",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 371
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:28.792Z",
+      "buildSha": null,
+      "caseId": "technical-copy-1440-retry-success",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "1440-trace-denied.png",
+      "sha256": "3d10ffecda1b57633e528a58726ae33251b33e9400be8f42fcb9d21a16e58489",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "trace-denied",
+      "approval": "pending",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 408
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:30.758Z",
+      "buildSha": null,
+      "caseId": "technical-copy-1440-trace-denied",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "file": "1440-changed-content.png",
+      "sha256": "79f87729888ac12a945738336d2dc6f9a20b89040ae1eae2c00c8448a0901f23",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "changed-content",
+      "approval": "pending",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 371
+      },
+      "concreteUrl": "http://127.0.0.1:50812/__technical_copy",
+      "capturedAt": "2026-09-10T18:46:30.857Z",
+      "buildSha": null,
+      "caseId": "technical-copy-1440-changed-content",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "processesClosed": true
+}

@@ -1,5 +1,7 @@
 # B3b · 运行拓扑与Redis/MySQL/文件韧性合同复核
 
+2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
+
 ## 2026-09-09 P69设计补充 · FILES-C-r1（未实施）
 
 [图册](design/files-direction-c/README.md)与verify-ui-phase2-files-c交66场景138PNG。RS-G05源隔离复现三根access/statfs失败占位、索引仍保留、temp固定零、证据优先占满名额不读导出、无效路径/缺失/不一致及真实SHA256对内存流。service未知10000与负比例/used归零、evaluator最高水位不求和、零样本仍ready、恢复过期warning/取整未来年龄/空证据、固定公网false与暴露finding并存明确呈现。两根/零根、共享/备用、verified空年龄与长值标明评估或布局边界，不伪称正常探针输出。
@@ -152,7 +154,7 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 | apps/web/src/components/RedisResilienceCenter.vue | 75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d |
 | apps/web/src/components/MySqlResilienceCenter.vue | 8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa |
 | apps/web/src/components/FileResilienceCenter.vue | e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2 |
-| apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/api/src/runtime-topology-service.ts | 4a88e08069419e093c514fbe05b1a2b9c1966ca505910130780823a8db5fb172 |
 | apps/api/src/mysql-runtime-topology-repository.ts | 8df495e05636d11ddaa4994813952a584a675e1b309fced24131ca073d8d5960 |
 | apps/api/src/runtime-topology-routes.ts | 850d8148baab86f20bad5bff10f5bec4b85f7f3802560c3adb9be7d94aae2de6 |

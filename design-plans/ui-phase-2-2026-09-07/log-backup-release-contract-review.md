@@ -1,5 +1,7 @@
 # B3a · 链路日志、备份恢复与发布事实合同
 
+2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
+
 2026-09-09 P65续交：[RELEASE-C-r1](design/release-direction-c/README.md)，81场景169PNG待具体审核。当前运行身份和匹配证据、最近历史记录及历史观察门分区；源码原样提取单门条件，原status=passed但错误率等于阈值仍未满足。缺来源SHA回退、没有当前release却旧“同源”卡仍可一致、无完成时间/未来日期/负指标/百分比错配仍可能verified均有源服务合成执行证据；不改变service.state或生产判定。status failed/rolled_back与自动停止/回滚门布尔事实独立，timing_schema2的0毫秒不混成未知；原E2E同时verified/回滚门/rollback_verified=false保留并标矛盾。Vue/仓库/GET路由及技术复制在惰性依赖执行；config/bootstrap/manifest静态绑定，10个P65相关历史hash不变。新版本复制、完整披露、缺失/矛盾提示、六列/手机模态焦点仅待审提案，不执行签名探针、真实SQL/鉴权/读取审计/旧双槽或当前部署。OP-G05/06、具体审图、真实全生命周期及全73页实现部署签收待办，下一P66。旧表与历史记录保留，不宣称三页全合同均已通过。
 
 2026-09-09 P64续交：[BACKUP-RECOVERY-C-r1](design/backup-recovery-direction-c/README.md)，61场景123PNG首轮具体稿待审。服务在合成仓库上实际执行，确认Number(null)=0/负数与上限比较、无finished_at、过期半天floor=90/ceil=0、未来日期及单种合格资产仍可verified；最近20运行缺backup但独立最新备份资产仍返回时为empty。原型保留原state/实际分钟/精确日期，并单独提示证据缺口，不修改业务判定。Vue单飞/15秒/保留与401/403清快照/unmount在惰性hook执行，仓库SQL构造/映射/审计提交与失败回滚为惰性连接；路由仅静态核对授权后14秒和单GET，不冒充实际鉴权/SQL/审计/宝塔演练。11个P64相关历史来源hash不变，未覆盖整份三页联合合同。副本条件不是五类资产完整覆盖；30/120天仅显示，不改发布资格。具体审图、OP-G04/06/07及缓存生命周期/真实恢复与全73页实现部署未完成，下一P65。旧表和历史修复记录保留。
@@ -183,7 +185,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
-| apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/use-audited-reason.ts | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
 | apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |

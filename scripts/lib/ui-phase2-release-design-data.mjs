@@ -621,6 +621,9 @@ export async function buildReleaseDesignData(repo) {
   const tc = {
     ref,
     computed,
+    watch: () => {},
+    onBeforeUnmount: () => {},
+    onDeactivated: () => {},
     defineProps: () => ({ requestId: "synthetic", traceId: "", items: [] }),
     withDefaults: (p) => p,
     navigator: {
@@ -630,17 +633,18 @@ export async function buildReleaseDesignData(repo) {
         },
       },
     },
-    window: { setTimeout: () => 0 },
+    window: { setTimeout: () => 0, clearTimeout: () => {} },
   };
   vm.createContext(tc);
   const technical = (await read(sourcePaths[3]))
     .split(/<script setup[^>]*>/)[1]
     .split("</script>")[0];
-  vm.runInContext(compile(strip(technical)) + "\nglobalThis.t={copy,copied};", tc);
-  await assert.rejects(tc.t.copy("请求编号", "synthetic"), /synthetic clipboard denial/);
+  vm.runInContext(compile(strip(technical)) + "\nglobalThis.t={copy,copied,copyError};", tc);
+  await tc.t.copy("请求编号", "synthetic");
   assert.equal(tc.t.copied.value, "");
+  assert.equal(tc.t.copyError.value, "暂时无法复制请求编号，可以选中上方内容后手动复制。");
   sourceChecks.push(
-    "Actual TechnicalDetails.copy rejects on denied clipboard with no local error state. Prototype feedback remains a design proposal; no operating-system clipboard call.",
+    "Actual TechnicalDetails.copy handles denied clipboard with local failure feedback. Full lifecycle coverage is in technical-copy-feedback evidence; no operating-system clipboard call.",
   );
   const manifest = JSON.parse(await read(sourcePaths[12]));
   assert.equal(manifest.objects.filter((o) => o.kind === "baota-node-project").length, 1);

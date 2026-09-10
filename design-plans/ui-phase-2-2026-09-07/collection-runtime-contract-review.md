@@ -1,5 +1,7 @@
 # B1c · 采集任务、总览与浏览器运行合同
 
+2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
+
 2026-09-09追加P53：[BROWSER-RUNTIME-C-r1](design/browser-runtime-direction-c/README.md)蓝色全局风险/白色占用清单与运行台账，双端两类弹窗待审。R未传destructive，实际只输入“确认回收”无影响勾选，更正P53旧规格；不改变O批量确认规则。源函数复现读取状态漂移、成功回收覆盖刷新失败、未知结果错误声称未执行和忽略abort后引用更新；保护仅原型。31份源合同LF指纹未变，惰性service/repository适配不执行SQL或回收。真实服务还清过期调度租约，回收数不等于OS进程数。原三条与合成26条分页分开；具体审核、CL-G01–07与全73页实现部署签收未完成，下一P54数据中心。
 
 日期：2026-09-08；起点main/0ba784a，接续同一目标的两份采集E2E在途改动。对应[P51](page-specs/P51.md)、[P52](page-specs/P52.md)、[P53](page-specs/P53.md)。本批交付事实规格与两处局部UI修复，不是正式风格、全站行为、真实后端、生产或用户验收通过。
@@ -167,7 +169,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
-| apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | apps/web/src/route-catalog.ts | 6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956 |

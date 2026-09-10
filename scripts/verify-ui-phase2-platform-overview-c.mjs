@@ -4,6 +4,7 @@ import { readFile, writeFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import vm from "node:vm";
+import { format, resolveConfig } from "prettier";
 import { chromium } from "playwright";
 import { buildPlatformOverviewDesignData } from "./lib/ui-phase2-platform-overview-design-data.mjs";
 import { checkPrototypeMetrics } from "./lib/ui-phase2-prototype-metrics.mjs";
@@ -15,6 +16,16 @@ const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
 assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
 const data = await buildPlatformOverviewDesignData(repo),
   box = { window: {} };
+if (capture) {
+  const file = path.join(root, "data.js");
+  await writeFile(
+    file,
+    await format(`window.PLATFORM_OVERVIEW_C_DATA=${JSON.stringify(data)};`, {
+      ...(await resolveConfig(file)),
+      parser: "babel",
+    }),
+  );
+}
 vm.runInNewContext(await readFile(path.join(root, "data.js"), "utf8"), box);
 assert.deepEqual(JSON.parse(JSON.stringify(box.window.PLATFORM_OVERVIEW_C_DATA)), data);
 const sources = [

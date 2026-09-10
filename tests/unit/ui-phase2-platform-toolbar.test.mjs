@@ -59,7 +59,7 @@ test("P38 toolbar binds actual Vue and fixture sources with 18 distinct state im
     );
 });
 
-test("P38 toolbar styling remains state-only and review-scoped, without changing old layouts or production", () => {
+test("P38 toolbar styling stays review-scoped and preserves unrelated sources and recorded image history", () => {
   const allowed = new Set([
     "transition",
     "box-shadow",
@@ -84,14 +84,26 @@ test("P38 toolbar styling remains state-only and review-scoped, without changing
     "apps/web/src/components/PlatformDashboard.vue",
     "apps/web/src/components/ResponsiveDataView.vue",
     "apps/web/src/components/TableViewControls.vue",
-    "apps/web/src/components/TechnicalDetails.vue",
     "apps/web/src/api-client.ts",
     "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css",
   ])
     assert.equal(read(file), prior(file), file);
   for (const directory of ["p38-vue-c-preview", "p38-provider-compositions"]) {
     const file = `output/playwright/${directory}/evidence.json`;
-    assert.equal(read(file), prior(file));
+    // Clipboard behavior and exact recapture differences have independent regression gates.
+    const captureReview = JSON.parse(
+      read("design-plans/ui-phase-2-2026-09-07/technical-copy-capture-review.json"),
+    );
+    assert.deepEqual(
+      JSON.parse(read(file)).screenshots.map(({ file, sha256 }) => {
+        const difference = captureReview.differences.find(
+          (d) => d.file === `output/playwright/${directory}/${file}`,
+        );
+        if (difference) assert.equal(sha256, difference.afterSha256);
+        return { file, sha256: difference?.beforeSha256 ?? sha256 };
+      }),
+      JSON.parse(prior(file)).screenshots.map(({ file, sha256 }) => ({ file, sha256 })),
+    );
     for (const shot of JSON.parse(read(file)).screenshots)
       assert.equal(hash(readFileSync(`output/playwright/${directory}/${shot.file}`)), shot.sha256);
   }

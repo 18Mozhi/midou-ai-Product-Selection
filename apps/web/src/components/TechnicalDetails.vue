@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 
 type DetailItem = { label: string; value?: string | number | null };
 
@@ -14,6 +14,9 @@ const props = withDefaults(
 );
 
 const copied = ref("");
+const copyError = ref("");
+let copyVersion = 0;
+let feedbackTimer: number | undefined;
 const rows = computed(() => [
   ...(props.requestId ? [{ label: "请求编号", value: props.requestId }] : []),
   ...(props.traceId ? [{ label: "链路编号", value: props.traceId }] : []),
@@ -22,12 +25,35 @@ const rows = computed(() => [
   ),
 ]);
 
+function resetCopyFeedback() {
+  copyVersion += 1;
+  if (feedbackTimer !== undefined) window.clearTimeout(feedbackTimer);
+  feedbackTimer = undefined;
+  copied.value = "";
+  copyError.value = "";
+}
+
+watch(() => JSON.stringify(rows.value), resetCopyFeedback, { flush: "sync" });
+onBeforeUnmount(resetCopyFeedback);
+onDeactivated(resetCopyFeedback);
+
 async function copy(label: string, value: string | number) {
-  await navigator.clipboard.writeText(String(value));
-  copied.value = label;
-  window.setTimeout(() => {
-    if (copied.value === label) copied.value = "";
-  }, 1_500);
+  resetCopyFeedback();
+  const version = copyVersion;
+  try {
+    await navigator.clipboard.writeText(String(value));
+    if (version !== copyVersion) return;
+    copied.value = label;
+    feedbackTimer = window.setTimeout(() => {
+      if (version === copyVersion) {
+        copied.value = "";
+        feedbackTimer = undefined;
+      }
+    }, 1_500);
+  } catch {
+    if (version === copyVersion)
+      copyError.value = `暂时无法复制${label}，可以选中上方内容后手动复制。`;
+  }
 }
 </script>
 
@@ -49,6 +75,7 @@ async function copy(label: string, value: string | number) {
         </button>
       </div>
     </dl>
+    <p v-if="copyError" role="status" class="technical-copy-feedback">{{ copyError }}</p>
   </details>
 </template>
 
@@ -83,5 +110,9 @@ async function copy(label: string, value: string | number) {
 .technical-details button {
   min-height: 1.8rem;
   padding: 0.2rem 0.55rem;
+}
+.technical-copy-feedback {
+  margin: 0.65rem 0 0;
+  overflow-wrap: anywhere;
 }
 </style>

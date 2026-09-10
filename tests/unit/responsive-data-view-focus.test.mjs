@@ -93,21 +93,32 @@ test("recaptured proposals allow only exact recorded edge-pixel differences, not
     path.join(path.dirname(require.resolve("playwright-core/package.json")), "lib/utilsBundle.js"),
   );
   const changed = [];
+  const nextReview = JSON.parse(
+    read("design-plans/ui-phase-2-2026-09-07/technical-copy-capture-review.json"),
+  );
+  assert.equal(nextReview.baselineCommit, "e704cd24");
   for (const manifest of review.manifests) {
     const current = JSON.parse(read(manifest)),
       prior = JSON.parse(baseline(manifest));
     for (const shot of prior.screenshots) {
-      const now = current.screenshots.find((item) => item.file === shot.file);
+      let now = current.screenshots.find((item) => item.file === shot.file);
       assert.ok(now, `${manifest}:${shot.file}`);
-      if (now.sha256 === shot.sha256) continue;
       const file = `${path.posix.dirname(manifest)}/${shot.file}`;
+      const next = nextReview.differences.find((item) => item.file === file);
+      if (next) {
+        assert.equal(now.sha256, next.afterSha256);
+        now = { ...now, sha256: next.beforeSha256 };
+      }
+      if (now.sha256 === shot.sha256) continue;
       const entry = review.differences.find((item) => item.file === file);
       assert.ok(entry, `unreviewed image change ${file}`);
       changed.push(file);
       assert.equal(entry.beforeSha256, shot.sha256);
       assert.equal(entry.afterSha256, now.sha256);
       const old = execFileSync("git", ["show", `ea005452:${file}`], { maxBuffer: 20_000_000 }),
-        bytes = readFileSync(file);
+        bytes = next
+          ? execFileSync("git", ["show", `e704cd24:${file}`], { maxBuffer: 20_000_000 })
+          : readFileSync(file);
       assert.equal(hash(bytes), entry.afterSha256);
       const a = PNG.sync.read(old),
         b = PNG.sync.read(bytes);

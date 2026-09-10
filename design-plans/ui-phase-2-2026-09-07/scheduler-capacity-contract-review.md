@@ -1,5 +1,7 @@
 # B3c · 调度与容量合同复核
 
+2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
+
 ## 2026-09-09 · P71 C方向具体稿补充
 
 [CAPACITY-C-r1](design/capacity-direction-c/README.md)：82场景175PNG、38数据集。蓝色运行边界、白色返回声明/停止事实、性能参考和恢复签认，资源绝对值替代伪占比。指标warning不必有下一档失败，blocked不必是5档未通过；policy未在DTO返回，合同参考与本次阈值不混淆。两类原请求详情和finding披露保留，新增已有降载actions展开；确认词无勾选框/新原因，预览不锁定数据库记录。统一忙碌、ID归属及独立结果是离线提案，真实Vue未改。
@@ -104,7 +106,7 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 | apps/web/src/components/CrawlerSchedulerCenter.vue | a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844 |
 | apps/web/src/components/CapacityBoundaryCenter.vue | 9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4 |
 | apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
-| apps/web/src/components/TechnicalDetails.vue | f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0 |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/web/src/ui/state-contract.ts | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
 | apps/web/src/components/NavigationShell.vue | 993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92 |

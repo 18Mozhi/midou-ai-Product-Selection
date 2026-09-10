@@ -249,7 +249,7 @@ window.PLATFORM_OVERVIEW_C_DATA = {
       "Original dashboard, independent 15-provider and three-point trend fixtures extracted from existing E2E AST; values not reconciled or recomputed.",
     vue: "Actual inert functions/computed: 8/15 priority, 43/3 trend, null/0 rate, bytes, fallback labels, four window URLs, preserved query, invalid default, pending single-flight and 12000ms abort callback.",
     reproduced:
-      "Selected 7d with failed refresh retains 24h; existing-ready 401/403 retains data; trend-only is empty; TechnicalDetails copy rejection is uncaught.",
+      "Selected 7d with failed refresh retains 24h; existing-ready 401/403 retains data; trend-only is empty. TechnicalDetails clipboard denial is now handled locally; full lifecycle coverage is in technical-copy-feedback evidence.",
     limits:
       "Not mounted Vue, real API, SQL, authorization, browser history, OS clipboard or production proof. Metric scope and audit writes are source inspection only.",
   },

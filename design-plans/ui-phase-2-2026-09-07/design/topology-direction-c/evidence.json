@@ -2,7 +2,7 @@
   "proposal": "TOPOLOGY-C-r1",
   "sourceHashes": {
     "apps/web/src/components/RuntimeTopologyCenter.vue": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
-    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
     "apps/api/src/runtime-topology-service.ts": "4a88e08069419e093c514fbe05b1a2b9c1966ca505910130780823a8db5fb172",
     "apps/api/src/mysql-runtime-topology-repository.ts": "8df495e05636d11ddaa4994813952a584a675e1b309fced24131ca073d8d5960",
     "apps/api/src/runtime-topology-routes.ts": "850d8148baab86f20bad5bff10f5bec4b85f7f3802560c3adb9be7d94aae2de6",

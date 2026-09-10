@@ -200,8 +200,23 @@ export async function buildPlatformOverviewDesignData(repo) {
   assert.equal(d.h.state.value, "empty");
   const technical = await read("apps/web/src/components/TechnicalDetails.vue");
   const ta = parse(technical.split(/<script setup[^>]*>/)[1].split("</script>")[0]);
-  const copyNode = find(ta, (n) => ts.isFunctionDeclaration(n) && n.name?.text === "copy")[0];
-  const copy = run(copyNode.getText(ta) + ";globalThis.__result=copy", {
+  const technicalScript = ta.statements
+    .filter((n) => !ts.isImportDeclaration(n))
+    .map((n) => n.getFullText(ta))
+    .join("\n");
+  const technicalState = run(technicalScript + ";globalThis.__result={copy,copied,copyError}", {
+    ref: (value) => ({ value }),
+    computed: (fn) => ({
+      get value() {
+        return fn();
+      },
+    }),
+    watch: () => {},
+    onBeforeUnmount: () => {},
+    onDeactivated: () => {},
+    defineProps: () => ({ requestId: "fixture", traceId: "", items: [] }),
+    withDefaults: (p) => p,
+    window: { setTimeout: () => 0, clearTimeout: () => {} },
     navigator: {
       clipboard: {
         writeText: async () => {
@@ -209,9 +224,13 @@ export async function buildPlatformOverviewDesignData(repo) {
         },
       },
     },
-    copied: { value: "" },
   });
-  await assert.rejects(copy("请求编号", "fixture"), /synthetic denied/);
+  await technicalState.copy("请求编号", "fixture");
+  assert.equal(technicalState.copied.value, "");
+  assert.equal(
+    technicalState.copyError.value,
+    "暂时无法复制请求编号，可以选中上方内容后手动复制。",
+  );
   return {
     dashboard,
     providers15,
@@ -223,7 +242,7 @@ export async function buildPlatformOverviewDesignData(repo) {
         "Original dashboard, independent 15-provider and three-point trend fixtures extracted from existing E2E AST; values not reconciled or recomputed.",
       vue: "Actual inert functions/computed: 8/15 priority, 43/3 trend, null/0 rate, bytes, fallback labels, four window URLs, preserved query, invalid default, pending single-flight and 12000ms abort callback.",
       reproduced:
-        "Selected 7d with failed refresh retains 24h; existing-ready 401/403 retains data; trend-only is empty; TechnicalDetails copy rejection is uncaught.",
+        "Selected 7d with failed refresh retains 24h; existing-ready 401/403 retains data; trend-only is empty. TechnicalDetails clipboard denial is now handled locally; full lifecycle coverage is in technical-copy-feedback evidence.",
       limits:
         "Not mounted Vue, real API, SQL, authorization, browser history, OS clipboard or production proof. Metric scope and audit writes are source inspection only.",
     },

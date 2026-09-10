@@ -7,7 +7,7 @@
     "apps/api/src/file-resilience-repository.ts": "12b943df959c7d007cec3f1f9133cdbd4de612764e27fecfc33e3c0d706c6860",
     "apps/api/src/file-resilience-routes.ts": "b99b4e7934369b5ab8d22802a0f18e4d71b66e8570b588027a918c4ab970aa6c",
     "apps/web/src/components/FileResilienceCenter.vue": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
     "tests/e2e/m08-04-file-resilience.spec.ts": "9fe7bef0ae8630bd19d13af3244a4587addd068d3bf9f4867c85a288c896af1a",
     "infra/baota/local-file-storage-manifest.json": "6b9b2a4ad271fcc6e3f183b3837a52afd4e7451d7ff8b01ef79c2086962de316",
     "packages/config/src/index.ts": "7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11",
