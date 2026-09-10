@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "04ac20e8cb19229ef55c8e6e0458d7de96d243b92f0c0afc68c25a10b0b1097c",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "654d32052f2b0715da3816ec15d02ad8d47de4c8fd007ef0d15cf526892a37b3",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -24,7 +24,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json": "0e3f660c2183fe58464112c5d9899417503efa7e2d24f4fe46efb7dc005f09ae",
     "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/evidence.json": "27712019f5a053e3d04b4e62c1f1b6afb306756bd585ca93252b11c5956b229b",
     "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/evidence.json": "d67da4d14f515bf59f59da74a4a4a82e47eafc6851138acc3dbfe158aa3a034a",
-    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json": "33bc20241334db1c53591c30090f3a50652df962a2dd97483dae2833c63c01b9",
+    "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/evidence.json": "6ec75fe6061d43f0aab5d0905e7183c6e77045fb6eb7e09d23f116774ccea04c",
     "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json": "da8e1396af7ceb615d3954213160500ded8ccbd60f3a68524593bd5e704a98f6",
     "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/evidence.json": "61d0c73a4e8c8bc1e7d6e4a4d50029db73cd2a351befa0b076bcf455748444f2",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json": "5130e8b205448f830a2ef0ba82cd8bee02b3dd2ea6d16f35fbca353139dcb982",
@@ -139,6 +139,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "output/playwright/p31-approved-controls-review/evidence.json": "4b7033532e4982d334f4a6068462a98b3227ffad6ddde3968734070c8fac1658",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "0267e1589dcd4d78eace2098fa1fab153aa5256cbbd5acfe943d8a489cad8015",
     "output/playwright/p32-approved-restore-review/evidence.json": "fe0cb804cb5a42b58caa6dd4856ed2472fd490b48f237a7ac823b708b615d6e4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "fb8132e5750fd59f997a4058e63d93f619504341132c7a33f8fdcdf0f31a0036",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "7375ef991df97c88a0b2a3e7dcb200f26fbb8b5bd828ec96344d7291053c0598"
   },
   "summary": {

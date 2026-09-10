@@ -212,6 +212,33 @@ export function validateActionReview(
         );
         const evidence = packages.get(ref.package);
         const pageScoped = Object.hasOwn(ref, "pageId");
+        if (Object.hasOwn(ref, "catalogControlId")) {
+          assert.equal(pageScoped, false, "catalog and page-scoped references cannot mix");
+          const control = evidence?.controls?.find((c) => c.id === ref.catalogControlId);
+          assert.ok(control && !control.proposalOnly, "missing business catalog control");
+          assert.equal(
+            control.actionId,
+            action.actionId,
+            "catalog control belongs to another action",
+          );
+          assert.equal(control.selector, ref.selector, "catalog selector differs from evidence");
+          assert.ok(control.states.includes(state), "catalog state missing");
+          for (const width of [1440, 390])
+            assert.ok(
+              evidence.screenshots.some(
+                (shot) =>
+                  shot.pageId === review.pageId &&
+                  shot.scene === ref.scene &&
+                  shot.width === width &&
+                  shot.control?.id === control.id &&
+                  shot.control?.selector === ref.selector &&
+                  shot.control?.actionId === action.actionId &&
+                  shot.control?.variant === state,
+              ),
+              "missing exact catalog screenshot/viewport",
+            );
+          continue;
+        }
         if (pageScoped)
           assert.equal(ref.pageId, review.pageId, "visual reference belongs to another page");
         const target = pageScoped

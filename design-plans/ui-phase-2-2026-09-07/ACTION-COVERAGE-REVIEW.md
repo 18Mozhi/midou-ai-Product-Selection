@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份24，旧表独有身份22。签名变化不等于增删业务能力。
-- 已具体语义对应33页/699源位置/671组；其中路由动作569组，转发/容器关联65组，其余明确排除。其余40页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应34页/717源位置/687组；其中路由动作581组，转发/容器关联65组，其余明确排除。其余39页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -44,7 +44,7 @@
 | [P30 成员与邀请](page-specs/P30.md) | 162 | [23组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P31 角色与权限](page-specs/P31.md) | 162 | [24组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P32 工作区管理](page-specs/P32.md) | 162 | [22组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P33 团队管理](page-specs/P33.md) | 162 | [16组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P34 审批模板](page-specs/P34.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P35 组织数据](page-specs/P35.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P36 组织令牌](page-specs/P36.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2788,6 +2788,76 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 新控件稿保留旧原型字段锁定、reason max500及未知结果保护提案；不能用控件图批准这些未确认的生产行为。
 - 共享原因窗的原生焦点/销毁/跨路由归属尚未由本页证明。
 - 原92PNG只是上下文，不冒充逐控件六态或真实Vue。
+
+## P33 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P33.json)：29个局部源位置 → 16组；2类写入，12组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，3处调用/内嵌容器，14个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有17个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新团队 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)、[refreshing · 1440](design/teams-direction-c/1440-refreshing.png) / [refreshing · 390](design/teams-direction-c/390-refreshing.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/teams-direction-c/1440-error.png) / [error · 390](design/teams-direction-c/390-error.png)、[blocked · 1440](design/teams-direction-c/1440-blocked.png) / [blocked · 390](design/teams-direction-c/390-blocked.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| EX-P29-PROFILE 资料分支排除 / excluded | 3处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| EX-P30-MEMBERS 成员分支排除 / excluded | 1处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| EX-P31-ROLES 授权分支排除 / excluded | 1处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| D-OG-REASON 分配与移除原因 / local | 3处；reason_assign、reason_remove、reason_short、reason_long | [reason_assign · 1440](design/teams-direction-c/1440-reason_assign.png) / [reason_assign · 390](design/teams-direction-c/390-reason_assign.png)、[reason_remove · 1440](design/teams-direction-c/1440-reason_remove.png) / [reason_remove · 390](design/teams-direction-c/390-reason_remove.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| EX-P36-TOKEN 令牌原因排除 / excluded | 1处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-OPEN 打开创建 / local | 2处；normal、empty、create | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)、[empty · 1440](design/teams-direction-c/1440-empty.png) / [empty · 390](design/teams-direction-c/390-empty.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-CREATE 创建团队 / write | 2处；create_draft、create_optional_empty、create_required、create_busy、create_failure、create_success、create_read_failed | [create_draft · 1440](design/teams-direction-c/1440-create_draft.png) / [create_draft · 390](design/teams-direction-c/390-create_draft.png)、[create_optional_empty · 1440](design/teams-direction-c/1440-create_optional_empty.png) / [create_optional_empty · 390](design/teams-direction-c/390-create_optional_empty.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-CANCEL 取消创建 / local | 1处；create_draft、create_busy | [create_draft · 1440](design/teams-direction-c/1440-create_draft.png) / [create_draft · 390](design/teams-direction-c/390-create_draft.png)、[create_busy · 1440](design/teams-direction-c/1440-create_busy.png) / [create_busy · 390](design/teams-direction-c/390-create_busy.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-FILTER 状态与筛选重置 / local | 5处；catalog、archived、filter_empty | [catalog · 1440](design/teams-direction-c/1440-catalog.png) / [catalog · 390](design/teams-direction-c/390-catalog.png)、[archived · 1440](design/teams-direction-c/1440-archived.png) / [archived · 390](design/teams-direction-c/390-archived.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-SELECT 选择团队 / local | 1处；selected、switched_pending | [selected · 1440](design/teams-direction-c/1440-selected.png) / [selected · 390](design/teams-direction-c/390-selected.png)、[switched_pending · 1440](design/teams-direction-c/1440-switched_pending.png) / [switched_pending · 390](design/teams-direction-c/390-switched_pending.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-PAGE 前后分页 / local | 2处；catalog、page_two | [catalog · 1440](design/teams-direction-c/1440-catalog.png) / [catalog · 390](design/teams-direction-c/390-catalog.png)、[page_two · 1440](design/teams-direction-c/1440-page_two.png) / [page_two · 390](design/teams-direction-c/390-page_two.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-MEMBER 分配与移除成员 / write | 2处；member_missing、locked_member、no_members、archived、member_busy、member_failure、member_success、switched_pending | [member_missing · 1440](design/teams-direction-c/1440-member_missing.png) / [member_missing · 390](design/teams-direction-c/390-member_missing.png)、[locked_member · 1440](design/teams-direction-c/1440-locked_member.png) / [locked_member · 390](design/teams-direction-c/390-locked_member.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-LINK 成员与工作区入口 / navigation | 2处；selected | [selected · 1440](design/teams-direction-c/1440-selected.png) / [selected · 390](design/teams-direction-c/390-selected.png)、[members-default · 1440](design/teams-controls-direction-c/members-default-1440.png) / [members-default · 390](design/teams-controls-direction-c/members-default-390.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-TECH 技术详情 / local | 1处；technical | [technical · 1440](design/teams-direction-c/1440-technical.png) / [technical · 390](design/teams-direction-c/390-technical.png)、[technical-default · 1440](design/teams-controls-direction-c/technical-default-1440.png) / [technical-default · 390](design/teams-controls-direction-c/technical-default-390.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | 仅P29资料表单，P33排除 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.logo_url | 仅P29资料表单，P33排除 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.timezone | 仅P29资料表单，P33排除 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | 仅P29资料表单，P33排除 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | 仅P29资料表单，P33排除 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.reason | 仅P29资料表单，P33排除 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.name | required/max120，提交trim，等待仍编辑 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.lead_membership_id | 可留空；活动成员不排除锁定账号；负责人创建时加入团队 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.default_workflow_key | 可留空/max80；trim，不检查流程存在 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.reason | required/max500，trim，不追加共享原因最短2字规则 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / query | 仅名称/负责人邮箱/流程键，trim小写，不搜索成员名单 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / sort | name_asc/members_desc/updated_desc；后两者并列按名称 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / selectedMembershipId | 当前组织活动成员；非原生required；换团队清空，等待仍编辑 | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / normal | form-container / route-excluded-reference | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_assign | native-reason-dialog / matching-dialog-scene | [reason_assign · 1440](design/teams-direction-c/1440-reason_assign.png) / [reason_assign · 390](design/teams-direction-c/390-reason_assign.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_remove | native-reason-dialog / matching-dialog-scene | [reason_remove · 1440](design/teams-direction-c/1440-reason_remove.png) / [reason_remove · 390](design/teams-direction-c/390-reason_remove.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_short | native-reason-dialog / matching-dialog-scene | [reason_short · 1440](design/teams-direction-c/1440-reason_short.png) / [reason_short · 390](design/teams-direction-c/390-reason_short.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_long | native-reason-dialog / matching-dialog-scene | [reason_long · 1440](design/teams-direction-c/1440-reason_long.png) / [reason_long · 390](design/teams-direction-c/390-reason_long.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / composition-assign | native-reason-dialog / matching-dialog-scene | [composition-assign · 1440](design/teams-controls-direction-c/composition-assign-1440.png) / [composition-assign · 390](design/teams-controls-direction-c/composition-assign-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / composition-remove | native-reason-dialog / matching-dialog-scene | [composition-remove · 1440](design/teams-controls-direction-c/composition-remove-1440.png) / [composition-remove · 390](design/teams-controls-direction-c/composition-remove-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-empty | form-container / matching-inline-form-scene | [composition-create-empty · 1440](design/teams-fields-direction-c/composition-create-empty-1440.png) / [composition-create-empty · 390](design/teams-fields-direction-c/composition-create-empty-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-ready | form-container / matching-inline-form-scene | [composition-create-ready · 1440](design/teams-fields-direction-c/composition-create-ready-1440.png) / [composition-create-ready · 390](design/teams-fields-direction-c/composition-create-ready-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-optional-empty | form-container / matching-inline-form-scene | [composition-create-optional-empty · 1440](design/teams-fields-direction-c/composition-create-optional-empty-1440.png) / [composition-create-optional-empty · 390](design/teams-fields-direction-c/composition-create-optional-empty-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-invalid | form-container / matching-inline-form-scene | [composition-create-invalid · 1440](design/teams-fields-direction-c/composition-create-invalid-1440.png) / [composition-create-invalid · 390](design/teams-fields-direction-c/composition-create-invalid-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-boundary | form-container / matching-inline-form-scene | [composition-create-boundary · 1440](design/teams-fields-direction-c/composition-create-boundary-1440.png) / [composition-create-boundary · 390](design/teams-fields-direction-c/composition-create-boundary-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-pending | form-container / matching-inline-form-scene | [composition-create-pending · 1440](design/teams-fields-direction-c/composition-create-pending-1440.png) / [composition-create-pending · 390](design/teams-fields-direction-c/composition-create-pending-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OrganizationTeamPanel.vue / form.1 / composition-create-failed | form-container / matching-inline-form-scene | [composition-create-failed · 1440](design/teams-fields-direction-c/composition-create-failed-1440.png) / [composition-create-failed · 390](design/teams-fields-direction-c/composition-create-failed-390.png) | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+
+### 明确保留的边界
+
+- OG-G02：成员请求等待后读取后来选择，可能异常或错误归属；图稿保护未进入Vue。
+- 创建成功清除后续草稿；共享原因max500/晚到结果保护仍属未批准提案；不决定新政策。
+- 代表六态未映射部分仍需适用性审查，不把179个列明控件状态当全部状态空间。
+- 原型不是完整Vue响应性、原生缩放、多主题、多角色或真实权限/审计证明。
+- 成员操作选择区不是原生form，不计第四表单；两张成员组合单独关联该字段。
 
 ## P54 局部动作与共享消费者
 

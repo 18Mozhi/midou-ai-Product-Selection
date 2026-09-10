@@ -1,0 +1,2968 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P33",
+  "route": "/org-admin/teams",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174"
+  },
+  "actions": [
+    {
+      "actionId": "OG-REFRESH",
+      "label": "刷新团队",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+      ],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "loading或refreshing禁用",
+      "handler": "load(background)读取summary、teams和members；子busy不包含refreshing",
+      "variants": [
+        "normal",
+        "refreshing",
+        "refresh_error"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "refreshing"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "refresh_error"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-busy"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-loading-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-default",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-hover",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-focus",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-pressed",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        },
+        "busy": {
+          "package": "teams-controls-direction-c",
+          "scene": "refresh-busy",
+          "selector": "#refresh",
+          "catalogControlId": "refresh"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "refresh",
+          "selector": "#refresh",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "refresh-default",
+            "hover": "refresh-hover",
+            "focus": "refresh-focus",
+            "pressed": "refresh-pressed",
+            "busy": "refresh-busy"
+          }
+        },
+        {
+          "id": "refresh-loading",
+          "selector": "#refresh",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "disabled": "refresh-loading-disabled"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-RETRY",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "父错误分支，无disabled",
+      "handler": "load()不绕过权限",
+      "variants": [
+        "error",
+        "blocked",
+        "expired",
+        "forbidden",
+        "rate_limited"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "rate_limited"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-blocked-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-blocked-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-blocked-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-blocked-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-expired-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-expired-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-expired-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-expired-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-forbidden-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-forbidden-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-forbidden-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-forbidden-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-rate_limited-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-rate_limited-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-rate_limited-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-rate_limited-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-default",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-hover",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-focus",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "retry-error-pressed",
+          "selector": "#retry",
+          "catalogControlId": "retry-error"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "retry-error",
+          "selector": "#retry",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "retry-error-default",
+            "hover": "retry-error-hover",
+            "focus": "retry-error-focus",
+            "pressed": "retry-error-pressed"
+          }
+        },
+        {
+          "id": "retry-blocked",
+          "selector": "#retry",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "retry-blocked-default",
+            "hover": "retry-blocked-hover",
+            "focus": "retry-blocked-focus",
+            "pressed": "retry-blocked-pressed"
+          }
+        },
+        {
+          "id": "retry-expired",
+          "selector": "#retry",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "retry-expired-default",
+            "hover": "retry-expired-hover",
+            "focus": "retry-expired-focus",
+            "pressed": "retry-expired-pressed"
+          }
+        },
+        {
+          "id": "retry-forbidden",
+          "selector": "#retry",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "retry-forbidden-default",
+            "hover": "retry-forbidden-hover",
+            "focus": "retry-forbidden-focus",
+            "pressed": "retry-forbidden-pressed"
+          }
+        },
+        {
+          "id": "retry-rate_limited",
+          "selector": "#retry",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "retry-rate_limited-default",
+            "hover": "retry-rate_limited-hover",
+            "focus": "retry-rate_limited-focus",
+            "pressed": "retry-rate_limited-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "EX-P29-PROFILE",
+      "label": "资料分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "仅summary",
+      "handler": "P33不显示资料表单",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+    },
+    {
+      "actionId": "EX-P30-MEMBERS",
+      "label": "成员分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
+      ],
+      "sourceContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "仅members",
+      "handler": "不计入团队动作",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+    },
+    {
+      "actionId": "EX-P31-ROLES",
+      "label": "授权分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
+      ],
+      "sourceContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "仅roles",
+      "handler": "不计入团队动作",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+    },
+    {
+      "actionId": "D-OG-REASON",
+      "label": "分配与移除原因",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON提交/取消父转发",
+        "D-OG-REASON组件调用",
+        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "成员操作先等原因",
+      "handler": "共享窗trim至少2字、前端无max；先关闭再写，取消零写",
+      "variants": [
+        "reason_assign",
+        "reason_remove",
+        "reason_short",
+        "reason_long"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "reason_assign"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "reason_remove"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "reason_short"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "reason_long"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-disabled"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-cancel-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-cancel-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-cancel-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-cancel-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-close-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-close-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-close-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-close-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-confirm-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-confirm-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-confirm-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-confirm-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-confirm-disabled"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-cancel-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-cancel-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-cancel-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-cancel-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-close-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-close-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-close-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-remove-close-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-default",
+          "selector": "#reason-confirm",
+          "catalogControlId": "reason-assign-confirm"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-hover",
+          "selector": "#reason-confirm",
+          "catalogControlId": "reason-assign-confirm"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-focus",
+          "selector": "#reason-confirm",
+          "catalogControlId": "reason-assign-confirm"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-pressed",
+          "selector": "#reason-confirm",
+          "catalogControlId": "reason-assign-confirm"
+        },
+        "disabled": {
+          "package": "teams-controls-direction-c",
+          "scene": "reason-assign-confirm-disabled",
+          "selector": "#reason-confirm",
+          "catalogControlId": "reason-assign-confirm"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "reason-assign-confirm",
+          "selector": "#reason-confirm",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "reason-assign-confirm-default",
+            "hover": "reason-assign-confirm-hover",
+            "focus": "reason-assign-confirm-focus",
+            "pressed": "reason-assign-confirm-pressed",
+            "disabled": "reason-assign-confirm-disabled"
+          }
+        },
+        {
+          "id": "reason-assign-cancel",
+          "selector": "#reason-cancel",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "reason-assign-cancel-default",
+            "hover": "reason-assign-cancel-hover",
+            "focus": "reason-assign-cancel-focus",
+            "pressed": "reason-assign-cancel-pressed"
+          }
+        },
+        {
+          "id": "reason-assign-close",
+          "selector": "#reason-close",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "reason-assign-close-default",
+            "hover": "reason-assign-close-hover",
+            "focus": "reason-assign-close-focus",
+            "pressed": "reason-assign-close-pressed"
+          }
+        },
+        {
+          "id": "reason-remove-confirm",
+          "selector": "#reason-confirm",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "reason-remove-confirm-default",
+            "hover": "reason-remove-confirm-hover",
+            "focus": "reason-remove-confirm-focus",
+            "pressed": "reason-remove-confirm-pressed",
+            "disabled": "reason-remove-confirm-disabled"
+          }
+        },
+        {
+          "id": "reason-remove-cancel",
+          "selector": "#reason-cancel",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "reason-remove-cancel-default",
+            "hover": "reason-remove-cancel-hover",
+            "focus": "reason-remove-cancel-focus",
+            "pressed": "reason-remove-cancel-pressed"
+          }
+        },
+        {
+          "id": "reason-remove-close",
+          "selector": "#reason-close",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "reason-remove-close-default",
+            "hover": "reason-remove-close-hover",
+            "focus": "reason-remove-close-focus",
+            "pressed": "reason-remove-close-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "EX-P36-TOKEN",
+      "label": "令牌原因排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON令牌轮换/撤销调用"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "仅Token函数",
+      "handler": "共享helper不等于其他页验收",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+    },
+    {
+      "actionId": "OG-T-OPEN",
+      "label": "打开创建",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#dea8d744b50ed1f0.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#9f5ea38e58a26f78.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-OPEN头部/空态"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "头部busy禁用，空态入口无同样绑定",
+      "handler": "展开聚焦名称，不清草稿",
+      "variants": [
+        "normal",
+        "empty",
+        "create"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-busy"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-empty-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-empty-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-empty-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "open-empty-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "open-default",
+          "selector": ".head-actions [data-create]",
+          "catalogControlId": "open"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "open-hover",
+          "selector": ".head-actions [data-create]",
+          "catalogControlId": "open"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "open-focus",
+          "selector": ".head-actions [data-create]",
+          "catalogControlId": "open"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "open-pressed",
+          "selector": ".head-actions [data-create]",
+          "catalogControlId": "open"
+        },
+        "busy": {
+          "package": "teams-controls-direction-c",
+          "scene": "open-busy",
+          "selector": ".head-actions [data-create]",
+          "catalogControlId": "open"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "open",
+          "selector": ".head-actions [data-create]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#dea8d744b50ed1f0.1"
+          ],
+          "states": {
+            "default": "open-default",
+            "hover": "open-hover",
+            "focus": "open-focus",
+            "pressed": "open-pressed",
+            "busy": "open-busy"
+          }
+        },
+        {
+          "id": "open-empty",
+          "selector": ".empty [data-create]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#9f5ea38e58a26f78.1"
+          ],
+          "states": {
+            "default": "open-empty-default",
+            "hover": "open-empty-hover",
+            "focus": "open-empty-focus",
+            "pressed": "open-empty-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-CREATE",
+      "label": "创建团队",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#1ea0ce8ecc982edd.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#bae4e728dfc90592.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-CREATE"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "busy或createBusy防重",
+      "handler": "四字段经函数prop创建，名称/流程键/原因trim；失败保留，成功清空收起，等待可编辑",
+      "variants": [
+        "create_draft",
+        "create_optional_empty",
+        "create_required",
+        "create_busy",
+        "create_failure",
+        "create_success",
+        "create_read_failed"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "create_draft"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_optional_empty"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_required"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_busy"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_failure"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_success"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_read_failed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-default",
+          "selector": "#create-submit",
+          "catalogControlId": "create"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-hover",
+          "selector": "#create-submit",
+          "catalogControlId": "create"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-focus",
+          "selector": "#create-submit",
+          "catalogControlId": "create"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-pressed",
+          "selector": "#create-submit",
+          "catalogControlId": "create"
+        },
+        "busy": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-busy",
+          "selector": "#create-submit",
+          "catalogControlId": "create"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "create",
+          "selector": "#create-submit",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#1ea0ce8ecc982edd.1",
+            "apps/web/src/components/OrganizationTeamPanel.vue#bae4e728dfc90592.1"
+          ],
+          "states": {
+            "default": "create-default",
+            "hover": "create-hover",
+            "focus": "create-focus",
+            "pressed": "create-pressed",
+            "busy": "create-busy"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-CANCEL",
+      "label": "取消创建",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#617ab4a17066056a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-CANCEL"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "仅createBusy禁用及早退",
+      "handler": "清四字段并收起，不请求服务",
+      "variants": [
+        "create_draft",
+        "create_busy"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "create_draft"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_busy"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-default",
+          "selector": "#cancel-create",
+          "catalogControlId": "cancel-create"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-hover",
+          "selector": "#cancel-create",
+          "catalogControlId": "cancel-create"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-focus",
+          "selector": "#cancel-create",
+          "catalogControlId": "cancel-create"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-pressed",
+          "selector": "#cancel-create",
+          "catalogControlId": "cancel-create"
+        },
+        "disabled": {
+          "package": "teams-controls-direction-c",
+          "scene": "cancel-create-disabled",
+          "selector": "#cancel-create",
+          "catalogControlId": "cancel-create"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "cancel-create",
+          "selector": "#cancel-create",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#617ab4a17066056a.1"
+          ],
+          "states": {
+            "default": "cancel-create-default",
+            "hover": "cancel-create-hover",
+            "focus": "cancel-create-focus",
+            "pressed": "cancel-create-pressed",
+            "disabled": "cancel-create-disabled"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-FILTER",
+      "label": "状态与筛选重置",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#cde0a7cecbbc9a09.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#18ece981bcb15fca.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#56fb9bb2ac849bf0.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#66725db5db9a8fe8.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#83a359c9f404cb11.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-FILTER状态/重置/清除"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "无busy禁用；空结果按钮需全量非空",
+      "handler": "all/active/archived及query/sort本地筛选，变化回第一页，重置不清选择或草稿",
+      "variants": [
+        "catalog",
+        "archived",
+        "filter_empty"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "catalog"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "archived"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "filter_empty"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-selected-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-selected-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-selected-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-selected-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-available-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-available-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-available-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-available-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-selected-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-selected-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-selected-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-active-selected-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-available-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-available-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-available-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-available-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-selected-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-selected-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-selected-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "status-archived-selected-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reset-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reset-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reset-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "reset-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "clear-empty-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "clear-empty-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "clear-empty-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "clear-empty-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-default",
+          "selector": "[data-status=\"all\"]",
+          "catalogControlId": "status-all-available"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-hover",
+          "selector": "[data-status=\"all\"]",
+          "catalogControlId": "status-all-available"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-focus",
+          "selector": "[data-status=\"all\"]",
+          "catalogControlId": "status-all-available"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "status-all-available-pressed",
+          "selector": "[data-status=\"all\"]",
+          "catalogControlId": "status-all-available"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "status-all-available",
+          "selector": "[data-status=\"all\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#cde0a7cecbbc9a09.1"
+          ],
+          "states": {
+            "default": "status-all-available-default",
+            "hover": "status-all-available-hover",
+            "focus": "status-all-available-focus",
+            "pressed": "status-all-available-pressed"
+          }
+        },
+        {
+          "id": "status-all-selected",
+          "selector": "[data-status=\"all\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "status-all-selected-default",
+            "hover": "status-all-selected-hover",
+            "focus": "status-all-selected-focus",
+            "pressed": "status-all-selected-pressed"
+          }
+        },
+        {
+          "id": "status-active-available",
+          "selector": "[data-status=\"active\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#18ece981bcb15fca.1"
+          ],
+          "states": {
+            "default": "status-active-available-default",
+            "hover": "status-active-available-hover",
+            "focus": "status-active-available-focus",
+            "pressed": "status-active-available-pressed"
+          }
+        },
+        {
+          "id": "status-active-selected",
+          "selector": "[data-status=\"active\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "status-active-selected-default",
+            "hover": "status-active-selected-hover",
+            "focus": "status-active-selected-focus",
+            "pressed": "status-active-selected-pressed"
+          }
+        },
+        {
+          "id": "status-archived-available",
+          "selector": "[data-status=\"archived\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#56fb9bb2ac849bf0.1"
+          ],
+          "states": {
+            "default": "status-archived-available-default",
+            "hover": "status-archived-available-hover",
+            "focus": "status-archived-available-focus",
+            "pressed": "status-archived-available-pressed"
+          }
+        },
+        {
+          "id": "status-archived-selected",
+          "selector": "[data-status=\"archived\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "status-archived-selected-default",
+            "hover": "status-archived-selected-hover",
+            "focus": "status-archived-selected-focus",
+            "pressed": "status-archived-selected-pressed"
+          }
+        },
+        {
+          "id": "reset",
+          "selector": "#filters [data-reset]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#66725db5db9a8fe8.1"
+          ],
+          "states": {
+            "default": "reset-default",
+            "hover": "reset-hover",
+            "focus": "reset-focus",
+            "pressed": "reset-pressed"
+          }
+        },
+        {
+          "id": "clear-empty",
+          "selector": ".empty [data-reset]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#83a359c9f404cb11.1"
+          ],
+          "states": {
+            "default": "clear-empty-default",
+            "hover": "clear-empty-hover",
+            "focus": "clear-empty-focus",
+            "pressed": "clear-empty-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-SELECT",
+      "label": "选择团队",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#95629c96c6d7c41b.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-SELECT"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "pageItems，无busy禁用",
+      "handler": "原id选择；watch清操作成员与反馈，详情按全量数组查找；button role=listitem仍待修",
+      "variants": [
+        "selected",
+        "switched_pending"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "selected"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "switched_pending"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-current-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-current-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-current-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "select-current-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "select-default",
+          "selector": ".team-row[aria-pressed='false']",
+          "catalogControlId": "select"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "select-hover",
+          "selector": ".team-row[aria-pressed='false']",
+          "catalogControlId": "select"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "select-focus",
+          "selector": ".team-row[aria-pressed='false']",
+          "catalogControlId": "select"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "select-pressed",
+          "selector": ".team-row[aria-pressed='false']",
+          "catalogControlId": "select"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "select",
+          "selector": ".team-row[aria-pressed='false']",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#95629c96c6d7c41b.1"
+          ],
+          "states": {
+            "default": "select-default",
+            "hover": "select-hover",
+            "focus": "select-focus",
+            "pressed": "select-pressed"
+          }
+        },
+        {
+          "id": "select-current",
+          "selector": ".team-row[aria-pressed='true']",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "select-current-default",
+            "hover": "select-current-hover",
+            "focus": "select-current-focus",
+            "pressed": "select-current-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-PAGE",
+      "label": "前后分页",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#3619d28a163df5ce.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#d56d9b5edd39513e.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-PAGE"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "结果超过8条展示；边界禁用",
+      "handler": "本地page减增，不新GET",
+      "variants": [
+        "catalog",
+        "page_two"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "catalog"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "page_two"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-disabled"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "next-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "next-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "next-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "next-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "next-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-default",
+          "selector": ".pagination button:first-child",
+          "catalogControlId": "previous"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-hover",
+          "selector": ".pagination button:first-child",
+          "catalogControlId": "previous"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-focus",
+          "selector": ".pagination button:first-child",
+          "catalogControlId": "previous"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-pressed",
+          "selector": ".pagination button:first-child",
+          "catalogControlId": "previous"
+        },
+        "disabled": {
+          "package": "teams-controls-direction-c",
+          "scene": "previous-disabled",
+          "selector": ".pagination button:first-child",
+          "catalogControlId": "previous"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "previous",
+          "selector": ".pagination button:first-child",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#3619d28a163df5ce.1"
+          ],
+          "states": {
+            "default": "previous-default",
+            "hover": "previous-hover",
+            "focus": "previous-focus",
+            "pressed": "previous-pressed",
+            "disabled": "previous-disabled"
+          }
+        },
+        {
+          "id": "next",
+          "selector": ".pagination button:last-child",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#d56d9b5edd39513e.1"
+          ],
+          "states": {
+            "default": "next-default",
+            "hover": "next-hover",
+            "focus": "next-focus",
+            "pressed": "next-pressed",
+            "disabled": "next-disabled"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-MEMBER",
+      "label": "分配与移除成员",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#9fbd42d272c62579.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#917ad4e4a5730305.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-MEMBER分配/移除"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "busy或memberBusy防重；未选只提示，归档不额外禁用",
+      "handler": "等原因后POST action/membership_id/reason，无expected_version；成功后读当前选择有OG-G02风险",
+      "variants": [
+        "member_missing",
+        "locked_member",
+        "no_members",
+        "archived",
+        "member_busy",
+        "member_failure",
+        "member_success",
+        "switched_pending"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "member_missing"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "locked_member"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "no_members"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "archived"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "member_busy"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "member_failure"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "member_success"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "switched_pending"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-busy"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-missing-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-missing-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-missing-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-missing-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-archived-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-archived-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-archived-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-archived-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-no-members-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-no-members-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-no-members-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-no-members-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-busy"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-missing-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-missing-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-missing-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-missing-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-archived-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-archived-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-archived-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-archived-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-no-members-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-no-members-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-no-members-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "remove-no-members-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "scene-reference-not-acceptance"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-default",
+          "selector": "[data-member-action=\"assign\"]",
+          "catalogControlId": "assign"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-hover",
+          "selector": "[data-member-action=\"assign\"]",
+          "catalogControlId": "assign"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-focus",
+          "selector": "[data-member-action=\"assign\"]",
+          "catalogControlId": "assign"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-pressed",
+          "selector": "[data-member-action=\"assign\"]",
+          "catalogControlId": "assign"
+        },
+        "busy": {
+          "package": "teams-controls-direction-c",
+          "scene": "assign-busy",
+          "selector": "[data-member-action=\"assign\"]",
+          "catalogControlId": "assign"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "assign",
+          "selector": "[data-member-action=\"assign\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#9fbd42d272c62579.1"
+          ],
+          "states": {
+            "default": "assign-default",
+            "hover": "assign-hover",
+            "focus": "assign-focus",
+            "pressed": "assign-pressed",
+            "busy": "assign-busy"
+          }
+        },
+        {
+          "id": "assign-missing",
+          "selector": "[data-member-action=\"assign\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "assign-missing-default",
+            "hover": "assign-missing-hover",
+            "focus": "assign-missing-focus",
+            "pressed": "assign-missing-pressed"
+          }
+        },
+        {
+          "id": "assign-archived",
+          "selector": "[data-member-action=\"assign\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "assign-archived-default",
+            "hover": "assign-archived-hover",
+            "focus": "assign-archived-focus",
+            "pressed": "assign-archived-pressed"
+          }
+        },
+        {
+          "id": "assign-no-members",
+          "selector": "[data-member-action=\"assign\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "assign-no-members-default",
+            "hover": "assign-no-members-hover",
+            "focus": "assign-no-members-focus",
+            "pressed": "assign-no-members-pressed"
+          }
+        },
+        {
+          "id": "remove",
+          "selector": "[data-member-action=\"remove\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#917ad4e4a5730305.1"
+          ],
+          "states": {
+            "default": "remove-default",
+            "hover": "remove-hover",
+            "focus": "remove-focus",
+            "pressed": "remove-pressed",
+            "busy": "remove-busy"
+          }
+        },
+        {
+          "id": "remove-missing",
+          "selector": "[data-member-action=\"remove\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "remove-missing-default",
+            "hover": "remove-missing-hover",
+            "focus": "remove-missing-focus",
+            "pressed": "remove-missing-pressed"
+          }
+        },
+        {
+          "id": "remove-archived",
+          "selector": "[data-member-action=\"remove\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "remove-archived-default",
+            "hover": "remove-archived-hover",
+            "focus": "remove-archived-focus",
+            "pressed": "remove-archived-pressed"
+          }
+        },
+        {
+          "id": "remove-no-members",
+          "selector": "[data-member-action=\"remove\"]",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "remove-no-members-default",
+            "hover": "remove-no-members-hover",
+            "focus": "remove-no-members-focus",
+            "pressed": "remove-no-members-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-LINK",
+      "label": "成员与工作区入口",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#76054446429e86da.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#2db399169624cf8a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-LINK成员/工作区"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "有选择时显示，无busy禁用",
+      "handler": "RouterLink去成员或工作区，不修改会话范围",
+      "variants": [
+        "selected"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "selected"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "members-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "members-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "members-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "members-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "workspaces-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "workspaces-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "workspaces-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "workspaces-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "members-default",
+          "selector": "a[href='/org-admin/members']",
+          "catalogControlId": "members"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "members-hover",
+          "selector": "a[href='/org-admin/members']",
+          "catalogControlId": "members"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "members-focus",
+          "selector": "a[href='/org-admin/members']",
+          "catalogControlId": "members"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "members-pressed",
+          "selector": "a[href='/org-admin/members']",
+          "catalogControlId": "members"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "members",
+          "selector": "a[href='/org-admin/members']",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#76054446429e86da.1"
+          ],
+          "states": {
+            "default": "members-default",
+            "hover": "members-hover",
+            "focus": "members-focus",
+            "pressed": "members-pressed"
+          }
+        },
+        {
+          "id": "workspaces",
+          "selector": "a[href='/org-admin/workspaces']",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#2db399169624cf8a.1"
+          ],
+          "states": {
+            "default": "workspaces-default",
+            "hover": "workspaces-hover",
+            "focus": "workspaces-focus",
+            "pressed": "workspaces-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-TECH",
+      "label": "技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "OG-TECH"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "所选团队存在",
+      "handler": "原生details展示团队及负责人成员关系ID，不是弹窗/复制",
+      "variants": [
+        "technical"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "technical"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-open-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-open-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-open-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-open-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-default",
+          "selector": "#technical summary",
+          "catalogControlId": "technical"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-hover",
+          "selector": "#technical summary",
+          "catalogControlId": "technical"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-focus",
+          "selector": "#technical summary",
+          "catalogControlId": "technical"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "technical-pressed",
+          "selector": "#technical summary",
+          "catalogControlId": "technical"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "technical",
+          "selector": "#technical summary",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#1c008f867673db60.1"
+          ],
+          "states": {
+            "default": "technical-default",
+            "hover": "technical-hover",
+            "focus": "technical-focus",
+            "pressed": "technical-pressed"
+          }
+        },
+        {
+          "id": "technical-open",
+          "selector": "#technical summary",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "technical-open-default",
+            "hover": "technical-open-hover",
+            "focus": "technical-open-focus",
+            "pressed": "technical-open-pressed"
+          }
+        }
+      ]
+    }
+  ],
+  "functionProps": [
+    {
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "component": "OrganizationTeamPanel",
+      "attribute": "create-team",
+      "handler": "createTeam",
+      "consumer": "props.createTeam",
+      "actionId": "OG-T-CREATE"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "component": "OrganizationTeamPanel",
+      "attribute": "perform-member-action",
+      "handler": "teamMemberAction",
+      "consumer": "props.performMemberAction",
+      "actionId": "OG-T-MEMBER"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "分配/移除共用一个原因窗；创建为内联form，不是第二弹窗。"
+  },
+  "inputs": {
+    "OrganizationAdminCenter.vue": [
+      "form.name",
+      "form.logo_url",
+      "form.timezone",
+      "form.data_retention_days",
+      "form.default_workspace_id",
+      "form.reason"
+    ],
+    "OrganizationTeamPanel.vue": [
+      "form.name",
+      "form.lead_membership_id",
+      "form.default_workflow_key",
+      "form.reason",
+      "query",
+      "sort",
+      "selectedMembershipId"
+    ]
+  },
+  "sharedReasonInput": {
+    "file": "apps/web/src/components/AuditedReasonDialog.vue",
+    "binding": "reason",
+    "minimumLength": 2,
+    "maximumLength": null,
+    "serverMaximumLength": 500,
+    "remaining": "旧稿max500不是实际前端规则，未获本批批准"
+  },
+  "proposalOnlyControls": [
+    {
+      "id": "filters-closed",
+      "reason": "筛选details是提案新增结构，不计为真实业务控件"
+    },
+    {
+      "id": "filters-open",
+      "reason": "筛选details是提案新增结构，不计为真实业务控件"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationTeamPanel.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+      "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+      "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+      "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.name",
+        "meaning": "仅P29资料表单，P33排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.logo_url",
+        "meaning": "仅P29资料表单，P33排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.timezone",
+        "meaning": "仅P29资料表单，P33排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.data_retention_days",
+        "meaning": "仅P29资料表单，P33排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.default_workspace_id",
+        "meaning": "仅P29资料表单，P33排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.reason",
+        "meaning": "仅P29资料表单，P33排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "form.name",
+        "meaning": "required/max120，提交trim，等待仍编辑",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "name",
+          "selector": "#team-name",
+          "states": {
+            "default": "name-default",
+            "focus": "name-focus",
+            "empty": "name-empty",
+            "whitespace": "name-whitespace",
+            "boundary": "name-boundary",
+            "corrected": "name-corrected",
+            "pending": "name-pending"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "form.lead_membership_id",
+        "meaning": "可留空；活动成员不排除锁定账号；负责人创建时加入团队",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "lead",
+          "selector": "#team-lead",
+          "states": {
+            "default": "lead-default",
+            "focus": "lead-focus",
+            "empty": "lead-empty",
+            "admin": "lead-admin",
+            "buyer": "lead-buyer",
+            "locked": "lead-locked",
+            "no-members": "lead-no-members",
+            "pending": "lead-pending"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "form.default_workflow_key",
+        "meaning": "可留空/max80；trim，不检查流程存在",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "workflow",
+          "selector": "#team-workflow",
+          "states": {
+            "default": "workflow-default",
+            "focus": "workflow-focus",
+            "empty": "workflow-empty",
+            "whitespace": "workflow-whitespace",
+            "boundary": "workflow-boundary",
+            "free-text": "workflow-free-text",
+            "pending": "workflow-pending"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "form.reason",
+        "meaning": "required/max500，trim，不追加共享原因最短2字规则",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "reason",
+          "selector": "#team-reason",
+          "states": {
+            "default": "reason-default",
+            "focus": "reason-focus",
+            "empty": "reason-empty",
+            "whitespace": "reason-whitespace",
+            "boundary": "reason-boundary",
+            "corrected": "reason-corrected",
+            "pending": "reason-pending"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "query",
+        "meaning": "仅名称/负责人邮箱/流程键，trim小写，不搜索成员名单",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "query",
+          "selector": "#query",
+          "states": {
+            "default": "query-default",
+            "focus": "query-focus",
+            "name": "query-name",
+            "email": "query-email",
+            "workflow": "query-workflow",
+            "no-result": "query-no-result",
+            "cleared": "query-cleared"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "sort",
+        "meaning": "name_asc/members_desc/updated_desc；后两者并列按名称",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "sort",
+          "selector": "#sort",
+          "states": {
+            "default": "sort-default",
+            "focus": "sort-focus",
+            "name_asc": "sort-name_asc",
+            "members_desc": "sort-members_desc",
+            "updated_desc": "sort-updated_desc"
+          }
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "binding": "selectedMembershipId",
+        "meaning": "当前组织活动成员；非原生required；换团队清空，等待仍编辑",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "fieldEvidence": {
+          "package": "teams-fields-direction-c",
+          "id": "member",
+          "selector": "#team-member-select",
+          "states": {
+            "default": "member-default",
+            "focus": "member-focus",
+            "admin": "member-admin",
+            "buyer": "member-buyer",
+            "locked": "member-locked",
+            "no-members": "member-no-members",
+            "archived": "member-archived",
+            "pending": "member-pending"
+          }
+        }
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "summary资料表单，teams分支排除",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "variants": [
+          {
+            "name": "normal",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "teams-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+            "exclusionReason": "仅summary分支"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "分配/移除先等原因，取消零写；关闭后写入",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "variants": [
+          {
+            "name": "reason_assign",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "teams-direction-c",
+                "scene": "reason_assign"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "reason_remove",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "teams-direction-c",
+                "scene": "reason_remove"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "reason_short",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "teams-direction-c",
+                "scene": "reason_short"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "reason_long",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "teams-direction-c",
+                "scene": "reason_long"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-assign",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "teams-controls-direction-c",
+                "scene": "composition-assign"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-remove",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "teams-controls-direction-c",
+                "scene": "composition-remove"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "四字段内联创建；成功/取消清空，失败保留，等待字段仍编辑",
+        "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+        "variants": [
+          {
+            "name": "composition-create-empty",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-empty"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-create-ready",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-ready"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-create-optional-empty",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-optional-empty"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-create-invalid",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-invalid"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-create-boundary",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-boundary"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-create-pending",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-pending"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          },
+          {
+            "name": "composition-create-failed",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "teams-fields-direction-c",
+                "scene": "composition-create-failed"
+              }
+            ],
+            "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "原型不是完整Vue响应性、原生缩放、多主题、多角色或真实权限/审计证明。",
+      "成员操作选择区不是原生form，不计第四表单；两张成员组合单独关联该字段。"
+    ]
+  },
+  "memberCombinations": [
+    {
+      "package": "teams-fields-direction-c",
+      "scene": "composition-member-missing"
+    },
+    {
+      "package": "teams-fields-direction-c",
+      "scene": "composition-member-archived"
+    }
+  ],
+  "compositionGaps": [
+    "OG-G02：成员请求等待后读取后来选择，可能异常或错误归属；图稿保护未进入Vue。",
+    "创建成功清除后续草稿；共享原因max500/晚到结果保护仍属未批准提案；不决定新政策。",
+    "代表六态未映射部分仍需适用性审查，不把179个列明控件状态当全部状态空间。"
+  ],
+  "limits": [
+    "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+    "P31/P32局部批准不外推P33；无生产源码/API/env/依赖/权限/部署变化。"
+  ]
+}
