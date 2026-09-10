@@ -54,6 +54,35 @@ test("P35 approved mobile composition is pinned without promoting other images o
   );
 });
 
+test("P35 null and zero approvals pin only the two reviewed 390px images", () => {
+  const approval = read("design-plans/ui-phase-2-2026-09-07/P35-MOBILE-EXPORT-DETAIL-APPROVAL.md");
+  const approved = [
+    [
+      "zero-open-390.png",
+      "zero",
+      "4d9f22dddd4c73714a04c5021aae81213b8b1991a0c13bf8d99aec4358cd40ae",
+    ],
+    [
+      "known-zero-open-390.png",
+      "known-zero",
+      "3c4ea30c98279a4da0f361e73d72a39e7547411bdc3d17c6fa30ef512160a560",
+    ],
+  ];
+  for (const [file, scene, sha] of approved) {
+    const shot = e.screenshots.find((s) => s.file === file);
+    assert.equal(shot.width, 390);
+    assert.equal(shot.scene, scene);
+    assert.equal(shot.sha256, sha);
+    assert.equal(hash(readFileSync(`${root}/${file}`)), sha);
+    assert.ok(approval.includes(file));
+    assert.ok(approval.includes(sha));
+  }
+  assert.match(approval, /两种状态均通过，继续其他状态/);
+  assert.match(approval, /不包含760px图、其他导出状态或完整控件包/);
+  assert.match(approval, /“正在生成”与“等待重试”继续待审/);
+  assert.equal(Object.hasOwn(e, "approved"), false);
+});
+
 test("P35 actual child proof covers mobile layout, null versus zero and desktop exclusion", () => {
   assert.equal(e.baselineCommit, baseline);
   assert.equal(e.baselineLoaded, true);

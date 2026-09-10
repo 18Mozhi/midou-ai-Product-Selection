@@ -1,5 +1,7 @@
 # P35 手机导出详情 · 已批准组合的真实 Vue 实施
 
+后续审核：用户另已批准390px“尚未生成”和“0行”两张视觉状态，图片与边界见[批准记录](P35-MOBILE-EXPORT-DETAIL-APPROVAL.md)。其余状态仍待审，不改动下文历史验证清单或扩展为整页/生产验收。
+
 从干净 main/d401ec95 继续，依据[仅手机详情组合批准](P35-MOBILE-EXPORT-DETAIL-APPROVAL.md)。使用 frontend-design 将C稿的类型/状态、行数、两项时间与技术详情排列接入当前子组件；不是整页批准或生产发布。
 
 [24张实际子Vue图册](../../output/playwright/p35-export-detail-vue/index.html) · [完整验证证据](../../output/playwright/p35-export-detail-vue/evidence.json)。数据来自原m06-01夹具；long/unknown/missing是明确合成的边界场景。不把截图示例当作真实组织或真实导出结果。
