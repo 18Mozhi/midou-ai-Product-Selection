@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P34 审批治理 · 逐控件审核</title>
+    <link rel="stylesheet" href="../org-approvals-direction-c/approvals.css" />
+    <link rel="stylesheet" href="controls.css" />
+    <script defer src="../org-approvals-direction-c/data.js"></script>
+    <script defer src="../org-approvals-direction-c/approvals.js"></script>
+    <script defer src="controls.js"></script>
+  </head>
+  <body>
+    <details class="control-tools">
+      <summary>P34 控件审核工具 · 非业务入口</summary>
+      <label for="control-picker">控件 / 状态</label>
+      <select id="control-picker"></select>
+      <button id="control-show" type="button">展示控件</button>
+      <p>
+        只读离线稿，全部待审。展示按钮选择场景；悬停、焦点、按下请用鼠标或键盘体验，精确状态见图册。
+      </p>
+      <a href="gallery.html">逐控件图册</a>
+    </details>
+    <div id="app"></div>
+  </body>
+</html>

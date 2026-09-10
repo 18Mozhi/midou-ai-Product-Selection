@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "63ff566c4084f16823a0e51135b20b29762408c5ab71549c4ce43f58da470f5e",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "ff291ec41528b676a8a19a52ba19c9c8b308c8d82c173851f741d9d408ef26b5",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -55,6 +55,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "3827fb1854b9f190e9961c959e2caa37eaca01cfa10d20c8f5c12eb7ba04c0bc",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "1ccc2a7f7ce664fb105dde1fcd3fbccdae7b2e9417316abaeacb0a6ddefd0626",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "ff82e9bf86a14443ef2273a9871dd8937cae0d461447a24bc277338cbea6995e",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "b633f59f44962017305897434f7956b31b16da17fbdab5218499c59d785d1e68",
@@ -148,16 +149,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 99,
+    "packages": 100,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 949,
-    "sourceBindings": 1916,
+    "uniqueBoundFiles": 953,
+    "sourceBindings": 1934,
     "sourceDrift": 0,
-    "pngs": 14601,
+    "pngs": 14845,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10077,
+    "readmeLinksChecked": 10083,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -510,6 +511,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P34",
       "spec": "page-specs/P34.md",
       "packages": [
+        "org-approvals-controls-direction-c",
         "org-approvals-direction-c"
       ],
       "actualVue": []
@@ -1290,6 +1292,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/opportunity-direction-c/evidence.json",
       "prototype": "design/opportunity-direction-c/index.html",
       "gallery": null
+    },
+    "org-approvals-controls-direction-c": {
+      "id": "org-approvals-controls-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 244,
+      "readme": "design/org-approvals-controls-direction-c/README.md",
+      "evidence": "design/org-approvals-controls-direction-c/evidence.json",
+      "prototype": "design/org-approvals-controls-direction-c/index.html",
+      "gallery": "design/org-approvals-controls-direction-c/gallery.html"
     },
     "org-approvals-direction-c": {
       "id": "org-approvals-direction-c",
