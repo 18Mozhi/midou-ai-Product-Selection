@@ -189,6 +189,26 @@ const canManage = computed(() => props.authorization?.capabilities?.includes("ro
   minGrantExpiry = localDateTime(new Date(Date.now() + 60_000)),
   maxGrantExpiry = localDateTime(new Date(Date.now() + 30 * 86_400_000));
 
+const minMutationExpiry = computed(() => {
+  const current = Date.parse(selectedGrant.value?.expires_at ?? "");
+  if (!Number.isFinite(current)) return minGrantExpiry;
+  // The native minute-step field must select a time strictly after the existing expiry.
+  return localDateTime(
+    new Date(
+      Math.max(new Date(minGrantExpiry).valueOf(), (Math.floor(current / 60_000) + 1) * 60_000),
+    ),
+  );
+});
+const mutationExpiryError = computed(() => {
+  const value = grantMutation.value.expires_at;
+  if (!value) return "";
+  const expiry = new Date(value).valueOf(),
+    current = Date.parse(selectedGrant.value?.expires_at ?? "");
+  return Number.isFinite(expiry) && Number.isFinite(current) && expiry <= current
+    ? "新到期时间必须晚于当前授权的到期时间。"
+    : "";
+});
+
 watch(
   () => props.roles,
   (roles) => {
@@ -616,17 +636,40 @@ watch(
               })
             "
           >
-            <label
-              >变更原因<input v-model.trim="grantMutation.reason" required maxlength="500"
-            /></label>
+            <label>
+              变更原因
+              <input
+                v-model.trim="grantMutation.reason"
+                required
+                maxlength="500"
+                aria-describedby="org-grant-extension-reason-help"
+              />
+            </label>
+            <p id="org-grant-extension-reason-help" class="org-grant-field-help">
+              必填且最多500字；尚未提交的草稿不等于审计记录。已输入{{
+                grantMutation.reason.length
+              }}字。
+            </p>
             <label
               >新到期时间<input
                 v-model="grantMutation.expires_at"
                 required
                 type="datetime-local"
-                :min="minGrantExpiry"
+                :min="minMutationExpiry"
                 :max="maxGrantExpiry"
+                :aria-invalid="mutationExpiryError ? true : undefined"
+                aria-describedby="org-grant-extension-expiry-help org-grant-extension-expiry-error"
             /></label>
+            <p id="org-grant-extension-expiry-help" class="org-grant-field-help">
+              需晚于当前授权的到期时间，且距当前时间不超过30天。
+            </p>
+            <p
+              id="org-grant-extension-expiry-error"
+              class="org-grant-field-error"
+              aria-live="polite"
+            >
+              {{ mutationExpiryError }}
+            </p>
             <div class="org-admin-actions">
               <button :disabled="busy">{{ busy ? "正在保存…" : "延长授权" }}</button>
               <button

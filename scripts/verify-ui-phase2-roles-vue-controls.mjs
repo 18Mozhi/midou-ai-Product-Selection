@@ -57,7 +57,7 @@ if (capture) await mkdir(root, { recursive: true });
 if (!capture && !smoke) {
   const saved = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
   assert.deepEqual(saved.sourceHashes, sourceHashes);
-  assert.equal(saved.screenshots.length, 12);
+  assert.equal(saved.screenshots.length, 22);
   for (const shot of saved.screenshots) {
     assert.match(shot.file, /^(1440|390)-[a-z-]+\.png$/u);
     assert.equal(hash(await readFile(path.join(root, shot.file))), shot.sha256);
@@ -102,7 +102,11 @@ try {
           new URL(request.url()).pathname.startsWith("/api/") &&
           !["GET", "HEAD"].includes(request.method())
         )
-          writes.push({ method: request.method(), url: request.url() });
+          writes.push({
+            method: request.method(),
+            url: request.url(),
+            body: request.postDataJSON(),
+          });
       });
       await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
       await page.route("**/*", (route) => {
@@ -256,20 +260,124 @@ try {
       assert.deepEqual(unexpected, []);
       assert.deepEqual(errors, []);
       checks.push({ width, name: "no writes, unexpected HTTP or Vue errors" });
+
+      await page.goto(`${base}/org-admin/roles`);
+      await page.getByRole("button", { name: /指定资源授权 1/ }).click();
+      const form = page.locator(".org-grant-mutation"),
+        reason = form.getByLabel("变更原因", { exact: true }),
+        expiry = form.getByLabel("新到期时间", { exact: true }),
+        extend = form.getByRole("button", { name: "延长授权", exact: true });
+      await reason.fill("延长核对期限");
+      await check(
+        "extension fields link their help and counter",
+        async () =>
+          (await reason.getAttribute("aria-describedby")) === "org-grant-extension-reason-help" &&
+          (await page.locator("#org-grant-extension-reason-help").textContent()).includes(
+            "已输入6字",
+          ) &&
+          (await expiry.getAttribute("aria-describedby")).includes(
+            "org-grant-extension-expiry-error",
+          ),
+      );
+      await shot("extension-default", form);
+      for (const value of ["2026-09-01T17:59", "2026-09-01T18:00"]) {
+        await expiry.fill(value);
+        await check(
+          `expiry ${value} rejects non-extension locally`,
+          async () =>
+            (await expiry.getAttribute("aria-invalid")) === "true" &&
+            (await expiry.evaluate((node) => node.validity.rangeUnderflow)) &&
+            (await page.locator("#org-grant-extension-expiry-error").textContent()).includes(
+              "必须晚于当前授权",
+            ),
+        );
+        await extend.click();
+        assert.deepEqual(writes, []);
+      }
+      // Dismiss the native validation bubble so it cannot obscure the persistent inline error.
+      await reason.focus();
+      await page.keyboard.press("Escape");
+      await shot("extension-not-later", form);
+      await expiry.fill("2026-09-01T18:01");
+      await check(
+        "first selectable minute clears the linked error",
+        async () =>
+          (await expiry.getAttribute("aria-invalid")) === null &&
+          (await expiry.evaluate((node) => node.validity.valid)) &&
+          (await page.locator("#org-grant-extension-expiry-error").textContent()).trim() === "",
+      );
+      await shot("extension-corrected", form);
+      const writeGate = new Promise((resolve) => {
+        release = resolve;
+      });
+      await page.route("**/api/v1/org/*/resource-grants/*/expiry", async (route) => {
+        await writeGate;
+        await route.fulfill({
+          status: 409,
+          json: {
+            error: {
+              code: "grant_version_conflict",
+              message: "隔离延期版本冲突",
+              action_hint: "重新读取当前授权后再操作。",
+            },
+            request_id: "p31-extension-conflict",
+            trace_id: "p31-extension-conflict",
+          },
+        });
+      });
+      await extend.click();
+      await page.waitForFunction(
+        () => document.querySelector(".org-grant-mutation button")?.disabled,
+      );
+      await check("extension carries the unchanged audited PATCH payload", async () => {
+        assert.equal(writes.length, 1);
+        assert.equal(writes[0].method, "PATCH");
+        assert.ok(
+          writes[0].url.endsWith("/resource-grants/00000000-0000-4000-8000-000000000625/expiry"),
+        );
+        assert.deepEqual(writes[0].body, {
+          expected_version: 1,
+          reason: "延长核对期限",
+          expires_at: "2026-09-01T10:01:00.000Z",
+        });
+        return true;
+      });
+      await reason.fill("请求后继续编辑");
+      await check(
+        "pending extension keeps fields editable and prevents duplicate submit",
+        async () =>
+          (await reason.isEditable()) &&
+          (await expiry.isEditable()) &&
+          (await form.locator("button").first().isDisabled()),
+      );
+      await shot("extension-pending", form);
+      release();
+      release = null;
+      await page.locator('.org-admin-notice[role="alert"]').waitFor();
+      await check(
+        "failed extension retains the later draft without a false success",
+        async () =>
+          (await reason.inputValue()) === "请求后继续编辑" &&
+          writes.length === 1 &&
+          !(await page.locator(".org-admin-notice").textContent()).includes("已更新并写入审计"),
+      );
+      await shot("extension-failed", page.locator(".org-admin-center"));
+      assert.deepEqual(errors, []);
+      assert.deepEqual(unexpected, []);
     } finally {
       release?.();
       await context.close();
     }
   }
   if (capture) {
-    assert.equal(screenshots.length, 12);
+    assert.equal(screenshots.length, 22);
     await writeFile(
       path.join(root, "evidence.json"),
       JSON.stringify(
         {
-          version: "P31-approved-controls-Vue-r1",
+          version: "P31-approved-controls-and-extension-Vue-r2",
           boundary:
-            "Actual Vue route, isolated existing API fixtures. Four approved styles only; not full C layout or production acceptance.",
+            "Actual Vue route, isolated API fixtures. Four approved styles and extension field composition; not full C layout or production acceptance. One intercepted versioned PATCH per viewport, no real writes.",
           sourceHashes,
           checks,
           screenshots,
@@ -288,7 +396,7 @@ try {
       path.join(root, "index.html"),
       `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P31 已批准控件 · 真实 Vue</title>
 <style>body{font-family:system-ui;padding:24px;background:#edf2fa;color:#183252}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}figure{margin:0}img{width:100%}figcaption{padding:12px}</style>
-<h1>P31 已批准控件 · 真实 Vue</h1><p>仅四项控件样式。旧页面结构尚待 C 重构；隔离数据不代表真实授权或生产验收。</p><main>${cards}</main></html>`,
+<h1>P31 控件与延期字段 · 真实 Vue</h1><p>四项控件样式与延期组合。旧页面结构尚待 C 重构；隔离PATCH不代表真实授权或生产验收。桌面组合尚未获批。</p><main>${cards}</main></html>`,
     );
   }
   console.log(

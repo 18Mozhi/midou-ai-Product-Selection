@@ -33,7 +33,7 @@
 | 8bd3f7b2e5dcb44f.1 | 状态筛选重置page1并重读 | grant.status.select.{status} |
 | a162032f86484b89.1 | 当前页本地选择，watch可能重置延期草稿 | grant.select.{grantId} |
 | 5f937fb211eb5840.1 | 原生details资源/授权编号 | grant.technical.toggle |
-| 64b97b8b5fe9de71.1、8c59567be7cef9a3.1 | form与按钮同一PATCH；active且canManage | grant.expiry.submit |
+| 201e6ad7077e4318.1、8c59567be7cef9a3.1 | form与按钮同一PATCH；active且canManage；日期min表达既有严格延期规则，新增说明改变form标签签名但emit不变 | grant.expiry.submit |
 | 5be3d5846e4138fa.1 | 撤销原因确认后带version POST | grant.revoke.request |
 | bf5c2f057a07f3f3.1 | 服务端上一页，busy及页首禁用 | grant.page.previous |
 | 085ead5af6973fef.1 | 服务端下一页，busy及页尾禁用 | grant.page.next |

@@ -8,7 +8,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/roles.css": "05aab6c2df11deee185fa1be1eaccc706791ef70e178336513c7b4bd6c3acad4",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
     "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
-    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
     "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
     "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
@@ -10415,7 +10415,7 @@
       "file": "grant-technical-open-focus-1440.png",
       "width": 1440,
       "scene": "grant-technical-open-focus",
-      "sha256": "6be556f54d06fff3883fbdc2bf96e8f89c219b1e3aa1cdcd22e0af13359aa579",
+      "sha256": "ca77ec7ee414f9a6cce14a9b2c185ff7f7599b3bca7386c7f08d4197e3878b15",
       "control": {
         "key": "P31-grant-technical-open",
         "actionId": "grant.technical.toggle",
@@ -10753,7 +10753,7 @@
       "file": "reason-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-confirm-focus",
-      "sha256": "43fd34df4e17099b010ec09da1d623c041bf2b0000809823c50fb0ab35f1be79",
+      "sha256": "79a3fe1b745eedb58d669c6cc2c0e5590cc55dc10590178d51ba12b439e3575e",
       "control": {
         "key": "P31-reason-confirm",
         "actionId": "D-OG-REASON",
@@ -10831,7 +10831,7 @@
       "file": "reason-cancel-pressed-1440.png",
       "width": 1440,
       "scene": "reason-cancel-pressed",
-      "sha256": "6c92db5f230f691499138c4f4a9aaacfbbb946287ab7d92dddc3ed973310de49",
+      "sha256": "5398ab4b6ee27305d8def0cfd20ba4614b8ebff3fbf2eb11bb718f3963485e1d",
       "control": {
         "key": "P31-reason-cancel",
         "actionId": "D-OG-REASON",
@@ -10870,7 +10870,7 @@
       "file": "reason-close-focus-1440.png",
       "width": 1440,
       "scene": "reason-close-focus",
-      "sha256": "ddd095a80162e078afa921f338d2ecc4f01f547531280475e7e9f656f87f9d90",
+      "sha256": "3d93e538b3fae79bff35e6865a56672e15a2020b8730702306674717e50a8c97",
       "control": {
         "key": "P31-reason-close",
         "actionId": "D-OG-REASON",
@@ -13223,7 +13223,7 @@
       "file": "reason-confirm-pressed-390.png",
       "width": 390,
       "scene": "reason-confirm-pressed",
-      "sha256": "140399e6ddfaefd88e14549f69d2639f2f317bbae1b59f4ea6658ff04fcee3d1",
+      "sha256": "a333727d1facccb0d9711c62b1aff5c151df197694ff88f107c586f98e6dabca",
       "control": {
         "key": "P31-reason-confirm",
         "actionId": "D-OG-REASON",
@@ -13340,7 +13340,7 @@
       "file": "reason-close-pressed-390.png",
       "width": 390,
       "scene": "reason-close-pressed",
-      "sha256": "eb7a8a693a9660ddec392993814ce261b21b7dd03f47fe5f69c9b4d4ac378ccb",
+      "sha256": "3e7c2c88fedbc8370c6c72d8f2e893c3f890e79272b3c17004c00f6c5e844e5f",
       "control": {
         "key": "P31-reason-close",
         "actionId": "D-OG-REASON",

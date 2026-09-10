@@ -30,11 +30,11 @@ const fieldEvidence = JSON.parse(
 );
 const buildRolesReview = (sources, evidence) =>
   buildReview(sources, evidence, controlsEvidence, fieldEvidence);
-test("P31 mounted controls evidence binds twelve real Vue screenshots without approving the page", () => {
+test("P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page", () => {
   const entry = buildRolesReview(sources, evidence).actualVueControlEvidence;
   const proof = JSON.parse(readFileSync(entry.evidence, "utf8"));
-  assert.equal(proof.checks.length, 30);
-  assert.equal(proof.screenshots.length, 12);
+  assert.equal(proof.checks.length, 54);
+  assert.equal(proof.screenshots.length, 22);
   assert.match(entry.scope, /not C layout or production acceptance/);
   for (const [file, expected] of Object.entries(proof.sourceHashes))
     assert.equal(
@@ -52,6 +52,11 @@ test("P31 mounted controls evidence binds twelve real Vue screenshots without ap
     "revoke-confirm",
     "revoke-disabled",
     "neighbor-dialog-unchanged",
+    "extension-default",
+    "extension-not-later",
+    "extension-corrected",
+    "extension-pending",
+    "extension-failed",
   ];
   assert.deepEqual(
     proof.screenshots.map((shot) => shot.file).sort(),
@@ -438,6 +443,8 @@ function childHarness() {
     "grantMutation",
     "minGrantExpiry",
     "maxGrantExpiry",
+    "minMutationExpiry",
+    "mutationExpiryError",
     "canManage",
   ];
   const h = run(
@@ -459,6 +466,37 @@ function childHarness() {
   );
   return { h, props, watches };
 }
+test("P31 extension fields keep the existing expiry rule and clear only their derived error", () => {
+  const { h, props } = childHarness();
+  const original = Date.parse(props.grants[0].expires_at);
+  const expectedMinimum = (Math.floor(original / 60000) + 1) * 60000;
+  assert.equal(new Date(h.minMutationExpiry.value).valueOf(), expectedMinimum);
+  h.grantMutation.value.expires_at = new Date(original).toISOString().slice(0, 16);
+  // Use local input values, as datetime-local deliberately has no timezone suffix.
+  const local = (time) => {
+    const d = new Date(time);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 16);
+  };
+  for (const time of [original - 60000, original]) {
+    h.grantMutation.value.expires_at = local(time);
+    assert.match(h.mutationExpiryError.value, /必须晚于当前授权/);
+  }
+  h.grantMutation.value.reason = "保留草稿";
+  h.grantMutation.value.expires_at = local(expectedMinimum);
+  assert.equal(h.mutationExpiryError.value, "");
+  assert.equal(h.grantMutation.value.reason, "保留草稿");
+  h.grantMutation.value.expires_at = "";
+  assert.equal(h.mutationExpiryError.value, "");
+});
+test("P31 extension minimum handles subminute expiry and unavailable expiry without guessing", () => {
+  const { h, props } = childHarness();
+  props.grants[0].expires_at = new Date(frozen + 2 * 86400000 + 30000).toISOString();
+  assert.equal(new Date(h.minMutationExpiry.value).valueOf(), frozen + 2 * 86400000 + 60000);
+  props.grants[0].expires_at = "invalid";
+  assert.equal(h.minMutationExpiry.value, h.minGrantExpiry);
+  assert.equal(h.mutationExpiryError.value, "");
+});
 test("P31 actual computed search boundaries distinguish roles, raw capabilities and current-page grants", () => {
   const { h, props } = childHarness();
   assert.equal(h.filteredRoles.value.length, 2);

@@ -74,7 +74,7 @@
     "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
     "apps/web/src/components/OrganizationDataPanel.vue": "575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
-    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
     "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
     "apps/web/src/components/OrganizationTokenPanel.vue": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
@@ -188,12 +188,12 @@
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "00ddf46b8d17108aba16e9bfd83c806551a07c47739ef860573db25cb55a5caf",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "99197515dbb0075c1b19c86d3b0eb81f6ac55493af0c7cadbeb1ea32dfa6ae93",
-    "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "0e05f2395fb018f6861fc2a27a330ebd7c5a758f5afa0a3fe37b1a9d36e4e946",
+    "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "f961c5deb7e19ed5a8ca344ea6ff3025901071ed5098dfeb4904e0f25f137edc",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "894e47fe1fedb1728897fd5afa1497731585d5fbe6507566599008c581db6760",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "09124326e2db64b069941a69ac7161c94fd754015069ea47a24a9b433b3a8938",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "dfe9ea0a1064513435cf4e004233fd1bc64660a0b9a1ecbc3d380893159cad88",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "aae0afa73fcdba0e1e65d5b7e83ca9697bf84e5f056e6be0da0bf547bd1fd155",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "2e55ace742f1d1631f02c37cae32ac721bd7894545f29903ea3c956d5fda2fb4",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "2869cef128d778f5706ef17d437242d8364a1e2167e6ac211875b88454cf748a",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "74529109c7dd6373438b50a7121528953d172412ffc9e1eafea81e8f3155e64e",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "2cba8fb2525d35483ff8d2c29229e8068fedcb59a2921b9ea4ff519d294774ba",
@@ -274,9 +274,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/evidence.json": "3949cb0a58724d5ff6b82722109c951c27645523a33dad2aaf31a295580b85e9",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/evidence.json": "b95c32558e798230dcacf691dbcb9b4b51e727ed6c4d55cc12d4623742e7d0a6",
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "600c1743f86d66f5840f4b9813966e74df2cbc231fc3b0e0fff6328c440a6bf6",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json": "ac67dab35df8e6407a802cc6defdb6cf34ebbda610ded2aad157de13f84e1196",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "8c71c415389c058bae9bd567f2c83f2ad92f6ee34fc4d79a6428ed287f876db3",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json": "4c69b3d3747179a1e39bf5e7bf30222e304f157e274a67ab74f88f4ae05ee6bf",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json": "d584b2be8b597f2797464b4d841b4bba9397e010f0c05288096960d9af855b2e",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "125b947c04ac5f1423695e62db1cd436f68a92c4c81452c0a9006de281f30b95",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json": "05b44f7bbac3f2a6915e307501e0e9d7027594604d8736830532398e46175d71",
     "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/evidence.json": "c41dae66423d75fa549f35d4322a750b868609d6a595b84002bfa0e1f544151e",
     "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/evidence.json": "998193f09224c3d87029ede4094856bc00c8407ea7d1374d275c23a3d986aa2d",
     "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json": "5f401727b28f442e07177f471b5450b41d9dc360e42f4dfd3cb401374972ee22",
@@ -374,7 +374,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9ce4a6c7e507d3cab1074c9eabece32967cc83c6d71fcb975ad2b39e269bda1e",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "e1549981b6fb3ca66074d97fc476f306e757b06d19b9fe48d6737921e3dd2730",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "2e24e68887c7a4f33de7131023c7d5714d7c80945e634b6ef8b148169e3c6a16",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
@@ -412,7 +412,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "24d40460e447eb5ed672eafd17f1cb1cf47133e41aa3d4d89931279bf57e3f6a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "a118eb7a0301a847ec9a48f7232f83e3b13b2fc3fb1ea528f471aa72f286021c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "3e1736e0e74f9b7dc4aafad8f750eafcc3ff48628060a4c36119ac010f7b0911",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "f5bdfdb3428e15ebef7bf7b69d558942924fd3ecb7739ba042893d4fce0593e2",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "947dbf0bc440200cc64474ae2f51716f29111a21072715a91a6c60be814515e1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "7033fd42ed0b5654f922ae10643fdc50234059680a7a1b936fa81710b8397291",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "7ebc9f00d7cbd16fe1574c7656b42f1968e32a6248860a4bc146ad8b4088f4d2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "4b533634b6f4c64961e2c00fc50a94045934b40bf3e55ff941ecd746298b78e6",
@@ -466,8 +466,8 @@
     "routes": 73,
     "currentSourceCandidates": 1479,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 19,
-    "oldOnlyIdentities": 17,
+    "newSourceIdentities": 20,
+    "oldOnlyIdentities": 18,
     "reviewedPages": 32,
     "explicitlyGroupedSourceSites": 682,
     "semanticGroups": 649,
@@ -1530,7 +1530,7 @@
       "id": "P29",
       "path": "/org-admin",
       "title": "治理概览",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": {
         "pageId": "P29",
         "sourceSites": 11,
@@ -1565,7 +1565,7 @@
       "id": "P30",
       "path": "/org-admin/members",
       "title": "成员与邀请",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": {
         "pageId": "P30",
         "sourceSites": 28,
@@ -1602,7 +1602,7 @@
       "id": "P31",
       "path": "/org-admin/roles",
       "title": "角色与权限",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": {
         "pageId": "P31",
         "sourceSites": 30,
@@ -1638,7 +1638,7 @@
       "id": "P32",
       "path": "/org-admin/workspaces",
       "title": "工作区管理",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": null,
       "proposalPackages": [
         "workspaces-direction-c"
@@ -1651,7 +1651,7 @@
       "id": "P33",
       "path": "/org-admin/teams",
       "title": "团队管理",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": null,
       "proposalPackages": [
         "teams-direction-c"
@@ -1664,7 +1664,7 @@
       "id": "P34",
       "path": "/org-admin/approvals",
       "title": "审批模板",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": null,
       "proposalPackages": [
         "org-approvals-direction-c"
@@ -1677,7 +1677,7 @@
       "id": "P35",
       "path": "/org-admin/data",
       "title": "组织数据",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": null,
       "proposalPackages": [
         "org-data-direction-c"
@@ -1690,7 +1690,7 @@
       "id": "P36",
       "path": "/org-admin/tokens",
       "title": "组织令牌",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": null,
       "proposalPackages": [
         "org-token-direction-c"
@@ -1703,7 +1703,7 @@
       "id": "P37",
       "path": "/org-admin/audit",
       "title": "组织审计",
-      "oldStaticAssociatedCandidates": 167,
+      "oldStaticAssociatedCandidates": 166,
       "review": null,
       "proposalPackages": [
         "org-audit-direction-c"
@@ -29239,7 +29239,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 246,
+      "line": 266,
       "kind": "control",
       "label": "{{ item.label }}",
       "conditions": [
@@ -29284,7 +29284,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 273,
+      "line": 293,
       "kind": "control",
       "label": "{{ role.name.slice(0, 1) }} {{ role.name }} {{ role.description }} {{ role.capabilities.length }} 项",
       "conditions": [
@@ -29337,7 +29337,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 302,
+      "line": 322,
       "kind": "control",
       "label": "查看技术能力名称",
       "conditions": [
@@ -29390,7 +29390,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 338,
+      "line": 358,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -29439,7 +29439,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 413,
+      "line": 433,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -29484,7 +29484,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 448,
+      "line": 468,
       "kind": "control",
       "label": "{{ showGrantForm ? \"取消创建\" : \"创建授权\" }}",
       "conditions": [
@@ -29533,7 +29533,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 453,
+      "line": 473,
       "kind": "form-event",
       "label": "带原因并审计 授权指定资源 工作区 选择工作区 {{ workspace.name }} 资源类型 {{ resourceTypeText(type) }} 资源编号 必须从真实资源详情页复制；实际访问仍会按工作区、资源和动作复核。 目标成",
       "conditions": [
@@ -29582,7 +29582,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 473,
+      "line": 493,
       "kind": "event-binding",
       "label": "{{ resourceTypeText(type) }}",
       "conditions": [
@@ -29631,7 +29631,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 518,
+      "line": 538,
       "kind": "control",
       "label": "{{ busy ? \"正在创建…\" : \"创建并写入审计\" }}",
       "conditions": [
@@ -29680,7 +29680,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 525,
+      "line": 545,
       "kind": "control",
       "label": "{{ status === \"all\" ? `全部 ${grantTotal}` : `${grantStatusText(status)} ${grantCounts[status] ?? 0}` }}",
       "conditions": [
@@ -29729,7 +29729,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 550,
+      "line": 570,
       "kind": "control",
       "label": "{{ grantStatusText(grant.effective_status) }} {{ resourceTypeText(grant.resource_type) }} · {{ targetLabel(grant.grantee",
       "conditions": [
@@ -29782,7 +29782,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 604,
+      "line": 624,
       "kind": "control",
       "label": "查看技术标识",
       "conditions": [
@@ -29833,11 +29833,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#64b97b8b5fe9de71.1",
+      "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#201e6ad7077e4318.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 608,
+      "line": 628,
       "kind": "form-event",
-      "label": "变更原因 新到期时间 {{ busy ? \"正在保存…\" : \"延长授权\" }} 撤销授权",
+      "label": "变更原因 必填且最多500字；尚未提交的草稿不等于审计记录。已输入 {{ grantMutation.reason.length }} 字。 新到期时间 需晚于当前授权的到期时间，且距当前时间不超过30天。 {{ mutationExpir",
       "conditions": [
         {
           "directive": "v-else",
@@ -29856,19 +29856,9 @@
           "expression": "canManage && selectedGrant.effective_status === 'active'"
         }
       ],
-      "staticRouteIds": [
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
@@ -29892,7 +29882,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 631,
+      "line": 674,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"延长授权\" }}",
       "conditions": [
@@ -29949,7 +29939,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 632,
+      "line": 675,
       "kind": "control",
       "label": "撤销授权",
       "conditions": [
@@ -30006,7 +29996,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 646,
+      "line": 689,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -30055,7 +30045,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 654,
+      "line": 697,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -30104,7 +30094,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 665,
+      "line": 708,
       "kind": "control",
       "label": "创建首条授权",
       "conditions": [
@@ -30157,7 +30147,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1",
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
-      "line": 670,
+      "line": 713,
       "kind": "control",
       "label": "查看全部授权",
       "conditions": [
@@ -54137,6 +54127,12 @@
       "candidateId": "apps/web/src/components/DiscoveryOverlay.vue#f86ceb84c9007570.1",
       "file": "apps/web/src/components/DiscoveryOverlay.vue",
       "line": 312,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#64b97b8b5fe9de71.1",
+      "file": "apps/web/src/components/OrganizationRolePanel.vue",
+      "line": 608,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

@@ -2,7 +2,7 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
+- 当前源候选1479；旧登记1477；新身份20，旧表独有身份18。签名变化不等于增删业务能力。
 - 已具体语义对应32页/682源位置/649组；其中路由动作551组，转发/容器关联65组，其余明确排除。其余41页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
@@ -40,15 +40,15 @@
 | [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 167 | [7组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 167 | [23组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 167 | [24组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P33 团队管理](page-specs/P33.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P34 审批模板](page-specs/P34.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P35 组织数据](page-specs/P35.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P36 组织令牌](page-specs/P36.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P37 组织审计](page-specs/P37.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P29 治理概览](page-specs/P29.md) | 166 | [7组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 166 | [23组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 166 | [24组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P33 团队管理](page-specs/P33.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P34 审批模板](page-specs/P34.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P35 组织数据](page-specs/P35.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P36 组织令牌](page-specs/P36.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P37 组织审计](page-specs/P37.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P38 平台概览](page-specs/P38.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P39 账号与组织](page-specs/P39.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P40 组织管理](page-specs/P40.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2676,7 +2676,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OrganizationRolePanel.vue / grantForm.expires_at | required datetime-local；min/max在setup生成；父级提交按当前时间重新检查未来30天 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
 | OrganizationRolePanel.vue / grantQuery | 只搜索当前页成员/工作区/中文类型/中文动作；不搜索授权或资源UUID、reason | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
 | OrganizationRolePanel.vue / grantMutation.reason | required trim maxlength500；选中授权对象变化会重置 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
-| OrganizationRolePanel.vue / grantMutation.expires_at | required datetime-local；默认现在+7天，不是原expiry+7天 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantMutation.expires_at | required datetime-local；默认现在+7天，原期限下一可选分钟与原min取大；就地错误关联；不是原expiry+7天 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 

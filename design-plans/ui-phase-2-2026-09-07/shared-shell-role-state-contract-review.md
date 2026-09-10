@@ -24,7 +24,7 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 | apps/web/src/components/DiscoveryOverlay.vue | 6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27 |
 | apps/web/src/components/NavigationShell.vue | 4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc |
 | apps/web/src/components/NotFoundPage.vue | 2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b |
-| apps/web/src/components/OrganizationRolePanel.vue | 104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11 |
+| apps/web/src/components/OrganizationRolePanel.vue | aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415 |
 | apps/web/src/components/UiStateShowcase.vue | c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30 |
 | apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
 | apps/web/src/use-navigation-discovery.ts | e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94 |
@@ -104,25 +104,25 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1 | 246 | control | role.section.{section} | roles/scopes/grants三分区本地切换，保留各区局部状态 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1 | 273 | control | role.select.{roleCode} | 选角色模板仅更新selectedRoleCode；不是赋予角色 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1 | 302 | control | role.capability.technical.toggle | 原生details披露所选角色技术能力名称 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1 | 338 | control | role.capability.filter.reset | 清capabilityQuery与capabilityGroup；不改roleQuery | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1 | 413 | control | role.scope.filter.reset | 清scopeQuery与scopeFilter | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1 | 448 | control | grant.create.form.toggle | canManage时创建/取消内联表单；隐藏本身不清父级grantForm | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1 | 453 | form-event | grant.create.submit | form submit emit createGrant；父级校验、POST、刷新与审计反馈 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1 | 473 | event-binding | grant.create.type.change | emit updateGrantType；父级替换类型并将actions设该类型首个动作 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1 | 518 | control | grant.create.submit | 默认submit按钮；busy或actions空时禁用，与表单同一业务提交 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1 | 525 | control | grant.status.select.{status} | all/active/expired/revoked；emit updateGrantStatus，父级页码重置1并读取 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1 | 550 | control | grant.select.{grantId} | 本地选中当前页授权；不调用授权修改接口 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1 | 604 | control | grant.technical.toggle | 披露资源与授权ID，不是打开另一个弹窗 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#64b97b8b5fe9de71.1 | 608 | form-event | grant.expiry.submit | active且canManage的内联表单；emit grant/reason/expires_at给父级PATCH | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1 | 631 | control | grant.expiry.submit | 默认submit按钮；busy禁用，与延期表单同动作 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1 | 632 | control | grant.revoke.request | active且canManage；emit revokeGrant，父级先询问审计原因后POST | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1 | 646 | control | grant.page.previous | 有grantMeta.total时上一页；busy或page<=1禁用 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1 | 654 | control | grant.page.next | 下一页；busy或page>=pageCount禁用 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1 | 665 | control | grant.create.form.open | grantTotal=0且canManage时打开首条授权表单，不直接POST | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1 | 670 | control | grant.status.all | grantTotal>0但当前meta.total为空时重读全部状态；busy禁用 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1 | 266 | control | role.section.{section} | roles/scopes/grants三分区本地切换，保留各区局部状态 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1 | 293 | control | role.select.{roleCode} | 选角色模板仅更新selectedRoleCode；不是赋予角色 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1 | 322 | control | role.capability.technical.toggle | 原生details披露所选角色技术能力名称 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1 | 358 | control | role.capability.filter.reset | 清capabilityQuery与capabilityGroup；不改roleQuery | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1 | 433 | control | role.scope.filter.reset | 清scopeQuery与scopeFilter | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1 | 468 | control | grant.create.form.toggle | canManage时创建/取消内联表单；隐藏本身不清父级grantForm | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1 | 473 | form-event | grant.create.submit | form submit emit createGrant；父级校验、POST、刷新与审计反馈 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1 | 493 | event-binding | grant.create.type.change | emit updateGrantType；父级替换类型并将actions设该类型首个动作 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1 | 538 | control | grant.create.submit | 默认submit按钮；busy或actions空时禁用，与表单同一业务提交 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1 | 545 | control | grant.status.select.{status} | all/active/expired/revoked；emit updateGrantStatus，父级页码重置1并读取 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1 | 570 | control | grant.select.{grantId} | 本地选中当前页授权；不调用授权修改接口 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1 | 624 | control | grant.technical.toggle | 披露资源与授权ID，不是打开另一个弹窗 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#201e6ad7077e4318.1 | 628 | form-event | grant.expiry.submit | active且canManage的内联表单；emit grant/reason/expires_at给父级PATCH；2026-09-10字段说明改变AST标签签名，日期min反映既有后端严格延期规则 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1 | 674 | control | grant.expiry.submit | 默认submit按钮；busy禁用，与延期表单同动作 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1 | 675 | control | grant.revoke.request | active且canManage；emit revokeGrant，父级先询问审计原因后POST | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1 | 689 | control | grant.page.previous | 有grantMeta.total时上一页；busy或page<=1禁用 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1 | 697 | control | grant.page.next | 下一页；busy或page>=pageCount禁用 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1 | 708 | control | grant.create.form.open | grantTotal=0且canManage时打开首条授权表单，不直接POST | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1 | 713 | control | grant.status.all | grantTotal>0但当前meta.total为空时重读全部状态；busy禁用 | UI2-RP01–RP05 |
 
 ### apps/web/src/components/UiStateShowcase.vue
 

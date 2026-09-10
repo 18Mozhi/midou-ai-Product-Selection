@@ -918,6 +918,66 @@
   color: var(--so-danger);
   background: var(--so-danger-soft);
 }
+#app .org-admin-center .org-grant-mutation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  color: var(--so-roles-field-text);
+  background: var(--so-roles-focus-gap);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+#app .org-admin-center .org-grant-mutation .org-admin-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+#app .org-admin-center .org-grant-mutation label {
+  display: grid;
+  gap: 10px;
+  color: var(--so-roles-field-text);
+}
+#app .org-admin-center .org-grant-mutation input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-roles-field-border);
+  border-radius: 8px;
+  background: var(--so-roles-focus-gap);
+  color: var(--so-roles-field-text);
+}
+#app .org-admin-center .org-grant-mutation input:focus-visible {
+  outline: 3px solid var(--so-roles-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px var(--so-roles-focus-gap);
+}
+#app .org-admin-center .org-grant-mutation input[aria-invalid="true"] {
+  border: 2px solid var(--so-roles-field-error);
+}
+#app .org-admin-center .org-grant-mutation p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+#app .org-admin-center .org-grant-mutation .org-grant-field-help {
+  color: var(--so-roles-field-help);
+}
+#app .org-admin-center .org-grant-mutation .org-grant-field-error {
+  color: var(--so-roles-field-error);
+}
+#app .org-admin-center .org-grant-mutation .org-grant-field-error:empty {
+  display: none;
+}
+#app .org-admin-center .org-grant-mutation button:enabled {
+  border: 1px solid var(--so-roles-field-border);
+  border-radius: 8px;
+  background: var(--so-roles-focus-gap);
+  color: var(--so-roles-field-text);
+}
+#app .org-admin-center .org-grant-mutation button.danger:enabled {
+  border-color: var(--so-roles-danger);
+  color: var(--so-roles-danger);
+}
 .org-grant-pagination {
   display: flex;
   align-items: center;

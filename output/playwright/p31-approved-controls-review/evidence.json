@@ -1,16 +1,16 @@
 {
-  "version": "P31-approved-controls-Vue-r1",
-  "boundary": "Actual Vue route, isolated existing API fixtures. Four approved styles only; not full C layout or production acceptance.",
+  "version": "P31-approved-controls-and-extension-Vue-r2",
+  "boundary": "Actual Vue route, isolated API fixtures. Four approved styles and extension field composition; not full C layout or production acceptance. One intercepted versioned PATCH per viewport, no real writes.",
   "sourceHashes": {
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-    "scripts/verify-ui-phase2-roles-vue-controls.mjs": "a050ff2db978041420934f866853c9631a2107664f137c6b5493ec2a111c23d1",
-    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+    "scripts/verify-ui-phase2-roles-vue-controls.mjs": "930d219e1041900192d3c54d00fd8a8e82852f2a99ade98cb90a8bfcff7bddf1",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
     "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
     "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
     "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
-    "apps/web/src/organization-admin.css": "0d34e4be91c41c56d19e19eb4f68366a587075a843e4af6ccd041da4b40c25a8",
-    "apps/web/src/design/roles-tokens.css": "9d1cebfe2eff4ad6dd154c4ba9c1fa659a768f00ff63a67045d63b892370c41b",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
     "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
@@ -80,6 +80,54 @@
       "name": "no writes, unexpected HTTP or Vue errors"
     },
     {
+      "width": 1440,
+      "name": "extension fields link their help and counter"
+    },
+    {
+      "width": 1440,
+      "name": "extension-default: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "expiry 2026-09-01T17:59 rejects non-extension locally"
+    },
+    {
+      "width": 1440,
+      "name": "expiry 2026-09-01T18:00 rejects non-extension locally"
+    },
+    {
+      "width": 1440,
+      "name": "extension-not-later: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "first selectable minute clears the linked error"
+    },
+    {
+      "width": 1440,
+      "name": "extension-corrected: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "extension carries the unchanged audited PATCH payload"
+    },
+    {
+      "width": 1440,
+      "name": "pending extension keeps fields editable and prevents duplicate submit"
+    },
+    {
+      "width": 1440,
+      "name": "extension-pending: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "failed extension retains the later draft without a false success"
+    },
+    {
+      "width": 1440,
+      "name": "extension-failed: no document overflow"
+    },
+    {
       "width": 390,
       "name": "keyboard focus matches approved blue ring"
     },
@@ -138,6 +186,54 @@
     {
       "width": 390,
       "name": "no writes, unexpected HTTP or Vue errors"
+    },
+    {
+      "width": 390,
+      "name": "extension fields link their help and counter"
+    },
+    {
+      "width": 390,
+      "name": "extension-default: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "expiry 2026-09-01T17:59 rejects non-extension locally"
+    },
+    {
+      "width": 390,
+      "name": "expiry 2026-09-01T18:00 rejects non-extension locally"
+    },
+    {
+      "width": 390,
+      "name": "extension-not-later: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "first selectable minute clears the linked error"
+    },
+    {
+      "width": 390,
+      "name": "extension-corrected: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "extension carries the unchanged audited PATCH payload"
+    },
+    {
+      "width": 390,
+      "name": "pending extension keeps fields editable and prevents duplicate submit"
+    },
+    {
+      "width": 390,
+      "name": "extension-pending: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "failed extension retains the later draft without a false success"
+    },
+    {
+      "width": 390,
+      "name": "extension-failed: no document overflow"
     }
   ],
   "screenshots": [
@@ -163,19 +259,49 @@
       "file": "1440-revoke-confirm.png",
       "scene": "revoke-confirm",
       "width": 1440,
-      "sha256": "d69ca0ee0e6e88d55b93e39cdc5a4c86ca60fc67e27c9981e2fdc790d428af34"
+      "sha256": "f0715793a2c71b2685c4515f83eead07e7b70f2a27616c320db8636c651ee3e3"
     },
     {
       "file": "1440-revoke-disabled.png",
       "scene": "revoke-disabled",
       "width": 1440,
-      "sha256": "0a7cfb031a0c88e5ce10934f1d98cc962d9d040e608ed655212c649c163c6720"
+      "sha256": "52ec1a7d85804d4de6636d0063ed43159688b45bcb81effe1fcd455b5e90489e"
     },
     {
       "file": "1440-neighbor-dialog-unchanged.png",
       "scene": "neighbor-dialog-unchanged",
       "width": 1440,
       "sha256": "0f9e2c4b9ac1c2b335d27f9b3cb0de49b35d92fb694fdf4d6b9f74a7d9c5fc5a"
+    },
+    {
+      "file": "1440-extension-default.png",
+      "scene": "extension-default",
+      "width": 1440,
+      "sha256": "b0bb8161cbe7f34700a385962a5f6b7480bc2e37689bcc8a498a403abab84625"
+    },
+    {
+      "file": "1440-extension-not-later.png",
+      "scene": "extension-not-later",
+      "width": 1440,
+      "sha256": "d2ee4108d07675fb4cb06bf1a045ab40603591e31ba28fddd53f7507d61392be"
+    },
+    {
+      "file": "1440-extension-corrected.png",
+      "scene": "extension-corrected",
+      "width": 1440,
+      "sha256": "af6210defdca4c1cb14ffe56d1169d63cfd4b43b4a6dad553a554d8c2003b6cc"
+    },
+    {
+      "file": "1440-extension-pending.png",
+      "scene": "extension-pending",
+      "width": 1440,
+      "sha256": "87c0d9f9f273e95ff433fce3468ba5248c79a30bfc0cc1c93e17084d66ee2980"
+    },
+    {
+      "file": "1440-extension-failed.png",
+      "scene": "extension-failed",
+      "width": 1440,
+      "sha256": "64a4fa15bf3a3cad3c1be16cb3222295f3c343d34045e2ea86cb1ef51d0eb5ce"
     },
     {
       "file": "390-keyboard-focus.png",
@@ -199,19 +325,49 @@
       "file": "390-revoke-confirm.png",
       "scene": "revoke-confirm",
       "width": 390,
-      "sha256": "88467de16c28addab7639e84513727234de6cbb21c74af53d01c68ba736f9f34"
+      "sha256": "a528c67c2f281ac95220efb7dbd3779813e7b61210d446ce33d2237839857b62"
     },
     {
       "file": "390-revoke-disabled.png",
       "scene": "revoke-disabled",
       "width": 390,
-      "sha256": "d78a880c2c1a8df40e82ac02d04bee51d6ad64cd3dfa73a17a371d959500a061"
+      "sha256": "855c6bbc0640efc9b7a1ecd02432769953075ebb67e3fa0ea9e838e8957e93e5"
     },
     {
       "file": "390-neighbor-dialog-unchanged.png",
       "scene": "neighbor-dialog-unchanged",
       "width": 390,
       "sha256": "f53fcb7ee4de8314ac01400b657b0f5ac0c63d3286b5401aaaae973b1b861b53"
+    },
+    {
+      "file": "390-extension-default.png",
+      "scene": "extension-default",
+      "width": 390,
+      "sha256": "b5c1e4460f36c7061052c4edd4d15740f744b12f51c87450e79442fb48c66a41"
+    },
+    {
+      "file": "390-extension-not-later.png",
+      "scene": "extension-not-later",
+      "width": 390,
+      "sha256": "799f902478944d8029d7e7d59ef8aaac0494fb3800b35f24bca798c86f8898e4"
+    },
+    {
+      "file": "390-extension-corrected.png",
+      "scene": "extension-corrected",
+      "width": 390,
+      "sha256": "c5342296730840da91efde98c8a0f578d5d5fe1d0711941fa447800d3c0d1341"
+    },
+    {
+      "file": "390-extension-pending.png",
+      "scene": "extension-pending",
+      "width": 390,
+      "sha256": "f1e6f81fc639ac56b0bfbc9f40b46a6e8a5335fe8c82ee9cea3cbdb89d0d63f7"
+    },
+    {
+      "file": "390-extension-failed.png",
+      "scene": "extension-failed",
+      "width": 390,
+      "sha256": "852e35d9ba6d700c9a82a9aa4f3ea1d5af05fd74dccffc5cf632d27ae2a3f2aa"
     }
   ]
 }

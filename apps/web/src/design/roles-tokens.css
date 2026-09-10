@@ -8,4 +8,8 @@ html #app .org-admin-center:has(> .org-role-page) {
   --so-roles-disabled-bg: #e6ebf1;
   --so-roles-disabled-border: #bac5d2;
   --so-roles-disabled-selected-border: #526d9d;
+  --so-roles-field-text: #18365f;
+  --so-roles-field-border: #667f9e;
+  --so-roles-field-help: #485e78;
+  --so-roles-field-error: #9b2634;
 }

@@ -233,10 +233,10 @@ const definitions = [
     "grant.expiry.submit",
     "更新授权到期时间",
     "write",
-    ["64b97b8b5fe9de71.1", "8c59567be7cef9a3.1"],
+    ["201e6ad7077e4318.1", "8c59567be7cef9a3.1"],
     [],
     "canManage且effective_status active；busy禁用",
-    "PATCH /org/:organizationId/resource-grants/:id/expiry；expected_version/reason.trim/expires_at；父函数仅验未来30天，服务extend还要求晚于原expiry，否则grant_expiry_not_extended；隔离submit替身不证明服务器接受",
+    "PATCH /org/:organizationId/resource-grants/:id/expiry；expected_version/reason.trim/expires_at；子日期min按原expiry下一分钟与现有min取大，就地表达不得早于或等于原expiry；父函数验未来30天，服务仍最终检查grant_expiry_not_extended；隔离submit替身不证明服务器接受",
     ["grants", "extend-busy"],
   ],
   [
@@ -338,7 +338,10 @@ const childInputs = [
   ],
   ["grantQuery", "只搜索当前页成员/工作区/中文类型/中文动作；不搜索授权或资源UUID、reason"],
   ["grantMutation.reason", "required trim maxlength500；选中授权对象变化会重置"],
-  ["grantMutation.expires_at", "required datetime-local；默认现在+7天，不是原expiry+7天"],
+  [
+    "grantMutation.expires_at",
+    "required datetime-local；默认现在+7天，原期限下一可选分钟与原min取大；就地错误关联；不是原expiry+7天",
+  ],
 ];
 export function buildRolesReview(sources, evidence, controlsEvidence, fieldEvidence) {
   const dependencyHashes = Object.fromEntries(
@@ -585,7 +588,7 @@ export function buildRolesReview(sources, evidence, controlsEvidence, fieldEvide
       evidence: "output/playwright/p31-approved-controls-review/evidence.json",
       verifier: "scripts/verify-ui-phase2-roles-vue-controls.mjs",
       scope:
-        "four-approved-control-treatments-only; actual Vue with isolated HTTP, not C layout or production acceptance",
+        "four-approved-control-treatments-and-extension-composition; actual Vue with isolated HTTP, not C layout or production acceptance",
       approval: "four-design-treatments-approved; full-page-and-runtime-pending",
     },
     limits: [

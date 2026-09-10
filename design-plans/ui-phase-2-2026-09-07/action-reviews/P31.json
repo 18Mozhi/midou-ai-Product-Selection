@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
-    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11"
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415"
   },
   "actions": [
     {
@@ -2247,7 +2247,7 @@
       "label": "更新授权到期时间",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationRolePanel.vue#64b97b8b5fe9de71.1",
+        "apps/web/src/components/OrganizationRolePanel.vue#201e6ad7077e4318.1",
         "apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1"
       ],
       "sourceContractKeys": [
@@ -2258,7 +2258,7 @@
       ],
       "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
       "condition": "canManage且effective_status active；busy禁用",
-      "handler": "PATCH /org/:organizationId/resource-grants/:id/expiry；expected_version/reason.trim/expires_at；父函数仅验未来30天，服务extend还要求晚于原expiry，否则grant_expiry_not_extended；隔离submit替身不证明服务器接受",
+      "handler": "PATCH /org/:organizationId/resource-grants/:id/expiry；expected_version/reason.trim/expires_at；子日期min按原expiry下一分钟与现有min取大，就地表达不得早于或等于原expiry；父函数验未来30天，服务仍最终检查grant_expiry_not_extended；隔离submit替身不证明服务器接受",
       "variants": [
         "grants",
         "extend-busy"
@@ -2789,7 +2789,7 @@
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
-      "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+      "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
       "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
       "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
       "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
@@ -3088,7 +3088,7 @@
       {
         "file": "apps/web/src/components/OrganizationRolePanel.vue",
         "binding": "grantMutation.expires_at",
-        "meaning": "required datetime-local；默认现在+7天，不是原expiry+7天",
+        "meaning": "required datetime-local；默认现在+7天，原期限下一可选分钟与原min取大；就地错误关联；不是原expiry+7天",
         "visualReferences": {
           "package": "roles-fields-direction-c",
           "pageId": "P31",
@@ -3430,7 +3430,7 @@
     "review": "P31-VUE-APPROVED-CONTROLS.md",
     "evidence": "output/playwright/p31-approved-controls-review/evidence.json",
     "verifier": "scripts/verify-ui-phase2-roles-vue-controls.mjs",
-    "scope": "four-approved-control-treatments-only; actual Vue with isolated HTTP, not C layout or production acceptance",
+    "scope": "four-approved-control-treatments-and-extension-composition; actual Vue with isolated HTTP, not C layout or production acceptance",
     "approval": "four-design-treatments-approved; full-page-and-runtime-pending"
   },
   "limits": [

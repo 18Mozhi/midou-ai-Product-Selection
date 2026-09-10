@@ -8,7 +8,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/roles.css": "05aab6c2df11deee185fa1be1eaccc706791ef70e178336513c7b4bd6c3acad4",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
     "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
-    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
     "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
     "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
@@ -4432,7 +4432,7 @@
       "file": "expires-at-pending-1440.png",
       "width": 1440,
       "scene": "expires-at-pending",
-      "sha256": "65409625394d07349aed4e1137813ab38f84e38478b4bdb8c6c06dc6471e1a4d",
+      "sha256": "adf485686bd683b71ad00b3c532009b23e4b8f63869d62130125f118f67b8f9e",
       "field": {
         "binding": "grantForm.expires_at",
         "selector": "#expires-at",
@@ -4691,7 +4691,7 @@
       "file": "extend-ready-form-1440.png",
       "width": 1440,
       "scene": "extend-ready-form",
-      "sha256": "7dcba4147f13f13525619c7613f6018c43eb535337d6a6bb26078c9c55a48c7a",
+      "sha256": "836b66e7a815a671ba507892ba3c218a5a0f1f673217e74dcf11ba15de863ef1",
       "scope": "field-combination-not-production"
     },
     {
@@ -5507,7 +5507,7 @@
       "file": "expires-at-pending-390.png",
       "width": 390,
       "scene": "expires-at-pending",
-      "sha256": "14738a1b95dec052c21975beddd102cd5d98a297962ed5d85c3e8aa5327476fe",
+      "sha256": "f5437ee2814727b19e64427771d1c9d8a6de730e4a0344222dd8e994566577b5",
       "field": {
         "binding": "grantForm.expires_at",
         "selector": "#expires-at",
@@ -5661,7 +5661,7 @@
       "file": "extend-expiry-pending-390.png",
       "width": 390,
       "scene": "extend-expiry-pending",
-      "sha256": "11899e4979f2dad89125b78679cb84c4497f4e67a9022d0961a4cb06fda57668",
+      "sha256": "9426be17e395bce5a3212d995a7ede773f568bc3bf3169efea739305aac829bc",
       "field": {
         "binding": "grantMutation.expires_at",
         "selector": "#extend-expiry",
@@ -5752,14 +5752,14 @@
       "file": "create-no-actions-form-390.png",
       "width": 390,
       "scene": "create-no-actions-form",
-      "sha256": "6e2219324a74749d61eb0c124d575d65653c14c691d4d22c25b8b033387719a2",
+      "sha256": "f0a40fb7d04e2c49b54a5f4568bc47f1f4853222ab914102349418251bf711f5",
       "scope": "field-combination-not-production"
     },
     {
       "file": "create-pending-form-390.png",
       "width": 390,
       "scene": "create-pending-form",
-      "sha256": "dfb47b4442624b462f13b3df6f54ce51be9cd9f28587dc0a90a283a1a1280d5d",
+      "sha256": "b7b4457524d86fd3240f5ece16f10f3b2e17fa795483eebf0f7a2d4e5093d5ac",
       "scope": "field-combination-not-production"
     },
     {

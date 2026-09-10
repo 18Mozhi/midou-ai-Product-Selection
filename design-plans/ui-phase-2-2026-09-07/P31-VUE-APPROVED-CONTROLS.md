@@ -1,5 +1,7 @@
 # P31 已批准控件 · 真实 Vue 落地
 
+最新增量：[延期组合已进入真实Vue](P31-VUE-EXTENSION-REVIEW.md)，当前同一路径扩展为双端54检查/22图；下文30检查/12图及“延期未移植”为本文件首批历史边界。
+
 2026-09-10，从干净main/fb97d335开始。此前四项控件批准见P31-CONTROL-VISUAL-APPROVAL.md；手机延期组合另见P31-EXTEND-COMPOSITION-APPROVAL.md。本批不将局部批准扩大为整页批准。
 
 [真实页面图册](../../output/playwright/p31-approved-controls-review/index.html) · [同源证据](../../output/playwright/p31-approved-controls-review/evidence.json)
