@@ -7,8 +7,8 @@
 - 真实路由与规格：73/73。
 - 有明确整页或分段稿关联：73条；这不是73页全部完成。
 - 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
-- C稿包98个：含1个方向研究包、3个共享表面包；正式清单内PNG共14485张。
-- 1896条来源绑定 / 945个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内10073个本地链接已核对。
+- C稿包99个：含1个方向研究包、3个共享表面包；正式清单内PNG共14601张。
+- 1916条来源绑定 / 949个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内10076个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
@@ -55,7 +55,7 @@
 | P30 | 成员与邀请 · `/org-admin/members` | [规格](page-specs/P30.md) | [members-fields](design/members-fields-direction-c/README.md) · [members-controls](design/members-controls-direction-c/README.md) · [members](design/members-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P31 | 角色与权限 · `/org-admin/roles` | [规格](page-specs/P31.md) | [roles-fields](design/roles-fields-direction-c/README.md) · [roles-controls](design/roles-controls-direction-c/README.md) · [roles](design/roles-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P32 | 工作区管理 · `/org-admin/workspaces` | [规格](page-specs/P32.md) | [workspaces-fields](design/workspaces-fields-direction-c/README.md) · [workspaces-restore-states](design/workspaces-restore-states-direction-c/README.md) · [workspaces-controls](design/workspaces-controls-direction-c/README.md) · [workspaces](design/workspaces-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P33 | 团队管理 · `/org-admin/teams` | [规格](page-specs/P33.md) | [teams-controls](design/teams-controls-direction-c/README.md) · [teams](design/teams-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P33 | 团队管理 · `/org-admin/teams` | [规格](page-specs/P33.md) | [teams-fields](design/teams-fields-direction-c/README.md) · [teams-controls](design/teams-controls-direction-c/README.md) · [teams](design/teams-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P34 | 审批模板 · `/org-admin/approvals` | [规格](page-specs/P34.md) | [org-approvals](design/org-approvals-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P35 | 组织数据 · `/org-admin/data` | [规格](page-specs/P35.md) | [org-data](design/org-data-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P36 | 组织令牌 · `/org-admin/tokens` | [规格](page-specs/P36.md) | [org-token](design/org-token-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑98个包的浏览器测试，也没有重新人工审核14485张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑99个包的浏览器测试，也没有重新人工审核14601张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。

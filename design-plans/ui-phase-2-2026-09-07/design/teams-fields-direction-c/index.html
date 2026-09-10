@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P33 团队 · 字段与表单组合审核</title>
+    <link rel="stylesheet" href="../teams-direction-c/teams.css" />
+    <link rel="stylesheet" href="../teams-controls-direction-c/controls.css" />
+    <link rel="stylesheet" href="fields.css" />
+    <script defer src="../teams-direction-c/data.js"></script>
+    <script defer src="../teams-direction-c/teams.js"></script>
+    <script defer src="fields.js"></script>
+  </head>
+  <body>
+    <details class="control-tools">
+      <summary>P33 字段审核工具 · 非业务入口</summary>
+      <label for="field-picker">字段 / 组合</label
+      ><select id="field-picker"></select
+      ><button id="field-show" type="button">展示状态</button>
+      <p>
+        离线待审提案，不创建团队或调整成员关系。等待期间仍可编辑按真实Vue呈现，不决定后续草稿或迟到回执政策。
+      </p>
+      <a href="gallery.html">全部双端字段图</a>
+    </details>
+    <div class="review-bar">
+      <span>P33 C · 字段与组合 / 待审核</span
+      ><button id="review-toggle" aria-expanded="false">原审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">审核状态</label
+      ><select id="scene-picker"></select>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="shell">
+      <aside class="blue-directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>团队</h1>
+        <nav aria-label="本页目录">
+          <a href="#catalog" aria-current="true">团队目录</a><a href="#relationship">协作关系</a>
+        </nav>
+        <p class="note">团队关系与账号分开<br />可选配置不强制填写</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <h2 id="reason-title"></h2>
+          <button id="reason-close" type="button" aria-label="关闭原因填写">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少2个字）</label
+        ><textarea
+          id="reason-input"
+          required
+          minlength="2"
+          maxlength="500"
+          aria-describedby="reason-help"
+        ></textarea>
+        <p id="reason-help">继承旧稿500字限制；真实共享前端无上限，原因字段策略不在本批确认。</p>
+        <footer>
+          <button id="reason-cancel" type="button">取消</button
+          ><button id="reason-confirm" class="primary" type="submit">确认提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

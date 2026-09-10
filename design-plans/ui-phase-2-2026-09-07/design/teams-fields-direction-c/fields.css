@@ -1,0 +1,61 @@
+/* Field proposal only: source validation and permissions are unchanged. */
+#workspace .field-help,
+#workspace .field-count,
+#workspace .field-error {
+  display: block;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+#workspace .field-help {
+  color: #445779;
+  margin: 7px 0;
+}
+#workspace .field-count {
+  color: #445779;
+  text-align: right;
+  margin: 4px 0;
+}
+#workspace .field-error {
+  color: #9f301c;
+  border-left: 3px solid #9f301c;
+  padding-left: 10px;
+  margin: 7px 0;
+}
+#workspace .field-error:empty {
+  display: none;
+}
+#workspace input[aria-invalid="true"],
+#workspace textarea[aria-invalid="true"],
+#workspace select[aria-invalid="true"] {
+  border-color: #9f301c;
+}
+#workspace .create-grid label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+#workspace #team-reason {
+  min-height: 150px;
+}
+#workspace .create-form footer p {
+  font-size: 16px;
+}
+#field-pending {
+  margin-top: 16px;
+  background: #f3f6fc;
+  color: #254a9c;
+  padding: 12px;
+}
+#workspace .membership .member-identity {
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  #workspace .create-form footer {
+    align-items: stretch;
+  }
+  #workspace .create-form footer button {
+    width: 100%;
+  }
+}

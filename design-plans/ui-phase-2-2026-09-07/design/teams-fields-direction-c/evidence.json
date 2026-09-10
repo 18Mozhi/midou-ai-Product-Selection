@@ -1,0 +1,3624 @@
+{
+  "kind": "TEAMS-FIELDS-C-r1",
+  "approval": "pending-user-review",
+  "boundary": "Independent field proposal, not real Vue or production. Source field contracts retained; inline error presentation proposed. Shared reason dialog excluded. Pending editable snapshot does not decide later-draft completion policy or OG-G02.",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/index.html": "3abacda97240479cb04e55e4376a4900b9a944fbc4adfa468729618d1f5c64bf",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.css": "5aa4a2a298ec8546fe78e7fcf47a05cd847566e46f972bd89d932a8bd018bd5b",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.js": "3f2ca35d59a27fcb284d2378b3531f0dc376627836e22fadbb547f77b4a9c412",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/data.js": "0608f8b32717d4ede9ba24c018029251d2cfadb06885c6d2b8e5d84feb2259e9",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-teams-design-data.mjs": "314917fa2a35f9dfa12608f0c1a7bd217465a424574beb8a87440c0bcf9ac71f",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/index.html": "a82195d33aa0c31bd338168e0ce0d4feec6b3e998d59fb7eb8453ace70f6e8e3",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/fields.css": "2ed5a6d69cd2e5a1634beb40cc23b9dba1a3aacd842f32f3624218d492e39f17",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/fields.js": "cc1313b060129d8eb904c8ef50629449a599ca655958744ca7744b45f60cd684",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.css": "7e0c772e5fe1fef0ddfeeb5f049540644dab028e8d49a6efd9c96e4bffab5e2c",
+    "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69"
+  },
+  "fields": [
+    {
+      "id": "name",
+      "model": "form.name",
+      "selector": "#team-name",
+      "label": "团队名称",
+      "required": true,
+      "max": 120,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "whitespace",
+        "boundary",
+        "corrected",
+        "pending"
+      ]
+    },
+    {
+      "id": "lead",
+      "model": "form.lead_membership_id",
+      "selector": "#team-lead",
+      "label": "负责人（可选）",
+      "required": false,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "admin",
+        "buyer",
+        "locked",
+        "no-members",
+        "pending"
+      ]
+    },
+    {
+      "id": "workflow",
+      "model": "form.default_workflow_key",
+      "selector": "#team-workflow",
+      "label": "默认流程键（可选）",
+      "required": false,
+      "max": 80,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "whitespace",
+        "boundary",
+        "free-text",
+        "pending"
+      ]
+    },
+    {
+      "id": "reason",
+      "model": "form.reason",
+      "selector": "#team-reason",
+      "label": "创建原因",
+      "required": true,
+      "max": 500,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "whitespace",
+        "boundary",
+        "corrected",
+        "pending"
+      ]
+    },
+    {
+      "id": "query",
+      "model": "query",
+      "selector": "#query",
+      "label": "搜索团队",
+      "required": false,
+      "states": [
+        "default",
+        "focus",
+        "name",
+        "email",
+        "workflow",
+        "no-result",
+        "cleared"
+      ]
+    },
+    {
+      "id": "sort",
+      "model": "sort",
+      "selector": "#sort",
+      "label": "排序",
+      "required": false,
+      "states": [
+        "default",
+        "focus",
+        "name_asc",
+        "members_desc",
+        "updated_desc"
+      ]
+    },
+    {
+      "id": "member",
+      "model": "selectedMembershipId",
+      "selector": "#team-member-select",
+      "label": "操作成员",
+      "required": false,
+      "states": [
+        "default",
+        "focus",
+        "admin",
+        "buyer",
+        "locked",
+        "no-members",
+        "archived",
+        "pending"
+      ]
+    }
+  ],
+  "combinations": {
+    "create-empty": [
+      "create",
+      "四字段空表单"
+    ],
+    "create-ready": [
+      "create_draft",
+      "创建信息填妥"
+    ],
+    "create-optional-empty": [
+      "create_optional_empty",
+      "可选配置留空"
+    ],
+    "create-invalid": [
+      "create_required",
+      "必填字段就地错误"
+    ],
+    "create-boundary": [
+      "create_long",
+      "三个文本字段边界"
+    ],
+    "create-pending": [
+      "create_busy",
+      "提交期间继续编辑"
+    ],
+    "create-failed": [
+      "create_failure",
+      "失败保留草稿"
+    ],
+    "member-missing": [
+      "member_missing",
+      "未选择操作成员"
+    ],
+    "member-archived": [
+      "archived",
+      "归档团队成员选择"
+    ]
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "name-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: linked inline error"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: no write"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: linked inline error"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: no write"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: native length blocks extra character"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: error clears on correction"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: source max"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: actions disabled"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: live draft stays editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: editing never writes"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-default: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "lead-focus: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-empty: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-empty: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-empty: optional not invalid"
+    },
+    {
+      "width": 1440,
+      "name": "lead-empty: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-admin: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-admin: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-admin: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-admin: selected identity"
+    },
+    {
+      "width": 1440,
+      "name": "lead-admin: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-buyer: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-buyer: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-buyer: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-buyer: selected identity"
+    },
+    {
+      "width": 1440,
+      "name": "lead-buyer: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-locked: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-locked: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-locked: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-locked: selected identity"
+    },
+    {
+      "width": 1440,
+      "name": "lead-locked: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-no-members: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-no-members: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-no-members: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-no-members: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: actions disabled"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: live draft stays editable"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: editing never writes"
+    },
+    {
+      "width": 1440,
+      "name": "lead-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-default: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-default: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-focus: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-focus: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-empty: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-empty: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-empty: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-empty: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-empty: optional not invalid"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-whitespace: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-whitespace: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-whitespace: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-whitespace: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-whitespace: optional not invalid"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-whitespace: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-boundary: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-boundary: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-boundary: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-boundary: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-boundary: native length blocks extra character"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-free-text: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-free-text: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-free-text: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-free-text: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-free-text: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: source max"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: counter"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: actions disabled"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: live draft stays editable"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: editing never writes"
+    },
+    {
+      "width": 1440,
+      "name": "workflow-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: linked inline error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: no write"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: linked inline error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: no write"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: native length blocks extra character"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: error clears on correction"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: source max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: actions disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: live draft stays editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: editing never writes"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-name: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-name: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-name: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-name: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-email: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-email: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-email: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-email: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-workflow: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-workflow: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-workflow: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-workflow: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: exact search result count"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: cleared model"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: exact options"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: exact options"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: exact options"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: exact sort model"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: exact options"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: exact sort model"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: exact options"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: exact sort model"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-default: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-default: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-default: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-focus: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-focus: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "member-focus: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-admin: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-admin: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-admin: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-admin: selected identity"
+    },
+    {
+      "width": 1440,
+      "name": "member-admin: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-buyer: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-buyer: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-buyer: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-buyer: selected identity"
+    },
+    {
+      "width": 1440,
+      "name": "member-buyer: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-locked: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-locked: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-locked: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-locked: selected identity"
+    },
+    {
+      "width": 1440,
+      "name": "member-locked: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-no-members: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-no-members: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-no-members: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-no-members: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-archived: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-archived: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-archived: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-archived: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: label readable target and linked help"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: source editable and required"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: exact active member options including locked"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: actions disabled"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: live draft stays editable"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: editing never writes"
+    },
+    {
+      "width": 1440,
+      "name": "member-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-ready: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-optional-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-invalid: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-create-failed: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-member-missing: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "composition-member-archived: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "optional blanks exact trimmed intent"
+    },
+    {
+      "width": 1440,
+      "name": "disabled submit no duplicate"
+    },
+    {
+      "width": 1440,
+      "name": "free workflow key is not existence validated"
+    },
+    {
+      "width": 1440,
+      "name": "cancel clears four fields"
+    },
+    {
+      "width": 1440,
+      "name": "cancel closes form without write"
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "no HTTP"
+    },
+    {
+      "width": 1440,
+      "name": "no cookies"
+    },
+    {
+      "width": 1440,
+      "name": "no storage"
+    },
+    {
+      "width": 390,
+      "name": "name-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-default: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-default: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: linked inline error"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: no write"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: linked inline error"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: no write"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: native length blocks extra character"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: error clears on correction"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: source max"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: actions disabled"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: live draft stays editable"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: editing never writes"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-default: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "lead-focus: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-empty: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-empty: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-empty: optional not invalid"
+    },
+    {
+      "width": 390,
+      "name": "lead-empty: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-admin: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-admin: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-admin: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-admin: selected identity"
+    },
+    {
+      "width": 390,
+      "name": "lead-admin: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-buyer: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-buyer: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-buyer: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-buyer: selected identity"
+    },
+    {
+      "width": 390,
+      "name": "lead-buyer: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-locked: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-locked: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-locked: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-locked: selected identity"
+    },
+    {
+      "width": 390,
+      "name": "lead-locked: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-no-members: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-no-members: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-no-members: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-no-members: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: actions disabled"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: live draft stays editable"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: editing never writes"
+    },
+    {
+      "width": 390,
+      "name": "lead-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-default: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-default: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-focus: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-focus: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "workflow-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-empty: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-empty: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-empty: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-empty: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-empty: optional not invalid"
+    },
+    {
+      "width": 390,
+      "name": "workflow-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-whitespace: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-whitespace: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-whitespace: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-whitespace: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-whitespace: optional not invalid"
+    },
+    {
+      "width": 390,
+      "name": "workflow-whitespace: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-boundary: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-boundary: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-boundary: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-boundary: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-boundary: native length blocks extra character"
+    },
+    {
+      "width": 390,
+      "name": "workflow-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-free-text: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-free-text: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-free-text: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-free-text: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-free-text: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: source max"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: counter"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: actions disabled"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: live draft stays editable"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: editing never writes"
+    },
+    {
+      "width": 390,
+      "name": "workflow-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: linked inline error"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: no write"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: linked inline error"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: no write"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: native length blocks extra character"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: error clears on correction"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: source max"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: actions disabled"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: live draft stays editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: editing never writes"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-default: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-name: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-name: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-name: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-name: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-email: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-email: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-email: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-email: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-workflow: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-workflow: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-workflow: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-workflow: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: exact search result count"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: cleared model"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: exact options"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: exact options"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: exact options"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: exact sort model"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: exact options"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: exact sort model"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: exact options"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: exact sort model"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-default: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-default: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-default: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-focus: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-focus: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "member-focus: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-admin: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-admin: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-admin: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-admin: selected identity"
+    },
+    {
+      "width": 390,
+      "name": "member-admin: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-buyer: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-buyer: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-buyer: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-buyer: selected identity"
+    },
+    {
+      "width": 390,
+      "name": "member-buyer: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-locked: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-locked: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-locked: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-locked: selected identity"
+    },
+    {
+      "width": 390,
+      "name": "member-locked: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-no-members: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-no-members: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-no-members: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-no-members: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-archived: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-archived: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-archived: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-archived: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: label readable target and linked help"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: source editable and required"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: exact active member options including locked"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: actions disabled"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: live draft stays editable"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: editing never writes"
+    },
+    {
+      "width": 390,
+      "name": "member-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-ready: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-optional-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-invalid: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-create-failed: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-member-missing: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "composition-member-archived: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "optional blanks exact trimmed intent"
+    },
+    {
+      "width": 390,
+      "name": "disabled submit no duplicate"
+    },
+    {
+      "width": 390,
+      "name": "free workflow key is not existence validated"
+    },
+    {
+      "width": 390,
+      "name": "cancel clears four fields"
+    },
+    {
+      "width": 390,
+      "name": "cancel closes form without write"
+    },
+    {
+      "width": 390,
+      "name": "no browser errors"
+    },
+    {
+      "width": 390,
+      "name": "no HTTP"
+    },
+    {
+      "width": 390,
+      "name": "no cookies"
+    },
+    {
+      "width": 390,
+      "name": "no storage"
+    }
+  ],
+  "observations": [
+    {
+      "width": 1440,
+      "exactCreateIntent": {
+        "url": "/org/admin/teams",
+        "method": "POST",
+        "body": {
+          "name": "北美新品团队",
+          "lead_membership_id": "",
+          "default_workflow_key": "",
+          "reason": "划分协作职责"
+        }
+      },
+      "fieldsRemainEditable": true,
+      "noProductionWrites": true
+    },
+    {
+      "width": 390,
+      "exactCreateIntent": {
+        "url": "/org/admin/teams",
+        "method": "POST",
+        "body": {
+          "name": "北美新品团队",
+          "lead_membership_id": "",
+          "default_workflow_key": "",
+          "reason": "划分协作职责"
+        }
+      },
+      "fieldsRemainEditable": true,
+      "noProductionWrites": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "name-default-1440.png",
+      "scene": "name-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c74bc55c9df57b0bb127b9f11f223831ceaa45acabd68256bce05186857f1663",
+      "field": "name",
+      "variant": "default"
+    },
+    {
+      "file": "name-focus-1440.png",
+      "scene": "name-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e7020d7a801f6c3eecfc5368a5a3584fef5f6bfe6c023a8564042ed13a20a4af",
+      "field": "name",
+      "variant": "focus"
+    },
+    {
+      "file": "name-empty-1440.png",
+      "scene": "name-empty",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b42f30eee930c94490f8945842c136b4112df54724df1b07118b30ace8825c5d",
+      "field": "name",
+      "variant": "empty"
+    },
+    {
+      "file": "name-whitespace-1440.png",
+      "scene": "name-whitespace",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6b59ed8c871af740fd5d2b4b3c6a768bc8093a3e9bd54f9c6b32ab2d40b49783",
+      "field": "name",
+      "variant": "whitespace"
+    },
+    {
+      "file": "name-boundary-1440.png",
+      "scene": "name-boundary",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "567d5e0f79bdd7a038dfb88b07e33bc6b9d8faaec9abc2b9a8c58fc2af6760cc",
+      "field": "name",
+      "variant": "boundary"
+    },
+    {
+      "file": "name-corrected-1440.png",
+      "scene": "name-corrected",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5239c4aa92e461a17e1426358945f1dfb12c0b08cfab76b47271209a0f4e20b9",
+      "field": "name",
+      "variant": "corrected"
+    },
+    {
+      "file": "name-pending-1440.png",
+      "scene": "name-pending",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "704fc1ae875195a315d9b6c3b77fa078b950636e06833e454c1fe1ad5bde8110",
+      "field": "name",
+      "variant": "pending"
+    },
+    {
+      "file": "lead-default-1440.png",
+      "scene": "lead-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "530c61ab60d7ad6d371d539a5c8f1b70547cd74892dd841df9ae343fd96f29f0",
+      "field": "lead",
+      "variant": "default"
+    },
+    {
+      "file": "lead-focus-1440.png",
+      "scene": "lead-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "bea3244f6e02d9a49345b0f127c10443cdca4a02967efa97eaf428a705e08000",
+      "field": "lead",
+      "variant": "focus"
+    },
+    {
+      "file": "lead-empty-1440.png",
+      "scene": "lead-empty",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f517bb529f41b73bf5b0c52e209e7827b29638a43914fab4a8aad5a646e53ce8",
+      "field": "lead",
+      "variant": "empty"
+    },
+    {
+      "file": "lead-admin-1440.png",
+      "scene": "lead-admin",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "924b481699b342be36f587cf4b906114aebcb925c18643c3d34c7adf04f1426a",
+      "field": "lead",
+      "variant": "admin"
+    },
+    {
+      "file": "lead-buyer-1440.png",
+      "scene": "lead-buyer",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "530c61ab60d7ad6d371d539a5c8f1b70547cd74892dd841df9ae343fd96f29f0",
+      "field": "lead",
+      "variant": "buyer"
+    },
+    {
+      "file": "lead-locked-1440.png",
+      "scene": "lead-locked",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5a98021be09f795a389890960ad23ae631d316006b181e3b798b22331f38001a",
+      "field": "lead",
+      "variant": "locked"
+    },
+    {
+      "file": "lead-no-members-1440.png",
+      "scene": "lead-no-members",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f517bb529f41b73bf5b0c52e209e7827b29638a43914fab4a8aad5a646e53ce8",
+      "field": "lead",
+      "variant": "no-members"
+    },
+    {
+      "file": "lead-pending-1440.png",
+      "scene": "lead-pending",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f517bb529f41b73bf5b0c52e209e7827b29638a43914fab4a8aad5a646e53ce8",
+      "field": "lead",
+      "variant": "pending"
+    },
+    {
+      "file": "workflow-default-1440.png",
+      "scene": "workflow-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "170fb133003dbc15f79a9613c3b560f196f92bbf448208a9df9f1810e2386802",
+      "field": "workflow",
+      "variant": "default"
+    },
+    {
+      "file": "workflow-focus-1440.png",
+      "scene": "workflow-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "96cd35128bfc389ddb35103330f932255c231c46768e826c658b405aa819f26f",
+      "field": "workflow",
+      "variant": "focus"
+    },
+    {
+      "file": "workflow-empty-1440.png",
+      "scene": "workflow-empty",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c84233860334bc55731714218030820987fc8ec012dbd3af5be860b8f086cd67",
+      "field": "workflow",
+      "variant": "empty"
+    },
+    {
+      "file": "workflow-whitespace-1440.png",
+      "scene": "workflow-whitespace",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "99043ace8721686ad4cf7d8e949a55d8c754d513434c38f007267196c051a3a4",
+      "field": "workflow",
+      "variant": "whitespace"
+    },
+    {
+      "file": "workflow-boundary-1440.png",
+      "scene": "workflow-boundary",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "9e7422a534adc9ff17b819f17e33cae873a845340c4f8046141e2e0900a1df08",
+      "field": "workflow",
+      "variant": "boundary"
+    },
+    {
+      "file": "workflow-free-text-1440.png",
+      "scene": "workflow-free-text",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c6962051335887cd4e7218a41773d3281ad279f4443825dd07bf28bb4f35d511",
+      "field": "workflow",
+      "variant": "free-text"
+    },
+    {
+      "file": "workflow-pending-1440.png",
+      "scene": "workflow-pending",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "69002813f2a9180eccfc5da902364d26ae002fc62bdaddd12ef1f01ba4d7e93c",
+      "field": "workflow",
+      "variant": "pending"
+    },
+    {
+      "file": "reason-default-1440.png",
+      "scene": "reason-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "becdb4375888323059dd111f230d97d46ed4947a48db3f21b96d4f3f957e8307",
+      "field": "reason",
+      "variant": "default"
+    },
+    {
+      "file": "reason-focus-1440.png",
+      "scene": "reason-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "16871dc4cb53b6311e207fae35d228c450cf59f14b0eac28db9c86cda1f21e3f",
+      "field": "reason",
+      "variant": "focus"
+    },
+    {
+      "file": "reason-empty-1440.png",
+      "scene": "reason-empty",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f69c7c8bd258972e80f2298f7c3316fa8e114fba8ddc95f3f3dca92736906bb8",
+      "field": "reason",
+      "variant": "empty"
+    },
+    {
+      "file": "reason-whitespace-1440.png",
+      "scene": "reason-whitespace",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "15489bb2bc6c69a08e77878c37a08ee9c9b9cd95881a493974379905a2ede166",
+      "field": "reason",
+      "variant": "whitespace"
+    },
+    {
+      "file": "reason-boundary-1440.png",
+      "scene": "reason-boundary",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6010b3ca7fa861948fa9c38fcabded035573b2a0fa1988ec9d62db3100751c5b",
+      "field": "reason",
+      "variant": "boundary"
+    },
+    {
+      "file": "reason-corrected-1440.png",
+      "scene": "reason-corrected",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "2ce0439eef9b750cb5157306d7ecac174da3b791c6d94ae709943d72d905e051",
+      "field": "reason",
+      "variant": "corrected"
+    },
+    {
+      "file": "reason-pending-1440.png",
+      "scene": "reason-pending",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "de18a6351ae96e94a3d5802dafbadda88d9b0c36260b8197a9840ed2738270b0",
+      "field": "reason",
+      "variant": "pending"
+    },
+    {
+      "file": "query-default-1440.png",
+      "scene": "query-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f5f1dad5fd5508900077ba15cd5096126739b83f3345b5a86b74db02fb32172a",
+      "field": "query",
+      "variant": "default"
+    },
+    {
+      "file": "query-focus-1440.png",
+      "scene": "query-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "bf17b3a946609c999fcfed12f94df8d01fc7db3c430d1cec41f75373a300ffda",
+      "field": "query",
+      "variant": "focus"
+    },
+    {
+      "file": "query-name-1440.png",
+      "scene": "query-name",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "bbafe150ec873e9132f5ba6469451b37662a4c9142c80e84fc28effde354f76a",
+      "field": "query",
+      "variant": "name"
+    },
+    {
+      "file": "query-email-1440.png",
+      "scene": "query-email",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "1813b9c31cf9ab9598530ac967b05665e4d446ed9ba7c92a6fc8d383e8d5b1ad",
+      "field": "query",
+      "variant": "email"
+    },
+    {
+      "file": "query-workflow-1440.png",
+      "scene": "query-workflow",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "bc392e98379fd0300916738c4f76767330dd28573e591288aabe13c1c8a6d901",
+      "field": "query",
+      "variant": "workflow"
+    },
+    {
+      "file": "query-no-result-1440.png",
+      "scene": "query-no-result",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b92a21b40e6840f8d84f0d50a5534323a953f59188c0b468cdf145416cd15914",
+      "field": "query",
+      "variant": "no-result"
+    },
+    {
+      "file": "query-cleared-1440.png",
+      "scene": "query-cleared",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "bf17b3a946609c999fcfed12f94df8d01fc7db3c430d1cec41f75373a300ffda",
+      "field": "query",
+      "variant": "cleared"
+    },
+    {
+      "file": "sort-default-1440.png",
+      "scene": "sort-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f5f1dad5fd5508900077ba15cd5096126739b83f3345b5a86b74db02fb32172a",
+      "field": "sort",
+      "variant": "default"
+    },
+    {
+      "file": "sort-focus-1440.png",
+      "scene": "sort-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "42c73b25c86d3f9bdc45b99334393646e7ec9ea8cf0a3d452bc48baf2d3c3af9",
+      "field": "sort",
+      "variant": "focus"
+    },
+    {
+      "file": "sort-name_asc-1440.png",
+      "scene": "sort-name_asc",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "42c73b25c86d3f9bdc45b99334393646e7ec9ea8cf0a3d452bc48baf2d3c3af9",
+      "field": "sort",
+      "variant": "name_asc"
+    },
+    {
+      "file": "sort-members_desc-1440.png",
+      "scene": "sort-members_desc",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "97aba067c0bec5a8d3a276fd276e42e9fb19a8405ecbfb81217a1faef68aae33",
+      "field": "sort",
+      "variant": "members_desc"
+    },
+    {
+      "file": "sort-updated_desc-1440.png",
+      "scene": "sort-updated_desc",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c4dde4c874e5433bec35460d7c4c59c177f580ab4c3acdb344752a6172ea6855",
+      "field": "sort",
+      "variant": "updated_desc"
+    },
+    {
+      "file": "member-default-1440.png",
+      "scene": "member-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b640c22b4c9a50d3efd5118d11aeb0d765f8f7c4548228e321dcc46e540a12d1",
+      "field": "member",
+      "variant": "default"
+    },
+    {
+      "file": "member-focus-1440.png",
+      "scene": "member-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "7db86e8fdd960420c731bcaa6bebacaebc4809f09bc900e8805f258a99504c98",
+      "field": "member",
+      "variant": "focus"
+    },
+    {
+      "file": "member-admin-1440.png",
+      "scene": "member-admin",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "cf2d3f8b1ffa3678c0aa6caac07844fe3367223b1b9493d099ff2c2e465e0487",
+      "field": "member",
+      "variant": "admin"
+    },
+    {
+      "file": "member-buyer-1440.png",
+      "scene": "member-buyer",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "9cd8afc9233731e7e717779c12c183b4f0c872f88d4bb55b0691c41e254bb2fe",
+      "field": "member",
+      "variant": "buyer"
+    },
+    {
+      "file": "member-locked-1440.png",
+      "scene": "member-locked",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "d45b38566400a94530925b80a6fcbb4ef688fa1104644bb6930d86b761523ff5",
+      "field": "member",
+      "variant": "locked"
+    },
+    {
+      "file": "member-no-members-1440.png",
+      "scene": "member-no-members",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c6bb01259f9a7b5eea0e032daaa972ef26891ffd3b186cddfd74f00bd6c64695",
+      "field": "member",
+      "variant": "no-members"
+    },
+    {
+      "file": "member-archived-1440.png",
+      "scene": "member-archived",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "dcdb7b98355c051953ee77f8a967dad2d8e2fb5cd446a91603655945d399465a",
+      "field": "member",
+      "variant": "archived"
+    },
+    {
+      "file": "member-pending-1440.png",
+      "scene": "member-pending",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "615b80bb06e5d0b07c5c87942a2f720e06afb527c9122ba3ae7d8bdf70d3fad0",
+      "field": "member",
+      "variant": "pending"
+    },
+    {
+      "file": "composition-create-empty-1440.png",
+      "scene": "composition-create-empty",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "07a0c4675e84673ed7afd5b00153535c01723ff20666c69d98455dc5eac4095f",
+      "composition": true
+    },
+    {
+      "file": "composition-create-ready-1440.png",
+      "scene": "composition-create-ready",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "dd9127b548d73e88ce0b52434b8c3a44c3f72ede740bcda770cc03b4a6323983",
+      "composition": true
+    },
+    {
+      "file": "composition-create-optional-empty-1440.png",
+      "scene": "composition-create-optional-empty",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "87b9e327d84888a16c938a4c40c795ab6b4f409f8b20aba8fbd592161176d174",
+      "composition": true
+    },
+    {
+      "file": "composition-create-invalid-1440.png",
+      "scene": "composition-create-invalid",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "122663cebd2b92b8fe2a2b59236cf2abdcc0c15cdec1ee52b854f33b27b0b3c5",
+      "composition": true
+    },
+    {
+      "file": "composition-create-boundary-1440.png",
+      "scene": "composition-create-boundary",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6092da4451ba07409ae09c738d6e6b2702948f17af919c8e9c4878681b5adebf",
+      "composition": true
+    },
+    {
+      "file": "composition-create-pending-1440.png",
+      "scene": "composition-create-pending",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "fa7530e57dc75f5a3120e92930dec6fd38c9dfb648c432ce9033e52327e346d6",
+      "composition": true
+    },
+    {
+      "file": "composition-create-failed-1440.png",
+      "scene": "composition-create-failed",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6a6d18fea602b48060774a417dd71a5a4b412214dd290dae5b777f4fafdfad88",
+      "composition": true
+    },
+    {
+      "file": "composition-member-missing-1440.png",
+      "scene": "composition-member-missing",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5dd91ca2a1b69910d5aea5d2fbe8588db54390509bcf496eb1f33fc6c21465d8",
+      "composition": true
+    },
+    {
+      "file": "composition-member-archived-1440.png",
+      "scene": "composition-member-archived",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "cc1604163ab996e20127ff5c97a5ce183aa2c6c5d47d35b5e1e7c7957ceb0c65",
+      "composition": true
+    },
+    {
+      "file": "name-default-390.png",
+      "scene": "name-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ee07d22f0ed78ee3b2e9590f52ed44f72e284f0a6c0058447af5b7bfa99544b8",
+      "field": "name",
+      "variant": "default"
+    },
+    {
+      "file": "name-focus-390.png",
+      "scene": "name-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "2f0688818c900e1a8f6308dfd86a49e61ba3c72a8964693ad244c606956875cf",
+      "field": "name",
+      "variant": "focus"
+    },
+    {
+      "file": "name-empty-390.png",
+      "scene": "name-empty",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "2ec861ef2d35cd257063e74021b85c4d379a3f429f8d063464f0d19cdd7f6e3c",
+      "field": "name",
+      "variant": "empty"
+    },
+    {
+      "file": "name-whitespace-390.png",
+      "scene": "name-whitespace",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "41dcb053c516254f9e8f745a1811774bfba7fd2ef210bd5a836b76b7e2ae48c2",
+      "field": "name",
+      "variant": "whitespace"
+    },
+    {
+      "file": "name-boundary-390.png",
+      "scene": "name-boundary",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "0f5e30a8c07e602fb240ea3c57441e30a3b97d0f0d4dfec7f0f25381899c32ce",
+      "field": "name",
+      "variant": "boundary"
+    },
+    {
+      "file": "name-corrected-390.png",
+      "scene": "name-corrected",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "104706607eecb64e1075899c5078cd7db958ae2e1c89be8a4a592c3dd41d7947",
+      "field": "name",
+      "variant": "corrected"
+    },
+    {
+      "file": "name-pending-390.png",
+      "scene": "name-pending",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "4a18d829b539010261909cc9d6a7a04447529b1ab8d6c663fb4034139f7e1bc3",
+      "field": "name",
+      "variant": "pending"
+    },
+    {
+      "file": "lead-default-390.png",
+      "scene": "lead-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ffb0eb1923d44e494ae655a29e6a590ca61f8d294079fd166d9c57b894eac2f0",
+      "field": "lead",
+      "variant": "default"
+    },
+    {
+      "file": "lead-focus-390.png",
+      "scene": "lead-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f45613d82115fcaaaa3490877f81abe1cf185fa72ba16aa9124e40b3830c909f",
+      "field": "lead",
+      "variant": "focus"
+    },
+    {
+      "file": "lead-empty-390.png",
+      "scene": "lead-empty",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "38d595427f391b8f2fb020f91e6ad80b4ea3aecbb6e91a49763a6a9a300c0bd1",
+      "field": "lead",
+      "variant": "empty"
+    },
+    {
+      "file": "lead-admin-390.png",
+      "scene": "lead-admin",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f883de389e8b27fb3c9179e920ab942e00483d5325f7623617f31d53750c85bd",
+      "field": "lead",
+      "variant": "admin"
+    },
+    {
+      "file": "lead-buyer-390.png",
+      "scene": "lead-buyer",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ffb0eb1923d44e494ae655a29e6a590ca61f8d294079fd166d9c57b894eac2f0",
+      "field": "lead",
+      "variant": "buyer"
+    },
+    {
+      "file": "lead-locked-390.png",
+      "scene": "lead-locked",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "7f4a0161fdc12315d865d904d3565df6388921e186987f85a2de4bf05a0bafb9",
+      "field": "lead",
+      "variant": "locked"
+    },
+    {
+      "file": "lead-no-members-390.png",
+      "scene": "lead-no-members",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "38d595427f391b8f2fb020f91e6ad80b4ea3aecbb6e91a49763a6a9a300c0bd1",
+      "field": "lead",
+      "variant": "no-members"
+    },
+    {
+      "file": "lead-pending-390.png",
+      "scene": "lead-pending",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "38d595427f391b8f2fb020f91e6ad80b4ea3aecbb6e91a49763a6a9a300c0bd1",
+      "field": "lead",
+      "variant": "pending"
+    },
+    {
+      "file": "workflow-default-390.png",
+      "scene": "workflow-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "a75f71d98602904dad07e2ba807a24bc02c1484bd58865c27dd1892e785faa2e",
+      "field": "workflow",
+      "variant": "default"
+    },
+    {
+      "file": "workflow-focus-390.png",
+      "scene": "workflow-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "173e9e7e3912cdbc773f0af18d409e9d74d56103bb4f56c8f1a1c141a10d8c3a",
+      "field": "workflow",
+      "variant": "focus"
+    },
+    {
+      "file": "workflow-empty-390.png",
+      "scene": "workflow-empty",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e326ef4aaaf1efbf0bfba848ea73b2fe6de8c1f7cb64e0dc5983c0199a11787d",
+      "field": "workflow",
+      "variant": "empty"
+    },
+    {
+      "file": "workflow-whitespace-390.png",
+      "scene": "workflow-whitespace",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "4257d0f566543615d485313caad6c365b459788f0d626e6628a1bec4de2a0986",
+      "field": "workflow",
+      "variant": "whitespace"
+    },
+    {
+      "file": "workflow-boundary-390.png",
+      "scene": "workflow-boundary",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "a2a05c3c167b997c95e1345dc4fe1a54f52d27b19d37ebbd084697a23b922593",
+      "field": "workflow",
+      "variant": "boundary"
+    },
+    {
+      "file": "workflow-free-text-390.png",
+      "scene": "workflow-free-text",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "d2bf70a14baa2481a270d265f9b61b7f5853f8df041672564b4933432a5b8788",
+      "field": "workflow",
+      "variant": "free-text"
+    },
+    {
+      "file": "workflow-pending-390.png",
+      "scene": "workflow-pending",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5e4e3c9f839b50761e7bf646736a1c5f62128acae30f1d1f5f4da9c6c2ae58b5",
+      "field": "workflow",
+      "variant": "pending"
+    },
+    {
+      "file": "reason-default-390.png",
+      "scene": "reason-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "006fbb93c96486d88b18802fcaae37243ea9bd15cdbe7d4d729d9cb17571e21b",
+      "field": "reason",
+      "variant": "default"
+    },
+    {
+      "file": "reason-focus-390.png",
+      "scene": "reason-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "9dcb7e5370d2d4330ffcca80d60ec638fc6a480bd7c1a17d7759382d0ea97a66",
+      "field": "reason",
+      "variant": "focus"
+    },
+    {
+      "file": "reason-empty-390.png",
+      "scene": "reason-empty",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "0ed2c142b5a6831ea7f653180ab540a38a2f04b8dff95dc559536ab2eb46e179",
+      "field": "reason",
+      "variant": "empty"
+    },
+    {
+      "file": "reason-whitespace-390.png",
+      "scene": "reason-whitespace",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "4fa9eabf5609b2a34639e20152b68186beff0dd40d6c0d90e00622ec700e1462",
+      "field": "reason",
+      "variant": "whitespace"
+    },
+    {
+      "file": "reason-boundary-390.png",
+      "scene": "reason-boundary",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ab22c6033ac9c26736ea81b1f665e78183d12be2759a0e3a8a7b081bb164dc6b",
+      "field": "reason",
+      "variant": "boundary"
+    },
+    {
+      "file": "reason-corrected-390.png",
+      "scene": "reason-corrected",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "4ca7e8042212ed5f292ba634bd1cbb7dad8fbb6b23244f028dc87fe8239696ee",
+      "field": "reason",
+      "variant": "corrected"
+    },
+    {
+      "file": "reason-pending-390.png",
+      "scene": "reason-pending",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5aef595eb7b985d6feb8ce50467f826591c8caff28fc956fe377226b59a5bb9f",
+      "field": "reason",
+      "variant": "pending"
+    },
+    {
+      "file": "query-default-390.png",
+      "scene": "query-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5ead5da2b589d7d858bd59e4dfbcdb4a3334b414d86a6a10f17d53e5eae2ffab",
+      "field": "query",
+      "variant": "default"
+    },
+    {
+      "file": "query-focus-390.png",
+      "scene": "query-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "395a99a5ef1d892310847056c72cea9066435ec110d15779f1ca3562df232913",
+      "field": "query",
+      "variant": "focus"
+    },
+    {
+      "file": "query-name-390.png",
+      "scene": "query-name",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "99568a1eb1994a6ee6101420f0737846241573e24ea7914e501c1eb78822456a",
+      "field": "query",
+      "variant": "name"
+    },
+    {
+      "file": "query-email-390.png",
+      "scene": "query-email",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c69c42d26b00c740165c2193a3596586c2b2b926fbecffeacb62bbf5ce568d98",
+      "field": "query",
+      "variant": "email"
+    },
+    {
+      "file": "query-workflow-390.png",
+      "scene": "query-workflow",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b887091ec47de7609f1b27ee22b2131951b6a5ad491bf7c698a099ad0dbad12c",
+      "field": "query",
+      "variant": "workflow"
+    },
+    {
+      "file": "query-no-result-390.png",
+      "scene": "query-no-result",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "fd80bfb4dab26677907a48089a8ce23b680bf89c552a0b5bd7d19a83129e5207",
+      "field": "query",
+      "variant": "no-result"
+    },
+    {
+      "file": "query-cleared-390.png",
+      "scene": "query-cleared",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5ead5da2b589d7d858bd59e4dfbcdb4a3334b414d86a6a10f17d53e5eae2ffab",
+      "field": "query",
+      "variant": "cleared"
+    },
+    {
+      "file": "sort-default-390.png",
+      "scene": "sort-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5ead5da2b589d7d858bd59e4dfbcdb4a3334b414d86a6a10f17d53e5eae2ffab",
+      "field": "sort",
+      "variant": "default"
+    },
+    {
+      "file": "sort-focus-390.png",
+      "scene": "sort-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "078f9b13f07be8d01b31574e763dfb8fc55a6ac30cc11577af3c94514e61dfeb",
+      "field": "sort",
+      "variant": "focus"
+    },
+    {
+      "file": "sort-name_asc-390.png",
+      "scene": "sort-name_asc",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5ead5da2b589d7d858bd59e4dfbcdb4a3334b414d86a6a10f17d53e5eae2ffab",
+      "field": "sort",
+      "variant": "name_asc"
+    },
+    {
+      "file": "sort-members_desc-390.png",
+      "scene": "sort-members_desc",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6602611cb6a120e8aaaf75dad36249b0b2c7ad445f5b1447ad2ac0efe75c9bc0",
+      "field": "sort",
+      "variant": "members_desc"
+    },
+    {
+      "file": "sort-updated_desc-390.png",
+      "scene": "sort-updated_desc",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "f2a6f0989f9b26ebe3c5531633c994160fc05accd081a79d6c52dcbfb4dc7659",
+      "field": "sort",
+      "variant": "updated_desc"
+    },
+    {
+      "file": "member-default-390.png",
+      "scene": "member-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "33bdb3465323afd1b18e78cb621507c0b6430d7cf142da100e79475b85c7430d",
+      "field": "member",
+      "variant": "default"
+    },
+    {
+      "file": "member-focus-390.png",
+      "scene": "member-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "842713355cabe95914d8e07fadfd19c780bc72165586c40d4d4cc2e31c1ef2e9",
+      "field": "member",
+      "variant": "focus"
+    },
+    {
+      "file": "member-admin-390.png",
+      "scene": "member-admin",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "de7c025c3578d8d51a241ab68fd2c56ef202654c68db3fabc6e660e7ed90a0eb",
+      "field": "member",
+      "variant": "admin"
+    },
+    {
+      "file": "member-buyer-390.png",
+      "scene": "member-buyer",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "dfd2672ab0773fc34f703d195a33f4f8f9c9a4fe8993153264f8f36eedc0b94b",
+      "field": "member",
+      "variant": "buyer"
+    },
+    {
+      "file": "member-locked-390.png",
+      "scene": "member-locked",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "1b811cd1188150cc79859344f3fd5e774bf2b6397a6bb53d4886032e919871ec",
+      "field": "member",
+      "variant": "locked"
+    },
+    {
+      "file": "member-no-members-390.png",
+      "scene": "member-no-members",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "75bf19fbcb8ae7dbceea8df3a05155a06e2b089b14849388f3a2c29e2b7f3822",
+      "field": "member",
+      "variant": "no-members"
+    },
+    {
+      "file": "member-archived-390.png",
+      "scene": "member-archived",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "204eb4021fc428c69ea8c6d795cfbd3f74e1139543152ee3ee1c52249e27608d",
+      "field": "member",
+      "variant": "archived"
+    },
+    {
+      "file": "member-pending-390.png",
+      "scene": "member-pending",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "8472febf75f6a126419d30c6221629a768f0fed90e639e5254182e5d58165cdb",
+      "field": "member",
+      "variant": "pending"
+    },
+    {
+      "file": "composition-create-empty-390.png",
+      "scene": "composition-create-empty",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b0976297d89717e1a75c2c4d0c31fc72fac7391a7fb03be040a56767814817ca",
+      "composition": true
+    },
+    {
+      "file": "composition-create-ready-390.png",
+      "scene": "composition-create-ready",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b1050d1f340247ed816c0e223b3a44e7a92389d0cae31964e0bec8ece1c00de6",
+      "composition": true
+    },
+    {
+      "file": "composition-create-optional-empty-390.png",
+      "scene": "composition-create-optional-empty",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "d778aea717982d600aee50adac9bdc97401ea1d38b73b828597edbf7f97dd5b4",
+      "composition": true
+    },
+    {
+      "file": "composition-create-invalid-390.png",
+      "scene": "composition-create-invalid",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6310d8b95a508f57481bd9d928077ef51e34750c35e3baba8c050523890cd2d1",
+      "composition": true
+    },
+    {
+      "file": "composition-create-boundary-390.png",
+      "scene": "composition-create-boundary",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "52b6484b3d14e5d0d97428b4b1a92027016f2121d786c924c9821cc57d4fc837",
+      "composition": true
+    },
+    {
+      "file": "composition-create-pending-390.png",
+      "scene": "composition-create-pending",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "1af14f38e3aaf4d999de65916e92710f28b22ec229713e501034115d435906fe",
+      "composition": true
+    },
+    {
+      "file": "composition-create-failed-390.png",
+      "scene": "composition-create-failed",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "a80718d9dd7f1c7db3bef22e36e6cb3eb632edab896d9ee8393cffcb9802c676",
+      "composition": true
+    },
+    {
+      "file": "composition-member-missing-390.png",
+      "scene": "composition-member-missing",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ab97b4461e99aafe3ab266d57dad96b28e37781fde721421673f5e710acccf7c",
+      "composition": true
+    },
+    {
+      "file": "composition-member-archived-390.png",
+      "scene": "composition-member-archived",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "148c795fcd8dc4526306186bfd0f0133af01a5f51dceec64b6b7848f0b19d3d2",
+      "composition": true
+    }
+  ]
+}
