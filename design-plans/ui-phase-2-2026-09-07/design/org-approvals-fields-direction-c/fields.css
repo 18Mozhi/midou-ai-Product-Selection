@@ -1,0 +1,55 @@
+.filters {
+  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px 18px;
+}
+.filters label {
+  min-width: 0;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 14px;
+}
+.filters label:first-child {
+  grid-column: span 2;
+}
+.filters input,
+.filters select {
+  border-color: var(--control-border);
+  font-size: 16px;
+}
+.field-help,
+.field-count,
+.field-notice {
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.field-help,
+.field-count {
+  color: var(--muted);
+}
+.field-count {
+  font-variant-numeric: tabular-nums;
+}
+.field-notice {
+  color: var(--deep);
+  padding: 8px 10px;
+  background: #edf3ff;
+  border-left: 3px solid var(--blue);
+}
+.filters #reset {
+  align-self: start;
+  margin-top: 30px;
+}
+@media (max-width: 760px) {
+  .filters {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .filters label:first-child {
+    grid-column: auto;
+  }
+  .filters #reset {
+    margin-top: 0;
+  }
+}

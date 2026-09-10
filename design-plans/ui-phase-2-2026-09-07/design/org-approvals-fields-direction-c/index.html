@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P34 审批治理 · 筛选字段审核</title>
+    <link rel="stylesheet" href="../org-approvals-direction-c/approvals.css" />
+    <link rel="stylesheet" href="../org-approvals-controls-direction-c/controls.css" />
+    <link rel="stylesheet" href="fields.css" />
+    <script defer src="../org-approvals-direction-c/data.js"></script>
+    <script defer src="../org-approvals-direction-c/approvals.js"></script>
+    <script defer src="fields.js"></script>
+  </head>
+  <body>
+    <details class="control-tools">
+      <summary>P34 字段审核工具 · 非业务入口</summary>
+      <label for="field-picker">字段状态 / 筛选组合</label>
+      <select id="field-picker"></select>
+      <button id="field-show" type="button">展示场景</button>
+      <p>只读离线演示，全部待审。没有业务提交或新筛选规则；原生下拉展开层未以静态图片替代。</p>
+      <a href="gallery.html">字段与组合图册</a>
+    </details>
+    <div id="app"></div>
+  </body>
+</html>
