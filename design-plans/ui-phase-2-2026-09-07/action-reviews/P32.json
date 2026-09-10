@@ -1,0 +1,1354 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P32",
+  "route": "/org-admin/workspaces",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7"
+  },
+  "actions": [
+    {
+      "actionId": "OG-REFRESH",
+      "label": "刷新工作区",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+      ],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "loading或refreshing禁用",
+      "handler": "load(background)读取组织summary和工作区列表；不是只读所选工作区",
+      "variants": [
+        "normal",
+        "refreshing",
+        "refresh_error"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "refreshing"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "refresh_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-RETRY",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "六种错误状态，无disabled绑定",
+      "handler": "load()，不绕过权限或恢复登录",
+      "variants": [
+        "error",
+        "blocked",
+        "expired",
+        "forbidden",
+        "rate_limited"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "expired"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "forbidden"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "rate_limited"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "EX-P29-PROFILE",
+      "label": "资料分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "仅summary分支",
+      "handler": "P32不显示资料表单或Logo检查",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "EX-P30-MEMBERS",
+      "label": "成员分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
+      ],
+      "sourceContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "仅members分支",
+      "handler": "不计为工作区动作",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "EX-P31-ROLES",
+      "label": "授权分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
+      ],
+      "sourceContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "仅roles分支",
+      "handler": "不计为工作区动作",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "D-OG-REASON",
+      "label": "归档与恢复原因",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#56b1761955b256ef.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#f3515ca45998a840.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#7a51bff83af3db69.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON提交/取消父转发",
+        "D-OG-REASON组件调用",
+        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "workspaceAction先等待共享原因",
+      "handler": "初始值为归档工作区或恢复工作区；trim至少2字、前端无maxlength；先关闭再写，取消零写",
+      "variants": [
+        "reason_archive",
+        "reason_restore",
+        "reason_short",
+        "reason_long"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "reason_archive"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "reason_restore"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "reason_short"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "reason_long"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "EX-P36-TOKEN",
+      "label": "令牌原因排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON令牌轮换/撤销调用"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "仅Token函数发起",
+      "handler": "不把共享helper作为其他页面已验收",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-OPEN",
+      "label": "打开创建",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#ee38194d65edc8d9.1",
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#ea9b5ddcd4502f15.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-OPEN头部/空态"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "头部busy禁用；空目录入口无disabled",
+      "handler": "openCreate只展开并requestAnimationFrame聚焦名称；不清草稿",
+      "variants": [
+        "normal",
+        "empty",
+        "create"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "empty"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-CREATE",
+      "label": "创建并审计",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#7c1ff142d1b797a2.1",
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#bae4e728dfc90592.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-CREATE"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "原生required/pattern；busy或createBusy拒绝重复",
+      "handler": "submitCreate捕获trim三字段，经函数prop到createWorkspace；成功清空/收起，失败保留；等待期间输入仍可编辑",
+      "variants": [
+        "create",
+        "create_invalid",
+        "create_required",
+        "create_busy",
+        "create_failure",
+        "create_success",
+        "create_read_failed"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_invalid"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_required"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_busy"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_failure"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_success"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_read_failed"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-CANCEL",
+      "label": "取消创建",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#617ab4a17066056a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-CANCEL"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "createBusy禁用且函数早退；不是props.busy",
+      "handler": "cancelCreate清三字段并收起，不请求服务",
+      "variants": [
+        "create_draft",
+        "create_busy"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_draft"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "create_busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-STATUS-ALL",
+      "label": "全部状态",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#9aeabb6f832c875d.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-FILTER状态/重置/清除"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "无busy禁用",
+      "handler": "statusFilter=all；watch回第一页，不主动清所选项",
+      "variants": [
+        "catalog"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "catalog"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-STATUS-ACTIVE",
+      "label": "正常使用",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#18ece981bcb15fca.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-FILTER状态/重置/清除"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "无busy禁用",
+      "handler": "statusFilter=active；计数仅当前返回数组",
+      "variants": [
+        "active"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "active"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-STATUS-ARCHIVED",
+      "label": "已归档",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#56fb9bb2ac849bf0.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-FILTER状态/重置/清除"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "无busy禁用",
+      "handler": "statusFilter=archived；筛选不等于归档操作",
+      "variants": [
+        "archived"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "archived"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-RESET",
+      "label": "重置筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#66725db5db9a8fe8.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-FILTER状态/重置/清除"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "始终可用，无空值禁用",
+      "handler": "清query/status，sort回name_asc；不清选择/创建草稿",
+      "variants": [
+        "search",
+        "catalog"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "search"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "catalog"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-CLEAR-EMPTY",
+      "label": "空结果清除筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#009754681935b22a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-FILTER状态/重置/清除"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "全量有工作区但当前页无结果",
+      "handler": "同resetFilters；不是创建首项",
+      "variants": [
+        "filter_empty"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "filter_empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-SELECT",
+      "label": "选择工作区",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#b4c1c37e889b3212.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-SELECT"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "pageItems，无busy禁用",
+      "handler": "selectedWorkspaceId取原id；详情按全量数组，不因筛选隐藏而清空；旧button的role=listitem仍待修",
+      "variants": [
+        "selected",
+        "search"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "selected"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "search"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-PREVIOUS",
+      "label": "上一页",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#3619d28a163df5ce.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-PAGE"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "结果超过8条才显示；page<=1禁用",
+      "handler": "page-=1，不请求服务",
+      "variants": [
+        "catalog",
+        "page_two"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "catalog"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "page_two"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-NEXT",
+      "label": "下一页",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#d56d9b5edd39513e.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-PAGE"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "结果超过8条才显示；page>=pageCount禁用",
+      "handler": "page+=1，不请求服务",
+      "variants": [
+        "catalog",
+        "page_two"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "catalog"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "page_two"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-STATE",
+      "label": "归档或恢复",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#08f874283aa537b7.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-STATE归档/恢复"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "busy或活动默认项禁用；performAction仅检查选择和busy",
+      "handler": "函数prop传所选对象；父按原status确定action，等待原因后读取item.id/version并POST；API仍最终核验默认项",
+      "variants": [
+        "selected",
+        "restore",
+        "normal",
+        "reason_archive",
+        "reason_restore",
+        "action_busy",
+        "action_conflict",
+        "default_conflict"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "selected"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "restore"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "reason_archive"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "reason_restore"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "action_busy"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "action_conflict"
+        },
+        {
+          "package": "workspaces-direction-c",
+          "scene": "default_conflict"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-TEAMS",
+      "label": "团队与成员入口",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#8300243a415c8c66.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-LINK团队/概览"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "有选中项显示，不受busy禁用",
+      "handler": "RouterLink /org-admin/teams；不修改当前会话工作区",
+      "variants": [
+        "selected"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "selected"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-PROFILE",
+      "label": "默认工作区设置入口",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#01af8fcac461a03d.1"
+      ],
+      "sourceContractKeys": [
+        "OG-W-LINK团队/概览"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "有选中项显示，不受busy禁用",
+      "handler": "RouterLink /org-admin；不是直接修改默认项",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-W-TECH",
+      "label": "技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "OG-TECH"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "所选项存在",
+      "handler": "原生details展示id/slug，不是弹窗或复制动作",
+      "variants": [
+        "technical"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    }
+  ],
+  "functionProps": [
+    {
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "component": "OrganizationWorkspacePanel",
+      "attribute": "create-workspace",
+      "handler": "createWorkspace",
+      "consumer": "props.createWorkspace",
+      "actionId": "OG-W-CREATE"
+    },
+    {
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "component": "OrganizationWorkspacePanel",
+      "attribute": "perform-workspace-action",
+      "handler": "workspaceAction",
+      "consumer": "props.performWorkspaceAction",
+      "actionId": "OG-W-STATE"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "一个共享原因窗的归档/恢复两种调用；创建是内联form，不是第二弹窗。"
+  },
+  "inputs": {
+    "OrganizationAdminCenter.vue": [
+      "form.name",
+      "form.logo_url",
+      "form.timezone",
+      "form.data_retention_days",
+      "form.default_workspace_id",
+      "form.reason"
+    ],
+    "OrganizationWorkspacePanel.vue": [
+      "form.name",
+      "form.slug",
+      "form.reason",
+      "query",
+      "sort"
+    ]
+  },
+  "sharedReasonInput": {
+    "file": "apps/web/src/components/AuditedReasonDialog.vue",
+    "binding": "reason",
+    "minimumLength": 2,
+    "maximumLength": null,
+    "serverMaximumLength": 500,
+    "remaining": "旧C稿限制500并不等于真实前端限制；全部组合与生命周期仍待"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationWorkspacePanel.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+      "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+      "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+      "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.name",
+        "meaning": "仅P29资料表单，P32不显示",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.logo_url",
+        "meaning": "仅P29资料表单，P32不显示",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.timezone",
+        "meaning": "仅P29资料表单，P32不显示",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.data_retention_days",
+        "meaning": "仅P29资料表单，P32不显示",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.default_workspace_id",
+        "meaning": "仅P29资料表单，P32不显示",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.reason",
+        "meaning": "仅P29资料表单，P32不显示",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+        "binding": "form.name",
+        "meaning": "required maxlength120；无自动生成，提交trim；等待仍可编辑",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+        "binding": "form.slug",
+        "meaning": "required maxlength63，小写字母数字连字符且首尾非连字符；UI拒绝大写，服务另有lowercase归一化",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+        "binding": "form.reason",
+        "meaning": "required maxlength500；提交trim，不是共享原因窗至少2字规则",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+        "binding": "query",
+        "meaning": "只查询当前返回name/slug，trim转小写；不查询id/版本/成员数，无maxlength",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+        "binding": "sort",
+        "meaning": "name_asc/members_desc/updated_desc，后两者并列时名称排序；不发GET",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "仅summary资料表单，P32排除",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。",
+        "variants": [
+          {
+            "name": "normal",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。",
+            "exclusionReason": "workspaces分支不渲染summary表单"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "归档/恢复均先问原因，取消不写；共享组件先关闭再开始写入",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。",
+        "variants": [
+          {
+            "name": "reason_archive",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "reason_archive"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "reason_restore",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "reason_restore"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "reason_short",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "reason_short"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "reason_long",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "reason_long"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "三字段内联创建，成功/取消清空，失败保留；等待仍可输入",
+        "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。",
+        "variants": [
+          {
+            "name": "create",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_draft",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_draft"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_invalid",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_invalid"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_required",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_required"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_long",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_long"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_busy",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_busy"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_conflict",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_conflict"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_failure",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_failure"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_success",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_success"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_read_failed",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_read_failed"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "create_unknown",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "workspaces-direction-c",
+                "scene": "create_unknown"
+              }
+            ],
+            "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "共享原因窗的原生焦点/销毁/跨路由归属尚未由本页证明。",
+      "原92PNG只是上下文，不冒充逐控件六态或真实Vue。"
+    ]
+  },
+  "compositionGaps": [
+    "原型内联错误、缺失计数区分、原生button语义、未知写结果保护尚未进入真实Vue。",
+    "创建成功会清除等待期间后续编辑；归档原因等待与当前组织/目标版本归属仍需具体决策与真实验证。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。",
+    "P31局部控件批准不自动外推P32整页；没有部署或更改权限/API。"
+  ]
+}

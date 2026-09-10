@@ -377,6 +377,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "2e24e68887c7a4f33de7131023c7d5714d7c80945e634b6ef8b148169e3c6a16",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "d7a76590ca72bd56a206a1d364a0a422bab662bb84e998016b9c33c88956b9d3",
+    "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -413,7 +415,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "a118eb7a0301a847ec9a48f7232f83e3b13b2fc3fb1ea528f471aa72f286021c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "3e1736e0e74f9b7dc4aafad8f750eafcc3ff48628060a4c36119ac010f7b0911",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "947dbf0bc440200cc64474ae2f51716f29111a21072715a91a6c60be814515e1",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "7033fd42ed0b5654f922ae10643fdc50234059680a7a1b936fa81710b8397291",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "8d1cc47f5fe1c9d2a3cc6214708bca8dd17571eb7bda330679f94e25c58c28d3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "7ebc9f00d7cbd16fe1574c7656b42f1968e32a6248860a4bc146ad8b4088f4d2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "4b533634b6f4c64961e2c00fc50a94045934b40bf3e55ff941ecd746298b78e6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "122a75f10073b9a4d964175636fe84d7747534f2af78d777d1b6b4f4b0302ae8",
@@ -468,13 +470,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 20,
     "oldOnlyIdentities": 18,
-    "reviewedPages": 32,
-    "explicitlyGroupedSourceSites": 682,
-    "semanticGroups": 649,
-    "routeActions": 551,
+    "reviewedPages": 33,
+    "explicitlyGroupedSourceSites": 699,
+    "semanticGroups": 671,
+    "routeActions": 569,
     "wiringGroups": 65,
     "pagesWithoutExplicitSemanticReview": [
-      "P32",
       "P33",
       "P34",
       "P35",
@@ -1639,13 +1640,33 @@
       "path": "/org-admin/workspaces",
       "title": "工作区管理",
       "oldStaticAssociatedCandidates": 166,
-      "review": null,
+      "review": {
+        "pageId": "P32",
+        "sourceSites": 28,
+        "semanticGroups": 22,
+        "routeActions": 18,
+        "wiringGroups": 0,
+        "excludedGroups": 4,
+        "writeActions": 2,
+        "sourceInapplicableVisualSlots": 0,
+        "unmappedVisualSlots": 108,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 11,
+          "callerContainers": 3,
+          "consumerVariants": 16,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "workspaces-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "原型内联错误、缺失计数区分、原生button语义、未知写结果保护尚未进入真实Vue。",
+        "创建成功会清除等待期间后续编辑；归档原因等待与当前组织/目标版本归属仍需具体决策与真实验证。"
+      ]
     },
     {
       "id": "P33",
@@ -2757,6 +2778,24 @@
         "localModelBindings": 20,
         "callerContainers": 4,
         "consumerVariants": 20,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P32",
+      "sourceSites": 28,
+      "semanticGroups": 22,
+      "routeActions": 18,
+      "wiringGroups": 0,
+      "excludedGroups": 4,
+      "writeActions": 2,
+      "sourceInapplicableVisualSlots": 0,
+      "unmappedVisualSlots": 108,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 11,
+        "callerContainers": 3,
+        "consumerVariants": 16,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -26618,6 +26657,11 @@
           "pageId": "P31",
           "actionId": "OG-REFRESH",
           "kind": "read"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "OG-REFRESH",
+          "kind": "read"
         }
       ]
     },
@@ -26671,6 +26715,11 @@
         },
         {
           "pageId": "P31",
+          "actionId": "OG-RETRY",
+          "kind": "read"
+        },
+        {
+          "pageId": "P32",
           "actionId": "OG-RETRY",
           "kind": "read"
         }
@@ -26732,6 +26781,11 @@
           "pageId": "P31",
           "actionId": "EX-P29-PROFILE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
@@ -26789,6 +26843,11 @@
         },
         {
           "pageId": "P31",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P32",
           "actionId": "EX-P29-PROFILE",
           "kind": "excluded"
         }
@@ -26850,6 +26909,11 @@
           "pageId": "P31",
           "actionId": "EX-P29-PROFILE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
@@ -26907,6 +26971,11 @@
         },
         {
           "pageId": "P31",
+          "actionId": "EX-P30-MEMBERS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P32",
           "actionId": "EX-P30-MEMBERS",
           "kind": "excluded"
         }
@@ -26968,6 +27037,11 @@
           "pageId": "P31",
           "actionId": "WIRE-ROLES",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "EX-P31-ROLES",
+          "kind": "excluded"
         }
       ]
     },
@@ -27016,6 +27090,11 @@
         },
         {
           "pageId": "P31",
+          "actionId": "D-OG-REASON",
+          "kind": "local"
+        },
+        {
+          "pageId": "P32",
           "actionId": "D-OG-REASON",
           "kind": "local"
         }
@@ -27068,6 +27147,11 @@
           "pageId": "P31",
           "actionId": "D-OG-REASON",
           "kind": "local"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "D-OG-REASON",
+          "kind": "local"
         }
       ]
     },
@@ -27116,6 +27200,11 @@
         },
         {
           "pageId": "P31",
+          "actionId": "D-OG-REASON",
+          "kind": "local"
+        },
+        {
+          "pageId": "P32",
           "actionId": "D-OG-REASON",
           "kind": "local"
         }
@@ -27167,6 +27256,11 @@
         {
           "pageId": "P31",
           "actionId": "EX-P36-TOKEN-REASON",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "EX-P36-TOKEN",
           "kind": "excluded"
         }
       ]
@@ -31232,7 +31326,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#7c1ff142d1b797a2.1",
@@ -31266,7 +31366,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#617ab4a17066056a.1",
@@ -31300,7 +31406,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#bae4e728dfc90592.1",
@@ -31334,7 +31446,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#9aeabb6f832c875d.1",
@@ -31363,7 +31481,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-STATUS-ALL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#18ece981bcb15fca.1",
@@ -31392,7 +31516,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-STATUS-ACTIVE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#56fb9bb2ac849bf0.1",
@@ -31421,7 +31551,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-STATUS-ARCHIVED",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#66725db5db9a8fe8.1",
@@ -31450,7 +31586,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#b4c1c37e889b3212.1",
@@ -31488,7 +31630,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#009754681935b22a.1",
@@ -31526,7 +31674,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-CLEAR-EMPTY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#ea9b5ddcd4502f15.1",
@@ -31564,7 +31718,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#3619d28a163df5ce.1",
@@ -31598,7 +31758,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-PREVIOUS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#d56d9b5edd39513e.1",
@@ -31632,7 +31798,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#08f874283aa537b7.1",
@@ -31666,7 +31838,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-STATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#8300243a415c8c66.1",
@@ -31700,7 +31878,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-TEAMS",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#01af8fcac461a03d.1",
@@ -31734,7 +31918,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-PROFILE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationWorkspacePanel.vue#1c008f867673db60.1",
@@ -31768,7 +31958,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P32",
+          "actionId": "OG-W-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PersonalCenter.vue#50ca10b185d1647b.1",

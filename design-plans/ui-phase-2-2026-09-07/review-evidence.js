@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "3b9bfbbf9249da58311c99790952b8ec8738d5bcb7d45480b421f7e31cfeb6bf",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "4d3ff8fc243f8c5f81901ca92a1b9923c822fc3da6604b1398ab9ebc2a73a8b9",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -132,6 +132,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9ce4a6c7e507d3cab1074c9eabece32967cc83c6d71fcb975ad2b39e269bda1e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "2e24e68887c7a4f33de7131023c7d5714d7c80945e634b6ef8b148169e3c6a16",
     "output/playwright/p31-approved-controls-review/evidence.json": "f36cd9ebe59f94a11a74ae22425afbf65b96753b7ede197a3ee97a3340466640",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "d7a76590ca72bd56a206a1d364a0a422bab662bb84e998016b9c33c88956b9d3",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {

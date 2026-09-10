@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份20，旧表独有身份18。签名变化不等于增删业务能力。
-- 已具体语义对应32页/682源位置/649组；其中路由动作551组，转发/容器关联65组，其余明确排除。其余41页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应33页/699源位置/671组；其中路由动作569组，转发/容器关联65组，其余明确排除。其余40页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -43,7 +43,7 @@
 | [P29 治理概览](page-specs/P29.md) | 166 | [7组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P30 成员与邀请](page-specs/P30.md) | 166 | [23组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P31 角色与权限](page-specs/P31.md) | 166 | [24组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P32 工作区管理](page-specs/P32.md) | 166 | [22组](action-reviews/P32.json) | 108个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P33 团队管理](page-specs/P33.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P34 审批模板](page-specs/P34.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P35 组织数据](page-specs/P35.md) | 166 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2710,6 +2710,81 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 用户已确认四项控件视觉；新16字段代表状态与9组合保持待审。UUID复制、共享前端501字/服务端500界线、延期不得早于原值在新子稿明确，所有字段排列/主题密度/软键盘/日期弹层及真实Vue仍待，不新增目录或权限。
 - 实际共享撤销reason无maxlength，但服务端max500；各调用方约束及重开生命周期仍待。
 - use-modal-dialog仅绑定当前源码读取，不宣称旧48图已覆盖此依赖或全部返焦/销毁场景。
+
+## P32 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P32.json)：28个局部源位置 → 22组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。11个本地v-model，3处调用/内嵌容器，16个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有108个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新工作区 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)、[refreshing · 1440](design/workspaces-direction-c/1440-refreshing.png) / [refreshing · 390](design/workspaces-direction-c/390-refreshing.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/workspaces-direction-c/1440-error.png) / [error · 390](design/workspaces-direction-c/390-error.png)、[blocked · 1440](design/workspaces-direction-c/1440-blocked.png) / [blocked · 390](design/workspaces-direction-c/390-blocked.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| EX-P29-PROFILE 资料分支排除 / excluded | 3处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| EX-P30-MEMBERS 成员分支排除 / excluded | 1处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| EX-P31-ROLES 授权分支排除 / excluded | 1处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| D-OG-REASON 归档与恢复原因 / local | 3处；reason_archive、reason_restore、reason_short、reason_long | [reason_archive · 1440](design/workspaces-direction-c/1440-reason_archive.png) / [reason_archive · 390](design/workspaces-direction-c/390-reason_archive.png)、[reason_restore · 1440](design/workspaces-direction-c/1440-reason_restore.png) / [reason_restore · 390](design/workspaces-direction-c/390-reason_restore.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| EX-P36-TOKEN 令牌原因排除 / excluded | 1处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-OPEN 打开创建 / local | 2处；normal、empty、create | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)、[empty · 1440](design/workspaces-direction-c/1440-empty.png) / [empty · 390](design/workspaces-direction-c/390-empty.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-CREATE 创建并审计 / write | 2处；create、create_invalid、create_required、create_busy、create_failure、create_success、create_read_failed | [create · 1440](design/workspaces-direction-c/1440-create.png) / [create · 390](design/workspaces-direction-c/390-create.png)、[create_invalid · 1440](design/workspaces-direction-c/1440-create_invalid.png) / [create_invalid · 390](design/workspaces-direction-c/390-create_invalid.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-CANCEL 取消创建 / local | 1处；create_draft、create_busy | [create_draft · 1440](design/workspaces-direction-c/1440-create_draft.png) / [create_draft · 390](design/workspaces-direction-c/390-create_draft.png)、[create_busy · 1440](design/workspaces-direction-c/1440-create_busy.png) / [create_busy · 390](design/workspaces-direction-c/390-create_busy.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-STATUS-ALL 全部状态 / local | 1处；catalog | [catalog · 1440](design/workspaces-direction-c/1440-catalog.png) / [catalog · 390](design/workspaces-direction-c/390-catalog.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-STATUS-ACTIVE 正常使用 / local | 1处；active | [active · 1440](design/workspaces-direction-c/1440-active.png) / [active · 390](design/workspaces-direction-c/390-active.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-STATUS-ARCHIVED 已归档 / local | 1处；archived | [archived · 1440](design/workspaces-direction-c/1440-archived.png) / [archived · 390](design/workspaces-direction-c/390-archived.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-RESET 重置筛选 / local | 1处；search、catalog | [search · 1440](design/workspaces-direction-c/1440-search.png) / [search · 390](design/workspaces-direction-c/390-search.png)、[catalog · 1440](design/workspaces-direction-c/1440-catalog.png) / [catalog · 390](design/workspaces-direction-c/390-catalog.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-CLEAR-EMPTY 空结果清除筛选 / local | 1处；filter_empty | [filter_empty · 1440](design/workspaces-direction-c/1440-filter_empty.png) / [filter_empty · 390](design/workspaces-direction-c/390-filter_empty.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-SELECT 选择工作区 / local | 1处；selected、search | [selected · 1440](design/workspaces-direction-c/1440-selected.png) / [selected · 390](design/workspaces-direction-c/390-selected.png)、[search · 1440](design/workspaces-direction-c/1440-search.png) / [search · 390](design/workspaces-direction-c/390-search.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-PREVIOUS 上一页 / local | 1处；catalog、page_two | [catalog · 1440](design/workspaces-direction-c/1440-catalog.png) / [catalog · 390](design/workspaces-direction-c/390-catalog.png)、[page_two · 1440](design/workspaces-direction-c/1440-page_two.png) / [page_two · 390](design/workspaces-direction-c/390-page_two.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-NEXT 下一页 / local | 1处；catalog、page_two | [catalog · 1440](design/workspaces-direction-c/1440-catalog.png) / [catalog · 390](design/workspaces-direction-c/390-catalog.png)、[page_two · 1440](design/workspaces-direction-c/1440-page_two.png) / [page_two · 390](design/workspaces-direction-c/390-page_two.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-STATE 归档或恢复 / write | 1处；selected、restore、normal、reason_archive、reason_restore、action_busy、action_conflict、default_conflict | [selected · 1440](design/workspaces-direction-c/1440-selected.png) / [selected · 390](design/workspaces-direction-c/390-selected.png)、[restore · 1440](design/workspaces-direction-c/1440-restore.png) / [restore · 390](design/workspaces-direction-c/390-restore.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-TEAMS 团队与成员入口 / navigation | 1处；selected | [selected · 1440](design/workspaces-direction-c/1440-selected.png) / [selected · 390](design/workspaces-direction-c/390-selected.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-PROFILE 默认工作区设置入口 / navigation | 1处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OG-W-TECH 技术详情 / local | 1处；technical | [technical · 1440](design/workspaces-direction-c/1440-technical.png) / [technical · 390](design/workspaces-direction-c/390-technical.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | 仅P29资料表单，P32不显示 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / form.logo_url | 仅P29资料表单，P32不显示 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / form.timezone | 仅P29资料表单，P32不显示 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | 仅P29资料表单，P32不显示 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | 仅P29资料表单，P32不显示 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / form.reason | 仅P29资料表单，P32不显示 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.name | required maxlength120；无自动生成，提交trim；等待仍可编辑 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.slug | required maxlength63，小写字母数字连字符且首尾非连字符；UI拒绝大写，服务另有lowercase归一化 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.reason | required maxlength500；提交trim，不是共享原因窗至少2字规则 | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / query | 只查询当前返回name/slug，trim转小写；不查询id/版本/成员数，无maxlength | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / sort | name_asc/members_desc/updated_desc，后两者并列时名称排序；不发GET | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / normal | form-container / route-excluded-reference | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_archive | native-reason-dialog / matching-dialog-scene | [reason_archive · 1440](design/workspaces-direction-c/1440-reason_archive.png) / [reason_archive · 390](design/workspaces-direction-c/390-reason_archive.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_restore | native-reason-dialog / matching-dialog-scene | [reason_restore · 1440](design/workspaces-direction-c/1440-reason_restore.png) / [reason_restore · 390](design/workspaces-direction-c/390-reason_restore.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_short | native-reason-dialog / matching-dialog-scene | [reason_short · 1440](design/workspaces-direction-c/1440-reason_short.png) / [reason_short · 390](design/workspaces-direction-c/390-reason_short.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_long | native-reason-dialog / matching-dialog-scene | [reason_long · 1440](design/workspaces-direction-c/1440-reason_long.png) / [reason_long · 390](design/workspaces-direction-c/390-reason_long.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create | form-container / related-scene-only | [create · 1440](design/workspaces-direction-c/1440-create.png) / [create · 390](design/workspaces-direction-c/390-create.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_draft | form-container / related-scene-only | [create_draft · 1440](design/workspaces-direction-c/1440-create_draft.png) / [create_draft · 390](design/workspaces-direction-c/390-create_draft.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_invalid | form-container / related-scene-only | [create_invalid · 1440](design/workspaces-direction-c/1440-create_invalid.png) / [create_invalid · 390](design/workspaces-direction-c/390-create_invalid.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_required | form-container / related-scene-only | [create_required · 1440](design/workspaces-direction-c/1440-create_required.png) / [create_required · 390](design/workspaces-direction-c/390-create_required.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_long | form-container / related-scene-only | [create_long · 1440](design/workspaces-direction-c/1440-create_long.png) / [create_long · 390](design/workspaces-direction-c/390-create_long.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_busy | form-container / related-scene-only | [create_busy · 1440](design/workspaces-direction-c/1440-create_busy.png) / [create_busy · 390](design/workspaces-direction-c/390-create_busy.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_conflict | form-container / related-scene-only | [create_conflict · 1440](design/workspaces-direction-c/1440-create_conflict.png) / [create_conflict · 390](design/workspaces-direction-c/390-create_conflict.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_failure | form-container / related-scene-only | [create_failure · 1440](design/workspaces-direction-c/1440-create_failure.png) / [create_failure · 390](design/workspaces-direction-c/390-create_failure.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_success | form-container / related-scene-only | [create_success · 1440](design/workspaces-direction-c/1440-create_success.png) / [create_success · 390](design/workspaces-direction-c/390-create_success.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_read_failed | form-container / related-scene-only | [create_read_failed · 1440](design/workspaces-direction-c/1440-create_read_failed.png) / [create_read_failed · 390](design/workspaces-direction-c/390-create_read_failed.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| OrganizationWorkspacePanel.vue / form.1 / create_unknown | form-container / related-scene-only | [create_unknown · 1440](design/workspaces-direction-c/1440-create_unknown.png) / [create_unknown · 390](design/workspaces-direction-c/390-create_unknown.png) | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+
+### 明确保留的边界
+
+- 原型内联错误、缺失计数区分、原生button语义、未知写结果保护尚未进入真实Vue。
+- 创建成功会清除等待期间后续编辑；归档原因等待与当前组织/目标版本归属仍需具体决策与真实验证。
+- 共享原因窗的原生焦点/销毁/跨路由归属尚未由本页证明。
+- 原92PNG只是上下文，不冒充逐控件六态或真实Vue。
 
 ## P54 局部动作与共享消费者
 
