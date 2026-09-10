@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "e92a6157527c10d508584e81a05ddd55d85e171ab4f32413a97c519f89ee6d46",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "1402caf80a76fc6bdd3a5fd5d44a2076f955ed71ad60fec67bd17a277f093ffc",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -91,6 +91,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/evidence.json": "e55c94edb2bc36a9b53661ba6f1ba423fd20cb98c55c10893318426febaf327c",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/evidence.json": "7ed167b7e63539135e3fde6f1c569473f8910fe4dba3d7a95ca0b91612bf3b3f",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c-forms/evidence.json": "83f7768529bc472132c88a6e6fe68e8d2f40a6ccc5b93b96f5acccf6ab362c3d",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/evidence.json": "40d61f0edb5aee0e8543b7cd7f57f9ccdb439941eea97b085720be056f163161",
     "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/evidence.json": "3d563207566dc44842b4a356180388830ff453a46fa3ddb18796c8068fa79467",
     "design-plans/ui-phase-2-2026-09-07/design/theme-direction-c/evidence.json": "cf3b090b8aeddc4179a056f1ad7820e65613b73582c73f044b7e60b78a540061",
     "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/evidence.json": "09802e81d0046ae2a604b24493a1ad8a1f333cf5fdacd86e324f51a229102f99",
@@ -145,16 +146,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 97,
+    "packages": 98,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 940,
-    "sourceBindings": 1876,
+    "uniqueBoundFiles": 945,
+    "sourceBindings": 1896,
     "sourceDrift": 0,
-    "pngs": 14123,
+    "pngs": 14485,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10069,
+    "readmeLinksChecked": 10073,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -497,6 +498,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P33",
       "spec": "page-specs/P33.md",
       "packages": [
+        "teams-controls-direction-c",
         "teams-direction-c"
       ],
       "actualVue": []
@@ -1609,6 +1611,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/task-direction-c-forms/evidence.json",
       "prototype": "design/task-direction-c-forms/index.html",
       "gallery": null
+    },
+    "teams-controls-direction-c": {
+      "id": "teams-controls-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 362,
+      "readme": "design/teams-controls-direction-c/README.md",
+      "evidence": "design/teams-controls-direction-c/evidence.json",
+      "prototype": "design/teams-controls-direction-c/index.html",
+      "gallery": "design/teams-controls-direction-c/gallery.html"
     },
     "teams-direction-c": {
       "id": "teams-direction-c",
