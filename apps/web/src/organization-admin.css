@@ -1,3 +1,5 @@
+@import "./design/roles-tokens.css";
+
 .org-admin-center {
   margin-top: 26px;
   color: var(--so-text);
@@ -521,6 +523,34 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
+}
+/* P31: only the four approved control treatments; preserve layout and native behavior. */
+#app .org-admin-center .org-role-page :is(button, summary, select):focus-visible,
+#app .org-admin-center:has(> .org-role-page) > .audited-reason-dialog button:focus-visible {
+  outline: 3px solid var(--so-roles-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px var(--so-roles-focus-gap);
+}
+#app
+  .org-admin-center:has(> .org-role-page)
+  > .audited-reason-dialog
+  button[type="submit"]:enabled {
+  background: var(--so-roles-danger);
+  border-color: var(--so-roles-danger);
+  color: var(--so-roles-on-danger);
+}
+#app .org-admin-center .org-role-page button:disabled,
+#app .org-admin-center:has(> .org-role-page) > .audited-reason-dialog button:disabled {
+  opacity: 1;
+  color: var(--so-roles-disabled-text);
+  background: var(--so-roles-disabled-bg);
+  border-color: var(--so-roles-disabled-border);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+#app .org-admin-center .org-grant-toolbar button[aria-pressed="true"]:disabled {
+  border: 2px solid var(--so-roles-disabled-selected-border);
+  font-weight: 700;
 }
 .org-role-summary,
 .org-scope-definitions {

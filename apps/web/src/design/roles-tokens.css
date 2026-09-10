@@ -1,0 +1,11 @@
+/* P31 approved controls: page-lazy semantic tokens, not a global theme change. */
+html #app .org-admin-center:has(> .org-role-page) {
+  --so-roles-focus: #153e92;
+  --so-roles-focus-gap: #ffffff;
+  --so-roles-danger: #9b342e;
+  --so-roles-on-danger: #ffffff;
+  --so-roles-disabled-text: #58677a;
+  --so-roles-disabled-bg: #e6ebf1;
+  --so-roles-disabled-border: #bac5d2;
+  --so-roles-disabled-selected-border: #526d9d;
+}

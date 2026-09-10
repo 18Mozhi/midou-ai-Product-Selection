@@ -86,6 +86,14 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
+    if (paths[index] === "apps/web/src/design/roles-tokens.css") {
+      // Like P16, this page-lazy palette may declare scoped tokens only, not styling rules.
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html #app \.org-admin-center:has\(> \.org-role-page\)\s*\{(?:\s*--so-roles-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/selection-tokens.css") {
       // Page-lazy token source: only scoped custom properties, never ordinary CSS rules.
       assert.match(

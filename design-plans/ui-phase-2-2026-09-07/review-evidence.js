@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "bbe4e046b335e96897369996f2c16652952ce159eb89b7df51ff1c3cb2eccd74",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "af4383e635bc6dce0fa9faa6985d53cad45bc7ec60a9c93e1ef896641723d0c6",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -130,7 +130,8 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "79bfb96f492e1752f6f4bcd48b55869d749040974bfdecbbb67ab8c8798a5c3d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "cd3b657b5c6baee30237855171bf6cd8282f1815c800c6b15bd286e5cc72fe17",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9ce4a6c7e507d3cab1074c9eabece32967cc83c6d71fcb975ad2b39e269bda1e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "43fb4e42b0252bae95c16ed787ce24b450cc094d768e4b6c66aef7cd2fd278b4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "e1549981b6fb3ca66074d97fc476f306e757b06d19b9fe48d6737921e3dd2730",
+    "output/playwright/p31-approved-controls-review/evidence.json": "5df7fca2ddd2405f72d90f882df9ca8b70b6afc88a90261e435844f4d8b12573",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -456,7 +457,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
         "roles-controls-direction-c",
         "roles-direction-c"
       ],
-      "actualVue": []
+      "actualVue": [
+        {
+          "key": "actualVueControlEvidence",
+          "scope": "four-approved-control-treatments-only; actual Vue with isolated HTTP, not C layout or production acceptance",
+          "approval": "four-design-treatments-approved; full-page-and-runtime-pending",
+          "readme": "P31-VUE-APPROVED-CONTROLS.md",
+          "evidence": "../../output/playwright/p31-approved-controls-review/evidence.json",
+          "gallery": "../../output/playwright/p31-approved-controls-review/index.html"
+        }
+      ]
     },
     {
       "id": "P32",

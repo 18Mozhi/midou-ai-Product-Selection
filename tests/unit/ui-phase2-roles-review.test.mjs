@@ -30,6 +30,41 @@ const fieldEvidence = JSON.parse(
 );
 const buildRolesReview = (sources, evidence) =>
   buildReview(sources, evidence, controlsEvidence, fieldEvidence);
+test("P31 mounted controls evidence binds twelve real Vue screenshots without approving the page", () => {
+  const entry = buildRolesReview(sources, evidence).actualVueControlEvidence;
+  const proof = JSON.parse(readFileSync(entry.evidence, "utf8"));
+  assert.equal(proof.checks.length, 30);
+  assert.equal(proof.screenshots.length, 12);
+  assert.match(entry.scope, /not C layout or production acceptance/);
+  for (const [file, expected] of Object.entries(proof.sourceHashes))
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
+        .digest("hex"),
+      expected,
+      file,
+    );
+  const directory = entry.evidence.slice(0, -"evidence.json".length);
+  const scenes = [
+    "keyboard-focus",
+    "disabled-reset",
+    "selected-disabled",
+    "revoke-confirm",
+    "revoke-disabled",
+    "neighbor-dialog-unchanged",
+  ];
+  assert.deepEqual(
+    proof.screenshots.map((shot) => shot.file).sort(),
+    [1440, 390].flatMap((width) => scenes.map((scene) => `${width}-${scene}.png`)).sort(),
+  );
+  for (const shot of proof.screenshots)
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(directory + shot.file))
+        .digest("hex"),
+      shot.sha256,
+    );
+});
 const packages = new Map([
   ["roles-direction-c", evidence],
   ["roles-controls-direction-c", controlsEvidence],
