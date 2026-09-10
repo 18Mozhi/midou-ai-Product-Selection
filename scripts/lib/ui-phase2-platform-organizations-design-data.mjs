@@ -4,6 +4,7 @@ import { createHmac } from "node:crypto";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
+import { historicalOrganizationActionSource } from "./ui-phase2-organization-action-baseline.mjs";
 export async function buildPlatformOrganizationsDesignData(repo) {
   const plain = (v) => JSON.parse(JSON.stringify(v));
   const read = (p) => readFile(path.join(repo, p), "utf8");
@@ -114,7 +115,7 @@ export async function buildPlatformOrganizationsDesignData(repo) {
   assert.throws(() =>
     svc.organizationStatus(id, { status: "disabled", reason: "核对修改" }, context),
   );
-  const parentText = (await read(sourcePaths[0]))
+  const parentText = historicalOrganizationActionSource(sourcePaths[0], await read(sourcePaths[0]))
     .split(/<script setup[^>]*>/)[1]
     .split("</script>")[0];
   const parent = parse(parentText);

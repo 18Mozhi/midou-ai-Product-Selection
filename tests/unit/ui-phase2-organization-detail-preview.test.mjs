@@ -1,3 +1,4 @@
+import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -14,7 +15,8 @@ import {
 } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
+const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
 const detail = "apps/web/src/components/PlatformOrganizationDetailDialog.vue";
 const reason = "apps/web/src/components/PlatformAccountDialogs.vue";
 const output = "output/playwright/p42-detail-preview";
@@ -151,7 +153,7 @@ test("P42 intercepted writes retain exact original profile and status contracts"
     }
   }
 });
-test("P42 leaves production files, shared host and earlier P40/P41 evidence unchanged", () => {
+test("Historical P42 evidence retains its production source and earlier P40/P41 artifacts", () => {
   for (const file of [
     detail,
     reason,

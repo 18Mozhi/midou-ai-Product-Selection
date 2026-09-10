@@ -1,3 +1,4 @@
+import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -9,7 +10,8 @@ import { accountFilterPreview } from "../../scripts/lib/ui-phase2-account-filter
 
 const component = "apps/web/src/components/PlatformAccountCenter.vue";
 const output = "output/playwright/p39-filter-preview";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
+const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const source = read(component),
   preview = accountFilterPreview(source);

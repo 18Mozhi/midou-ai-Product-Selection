@@ -1,3 +1,4 @@
+import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -5,11 +6,12 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 
 const output = "output/playwright/p39-create-user-preview";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
+const read = (f) => historicalOrganizationActionSource(f, readFileSync(f, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const style = "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css";
 const script = "scripts/verify-ui-phase2-account-create-preview.mjs";
-test("P39 creation preview changes no current production source or native validation contract", () => {
+test("Historical P39 creation preview preserves its original production source or native validation contract", () => {
   for (const file of [
     "PlatformAccountCenter.vue",
     "PlatformAccountDialogs.vue",

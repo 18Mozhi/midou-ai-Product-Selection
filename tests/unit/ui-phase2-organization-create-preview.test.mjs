@@ -1,3 +1,4 @@
+import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -11,7 +12,8 @@ import {
 } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
+const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
 const wizard = "apps/web/src/components/OrganizationCreationWizard.vue";
 const output = "output/playwright/p41-create-preview";
 function directives(source) {
@@ -118,7 +120,7 @@ test("P41 fixture writes use only original optional administrator contract", () 
     );
   }
 });
-test("P41 changes no production source or earlier P40 preview artifacts", () => {
+test("Historical P41 preserves its original source and earlier P40 artifacts", () => {
   for (const file of [
     wizard,
     "apps/web/src/components/PlatformAccountCenter.vue",

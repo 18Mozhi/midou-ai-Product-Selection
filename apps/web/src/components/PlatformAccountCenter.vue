@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import { usePlatformUserDetail } from "../use-platform-user-detail";
+import { usePlatformOrganizationActions } from "../use-platform-organization-actions";
 import type { AccountData, AccountTab, MembershipInput } from "../platform-account-types";
 import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
@@ -82,6 +83,24 @@ const {
   closeUserDetail,
   openUserDetail,
 } = usePlatformUserDetail(request, selected, () => props.routePath);
+const { updateOrganization, toggleOrganization, invalidateOrganizationAction } =
+  usePlatformOrganizationActions({
+    selected,
+    form: organizationForm,
+    data,
+    detailOpen: organizationDetailOpen,
+    missing: organizationMissing,
+    error: organizationError,
+    success: organizationSuccess,
+    pendingReasonAction,
+    routePath: () => props.routePath,
+    organizationId: () => props.organizationId,
+    clearFeedback: clearOrganizationFeedback,
+    showOrganization,
+    askReason,
+    cancelReason,
+    write,
+  });
 watch(
   () => props.initialTab,
   (value) => {
@@ -206,6 +225,9 @@ async function loadPlatformRoles() {
   }
 }
 async function load() {
+  await loadAccounts();
+}
+async function loadAccounts(ownsResult?: () => boolean) {
   if (permissionsRoute.value) {
     if (rolesLoading.value) return;
     if (!platformRoles.value.length) state.value = "loading";
@@ -233,12 +255,14 @@ async function load() {
     const accountResponse = await request<AccountData>(`/platform/accounts?${p}`, {
       signal: controller.signal,
     });
+    if (ownsResult && !ownsResult()) return;
     data.value = accountResponse.data;
     state.value = "ready";
     lastUpdatedAt.value = new Date();
     syncOrganizationRoute();
     if (tab.value === "admins") await loadPlatformRoles();
   } catch (e) {
+    if (ownsResult && !ownsResult()) return;
     const action =
       e instanceof DOMException && e.name === "AbortError"
         ? "读取超过 12 秒，请稍后重试。"
@@ -276,12 +300,13 @@ async function write<T = unknown>(
   body: unknown,
   method = "POST",
   onError?: (value: string) => void,
+  ownsResult?: () => boolean,
 ) {
   busy.value = path;
   message.value = "";
   try {
     const response = await request<T>(path, { method, body });
-    await load();
+    if (!ownsResult || ownsResult()) await loadAccounts(ownsResult);
     return response.data;
   } catch (e) {
     const action = e instanceof ApiClientError ? e.actionHint : "操作失败";
@@ -347,26 +372,6 @@ async function submitReason() {
 function cancelReason() {
   reasonOpen.value = false;
   pendingReasonAction.value = null;
-}
-async function toggleOrganization(item: any) {
-  clearOrganizationFeedback();
-  askReason(item.status === "active" ? "停用组织" : "恢复组织", async (why) => {
-    if (
-      await write(
-        `/platform/accounts/organizations/${item.id}/status`,
-        {
-          status: item.status === "active" ? "archived" : "active",
-          reason: why,
-        },
-        "POST",
-        (value) => (organizationError.value = value),
-      )
-    ) {
-      const updated = data.value?.organizations.find((row) => row.id === item.id);
-      if (updated) showOrganization(updated);
-      organizationSuccess.value = item.status === "active" ? "组织已停用。" : "组织已恢复。";
-    }
-  });
 }
 async function toggleUser(item: any) {
   const isCurrent = captureDetailAction();
@@ -445,6 +450,7 @@ async function openOrganization(item: any) {
   await router.push(`/platform-admin/organizations/${item.id}`);
 }
 async function closeOrganizationDetail() {
+  invalidateOrganizationAction();
   organizationDetailOpen.value = false;
   organizationMissing.value = false;
   clearOrganizationFeedback();
@@ -475,24 +481,6 @@ function syncOrganizationRoute() {
   }
   organizationDetailOpen.value = false;
   organizationMissing.value = false;
-}
-async function updateOrganization() {
-  if (!selected.value) return;
-  clearOrganizationFeedback();
-  askReason("保存组织资料", async (why) => {
-    if (
-      await write(
-        `/platform/accounts/organizations/${selected.value.id}`,
-        { ...organizationForm, reason: why },
-        "PATCH",
-        (value) => (organizationError.value = value),
-      )
-    ) {
-      const updated = data.value?.organizations.find((item) => item.id === selected.value.id);
-      if (updated) showOrganization(updated);
-      organizationSuccess.value = "组织资料已更新。";
-    }
-  });
 }
 function openCreateUser(asAdmin = false) {
   createUserError.value = "";

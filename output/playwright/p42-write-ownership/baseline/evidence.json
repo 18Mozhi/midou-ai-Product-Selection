@@ -1,0 +1,1900 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "aa611c4033cfaf341730c46248beddc31c9e5f98",
+  "kind": "historical-original-script-replay",
+  "remaining": [
+    "successful write plus failed reread still shows old overview",
+    "full App/KeepAlive and real API/RBAC/DB not proven"
+  ],
+  "scope": "P42 pre-repair parent replay with existing review layout. All requests intercepted. Not current acceptance or full App/KeepAlive/production.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/platform-account-types.ts": "7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css": "3ca6614eb37eec2deb65fc3dec5db9b946db5d1d35fc9dad78994438d34a2650",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-filter-preview.css": "da58782137fbcf8b489e51dcce69e9af573dac83e356c6b6f98d84d77c887b79",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-page-preview.css": "fc8c02e1b07df9e7d85712ec1bf702b576a80603cf72732fbdd0152d140b5f9b",
+    "design-plans/ui-phase-2-2026-09-07/implementation/organization-detail-preview.css": "70a95a0cca18c955ed163bfda0afc430ed8a068e5c3459a32b4be4a1b9cf6b6f",
+    "design-plans/ui-phase-2-2026-09-07/implementation/organization-list-preview.css": "b54614add55ab6d5d1b6a9aeeb5f5ae3f14f11afc0bf47140278fe80da0eadd8",
+    "scripts/lib/ui-phase2-account-filter-preview.mjs": "c2e406a8516e19bd0fe9ef44f3f3ef11769bfe309e0811c9b6caae58d07bdeea",
+    "scripts/lib/ui-phase2-account-overview-design-data.mjs": "296ddf796f1bfea00fa250e4d2b2127fecd5aed8c23e89662f416cd112023563",
+    "scripts/lib/ui-phase2-account-page-preview.mjs": "ebc3ebccafb395f1f861a7bcd430f8936b08b820d55153667c8e74815f5c788f",
+    "scripts/lib/ui-phase2-organization-action-baseline.mjs": "fb7ae644405df28b8f8dac2173d1e5945d76de9bf54e4e82f47156866631237b",
+    "scripts/lib/ui-phase2-organization-detail-preview.mjs": "b59ce5b08255834dae7c9a2a8711da9492029aef0199e4b5557303ae630f46a3",
+    "scripts/lib/ui-phase2-organization-list-preview.mjs": "4df7efa461c52f5c826b1c3c851164f6a79b8d37bc1964ba97d81f0885c4804e",
+    "scripts/lib/ui-phase2-vue-review-host.mjs": "4980b53e811ccfae94e460fd1f3f8ddbaf259d6ecc808c58296a6ec59b934663",
+    "scripts/verify-ui-phase2-organization-write-ownership.mjs": "a3299e1c43d43a86ca7c87b8ee25bb462a519e9c97b3ad2c1c06d0acbe8b22e2",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "3945560486c7dabbc17689bad9b7f2cc5da73a15daf40b379f0ed49d299a3654",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "2df4919c8f64e665c1d59d387ea325a41b26a3a6677da5d70d99139c055f98c2",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "893a7a355fafd0d0550795c294937c5b35b80e7bbaf2d8c1a09eaa7912346f23",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "e1e2e98e07d9e175dd81dc35800313a17928b216dfc1d0d23817d67ce32870a4"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "failed write does not reopen closed detail"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "success is shown despite failed reread"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "identity still comes from old overview"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "reread failure remains in parent"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "baseline reason remains after leaving"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "detail closed after history leaves"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "failed write does not reopen closed detail"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "success is shown despite failed reread"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "identity still comes from old overview"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "status remains active after successful stop and failed reread"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "reread failure remains in parent"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "baseline reason remains after leaving"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "detail closed after history leaves"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "failed write does not reopen closed detail"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "success is shown despite failed reread"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "identity still comes from old overview"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "reread failure remains in parent"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "baseline reason remains after leaving"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "detail closed after history leaves"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "detail closed before server response"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "failed write does not reopen closed detail"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "success is shown despite failed reread"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "identity still comes from old overview"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "status remains active after successful stop and failed reread"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "reread failure remains in parent"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "name": "no unexpected network or browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "baseline reason remains after leaving"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "detail closed after history leaves"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "BUG late success reopens detail"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "BUG URL still names list"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "exactly one intercepted write"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "original idempotency header"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "name": "no unexpected network or browser errors"
+    }
+  ],
+  "scenarios": [
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "已提交的组织资料"
+      },
+      "observedOutcome": "closed-but-hidden-error-set"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "success-with-old-overview"
+    },
+    {
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "closed-but-hidden-error-set"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "success-with-old-overview"
+    },
+    {
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "已提交的组织资料"
+      },
+      "observedOutcome": "closed-but-hidden-error-set"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "success-with-old-overview"
+    },
+    {
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "已提交的组织资料",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "closed-but-hidden-error-set"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "success-with-old-overview"
+    },
+    {
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "生命周期测试"
+          },
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "afterWrite": true
+        }
+      ],
+      "finalState": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      },
+      "observedOutcome": "detail-reopened-at-list-url"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-profile-success-close-closed-pending.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "phase": "closed-pending",
+      "sha256": "8a13ad897b45e09a2ec1ce343eb286a03419a9b04b264bf4003fd88547338d5e",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "390-profile-success-close-settled.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "success-close",
+      "phase": "settled",
+      "sha256": "e2b5d274ab1367c4e97d4bd43dc6960c80116d7501a62a98075cf771371b88bc",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "390-profile-failure-close-closed-pending.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "phase": "closed-pending",
+      "sha256": "8a13ad897b45e09a2ec1ce343eb286a03419a9b04b264bf4003fd88547338d5e",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "390-profile-failure-close-settled.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "failure-close",
+      "phase": "settled",
+      "sha256": "1a7bde864aa9b7ca2871938f4d302cff52c018765bc1866104993cffa88e4984",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "390-profile-refresh-failure-settled.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "phase": "settled",
+      "sha256": "80443487bdd711a1e0e71ea3ea205809e4b6b0539fe1f43f39e71f1d809a8bcb",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-profile-reason-back-left-before-confirm.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "phase": "left-before-confirm",
+      "sha256": "a47e3d015361808726c2f20e8277641601fabe0ddda5b46621fd219aaa67126a",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": true,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "390-profile-reason-back-settled.png",
+      "width": 390,
+      "action": "profile",
+      "mode": "reason-back",
+      "phase": "settled",
+      "sha256": "e2b5d274ab1367c4e97d4bd43dc6960c80116d7501a62a98075cf771371b88bc",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "390-status-success-close-closed-pending.png",
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "phase": "closed-pending",
+      "sha256": "611f07f168b219a54b34a7f7886665e8c4924a19c5244e2f3f51cac87047b6a4",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-status-success-close-settled.png",
+      "width": 390,
+      "action": "status",
+      "mode": "success-close",
+      "phase": "settled",
+      "sha256": "f3d19190402657967fa6043291dec3ee857145d7e6663197e19fcfea1c47220a",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-status-failure-close-closed-pending.png",
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "phase": "closed-pending",
+      "sha256": "611f07f168b219a54b34a7f7886665e8c4924a19c5244e2f3f51cac87047b6a4",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-status-failure-close-settled.png",
+      "width": 390,
+      "action": "status",
+      "mode": "failure-close",
+      "phase": "settled",
+      "sha256": "6a506abcf649233743d093ed81c753c3c12afea2d53d97cb146e615fff23fd50",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-status-refresh-failure-settled.png",
+      "width": 390,
+      "action": "status",
+      "mode": "refresh-failure",
+      "phase": "settled",
+      "sha256": "9a16a48e5c8cb26eac07664994ff51aa286aab5232214eb273491d1c040b4499",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-status-reason-back-left-before-confirm.png",
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "phase": "left-before-confirm",
+      "sha256": "9b7679beb00316f52aa0d52d05e687ad0ca8907c8f33b41d11309d41a89eafe1",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": true,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "390-status-reason-back-settled.png",
+      "width": 390,
+      "action": "status",
+      "mode": "reason-back",
+      "phase": "settled",
+      "sha256": "f3d19190402657967fa6043291dec3ee857145d7e6663197e19fcfea1c47220a",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-profile-success-close-closed-pending.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "phase": "closed-pending",
+      "sha256": "ffa25122044b7f43b8d4576fbe875b1e733fdc3ff059a7bed95e62215e5b061d",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "1440-profile-success-close-settled.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "success-close",
+      "phase": "settled",
+      "sha256": "4017f8034b18f3671f63a4cdfa8166cc6fd67d8bb66a9a49e91ebbc6b0ea8443",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "1440-profile-failure-close-closed-pending.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "phase": "closed-pending",
+      "sha256": "ff7f1728f7c35d4158fe8d868de779c5a88336599f54f2930c225c44ac12710a",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "1440-profile-failure-close-settled.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "failure-close",
+      "phase": "settled",
+      "sha256": "ee2f1c3ef60b7d4276f4d971771da498b34996f2786b4796902a70e8458f4f52",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "1440-profile-refresh-failure-settled.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "refresh-failure",
+      "phase": "settled",
+      "sha256": "355055dfbf5039c7d7fa45cff226656e0ee5cc2b65d2abfb70f67054e9942a84",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-profile-reason-back-left-before-confirm.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "phase": "left-before-confirm",
+      "sha256": "8a249dde1c315d319b9961c596a235f8599d165acf011ea180fed7b46e89e851",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": true,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "1440-profile-reason-back-settled.png",
+      "width": 1440,
+      "action": "profile",
+      "mode": "reason-back",
+      "phase": "settled",
+      "sha256": "860b116e4d8f9a00bf7dad4ac636f5a1aa1b41b0500bb94ee9e1e3aed578834d",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "已提交的组织资料",
+        "feedback": [
+          "操作成功组织资料已更新。"
+        ],
+        "errors": [],
+        "field": "已提交的组织资料"
+      }
+    },
+    {
+      "file": "1440-status-success-close-closed-pending.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "phase": "closed-pending",
+      "sha256": "ff7f1728f7c35d4158fe8d868de779c5a88336599f54f2930c225c44ac12710a",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-status-success-close-settled.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "success-close",
+      "phase": "settled",
+      "sha256": "baa54614a09aef52fba3440e0917995aaf4d84731372352fcbf3d357a23ba5a2",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-status-failure-close-closed-pending.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "phase": "closed-pending",
+      "sha256": "ff7f1728f7c35d4158fe8d868de779c5a88336599f54f2930c225c44ac12710a",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-status-failure-close-settled.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "failure-close",
+      "phase": "settled",
+      "sha256": "ee2f1c3ef60b7d4276f4d971771da498b34996f2786b4796902a70e8458f4f52",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [
+          "操作未完成测试：原组织写入失败。"
+        ],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-status-refresh-failure-settled.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "refresh-failure",
+      "phase": "settled",
+      "sha256": "e73ca5090c99923eb7b2d245331fe502f97f61584a15ccbb2c1846305adbb0e2",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations/00000000-0000-4000-8000-000000000622",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-status-reason-back-left-before-confirm.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "phase": "left-before-confirm",
+      "sha256": "14dc8b6a26537cff31330f905b020efd0b01a0e974659b4fd26e937912561ea9",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": false,
+        "reasonVisible": true,
+        "identity": "米豆选品团队",
+        "feedback": [],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    },
+    {
+      "file": "1440-status-reason-back-settled.png",
+      "width": 1440,
+      "action": "status",
+      "mode": "reason-back",
+      "phase": "settled",
+      "sha256": "8c84115530cb788b757c6e91debe291e7140b67afcfa57f79d1f6fcb8b42a044",
+      "sourceSha": "6454540823a8424d58b1d68a7ac41bc9bbcc0c3245a8f776cb28eea5d882a2d1",
+      "state": {
+        "url": "/platform-admin/organizations",
+        "detailVisible": true,
+        "reasonVisible": false,
+        "identity": "米豆选品团队",
+        "feedback": [
+          "操作成功组织已停用。"
+        ],
+        "errors": [],
+        "field": "米豆选品团队"
+      }
+    }
+  ],
+  "processesClosed": true
+}

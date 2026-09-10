@@ -1,9 +1,11 @@
+import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
+const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
 const dir = "output/playwright/p42-write-lifecycle";
 const evidence = () => JSON.parse(read(`${dir}/evidence.json`));
 test("P42 lifecycle is explicitly diagnostic, bound to current sources and exact images", () => {
@@ -81,7 +83,7 @@ test("P42 lifecycle sends only original fixture payloads to the original organiz
     );
   }
 });
-test("P42 diagnostic does not mutate production or rewrite prior layout review", () => {
+test("Historical P42 diagnostic retains original source and prior layout review", () => {
   for (const file of [
     "apps/web/src/components/PlatformAccountCenter.vue",
     "apps/web/src/components/PlatformOrganizationDetailDialog.vue",

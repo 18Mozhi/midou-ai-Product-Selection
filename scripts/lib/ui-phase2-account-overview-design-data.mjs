@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
+import { historicalOrganizationActionSource } from "./ui-phase2-organization-action-baseline.mjs";
 const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildAccountOverviewDesignData(repo) {
   const read = (p) => readFile(path.join(repo, p), "utf8"),
@@ -39,7 +40,10 @@ export async function buildAccountOverviewDesignData(repo) {
   const overview = plain(run(vars + "globalThis.__result=overview;"));
   assert.equal(overview.organizations.length, 1);
   assert.equal(overview.summary.organizations, 3);
-  const vue = await read("apps/web/src/components/PlatformAccountCenter.vue"),
+  const vue = historicalOrganizationActionSource(
+      "apps/web/src/components/PlatformAccountCenter.vue",
+      await read("apps/web/src/components/PlatformAccountCenter.vue"),
+    ),
     ast = parse(vue.split(/<script setup[^>]*>/)[1].split("</script>")[0]);
   const script = ast.statements
     .filter((n) => !ts.isImportDeclaration(n))

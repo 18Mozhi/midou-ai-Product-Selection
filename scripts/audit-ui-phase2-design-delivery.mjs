@@ -3,6 +3,10 @@ import { createHash } from "node:crypto";
 import { readFile, readdir, writeFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  historicalOrganizationActionSource,
+  organizationActionRevisions,
+} from "./lib/ui-phase2-organization-action-baseline.mjs";
 
 // Artifact integrity and explicit page-link inventory, NOT design/action/production acceptance.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -42,6 +46,7 @@ for (const file of [
   relative + "/DIRECTION-DECISION-C.md",
   relative + "/PAGES.md",
   "scripts/audit-ui-phase2-design-delivery.mjs",
+  "scripts/lib/ui-phase2-organization-action-baseline.mjs",
 ])
   inputHashes[file] = (await fileHashes(file)).lf;
 const packages = [];
@@ -55,12 +60,19 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
   for (const [file, expected] of Object.entries(e.sourceHashes || {})) {
     assert.match(expected, /^[a-f0-9]{64}$/);
     const actual = await fileHashes(file);
+    const historical = organizationActionRevisions[file]?.before === expected;
+    const associated =
+      historical && hash(historicalOrganizationActionSource(file, await text(file))) === expected;
     sources.push({
       file,
       expected,
       actual: actual.lf,
-      match: expected === actual.lf || expected === actual.raw,
-      encoding: expected === actual.lf ? "LF-normalized" : "raw",
+      match: expected === actual.lf || expected === actual.raw || associated,
+      encoding: associated
+        ? "historical-LF-exact-revision-not-current-acceptance"
+        : expected === actual.lf
+          ? "LF-normalized"
+          : "raw",
     });
   }
   const screenshots = [];
@@ -211,6 +223,9 @@ const audit = {
   packages: packages.map(({ screenshots, sources, ...entry }) => ({
     ...entry,
     checkedSourceFiles: sources.map((s) => s.file),
+    historicalSourceAssociations: sources
+      .filter((s) => s.encoding === "historical-LF-exact-revision-not-current-acceptance")
+      .map(({ file, expected, actual, encoding }) => ({ file, expected, actual, encoding })),
     checkedViewportWidths: [...new Set(screenshots.map((s) => s.width))],
   })),
   sourceDrift,
@@ -218,7 +233,7 @@ const audit = {
   unmanifested,
   limits: [
     "Package and link counts are not page/action/dialog completion counts.",
-    "Hashes attest unchanged files, not semantic correctness, visual quality, all-state coverage or fresh browser tests.",
+    "Hashes attest unchanged files or explicitly recorded historical revision associations, not current semantic correctness, visual quality, all-state coverage or fresh browser tests.",
     "Shared shell/theme/discovery and historical account direction are not business-page substitutes.",
     "No global semantic action/dialog denominator, individual approval, implementation or production gate is promoted by this report.",
   ],
@@ -235,6 +250,7 @@ let report = `# C方向逐页审核索引与交付缺口
 - 未关联对应整页稿：${summary.noLinkedPageProposalRoutes}条（${missing.join("、") || "无"}）。共享主题浮层不抵扣业务整页。
 - C稿包${summary.packages}个：含${summary.researchPackages}个方向研究包、${summary.sharedOnlyPackages}个共享表面包；正式清单内PNG共${summary.pngs}张。
 - ${summary.sourceBindings}条来源绑定 / ${summary.uniqueBoundFiles}个唯一文件，漂移${summary.sourceDrift}；PNG指纹漂移${summary.pngDrift}，未列入清单PNG ${summary.unmanifestedPng}；图册内${summary.readmeLinksChecked}个本地链接已核对。
+- 其中${packages.reduce((sum, p) => sum + p.sources.filter((s) => s.encoding === "historical-LF-exact-revision-not-current-acceptance").length, 0)}条为精确历史修订关联，旧图不等于当前源码验收；机器报告保留原hash和当前hash。
 - 用户逐页批准${summary.userApprovedPages}；业务动作已正式验收${summary.verifiedBusinessActions}、弹窗变体已正式验收${summary.verifiedDialogVariants}；分母冻结=${summary.denominatorFrozen}。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步

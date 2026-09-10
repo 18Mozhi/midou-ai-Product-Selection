@@ -8,7 +8,8 @@
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "1e33326c8d8732e8ca4d51f2d3407136e67149aa5c664775e8c28f09cf615531",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "5ef04d168955bf16c50e6dad6a69d77a2947c90b9f50bdeba38f5a830cd704ac",
+    "scripts/lib/ui-phase2-organization-action-baseline.mjs": "fb7ae644405df28b8f8dac2173d1e5945d76de9bf54e4e82f47156866631237b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "7e5cb0b62a259d6e436738a757cef13816ab6705d914469555a699755dff22aa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "56880356f7da1b3f3195d51f2c2c3dc6c880c73e5c1893315a0b9e1f3b39b2b4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "775a1ecbc546756cd56312fa9f730b316bc8b49499777431832a7371238331d9",
@@ -50,7 +51,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P39.md": "38a00165d43b2919d6da9f9b476845893258ba546a60cbc5d0811875827bfa1f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "d83dfc9714d790070ac6ad9f9841ac9dffa400e93685d17949289ea2dd36be02",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "a49cd4953dd9d3e48e4d9f26c0edac5c397718a1cab15920d966eee06c1b1257",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "9ad505feb7a82a84770b9a723575025c30ae4299b78ac14510e25cd8bed227c5",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "5dcecda9a3317825a813c88be7c9a2bc1d1fd45f536fe9a2d3cde6b8bdfc80f6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "9c200af0d519941a2f1a85dcd70584060f2104112d2a7eeca0ce77e2d0fd02f1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "5fe39414203211633ee7aa40c6c603351b667467423d7dd5707f825b239fc6ee",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "94bfebb53e5a96e8f8a5770833c237a5a072f6f7207eb43e4fdfc8b7cfbcdfe6",
@@ -1835,6 +1836,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -1868,6 +1870,14 @@
         "apps/web/src/use-platform-user-detail.ts",
         "apps/api/src/platform-account-routes.ts",
         "apps/api/src/platform-account-service.ts"
+      ],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+          "actual": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
       ],
       "checkedViewportWidths": [
         1440,
@@ -1908,6 +1918,20 @@
         "apps/api/src/platform-account-routes.ts",
         "apps/api/src/mysql-platform-account-repository.ts",
         "tests/e2e/m06-01-platform-accounts.spec.ts"
+      ],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-account-overview-design-data.mjs",
+          "expected": "df765906f1eda3eb7c1c4158ee5e808796024df6bba3a841ce7ceaa3f2a7ba93",
+          "actual": "296ddf796f1bfea00fa250e4d2b2127fecd5aed8c23e89662f416cd112023563",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+          "actual": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
       ],
       "checkedViewportWidths": [
         1440,
@@ -1955,6 +1979,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -1988,6 +2013,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.css",
         "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/appearance.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2030,6 +2056,7 @@
         "scripts/verify-ui-phase2-approval-controls-c.mjs",
         "scripts/verify-ui-phase2-approval-review.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2062,6 +2089,7 @@
         "scripts/lib/ui-phase2-approval-diagnostics-data.mjs",
         "scripts/verify-ui-phase2-approval-diagnostics-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2098,6 +2126,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-approval-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2145,6 +2174,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/approval-forms-direction-c/fields.css",
         "scripts/verify-ui-phase2-approval-forms-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2203,6 +2233,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/approval-lifecycle-direction-c/lifecycle.css",
         "scripts/verify-ui-phase2-approval-lifecycle-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2256,6 +2287,7 @@
         "scripts/verify-ui-phase2-approval-navigation-c.mjs",
         "scripts/lib/ui-phase2-approval-navigation-cases.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2296,6 +2328,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-automation-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2332,6 +2365,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-automation-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2374,6 +2408,7 @@
         "scripts/verify-ui-phase2-automation-forms-c.mjs",
         "scripts/lib/ui-phase2-automation-form-review.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2415,6 +2450,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/backup.js",
         "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/data.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2457,6 +2493,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2497,6 +2534,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2538,6 +2576,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2581,6 +2620,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2621,6 +2661,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2663,6 +2704,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.css",
         "design-plans/ui-phase-2-2026-09-07/design/competitor-direction-c/competitor.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390,
@@ -2713,6 +2755,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2749,6 +2792,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/cost-rules.js",
         "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/cost-rules.css"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390,
@@ -2789,6 +2833,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.js",
         "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/data.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2858,6 +2903,7 @@
         "scripts/build-ui-phase2-data-composed-c.mjs",
         "scripts/verify-ui-phase2-data-composed-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2932,6 +2978,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/control-overrides.css",
         "scripts/verify-ui-phase2-data-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -2969,6 +3016,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3043,6 +3091,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/detail.css",
         "scripts/verify-ui-phase2-data-record-detail-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3086,6 +3135,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3141,6 +3191,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/adaptive.js",
         "scripts/verify-ui-phase2-detail-adaptive-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3191,6 +3242,7 @@
         "scripts/lib/ui-phase2-detail-assembly-data.mjs",
         "scripts/verify-ui-phase2-detail-assembly-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3238,6 +3290,7 @@
         "apps/web/src/components/OpportunityDecisionPanel.vue",
         "scripts/verify-ui-phase2-detail-cost-context-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3277,6 +3330,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-discovery-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3318,6 +3372,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/files-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/files-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3355,6 +3410,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3394,6 +3450,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-home-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3432,6 +3489,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/style.css",
         "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/casebook.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3470,6 +3528,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-insights-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3512,6 +3571,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-journey-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3557,6 +3617,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3599,6 +3660,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/controls.js",
         "scripts/verify-ui-phase2-members-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3637,6 +3699,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-members-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3680,6 +3743,7 @@
         "scripts/verify-ui-phase2-members-fields-c.mjs",
         "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/controls.css"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3720,6 +3784,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3760,6 +3825,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-notification-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3796,6 +3862,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-notification-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3839,6 +3906,7 @@
         "scripts/lib/ui-phase2-notification-forms-data.mjs",
         "apps/web/src/api-client.ts"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3879,6 +3947,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/navigation.css",
         "scripts/verify-ui-phase2-notification-navigation-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3923,6 +3992,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -3965,6 +4035,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-opportunity-detail-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4011,6 +4082,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-opportunity-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4052,6 +4124,7 @@
         "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
         "scripts/lib/ui-phase2-inventory.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4088,6 +4161,7 @@
         "apps/api/src/mysql-organization-admin-repository.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4134,6 +4208,7 @@
         "scripts/verify-ui-phase2-org-approvals-fields-c.mjs",
         "scripts/lib/ui-phase2-org-approvals-fields-data.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4184,6 +4259,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.css",
         "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4219,6 +4295,7 @@
         "packages/audit/src/index.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4254,6 +4331,7 @@
         "apps/api/src/mysql-organization-admin-repository.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4291,6 +4369,7 @@
         "apps/api/src/mysql-organization-admin-repository.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4329,6 +4408,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-organization-profile-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4363,6 +4443,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-organization-profile-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4401,6 +4482,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/fields.css",
         "scripts/verify-ui-phase2-organization-profile-fields-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4436,6 +4518,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/permissions.css",
         "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/permissions.js",
         "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/data.js"
+      ],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+          "actual": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
       ],
       "checkedViewportWidths": [
         1440,
@@ -4484,6 +4574,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/composed.css",
         "scripts/verify-ui-phase2-personal-composed-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4521,6 +4612,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-personal-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4564,6 +4656,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-personal-sections-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4617,6 +4710,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4652,6 +4746,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/platform-organizations-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/platform-organizations-direction-c/organizations.css",
         "design-plans/ui-phase-2-2026-09-07/design/platform-organizations-direction-c/organizations.js"
+      ],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+          "actual": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-platform-organizations-design-data.mjs",
+          "expected": "ba14e316c24538ffad21b0ae06622546762e2c28b296f6449de41a7ccbb36c91",
+          "actual": "98f022a75f8ec0361b0cf50f997b1cbb71dba39465e36537b3f977faa76d23c1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
       ],
       "checkedViewportWidths": [
         1440,
@@ -4694,6 +4802,7 @@
         "apps/api/src/mysql-platform-dashboard-storage-metrics.ts",
         "tests/e2e/m06-02-platform-dashboard.spec.ts"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4735,6 +4844,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-profit-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4775,6 +4885,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4816,6 +4927,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4857,6 +4969,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-recovery-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4897,6 +5010,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4941,6 +5055,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -4980,6 +5095,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-report-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5015,6 +5131,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-report-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5064,6 +5181,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-review-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5102,6 +5220,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/controls.js",
         "scripts/verify-ui-phase2-roles-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5136,6 +5255,7 @@
         "scripts/verify-ui-phase2-roles-c.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5178,6 +5298,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/fields.js",
         "scripts/verify-ui-phase2-roles-fields-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5220,6 +5341,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5253,6 +5375,7 @@
         "scripts/verify-ui-phase2-scoring-c.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5295,6 +5418,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5335,6 +5459,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-shell-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5375,6 +5500,7 @@
         "scripts/lib/ui-phase2-journey-design-data.mjs",
         "scripts/verify-ui-phase2-shell-journey-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5417,6 +5543,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/source-channels-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/source-channels-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5459,6 +5586,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.css",
         "design-plans/ui-phase-2-2026-09-07/design/sourcing-direction-c/sourcing.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390,
@@ -5498,6 +5626,7 @@
         "scripts/verify-ui-phase2-status-c.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5532,6 +5661,7 @@
         "scripts/verify-ui-phase2-task-c.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5565,6 +5695,7 @@
         "scripts/verify-ui-phase2-task-c-forms.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5607,6 +5738,7 @@
         "scripts/verify-ui-phase2-teams-controls-c.mjs",
         "scripts/lib/ui-phase2-inventory.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5644,6 +5776,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-teams-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5686,6 +5819,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-teams-fields-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5721,6 +5855,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-theme-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5763,6 +5898,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/source-logic.js"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5809,6 +5945,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-trend-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5852,6 +5989,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/accounts.js",
         "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/data.js"
       ],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+          "actual": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5888,6 +6033,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-work-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5929,6 +6075,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-workspaces-controls-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -5966,6 +6113,7 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-workspaces-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -6008,6 +6156,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-workspaces-fields-c.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -6053,6 +6202,7 @@
         "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json",
         "scripts/verify-ui-phase2-workspaces-restore-states.mjs"
       ],
+      "historicalSourceAssociations": [],
       "checkedViewportWidths": [
         1440,
         390
@@ -6064,7 +6214,7 @@
   "unmanifested": [],
   "limits": [
     "Package and link counts are not page/action/dialog completion counts.",
-    "Hashes attest unchanged files, not semantic correctness, visual quality, all-state coverage or fresh browser tests.",
+    "Hashes attest unchanged files or explicitly recorded historical revision associations, not current semantic correctness, visual quality, all-state coverage or fresh browser tests.",
     "Shared shell/theme/discovery and historical account direction are not business-page substitutes.",
     "No global semantic action/dialog denominator, individual approval, implementation or production gate is promoted by this report."
   ]
