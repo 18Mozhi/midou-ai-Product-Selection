@@ -39,23 +39,98 @@
         {
           "package": "members-direction-c",
           "scene": "refresh_error"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-busy"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-loading-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-default",
+          "selector": "#refresh"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-hover",
+          "selector": "#refresh"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-focus",
+          "selector": "#refresh"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-pressed",
+          "selector": "#refresh"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-disabled",
+          "selector": "#refresh"
+        },
+        "busy": {
+          "package": "members-controls-direction-c",
+          "scene": "refresh-busy",
+          "selector": "#refresh"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-refresh-loading",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#refresh",
+          "states": {
+            "disabled": "refresh-loading-disabled"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-RETRY",
@@ -97,13 +172,93 @@
         {
           "package": "members-direction-c",
           "scene": "rate_limited"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-blocked-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-blocked-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-blocked-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-blocked-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-expired-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-expired-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-expired-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-expired-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-forbidden-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-forbidden-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-forbidden-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-forbidden-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-rate_limited-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-rate_limited-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-rate_limited-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "retry-rate_limited-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -111,9 +266,85 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-default",
+          "selector": "#retry"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-hover",
+          "selector": "#retry"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-focus",
+          "selector": "#retry"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "retry-error-pressed",
+          "selector": "#retry"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-retry-blocked",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-blocked-default",
+            "hover": "retry-blocked-hover",
+            "focus": "retry-blocked-focus",
+            "pressed": "retry-blocked-pressed"
+          }
+        },
+        {
+          "key": "P30-retry-expired",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-expired-default",
+            "hover": "retry-expired-hover",
+            "focus": "retry-expired-focus",
+            "pressed": "retry-expired-pressed"
+          }
+        },
+        {
+          "key": "P30-retry-forbidden",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-forbidden-default",
+            "hover": "retry-forbidden-hover",
+            "focus": "retry-forbidden-focus",
+            "pressed": "retry-forbidden-pressed"
+          }
+        },
+        {
+          "key": "P30-retry-rate_limited",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-rate_limited-default",
+            "hover": "retry-rate_limited-hover",
+            "focus": "retry-rate_limited-focus",
+            "pressed": "retry-rate_limited-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "EX-P29-PROFILE",
@@ -416,23 +647,399 @@
         {
           "package": "members-direction-c",
           "scene": "action_conflict"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-confirm-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-confirm-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-confirm-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-confirm-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-confirm-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-cancel-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-cancel-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-cancel-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-cancel-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-close-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-close-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-close-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-disable-close-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-confirm-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-confirm-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-confirm-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-confirm-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-confirm-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-cancel-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-cancel-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-cancel-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-cancel-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-close-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-close-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-close-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-restore-close-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-cancel-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-cancel-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-cancel-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-cancel-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-close-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-close-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-close-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-close-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-confirm-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-confirm-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-confirm-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-confirm-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-confirm-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-cancel-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-cancel-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-cancel-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-cancel-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-close-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-close-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-close-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reason-revoke-close-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-default",
+          "selector": "#reason-confirm"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-hover",
+          "selector": "#reason-confirm"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-focus",
+          "selector": "#reason-confirm"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-pressed",
+          "selector": "#reason-confirm"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "reason-role-confirm-disabled",
+          "selector": "#reason-confirm"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-reason-disable-confirm",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-confirm",
+          "states": {
+            "default": "reason-disable-confirm-default",
+            "hover": "reason-disable-confirm-hover",
+            "focus": "reason-disable-confirm-focus",
+            "pressed": "reason-disable-confirm-pressed",
+            "disabled": "reason-disable-confirm-disabled"
+          }
+        },
+        {
+          "key": "P30-reason-disable-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-cancel",
+          "states": {
+            "default": "reason-disable-cancel-default",
+            "hover": "reason-disable-cancel-hover",
+            "focus": "reason-disable-cancel-focus",
+            "pressed": "reason-disable-cancel-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-disable-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-close",
+          "states": {
+            "default": "reason-disable-close-default",
+            "hover": "reason-disable-close-hover",
+            "focus": "reason-disable-close-focus",
+            "pressed": "reason-disable-close-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-restore-confirm",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-confirm",
+          "states": {
+            "default": "reason-restore-confirm-default",
+            "hover": "reason-restore-confirm-hover",
+            "focus": "reason-restore-confirm-focus",
+            "pressed": "reason-restore-confirm-pressed",
+            "disabled": "reason-restore-confirm-disabled"
+          }
+        },
+        {
+          "key": "P30-reason-restore-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-cancel",
+          "states": {
+            "default": "reason-restore-cancel-default",
+            "hover": "reason-restore-cancel-hover",
+            "focus": "reason-restore-cancel-focus",
+            "pressed": "reason-restore-cancel-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-restore-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-close",
+          "states": {
+            "default": "reason-restore-close-default",
+            "hover": "reason-restore-close-hover",
+            "focus": "reason-restore-close-focus",
+            "pressed": "reason-restore-close-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-role-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-cancel",
+          "states": {
+            "default": "reason-role-cancel-default",
+            "hover": "reason-role-cancel-hover",
+            "focus": "reason-role-cancel-focus",
+            "pressed": "reason-role-cancel-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-role-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-close",
+          "states": {
+            "default": "reason-role-close-default",
+            "hover": "reason-role-close-hover",
+            "focus": "reason-role-close-focus",
+            "pressed": "reason-role-close-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-revoke-confirm",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-confirm",
+          "states": {
+            "default": "reason-revoke-confirm-default",
+            "hover": "reason-revoke-confirm-hover",
+            "focus": "reason-revoke-confirm-focus",
+            "pressed": "reason-revoke-confirm-pressed",
+            "disabled": "reason-revoke-confirm-disabled"
+          }
+        },
+        {
+          "key": "P30-reason-revoke-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-cancel",
+          "states": {
+            "default": "reason-revoke-cancel-default",
+            "hover": "reason-revoke-cancel-hover",
+            "focus": "reason-revoke-cancel-focus",
+            "pressed": "reason-revoke-cancel-pressed"
+          }
+        },
+        {
+          "key": "P30-reason-revoke-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#reason-close",
+          "states": {
+            "default": "reason-revoke-close-default",
+            "hover": "reason-revoke-close-hover",
+            "focus": "reason-revoke-close-focus",
+            "pressed": "reason-revoke-close-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "EX-P36-TOKEN-REASON",
@@ -518,23 +1125,113 @@
         {
           "package": "members-direction-c",
           "scene": "invite_success"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite-busy"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite_partial-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite_partial-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite_partial-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "invite_partial-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "invite-default",
+          "selector": "#invite-submit"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "invite-hover",
+          "selector": "#invite-submit"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "invite-focus",
+          "selector": "#invite-submit"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "invite-pressed",
+          "selector": "#invite-submit"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "invite-disabled",
+          "selector": "#invite-submit"
+        },
+        "busy": {
+          "package": "members-controls-direction-c",
+          "scene": "invite-busy",
+          "selector": "#invite-submit"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-invite_partial",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "#invite-submit",
+          "states": {
+            "default": "invite_partial-default",
+            "hover": "invite_partial-hover",
+            "focus": "invite_partial-focus",
+            "pressed": "invite_partial-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-M-TAB-PENDING",
@@ -566,13 +1263,45 @@
         {
           "package": "members-direction-c",
           "scene": "invite_empty"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-available-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-available-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-available-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-available-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -580,9 +1309,49 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-default",
+          "selector": "[data-tab='pending']"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-hover",
+          "selector": "[data-tab='pending']"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-focus",
+          "selector": "[data-tab='pending']"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-pending-selected-pressed",
+          "selector": "[data-tab='pending']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-tab-pending-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "[data-tab='pending']",
+          "states": {
+            "default": "tab-pending-available-default",
+            "hover": "tab-pending-available-hover",
+            "focus": "tab-pending-available-focus",
+            "pressed": "tab-pending-available-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-M-TAB-EXPIRED",
@@ -614,13 +1383,45 @@
         {
           "package": "members-direction-c",
           "scene": "invite_boundary"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-available-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-available-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-available-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-available-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -628,9 +1429,49 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-default",
+          "selector": "[data-tab='expired']"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-hover",
+          "selector": "[data-tab='expired']"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-focus",
+          "selector": "[data-tab='expired']"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "tab-expired-selected-pressed",
+          "selector": "[data-tab='expired']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-tab-expired-available",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "[data-tab='expired']",
+          "states": {
+            "default": "tab-expired-available-default",
+            "hover": "tab-expired-available-hover",
+            "focus": "tab-expired-available-focus",
+            "pressed": "tab-expired-available-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-M-INVITATION-REVOKE",
@@ -667,23 +1508,123 @@
         {
           "package": "members-direction-c",
           "scene": "action_conflict"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-busy"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-invite_acceptance-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-invite_acceptance-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-invite_acceptance-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-invite_acceptance-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-invite_acceptance-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-invite_acceptance-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-default",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-hover",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-focus",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-pressed",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-disabled",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']"
+        },
+        "busy": {
+          "package": "members-controls-direction-c",
+          "scene": "revoke-normal-busy",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-revoke-invite_acceptance",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "[data-action='revoke'][data-id='00000000-0000-4000-8000-000000000613']",
+          "states": {
+            "default": "revoke-invite_acceptance-default",
+            "hover": "revoke-invite_acceptance-hover",
+            "focus": "revoke-invite_acceptance-focus",
+            "pressed": "revoke-invite_acceptance-pressed",
+            "disabled": "revoke-invite_acceptance-disabled",
+            "busy": "revoke-invite_acceptance-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-M-SEARCH",
@@ -710,13 +1651,29 @@
         {
           "package": "members-direction-c",
           "scene": "filter_empty"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "search-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "search-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "search-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "search-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -724,9 +1681,36 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "search-default",
+          "selector": "#filter-query"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "search-hover",
+          "selector": "#filter-query"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "search-focus",
+          "selector": "#filter-query"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "search-pressed",
+          "selector": "#filter-query"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-STATUS-FILTER",
@@ -753,12 +1737,24 @@
         {
           "package": "members-direction-c",
           "scene": "disabled_locked"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-status-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-status-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-status-focus"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -767,9 +1763,31 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-status-default",
+          "selector": "#filter-status"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-status-hover",
+          "selector": "#filter-status"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-status-focus",
+          "selector": "#filter-status"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-ROLE-FILTER",
@@ -796,12 +1814,24 @@
         {
           "package": "members-direction-c",
           "scene": "multiple_roles"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-role-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-role-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-role-focus"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -810,9 +1840,31 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-role-default",
+          "selector": "#filter-role"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-role-hover",
+          "selector": "#filter-role"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-role-focus",
+          "selector": "#filter-role"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-TEAM-FILTER",
@@ -839,12 +1891,24 @@
         {
           "package": "members-direction-c",
           "scene": "filter_empty"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-team-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-team-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-team-focus"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -853,9 +1917,31 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-team-default",
+          "selector": "#filter-team"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-team-hover",
+          "selector": "#filter-team"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-team-focus",
+          "selector": "#filter-team"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-SORT",
@@ -882,12 +1968,24 @@
         {
           "package": "members-direction-c",
           "scene": "multipage"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-sort-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-sort-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "filter-sort-focus"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -896,9 +1994,31 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-sort-default",
+          "selector": "#filter-sort"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-sort-hover",
+          "selector": "#filter-sort"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "filter-sort-focus",
+          "selector": "#filter-sort"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-RESET",
@@ -925,13 +2045,29 @@
         {
           "package": "members-direction-c",
           "scene": "filter_empty"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reset-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reset-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reset-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "reset-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -939,9 +2075,36 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "reset-default",
+          "selector": "#filters-panel [data-reset]"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "reset-hover",
+          "selector": "#filters-panel [data-reset]"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "reset-focus",
+          "selector": "#filters-panel [data-reset]"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "reset-pressed",
+          "selector": "#filters-panel [data-reset]"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-TECH",
@@ -968,13 +2131,45 @@
         {
           "package": "members-direction-c",
           "scene": "long_member"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-open-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-open-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-open-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "technical-open-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -982,9 +2177,49 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-default",
+          "selector": ".member[data-member='00000000-0000-4000-8000-000000000612'] summary"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-hover",
+          "selector": ".member[data-member='00000000-0000-4000-8000-000000000612'] summary"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-focus",
+          "selector": ".member[data-member='00000000-0000-4000-8000-000000000612'] summary"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "technical-closed-pressed",
+          "selector": ".member[data-member='00000000-0000-4000-8000-000000000612'] summary"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-technical-open",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": ".member[data-member='00000000-0000-4000-8000-000000000612'] summary",
+          "states": {
+            "default": "technical-open-default",
+            "hover": "technical-open-hover",
+            "focus": "technical-open-focus",
+            "pressed": "technical-open-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-M-ROLE-SELECT",
@@ -1011,12 +2246,24 @@
         {
           "package": "members-direction-c",
           "scene": "multiple_roles"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "row-role-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "row-role-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "row-role-focus"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
         "pressed": "not-mapped",
         "disabled": "not-mapped",
         "busy": "not-mapped"
@@ -1025,9 +2272,31 @@
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "row-role-default",
+          "selector": "#role-00000000-0000-4000-8000-000000000612"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "row-role-hover",
+          "selector": "#role-00000000-0000-4000-8000-000000000612"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "row-role-focus",
+          "selector": "#role-00000000-0000-4000-8000-000000000612"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-ROLE-ASSIGN",
@@ -1059,23 +2328,84 @@
         {
           "package": "members-direction-c",
           "scene": "action_conflict"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-default",
+          "selector": "[data-action='role'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-hover",
+          "selector": "[data-action='role'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-focus",
+          "selector": "[data-action='role'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-pressed",
+          "selector": "[data-action='role'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-disabled",
+          "selector": "[data-action='role'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "busy": {
+          "package": "members-controls-direction-c",
+          "scene": "assign-role-busy",
+          "selector": "[data-action='role'][data-id='00000000-0000-4000-8000-000000000612']"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-STATE",
@@ -1127,23 +2457,123 @@
         {
           "package": "members-direction-c",
           "scene": "action_conflict"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "disable-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "disable-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "disable-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "disable-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "disable-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "disable-busy"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "restore-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "restore-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "restore-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "restore-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "restore-disabled"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "restore-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "disable-default",
+          "selector": "[data-action='disable'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "disable-hover",
+          "selector": "[data-action='disable'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "disable-focus",
+          "selector": "[data-action='disable'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "disable-pressed",
+          "selector": "[data-action='disable'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "disable-disabled",
+          "selector": "[data-action='disable'][data-id='00000000-0000-4000-8000-000000000612']"
+        },
+        "busy": {
+          "package": "members-controls-direction-c",
+          "scene": "disable-busy",
+          "selector": "[data-action='disable'][data-id='00000000-0000-4000-8000-000000000612']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P30-restore",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "members-controls-direction-c",
+          "selector": "[data-action='restore'][data-id='00000000-0000-4000-8000-000000000621']",
+          "states": {
+            "default": "restore-default",
+            "hover": "restore-hover",
+            "focus": "restore-focus",
+            "pressed": "restore-pressed",
+            "disabled": "restore-disabled",
+            "busy": "restore-busy"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-M-PREV",
@@ -1170,23 +2600,75 @@
         {
           "package": "members-direction-c",
           "scene": "page_two"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "prev-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "prev-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "prev-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "prev-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "prev-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "prev-default",
+          "selector": ".pagination button:first-child"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "prev-hover",
+          "selector": ".pagination button:first-child"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "prev-focus",
+          "selector": ".pagination button:first-child"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "prev-pressed",
+          "selector": ".pagination button:first-child"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "prev-disabled",
+          "selector": ".pagination button:first-child"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-M-NEXT",
@@ -1213,23 +2695,75 @@
         {
           "package": "members-direction-c",
           "scene": "page_two"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "next-default"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "next-hover"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "next-focus"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "next-pressed"
+        },
+        {
+          "package": "members-controls-direction-c",
+          "scene": "next-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-members-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-members-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。",
+      "visualStateReferences": {
+        "default": {
+          "package": "members-controls-direction-c",
+          "scene": "next-default",
+          "selector": ".pagination button:last-child"
+        },
+        "hover": {
+          "package": "members-controls-direction-c",
+          "scene": "next-hover",
+          "selector": ".pagination button:last-child"
+        },
+        "focus": {
+          "package": "members-controls-direction-c",
+          "scene": "next-focus",
+          "selector": ".pagination button:last-child"
+        },
+        "pressed": {
+          "package": "members-controls-direction-c",
+          "scene": "next-pressed",
+          "selector": ".pagination button:last-child"
+        },
+        "disabled": {
+          "package": "members-controls-direction-c",
+          "scene": "next-disabled",
+          "selector": ".pagination button:last-child"
+        }
+      },
+      "additionalControlVariants": []
     }
   ],
   "dialogs": {
@@ -1547,8 +3081,131 @@
     "maximumLength": null,
     "sourceMeaning": "shared source has no maxlength; proposal500 is not production behavior"
   },
+  "proposalOnlyControls": [
+    {
+      "id": "invite_interrupted",
+      "actionId": "OG-M-INVITE",
+      "selector": "#invite-submit",
+      "states": {
+        "default": "invite_interrupted-default",
+        "hover": "invite_interrupted-hover",
+        "focus": "invite_interrupted-focus",
+        "pressed": "invite_interrupted-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "reset-empty",
+      "actionId": "PROPOSAL-RESET-EMPTY",
+      "selector": ".empty [data-reset]",
+      "states": {
+        "default": "reset-empty-default",
+        "hover": "reset-empty-hover",
+        "focus": "reset-empty-focus",
+        "pressed": "reset-empty-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "directory-member-section-available",
+      "actionId": "PROPOSAL-DIRECTORY",
+      "selector": ".directory a[href='#member-section']",
+      "states": {
+        "default": "directory-member-section-available-default",
+        "hover": "directory-member-section-available-hover",
+        "focus": "directory-member-section-available-focus",
+        "pressed": "directory-member-section-available-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "directory-member-section-selected",
+      "actionId": "PROPOSAL-DIRECTORY",
+      "selector": ".directory a[href='#member-section']",
+      "states": {
+        "default": "directory-member-section-selected-default",
+        "hover": "directory-member-section-selected-hover",
+        "focus": "directory-member-section-selected-focus",
+        "pressed": "directory-member-section-selected-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "directory-invitation-section-available",
+      "actionId": "PROPOSAL-DIRECTORY",
+      "selector": ".directory a[href='#invitation-section']",
+      "states": {
+        "default": "directory-invitation-section-available-default",
+        "hover": "directory-invitation-section-available-hover",
+        "focus": "directory-invitation-section-available-focus",
+        "pressed": "directory-invitation-section-available-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "directory-invitation-section-selected",
+      "actionId": "PROPOSAL-DIRECTORY",
+      "selector": ".directory a[href='#invitation-section']",
+      "states": {
+        "default": "directory-invitation-section-selected-default",
+        "hover": "directory-invitation-section-selected-hover",
+        "focus": "directory-invitation-section-selected-focus",
+        "pressed": "directory-invitation-section-selected-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "filters-closed",
+      "actionId": "PROPOSAL-FILTER-DISCLOSURE",
+      "selector": "#filters-panel > summary",
+      "states": {
+        "default": "filters-closed-default",
+        "hover": "filters-closed-hover",
+        "focus": "filters-closed-focus",
+        "pressed": "filters-closed-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "filters-open",
+      "actionId": "PROPOSAL-FILTER-DISCLOSURE",
+      "selector": "#filters-panel > summary",
+      "states": {
+        "default": "filters-open-default",
+        "hover": "filters-open-hover",
+        "focus": "filters-open-focus",
+        "pressed": "filters-open-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "feedback-refresh_error",
+      "actionId": "PROPOSAL-FEEDBACK-TECH",
+      "selector": "#feedback summary",
+      "states": {
+        "default": "feedback-refresh_error-default",
+        "hover": "feedback-refresh_error-hover",
+        "focus": "feedback-refresh_error-focus",
+        "pressed": "feedback-refresh_error-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    },
+    {
+      "id": "feedback-action_conflict",
+      "actionId": "PROPOSAL-FEEDBACK-TECH",
+      "selector": "#feedback summary",
+      "states": {
+        "default": "feedback-action_conflict-default",
+        "hover": "feedback-action_conflict-hover",
+        "focus": "feedback-action_conflict-focus",
+        "pressed": "feedback-action_conflict-pressed"
+      },
+      "reason": "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。"
+    }
+  ],
   "compositionGaps": [
-    "94旧图只有整页/原因窗及单个邀请按钮代表状态；本批不借图填114精确控件槽，也不把声明无busy当已完成截图。",
+    "94旧图保留上下文；新444图绑定19代表动作84状态、22附加变体92状态，另10纯提案40状态和6反馈上下文。仍有30代表槽未映射，不补造native select按下弹出或原因窗提交busy。",
+    "独立提案复用busy，而实际父源refreshing与写busy分离；当前只核对被选目标，不代表全页忙碌生命周期或全部字段/角色/主题/密度/软键盘组合通过。",
     "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。"
   ],
   "approval": "pending-user-review",

@@ -1,5 +1,7 @@
 # P30 成员与邀请 · 源码、按钮、字段与原因窗对应
 
+2026-09-10按钮细化增量：[444张控件与反馈图](design/members-controls-direction-c/README.md)。19代表动作84状态、22附加变体92状态、10纯提案40状态，216状态双端432图另加12反馈图；原94图不变。精确代表槽由114待映射变为84有图/30待映射，不用附加变体抵扣或假造native select/共享窗busy。六项新永久测试与原11项通过；增加明显焦点/危险操作反馈/16px错误及忙碌说明仅限独立提案。源refreshing与写busy分离、共享reason无上限等差异明确保留，具体审核、字段组合、真实C实施和未决邀请中断策略仍待。下文“本批未改图片/114待映射”为之前源注册批记录，不作为当前图数量。
+
 2026-09-10；从干净 main/95b9ee47 继续。先读 AGENTS → Feature Map organizationAdmin → 蓝图 M06-01 → 真实父子组件、共享原因与服务写链；使用 ui-skills-root/frontend-design 保持 C 方向，但不扩大 P16 布局批准。缺失 ui-skills CLI 不安装，复用本地技能与已有 Playwright 验证器。
 
 [现有94张审核图](design/members-direction-c/README.md) · [机器登记](action-reviews/P30.json) · [事实规格](page-specs/P30.md)

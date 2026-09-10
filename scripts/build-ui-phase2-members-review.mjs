@@ -15,6 +15,7 @@ export const dependencies = [
   "apps/web/src/use-modal-dialog.ts",
 ];
 const pkg = "members-direction-c";
+const controls = "members-controls-direction-c";
 const remaining =
   "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。";
 const filterKey = "OG-M-FILTER搜索/状态/角色/团队/排序/重置";
@@ -336,12 +337,13 @@ const visibleInputs = [
   ["form.role_code", "必填固定五角色select；选择本身不写入"],
   ["form.reason", "邀请原因必填maxlength500，父函数trim后1–500；不是共享窗的至少2字规则"],
 ];
-export function buildMembersReview(sources, evidence) {
+export function buildMembersReview(sources, evidence, controlsEvidence) {
   const dependencyHashes = Object.fromEntries(
     dependencies.map((file) => {
       assert.equal(typeof sources[file], "string", `missing source ${file}`);
       const sha = createHash("sha256").update(sources[file].replaceAll("\r\n", "\n")).digest("hex");
       assert.equal(evidence.sourceHashes[file], sha, "verify current members proposal");
+      assert.equal(controlsEvidence.sourceHashes[file], sha, "verify current members controls");
       return [file, sha];
     }),
   );
@@ -387,6 +389,44 @@ export function buildMembersReview(sources, evidence) {
       remaining,
     }),
   );
+  assert.deepEqual(
+    Object.keys(controlsEvidence.actionVisualReferences).sort(),
+    actions
+      .filter((a) => !["excluded", "wiring"].includes(a.kind))
+      .map((a) => a.actionId)
+      .sort(),
+    "exact reachable members action set",
+  );
+  for (const action of actions.filter((a) => !["excluded", "wiring"].includes(a.kind))) {
+    const primary = controlsEvidence.actionVisualReferences[action.actionId];
+    action.visualStateReferences = {};
+    for (const [state, scene] of Object.entries(primary.states)) {
+      action.visualStates[state] = "scene-reference-not-acceptance";
+      action.visualStateReferences[state] = {
+        package: controls,
+        scene,
+        selector: primary.selector,
+      };
+      action.scenes.push({ package: controls, scene });
+    }
+    action.additionalControlVariants = Object.entries(controlsEvidence.controlVariantReferences)
+      .filter(([, ref]) => ref.actionId === action.actionId)
+      .map(([key, ref]) => {
+        for (const scene of Object.values(ref.states))
+          action.scenes.push({ package: controls, scene });
+        return {
+          key,
+          scope: "additional-control-variant-not-new-action",
+          package: controls,
+          selector: ref.selector,
+          states: ref.states,
+        };
+      });
+    action.testReferences.push({
+      file: "scripts/verify-ui-phase2-members-controls-c.mjs",
+      evidenceType: "offline-proposal-check-not-Vue",
+    });
+  }
   const wire = actions.find((a) => a.actionId === "WIRE-MEMBERS");
   wire.forwardsTo = [...new Set(eventTargets.flatMap(([, , targets]) => targets))];
   wire.forwardBindings = eventTargets.map(([event, handler, targets]) => ({
@@ -532,8 +572,18 @@ export function buildMembersReview(sources, evidence) {
       maximumLength: null,
       sourceMeaning: "shared source has no maxlength; proposal500 is not production behavior",
     },
+    proposalOnlyControls: Object.entries(controlsEvidence.controlReferences)
+      .filter(([, ref]) => ref.scope === "proposal-only-not-source-action")
+      .map(([id, ref]) => ({
+        id,
+        actionId: ref.actionId,
+        selector: ref.selector,
+        states: ref.states,
+        reason: "目录/折叠/空结果/反馈说明及中断保留仅提案，不加入源动作分母。",
+      })),
     compositionGaps: [
-      "94旧图只有整页/原因窗及单个邀请按钮代表状态；本批不借图填114精确控件槽，也不把声明无busy当已完成截图。",
+      "94旧图保留上下文；新444图绑定19代表动作84状态、22附加变体92状态，另10纯提案40状态和6反馈上下文。仍有30代表槽未映射，不补造native select按下弹出或原因窗提交busy。",
+      "独立提案复用busy，而实际父源refreshing与写busy分离；当前只核对被选目标，不代表全页忙碌生命周期或全部字段/角色/主题/密度/软键盘组合通过。",
       "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。",
     ],
     approval: "pending-user-review",
@@ -548,6 +598,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const value = buildMembersReview(
     Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")])),
     JSON.parse(readFileSync(`${base}/design/${pkg}/evidence.json`, "utf8")),
+    JSON.parse(readFileSync(`${base}/design/${controls}/evidence.json`, "utf8")),
   );
   const target = `${base}/action-reviews/P30.json`;
   if (process.argv.includes("--write"))

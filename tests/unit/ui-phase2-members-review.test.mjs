@@ -16,7 +16,7 @@ import {
   parentFile,
   childFile,
   dependencies,
-  buildMembersReview,
+  buildMembersReview as buildReview,
 } from "../../scripts/build-ui-phase2-members-review.mjs";
 
 const sources = Object.fromEntries(
@@ -25,7 +25,14 @@ const sources = Object.fromEntries(
 const evidence = JSON.parse(
   readFileSync(`${base}/design/members-direction-c/evidence.json`, "utf8"),
 );
-const packages = new Map([["members-direction-c", evidence]]);
+const controlsEvidence = JSON.parse(
+  readFileSync(`${base}/design/members-controls-direction-c/evidence.json`, "utf8"),
+);
+const buildMembersReview = (sources, evidence) => buildReview(sources, evidence, controlsEvidence);
+const packages = new Map([
+  ["members-direction-c", evidence],
+  ["members-controls-direction-c", controlsEvidence],
+]);
 const context = {
   candidates: [parentFile, childFile].flatMap((file) => scanSource(sources[file], file).candidates),
   sourceHashes: Object.fromEntries(
@@ -36,7 +43,10 @@ const context = {
   ),
   contracts: runContractAudit().records,
   packages,
-  files: new Set(["scripts/verify-ui-phase2-members-c.mjs"]),
+  files: new Set([
+    "scripts/verify-ui-phase2-members-c.mjs",
+    "scripts/verify-ui-phase2-members-controls-c.mjs",
+  ]),
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P30.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
@@ -49,7 +59,7 @@ test("P30 registers all 28 local sites without duplicating parent event forwards
   assert.equal(r.wiringGroups, 1);
   assert.equal(r.excludedGroups, 3);
   assert.equal(r.writeActions, 4);
-  assert.equal(r.unmappedVisualSlots, 114);
+  assert.equal(r.unmappedVisualSlots, 30);
   assert.deepEqual(review(), buildMembersReview(sources, evidence));
 });
 test("P30 registers thirteen exact event forwards, including both tabs and both pages", () => {
@@ -156,8 +166,12 @@ test("P30 keeps contextual screenshots separate from exact control-state approva
   const r = review();
   assert.equal(evidence.screenshots.length, 94);
   for (const a of r.actions.filter((a) => !["wiring", "excluded"].includes(a.kind))) {
-    assert.ok(Object.values(a.visualStates).every((v) => v === "not-mapped"));
-    assert.ok(!a.visualStateReferences);
+    assert.ok(Object.values(a.visualStates).some((v) => v === "scene-reference-not-acceptance"));
+    assert.ok(
+      Object.values(a.visualStateReferences).every(
+        (ref) => ref.package === "members-controls-direction-c",
+      ),
+    );
   }
   const missing = structuredClone(evidence);
   missing.screenshots = missing.screenshots.filter(
@@ -167,7 +181,7 @@ test("P30 keeps contextual screenshots separate from exact control-state approva
     () =>
       validateActionReview(r, {
         ...context,
-        packages: new Map([["members-direction-c", missing]]),
+        packages: new Map([...packages, ["members-direction-c", missing]]),
       }),
     /missing scene\/viewport/,
   );

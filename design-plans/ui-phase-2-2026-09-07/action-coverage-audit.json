@@ -239,6 +239,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/evidence.json": "a49ba0902fc80bab8f0099fb86f4cce033b52b873a442f7c924fe008c9c8ef33",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "fec49054a4c86198eddeb6be212e66398288f1bc87ebcd0f131819cfe60e7fab",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ead87b6db66317b720e7e40618df74bc7c700563d1cf1de85db38752bd0b61fc",
+    "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "48992c30bc94a6751450ace4e9b4c9f72e25f902ddb1cf826cbdc8cd4f136257",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "c232408bd2d56d730507acc7753d6e0470080dd0d7dad93cdb2e050095842bb9",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
@@ -366,8 +367,9 @@
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "2f1368a16766c129c782530f296d8bcc49964ff17e57764ce190f6b867098251",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "1cf25f3e288413ef619ffc176390a571f88da883e2b39c8072cf879d31f0be6e",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
+    "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -402,7 +404,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "d99d66fec022fe8eabceaccaa52683e8de640190857b28da49b0940edade1549",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "24d40460e447eb5ed672eafd17f1cb1cf47133e41aa3d4d89931279bf57e3f6a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "a118eb7a0301a847ec9a48f7232f83e3b13b2fc3fb1ea528f471aa72f286021c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "3cc06ce387a9a52283919bb2f4a7e215531fa341269fba3292fcab0056ecb9db",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8a5c6548419549e83e3b1762a44f40982306285a52155e9e1e532dcca618527b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "96faebd57a156fffedf3a60f1feddb8be4644b8851100b6b64bb5f26d8c9a5e2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "7033fd42ed0b5654f922ae10643fdc50234059680a7a1b936fa81710b8397291",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "7ebc9f00d7cbd16fe1574c7656b42f1968e32a6248860a4bc146ad8b4088f4d2",
@@ -1567,7 +1569,7 @@
         "excludedGroups": 3,
         "writeActions": 4,
         "sourceInapplicableVisualSlots": 0,
-        "unmappedVisualSlots": 114,
+        "unmappedVisualSlots": 30,
         "surfaces": {
           "callerFiles": 2,
           "localModelBindings": 9,
@@ -1577,12 +1579,14 @@
         }
       },
       "proposalPackages": [
+        "members-controls-direction-c",
         "members-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "94旧图只有整页/原因窗及单个邀请按钮代表状态；本批不借图填114精确控件槽，也不把声明无busy当已完成截图。",
+        "94旧图保留上下文；新444图绑定19代表动作84状态、22附加变体92状态，另10纯提案40状态和6反馈上下文。仍有30代表槽未映射，不补造native select按下弹出或原因窗提交busy。",
+        "独立提案复用busy，而实际父源refreshing与写busy分离；当前只核对被选目标，不代表全页忙碌生命周期或全部字段/角色/主题/密度/软键盘组合通过。",
         "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。"
       ]
     },
@@ -2698,7 +2702,7 @@
       "excludedGroups": 3,
       "writeActions": 4,
       "sourceInapplicableVisualSlots": 0,
-      "unmappedVisualSlots": 114,
+      "unmappedVisualSlots": 30,
       "surfaces": {
         "callerFiles": 2,
         "localModelBindings": 9,

@@ -1,0 +1,52 @@
+/* This child proposal only; parent layout, API intentions and 94 original PNGs stay unchanged. */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+a:focus-visible,
+.notice:focus {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+.directory a:focus-visible {
+  outline-color: white;
+}
+button:active:not(:disabled) {
+  background: #cfdbf1;
+  border-color: var(--deep);
+}
+button.primary:active:not(:disabled),
+.tabs button[aria-pressed="true"]:active {
+  background: #10285b;
+  color: white;
+}
+button.danger:hover:not(:disabled) {
+  color: #822d1a;
+  border-color: #a1422c;
+  background: #fff0e9;
+}
+button.danger:active:not(:disabled) {
+  background: #f7d4c7;
+}
+summary:hover {
+  color: var(--deep);
+  background: #eaf0fb;
+}
+summary:active {
+  background: #cfdbf1;
+}
+.notice p,
+.results li {
+  font-size: 16px;
+}
+.control-busy-note {
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  border-left: 4px solid var(--blue);
+  background: white;
+}
+.directory a:active {
+  background: #10285b;
+  color: white;
+}
