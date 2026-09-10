@@ -1,0 +1,4205 @@
+{
+  "kind": "P36-WRITE-LIFECYCLE-r1",
+  "scope": "Unmodified actual parent/child/dialog/hooks and production CSS. HTTP fixtures, synthetic token, two-width mounted KeepAlive host; not full App routing, real permissions, OS clipboard, SQL, audit or C-design approval. Diagnostic findings are not acceptance passes.",
+  "fixedTime": "2026-08-26T10:00:00.000Z",
+  "checks": [
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "successful record states"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "deactivated parent detached"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "cache roundtrip has no write"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "pending parent detached"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "successful record states"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "successful record states"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "deactivated parent detached"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "cache roundtrip has no write"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "exact payload"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "pending parent detached"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "successful record states"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "successful record states"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "deactivated parent detached"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "cache roundtrip has no write"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "pending parent detached"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "successful record states"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "successful record states"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "failed write retains record"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "failed write feedback error"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "failed write has no secret"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "manual retry reason is blank"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "deactivated parent detached"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "cache roundtrip has no write"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "one POST while waiting"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "exact payload"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "reason closes before write settles"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "all row actions disabled"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "pending parent detached"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "successful record states"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "secret owned by active origin"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "no automatic write replay"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "zero external requests"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "name": "zero storage"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active",
+          "rotated"
+        ],
+        "secret": 1,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "数据已被其他操作更新，请先刷新并确认最新内容。 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "隔离请求未完成 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 1,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active",
+          "rotated"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "revoked"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "数据已被其他操作更新，请先刷新并确认最新内容。 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "隔离请求未完成 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "revoked"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active",
+          "rotated"
+        ],
+        "secret": 1,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "数据已被其他操作更新，请先刷新并确认最新内容。 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "隔离请求未完成 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 1,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active",
+          "rotated"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "revoked"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "数据已被其他操作更新，请先刷新并确认最新内容。 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        }
+      ],
+      "observation": {
+        "notice": "隔离请求未完成 请核对后重试。 p36-failure-fixture",
+        "kind": "error",
+        "role": "alert",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "revoked"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    }
+  ],
+  "findings": [
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 1,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 1,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "rotate",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "Token 明文仅显示这一次，请立即保存到受限位置。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [
+          "active"
+        ],
+        "secret": 0,
+        "pageFailure": []
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens/00000000-0000-4000-8000-000000000900/actions",
+          "body": {
+            "action": "revoke",
+            "expected_version": 5,
+            "reason": "定期维护隔离测试"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "notice": "操作已完成并写入审计。 p36-write-fixture",
+        "kind": "success",
+        "role": "status",
+        "rowStates": [],
+        "secret": 0,
+        "pageFailure": [
+          "无权管理当前组织"
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ],
+      "observation": {
+        "open": true,
+        "modal": false,
+        "connected": true,
+        "value": "  定期维护隔离测试  "
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-rotate-success-pending.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-success-notice.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "state": "notice",
+      "sha256": "1157ceeb4c2bf611439268161040e9d0c8cac75f66b2af705af21eebc2f53b4d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-success-records.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "success",
+      "state": "records",
+      "sha256": "7e9824957a97354045d16a03bf9afa2af57cd88977794f0ce6efefa68993db87",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-write409-pending.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-write409-notice.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "state": "notice",
+      "sha256": "552b6aee5f64ad1faab058375a6b43c0225b706e05f91bfe05cd061cfab81669",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-write409-records.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write409",
+      "state": "records",
+      "sha256": "9ceb28c6df717a565c5109f9b8456ceca475ef1cd8693ce328b00fd2374547d3",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-write500-pending.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-write500-notice.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "state": "notice",
+      "sha256": "e226e170b34bc716b21aff12c93993fdc5dd1c9c772d4543df1601ac2dd4edb0",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-write500-records.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "write500",
+      "state": "records",
+      "sha256": "9ceb28c6df717a565c5109f9b8456ceca475ef1cd8693ce328b00fd2374547d3",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-read500-pending.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-read500-notice.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "state": "notice",
+      "sha256": "1157ceeb4c2bf611439268161040e9d0c8cac75f66b2af705af21eebc2f53b4d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-read500-records.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read500",
+      "state": "records",
+      "sha256": "9ceb28c6df717a565c5109f9b8456ceca475ef1cd8693ce328b00fd2374547d3",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-read403-pending.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-read403-notice.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "state": "notice",
+      "sha256": "1157ceeb4c2bf611439268161040e9d0c8cac75f66b2af705af21eebc2f53b4d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-read403-page-failure.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "read403",
+      "state": "page-failure",
+      "sha256": "7aad0c0ae7e272d1b37cea5ee4a569aeaaed849e9ee6b10edecdbea6e88f3dfc",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-reason-deactivate-restored-reason.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "state": "restored-reason",
+      "sha256": "d0e93f07295ab11e46ed3ce108a1849152a9c4b0a8029a10d5fdc553a658ec07",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-pending-deactivate-pending.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-pending-deactivate-notice.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "state": "notice",
+      "sha256": "073b812a226b84547de587c80397b28c411fe77ab0761a41db5f3ebd96726f7d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-rotate-pending-deactivate-records.png",
+      "width": 390,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "state": "records",
+      "sha256": "7e9824957a97354045d16a03bf9afa2af57cd88977794f0ce6efefa68993db87",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-success-pending.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-success-notice.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "state": "notice",
+      "sha256": "073b812a226b84547de587c80397b28c411fe77ab0761a41db5f3ebd96726f7d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-success-records.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "success",
+      "state": "records",
+      "sha256": "d9487ee130c3f6ee0a8ad7d3d2a4bc6dd6787dbc3f89917fb6bb19a7e515ce0b",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-write409-pending.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-write409-notice.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "state": "notice",
+      "sha256": "552b6aee5f64ad1faab058375a6b43c0225b706e05f91bfe05cd061cfab81669",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-write409-records.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write409",
+      "state": "records",
+      "sha256": "9ceb28c6df717a565c5109f9b8456ceca475ef1cd8693ce328b00fd2374547d3",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-write500-pending.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-write500-notice.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "state": "notice",
+      "sha256": "e226e170b34bc716b21aff12c93993fdc5dd1c9c772d4543df1601ac2dd4edb0",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-write500-records.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "write500",
+      "state": "records",
+      "sha256": "9ceb28c6df717a565c5109f9b8456ceca475ef1cd8693ce328b00fd2374547d3",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-read500-pending.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-read500-notice.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "state": "notice",
+      "sha256": "073b812a226b84547de587c80397b28c411fe77ab0761a41db5f3ebd96726f7d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-read500-records.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read500",
+      "state": "records",
+      "sha256": "9ceb28c6df717a565c5109f9b8456ceca475ef1cd8693ce328b00fd2374547d3",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-read403-pending.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-read403-notice.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "state": "notice",
+      "sha256": "073b812a226b84547de587c80397b28c411fe77ab0761a41db5f3ebd96726f7d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-read403-page-failure.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "read403",
+      "state": "page-failure",
+      "sha256": "5d8c04ddab27a24c9dcd5262d4426c3b7b1058dee05b0cc5318cc640f5cb9a10",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-reason-deactivate-restored-reason.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "state": "restored-reason",
+      "sha256": "1475d5833589b33d5dd953576ac5752d506bbf2e6a79c67dd69a92f6a16c0c4e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-pending-deactivate-pending.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "state": "pending",
+      "sha256": "c2db3bf4fd47715fb6238af1c3fe37ccb2feb56036cab252ace8ae6de028554e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-pending-deactivate-notice.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "state": "notice",
+      "sha256": "073b812a226b84547de587c80397b28c411fe77ab0761a41db5f3ebd96726f7d",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "390-revoke-pending-deactivate-records.png",
+      "width": 390,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "state": "records",
+      "sha256": "d9487ee130c3f6ee0a8ad7d3d2a4bc6dd6787dbc3f89917fb6bb19a7e515ce0b",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-success-pending.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-success-notice.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "state": "notice",
+      "sha256": "f6b647b335f75afe11bb074377f25f3fa7e67ad4bab5442e9ac46c6f48f24c4a",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-success-records.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "success",
+      "state": "records",
+      "sha256": "f437c34a6f029ea64373bb801adb6d8b9f8291c998a599e55f080f3467cbd383",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-write409-pending.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-write409-notice.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "state": "notice",
+      "sha256": "d83edd8f892d82686296b6b19e4b173e12c0a8815d048cf768ddf4802cda1fa8",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-write409-records.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write409",
+      "state": "records",
+      "sha256": "0126f3836376d4484db4df7da56df12f9197d6ad5c1054b1181631e3ffde823c",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-write500-pending.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-write500-notice.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "state": "notice",
+      "sha256": "48d03029a07a8670e3fbd52e3475a2bd39b80a31fbe77b50eb107c3fb417209a",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-write500-records.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "write500",
+      "state": "records",
+      "sha256": "0126f3836376d4484db4df7da56df12f9197d6ad5c1054b1181631e3ffde823c",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-read500-pending.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-read500-notice.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "state": "notice",
+      "sha256": "f6b647b335f75afe11bb074377f25f3fa7e67ad4bab5442e9ac46c6f48f24c4a",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-read500-records.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read500",
+      "state": "records",
+      "sha256": "c7c58e98c9de2152adb4a828f656e196ec09289ba3b686038bc1287855ad39a9",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-read403-pending.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-read403-notice.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "state": "notice",
+      "sha256": "f6b647b335f75afe11bb074377f25f3fa7e67ad4bab5442e9ac46c6f48f24c4a",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-read403-page-failure.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "read403",
+      "state": "page-failure",
+      "sha256": "6547e5f0124d08da827086c052b9587e6bf306bfdb32aba760c1f8d48b69e84e",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-reason-deactivate-restored-reason.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "reason-deactivate",
+      "state": "restored-reason",
+      "sha256": "7cf47b1b617f1a614f27996b419d5d66a82083fd7d24602aa18d3c38ad718373",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-pending-deactivate-pending.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-pending-deactivate-notice.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "state": "notice",
+      "sha256": "8f9b68dd6b699c6c5016db4f8ae364a364c29b97acd3a115a1c1dd94f425897f",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-rotate-pending-deactivate-records.png",
+      "width": 1440,
+      "action": "rotate",
+      "scenario": "pending-deactivate",
+      "state": "records",
+      "sha256": "6f1793c60cdf2bd2903655dc0b5eb9dd2fbab1df0eb25638a65ea36feddc13c2",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-success-pending.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-success-notice.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "state": "notice",
+      "sha256": "8f9b68dd6b699c6c5016db4f8ae364a364c29b97acd3a115a1c1dd94f425897f",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-success-records.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "success",
+      "state": "records",
+      "sha256": "6f9a1486e9403f524c438f446c8920eb4251d730969eb7f2ea85010cf1055b88",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-write409-pending.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-write409-notice.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "state": "notice",
+      "sha256": "d83edd8f892d82686296b6b19e4b173e12c0a8815d048cf768ddf4802cda1fa8",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-write409-records.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write409",
+      "state": "records",
+      "sha256": "0126f3836376d4484db4df7da56df12f9197d6ad5c1054b1181631e3ffde823c",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-write500-pending.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-write500-notice.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "state": "notice",
+      "sha256": "48d03029a07a8670e3fbd52e3475a2bd39b80a31fbe77b50eb107c3fb417209a",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-write500-records.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "write500",
+      "state": "records",
+      "sha256": "0126f3836376d4484db4df7da56df12f9197d6ad5c1054b1181631e3ffde823c",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-read500-pending.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-read500-notice.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "state": "notice",
+      "sha256": "8f9b68dd6b699c6c5016db4f8ae364a364c29b97acd3a115a1c1dd94f425897f",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-read500-records.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read500",
+      "state": "records",
+      "sha256": "0126f3836376d4484db4df7da56df12f9197d6ad5c1054b1181631e3ffde823c",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-read403-pending.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-read403-notice.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "state": "notice",
+      "sha256": "8f9b68dd6b699c6c5016db4f8ae364a364c29b97acd3a115a1c1dd94f425897f",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-read403-page-failure.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "read403",
+      "state": "page-failure",
+      "sha256": "b2fe27f84a59825c69fbae298a97750de32c48c3f9f2895aba536e33600e5e27",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-reason-deactivate-restored-reason.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "reason-deactivate",
+      "state": "restored-reason",
+      "sha256": "05eaacfb8b7f4b0ded6d7b39949450cac5276df2b6dffeadc34b51882a6450d0",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-pending-deactivate-pending.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "state": "pending",
+      "sha256": "e09a18a1c50fcfa92b919e48d3855d1dc3fa9f2d864db20ec2ebb2ecc05b20b5",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-pending-deactivate-notice.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "state": "notice",
+      "sha256": "8f9b68dd6b699c6c5016db4f8ae364a364c29b97acd3a115a1c1dd94f425897f",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    },
+    {
+      "file": "1440-revoke-pending-deactivate-records.png",
+      "width": 1440,
+      "action": "revoke",
+      "scenario": "pending-deactivate",
+      "state": "records",
+      "sha256": "6f9a1486e9403f524c438f446c8920eb4251d730969eb7f2ea85010cf1055b88",
+      "scope": "actual-production-UI-fixture-diagnostic-not-C-approval"
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/verify-ui-phase2-token-write-lifecycle.mjs": "7eceffd9a6a1a2b79ad2d6413fd37690f2bb85e0872c89a2bebdd57f24d919cd",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "processesClosed": true
+}
