@@ -155,7 +155,15 @@ try {
               width,
               file,
               sha256: hash(await readFile(path.join(root, file))),
-              control: { selector: c.selector, actionId: c.actionId, scope: c.scope, state },
+              control: {
+                selector: c.selector,
+                actionId: c.actionId,
+                scope: c.scope,
+                state,
+                ...(!c.proposalOnly && !["save", "refresh", "retry"].includes(c.id)
+                  ? { key: `P29-${c.id}` }
+                  : {}),
+              },
             });
           }
           controlReferences[c.id].states[state] = scene;
@@ -242,6 +250,38 @@ try {
 } finally {
   await browser.close();
 }
+// Bind only existing business controls. Navigation/disclosure/recheck remain proposal-only.
+const actionVisualReferences = {},
+  controlVariantReferences = {};
+for (const [id, ref] of Object.entries(controlReferences)) {
+  if (ref.scope !== "source-action-representative-or-variant") continue;
+  const states = Object.fromEntries(
+    Object.entries(ref.states).flatMap(([state, scene]) =>
+      state === "pending"
+        ? [
+            ["disabled", scene],
+            ["busy", scene],
+          ]
+        : [[state, scene]],
+    ),
+  );
+  if (["save", "refresh", "retry"].includes(id)) {
+    actionVisualReferences[ref.actionId] = {
+      pageId: "P29",
+      scope: "representative-control-only-not-all-variants-or-Vue",
+      selector: ref.selector,
+      states,
+    };
+  } else {
+    controlVariantReferences[`P29-${id}`] = {
+      pageId: "P29",
+      scope: "additional-control-variant-not-new-action",
+      actionId: ref.actionId,
+      selector: ref.selector,
+      states,
+    };
+  }
+}
 if (capture) {
   assert.equal(screenshots.length, 170);
   await writeFile(
@@ -252,6 +292,8 @@ if (capture) {
         scope: "offline-proposal-not-runtime-or-user-accepted",
         sourceHashes,
         controlReferences,
+        actionVisualReferences,
+        controlVariantReferences,
         checks,
         interactions,
         screenshots,
@@ -290,6 +332,8 @@ if (capture) {
   assert.deepEqual(previous.checks, checks);
   assert.deepEqual(previous.interactions, interactions);
   assert.deepEqual(previous.controlReferences, controlReferences);
+  assert.deepEqual(previous.actionVisualReferences, actionVisualReferences);
+  assert.deepEqual(previous.controlVariantReferences, controlVariantReferences);
 }
 console.log(
   JSON.stringify({

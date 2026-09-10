@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应29页/635源位置/595组；其中路由动作508组，转发/容器关联63组，其余明确排除。其余44页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应30页/646源位置/602组；其中路由动作512组，转发/容器关联63组，其余明确排除。其余43页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -40,7 +40,7 @@
 | [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P29 治理概览](page-specs/P29.md) | 167 | [7组](action-reviews/P29.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P30 成员与邀请](page-specs/P30.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P31 角色与权限](page-specs/P31.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P32 工作区管理](page-specs/P32.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2444,6 +2444,71 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。
 - useModalDialog仅此调用方接线核对，不是全部焦点/跨缓存生命周期验收。
 - RP-G01–G04和F03-G05仍待；全部输入为空不代表统计口径、文件或权限已获准。
+
+## P29 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P29.json)：11个局部源位置 → 7组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。6个本地v-model，2处调用/内嵌容器，24个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有4个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+另有4个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新组织资料 / read | 1处；normal、refreshing、loading、refresh_error、dirty_refresh | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)、[refreshing · 1440](design/organization-profile-direction-c/1440-refreshing.png) / [refreshing · 390](design/organization-profile-direction-c/390-refreshing.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OG-RETRY 错误后重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited、conflict_page | [error · 1440](design/organization-profile-direction-c/1440-error.png) / [error · 390](design/organization-profile-direction-c/390-error.png)、[blocked · 1440](design/organization-profile-direction-c/1440-blocked.png) / [blocked · 390](design/organization-profile-direction-c/390-blocked.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OG-PROFILE-SAVE 保存并审计 / write | 2处；editing、save_busy、save_error、save_conflict、save_success、write_read_failed、save_timeout | [editing · 1440](design/organization-profile-direction-c/1440-editing.png) / [editing · 390](design/organization-profile-direction-c/390-editing.png)、[save_busy · 1440](design/organization-profile-direction-c/1440-save_busy.png) / [save_busy · 390](design/organization-profile-direction-c/390-save_busy.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OG-PROFILE-LOGO Logo浏览器有效性 / local | 1处；normal、logo_invalid、blank_logo | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)、[logo_invalid · 1440](design/organization-profile-direction-c/1440-logo_invalid.png) / [logo_invalid · 390](design/organization-profile-direction-c/390-logo_invalid.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| EX-P30-MEMBERS P30成员事件（非本页） / excluded | 1处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| EX-P31-ROLES P31授权事件（非本页） / excluded | 1处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| EX-REASON-ORIGINS 共享原因窗的其他页调用 / excluded | 4处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | 名称；required、maxlength120，初值data.name | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.logo_url | Logo；url、https://.*、maxlength2048，可空；输入清自定义错误 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.timezone | 时区；required、maxlength64，自由文本，不造枚举 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | 保留天数；v-model.number，number/min30/max3650/required；原生默认step1 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | 默认工作区；required，按当前返回名称展示，不新增active-only过滤 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.reason | 变更原因；required、maxlength500；成功load清空，保存期间未禁用输入 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / normal | form-container / matching-inline-form-scene | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / editing | form-container / matching-inline-form-scene | [editing · 1440](design/organization-profile-direction-c/1440-editing.png) / [editing · 390](design/organization-profile-direction-c/390-editing.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / blank_logo | form-container / matching-inline-form-scene | [blank_logo · 1440](design/organization-profile-direction-c/1440-blank_logo.png) / [blank_logo · 390](design/organization-profile-direction-c/390-blank_logo.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / long_name | form-container / matching-inline-form-scene | [long_name · 1440](design/organization-profile-direction-c/1440-long_name.png) / [long_name · 390](design/organization-profile-direction-c/390-long_name.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / long_workspace | form-container / matching-inline-form-scene | [long_workspace · 1440](design/organization-profile-direction-c/1440-long_workspace.png) / [long_workspace · 390](design/organization-profile-direction-c/390-long_workspace.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / missing_workspace | form-container / matching-inline-form-scene | [missing_workspace · 1440](design/organization-profile-direction-c/1440-missing_workspace.png) / [missing_workspace · 390](design/organization-profile-direction-c/390-missing_workspace.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / no_options | form-container / matching-inline-form-scene | [no_options · 1440](design/organization-profile-direction-c/1440-no_options.png) / [no_options · 390](design/organization-profile-direction-c/390-no_options.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / archived_option | form-container / matching-inline-form-scene | [archived_option · 1440](design/organization-profile-direction-c/1440-archived_option.png) / [archived_option · 390](design/organization-profile-direction-c/390-archived_option.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / refreshing | form-container / matching-inline-form-scene | [refreshing · 1440](design/organization-profile-direction-c/1440-refreshing.png) / [refreshing · 390](design/organization-profile-direction-c/390-refreshing.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / refresh_error | form-container / matching-inline-form-scene | [refresh_error · 1440](design/organization-profile-direction-c/1440-refresh_error.png) / [refresh_error · 390](design/organization-profile-direction-c/390-refresh_error.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / refresh_success | form-container / matching-inline-form-scene | [refresh_success · 1440](design/organization-profile-direction-c/1440-refresh_success.png) / [refresh_success · 390](design/organization-profile-direction-c/390-refresh_success.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / dirty_refresh | form-container / matching-inline-form-scene | [dirty_refresh · 1440](design/organization-profile-direction-c/1440-dirty_refresh.png) / [dirty_refresh · 390](design/organization-profile-direction-c/390-dirty_refresh.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / save_busy | form-container / matching-inline-form-scene | [save_busy · 1440](design/organization-profile-direction-c/1440-save_busy.png) / [save_busy · 390](design/organization-profile-direction-c/390-save_busy.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / save_error | form-container / matching-inline-form-scene | [save_error · 1440](design/organization-profile-direction-c/1440-save_error.png) / [save_error · 390](design/organization-profile-direction-c/390-save_error.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / save_conflict | form-container / matching-inline-form-scene | [save_conflict · 1440](design/organization-profile-direction-c/1440-save_conflict.png) / [save_conflict · 390](design/organization-profile-direction-c/390-save_conflict.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / save_success | form-container / matching-inline-form-scene | [save_success · 1440](design/organization-profile-direction-c/1440-save_success.png) / [save_success · 390](design/organization-profile-direction-c/390-save_success.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / write_read_failed | form-container / matching-inline-form-scene | [write_read_failed · 1440](design/organization-profile-direction-c/1440-write_read_failed.png) / [write_read_failed · 390](design/organization-profile-direction-c/390-write_read_failed.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / save_timeout | form-container / matching-inline-form-scene | [save_timeout · 1440](design/organization-profile-direction-c/1440-save_timeout.png) / [save_timeout · 390](design/organization-profile-direction-c/390-save_timeout.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / logo_invalid | form-container / matching-inline-form-scene | [logo_invalid · 1440](design/organization-profile-direction-c/1440-logo_invalid.png) / [logo_invalid · 390](design/organization-profile-direction-c/390-logo_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / reason_missing | form-container / matching-inline-form-scene | [reason_missing · 1440](design/organization-profile-direction-c/1440-reason_missing.png) / [reason_missing · 390](design/organization-profile-direction-c/390-reason_missing.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / retention_invalid | form-container / matching-inline-form-scene | [retention_invalid · 1440](design/organization-profile-direction-c/1440-retention_invalid.png) / [retention_invalid · 390](design/organization-profile-direction-c/390-retention_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / timezone_invalid | form-container / matching-inline-form-scene | [timezone_invalid · 1440](design/organization-profile-direction-c/1440-timezone_invalid.png) / [timezone_invalid · 390](design/organization-profile-direction-c/390-timezone_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / name_invalid | form-container / matching-inline-form-scene | [name_invalid · 1440](design/organization-profile-direction-c/1440-name_invalid.png) / [name_invalid · 390](design/organization-profile-direction-c/390-name_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / fresh-summary-no-reason-origin | native-reason-dialog / route-excluded-reference | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+
+### 明确保留的边界
+
+- Logo默认/悬停/焦点/按下尚未精确绑定；六字段完整状态另细化。
+- 170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。
+- P30–P37子组件和共享原因窗全源需分别核对；不以父层排除完成其它页面。
+- 全局缓存/组织隔离、共享诊断及未提交草稿策略仍待，不从Token保护推断资料页安全。
 
 ## P54 局部动作与共享消费者
 

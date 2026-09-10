@@ -17,7 +17,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/index.html": "d3ed891c6e5e916c39e7def6ba8be2dc17ad0d0b3f0f064ef82cb81e27886c21",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/controls.js": "4ec529eebbaedb70daf57e7218d7d4fabd7044302f95ac4f87f467c78aecc6a5",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/controls.css": "2263db25b1af08305b8443d8ef59d67375b269144a9621664a148126f1949c54",
-    "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "2e18781d5583be7f4e821857950abb446948fdc2f3e1b70a2344969577d3fb77"
+    "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a"
   },
   "controlReferences": {
     "save": {
@@ -299,6 +299,140 @@
       "label": "首次加载不能刷新",
       "selector": "#refresh-profile",
       "sourceScene": "loading",
+      "states": {
+        "disabled": "refresh-loading-disabled"
+      }
+    }
+  },
+  "actionVisualReferences": {
+    "OG-PROFILE-SAVE": {
+      "pageId": "P29",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#save-profile",
+      "states": {
+        "default": "save-default",
+        "hover": "save-hover",
+        "focus": "save-focus",
+        "pressed": "save-pressed",
+        "disabled": "save-pending",
+        "busy": "save-pending"
+      }
+    },
+    "OG-REFRESH": {
+      "pageId": "P29",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#refresh-profile",
+      "states": {
+        "default": "refresh-default",
+        "hover": "refresh-hover",
+        "focus": "refresh-focus",
+        "pressed": "refresh-pressed",
+        "disabled": "refresh-pending",
+        "busy": "refresh-pending"
+      }
+    },
+    "OG-RETRY": {
+      "pageId": "P29",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#retry-profile",
+      "states": {
+        "default": "retry-default",
+        "hover": "retry-hover",
+        "focus": "retry-focus",
+        "pressed": "retry-pressed"
+      }
+    }
+  },
+  "controlVariantReferences": {
+    "P29-retry-blocked": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-RETRY",
+      "selector": "#retry-profile",
+      "states": {
+        "default": "retry-blocked-default",
+        "hover": "retry-blocked-hover",
+        "focus": "retry-blocked-focus",
+        "pressed": "retry-blocked-pressed"
+      }
+    },
+    "P29-retry-expired": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-RETRY",
+      "selector": "#retry-profile",
+      "states": {
+        "default": "retry-expired-default",
+        "hover": "retry-expired-hover",
+        "focus": "retry-expired-focus",
+        "pressed": "retry-expired-pressed"
+      }
+    },
+    "P29-retry-forbidden": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-RETRY",
+      "selector": "#retry-profile",
+      "states": {
+        "default": "retry-forbidden-default",
+        "hover": "retry-forbidden-hover",
+        "focus": "retry-forbidden-focus",
+        "pressed": "retry-forbidden-pressed"
+      }
+    },
+    "P29-retry-rate_limited": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-RETRY",
+      "selector": "#retry-profile",
+      "states": {
+        "default": "retry-rate_limited-default",
+        "hover": "retry-rate_limited-hover",
+        "focus": "retry-rate_limited-focus",
+        "pressed": "retry-rate_limited-pressed"
+      }
+    },
+    "P29-retry-conflict_page": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-RETRY",
+      "selector": "#retry-profile",
+      "states": {
+        "default": "retry-conflict_page-default",
+        "hover": "retry-conflict_page-hover",
+        "focus": "retry-conflict_page-focus",
+        "pressed": "retry-conflict_page-pressed"
+      }
+    },
+    "P29-save_error": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-PROFILE-SAVE",
+      "selector": "#save-profile",
+      "states": {
+        "default": "save_error-default",
+        "hover": "save_error-hover",
+        "focus": "save_error-focus",
+        "pressed": "save_error-pressed"
+      }
+    },
+    "P29-save_conflict": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-PROFILE-SAVE",
+      "selector": "#save-profile",
+      "states": {
+        "default": "save_conflict-default",
+        "hover": "save_conflict-hover",
+        "focus": "save_conflict-focus",
+        "pressed": "save_conflict-pressed"
+      }
+    },
+    "P29-refresh-loading": {
+      "pageId": "P29",
+      "scope": "additional-control-variant-not-new-action",
+      "actionId": "OG-REFRESH",
+      "selector": "#refresh-profile",
       "states": {
         "disabled": "refresh-loading-disabled"
       }
@@ -2782,7 +2916,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -2794,7 +2929,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -2806,7 +2942,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -2818,7 +2955,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -2830,7 +2968,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -2842,7 +2981,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -2854,7 +2994,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -2866,7 +3007,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -2878,7 +3020,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -2890,7 +3033,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -2902,7 +3046,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -2914,7 +3059,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -2926,7 +3072,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -2938,19 +3085,21 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
       "scene": "retry-rate_limited-focus",
       "width": 1440,
       "file": "retry-rate_limited-focus-1440.png",
-      "sha256": "b8225850086a5a0e415e74324a15b539cbcc218f06f7826ad250a7370ca7d5c1",
+      "sha256": "3217d19d11f068e5a5357e8eb3591ca5787ed3327b8b5a6f562b29d1a165d386",
       "control": {
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -2962,7 +3111,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -2974,7 +3124,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -2986,7 +3137,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -2998,7 +3150,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -3010,7 +3163,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -3137,7 +3291,7 @@
       "scene": "nav-profile-form-available-focus",
       "width": 1440,
       "file": "nav-profile-form-available-focus-1440.png",
-      "sha256": "75cf214bf04b34759682d786898479276e76510e3afe8e9168b094081d4d12f2",
+      "sha256": "0ce595db1c39444329c08748ec0417207b47555e1c56339fcf7257f07675c424",
       "control": {
         "selector": ".directory nav a[href='#profile-form']",
         "actionId": "PROPOSAL-NAV",
@@ -3454,7 +3608,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-save_error"
       }
     },
     {
@@ -3466,19 +3621,21 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-save_error"
       }
     },
     {
       "scene": "save_error-focus",
       "width": 1440,
       "file": "save_error-focus-1440.png",
-      "sha256": "2e89b8c00fc547cbadfd7394ac2094eb6b4a3a90d61b338e30522b312d159faf",
+      "sha256": "5c146865e07fa2f3c46b25eb9fa366126329e106bf8eef560bafe2cc839b7f3e",
       "control": {
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-save_error"
       }
     },
     {
@@ -3490,7 +3647,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-save_error"
       }
     },
     {
@@ -3514,7 +3672,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -3526,7 +3685,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -3538,7 +3698,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -3550,7 +3711,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -3622,7 +3784,8 @@
         "selector": "#refresh-profile",
         "actionId": "OG-REFRESH",
         "scope": "source-action-representative-or-variant",
-        "state": "disabled"
+        "state": "disabled",
+        "key": "P29-refresh-loading"
       }
     },
     {
@@ -3802,7 +3965,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -3814,19 +3978,21 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-blocked"
       }
     },
     {
       "scene": "retry-blocked-focus",
       "width": 390,
       "file": "retry-blocked-focus-390.png",
-      "sha256": "552b34008aead2d287cc2dcf8f82f0153c24ddb7267659a1c9041bee7e2e14d9",
+      "sha256": "1284d0763558895744428a1f07d3eb7c2d239e05fa7cb78cf6cbe301bf160b49",
       "control": {
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -3838,7 +4004,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-blocked"
       }
     },
     {
@@ -3850,7 +4017,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -3862,7 +4030,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -3874,7 +4043,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -3886,7 +4056,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-expired"
       }
     },
     {
@@ -3898,7 +4069,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -3910,7 +4082,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -3922,7 +4095,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -3934,7 +4108,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-forbidden"
       }
     },
     {
@@ -3946,7 +4121,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -3958,7 +4134,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -3970,7 +4147,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -3982,7 +4160,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-rate_limited"
       }
     },
     {
@@ -3994,7 +4173,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -4006,7 +4186,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -4018,7 +4199,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -4030,7 +4212,8 @@
         "selector": "#retry-profile",
         "actionId": "OG-RETRY",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-retry-conflict_page"
       }
     },
     {
@@ -4474,7 +4657,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-save_error"
       }
     },
     {
@@ -4486,19 +4670,21 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-save_error"
       }
     },
     {
       "scene": "save_error-focus",
       "width": 390,
       "file": "save_error-focus-390.png",
-      "sha256": "a4d26e6f1b6e9d4a01b88f945d37e39d528978e1f8257f95f5cac112311a78ce",
+      "sha256": "7f4ce29fa9b52d7dcd312fd8778153e677f4e65693e0c3592c929b67c1a5c1f2",
       "control": {
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-save_error"
       }
     },
     {
@@ -4510,7 +4696,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-save_error"
       }
     },
     {
@@ -4534,7 +4721,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "default"
+        "state": "default",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -4546,7 +4734,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "hover"
+        "state": "hover",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -4558,7 +4747,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "focus"
+        "state": "focus",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -4570,7 +4760,8 @@
         "selector": "#save-profile",
         "actionId": "OG-PROFILE-SAVE",
         "scope": "source-action-representative-or-variant",
-        "state": "pressed"
+        "state": "pressed",
+        "key": "P29-save_conflict"
       }
     },
     {
@@ -4642,7 +4833,8 @@
         "selector": "#refresh-profile",
         "actionId": "OG-REFRESH",
         "scope": "source-action-representative-or-variant",
-        "state": "disabled"
+        "state": "disabled",
+        "key": "P29-refresh-loading"
       }
     }
   ]

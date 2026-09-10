@@ -252,7 +252,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "b21bdbdb16471e322f4e60ebf1a2b21a3f4a0c080c943fa444c4867f902e5df2",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "16d64f22a52445b6407e2f3c057f9e0e0b3691efefee3aebe531f881b2e0f31e",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "380786ba76be2768899d5a6bfce8b290fabdc67e49652140b40adfdc1d690403",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "dbaa0ae0bbbee30ebf6f4f1bbe684f155fa0c84fc0a139f8ffe92d7d968a5d72",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "500ba595f07edd54de77dc6f7a03ac16b0ad234f7cf2aba43acbaf996a53e904",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "992f751544dbd85a665aa14e51d5a8c8cbe7f83c8dc8a70ec77c53050ba9da67",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
     "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
@@ -361,6 +361,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "79bfb96f492e1752f6f4bcd48b55869d749040974bfdecbbb67ab8c8798a5c3d",
     "scripts/verify-ui-phase2-report-c.mjs": "63c52224823743579af6909fbed606a9bc2ae2765de6f7fe887cc98f4102dbdb",
     "scripts/verify-ui-phase2-report-controls-c.mjs": "9e464c9d0749bb96bb7bdde89a09e24975e8a087ae4ad2b3b706afd7d86439e7",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "36eb37442232959f418cb428b3eb802986858469d8eecb3829087e8bb1e2127f",
+    "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
+    "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -394,7 +397,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "273c67843540265c6205717e4e14b340a29c730cfc8f4cb063e6976dc9aabd28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "d99d66fec022fe8eabceaccaa52683e8de640190857b28da49b0940edade1549",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "24d40460e447eb5ed672eafd17f1cb1cf47133e41aa3d4d89931279bf57e3f6a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "802e7b21bbee52f1c609817ce7a27e42463e7f0a56a88e3ad89d0f2e03d55f3b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "4394c627ed47b92f33ab7c2fd1c3c754dbb234a1b3c61bb558d87db793d88ac8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8bb99072f3db70e0687adb08c5596ac3bae9129d975d2f1fe472224956734247",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "96faebd57a156fffedf3a60f1feddb8be4644b8851100b6b64bb5f26d8c9a5e2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "7033fd42ed0b5654f922ae10643fdc50234059680a7a1b936fa81710b8397291",
@@ -452,13 +455,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 19,
     "oldOnlyIdentities": 17,
-    "reviewedPages": 29,
-    "explicitlyGroupedSourceSites": 635,
-    "semanticGroups": 595,
-    "routeActions": 508,
+    "reviewedPages": 30,
+    "explicitlyGroupedSourceSites": 646,
+    "semanticGroups": 602,
+    "routeActions": 512,
     "wiringGroups": 63,
     "pagesWithoutExplicitSemanticReview": [
-      "P29",
       "P30",
       "P31",
       "P32",
@@ -1518,14 +1520,34 @@
       "path": "/org-admin",
       "title": "治理概览",
       "oldStaticAssociatedCandidates": 167,
-      "review": null,
+      "review": {
+        "pageId": "P29",
+        "sourceSites": 11,
+        "semanticGroups": 7,
+        "routeActions": 4,
+        "wiringGroups": 0,
+        "excludedGroups": 3,
+        "writeActions": 1,
+        "sourceInapplicableVisualSlots": 4,
+        "unmappedVisualSlots": 4,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 6,
+          "callerContainers": 2,
+          "consumerVariants": 24,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "organization-profile-controls-direction-c",
         "organization-profile-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "Logo默认/悬停/焦点/按下尚未精确绑定；六字段完整状态另细化。",
+        "170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。"
+      ]
     },
     {
       "id": "P30",
@@ -2622,6 +2644,24 @@
         "localModelBindings": 0,
         "callerContainers": 1,
         "consumerVariants": 17,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P29",
+      "sourceSites": 11,
+      "semanticGroups": 7,
+      "routeActions": 4,
+      "wiringGroups": 0,
+      "excludedGroups": 3,
+      "writeActions": 1,
+      "sourceInapplicableVisualSlots": 4,
+      "unmappedVisualSlots": 4,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 6,
+        "callerContainers": 2,
+        "consumerVariants": 24,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -26463,7 +26503,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "OG-REFRESH",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
@@ -26497,7 +26543,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "OG-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
@@ -26535,7 +26587,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "OG-PROFILE-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
@@ -26573,7 +26631,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "OG-PROFILE-LOGO",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
@@ -26611,7 +26675,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "OG-PROFILE-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1",
@@ -26649,7 +26719,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-P30-MEMBERS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
@@ -26687,7 +26763,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-P31-ROLES",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#56b1761955b256ef.1",
@@ -26716,7 +26798,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-REASON-ORIGINS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#f3515ca45998a840.1",
@@ -26745,7 +26833,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-REASON-ORIGINS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#7a51bff83af3db69.1",
@@ -26774,7 +26868,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-REASON-ORIGINS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1",
@@ -26803,7 +26903,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-REASON-ORIGINS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#00f81ad5e8a2f732.1",
